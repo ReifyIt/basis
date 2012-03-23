@@ -120,13 +120,13 @@ abstract class Struct3[T1, T2, T3, T]
   
   def unapply(value: T): Option[(T1, T2, T3)]
   
-  /** The offset of the first column into this Struct's frame. */
+  /** The offset of the first column in this Struct's frame. */
   final val offset1: Long = align(column1.alignment)(frameOffset)
   
-  /** The offset of the second column into this Struct's frame. */
+  /** The offset of the second column in this Struct's frame. */
   final val offset2: Long = align(column2.alignment)(offset1 + column1.size)
   
-  /** The offset of the third column into this Struct's frame. */
+  /** The offset of the third column in this Struct's frame. */
   final val offset3: Long = align(column3.alignment)(offset2 + column2.size)
   
   final val alignment: Long = {
