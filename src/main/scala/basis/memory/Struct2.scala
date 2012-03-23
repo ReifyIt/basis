@@ -86,9 +86,9 @@ import scala.math.max
   * @author Chris Sachs
   * 
   * @constructor  Constructs a value type with a given frame.
-  * @tparam T1              the instance type of the first column.
-  * @tparam T2              the instance type of the second column.
-  * @tparam T               the instance type of this value type.
+  * @tparam T1              the Scala type of the first column.
+  * @tparam T2              the Scala type of the second column.
+  * @tparam T               the Scala type of this value type.
   * @param  frameOffset     the cumulative offset of the first column into the frame.
   * @param  frameSize       the size of the frame.
   * @param  frameAlignment  the alignment of the frame.
