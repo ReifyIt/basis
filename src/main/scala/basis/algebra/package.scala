@@ -34,8 +34,14 @@ package object algebra {
   }
   
   type AffineSpace = Singleton {
-    type Point <: AffinePoint[Point, Vector, Scalar]
+    type Point  <: AffinePoint[Point, Vector, Scalar]
     type Vector <: LinearVector[Vector, Scalar]
     type Scalar <: Field[Scalar]
+  }
+  
+  type EuclideanSpace = Singleton {
+    type Point  <: AffinePoint[Point, Vector, Scalar]
+    type Vector <: EuclideanVector[Vector, Scalar]
+    type Scalar <: OrderedRing[Scalar] with CompleteField[Scalar]
   }
 }
