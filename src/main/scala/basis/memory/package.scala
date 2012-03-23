@@ -7,7 +7,7 @@
 
 package basis
 
-/** Contains a low-level memory abstraction and store-by-value typeclasses. */
+/** Contains a low-level memory abstraction and value typeclasses. */
 package object memory {
   /** Aligns a value to a power-of-2 alignment.
     * 
