@@ -28,7 +28,7 @@ package object algebra {
     type Scalar <: OrderedRing[Scalar] with Field[Scalar]
   }
   
-  type CompleteOrderedVectorSpace = Singleton {
+  type RealVectorSpace = Singleton {
     type Vector <: LinearVector[Vector, Scalar]
     type Scalar <: OrderedRing[Scalar] with CompleteField[Scalar]
   }
@@ -52,6 +52,12 @@ package object algebra {
     type RowVector    <: LinearVector[RowVector, Scalar]
     type Scalar       <: Field[Scalar]
     type Vector       >: Matrix
+  }
+  
+  type R1 = Singleton {
+    type Point  = Real
+    type Vector = Real
+    type Scalar = Real
   }
   
   type R2 = Singleton {
