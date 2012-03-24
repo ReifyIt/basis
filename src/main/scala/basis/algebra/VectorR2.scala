@@ -69,7 +69,7 @@ object VectorR2 {
   implicit lazy val Struct = new Struct
   
   final class Struct(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    extends Struct2[Double, Double, VectorR2] {
+    extends Struct2[Double, Double, VectorR2](frameOffset, frameSize, frameAlignment) {
     
     def this() = this(0L, 0L, 0L)
     
