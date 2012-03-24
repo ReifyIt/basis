@@ -34,8 +34,8 @@ final class PointR3(val x: Double, val y: Double, val z: Double)
     "PointR3"+"("+ x +", "+ y +", "+ z +")"
 }
 
-object PointR3 {
-  val Origin = new PointR3(0.0, 0.0, 0.0)
+object PointR3 extends Struct3[Double, Double, Double, PointR3] {
+  def Origin = new PointR3(0.0, 0.0, 0.0)
   
   def apply(x: Double, y: Double, z: Double): PointR3 =
     new PointR3(x, y, z)
@@ -43,35 +43,20 @@ object PointR3 {
   def unapply(point: PointR3): Some[(Double, Double, Double)] =
     Some(point.x, point.y, point.z)
   
-  implicit lazy val Struct = new Struct
-  
-  final class Struct(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    extends Struct3[Double, Double, Double, PointR3](frameOffset, frameSize, frameAlignment) {
-    
-    def this() = this(0L, 0L, 0L)
-    
-    def apply(x: Double, y: Double, z: Double): PointR3 =
-      new PointR3(x, y, z)
-    
-    def unapply(point: PointR3): Some[(Double, Double, Double)] =
-      Some(point.x, point.y, point.z)
-    
-    override def load(data: Data, address: Long): PointR3 = {
-      val x = data.loadDouble(address + offset1)
-      val y = data.loadDouble(address + offset2)
-      val z = data.loadDouble(address + offset3)
-      new PointR3(x, y, z)
-    }
-    
-    override def store(data: Data, address: Long, point: PointR3) {
-      data.storeDouble(address + offset1, point.x)
-      data.storeDouble(address + offset2, point.y)
-      data.storeDouble(address + offset3, point.z)
-    }
-    
-    override def project(offset: Long, size: Long, alignment: Long): Struct =
-      new Struct(offset1 + offset, size, alignment)
-    
-    override def toString: String = "PointR3.Struct"
+  override def load(data: Data, address: Long): PointR3 = {
+    val x = data.loadDouble(address + offset1)
+    val y = data.loadDouble(address + offset2)
+    val z = data.loadDouble(address + offset3)
+    new PointR3(x, y, z)
   }
+  
+  override def store(data: Data, address: Long, point: PointR3) {
+    data.storeDouble(address + offset1, point.x)
+    data.storeDouble(address + offset2, point.y)
+    data.storeDouble(address + offset3, point.z)
+  }
+  
+  implicit def struct = this
+  
+  override def toString = "PointR3"
 }

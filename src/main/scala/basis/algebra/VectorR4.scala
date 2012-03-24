@@ -57,8 +57,8 @@ final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
     "VectorR4"+"("+ x +", "+ y +", "+ z +", "+ w +")"
 }
 
-object VectorR4 {
-  val Zero = new VectorR4(0.0, 0.0, 0.0, 0.0)
+object VectorR4 extends Struct4[Double, Double, Double, Double, VectorR4] {
+  def Zero = new VectorR4(0.0, 0.0, 0.0, 0.0)
   
   def apply(x: Double, y: Double, z: Double, w: Double): VectorR4 =
     new VectorR4(x, y, z, w)
@@ -66,37 +66,22 @@ object VectorR4 {
   def unapply(vector: VectorR4): Some[(Double, Double, Double, Double)] =
     Some(vector.x, vector.y, vector.z, vector.w)
   
-  implicit lazy val Struct = new Struct
-  
-  final class Struct(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    extends Struct4[Double, Double, Double, Double, VectorR4](frameOffset, frameSize, frameAlignment) {
-    
-    def this() = this(0L, 0L, 0L)
-    
-    def apply(x: Double, y: Double, z: Double, w: Double): VectorR4 =
-      new VectorR4(x, y, z, w)
-    
-    def unapply(vector: VectorR4): Some[(Double, Double, Double, Double)] =
-      Some(vector.x, vector.y, vector.z, vector.w)
-    
-    override def load(data: Data, address: Long): VectorR4 = {
-      val x = data.loadDouble(address + offset1)
-      val y = data.loadDouble(address + offset2)
-      val z = data.loadDouble(address + offset3)
-      val w = data.loadDouble(address + offset4)
-      new VectorR4(x, y, z, w)
-    }
-    
-    override def store(data: Data, address: Long, vector: VectorR4) {
-      data.storeDouble(address + offset1, vector.x)
-      data.storeDouble(address + offset2, vector.y)
-      data.storeDouble(address + offset3, vector.z)
-      data.storeDouble(address + offset4, vector.w)
-    }
-    
-    override def project(offset: Long, size: Long, alignment: Long): Struct =
-      new Struct(offset1 + offset, size, alignment)
-    
-    override def toString: String = "VectorR4.Struct"
+  override def load(data: Data, address: Long): VectorR4 = {
+    val x = data.loadDouble(address + offset1)
+    val y = data.loadDouble(address + offset2)
+    val z = data.loadDouble(address + offset3)
+    val w = data.loadDouble(address + offset4)
+    new VectorR4(x, y, z, w)
   }
+  
+  override def store(data: Data, address: Long, vector: VectorR4) {
+    data.storeDouble(address + offset1, vector.x)
+    data.storeDouble(address + offset2, vector.y)
+    data.storeDouble(address + offset3, vector.z)
+    data.storeDouble(address + offset4, vector.w)
+  }
+  
+  implicit def struct = this
+  
+  override def toString = "VectorR4"
 }
