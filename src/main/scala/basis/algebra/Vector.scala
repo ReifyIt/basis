@@ -7,15 +7,50 @@
 
 package basis.algebra
 
+/** An element of a vector space.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define point   $vector
+  * @define vector  vector
+  * @define scalar  scalar
+  * 
+  * @tparam Vector  The `Vector` type of the vector space.
+  * @tparam Scalar  The `Scalar` type of the vector space.
+  */
 trait Vector[Vector, -Scalar] extends AffinePoint[Vector, Vector, Scalar] {
+  /** Adds a $vector to this $vector.
+    * 
+    * @param  that  the $vector to add.
+    * @return the vector sum of this $vector and another $vector.
+    */
   def + (that: Vector): Vector
   
+  /** Negates this $vector.
+    * 
+    * @return the vector opposite of this $vector.
+    */
   def unary_- : Vector
   
+  /** Subtracts a $vector from this $vector.
+    * 
+    * @param  that  the $vector to subtract.
+    * @return the vector difference of this $vector and another $vector.
+    */
   def - (that: Vector): Vector
   
+  /** Multiples this $vector by a $scalar on the right.
+    * 
+    * @param  scalar  the $scalar to multiply by.
+    * @return the scaled $vector.
+    */
   def :* (scalar: Scalar): Vector
   
+  /** Multiplies this $vector by a $scalar on the left.
+    * 
+    * @param  scalar  the $scalar to multiply by.
+    * @return the scaled $vector.
+    */
   def *: (scalar: Scalar): Vector
   
   def :+ (that: Vector): Vector = this + that
