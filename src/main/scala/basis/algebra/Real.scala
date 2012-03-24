@@ -7,6 +7,9 @@
 
 package basis.algebra
 
+import basis.memory._
+import basis.util.MurmurHash._
+
 final class Real(private val value: Double) extends OrderedRing[Real] with CompleteField[Real] {
   def + (that: Real): Real = new Real(value + that.value)
   
@@ -63,7 +66,7 @@ final class Real(private val value: Double) extends OrderedRing[Real] with Compl
     case _ => false
   }
   
-  override def hashCode: Int = basis.util.MurmurHash.hash(value)
+  override def hashCode: Int = hash(value)
   
   override def toString: String = value.toString
   
@@ -88,4 +91,29 @@ object Real {
   def apply(value: Double): Real = new Real(value)
   
   def unapply(real: Real): Some[Double] = Some(real.value)
+  
+  implicit lazy val Struct = new Struct
+  
+  final class Struct(frameOffset: Long, frameSize: Long, frameAlignment: Long)
+    extends Struct1[Double, Real](frameOffset, frameSize, frameAlignment) {
+    
+    def this() = this(0L, 0L, 0L)
+    
+    def apply(value: Double): Real = new Real(value)
+    
+    def unapply(real: Real): Some[Double] = Some(real.value)
+    
+    override def load(data: Data, address: Long): Real = {
+      new Real(data.loadDouble(address + offset))
+    }
+    
+    override def store(data: Data, address: Long, real: Real) {
+      data.storeDouble(address + offset, real.value)
+    }
+    
+    override def project(offset: Long, size: Long, alignment: Long): Struct =
+      new Struct(this.offset + offset, size, alignment)
+    
+    override def toString: String = "Real.Struct"
+  }
 }
