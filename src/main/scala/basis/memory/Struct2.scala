@@ -86,9 +86,9 @@ import scala.math.max
   * @author Chris Sachs
   * 
   * @constructor  Constructs a value type with a given frame.
-  * @tparam T1              the instance type of the first column.
-  * @tparam T2              the instance type of the second column.
-  * @tparam T               the instance type of this value type.
+  * @tparam T1              the Scala type of the first column.
+  * @tparam T2              the Scala type of the second column.
+  * @tparam T               the Scala type of this value type.
   * @param  frameOffset     the cumulative offset of the first column into the frame.
   * @param  frameSize       the size of the frame.
   * @param  frameAlignment  the alignment of the frame.
@@ -111,10 +111,10 @@ abstract class Struct2[T1, T2, T]
   
   def unapply(value: T): Option[(T1, T2)]
   
-  /** The offset of the first column into this Struct's frame. */
+  /** The offset of the first column in this Struct's frame. */
   final val offset1: Long = align(column1.alignment)(frameOffset)
   
-  /** The offset of the second column into this Struct's frame. */
+  /** The offset of the second column in this Struct's frame. */
   final val offset2: Long = align(column2.alignment)(offset1 + column1.size)
   
   final val alignment: Long = {
@@ -127,10 +127,10 @@ abstract class Struct2[T1, T2, T]
     align(alignment)(max(minimalSize, frameSize))
   }
   
-  /** The projection of the first column into this Struct's frame. */
+  /** The projection of the first column in this Struct's frame. */
   final val field1: Struct[T1] = column1.project(offset1, size, alignment)
   
-  /** The projection of the second column into this Struct's frame. */
+  /** The projection of the second column in this Struct's frame. */
   final val field2: Struct[T2] = column2.project(offset2, size, alignment)
   
   def load(data: Data, address: Long): T = {
