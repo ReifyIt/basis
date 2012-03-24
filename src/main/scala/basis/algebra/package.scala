@@ -44,4 +44,20 @@ package object algebra {
     type Vector <: EuclideanVector[Vector, Scalar]
     type Scalar <: OrderedRing[Scalar] with CompleteField[Scalar]
   }
+  
+  type R2 = Singleton {
+    type Point  = PointR2
+    type Vector = VectorR2
+    type Scalar = Real
+  }
+  
+  type R3 = Singleton {
+    type Point  = PointR3
+    type Vector = VectorR3
+    type Scalar = Real
+  }
+  
+  implicit def DoubleToReal(value: Double): Real = new Real(value)
+  
+  implicit def RealToDouble(real: Real): Double = real.toDouble
 }
