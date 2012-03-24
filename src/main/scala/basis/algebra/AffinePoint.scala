@@ -7,10 +7,10 @@
 
 package basis.algebra
 
-trait AffinePoint[Point, Vector, -Scalar] {
-  def :+ (vector: Vector): Point
+trait AffinePoint[AffinePoint, Vector, -Scalar] {
+  def :+ (vector: Vector): AffinePoint
   
-  def :- (vector: Vector): Point
+  def :- (vector: Vector): AffinePoint
   
-  def - (that: Point): Vector
+  def - (that: AffinePoint): Vector
 }

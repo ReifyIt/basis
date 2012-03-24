@@ -7,9 +7,7 @@
 
 package basis.algebra
 
-trait Matrix[Matrix, Transpose, ColumnVector, RowVector, -Scalar]
-  extends LinearVector[Matrix, Scalar] {
-  
+trait Matrix[Matrix, Transpose, ColumnVector, RowVector, -Scalar] extends Vector[Matrix, Scalar] {
   def :⋅ (column: RowVector): ColumnVector
   
   def ⋅: (row: ColumnVector): RowVector

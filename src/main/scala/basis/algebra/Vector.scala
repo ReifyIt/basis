@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait LinearVector[Vector, -Scalar] extends AffinePoint[Vector, Vector, Scalar] {
+trait Vector[Vector, -Scalar] extends AffinePoint[Vector, Vector, Scalar] {
   def + (that: Vector): Vector
   
   def unary_- : Vector

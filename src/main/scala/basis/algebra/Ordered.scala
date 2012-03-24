@@ -7,16 +7,16 @@
 
 package basis.algebra
 
-trait Ordered[Self] {
-  def < (that: Self): Boolean
+trait Ordered[Ordered] {
+  def < (that: Ordered): Boolean
   
-  def <= (that: Self): Boolean
+  def <= (that: Ordered): Boolean
   
-  def >= (that: Self): Boolean
+  def >= (that: Ordered): Boolean
   
-  def > (that: Self): Boolean
+  def > (that: Ordered): Boolean
   
-  def min(that: Self): Self
+  def min(that: Ordered): Ordered
   
-  def max(that: Self): Self
+  def max(that: Ordered): Ordered
 }

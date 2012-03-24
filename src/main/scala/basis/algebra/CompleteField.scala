@@ -7,18 +7,18 @@
 
 package basis.algebra
 
-trait CompleteField[Self] extends Field[Self] {
-  def + (x: Double): Self
+trait CompleteField[CompleteField] extends Field[CompleteField] {
+  def + (x: Double): CompleteField
   
-  def - (x: Double): Self
+  def - (x: Double): CompleteField
   
-  def * (x: Double): Self
+  def * (x: Double): CompleteField
   
-  def / (x: Double): Self
+  def / (x: Double): CompleteField
   
-  def pow(that: Self): Self
+  def pow(that: CompleteField): CompleteField
   
-  def pow(x: Double): Self
+  def pow(x: Double): CompleteField
   
-  def sqrt: Self
+  def sqrt: CompleteField
 }

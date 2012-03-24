@@ -7,10 +7,10 @@
 
 package basis.algebra
 
-trait EuclideanVector[Vector, Scalar] extends LinearVector[Vector, Scalar] {
-  def / (scalar: Scalar): Vector
+trait EuclideanVector[EuclideanVector, Scalar] extends Vector[EuclideanVector, Scalar] {
+  def / (scalar: Scalar): EuclideanVector
   
-  def ⋅ (that: Vector): Scalar
+  def ⋅ (that: EuclideanVector): Scalar
   
   def norm: Scalar
 }

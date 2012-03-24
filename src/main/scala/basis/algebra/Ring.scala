@@ -7,18 +7,18 @@
 
 package basis.algebra
 
-trait Ring[Self] extends LinearVector[Self, Self] {
-  def + (n: Int): Self
+trait Ring[Ring] extends Vector[Ring, Ring] {
+  def + (n: Int): Ring
   
-  def - (n: Int): Self
+  def - (n: Int): Ring
   
-  def * (that: Self): Self
+  def * (that: Ring): Ring
   
-  def * (n: Int): Self
+  def * (n: Int): Ring
   
-  def pow(n: Int): Self
+  def pow(n: Int): Ring
   
-  def :* (that: Self): Self = this * that
+  def :* (that: Ring): Ring = this * that
   
-  def *: (that: Self): Self = this * that
+  def *: (that: Ring): Ring = this * that
 }

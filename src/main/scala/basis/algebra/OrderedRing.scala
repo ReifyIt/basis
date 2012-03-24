@@ -7,6 +7,6 @@
 
 package basis.algebra
 
-trait OrderedRing[Self] extends Ordered[Self] with Ring[Self] {
-  def abs: Self
+trait OrderedRing[OrderedRing] extends Ordered[OrderedRing] with Ring[OrderedRing] {
+  def abs: OrderedRing
 }

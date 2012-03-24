@@ -7,10 +7,10 @@
 
 package basis.algebra
 
-trait Field[Self] extends Ring[Self] {
-  def reciprocal: Self
+trait Field[Field] extends Ring[Field] {
+  def reciprocal: Field
   
-  def / (that: Self): Self
+  def / (that: Field): Field
   
-  def / (n: Int): Self
+  def / (n: Int): Field
 }
