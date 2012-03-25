@@ -13,11 +13,10 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
+  * @tparam OrderedRing   the element type of the ordered ring.
+  * 
   * @define Element   OrderedRing
   * @define element   `OrderedRing` value
-  * @define nospace
-  * 
-  * @tparam OrderedRing   the element type of the ordered ring.
   */
 trait OrderedRing[OrderedRing] extends Ordered[OrderedRing] with Ring[OrderedRing] {
   /** Returns the absolute value of this $element. */

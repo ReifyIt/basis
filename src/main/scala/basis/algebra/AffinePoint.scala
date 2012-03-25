@@ -11,14 +11,13 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
-  * @define point   point
-  * @define vector  vector
-  * @define scalar  scalar
-  * @define nospace
-  * 
   * @tparam AffinePoint   the point type of the affine space.
   * @tparam Vector        the vector type of the affine space.
   * @tparam Scalar        the scalar type of the affine space.
+  * 
+  * @define point   point
+  * @define vector  vector
+  * @define scalar  scalar
   */
 trait AffinePoint[AffinePoint, Vector, -Scalar] {
   /** Adds a $vector to this $point.

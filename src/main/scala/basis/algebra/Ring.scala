@@ -14,6 +14,8 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
+  * @tparam Ring  the element type of the ring.
+  * 
   * @define IntMorphismInfo
   * A `$Element` has a morphism from `Int` values to $element values.
   * An `Int` value ''n'' represents the ''nth'' addition of the `$Element`'s
@@ -22,9 +24,6 @@ package basis.algebra
   * @define vector    $element
   * @define Element   Ring
   * @define element   `Ring` value
-  * @define nospace
-  * 
-  * @tparam Ring  the element type of the ring.
   */
 trait Ring[Ring] extends Vector[Ring, Ring] {
   /** Adds an `Int` value to this $element.

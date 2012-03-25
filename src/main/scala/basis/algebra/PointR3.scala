@@ -35,7 +35,7 @@ final class PointR3(val x: Double, val y: Double, val z: Double)
 }
 
 object PointR3 extends Struct3[Double, Double, Double, PointR3] {
-  def Origin = new PointR3(0.0, 0.0, 0.0)
+  def Origin: PointR3 = new PointR3(0.0, 0.0, 0.0)
   
   def apply(x: Double, y: Double, z: Double): PointR3 =
     new PointR3(x, y, z)
@@ -56,7 +56,7 @@ object PointR3 extends Struct3[Double, Double, Double, PointR3] {
     data.storeDouble(address + offset3, point.z)
   }
   
-  implicit def struct = this
+  implicit def struct: this.type = this
   
-  override def toString = "PointR3"
+  override def toString: String = "PointR3"
 }

@@ -13,11 +13,10 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
+  * @tparam Field   the element type of the field.
+  * 
   * @define Element   Field
   * @define element   `Field` value
-  * @define nospace
-  * 
-  * @tparam Field   the element type of the field.
   */
 trait Field[Field] extends Ring[Field] {
   /** Returns the multiplicative inverse of this $element. */

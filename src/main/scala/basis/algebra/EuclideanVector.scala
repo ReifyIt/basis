@@ -15,8 +15,7 @@ package basis.algebra
   * @tparam Scalar            the scalar type of the euclidean space.
   */
 trait EuclideanVector[EuclideanVector, Scalar] extends Vector[EuclideanVector, Scalar] {
-  /** Divides this $vector by a $scalar. Equivalent to multiplying this $vector
-    * by the $scalar's multiplicative inverse.
+  /** Divides this $vector by a $scalar.
     * 
     * @param  scalar  the $scalar to divide by.
     * @return the scaled $vector.

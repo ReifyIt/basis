@@ -11,12 +11,11 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
-  * @define point   $vector
-  * @define vector  vector
-  * @define nospace
-  * 
   * @tparam Vector  the vector type of the module.
   * @tparam Scalar  the scalar type of the module.
+  * 
+  * @define point   $vector
+  * @define vector  vector
   */
 trait Vector[Vector, -Scalar] extends AffinePoint[Vector, Vector, Scalar] {
   /** Adds a $vector to this $vector.

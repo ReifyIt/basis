@@ -15,6 +15,8 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
+  * @tparam CompleteField   the element type of the complete field.
+  * 
   * @define DoubleMorphismInfo
   * A `$Element` also has a morphism from `Double` values to `$Element` values.
   * A `Double` value ''x'' represents a rational approximation to an element of
@@ -26,9 +28,6 @@ package basis.algebra
   * 
   * @define Element   CompleteField
   * @define element   `CompleteField` value
-  * @define nospace
-  * 
-  * @tparam CompleteField   the element type of the complete field.
   */
 trait CompleteField[CompleteField] extends Field[CompleteField] {
   /** Adds a `Double` value to this $element.

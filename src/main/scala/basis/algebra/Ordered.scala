@@ -11,10 +11,9 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
-  * @define element   element
-  * @define nospace
-  * 
   * @tparam Ordered   the element type of the totally ordered set.
+  * 
+  * @define element   element
   */
 trait Ordered[Ordered] {
   /** Returns `true` if this $element is less than the other $element. */

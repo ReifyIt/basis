@@ -11,15 +11,14 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
-  * @define vector  $matrix
-  * @define matrix  matrix
-  * @define nospace
-  * 
   * @tparam Matrix        the matrix type of the matrix space.
   * @tparam Transpose     the transpose matrix type of the matrix space.
   * @tparam ColumnVector  the vector type of the column space.
   * @tparam RowVector     the vector type of the row space.
   * @tparam Scalar        the scalar type of the matrix space.
+  * 
+  * @define vector  $matrix
+  * @define matrix  matrix
   */
 trait Matrix[Matrix, Transpose, ColumnVector, RowVector, -Scalar] extends Vector[Matrix, Scalar] {
   /** Multiplies a vector in the row space. Multiplies the vector on the right.
