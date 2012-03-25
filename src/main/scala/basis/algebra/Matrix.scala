@@ -13,25 +13,30 @@ package basis.algebra
   * 
   * @define vector  $matrix
   * @define matrix  matrix
+  * @define nospace
   * 
-  * @tparam Matrix        The `Matrix` type of the matrix space.
-  * @tparam Transpose     The `Transpose` type of the matrix space.
-  * @tparam ColumnVector  The `Vector` type of the column space.
-  * @tparam RowVector     The `Vector` type of the row space.
-  * @tparam Scalar        The `Scalar` type of this matrix space.
+  * @tparam Matrix        the matrix type of the matrix space.
+  * @tparam Transpose     the transpose matrix type of the matrix space.
+  * @tparam ColumnVector  the vector type of the column space.
+  * @tparam RowVector     the vector type of the row space.
+  * @tparam Scalar        the scalar type of the matrix space.
   */
 trait Matrix[Matrix, Transpose, ColumnVector, RowVector, -Scalar] extends Vector[Matrix, Scalar] {
-  /** Multiplies a vector in the row space.
+  /** Multiplies a vector in the row space. Multiplies the vector on the right.
+    * The method name uses the unicode dot operator U+22C5 to differentiate
+    * vector multiplication from scalar multiplication.
     * 
-    * @param  column  the vector to multiply, treated as a column vector.
-    * @return a vector in the column space.
+    * @param  column  the vector to transform; treated as a column vector.
+    * @return the transformed vector in the column space.
     */
   def :⋅ (column: RowVector): ColumnVector
   
-  /** Multiples a vector in the column space.
+  /** Multiples a vector in the column space. Multiplies the vector on the left.
+    * The method name uses the unicode dot operator U+22C5 to differentiate
+    * vector multiplication from scalar multiplication.
     * 
-    * @param  row     the vector to multiply, treated as a row vector.
-    * @return a vector in the row space.
+    * @param  row     the vector to transform; treated as a row vector.
+    * @return the transformed vector in the row space.
     */
   def ⋅: (row: ColumnVector): RowVector
   

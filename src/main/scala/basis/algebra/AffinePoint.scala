@@ -14,30 +14,31 @@ package basis.algebra
   * @define point   point
   * @define vector  vector
   * @define scalar  scalar
+  * @define nospace
   * 
-  * @tparam AffinePoint   the `Point` type of the affine space.
-  * @tparam Vector        the `Vector` type of the affine space.
-  * @tparam Scalar        the `Scalar` type of the affine space.
+  * @tparam AffinePoint   the point type of the affine space.
+  * @tparam Vector        the vector type of the affine space.
+  * @tparam Scalar        the scalar type of the affine space.
   */
 trait AffinePoint[AffinePoint, Vector, -Scalar] {
   /** Adds a $vector to this $point.
     * 
     * @param  vector  the $vector to add.
-    * @return the affine sum of this $point and another $vector.
+    * @return the affine sum of this $point and the other $vector.
     */
   def :+ (vector: Vector): AffinePoint
   
   /** Subtracts a $vector from this $point.
     * 
     * @param  vector  the $vector to subtract.
-    * @return the affine difference of this $point and another $vector.
+    * @return the affine difference of this $point and the other $vector.
     */
   def :- (vector: Vector): AffinePoint
   
   /** Subtracts a $point from this $point.
     * 
     * @param  that  the $point to subtract.
-    * @return the affine difference of this $point and another $point.
+    * @return the affine difference of this $point and the other $point.
     */
   def - (that: AffinePoint): Vector
 }

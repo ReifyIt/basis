@@ -7,10 +7,33 @@
 
 package basis.algebra
 
+/** An element of a field.
+  * 
+  * $IntMorphismInfo
+  * 
+  * @author Chris Sachs
+  * 
+  * @define Element   Field
+  * @define element   `Field` value
+  * @define nospace
+  * 
+  * @tparam Field   the element type of the field.
+  */
 trait Field[Field] extends Ring[Field] {
+  /** Returns the multiplicative inverse of this $element. */
   def reciprocal: Field
   
+  /** Divides this $element by another $element.
+    * 
+    * @param  that  the $element to divide by.
+    * @return the quotient of this $element and the other $element.
+    */
   def / (that: Field): Field
   
+  /** Divides this $element by an `Int` value.
+    * 
+    * @param  n   the `Int` value to divide by.
+    * @return the quotient of this $element and the `Int` value.
+    */
   def / (n: Int): Field
 }

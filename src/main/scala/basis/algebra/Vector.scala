@@ -7,22 +7,22 @@
 
 package basis.algebra
 
-/** An element of a vector space.
+/** A vector in a module.
   * 
   * @author Chris Sachs
   * 
   * @define point   $vector
   * @define vector  vector
-  * @define scalar  scalar
+  * @define nospace
   * 
-  * @tparam Vector  The `Vector` type of the vector space.
-  * @tparam Scalar  The `Scalar` type of the vector space.
+  * @tparam Vector  the vector type of the module.
+  * @tparam Scalar  the scalar type of the module.
   */
 trait Vector[Vector, -Scalar] extends AffinePoint[Vector, Vector, Scalar] {
   /** Adds a $vector to this $vector.
     * 
     * @param  that  the $vector to add.
-    * @return the vector sum of this $vector and another $vector.
+    * @return the vector sum of this $vector and the other $vector.
     */
   def + (that: Vector): Vector
   
@@ -35,7 +35,7 @@ trait Vector[Vector, -Scalar] extends AffinePoint[Vector, Vector, Scalar] {
   /** Subtracts a $vector from this $vector.
     * 
     * @param  that  the $vector to subtract.
-    * @return the vector difference of this $vector and another $vector.
+    * @return the vector difference of this $vector and the other $vector.
     */
   def - (that: Vector): Vector
   

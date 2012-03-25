@@ -7,16 +7,31 @@
 
 package basis.algebra
 
+/** An element of a totally ordered set.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define element   element
+  * @define nospace
+  * 
+  * @tparam Ordered   the element type of the totally ordered set.
+  */
 trait Ordered[Ordered] {
+  /** Returns `true` if this $element is less than the other $element. */
   def < (that: Ordered): Boolean
   
+  /** Returns `true` if this $element is less than or equal to the other $element. */
   def <= (that: Ordered): Boolean
   
+  /** Returns `true` if this $element is greater than or equal to the other $element. */
   def >= (that: Ordered): Boolean
   
+  /** Returns `true` if this $element is greater than the other $element. */
   def > (that: Ordered): Boolean
   
+  /** Returns the minimum of this $element and the other $element. */
   def min(that: Ordered): Ordered
   
+  /** Returns the maximum of this $element and the other $element. */
   def max(that: Ordered): Ordered
 }

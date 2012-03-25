@@ -15,21 +15,15 @@ final class Real(private val value: Double) extends OrderedRing[Real] with Compl
   
   def + (x: Double): Real = new Real(value + x)
   
-  def + (n: Int): Real = new Real(value + n)
-  
   def unary_- : Real = new Real(-value)
   
   def - (that: Real): Real = new Real(value - that.value)
   
   def - (x: Double): Real = new Real(value - x)
   
-  def - (n: Int): Real = new Real(value - n)
-  
   def * (that: Real): Real = new Real(value * that.value)
   
   def * (x: Double): Real = new Real(value * x)
-  
-  def * (n: Int): Real = new Real(value * n)
   
   def reciprocal: Real = new Real(1.0 / value)
   
@@ -37,13 +31,9 @@ final class Real(private val value: Double) extends OrderedRing[Real] with Compl
   
   def / (x: Double): Real = new Real(value / x)
   
-  def / (n: Int): Real = new Real(value / n)
-  
   def pow(that: Real): Real = new Real(math.pow(value, that.value))
   
   def pow(x: Double): Real = new Real(math.pow(value, x))
-  
-  def pow(n: Int): Real = new Real(math.pow(value, n))
   
   def sqrt: Real = new Real(math.sqrt(value))
   
