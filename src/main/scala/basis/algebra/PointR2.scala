@@ -43,13 +43,13 @@ object PointR2 extends Struct2[Double, Double, PointR2] {
   def unapply(point: PointR2): Some[(Double, Double)] =
     Some(point.x, point.y)
   
-  override def load(data: Data, address: Long): PointR2 = {
+  def load(data: Data, address: Long): PointR2 = {
     val x = data.loadDouble(address + offset1)
     val y = data.loadDouble(address + offset2)
     new PointR2(x, y)
   }
   
-  override def store(data: Data, address: Long, point: PointR2) {
+  def store(data: Data, address: Long, point: PointR2) {
     data.storeDouble(address + offset1, point.x)
     data.storeDouble(address + offset2, point.y)
   }

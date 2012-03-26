@@ -103,13 +103,11 @@ object Real extends Struct1[Double, Real] {
   
   def unapply(real: Real): Some[Double] = Some(real.value)
   
-  override def load(data: Data, address: Long): Real = {
+  def load(data: Data, address: Long): Real =
     new Real(data.loadDouble(address))
-  }
   
-  override def store(data: Data, address: Long, real: Real) {
+  def store(data: Data, address: Long, real: Real): Unit =
     data.storeDouble(address, real.value)
-  }
   
   implicit def struct: this.type = this
   

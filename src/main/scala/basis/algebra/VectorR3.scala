@@ -97,14 +97,14 @@ object VectorR3 extends Struct3[Double, Double, Double, VectorR3] {
   def unapply(vector: VectorR3): Some[(Double, Double, Double)] =
     Some(vector.x, vector.y, vector.z)
   
-  override def load(data: Data, address: Long): VectorR3 = {
+  def load(data: Data, address: Long): VectorR3 = {
     val x = data.loadDouble(address + offset1)
     val y = data.loadDouble(address + offset2)
     val z = data.loadDouble(address + offset3)
     new VectorR3(x, y, z)
   }
   
-  override def store(data: Data, address: Long, vector: VectorR3) {
+  def store(data: Data, address: Long, vector: VectorR3) {
     data.storeDouble(address + offset1, vector.x)
     data.storeDouble(address + offset2, vector.y)
     data.storeDouble(address + offset3, vector.z)
