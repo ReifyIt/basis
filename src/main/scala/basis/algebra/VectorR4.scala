@@ -10,6 +10,18 @@ package basis.algebra
 import basis.memory._
 import basis.util.MurmurHash._
 
+/** A vector in a 4-dimensional `Real` vector space.
+  * 
+  * @author Chris Sachs
+  * 
+  * @constructor  Constructs a vector with four `Double` coordinates.
+  * @param  x   the ''x''-coordinate.
+  * @param  y   the ''y''-coordinate.
+  * @param  z   the ''z''-coordinate.
+  * @param  w   the ''w''-coordinate.
+  * 
+  * @define scalar  `Real` value
+  */
 final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
   extends EuclideanVector[VectorR4, Real] {
   
@@ -25,18 +37,33 @@ final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
   def :* (scalar: Real): VectorR4 =
     this :* scalar.toDouble
   
+  /** Multiplies this $vector by a `Double` value on the right.
+    * 
+    * @param  scalar  the `Double` value to multiply by.
+    * @return the scaled $vector.
+    */
   def :* (scalar: Double): VectorR4 =
     new VectorR4(x * scalar, y * scalar, z * scalar, w * scalar)
   
   def *: (scalar: Real): VectorR4 =
     this :* scalar.toDouble
   
+  /** Multiplies this $vector by a `Double` value on the left.
+    * 
+    * @param  scalar  the `Double` value to multiply by.
+    * @return the scaled $vector.
+    */
   def *: (scalar: Double): VectorR4 =
     this :* scalar
   
   def / (scalar: Real): VectorR4 =
     this / scalar.toDouble
   
+  /** Divides this $vector by a `Double` value.
+    * 
+    * @param  scalar  the `Double` value to divide by.
+    * @return the scaled $vector.
+    */
   def / (scalar: Double): VectorR4 =
     new VectorR4(x / scalar, y / scalar, z / scalar, w / scalar)
   
@@ -57,8 +84,10 @@ final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
     "VectorR4"+"("+ x +", "+ y +", "+ z +", "+ w +")"
 }
 
+/** Contains the zero vector in `R4` and serves as a `Struct` for vectors in `R4`. */
 object VectorR4 extends Struct4[Double, Double, Double, Double, VectorR4] {
-  def Zero = new VectorR4(0.0, 0.0, 0.0, 0.0)
+  /** The zero vector in `R4`. */
+  def Zero: VectorR4 = new VectorR4(0.0, 0.0, 0.0, 0.0)
   
   def apply(x: Double, y: Double, z: Double, w: Double): VectorR4 =
     new VectorR4(x, y, z, w)
@@ -81,7 +110,7 @@ object VectorR4 extends Struct4[Double, Double, Double, Double, VectorR4] {
     data.storeDouble(address + offset4, vector.w)
   }
   
-  implicit def struct = this
+  implicit def struct: this.type = this
   
-  override def toString = "VectorR4"
+  override def toString: String = "VectorR4"
 }

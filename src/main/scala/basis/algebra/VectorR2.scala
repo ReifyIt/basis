@@ -10,6 +10,16 @@ package basis.algebra
 import basis.memory._
 import basis.util.MurmurHash._
 
+/** A vector in a 2-dimensional `Real` vector space.
+  * 
+  * @author Chris Sachs
+  * 
+  * @constructor  Constructs a vector with two `Double` coordinates.
+  * @param  x   the ''x''-coordinate.
+  * @param  y   the ''y''-coordinate.
+  * 
+  * @define scalar  `Real` value
+  */
 final class VectorR2(val x: Double, val y: Double)
   extends EuclideanVector[VectorR2, Real] {
   
@@ -25,18 +35,33 @@ final class VectorR2(val x: Double, val y: Double)
   def :* (scalar: Real): VectorR2 =
     this :* scalar.toDouble
   
+  /** Multiplies this $vector by a `Double` value on the right.
+    * 
+    * @param  scalar  the `Double` value to multiply by.
+    * @return the scaled $vector.
+    */
   def :* (scalar: Double): VectorR2 =
     new VectorR2(x * scalar, y * scalar)
   
   def *: (scalar: Real): VectorR2 =
     this :* scalar.toDouble
   
+  /** Multiplies this $vector by a `Double` value on the left.
+    * 
+    * @param  scalar  the `Double` value to multiply by.
+    * @return the scaled $vector.
+    */
   def *: (scalar: Double): VectorR2 =
     this :* scalar
   
   def / (scalar: Real): VectorR2 =
     this / scalar.toDouble
   
+  /** Divides this $vector by a `Double` value.
+    * 
+    * @param  scalar  the `Double` value to divide by.
+    * @return the scaled $vector.
+    */
   def / (scalar: Double): VectorR2 =
     new VectorR2(x / scalar, y / scalar)
   
@@ -57,8 +82,10 @@ final class VectorR2(val x: Double, val y: Double)
     "VectorR2"+"("+ x +", "+ y +")"
 }
 
+/** Contains the zero vector in `R2` and serves as a `Struct` for vectors in `R2`. */
 object VectorR2 extends Struct2[Double, Double, VectorR2] {
-  def Zero = new VectorR2(0.0, 0.0)
+  /** The zero vector in `R2`. */
+  def Zero: VectorR2 = new VectorR2(0.0, 0.0)
   
   def apply(x: Double, y: Double): VectorR2 =
     new VectorR2(x, y)
@@ -77,7 +104,7 @@ object VectorR2 extends Struct2[Double, Double, VectorR2] {
     data.storeDouble(address + offset2, vector.y)
   }
   
-  implicit def struct = this
+  implicit def struct: this.type = this
   
-  override def toString = "VectorR2"
+  override def toString: String = "VectorR2"
 }
