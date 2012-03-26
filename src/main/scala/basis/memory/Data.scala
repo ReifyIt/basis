@@ -20,14 +20,45 @@ import Endianness._
   * 
   * ==Address space==
   * 
-  * `Data` has a 64-bit ''address space'' ranging from `0` until `size`. Each
+  * Data has a 64-bit ''address space'' ranging from `0` until `size`. Each
   * ''address'' in the space identifies a unique storage location for a single
-  * `Byte` value. Multi-byte values occupy multiple storage locations, and thus
+  * `Byte` value. Multi-byte values occupy multiple storage locations and thus
   * have multiple addresses–one address per byte. The lowest address of a
-  * multi-byte sequence canonically refers to the whole sequence.
+  * multi-byte sequence canonically refers to the whole byte sequence.
   * 
-  * Here's a demonstration of address space semantics:
-  * {{{
+  * ==Data values==
+  * 
+  * Data stores structured value types. ''Value type'' in this context stands
+  * for an isomorphism between Scala values and fixed-length byte sequences,
+  * with a possible restriction on address alignment.
+  * 
+  * ===Primitive values===
+  * 
+  * Primitive value types have dedicated `load` and `store` methods. Multi-byte
+  * primitives have ''aligned'' and ''unaligned'' variants. The data's `endian`
+  * property determines the ''endianness'' of multi-byte data values.
+  * 
+  * ===Struct values===
+  * 
+  * [[basis.memory.Struct]] typeclasses abstract over value types. Generic
+  * `load` and `store` methods delegate to the implicit struct typeclass
+  * associated with each method's type parameter.
+  * 
+  * ==Alignment==
+  * 
+  * N-byte divisible addresses are said to be N-byte ''aligned''. Using aligned
+  * addresses reduces some multi-byte data accesses to single array operations,
+  * which can noticeably improve performance. Alignment sensitive allocators
+  * such as the default `Block` allocator try to allocate Data backed by a
+  * primitive array whose element size matches the alignment of the unit struct
+  * passed to the allocator. This allocation strategy makes possible the
+  * performance benefit of using aligned addresses.
+  * 
+  * Aligned data accesses truncate unaligned addresses to the required alignment.
+  * 
+  * @author Chris Sachs
+  * 
+  * @example {{{
   * scala> val data = Data.alloc[Int](1L) // allocate data for a single Int value.
   * data: basis.memory.Data = Block4LE(4) // Data class will vary by architecture.
   * 
@@ -48,70 +79,9 @@ import Endianness._
   * scala> data.loadUnalignedShort(1L).toHexString // load the middle bytes.
   * res5: String = fffffeba
   * }}}
-  * 
-  * ==Value types==
-  * 
-  * `Data` stores structured value types. A ''value type'' in this context is an
-  * isomorphism between Scala values and fixed-length byte sequences, with a
-  * restriction on address alignment.
-  * 
-  * ===Primitive value types===
-  * 
-  * Primitive value types have dedicated `load` and `store` methods. Multi-byte
-  * primitives have ''aligned'' and ''unaligned'' variants. The Data's `endian`
-  * property determines the ''endianness'' of multi-byte primitive values.
-  * 
-  * ===Derived value types===
-  * 
-  * [[basis.memory.Struct]] typeclasses represent derived value types. Generic
-  * `load` and `store` methods delegate to the implicitly scoped `Struct`
-  * typeclass of each method's type parameter.
-  * 
-  * Primitive types have structs too. First an example of basic usage:
-  * {{{
-  * val primes = Data.iterate(1, 100)(java.math.BigInteger.valueOf(_).nextProbablePrime.intValue)
-  * primes: basis.memory.Data = Block4LE(400)
-  * 
-  * scala> primes.load[Int](sizeOf[Int] * 99L) // load the 99th prime.
-  * res0: Int = 523
-  * 
-  * scala> primes.store[Int](0L, 0) // there is no zeroth prime.
-  * }}}
-  * 
-  * Next a more advanced example of `Struct` capabilities:
-  * {{{
-  * scala> type Row = (Int, Double); implicit val Row = Struct.Record2[Int, Double]
-  * defined type alias Row
-  * Row: basis.memory.Struct.Record2[Int,Double] = Record2(PaddedInt, PaddedDouble)
-  * 
-  * scala> val table = Data.tabulate(1024)(i => (i.toInt, math.log(i)))
-  * table: basis.memory.Data = Block8LE(16384)
-  * 
-  * scala> table.load[Row](Row.size * 10L) // load a row.
-  * res0: (Int, Double) = (10,2.302585092994046)
-  * 
-  * scala> table.load(Row.size * 10L)(Row.field2) // load a field.
-  * res1: Double = 2.302585092994046
-  * 
-  * scala> table.loadArray[Double](0L, 4)(Row.field2, implicitly) // load an array of fields.
-  * res2: Array[Double] = Array(-Infinity, 0.0, 0.6931471805599453, 1.0986122886681098)
-  * }}}
-  * 
-  * ==Alignment==
-  * 
-  * N-byte divisible addresses are said to be N-byte ''aligned''. Using aligned
-  * addresses reduces some multi-byte primitive accesses to a single array
-  * operation, which can improve performance by an order of magnitude.
-  * Alignment sensitive allocators such as the `Block` allocator (the default)
-  * try to allocate Data backed by a primitive array whose element size matches
-  * the alignment of the unit struct passed to the allocator.
-  * 
-  * Accessors truncate unaligned addresses to their required alignment.
-  * 
-  * @author Chris Sachs
   */
 abstract class Data {
-  /** The number of addressable bytes. */
+  /** The number of addressable bytes in the address space. */
   def size: Long
   
   /** The internal word size. */
@@ -413,32 +383,32 @@ abstract class Data {
   def storeUnalignedDouble(address: Long, value: Double): Unit =
     storeUnalignedLong(address, doubleToRawLongBits(value))
   
-  /** Loads a struct value as a Scala value.
+  /** Loads an instance of a data value.
     * 
-    * @tparam T         the type of Scala value to load.
+    * @tparam T         the struct type.
     * @param  address   the aligned address to load.
-    * @param  struct    the implicit value type of `T`.
-    * @return the loaded Scala value.
+    * @param  struct    the implicit struct.
+    * @return the loaded instance.
     */
   final def load[@specialized T](address: Long)(implicit struct: Struct[T]): T =
     struct.load(this, address)
   
-  /** Stores a Scala value as a struct value.
+  /** Stores an instance as a data value.
     * 
-    * @tparam T         the type of Scala value to store.
+    * @tparam T         the struct type.
     * @param  address   the aligned storage address.
-    * @param  value     the Scala value to store.
-    * @param  struct    the implicit value type of `T`.
+    * @param  value     the instance to store.
+    * @param  struct    the implicit struct.
     */
   final def store[@specialized T](address: Long, value: T)(implicit struct: Struct[T]): Unit =
     struct.store(this, address, value)
   
-  /** Loads a sequence of struct values as a new array of Scala values.
+  /** Loads a sequence of data values as a new instance array.
     * 
-    * @tparam T         the type of Scala values to load.
+    * @tparam T         the struct type.
     * @param  address   the aligned address to load.
     * @param  count     the number of values to load.
-    * @param  struct    the implicit value type of `T`.
+    * @param  struct    the implicit struct.
     * @param  manifest  the manifest to create the array of type `T`.
     * @return the loaded array of Scala values.
     */
@@ -450,14 +420,14 @@ abstract class Data {
     array
   }
   
-  /** Copies a sequence of struct values to an array slice as Scala values.
+  /** Copies a sequence of data values to an instance array slice.
     * 
-    * @tparam T         the type of Scala values to load.
+    * @tparam T         the struct type.
     * @param  address   the aligned address to load.
     * @param  array     the array to copy to.
     * @param  start     the lower bound of the array slice to copy to.
     * @param  count     the number of values to copy.
-    * @param  struct    the implicit value type of `T`.
+    * @param  struct    the implicit struct.
     */
   def copyToArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, array: Array[T], start: Int, count: Int)
@@ -472,14 +442,14 @@ abstract class Data {
     }
   }
   
-  /** Stores an array slice of Scala values as a sequence of struct values.
+  /** Stores an instance array slice as a sequence of data values.
     * 
-    * @tparam T         the type of Scala values to store.
+    * @tparam T         the struct type.
     * @param  address   the aligned storage address.
     * @param  array     the array to store from.
     * @param  start     the lower bound of the array slice to store from.
     * @param  count     the number of values to store.
-    * @param  struct    the implicit value type of `T`.
+    * @param  struct    the implicit struct.
     */
   def storeArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, array: Array[T], start: Int, count: Int)
@@ -645,105 +615,106 @@ abstract class Data {
   }
 }
 
-/** Conatins various Data implementations and allocators. */
+/** Conatins data implementations and allocators. */
 object Data {
-  /** Allocates `Data` for a number of unit sized values.
+  
+  /** Allocates data for a number of unit sized values.
     * Allocates `struct.size * count` bytes of data. May return a `Data` class
     * optimized for the given unit struct. This convenience function delegates
-    * to the implicitly scope allocator.
+    * to the implicitly scoped allocator.
     * 
-    * @tparam T           the Scala type of the unit struct.
+    * @tparam T           the unit struct type.
     * @param  count       the number of units to allocate.
     * @param  allocator   the implicit allocator to delegate to.
     * @param  unit        the implicit unit struct.
-    * @return the allocated zero-filled `Data`.
+    * @return the zero-filled data.
     */
   @inline def alloc[T](count: Long)(implicit allocator: Allocator, unit: Struct[T]): Data =
     allocator.alloc[T](count)
   
-  /** Allocates `Data` storing a sequence of values.
+  /** Stores a sequence of values to newly allocated data.
     * Allocates `struct.size * count` bytes of data. This convenience function
     * delegates to the implicitly scoped allocator.
     * 
-    * @tparam T           the type of Scala values to store.
+    * @tparam T           the struct type.
     * @param  values      the sequence to store.
     * @param  allocator   the implicit allocator to delegate to.
-    * @param  struct      the implicit value type of `T`.
-    * @return the initialized `Data`
+    * @param  struct      the implicit struct.
+    * @return the initialized data.
     */
   @inline def apply[T](values: T*)(implicit allocator: Allocator, struct: Struct[T]): Data =
     allocator[T](values: _*)
   
-  /** Allocates `Data` storing a sequence of generated values.
+  /** Stores a sequence of generated values to newly allocated data.
     * Allocates `struct.size * count` bytes of data. This convenience function
     * delegates to the implicitly scoped allocator.
     * 
-    * @tparam T           the type of Scala values to store.
+    * @tparam T           the struct type.
     * @param  count       the number of values in the sequence.
     * @param  value       the value generator.
     * @param  allocator   the implicit allocator to delegate to.
-    * @param  struct      the implicit value type of `T`.
-    * @return the initialized `Data`.
+    * @param  struct      the implicit struct.
+    * @return the initialized data.
     */
   @inline def fill[@specialized T](count: Long)(value: => T)(implicit allocator: Allocator, struct: Struct[T]): Data =
     allocator.fill[T](count)(value)
   
-  /** Allocates `Data` storing a sequence of iterated function values.
+  /** Stores a sequence of iterated function values to newly allocated data.
     * Allocates `struct.size * count` bytes of data. This convenience function
     * delegates to the implicitly scoped allocator.
     * 
-    * @tparam T           the type of Scala values to store.
+    * @tparam T           the struct type.
     * @param  start       the initial value of the sequence.
     * @param  count       the number of values in the sequence.
-    * @param  f           the repeatedly applied function.
+    * @param  f           the iteratively applied function.
     * @param  allocator   the implicit allocator to delegate to.
-    * @param  struct      the implicit value type of `f`.
-    * @return the initialized `Data`.
+    * @param  struct      the implicit struct.
+    * @return the initialized data.
     */
   @inline def iterate[@specialized T](start: T, count: Long)(f: T => T)(implicit allocator: Allocator, struct: Struct[T]): Data =
     allocator.iterate[T](start, count)(f)
   
-  /** Allocates `Data` storing a sequence of iterated function values.
+  /** Stores a sequence of enumerated function values to newly allocated data.
+    * Applies sequential `Long` values to the enumerator function starting from 0.
     * Allocates `struct.size * count` bytes of data. This convenience function
     * delegates to the implicitly scoped allocator.
     * 
-    * @tparam T           the type of Scala values to store.
-    * @param  start       the initial value of the sequence.
+    * @tparam T           the struct type.
     * @param  count       the number of values in the sequence.
-    * @param  f           the repeatedly applied function.
+    * @param  f           the enumerator function.
     * @param  allocator   the implicit allocator to delegate to.
-    * @param  struct      the implicit value type of `f`.
-    * @return the initialized `Data`.
+    * @param  struct      the implicit struct.
+    * @return the initialized data.
     */
   @inline def tabulate[@specialized T](count: Long)(f: Long => T)(implicit allocator: Allocator, struct: Struct[T]): Data =
     allocator.tabulate[T](count)(f)
   
-  /** Wraps a `Byte` array in a native-endian Data object. */
+  /** Returns native-endian data backed by the given `Byte` array. */
   def wrap(array: Array[Byte]): Data = NativeEndian match {
     case BigEndian => new Block1BE(array)
     case LittleEndian => new Block1LE(array)
   }
   
-  /** Wraps a `Short` array in a native-endian Data object. */
+  /** Returns native-endian data backed by the given `Short` array. */
   def wrap(array: Array[Short]): Data = NativeEndian match {
     case BigEndian => new Block2BE(array)
     case LittleEndian => new Block2LE(array)
   }
   
-  /** Wraps an `Int` array in a native-endan Data object. */
+  /** Returns native-endian data backed by the given `Int` array. */
   def wrap(array: Array[Int]): Data = NativeEndian match {
     case BigEndian => new Block4BE(array)
     case LittleEndian => new Block4LE(array)
   }
   
-  /** Wraps a `Long` array in a native-endian Data object. */
+  /** Returns native-endian data backed by the given `Long` array. */
   def wrap(array: Array[Long]): Data = NativeEndian match {
     case BigEndian => new Block8BE(array)
     case LittleEndian => new Block8LE(array)
   }
   
-  /** Wraps a `ByteBuffer` in a Data object. */
-  def wrap(buffer: ByteBuffer): Chunk = new Chunk(buffer)
+  /** Returns native-endian data backed by the given `ByteBuffer`. */
+  def wrap(buffer: ByteBuffer): Data = new Chunk(buffer)
   
   /** The native-endian Block allocator. */
   val Block: Allocator = NativeEndian match {
@@ -835,7 +806,7 @@ object Data {
     override def toString: String = "BlockLE"
   }
   
-  /** Big-endian `Byte` array backed Data. */
+  /** Big-endian `Byte` array backed data. */
   final class Block1BE(val array: Array[Byte]) extends Data {
     def this(size: Long) = this {
       require(0L <= size && size <= Int.MaxValue.toLong)
@@ -932,7 +903,7 @@ object Data {
     override def toString: String = "Block1BE"
   }
   
-  /** Little-endian `Byte` array backed Data. */
+  /** Little-endian `Byte` array backed data. */
   final class Block1LE(val array: Array[Byte]) extends Data {
     def this(size: Long) = this {
       require(0L <= size && size <= Int.MaxValue.toLong)
@@ -1029,7 +1000,7 @@ object Data {
     override def toString: String = "Block1LE"
   }
   
-  /** Big-endian `Short` array backed Data. */
+  /** Big-endian `Short` array backed data. */
   final class Block2BE(val array: Array[Short]) extends Data {
     def this(size: Long) = this {
       require(0L <= size && size <= (Int.MaxValue.toLong << 1))
@@ -1114,7 +1085,7 @@ object Data {
     override def toString: String = "Block2BE"
   }
   
-  /** Little-endian `Short` array backed Data. */
+  /** Little-endian `Short` array backed data. */
   final class Block2LE(val array: Array[Short]) extends Data {
     def this(size: Long) = this {
       require(0L <= size && size <= (Int.MaxValue.toLong << 1))
@@ -1199,7 +1170,7 @@ object Data {
     override def toString: String = "Block2LE"
   }
   
-  /** Big-endian `Int` array backed Data. */
+  /** Big-endian `Int` array backed data. */
   final class Block4BE(val array: Array[Int]) extends Data {
     def this(size: Long) = this {
       require(0L <= size && size <= (Int.MaxValue.toLong << 2))
@@ -1280,7 +1251,7 @@ object Data {
     override def toString: String = "Block4BE"
   }
   
-  /** Little-endian `Int` array backed Data. */
+  /** Little-endian `Int` array backed data. */
   final class Block4LE(val array: Array[Int]) extends Data {
     def this(size: Long) = this {
       require(0L <= size && size <= (Int.MaxValue.toLong << 2))
@@ -1361,7 +1332,7 @@ object Data {
     override def toString: String = "Block4LE"
   }
   
-  /** Big-endian `Long` array backed Data. */
+  /** Big-endian `Long` array backed data. */
   final class Block8BE(val array: Array[Long]) extends Data {
     def this(size: Long) = this {
       require(0L <= size && size <= (Int.MaxValue.toLong << 3))
@@ -1442,7 +1413,7 @@ object Data {
     override def toString: String = "Block8BE"
   }
   
-  /** Little-endian `Long` array backed Data. */
+  /** Little-endian `Long` array backed data. */
   final class Block8LE(val array: Array[Long]) extends Data {
     def this(size: Long) = this {
       require(0L <= size && size <= (Int.MaxValue.toLong << 3))

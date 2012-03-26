@@ -9,16 +9,16 @@ package basis.memory
 
 import java.nio.ByteOrder
 
-/** Represents a significance ordering.
+/** A representation of a significance ordering.
   * 
-  * @author Christopher Sachs
+  * @author Chris Sachs
   */
 sealed abstract class Endianness {
   /** Returns `true` if this is the Endianness of the virtual machine. */
   def isNative: Boolean
 }
 
-/** Contains an enumeration of significance orderings. Implicitly provides the
+/** Contains enumerated significance orderings. Implicitly provides the
   * `NativeEndian` ordering. */
 object Endianness {
   /** The ordering of the virtual machine. */

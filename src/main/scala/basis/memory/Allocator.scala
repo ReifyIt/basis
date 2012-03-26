@@ -9,33 +9,33 @@ package basis.memory
 
 import scala.annotation.implicitNotFound
 
-/** Abstracts over the allocation of `Data`.
+/** A `Data` allocator.
   * 
   * @author Chris Sachs
   */
-@implicitNotFound("No implicit Allocator")
+@implicitNotFound("No implicit allocator")
 abstract class Allocator {
-  /** The maximum number of bytes this Allocator can allocate. */
+  /** The maximum number of bytes this allocator can allocate. */
   def MaxSize: Long
   
-  /** Allocates `Data` for a number of unit sized values.
+  /** Allocates data for a number of unit sized values.
     * Allocates `struct.size * count` bytes of data. May return a `Data` class
     * optimized for the given unit struct.
     * 
-    * @tparam T       the Scala type of the unit struct.
+    * @tparam T       the unit struct type.
     * @param  count   the number of units to allocate.
     * @param  unit    the implicit unit struct.
-    * @return the allocated zero-filled `Data`.
+    * @return the zero-filled data.
     */
   def alloc[T](count: Long)(implicit unit: Struct[T]): Data
   
-  /** Allocates `Data` storing a sequence of values.
+  /** Stores a sequence of values to newly allocated data.
     * Allocates `struct.size * count` bytes of data.
     * 
-    * @tparam T       the type of Scala values to store.
+    * @tparam T       the struct type.
     * @param  values  the sequence to store.
-    * @param  struct  the implicit value type of `T`.
-    * @return the initialized `Data`
+    * @param  struct  the implicit struct.
+    * @return the initialized data.
     */
   def apply[T](values: T*)(implicit struct: Struct[T]): Data = {
     val count = values.length
@@ -50,14 +50,14 @@ abstract class Allocator {
     data
   }
   
-  /** Allocates `Data` storing a sequence of generated values.
+  /** Stores a sequence of generated values to newly allocated data.
     * Allocates `struct.size * count` bytes of data.
     * 
-    * @tparam T       the type of Scala values to store.
+    * @tparam T       the struct type.
     * @param  count   the number of values in the sequence.
     * @param  value   the value generator.
-    * @param  struct  the implicit value type of `T`.
-    * @return the initialized `Data`.
+    * @param  struct  the implicit struct.
+    * @return the initialized data.
     */
   def fill[@specialized T](count: Long)(value: => T)(implicit struct: Struct[T]): Data = {
     val data = alloc[T](count)
@@ -71,15 +71,15 @@ abstract class Allocator {
     data
   }
   
-  /** Allocates `Data` storing a sequence of iterated function values.
+  /** Stores a sequence of iterated function values to newly allocated data.
     * Allocates `struct.size * count` bytes of data.
     * 
-    * @tparam T       the type of Scala values to store.
+    * @tparam T       the struct type.
     * @param  start   the initial value of the sequence.
     * @param  count   the number of values in the sequence.
-    * @param  f       the repeatedly applied function.
-    * @param  struct  the implicit value type of `f`.
-    * @return the initialized `Data`.
+    * @param  f       the iteratively applied function.
+    * @param  struct  the implicit struct.
+    * @return the initialized data.
     */
   def iterate[@specialized T](start: T, count: Long)(f: T => T)(implicit struct: Struct[T]): Data = {
     val data = alloc[T](count)
@@ -98,14 +98,15 @@ abstract class Allocator {
     data
   }
   
-  /** Allocates `Data` storing a sequence of indexed function values starting from 0.
+  /** Stores a sequence of enumerated function values to newly allocated data.
+    * Applies sequential `Long` values to the enumerator function starting from 0.
     * Allocates `struct.size * count` bytes of data.
     * 
-    * @tparam T       the type of Scala values to store.
+    * @tparam T       the struct type.
     * @param  count   the number of values in the sequence.
-    * @param  f       the indexed function.
-    * @param  struct  the implicit value type of `f`.
-    * @return the initialized `Data`.
+    * @param  f       the enumerator function.
+    * @param  struct  the implicit struct.
+    * @return the initialized data.
     */
   def tabulate[@specialized T](count: Long)(f: Long => T)(implicit struct: Struct[T]): Data = {
     val data = alloc[T](count)
@@ -120,7 +121,7 @@ abstract class Allocator {
   }
 }
 
-/** Contains an implicit default `Allocator`. */
+/** Contains the implicit default allocator. */
 object Allocator {
   /** The default allocator. */
   implicit def default: Allocator = Data.Block
