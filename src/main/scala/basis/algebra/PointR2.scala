@@ -10,6 +10,16 @@ package basis.algebra
 import basis.memory._
 import basis.util.MurmurHash._
 
+/** A point in a 2-dimensional `Real` affine space.
+  * 
+  * @author Chris Sachs
+  * 
+  * @constructor  Constructs a point with two `Double` coordinates.
+  * @param  x   the ''x''-coordinate.
+  * @param  y   the ''y''-coordinate.
+  * 
+  * @define scalar  `Real` value
+  */
 final class PointR2(val x: Double, val y: Double)
   extends AffinePoint[PointR2, VectorR2, Real] {
   
@@ -34,7 +44,9 @@ final class PointR2(val x: Double, val y: Double)
     "PointR2"+"("+ x +", "+ y +")"
 }
 
+/** Contains the origin of `R2` and serves as a struct for points in `R2`. */
 object PointR2 extends Struct2[Double, Double, PointR2] {
+  /** the origin of `R2`. */
   def Origin: PointR2 = new PointR2(0.0, 0.0)
   
   def apply(x: Double, y: Double): PointR2 =

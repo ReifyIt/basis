@@ -10,6 +10,17 @@ package basis.algebra
 import basis.memory._
 import basis.util.MurmurHash._
 
+/** A point in a 3-dimensional `Real` affine space.
+  * 
+  * @author Chris Sachs
+  * 
+  * @constructor  Constructs a point with three `Double` coordinates.
+  * @param  x   the ''x''-coordinate.
+  * @param  y   the ''y''-coordinate.
+  * @param  z   the ''z''-coordinate.
+  * 
+  * @define scalar  `Real` value
+  */
 final class PointR3(val x: Double, val y: Double, val z: Double)
   extends AffinePoint[PointR3, VectorR3, Real] {
   
@@ -34,7 +45,9 @@ final class PointR3(val x: Double, val y: Double, val z: Double)
     "PointR3"+"("+ x +", "+ y +", "+ z +")"
 }
 
+/** Contains the origin of `R3` and serves as a struct for points in `R3`. */
 object PointR3 extends Struct3[Double, Double, Double, PointR3] {
+   /** the origin of `R3`. */
   def Origin: PointR3 = new PointR3(0.0, 0.0, 0.0)
   
   def apply(x: Double, y: Double, z: Double): PointR3 =

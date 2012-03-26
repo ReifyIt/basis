@@ -84,9 +84,9 @@ final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
     "VectorR4"+"("+ x +", "+ y +", "+ z +", "+ w +")"
 }
 
-/** Contains the zero vector in `R4` and serves as a `Struct` for vectors in `R4`. */
+/** Contains the zero vector of `R4` and serves as a struct for vectors in `R4`. */
 object VectorR4 extends Struct4[Double, Double, Double, Double, VectorR4] {
-  /** The zero vector in `R4`. */
+  /** The zero vector of `R4`. */
   def Zero: VectorR4 = new VectorR4(0.0, 0.0, 0.0, 0.0)
   
   def apply(x: Double, y: Double, z: Double, w: Double): VectorR4 =
