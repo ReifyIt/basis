@@ -27,61 +27,61 @@ import scala.math.max
   * 
   * @author Chris Sachs
   * 
-  * @tparam T   The instance type of this value type.
+  * @tparam T   the type of this struct.
   * @see [[basis.memory.Data]]
   */
-@implicitNotFound("No implicit Struct for ${T}")
+@implicitNotFound("No implicit struct for ${T}")
 abstract class Struct[@specialized T] { struct =>
-  /** The power-of-two alignment of this Struct's frame. Storage addresses must
+  /** The power-of-two alignment of this struct's frame. Storage addresses must
     * be multiples of this alignment. */
   def alignment: Long
   
-  /** The size in bytes of this Struct's frame. Must be a multiple of `alignment`. */
+  /** The size in bytes of this struct's frame. Must be a multiple of `alignment`. */
   def size: Long
   
-  /** Loads an instance of a value.
+  /** Loads an instance of a data value.
     * 
-    * @param  data      the Data to load from.
-    * @param  address   the aligned `data` address to load from.
+    * @param  data      the `Data` to load from.
+    * @param  address   the aligned address to load from.
     * @return the loaded instance.
     */
   def load(data: Data, address: Long): T
   
-  /** Stores an instance as a value.
+  /** Stores an instance as a data value.
     * 
-    * @param  data      the Data to store to.
-    * @param  address   the aligned `data` address to store to.
+    * @param  data      the `Data` to store to.
+    * @param  address   the aligned address to store to.
     * @param  value     the instance to store.
     */
   def store(data: Data, address: Long, value: T): Unit
   
-  /** Projects this Struct into a different frame.
+  /** Projects this struct into a different frame.
     * 
     * @param  offset      the incremental offset into the new frame.
     * @param  size        the preferred size of the new frame.
     * @param  alignment   the preferred alignment of the new frame.
-    * @return A Struct that embeds this value type into the new frame.
+    * @return this struct embedded into a new frame.
     */
   def project(offset: Long = 0L, size: Long = this.size, alignment: Long = this.alignment): Struct[T] =
     new Frame(offset, size, alignment)
   
-  /** A projection of the outer Struct into a new frame.
-   * 
-   * @param frameOffset     the cumulative offset into the frame.
-   * @param frameSize       the size of the frame.
-   * @param frameAlignment  the alignment of the frame.
-   */
+  /** A projection of the outer struct into a different frame.
+    * 
+    * @param frameOffset     the preferred total offset into the frame.
+    * @param frameSize       the preferred size of the frame.
+    * @param frameAlignment  the preferred alignment of the frame.
+    */
   protected class Frame(frameOffset: Long, frameSize: Long, frameAlignment: Long) extends Struct[T] {
-    /** The cumulative offset into this Struct's frame. Forces `frameOffset` to
-      * align to the outer Struct's alignment. */
+    /** The cumulative offset into the struct's frame. Forces `frameOffset` to
+      * align to the outer struct's alignment. */
     val offset: Long = align(struct.alignment)(frameOffset)
     
-    /** The alignment of this Struct's frame. Forces `frameAlignment` to a
-      * multiple of the outer Struct's alignment. */
+    /** The alignment of the struct's frame. Forces `frameAlignment` to a
+      * multiple of the outer struct's alignment. */
     val alignment: Long = align(struct.alignment)(max(struct.alignment, frameAlignment))
     
-    /** The size of this Struct's frame. Forces `frameSize` to contain the outer
-      * Struct's offset frame and to align to this Struct's alignment. */
+    /** The size of the struct's frame. Forces `frameSize` to contain the outer
+      * struct's offset frame and to align to this struct's alignment. */
     val size: Long = align(alignment)(max(offset + struct.size, frameSize))
     
     def load(data: Data, address: Long): T =
@@ -98,32 +98,31 @@ abstract class Struct[@specialized T] { struct =>
   }
 }
 
-/** Contains value types for fundamental Scala types. Implicitly provides an
-  * ''aligned'' value type for each primitive Scala type. Also implicitly
-  * provides value types for tuples of value typed elements.
+/** Contains structs for fundamental Scala types. Implicitly provides an
+  * ''aligned'' struct for each primitive Scala type. Also implicitly provides
+  * structs for tuples of struct types.
   */
 object Struct {
-  /** Returns the implicit value type of an instance type.
+  /** Returns the implicit struct of a Scala type.
     * 
-    * Use as shorthand to obtain an implicitly scoped value type.
-    * {{{
-    * scala> val row = Struct[(Int, Double)]
-    * row: basis.memory.Struct[(Int, Double)] = Record2(PaddedInt, PaddedDouble)
+    * @example {{{
+    * scala> Struct[(Int, Double)]
+    * res0: basis.memory.Struct[(Int, Double)] = Record2(PaddedInt, PaddedDouble)
     * }}}
     * 
-    * @tparam T       the instance type of the value type to retrieve.
-    * @param  struct  the implicit value type itself.
-    * @return the implicitly supplied value type.
+    * @tparam T       the Scala type of the struct to get.
+    * @param  struct  the implicit struct itself.
+    * @return the implicitly supplied struct.
     */
   @inline def apply[T](implicit struct: Struct[T]): Struct[T] = struct
   
-  /** Returns the implicit raw type of an instance type. 
+  /** Optionally returns the implicit struct of a Scala type. 
     * 
-    * @tparam T       the instance type of the raw type to retrieve.
-    * @param  struct  the implicit value type if available.
-    * @return An option containing some `struct` or none.
+    * @tparam T       the Scala type of the struct type to try to get.
+    * @param  struct  the implicit struct itself, if available.
+    * @return the optional struct.
     */
-  implicit def raw[T](implicit struct: Struct[T] = null): Option[Struct[T]] =
+  @inline implicit def raw[T](implicit struct: Struct[T] = null): Option[Struct[T]] =
     if (struct != null) Some(struct) else None
   
   /** The value type of `Byte` values. */
@@ -523,28 +522,30 @@ object Struct {
   /** The value type of a kind of 2-tuple. */
   final class Record2[@specialized(Int, Long, Double) T1, @specialized(Int, Long, Double) T2]
       (frameOffset: Long, frameSize: Long, frameAlignment: Long)
-      (implicit struct1: Struct[T1], struct2: Struct[T2])
+      (implicit column1Spec: Struct[T1], column2Spec: Struct[T2])
     extends Struct2[T1, T2, (T1, T2)](frameOffset, frameSize, frameAlignment) {
     
-    def this()(implicit struct1: Struct[T1], struct2: Struct[T2]) = this(0L, 0L, 0L)
+    def this()(implicit column1: Struct[T1], column2: Struct[T2]) = this(0L, 0L, 0L)
     
-    def apply(_1: T1, _2: T2) = (_1, _2)
+    /** The projection of the first field of this record. */
+    def _1: Struct[T1] = field1
     
-    def unapply(value: (T1, T2)) = Tuple2.unapply(value)
+    /** The projection of the second field of this record. */
+    def _2: Struct[T2] = field2
     
-    override def load(data: Data, address: Long): (T1, T2) = {
+    def load(data: Data, address: Long): (T1, T2) = {
       val _1 = field1.load(data, address)
       val _2 = field2.load(data, address)
-      apply(_1, _2)
+      (_1, _2)
     }
     
-    override def store(data: Data, address: Long, value: (T1, T2)) {
+    def store(data: Data, address: Long, value: (T1, T2)) {
       field1.store(data, address, value._1)
       field2.store(data, address, value._2)
     }
     
     override def project(offset: Long, size: Long, alignment: Long): Record2[T1, T2] =
-      new Record2[T1, T2](offset1 + offset, size, alignment)(column1, column2)
+      new Record2[T1, T2](offset1 + offset, size, alignment)
     
     override def toString: String =
       "Record2"+"("+ column1 +", "+ column2 +")"
@@ -562,23 +563,35 @@ object Struct {
   /** The value type of a kind of 3-tuple. */
   final class Record3[T1, T2, T3]
       (frameOffset: Long, frameSize: Long, frameAlignment: Long)
-      (implicit struct1: Struct[T1], struct2: Struct[T2], struct3: Struct[T3])
+      (implicit column1: Struct[T1], column2: Struct[T2], column3: Struct[T3])
     extends Struct3[T1, T2, T3, (T1, T2, T3)](frameOffset, frameSize, frameAlignment) {
     
-    def this()(implicit struct1: Struct[T1], struct2: Struct[T2], struct3: Struct[T3]) = this(0L, 0L, 0L)
+    def this()(implicit column1: Struct[T1], column2: Struct[T2], column3: Struct[T3]) = this(0L, 0L, 0L)
     
-    def apply(_1: T1, _2: T2, _3: T3) = (_1, _2, _3)
+    /** The projection of the first field of this record. */
+    def _1: Struct[T1] = field1
     
-    def unapply(value: (T1, T2, T3)) = Tuple3.unapply(value)
+    /** The projection of the second field of this record. */
+    def _2: Struct[T2] = field2
     
-    override def store(data: Data, address: Long, value: (T1, T2, T3)) {
+    /** The projection of the third field of this record. */
+    def _3: Struct[T3] = field3
+    
+    def load(data: Data, address: Long): (T1, T2, T3) = {
+      val _1 = field1.load(data, address)
+      val _2 = field2.load(data, address)
+      val _3 = field3.load(data, address)
+      (_1, _2, _3)
+    }
+    
+    def store(data: Data, address: Long, value: (T1, T2, T3)) {
       field1.store(data, address, value._1)
       field2.store(data, address, value._2)
       field3.store(data, address, value._3)
     }
     
     override def project(offset: Long, size: Long, alignment: Long): Record3[T1, T2, T3] =
-      new Record3(offset1 + offset, size, alignment)(column1, column2, column3)
+      new Record3(offset1 + offset, size, alignment)
     
     override def toString: String =
       "Record3"+"("+ column1 +", "+ column2 +", "+ column3 +")"
@@ -597,16 +610,32 @@ object Struct {
   /** The value type of a kind of 4-tuple. */
   final class Record4[T1, T2, T3, T4]
       (frameOffset: Long, frameSize: Long, frameAlignment: Long)
-      (implicit struct1: Struct[T1], struct2: Struct[T2], struct3: Struct[T3], struct4: Struct[T4])
+      (implicit column1: Struct[T1], column2: Struct[T2], column3: Struct[T3], column4: Struct[T4])
     extends Struct4[T1, T2, T3, T4, (T1, T2, T3, T4)](frameOffset, frameSize, frameAlignment) {
     
-    def this()(implicit struct1: Struct[T1], struct2: Struct[T2], struct3: Struct[T3], struct4: Struct[T4]) = this(0L, 0L, 0L)
+    def this()(implicit column1: Struct[T1], column2: Struct[T2], column3: Struct[T3], column4: Struct[T4]) = this(0L, 0L, 0L)
     
-    def apply(_1: T1, _2: T2, _3: T3, _4: T4) = (_1, _2, _3, _4)
+    /** The projection of the first field of this record. */
+    def _1: Struct[T1] = field1
     
-    def unapply(value: (T1, T2, T3, T4)) = Tuple4.unapply(value)
+    /** The projection of the second field of this record. */
+    def _2: Struct[T2] = field2
     
-    override def store(data: Data, address: Long, value: (T1, T2, T3, T4)) {
+    /** The projection of the third field of this record. */
+    def _3: Struct[T3] = field3
+    
+    /** The projection of the fourth field of this record. */
+    def _4: Struct[T4] = field4
+    
+    def load(data: Data, address: Long): (T1, T2, T3, T4) = {
+      val _1 = field1.load(data, address)
+      val _2 = field2.load(data, address)
+      val _3 = field3.load(data, address)
+      val _4 = field4.load(data, address)
+      (_1, _2, _3, _4)
+    }
+    
+    def store(data: Data, address: Long, value: (T1, T2, T3, T4)) {
       field1.store(data, address, value._1)
       field2.store(data, address, value._2)
       field3.store(data, address, value._3)
@@ -614,7 +643,7 @@ object Struct {
     }
     
     override def project(offset: Long, size: Long, alignment: Long): Record4[T1, T2, T3, T4] =
-      new Record4(offset1 + offset, size, alignment)(column1, column2, column3, column4)
+      new Record4(offset1 + offset, size, alignment)
     
     override def toString: String =
       "Record4"+"("+ column1 +", "+ column2 +", "+ column3 +", "+ column4 +")"
