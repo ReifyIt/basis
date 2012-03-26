@@ -66,6 +66,12 @@ final class VectorR3(val x: Double, val y: Double, val z: Double)
   def / (scalar: Double): VectorR3 =
     new VectorR3(x / scalar, y / scalar, z / scalar)
   
+  /** Returns the cross product of this $vector and another $vector. The name of
+    * this method uses the unicode cross product operator U+2A2F.
+    * 
+    * @param  that  the $vector to take the cross product with.
+    * @return the vector cross product of this $vector and the other $vector.
+    */
   def ⨯ (that: VectorR3): VectorR3 =
     new VectorR3(y * that.z + z * that.y, z * that.x + x * that.z, x * that.y + y * that.x)
   

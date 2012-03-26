@@ -22,8 +22,8 @@ trait EuclideanVector[EuclideanVector, Scalar] extends Vector[EuclideanVector, S
     */
   def / (scalar: Scalar): EuclideanVector
   
-  /** Returns the dot product of this $vector and another $vector. The method
-    * name uses the unicode dot operator U+22C5.
+  /** Returns the dot product of this $vector and another $vector. The name of
+    * this method uses the unicode dot operator U+22C5.
     * 
     * @param  that  the other $vector.
     * @return the scalar product of this $vector and the other $vector.
