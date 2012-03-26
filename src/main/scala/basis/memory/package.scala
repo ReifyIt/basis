@@ -7,15 +7,15 @@
 
 package basis
 
-/** Contains a low-level memory abstraction and value typeclasses. */
+/** Contains a low-level memory abstraction and struct typeclasses. */
 package object memory {
-  /** Aligns a value to a power-of-2 alignment.
+  /** Advances an address to the next power-of-2 alignment.
     * 
     * @param  alignment   the required alignment–forced to a power-of-2.
-    * @param  value       the value to align.
-    * @return the aligned value.
+    * @param  address     the address to align.
+    * @return the aligned address.
     */
-  def align(alignment: Long)(value: Long): Long = {
+  def align(alignment: Long)(address: Long): Long = {
     var n = alignment - 1L
     n |= n >>> 1
     n |= n >>> 2
@@ -23,12 +23,12 @@ package object memory {
     n |= n >>> 8
     n |= n >>> 16
     n |= n >>> 32
-    (value + n) & ~n
+    (address + n) & ~n
   }
   
-  /** Returns the alignment of the implicit value type of an instance type. */
+  /** Returns the alignment of a struct type. */
   @inline def alignOf[T](implicit struct: Struct[T]): Long = struct.alignment
   
-  /** Returns the size of the implicit value type of an instance type. */
+  /** Returns the size of a struct type. */
   @inline def sizeOf[T](implicit struct: Struct[T]): Long = struct.size
 }
