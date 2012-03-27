@@ -68,7 +68,7 @@ res2: basis.memory.Struct[(Int, Double)] = Record2(PaddedInt, PaddedDouble)
 scala> implicit val Row = Struct.Record2[Int, Double] // cache the value type.
 Row: basis.memory.Struct.Record2[Int,Double] = Record2(PaddedInt, PaddedDouble)
 
-scala> data.load(0L)(Row.field2) // load just the second field of the tuple.
+scala> data.load(0L)(Row._2) // load just the second field of the tuple.
 res3: Double = 1.4142135623730951
 ```
 
