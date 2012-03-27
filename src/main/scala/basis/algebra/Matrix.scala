@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-/** An element of a matrix space.
+/** A matrix in a matrix space.
   * 
   * @author Chris Sachs
   * 
@@ -22,8 +22,8 @@ package basis.algebra
   */
 trait Matrix[Matrix, Transpose, ColumnVector, RowVector, -Scalar] extends Vector[Matrix, Scalar] {
   /** Multiplies a vector in the row space. Multiplies the vector on the right.
-    * The method name uses the unicode dot operator U+22C5 to differentiate
-    * vector multiplication from scalar multiplication.
+    * The name of this method uses the unicode dot operator U+22C5 to
+    * differentiate it from scalar multiplication.
     * 
     * @param  column  the vector to transform; treated as a column vector.
     * @return the transformed vector in the column space.
@@ -31,8 +31,8 @@ trait Matrix[Matrix, Transpose, ColumnVector, RowVector, -Scalar] extends Vector
   def :⋅ (column: RowVector): ColumnVector
   
   /** Multiples a vector in the column space. Multiplies the vector on the left.
-    * The method name uses the unicode dot operator U+22C5 to differentiate
-    * vector multiplication from scalar multiplication.
+    * The method of this method uses the unicode dot operator U+22C5 to
+    * differentiate it from scalar multiplication.
     * 
     * @param  row     the vector to transform; treated as a row vector.
     * @return the transformed vector in the row space.

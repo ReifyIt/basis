@@ -45,7 +45,7 @@ final class PointR3(val x: Double, val y: Double, val z: Double)
     "PointR3"+"("+ x +", "+ y +", "+ z +")"
 }
 
-/** Contains the origin of `R3` and serves as a struct for points in `R3`. */
+/** Contains factory methods and serves as a struct for points in `R3`. */
 object PointR3 extends Struct3[Double, Double, Double, PointR3] {
    /** the origin of `R3`. */
   def Origin: PointR3 = new PointR3(0.0, 0.0, 0.0)

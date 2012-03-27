@@ -9,22 +9,46 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
+/** A 3x3 matrix of `Real` values.
+  * 
+  * @author Chris Sachs
+  * 
+  * @constructor  Constructs a matrix with nine row-major `Double` values.
+  * @param  _1_1  The entry at row 1, column 1.
+  * @param  _1_2  The entry at row 1, column 2.
+  * @param  _1_3  The entry at row 1, column 3.
+  * @param  _2_1  The entry at row 2, column 1.
+  * @param  _2_2  The entry at row 2, column 2.
+  * @param  _2_3  The entry at row 2, column 3.
+  * @param  _3_1  The entry at row 3, column 1.
+  * @param  _3_2  The entry at row 3, column 2.
+  * @param  _3_3  The entry at row 3, column 3.
+  * 
+  * @define scalar  `Real` value
+  */
 final class MatrixR3x3(
     val _1_1: Double, val _1_2: Double, val _1_3: Double,
     val _2_1: Double, val _2_2: Double, val _2_3: Double,
     val _3_1: Double, val _3_2: Double, val _3_3: Double)
-  extends Matrix[MatrixR3x3, MatrixR3x3, VectorR3, VectorR3, Real] {
+  extends SquareMatrix[MatrixR3x3, VectorR3, Real]
+    with RealVector[MatrixR3x3] {
   
+  /** The vector in the first column of the matrix. */
   def column1: VectorR3 = new VectorR3(_1_1, _2_1, _3_1)
   
+  /** The vector in the second column of the matrix. */
   def column2: VectorR3 = new VectorR3(_1_2, _2_2, _3_2)
   
+  /** The vector in the third column of the matrix. */
   def column3: VectorR3 = new VectorR3(_1_3, _2_3, _3_3)
   
+  /** The vector in the first row of the matrix. */
   def row1: VectorR3 = new VectorR3(_1_1, _1_2, _1_3)
   
+  /** The vector in the second row of the matrix. */
   def row2: VectorR3 = new VectorR3(_2_1, _2_2, _2_3)
   
+  /** The vector in the third row of the matrix. */
   def row3: VectorR3 = new VectorR3(_3_1, _3_2, _3_3)
   
   def + (that: MatrixR3x3): MatrixR3x3 =
@@ -45,23 +69,14 @@ final class MatrixR3x3(
       _2_1 - that._2_1, _2_2 - that._2_2, _2_3 - that._2_3,
       _3_1 - that._3_1, _3_2 - that._3_2, _3_3 - that._3_3)
   
-  def :* (scalar: Real): MatrixR3x3 =
-    this :* scalar.toDouble
-  
   def :* (scalar: Double): MatrixR3x3 =
     new MatrixR3x3(
       _1_1 * scalar, _1_2 * scalar, _1_3 * scalar,
       _2_1 * scalar, _2_2 * scalar, _2_3 * scalar,
       _3_1 * scalar, _3_2 * scalar, _3_3 * scalar)
   
-  def *: (scalar: Real): MatrixR3x3 =
-    this :* scalar.toDouble
-  
   def *: (scalar: Double): MatrixR3x3 =
     this :* scalar
-  
-  def / (scalar: Real): MatrixR3x3 =
-    this / scalar.toDouble
   
   def / (scalar: Double): MatrixR3x3 =
     new MatrixR3x3(
@@ -107,7 +122,7 @@ final class MatrixR3x3(
       _3_1 * that._1_2 + _3_2 * that._2_2 + _3_3 * that._3_2,
       _3_1 * that._1_3 + _3_2 * that._2_3 + _3_3 * that._3_3)
   
-  def inverse: MatrixR3x3 = {
+  def inverse: Option[MatrixR3x3] = {
     // all 2x2 determinants minor_i_j with row i and column j blocked out.
     val minor_1_1 = _2_2 * _3_3 - _2_3 * _3_2
     val minor_1_2 = _2_1 * _3_3 - _2_3 * _3_1
@@ -120,10 +135,12 @@ final class MatrixR3x3(
     val minor_3_3 = _1_1 * _2_2 - _1_2 * _2_1
     
     val det = _1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3
-    new MatrixR3x3(
-       minor_1_1 / det, -minor_2_1 / det,  minor_3_1 / det,
-      -minor_1_2 / det,  minor_2_2 / det, -minor_3_2 / det,
-       minor_1_3 / det, -minor_2_3 / det,  minor_3_3 / det)
+    if (math.abs(det) >= java.lang.Double.MIN_NORMAL)
+      Some(new MatrixR3x3(
+         minor_1_1 / det, -minor_2_1 / det,  minor_3_1 / det,
+        -minor_1_2 / det,  minor_2_2 / det, -minor_3_2 / det,
+         minor_1_3 / det, -minor_2_3 / det,  minor_3_3 / det))
+    else None
   }
   
   override def equals(other: Any): Boolean = other match {
@@ -147,13 +164,16 @@ final class MatrixR3x3(
       _3_1 +", "+ _3_2 +", "+ _3_3 +")"
 }
 
+/** Contains factory methods for matrices in `R3x3`. */
 object MatrixR3x3 {
+  /** The zero matrix of `R3x3`. */
   def Zero: MatrixR3x3 =
     new MatrixR3x3(
       0.0, 0.0, 0.0,
       0.0, 0.0, 0.0,
       0.0, 0.0, 0.0)
   
+  /** The identity matrix of `R3x3`. */
   def Identity: MatrixR3x3 =
     new MatrixR3x3(
       1.0, 0.0, 0.0,

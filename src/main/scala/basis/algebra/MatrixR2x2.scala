@@ -9,17 +9,34 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
+/** A 2x2 matrix of `Real` values.
+  * 
+  * @author Chris Sachs
+  * 
+  * @constructor  Constructs a matrix with four row-major `Double` values.
+  * @param  _1_1  The entry at row 1, column 1.
+  * @param  _1_2  The entry at row 1, column 2.
+  * @param  _2_1  The entry at row 2, column 1.
+  * @param  _2_2  The entry at row 2, column 2.
+  * 
+  * @define scalar  `Real` value
+  */
 final class MatrixR2x2(
     val _1_1: Double, val _1_2: Double,
     val _2_1: Double, val _2_2: Double)
-  extends Matrix[MatrixR2x2, MatrixR2x2, VectorR2, VectorR2, Real] {
+  extends SquareMatrix[MatrixR2x2, VectorR2, Real]
+    with RealVector[MatrixR2x2] {
   
+  /** The vector in the first column of the matrix. */
   def column1: VectorR2 = new VectorR2(_1_1, _2_1)
   
+  /** The vector in the second column of the matrix. */
   def column2: VectorR2 = new VectorR2(_1_2, _2_2)
   
+  /** The vector in the first row of the matrix. */
   def row1: VectorR2 = new VectorR2(_1_1, _1_2)
   
+  /** The vector in the second row of the matrix. */
   def row2: VectorR2 = new VectorR2(_2_1, _2_2)
   
   def + (that: MatrixR2x2): MatrixR2x2 =
@@ -37,22 +54,13 @@ final class MatrixR2x2(
       _1_1 - that._1_1, _1_2 - that._1_2,
       _2_1 - that._2_1, _2_2 - that._2_2)
   
-  def :* (scalar: Real): MatrixR2x2 =
-    this :* scalar.toDouble
-  
   def :* (scalar: Double): MatrixR2x2 =
     new MatrixR2x2(
       _1_1 * scalar, _1_2 * scalar,
       _2_1 * scalar, _2_2 * scalar)
   
-  def *: (scalar: Real): MatrixR2x2 =
-    this :* scalar.toDouble
-  
   def *: (scalar: Double): MatrixR2x2 =
     this :* scalar
-  
-  def / (scalar: Real): MatrixR2x2 =
-    this / scalar.toDouble
   
   def / (scalar: Double): MatrixR2x2 =
     new MatrixR2x2(
@@ -83,11 +91,13 @@ final class MatrixR2x2(
       _2_1 * that._1_1 + _2_2 * that._2_1,
       _2_1 * that._1_2 + _2_2 * that._2_2)
   
-  def inverse: MatrixR2x2 = {
+  def inverse: Option[MatrixR2x2] = {
     val det = _1_1 * _2_2 - _1_2 * _2_1
-    new MatrixR2x2(
-       _2_2 / det, -_1_2 / det,
-      -_2_1 / det,  _1_1 / det)
+    if (math.abs(det) >= java.lang.Double.MIN_NORMAL)
+      Some(new MatrixR2x2(
+         _2_2 / det, -_1_2 / det,
+        -_2_1 / det,  _1_1 / det))
+    else None
   }
   
   override def equals(other: Any): Boolean = other match {
@@ -108,12 +118,15 @@ final class MatrixR2x2(
       _2_1 +", "+ _2_2 +")"
 }
 
+/** Contains factory methods for matrices in `R2x2`. */
 object MatrixR2x2 {
+  /** The zero matrix of `R2x2`. */
   def Zero: MatrixR2x2 =
     new MatrixR2x2(
       0.0, 0.0,
       0.0, 0.0)
   
+  /** The identity matrix of `R2x2`. */
   def Identity: MatrixR2x2 =
     new MatrixR2x2(
       1.0, 0.0,

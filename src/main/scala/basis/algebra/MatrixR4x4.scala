@@ -9,27 +9,60 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
+/** A 4x4 matrix of `Real` values.
+  * 
+  * @author Chris Sachs
+  * 
+  * @constructor  Constructs a matrix with sixteen row-major `Double` values.
+  * @param  _1_1  The entry at row 1, column 1.
+  * @param  _1_2  The entry at row 1, column 2.
+  * @param  _1_3  The entry at row 1, column 3.
+  * @param  _1_4  The entry at row 1, column 4.
+  * @param  _2_1  The entry at row 2, column 1.
+  * @param  _2_2  The entry at row 2, column 2.
+  * @param  _2_3  The entry at row 2, column 3.
+  * @param  _2_4  The entry at row 2, column 4.
+  * @param  _3_1  The entry at row 3, column 1.
+  * @param  _3_2  The entry at row 3, column 2.
+  * @param  _3_3  The entry at row 3, column 3.
+  * @param  _3_4  The emtry at row 3, column 4.
+  * @param  _4_1  The entry at row 4, column 1.
+  * @param  _4_2  The entry at row 4, column 2.
+  * @param  _4_3  The entry at row 4, column 3.
+  * @param  _4_4  The entry at row 4, column 4.
+  * 
+  * @define scalar  `Real` value
+  */
 final class MatrixR4x4(
     val _1_1: Double, val _1_2: Double, val _1_3: Double, val _1_4: Double,
     val _2_1: Double, val _2_2: Double, val _2_3: Double, val _2_4: Double,
     val _3_1: Double, val _3_2: Double, val _3_3: Double, val _3_4: Double,
     val _4_1: Double, val _4_2: Double, val _4_3: Double, val _4_4: Double)
-  extends Matrix[MatrixR4x4, MatrixR4x4, VectorR4, VectorR4, Real] {
+  extends SquareMatrix[MatrixR4x4, VectorR4, Real]
+    with RealVector[MatrixR4x4] {
   
+  /** The vector in the first column of the matrix. */
   def column1: VectorR4 = new VectorR4(_1_1, _2_1, _3_1, _4_1)
   
+  /** The vector in the second column of the matrix. */
   def column2: VectorR4 = new VectorR4(_1_2, _2_2, _3_2, _4_2)
   
+  /** The vector in the third column of the matrix. */
   def column3: VectorR4 = new VectorR4(_1_3, _2_3, _3_3, _4_3)
   
+  /** The vector in the fourth column of the matrix. */
   def column4: VectorR4 = new VectorR4(_1_4, _2_4, _3_4, _4_4)
   
+  /** The vector in the first row of the matrix. */
   def row1: VectorR4 = new VectorR4(_1_1, _1_2, _1_3, _1_4)
   
+  /** The vector in the second row of the matrix. */
   def row2: VectorR4 = new VectorR4(_2_1, _2_2, _2_3, _2_4)
   
+  /** The vector in the third row of the matrix. */
   def row3: VectorR4 = new VectorR4(_3_1, _3_2, _3_3, _3_4)
   
+  /** The vector in the fourth row of the matrix. */
   def row4: VectorR4 = new VectorR4(_4_1, _4_2, _4_3, _4_4)
   
   def + (that: MatrixR4x4): MatrixR4x4 =
@@ -53,9 +86,6 @@ final class MatrixR4x4(
       _3_1 - that._3_1, _3_2 - that._3_2, _3_3 - that._3_3, _3_4 - that._3_4,
       _4_1 - that._4_1, _4_2 - that._4_2, _4_3 - that._4_3, _4_4 - that._4_4)
   
-  def :* (scalar: Real): MatrixR4x4 =
-    this :* scalar.toDouble
-  
   def :* (scalar: Double): MatrixR4x4 =
     new MatrixR4x4(
       _1_1 * scalar, _1_2 * scalar, _1_3 * scalar, _1_4 * scalar,
@@ -63,14 +93,8 @@ final class MatrixR4x4(
       _3_1 * scalar, _3_2 * scalar, _3_3 * scalar, _3_4 * scalar,
       _4_1 * scalar, _4_2 * scalar, _4_3 * scalar, _4_4 * scalar)
   
-  def *: (scalar: Real): MatrixR4x4 =
-    this :* scalar.toDouble
-  
   def *: (scalar: Double): MatrixR4x4 =
     this :* scalar
-  
-  def / (scalar: Real): MatrixR4x4 =
-    this / scalar.toDouble
   
   def / (scalar: Double): MatrixR4x4 =
     new MatrixR4x4(
@@ -138,7 +162,7 @@ final class MatrixR4x4(
       _4_1 * that._1_3 + _4_2 * that._2_3 + _4_3 * that._3_3 + _4_4 * that._4_3,
       _4_1 * that._1_4 + _4_2 * that._2_4 + _4_3 * that._3_4 + _4_4 * that._4_4)
   
-  def inverse: MatrixR4x4 = {
+  def inverse: Option[MatrixR4x4] = {
     // all 2x2 determinants minor_i1_i2__j1_j2 with
     // rows i1 and i2 and columns j1 and j2 blocked out.
     val minor_1_2__1_2 = _3_3 * _4_4 - _3_4 * _4_3
@@ -179,11 +203,13 @@ final class MatrixR4x4(
     val minor_4_4 = _1_1 * minor_1_4__1_4 - _1_2 * minor_1_4__2_4 + _1_3 * minor_1_4__3_4
     
     val det = _1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3 - _1_4 * minor_1_4
-    new MatrixR4x4(
-       minor_1_1 / det, -minor_2_1 / det,  minor_3_1 / det, -minor_4_1 / det,
-      -minor_1_2 / det,  minor_2_2 / det, -minor_3_2 / det,  minor_4_2 / det,
-       minor_1_3 / det, -minor_2_3 / det,  minor_3_3 / det, -minor_4_3 / det,
-      -minor_1_4 / det,  minor_2_4 / det, -minor_3_4 / det,  minor_4_4 / det)
+    if (math.abs(det) >= java.lang.Double.MIN_NORMAL)
+      Some(new MatrixR4x4(
+         minor_1_1 / det, -minor_2_1 / det,  minor_3_1 / det, -minor_4_1 / det,
+        -minor_1_2 / det,  minor_2_2 / det, -minor_3_2 / det,  minor_4_2 / det,
+         minor_1_3 / det, -minor_2_3 / det,  minor_3_3 / det, -minor_4_3 / det,
+        -minor_1_4 / det,  minor_2_4 / det, -minor_3_4 / det,  minor_4_4 / det))
+    else None
   }
   
   override def equals(other: Any): Boolean = other match {
@@ -210,7 +236,9 @@ final class MatrixR4x4(
       _4_1 +", "+ _4_2 +", "+ _4_3 +", "+ _4_4 +")"
 }
 
+/** Contains factory methods for matrices in `R4x4`. */
 object MatrixR4x4 {
+  /** The zero matrix of `R4x4`. */
   def Zero: MatrixR4x4 =
     new MatrixR4x4(
       0.0, 0.0, 0.0, 0.0,
@@ -218,6 +246,7 @@ object MatrixR4x4 {
       0.0, 0.0, 0.0, 0.0,
       0.0, 0.0, 0.0, 0.0)
   
+  /** The identity matrix of `R4x4`. */
   def Identity: MatrixR4x4 =
     new MatrixR4x4(
       1.0, 0.0, 0.0, 0.0,

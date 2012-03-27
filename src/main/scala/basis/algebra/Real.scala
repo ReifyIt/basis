@@ -91,7 +91,7 @@ final class Real(private val value: Double)
   def toDouble: Double = value
 }
 
-/** Contains the `Real` identity elements and serves as a struct for `Real` values. */
+/** Contains factory methods and serves as a struct for `Real` values. */
 object Real extends Struct1[Double, Real] {
   /** The additive identity of `Real`. */
   val Zero: Real = new Real(0.0)

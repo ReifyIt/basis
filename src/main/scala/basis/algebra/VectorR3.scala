@@ -71,7 +71,7 @@ final class VectorR3(val x: Double, val y: Double, val z: Double)
     "VectorR3"+"("+ x +", "+ y +", "+ z +")"
 }
 
-/** Contains the zero vector of `R3` and serves as a struct for vectors in `R3`. */
+/** Contains factory methods and serves as a struct for vectors in `R3`. */
 object VectorR3 extends Struct3[Double, Double, Double, VectorR3] {
   /** The zero vector of `R3`. */
   def Zero: VectorR3 = new VectorR3(0.0, 0.0, 0.0)
