@@ -69,6 +69,15 @@ object PointR3 extends Struct3[Double, Double, Double, PointR3] {
     data.storeDouble(address + offset3, point.z)
   }
   
+  /** The projection of the `x` field of `PointR3` values. */
+  def x: Struct[Double] = field1
+  
+  /** The projection of the `y` field of `PointR3` values. */
+  def y: Struct[Double] = field2
+  
+  /** The projection of the `z` field of `PointR3` values. */
+  def z: Struct[Double] = field3
+  
   implicit def struct: this.type = this
   
   override def toString: String = "PointR3"

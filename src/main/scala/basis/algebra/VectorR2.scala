@@ -83,6 +83,12 @@ object VectorR2 extends Struct2[Double, Double, VectorR2] {
     data.storeDouble(address + offset2, vector.y)
   }
   
+  /** The projection of the `x` field of `VectorR2` values. */
+  def x: Struct[Double] = field1
+  
+  /** The projection of the `y` field of `VectorR2` values. */
+  def y: Struct[Double] = field2
+  
   implicit def struct: this.type = this
   
   override def toString: String = "VectorR2"
