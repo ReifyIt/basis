@@ -30,8 +30,8 @@ final class MatrixR3x3(
     val _1_1: Double, val _1_2: Double, val _1_3: Double,
     val _2_1: Double, val _2_2: Double, val _2_3: Double,
     val _3_1: Double, val _3_2: Double, val _3_3: Double)
-  extends SquareMatrix[MatrixR3x3, VectorR3, Real]
-    with RealVector[MatrixR3x3] {
+  extends RealVector[MatrixR3x3]
+    with SquareMatrix[MatrixR3x3, VectorR3, Real] {
   
   /** The vector in the first column of the matrix. */
   def column1: VectorR3 = new VectorR3(_1_1, _2_1, _3_1)

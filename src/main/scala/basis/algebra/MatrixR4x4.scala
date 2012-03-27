@@ -38,8 +38,8 @@ final class MatrixR4x4(
     val _2_1: Double, val _2_2: Double, val _2_3: Double, val _2_4: Double,
     val _3_1: Double, val _3_2: Double, val _3_3: Double, val _3_4: Double,
     val _4_1: Double, val _4_2: Double, val _4_3: Double, val _4_4: Double)
-  extends SquareMatrix[MatrixR4x4, VectorR4, Real]
-    with RealVector[MatrixR4x4] {
+  extends RealVector[MatrixR4x4]
+    with SquareMatrix[MatrixR4x4, VectorR4, Real] {
   
   /** The vector in the first column of the matrix. */
   def column1: VectorR4 = new VectorR4(_1_1, _2_1, _3_1, _4_1)

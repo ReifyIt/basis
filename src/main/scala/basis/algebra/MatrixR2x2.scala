@@ -24,8 +24,8 @@ import basis.util.MurmurHash._
 final class MatrixR2x2(
     val _1_1: Double, val _1_2: Double,
     val _2_1: Double, val _2_2: Double)
-  extends SquareMatrix[MatrixR2x2, VectorR2, Real]
-    with RealVector[MatrixR2x2] {
+  extends RealVector[MatrixR2x2]
+    with SquareMatrix[MatrixR2x2, VectorR2, Real] {
   
   /** The vector in the first column of the matrix. */
   def column1: VectorR2 = new VectorR2(_1_1, _2_1)
