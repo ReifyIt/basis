@@ -1,6 +1,8 @@
 Basis
 =====
 
+Explore the comprehensive [API docs](http://scalabasis.github.com/api/#basis.package) for further explanations and code examples of the features introduced in this document.
+
 Value collections
 --------------------------
 
