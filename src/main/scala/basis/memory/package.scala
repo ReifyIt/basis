@@ -7,7 +7,7 @@
 
 package basis
 
-/** Contains a low-level memory abstraction and struct typeclasses. */
+/** Contains an abstract memory model with struct typeclasses. */
 package object memory {
   /** Advances an address to the next power-of-2 alignment.
     * 
