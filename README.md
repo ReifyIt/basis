@@ -4,7 +4,7 @@ Basis
 Value collections
 --------------------------
 
-The `basis.collection` module contains collections that optionally store their elements by value. `RawSeq` and its descendants build value sequences when an implicit `Struct` typeclass is available, and reference sequences otherwise. Here's an example:
+The `basis.collection` package contains collections that optionally store their elements by value. `RawSeq` and its descendants build value sequences when an implicit `Struct` typeclass is available, and reference sequences otherwise. Here's an example:
 
 ```scala
 scala> import basis.collection._
@@ -23,7 +23,7 @@ zs: basis.collection.RawSeq[Double] = ValBuffer(1.0, 2.0, 3.0, 4.0, 5.0) // stor
 Memory abstraction
 ------------------
 
-The `basis.memory` module contains a low-level memory abstraction and value typeclasses. `Data` objects model byte-addressable memory regions and `Allocator` objects abstract over `Data` allocation. `Struct` typeclasses implement store-by-value semantics for Scala types.
+The `basis.memory` package contains an abstract memory model with struct typeclasses. `Data` objects model byte-addressable memory regions and `Allocator` objects abstract over `Data` allocation. `Struct` typeclasses implement store-by-value semantics for Scala types.
 
 Let's look at some simple uses of `Data`:
 
@@ -90,11 +90,55 @@ scala> data.store(0L, Vector3(1.0F, 2.0F, 3.0F))
 scala> data.load[Vector3](0L)
 res1: Vector3 = Vector3(1.0,2.0,3.0)
 
-scaka> data.load(0L)(Vector3.field3) // load just the z-coordinate.
-res2: Float = 3.0
-
 scala> data.store(24L, (Vector3(0.0F, 3.0F, 4.0F), 5.0)) // store a tuple of a vector and a norm.
 
 scala> data.load[(Vector3, Double)](24L)
-res4: (Vector3, Double) = (Vector3(0.0,3.0,4.0),5.0)
+res3: (Vector3, Double) = (Vector3(0.0,3.0,4.0),5.0)
+```
+
+Here's a more specialized `Struct` implementation:
+
+```scala
+case class Vector3(x: Float, y: Float, z: Float)
+
+object Vector3 extends Struct3[Float, Float, Float, Vector3] {
+  def load(data: Data, address: Long): Vector3 = {
+    val x = field1.load(data, address) // specialized load from field 1.
+    val y = field2.load(data, address) // specialized load from field 2.
+    val z = field3.load(data, address) // specialized load from field 2.
+    new Vector3(x, y, z)
+  }
+  
+  def store(data: Data, address: Long, vector: Vector3) {
+    field1.store(data, address, vector.x) // specialized store to field 1.
+    field2.store(data, address, vector.y) // specialized store to field 2.
+    field3.store(data, address, vector.z) // specialized store to field 3.
+  }
+  
+  def x = field1 // expose field 1 projection.
+  def y = field2 // expose field 2 projection.
+  def z = field3 // expose field 3 projection.
+  
+  implicit def struct = this // make this struct implicitly available.
+}
+```
+
+You can use this new struct to access individual fields of a stored value without boxing, like so:
+
+```scala
+scala> val data = Data.alloc[Vector3](1024)
+data: basis.memory.Data = Block4LE(12288)
+
+scala> data.store(0L, Vector3(1.0F, 2.0F, 3.0F))
+
+scala> data.load[Vector3](0L) // load the whole vector.
+res1: Vector3 = Vector3(1.0,2.0,3.0)
+
+scaka> data.load(0L)(Vector3.z) // load just the z-coordinate.
+res2: Float = 3.0
+
+scala> data.store(0L, 5.0F)(Vector3.y) // store just the y-coordinate.
+
+scala> data.load(0L)(Vector3.y) // load the mutated y-coordinate.
+res3: Float = 5.0
 ```
