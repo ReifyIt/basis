@@ -16,8 +16,8 @@ xs: basis.collection.RawSeq[Int] = ValBuffer(1, 2, 3, 4, 5) // stored by-value.
 scala> val ys = xs map (_.toString) // map Ints to Strings.
 ys: basis.collection.RawSeq[java.lang.String] = RefBuffer(1, 2, 3, 4, 5) // stored by reference.
 
-scala> val zs = ys map (java.lang.Double.valueOf(_)) // map Strings to Doubles.
-zs: basis.collection.RawSeq[java.lang.Double] = RefBuffer(1.0, 2.0, 3.0, 4.0, 5.0) // stored by value again.
+scala> val zs = ys map (java.lang.Double.valueOf(_).toDouble) // map Strings to Doubles.
+zs: basis.collection.RawSeq[Double] = ValBuffer(1.0, 2.0, 3.0, 4.0, 5.0) // stored by value again.
 ```
 
 Memory abstraction
