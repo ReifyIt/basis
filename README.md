@@ -76,8 +76,7 @@ Here's how to define a `Struct` for a case class (use :paste mode in the REPL).
 
 ```scala
 case class Vector3(x: Float, y: Float, z: Float)
-
-implicit object Vector3 extends Struct3[Float, Float, Float, Vector3]
+implicit object Vector3 extends CaseStruct3[Float, Float, Float, Vector3]
 ```
 
 And here are some ways you can use it:
