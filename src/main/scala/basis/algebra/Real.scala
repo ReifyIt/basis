@@ -19,9 +19,11 @@ import basis.util.MurmurHash._
   * 
   * @define Element   Real
   * @define element   `Real` value
+  * @define scalar    `Real` value
   */
 final class Real(private val value: Double)
   extends EuclideanVector[Real, Real]
+    with RealVector[Real]
     with OrderedRing[Real]
     with CompleteField[Real] {
   
@@ -39,9 +41,17 @@ final class Real(private val value: Double)
   
   def * (x: Double): Real = new Real(value * x)
   
+  override def :* (that: Real): Real = new Real(value * that.value)
+  
+  def :* (x: Double): Real = new Real(value * x)
+  
+  override def *: (that: Real): Real = new Real(that.value * value)
+  
+  def *: (x: Double): Real = new Real(x * value)
+  
   def reciprocal: Real = new Real(1.0 / value)
   
-  def / (that: Real): Real = new Real(value / that.value)
+  override def / (that: Real): Real = new Real(value / that.value)
   
   def / (x: Double): Real = new Real(value / x)
   
