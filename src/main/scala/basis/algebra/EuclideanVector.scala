@@ -30,6 +30,6 @@ trait EuclideanVector[EuclideanVector, Scalar] extends Vector[EuclideanVector, S
     */
   def ⋅ (that: EuclideanVector): Scalar
   
-  /** Returns the magnitude of this $vector. */
+  /** Returns the euclidean norm of this $vector. */
   def norm: Scalar
 }

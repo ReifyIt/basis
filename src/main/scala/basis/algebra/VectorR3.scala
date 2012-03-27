@@ -22,7 +22,7 @@ import basis.util.MurmurHash._
   * @define scalar  `Real` value
   */
 final class VectorR3(val x: Double, val y: Double, val z: Double)
-  extends EuclideanVector[VectorR3, Real] {
+  extends EuclideanVector[VectorR3, Real] with RealVector[VectorR3] {
   
   def + (that: VectorR3): VectorR3 =
     new VectorR3(x + that.x, y + that.y, z + that.z)
@@ -33,36 +33,12 @@ final class VectorR3(val x: Double, val y: Double, val z: Double)
   def - (that: VectorR3): VectorR3 =
     new VectorR3(x - that.x, y - that.y, z - that.z)
   
-  def :* (scalar: Real): VectorR3 =
-    this :* scalar.toDouble
-  
-  /** Multiplies this $vector by a `Double` value on the right.
-    * 
-    * @param  scalar  the `Double` value to multiply by.
-    * @return the scaled $vector.
-    */
   def :* (scalar: Double): VectorR3 =
     new VectorR3(x * scalar, y * scalar, z * scalar)
   
-  def *: (scalar: Real): VectorR3 =
-    this :* scalar.toDouble
-  
-  /** Multiplies this $vector by a `Double` value on the left.
-    * 
-    * @param  scalar  the `Double` value to multiply by.
-    * @return the scaled $vector.
-    */
   def *: (scalar: Double): VectorR3 =
     this :* scalar
   
-  def / (scalar: Real): VectorR3 =
-    this / scalar.toDouble
-  
-  /** Divides this $vector by a `Double` value.
-    * 
-    * @param  scalar  the `Double` value to divide by.
-    * @return the scaled $vector.
-    */
   def / (scalar: Double): VectorR3 =
     new VectorR3(x / scalar, y / scalar, z / scalar)
   
@@ -78,7 +54,10 @@ final class VectorR3(val x: Double, val y: Double, val z: Double)
   def ⋅ (that: VectorR3): Real =
     new Real(x * that.x + y * that.y + z * that.z)
   
-  def norm: Real = new Real(math.sqrt(x * x + y * y + z * z))
+  def norm: Real = new Real(length)
+  
+  /** Returns the length of this $vector. */
+  def length: Double = math.sqrt(x * x + y * y + z * z)
   
   override def equals(other: Any): Boolean = other match {
     case that: VectorR3 => x == that.x && y == that.y && z == that.z

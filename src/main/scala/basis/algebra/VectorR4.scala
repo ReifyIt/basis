@@ -23,7 +23,7 @@ import basis.util.MurmurHash._
   * @define scalar  `Real` value
   */
 final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
-  extends EuclideanVector[VectorR4, Real] {
+  extends EuclideanVector[VectorR4, Real] with RealVector[VectorR4] {
   
   def + (that: VectorR4): VectorR4 =
     new VectorR4(x + that.x, y + that.y, z + that.z, w + that.w)
@@ -34,43 +34,22 @@ final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
   def - (that: VectorR4): VectorR4 =
     new VectorR4(x - that.x, y - that.y, z - that.z, w - that.w)
   
-  def :* (scalar: Real): VectorR4 =
-    this :* scalar.toDouble
-  
-  /** Multiplies this $vector by a `Double` value on the right.
-    * 
-    * @param  scalar  the `Double` value to multiply by.
-    * @return the scaled $vector.
-    */
   def :* (scalar: Double): VectorR4 =
     new VectorR4(x * scalar, y * scalar, z * scalar, w * scalar)
   
-  def *: (scalar: Real): VectorR4 =
-    this :* scalar.toDouble
-  
-  /** Multiplies this $vector by a `Double` value on the left.
-    * 
-    * @param  scalar  the `Double` value to multiply by.
-    * @return the scaled $vector.
-    */
   def *: (scalar: Double): VectorR4 =
     this :* scalar
   
-  def / (scalar: Real): VectorR4 =
-    this / scalar.toDouble
-  
-  /** Divides this $vector by a `Double` value.
-    * 
-    * @param  scalar  the `Double` value to divide by.
-    * @return the scaled $vector.
-    */
   def / (scalar: Double): VectorR4 =
     new VectorR4(x / scalar, y / scalar, z / scalar, w / scalar)
   
   def ⋅ (that: VectorR4): Real =
     new Real(x * that.x + y * that.y + z * that.z + w * that.w)
   
-  def norm: Real = new Real(math.sqrt(x * x + y * y + z * z + w * w))
+  def norm: Real = new Real(length)
+  
+  /** Returns the length of this $vector. */
+  def length: Double = math.sqrt(x * x + y * y + z * z + w * w)
   
   override def equals(other: Any): Boolean = other match {
     case that: VectorR4 => x == that.x && y == that.y && z == that.z && w == that.w
