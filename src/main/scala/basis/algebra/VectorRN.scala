@@ -14,11 +14,11 @@ import basis.util.MurmurHash._
   * @author Chris Sachs
   * 
   * @constructor  Constructs a vector with a coordinate array.
-  * @param  coordinates   the array of coordinates.
+  * @param  coordinates   The array of coordinates.
   * 
   * @define scalar  `Real` value
   */
-final class VectorRN(private val coordinates: Array[Double])
+final class VectorRN(protected val coordinates: Array[Double])
   extends EuclideanVector[VectorRN, Real] with RealVector[VectorRN] {
   
   /** Constructs a vector with repeated coordinate parameters.
@@ -30,7 +30,11 @@ final class VectorRN(private val coordinates: Array[Double])
   /** The number of coordinates. */
   def dimension: Int = coordinates.length
   
-  /** Returns the ''nth'' coordinate. */
+  /** Returns the ''n''th coordinate.
+    * 
+    * @param  n   the zero-based coordinate index.
+    * @return the $vector coordinate.
+    */
   def apply(n: Int): Double = coordinates(n)
   
   def + (that: VectorRN): VectorRN = {
@@ -142,7 +146,7 @@ final class VectorRN(private val coordinates: Array[Double])
   def toSeq: Seq[Double] = coordinates
 }
 
-/** Contains factory methods for vectors in `RN`. */
+/** Contains factory methods for ''N''-dimensional `Real` vectors. */
 object VectorRN {
   def apply(coordinates: Array[Double]): VectorRN =
     new VectorRN(coordinates)

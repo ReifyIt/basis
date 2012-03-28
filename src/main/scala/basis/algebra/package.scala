@@ -183,6 +183,13 @@ package object algebra {
     type Scalar = Real
   }
   
+  /** A concrete ''N''-dimensional `Real` euclidean space. */
+  type RN = Singleton {
+    type Point  = VectorRN
+    type Vector = VectorRN
+    type Scalar = Real
+  }
+  
   /** A concrete 2x2 `Real` matrix space. */
   type R2x2 = Singleton {
     type Matrix       = MatrixR2x2
@@ -213,6 +220,17 @@ package object algebra {
     type RowVector    = VectorR4
     type Point        = MatrixR4x4
     type Vector       = MatrixR4x4
+    type Scalar       = Real
+  }
+  
+  /** A concrete ''M''x''N'' `Real` matrix space. */
+  type RMxN = Singleton {
+    type Matrix       = MatrixRMxN
+    type Transpose    = MatrixRMxN
+    type ColumnVector = VectorRN
+    type RowVector    = VectorRN
+    type Point        = MatrixRMxN
+    type Vector       = MatrixRMxN
     type Scalar       = Real
   }
   
