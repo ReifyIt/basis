@@ -7,7 +7,7 @@
 
 package basis
 
-/** Contains algebraic structures. Includes implicit conversions for some structures.
+/** Contains algebraic structures.
   * 
   * ==Mathematical spaces==
   * 
@@ -233,10 +233,4 @@ package object algebra {
     type Vector       = MatrixRMxN
     type Scalar       = Real
   }
-  
-  /** Implicitly converts a `Double` value to a `Real` value. */
-  implicit def DoubleToReal(value: Double): Real = new Real(value)
-  
-  /** Implicitly converts a `Real` value to a `Double` value. */
-  implicit def RealToDouble(real: Real): Double = real.toDouble
 }
