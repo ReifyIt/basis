@@ -158,10 +158,10 @@ object Complex extends Struct2[Double, Double, Complex] {
     data.storeDouble(address + offset2, complex.imaginary)
   }
   
-  /** The projection of the `real` field of `Complex` values. */
+  /** The projection of the `real` field of the `Complex` struct. */
   def real: Struct[Double] = field1
   
-  /** The projection of the `imaginary` field of `Complex` values. */
+  /** The projection of the `imaginary` field of the `Complex` struct. */
   def imaginary: Struct[Double] = field2
   
   implicit def struct: this.type = this

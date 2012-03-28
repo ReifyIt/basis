@@ -89,16 +89,16 @@ object VectorR4 extends Struct4[Double, Double, Double, Double, VectorR4] {
     data.storeDouble(address + offset4, vector.w)
   }
   
-  /** The projection of the `x` field of `VectorR4` values. */
+  /** The projection of the `x` field of the `VectorR4` struct. */
   def x: Struct[Double] = field1
   
-  /** The projection of the `y` field of `VectorR4` values. */
+  /** The projection of the `y` field of the `VectorR4` struct. */
   def y: Struct[Double] = field2
   
-  /** The projection of the `z` field of `VectorR4` values. */
+  /** The projection of the `z` field of the `VectorR4` struct. */
   def z: Struct[Double] = field3
   
-  /** The projection of the `w` field of `VectorR4` values. */
+  /** The projection of the `w` field of the `VectorR4` struct. */
   def w: Struct[Double] = field4
   
   implicit def struct: this.type = this

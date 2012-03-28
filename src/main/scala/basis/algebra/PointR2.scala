@@ -66,10 +66,10 @@ object PointR2 extends Struct2[Double, Double, PointR2] {
     data.storeDouble(address + offset2, point.y)
   }
   
-  /** The projection of the `x` field of `PointR2` values. */
+  /** The projection of the `x` field of the `PointR2` struct. */
   def x: Struct[Double] = field1
   
-  /** The projection of the `y` field of `PointR2` values. */
+  /** The projection of the `y` field of the `PointR2` struct. */
   def y: Struct[Double] = field2
   
   implicit def struct: this.type = this
