@@ -16,8 +16,8 @@ The process of design involves balancing these principles so that they all apply
 
 The library so far includes the following packages. Each core package may be moved to a separate subproject in the future.
 
-- \[[API](http://scalabasis.github.com/api/#basis.collection.package)\] [basis.collection](https://github.com/scalabasis/basis/wiki/basis.collection) – contains collections that optionally store their elements by value.
-- \[[API](http://scalabasis.github.com/api/#basis.memory.package)\] [basis.memory](https://github.com/scalabasis/basis/wiki/basis.memory) – contains an abstract memory model with value typeclasses.
+- \[[API](http://scalabasis.github.com/latest/api/#basis.collection.package)\] [basis.collection](https://github.com/scalabasis/basis/wiki/basis.collection) – contains collections that optionally store their elements by value.
+- \[[API](http://scalabasis.github.com/latest/api/#basis.memory.package)\] [basis.memory](https://github.com/scalabasis/basis/wiki/basis.memory) – contains an abstract memory model with value typeclasses.
 
 ### Packages in development
 

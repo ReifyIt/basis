@@ -56,7 +56,7 @@ object BasisBuild extends Build {
       (version, baseDirectory) =>
         val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
         val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-        Seq("-doc-source-url", docSourceUrl)
+        Seq("-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
     },
     libraryDependencies += "org.scalatest" %% "scalatest" % "1.7.1" % "test"
   )
