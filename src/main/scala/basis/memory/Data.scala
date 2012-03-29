@@ -716,43 +716,43 @@ object Data {
   /** Returns native-endian data backed by the given `ByteBuffer`. */
   def wrap(buffer: ByteBuffer): Data = new Chunk(buffer)
   
-  /** The native-endian Block allocator. */
+  /** The native-endian Block allocator. Allocates data backed by a primitive arrays. */
   val Block: Allocator = NativeEndian match {
     case BigEndian => BlockBE
     case LittleEndian => BlockLE
   }
   
-  /** The native-endian Block1 allocator. */
+  /** The native-endian Block1 allocator. Allocates data backed by a `Byte` array. */
   val Block1: Allocator = NativeEndian match {
     case BigEndian => Block1BE
     case LittleEndian => Block1LE
   }
   
-  /** The native-endian Block2 allocator. */
+  /** The native-endian Block2 allocator. Allocates data backed by a `Short` array. */
   val Block2: Allocator = NativeEndian match {
     case BigEndian => Block2BE
     case LittleEndian => Block2LE
   }
   
-  /** The native-endian Block4 allocator. */
+  /** The native-endian Block4 allocator. Allocates data backed by an `Int` array. */
   val Block4: Allocator = NativeEndian match {
     case BigEndian => Block4BE
     case LittleEndian => Block4LE
   }
   
-  /** The native-endian Block8 allocator. */
+  /** The native-endian Block8 allocator. Allocates data backed by a `Long` array. */
   val Block8: Allocator = NativeEndian match {
     case BigEndian => Block8BE
     case LittleEndian => Block8LE
   }
   
-  /** The native-endian Chunk allocator. */
+  /** The native-endian Chunk allocator. Allocates data backed by a `ByteBuffer`. */
   val Chunk: Allocator = NativeEndian match {
     case BigEndian => ChunkBE
     case LittleEndian => ChunkLE
   }
   
-  /** The big-endian Block allocator. */
+  /** The big-endian Block allocator. Allocates data backed by a primitive array. */
   object BlockBE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong << 3
     
@@ -779,7 +779,7 @@ object Data {
     override def toString: String = "BlockBE"
   }
   
-  /** The little-endian Block allocator. */
+  /** The little-endian Block allocator. Allocates data backed by a primitive array. */
   object BlockLE extends Allocator {
     def MaxSize: Long = Int.MaxValue << 3
     
@@ -891,7 +891,7 @@ object Data {
       "Block1BE"+"("+ size +")"
   }
   
-  /** The big-endian Block1 allocator. */
+  /** The big-endian Block1 allocator. Allocates data backed by a `Byte` array. */
   object Block1BE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong
     
@@ -988,7 +988,7 @@ object Data {
       "Block1LE"+"("+ size +")"
   }
   
-  /** The little-endian Block1 allocator. */
+  /** The little-endian Block1 allocator. Allocates data backed by a `Byte` array. */
   object Block1LE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong
     
@@ -1073,7 +1073,7 @@ object Data {
       "Block2BE"+"("+ size +")"
   }
   
-  /** The big-endian Block2 allocator. */
+  /** The big-endian Block2 allocator. Allocates data backed by a `Short` array. */
   object Block2BE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong << 1
     
@@ -1158,7 +1158,7 @@ object Data {
       "Block2LE"+"("+ size +")"
   }
   
-  /** The little-endian Block2 allocator. */
+  /** The little-endian Block2 allocator. Allocates data backed by a `Short` array. */
   object Block2LE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong << 1
     
@@ -1239,7 +1239,7 @@ object Data {
       "Block4BE"+"("+ size +")"
   }
   
-  /** The big-endian Block4 allocator. */
+  /** The big-endian Block4 allocator. Allocates data backed by an `Int` array. */
   object Block4BE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong << 2
     
@@ -1320,7 +1320,7 @@ object Data {
       "Block4LE"+"("+ size +")"
   }
   
-  /** The little-endian Block4 allocator. */
+  /** The little-endian Block4 allocator. Allocates data backed by an `Int` array. */
   object Block4LE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong << 2
     
@@ -1401,7 +1401,7 @@ object Data {
       "Block8BE"+"("+ size +")"
   }
   
-  /** The big-endian Block8 allocator. */
+  /** The big-endian Block8 allocator. Allocates data backed by a `Long` array. */
   object Block8BE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong << 3
     
@@ -1482,7 +1482,7 @@ object Data {
       "Block8LE"+"("+ size +")"
   }
   
-  /** The little-endian Block8 allocator. */
+  /** The little-endian Block8 allocator. Allocates data backed by a `Long` array. */
   object Block8LE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong << 3
     
@@ -1568,7 +1568,7 @@ object Data {
     }
   }
   
-  /** The big-endian Chunk allocator. */
+  /** The big-endian Chunk allocator. Allocates data backed by a `ByteBuffer`. */
   object ChunkBE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong
     
@@ -1583,7 +1583,7 @@ object Data {
     override def toString: String = "ChunkBE"
   }
   
-  /** The little-endian Chunk allocator. */
+  /** The little-endian Chunk allocator. Allocates data backed by a `ByteBuffer`. */
   object ChunkLE extends Allocator {
     def MaxSize: Long = Int.MaxValue.toLong
     
