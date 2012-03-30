@@ -44,6 +44,15 @@ object BasisBuild extends Build {
     )
   )
   
+  lazy val basisSignal = Project(
+    id           = "basis-signal",
+    base         = file("."),
+    dependencies = Seq(basisAlgebra, basisMemory, basisUtil),
+    settings     = commonSettings ++ Seq(
+      modulePath := "basis/signal"
+    )
+  )
+  
   lazy val commonSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.scalabasis",
     version      := "0.0-SNAPSHOT",
