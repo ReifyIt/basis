@@ -21,19 +21,19 @@ trait Image1[A] { imageA =>
   def composite[B, C](that: Image1[B])(operator: (A, B) => C): Image1[C] =
     new Composite[B, C](that)(operator)
   
-  def ∗ (that: Image1[A])(implicit isRing: A <:< Ring[A]): Image1[A] =
+  def ∗ (that: Image1[A])(implicit isRingA: A <:< Ring[A]): Image1[A] =
     new DiscreteConvolution[A](that)
   
-  def :∗ [B](filter: Image1[B])(implicit isVector: A <:< Vector[A, B]): Image1[A] =
+  def :∗ [B](filter: Image1[B])(implicit isVectorAB: A <:< Vector[A, B]): Image1[A] =
     new DiscreteConvolution[B](filter)
   
-  def ∗: [B](filter: Image1[B])(implicit isVector: A <:< Vector[A, B]): Image1[A] =
+  def ∗: [B](filter: Image1[B])(implicit isVectorAB: A <:< Vector[A, B]): Image1[A] =
     new DiscreteConvolution[B](filter)
   
-  def :∗ [B](filter: Double => B)(implicit isVector: A <:< Vector[A, B]): (Double => A) =
+  def :∗ [B](filter: Double => B)(implicit isVectorAB: A <:< Vector[A, B]): (Double => A) =
     new ContinuousConvolution[B](filter)
   
-  def ∗: [B](filter: Double => B)(implicit isVector: A <:< Vector[A, B]): (Double => A) =
+  def ∗: [B](filter: Double => B)(implicit isVectorAB: A <:< Vector[A, B]): (Double => A) =
     new ContinuousConvolution[B](filter)
   
   protected class Translation(val delta: Long) extends Image1[A] {
@@ -57,7 +57,7 @@ trait Image1[A] { imageA =>
   }
   
   protected class DiscreteConvolution[B]
-      (imageB: Image1[B])(implicit isVector: A <:< Vector[A, B])
+      (imageB: Image1[B])(implicit isVectorAB: A <:< Vector[A, B])
     extends Image1[A] {
     
     val min = imageA.min + imageB.min
@@ -78,7 +78,7 @@ trait Image1[A] { imageA =>
   }
   
   protected class ContinuousConvolution[B]
-      (filter: Double => B)(implicit isVector: A <:< Vector[A, B])
+      (filter: Double => B)(implicit isVectorAB: A <:< Vector[A, B])
     extends (Double => A) {
     
     def apply(x: Double): A = {
