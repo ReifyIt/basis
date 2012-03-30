@@ -94,6 +94,28 @@ package object algebra {
     type Vector <: algebra.Vector[Vector, Scalar]
     type Scalar <: algebra.Field[Scalar]
   }
+  
+  /** An abstract affine space over a complete field. */
+  type CompleteAffineSpace = Singleton {
+    type Point  <: algebra.AffinePoint[Point, Vector, Scalar]
+    type Vector <: algebra.Vector[Vector, Scalar]
+    type Scalar <: algebra.CompleteField[Scalar]
+  }
+  
+  /** An abstract affine space over an ordered field. */
+  type OrderedAffineSpace = Singleton {
+    type Point  <: algebra.AffinePoint[Point, Vector, Scalar]
+    type Vector <: algebra.Vector[Vector, Scalar]
+    type Scalar <: algebra.OrderedRing[Scalar] with algebra.Field[Scalar]
+  }
+  
+  /** An abstract affine space over a complete ordered field. */
+  type CompleteOrderedAffineSpace = Singleton {
+    type Point  <: algebra.AffinePoint[Point, Vector, Scalar]
+    type Vector <: algebra.Vector[Vector, Scalar]
+    type Scalar <: algebra.OrderedRing[Scalar] with algebra.CompleteField[Scalar]
+  }
+  
   /** An abstract affine space over the `Real` field. */
   type RealAffineSpace = Singleton {
     type Point  <: algebra.AffinePoint[Point, Vector, Scalar]
