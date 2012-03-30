@@ -10,6 +10,8 @@ package basis.signal
 import basis.algebra._
 
 trait Image2[A] { imageA =>
+  def apply(i: Long, j: Long): A
+  
   def min1: Long
   
   def max1: Long
@@ -17,8 +19,6 @@ trait Image2[A] { imageA =>
   def min2: Long
   
   def max2: Long
-  
-  def apply(i: Long, j: Long): A
   
   def translate(delta1: Long, delta2: Long): Image2[A] =
     new Translation(delta1, delta2)
@@ -54,7 +54,10 @@ trait Image2[A] { imageA =>
       new imageA.Translation(this.delta1 + delta1, this.delta2 + delta2)
   }
   
-  protected class Composite[B, C](val imageB: Image2[B])(val operator: (A, B) => C) extends Image2[C] {
+  protected class Composite[B, C]
+      (imageB: Image2[B])(operator: (A, B) => C)
+    extends Image2[C] {
+    
     val min1 = math.max(imageA.min1, imageB.min1)
     val max1 = math.min(imageA.max1, imageB.max1)
     
@@ -64,7 +67,10 @@ trait Image2[A] { imageA =>
     def apply(i: Long, j: Long): C = operator(imageA(i, j), imageB(i, j))
   }
   
-  protected class DiscreteConvolution[B](imageB: Image2[B])(implicit isVector: A <:< Vector[A, B]) extends Image2[A] {
+  protected class DiscreteConvolution[B]
+      (imageB: Image2[B])(implicit isVector: A <:< Vector[A, B])
+    extends Image2[A] {
+    
     val min1 = imageA.min1 + imageB.min1
     val max1 = imageA.max1 + imageB.max1
     
@@ -92,7 +98,10 @@ trait Image2[A] { imageA =>
     }
   }
   
-  protected class ContinuousConvolution[B](filter: (Double, Double) => B)(implicit isVector: A <:< Vector[A, B]) extends ((Double, Double) => A) {
+  protected class ContinuousConvolution[B]
+      (filter: (Double, Double) => B)(implicit isVector: A <:< Vector[A, B])
+    extends ((Double, Double) => A) {
+    
     def apply(i: Double, j: Double): A = {
       var lower1 = imageA.min1
       var upper1 = imageA.max1

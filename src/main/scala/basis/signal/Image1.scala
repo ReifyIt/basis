@@ -10,11 +10,11 @@ package basis.signal
 import basis.algebra._
 
 trait Image1[A] { imageA =>
+  def apply(i: Long): A
+  
   def min: Long
   
   def max: Long
-  
-  def apply(i: Long): A
   
   def translate(delta: Long): Image1[A] = new Translation(delta)
   
@@ -46,14 +46,20 @@ trait Image1[A] { imageA =>
       new imageA.Translation(this.delta + delta)
   }
   
-  protected class Composite[B, C](val imageB: Image1[B])(val operator: (A, B) => C) extends Image1[C] {
+  protected class Composite[B, C]
+      (imageB: Image1[B])(operator: (A, B) => C)
+    extends Image1[C] {
+    
     val min = math.max(imageA.min, imageB.min)
     val max = math.min(imageA.max, imageB.max)
     
     def apply(i: Long): C = operator(imageA(i), imageB(i))
   }
   
-  protected class DiscreteConvolution[B](imageB: Image1[B])(implicit isVector: A <:< Vector[A, B]) extends Image1[A] {
+  protected class DiscreteConvolution[B]
+      (imageB: Image1[B])(implicit isVector: A <:< Vector[A, B])
+    extends Image1[A] {
+    
     val min = imageA.min + imageB.min
     val max = imageA.max + imageB.max
     
@@ -71,7 +77,10 @@ trait Image1[A] { imageA =>
     }
   }
   
-  protected class ContinuousConvolution[B](val filter: Double => B)(implicit isVector: A <:< Vector[A, B]) extends (Double => A) {
+  protected class ContinuousConvolution[B]
+      (filter: Double => B)(implicit isVector: A <:< Vector[A, B])
+    extends (Double => A) {
+    
     def apply(x: Double): A = {
       var lower = imageA.min
       var upper = imageA.max
