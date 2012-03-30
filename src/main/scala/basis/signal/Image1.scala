@@ -30,6 +30,12 @@ trait Image1[A] { imageA =>
   def ∗: [B](filter: Image1[B])(implicit isVector: A <:< Vector[A, B]): Image1[A] =
     new DiscreteConvolution[B](filter)
   
+  def :∗ [B](filter: Double => B)(implicit isVector: A <:< Vector[A, B]): (Double => A) =
+    new ContinuousConvolution[B](filter)
+  
+  def ∗: [B](filter: Double => B)(implicit isVector: A <:< Vector[A, B]): (Double => A) =
+    new ContinuousConvolution[B](filter)
+  
   protected class Translation(val delta: Long) extends Image1[A] {
     val min = imageA.min + delta
     val max = imageA.max + delta
@@ -63,5 +69,20 @@ trait Image1[A] { imageA =>
       }
       sample
     }
+  }
+  
+  protected class ContinuousConvolution[B](val filter: Double => B)(implicit isVector: A <:< Vector[A, B]) extends (Double => A) {
+    def apply(x: Double): A = {
+      var lower = imageA.min
+      var upper = imageA.max
+      var j = lower
+      var sample = imageA(j) :* filter(x - j)
+      j += 1L
+      while (j <= upper) {
+        sample += imageA(j) :* filter(x - j)
+        j += 1L
+      }
+      sample
+    } 
   }
 }

@@ -35,6 +35,12 @@ trait Image2[A] { imageA =>
   def ∗: [B](filter: Image2[B])(implicit isVector: A <:< Vector[A, B]): Image2[A] =
     new DiscreteConvolution[B](filter)
   
+  def :∗ [B](filter: (Double, Double) => B)(implicit isVector: A <:< Vector[A, B]): ((Double, Double) => A) =
+    new ContinuousConvolution[B](filter)
+  
+  def ∗: [B](filter: (Double, Double) => B)(implicit isVector: A <:< Vector[A, B]): ((Double, Double) => A) =
+    new ContinuousConvolution[B](filter)
+  
   protected class Translation(val delta1: Long, val delta2: Long) extends Image2[A] {
     val min1 = imageA.min1 + delta1
     val max1 = imageA.max1 + delta1
@@ -72,11 +78,33 @@ trait Image2[A] { imageA =>
       val upper2 = math.min(imageA.max2, i - imageB.min2)
       var y = lower2
       var x = lower1
-      var sample = imageA(x, y) :* imageB(i - x, i - y)
+      var sample = imageA(x, y) :* imageB(i - x, j - y)
       x += 1L
       while (y <= upper2) {
         while (x <= upper1) {
-          sample += imageA(x, y) :* imageB(i - x, i - y)
+          sample += imageA(x, y) :* imageB(i - x, j - y)
+          x += 1L
+        }
+        y += 1L
+        x = lower1
+      }
+      sample
+    }
+  }
+  
+  protected class ContinuousConvolution[B](filter: (Double, Double) => B)(implicit isVector: A <:< Vector[A, B]) extends ((Double, Double) => A) {
+    def apply(i: Double, j: Double): A = {
+      var lower1 = imageA.min1
+      var upper1 = imageA.max1
+      var lower2 = imageA.min2
+      var upper2 = imageA.max2
+      var y = lower2
+      var x = lower1
+      var sample = imageA(x, y) :* filter(i - x, j - y)
+      x += 1L
+      while (y <= upper2) {
+        while (x <= upper1) {
+          sample += imageA(x, y) :* filter(i - x, j - y)
           x += 1L
         }
         y += 1L
