@@ -9,48 +9,144 @@ package basis.signal
 
 import basis.algebra._
 
-trait Image2[A] { imageA =>
-  def apply(i: Long, j: Long): A
-  
+/** A discrete 2-dimensional image.
+  * 
+  * @author Chris Sachs
+  */
+trait Image2[A] extends ((Long, Long) => A) { imageA =>
+  /** The lower bound of the 1st dimension of this image's domain. */
   def min1: Long
   
+  /** The upper bound of the 1st dimension of this image's domain. */
   def max1: Long
   
+  /** The lower bound of the 2nd dimension of this image's domain. */
   def min2: Long
   
+  /** The upper bound of the 2nd dimension of this image's domain. */
   def max2: Long
   
+  /** Returns a sample of this image.
+    * 
+    * @param  i   the sample's 1st coordinate; in the interval [`min1`, `max1`].
+    * @param  j   the sample's 2nd coordinate; in the interval [`min2`, `max2`].
+    * @return the image sample.
+    */
+  def apply(i: Long, j: Long): A
+  
+  /** Translates the domain of this image. The returned image behaves according
+    * to this identity: `image(x, y) = image.offset(dx, dy)(x + dx, y + dy)`
+    * 
+    * @param  delta1  the amount to offset the 1st dimension of this image's domain.
+    * @param  delta2  the amount to offset the 2nd dimension of this image's domain.
+    * @return a view of this image with the domain translated.
+    */
   def translate(delta1: Long, delta2: Long): Image2[A] =
     new Translation(delta1, delta2)
   
+  /** Composites this image and another image using an operator function. The
+    * returned image's domain is the intersection of this image's domain and
+    * the other image's domain.
+    * 
+    * @param  that      the other image to composite.
+    * @param  operator  the function that combines image samples.
+    * @return an image that composites the samples at each coordinate.
+    */
   def composite[B, C](that: Image2[B])(operator: (A, B) => C): Image2[C] =
     new Composite[B, C](that)(operator)
   
-  def ∗ (that: Image2[A])(implicit isRingA: A <:< Ring[A]): Image2[A] =
+  /** Convolves this image with another image. All samples must lie in the same
+    * ring. The name of this method uses the unicode asterisk operator U+2217.
+    * 
+    * @param  that    the image to convolve with.
+    * @param  isRing  implicit evidence that the images' samples lie in a `Ring`.
+    * @return the discrete convolution of this image with the other image.
+    */
+  def ∗ (that: Image2[A])(implicit isRing: A <:< Ring[A]): Image2[A] =
     new DiscreteConvolution[A](that)
   
-  def :∗ [B](filter: Image2[B])(implicit isVectorAB: A <:< Vector[A, B]): Image2[A] =
+  /** Convolves this vector image with a scalar image on the right. The name of
+    * this method uses the unicode asterisk operator U+2217.
+    * 
+    * @param  filter    the scalar filter to convolve with.
+    * @param  isVector  implicit evidence that this image has vector samples.
+    * @return the discrete convolution of this image with the filter.
+    */
+  def :∗ [B](filter: Image2[B])(implicit isVector: A <:< Vector[A, B]): Image2[A] =
     new DiscreteConvolution[B](filter)
   
-  def ∗: [B](filter: Image2[B])(implicit isVectorAB: A <:< Vector[A, B]): Image2[A] =
+  /** Convolves this vector image with a scalar image on the left. The name of
+    * this method uses the unicode asterisk operator U+2217.
+    * 
+    * @param  filter    the scalar filter to convolve with.
+    * @param  isVector  implicit evidence that this image has vector samples.
+    * @return the discrete convolution of this image with the filter.
+    */
+  def ∗: [B](filter: Image2[B])(implicit isVector: A <:< Vector[A, B]): Image2[A] =
     new DiscreteConvolution[B](filter)
   
-  def :∗ [B](filter: Image1[B])(implicit isVectorAB: A <:< Vector[A, B], isRingB: B <:< Ring[B]): Image2[A] =
+  /** Convolves this vector image with a 1-dimensional scalar image on the right.
+    * Equivalent to a convolving with `(x, y) => filter(x) * filter(y)`.
+    * 
+    * @param  filter    the 1-dimensional scalar filter.
+    * @param  isVector  implicit evidence that this image has vector samples.
+    * @return the discrete convolution of this image with the filter.
+    */
+  def :∗ [B <: Ring[B]](filter: Image1[B])(implicit isVector: A <:< Vector[A, B]): Image2[A] =
     new DiscreteSeparableConvolution[B](filter, filter)
   
-  def ∗: [B](filter: Image1[B])(implicit isVectorAB: A <:< Vector[A, B], isRingB: B <:< Ring[B]): Image2[A] =
+  /** Convolves this vector image with a 1-dimensional scalar image on the left.
+    * Equivalent to a convolving with `(x, y) => filter(x) * filter(y)`. The
+    * name of this method uses the unicode asterisk operator U+2217.
+    * 
+    * @param  filter    the 1-dimensional scalar filter.
+    * @param  isVector  implicit evidence that this image has vector samples.
+    * @return the discrete convolution of this image with the filter.
+    */
+  def ∗: [B <: Ring[B]](filter: Image1[B])(implicit isVector: A <:< Vector[A, B]): Image2[A] =
     new DiscreteSeparableConvolution[B](filter, filter)
   
-  def :∗ [B](filter: (Double, Double) => B)(implicit isVectorAB: A <:< Vector[A, B]): ((Double, Double) => A) =
+  /** Convolves this vector image with a continuous scalar filter on the right.
+    * The name of this method uses the unicode asterisk operator U+2217. The
+    * name of this method uses the unicode asterisk operator U+2217.
+    * 
+    * @param  filter    the continuous scalar filter function.
+    * @param  isVector  implicit evidence that this image has vector samples.
+    * @return the discrete-continuous convolution of this image with the filter.
+    */
+  def :∗ [B](filter: (Double, Double) => B)(implicit isVector: A <:< Vector[A, B]): ((Double, Double) => A) =
     new ContinuousConvolution[B](filter)
   
-  def ∗: [B](filter: (Double, Double) => B)(implicit isVectorAB: A <:< Vector[A, B]): ((Double, Double) => A) =
+  /** Convolves this vector image with a continuous scalar filter on the left.
+    * The name of this method uses the unicode asterisk operator U+2217.
+    * 
+    * @param  filter    the continuous scalar filter function.
+    * @param  isVector  implicit evidence that this image has vector samples.
+    * @return the discrete-continuous convolution of this image with the filter.
+    */
+  def ∗: [B](filter: (Double, Double) => B)(implicit isVector: A <:< Vector[A, B]): ((Double, Double) => A) =
     new ContinuousConvolution[B](filter)
   
-  def :∗ [B](filter: Double => B)(implicit isVectorAB: A <:< Vector[A, B], isRingB: B <:< Ring[B]): ((Double, Double) => A) =
+  /** Convolves this vector image with a 1-dimensional continuous scala filter on
+    * the right. Equivalent to convolving with `(x, y) => filter(x) * filter(y)`.
+    * The name of this method uses the unicode asterisk operator U+2217.
+    * 
+    * @param  filter    the 1-dimensional continuous scalar filter function.
+    * @param  isVector  implicit evidence that this image has vector samples.
+    * @return the discrete-continuous convolution of this image with the filter.
+    */
+  def :∗ [B <: Ring[B]](filter: Double => B)(implicit isVector: A <:< Vector[A, B]): ((Double, Double) => A) =
     new ContinuousSeparableConvolution[B](filter, filter)
   
-  def ∗: [B](filter: Double => B)(implicit isVectorAB: A <:< Vector[A, B], isRingB: B <:< Ring[B]): ((Double, Double) => A) =
+  /** Convolves this vector image with a 1-dimensional continuous scala filter on
+    * the left. Equivalent to convolving with `(x, y) => filter(x) * filter(y)`.
+    * The name of this method uses the unicode asterisk operator U+2217.
+    * 
+    * @param  filter    the 1-dimensional continuous scalar filter function.
+    * @param  isVector  implicit evidence that this image has vector samples.
+    * @return the discrete-continuous convolution of this image with the filter.
+    */
+  def ∗: [B <: Ring[B]](filter: Double => B)(implicit isVector: A <:< Vector[A, B]): ((Double, Double) => A) =
     new ContinuousSeparableConvolution[B](filter, filter)
   
   protected class Translation(val delta1: Long, val delta2: Long) extends Image2[A] {
@@ -78,7 +174,7 @@ trait Image2[A] { imageA =>
   }
   
   protected class DiscreteConvolution[B]
-      (imageB: Image2[B])(implicit isVectorAB: A <:< Vector[A, B])
+      (imageB: Image2[B])(implicit isVector: A <:< Vector[A, B])
     extends Image2[A] {
     
     val min1 = imageA.min1 + imageB.min1
@@ -107,9 +203,9 @@ trait Image2[A] { imageA =>
     }
   }
   
-  protected class DiscreteSeparableConvolution[B]
+  protected class DiscreteSeparableConvolution[B <: Ring[B]]
       (imageB1: Image1[B], imageB2: Image1[B])
-      (implicit isVectorAB: A <:< Vector[A, B], isRingB: B <:< Ring[B])
+      (implicit isVector: A <:< Vector[A, B])
     extends Image2[A] {
     
     val min1 = imageA.min1 + imageB1.min
@@ -140,7 +236,7 @@ trait Image2[A] { imageA =>
   }
   
   protected class ContinuousConvolution[B]
-      (filter: (Double, Double) => B)(implicit isVectorAB: A <:< Vector[A, B])
+      (filter: (Double, Double) => B)(implicit isVector: A <:< Vector[A, B])
     extends ((Double, Double) => A) {
     
     def apply(i: Double, j: Double): A = {
@@ -164,9 +260,9 @@ trait Image2[A] { imageA =>
     }
   }
   
-  protected class ContinuousSeparableConvolution[B]
+  protected class ContinuousSeparableConvolution[B <: Ring[B]]
       (filter1: Double => B, filter2: Double => B)
-      (implicit isVectorAB: A <:< Vector[A, B], isRingB: B <:< Ring[B])
+      (implicit isVector: A <:< Vector[A, B])
     extends ((Double, Double) => A) {
     
     def apply(i: Double, j: Double): A = {
