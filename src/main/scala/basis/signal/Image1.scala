@@ -12,12 +12,14 @@ import basis.algebra._
 /** A discrete 1-dimensional image.
   * 
   * @author Chris Sachs
+  * 
+  * @tparam A   the image's sample type.
   */
 trait Image1[A] extends PartialFunction[Long, A] { imageA =>
-  /** The lower bound of this image's domain. */
+  /** The lower bound of the domain. */
   def min: Long
   
-  /** The upper bound of this image's domain. */
+  /** The upper bound of the domain. */
   def max: Long
   
   /** Returns a sample of this image.
@@ -27,11 +29,11 @@ trait Image1[A] extends PartialFunction[Long, A] { imageA =>
     */
   def apply(i: Long): A
   
-  /** Returns `true` if a given coordinate is in this image's domain. */
+  /** Returns `true` if a given coordinate is in the domain. */
   def isDefinedAt(i: Long): Boolean = min <= i && i <= max
   
   /** Translates the domain of this image. The returned image behaves according
-    * to this identity: `image(x) = image.offset(dx)(x + dx)`
+    * to the identity `image(x) = image.offset(dx)(x + dx)`
     * 
     * @param  delta   the amount to offset this image's domain.
     * @return a view of this image with the domain translated.

@@ -12,18 +12,20 @@ import basis.algebra._
 /** A discrete 2-dimensional image.
   * 
   * @author Chris Sachs
+  * 
+  * @tparam A   the image's sample type.
   */
 trait Image2[A] extends ((Long, Long) => A) { imageA =>
-  /** The lower bound of the 1st dimension of this image's domain. */
+  /** The lower bound of the domain's 1st dimension. */
   def min1: Long
   
-  /** The upper bound of the 1st dimension of this image's domain. */
+  /** The upper bound of the domain's 1st dimension. */
   def max1: Long
   
-  /** The lower bound of the 2nd dimension of this image's domain. */
+  /** The lower bound of the domain's 2nd dimension. */
   def min2: Long
   
-  /** The upper bound of the 2nd dimension of this image's domain. */
+  /** The upper bound of the domain's 2nd dimension. */
   def max2: Long
   
   /** Returns a sample of this image.
