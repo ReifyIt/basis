@@ -14,11 +14,11 @@ import basis.util.MurmurHash._
   * 
   * @author Chris Sachs
   * 
-  * @constructor  Constructs a vector with four `Double` coordinates.
-  * @param  x   the ''x''-coordinate.
-  * @param  y   the ''y''-coordinate.
-  * @param  z   the ''z''-coordinate.
-  * @param  w   the ''w''-coordinate.
+  * @constructor Constructs a vector with four `Double` coordinates.
+  * @param  x   The ''x''-coordinate.
+  * @param  y   The ''y''-coordinate.
+  * @param  z   The ''z''-coordinate.
+  * @param  w   The ''w''-coordinate.
   * 
   * @define scalar  `Real` value
   */

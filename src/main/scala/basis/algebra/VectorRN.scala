@@ -13,7 +13,7 @@ import basis.util.MurmurHash._
   * 
   * @author Chris Sachs
   * 
-  * @constructor  Constructs a vector with a coordinate array.
+  * @constructor Constructs a vector with a coordinate array.
   * @param  coordinates   The array of coordinates.
   * 
   * @define scalar  `Real` value

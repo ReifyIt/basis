@@ -16,7 +16,7 @@ package basis.memory
   * implicit object Vector3 extends CaseStruct3[Double, Double, Double, Vector3]
   * }}}
   * 
-  * @constructor  Constructs a struct with a specified frame.
+  * @constructor Constructs a struct with a specified frame.
   * @tparam T1              the first column type.
   * @tparam T2              the second column type.
   * @tparam T3              the third column type.

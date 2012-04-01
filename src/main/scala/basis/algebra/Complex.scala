@@ -14,7 +14,7 @@ import basis.util.MurmurHash._
   * 
   * @author Chris Sachs
   * 
-  * @constructor  Constructs a `Complex` value with a real part and an imaginary part.
+  * @constructor Constructs a `Complex` value with a real part and an imaginary part.
   * @param  real        The real part.
   * @param  imaginary   The imaginary part.
   * 

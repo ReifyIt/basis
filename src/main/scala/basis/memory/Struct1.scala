@@ -42,7 +42,7 @@ import scala.math.max
   * }
   * }}}
   * 
-  * @constructor  Constructs a struct with a specified frame.
+  * @constructor Constructs a struct with a specified frame.
   * @tparam T1              the column type.
   * @tparam T               the type of this struct.
   * @param  frameOffset     the preferred offset of the column in this struct's frame.

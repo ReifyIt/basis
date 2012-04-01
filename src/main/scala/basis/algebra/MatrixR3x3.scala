@@ -13,7 +13,7 @@ import basis.util.MurmurHash._
   * 
   * @author Chris Sachs
   * 
-  * @constructor  Constructs a matrix with nine row-major `Double` values.
+  * @constructor Constructs a matrix with nine row-major `Double` values.
   * @param  _1_1  The entry at row 1, column 1.
   * @param  _1_2  The entry at row 1, column 2.
   * @param  _1_3  The entry at row 1, column 3.

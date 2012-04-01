@@ -14,9 +14,9 @@ import basis.util.MurmurHash._
   * 
   * @author Chris Sachs
   * 
-  * @constructor  Constructs a point with two `Double` coordinates.
-  * @param  x   the ''x''-coordinate.
-  * @param  y   the ''y''-coordinate.
+  * @constructor Constructs a point with two `Double` coordinates.
+  * @param  x   The ''x''-coordinate.
+  * @param  y   The ''y''-coordinate.
   * 
   * @define scalar  `Real` value
   */

@@ -13,7 +13,7 @@ import basis.util.MurmurHash._
   * 
   * @author Chris Sachs
   * 
-  * @constructor  Constructs a matrix with a row-major entry array.
+  * @constructor Constructs a matrix with a row-major entry array.
   * @param  M         The number of rows.
   * @param  N         The number of columns.
   * @param  entries   the array of row-major entries.

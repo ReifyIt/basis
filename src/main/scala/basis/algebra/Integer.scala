@@ -14,7 +14,7 @@ import basis.util.MurmurHash._
   * 
   * @author Chris Sachs
   * 
-  * @constructor  Creates an `Integer` value from a `Long` value.
+  * @constructor Constructs an `Integer` value from a `Long` value.
   * @param  value   The `Long` value.
   * 
   * @define Element   Integer

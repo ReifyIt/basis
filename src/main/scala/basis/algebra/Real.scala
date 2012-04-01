@@ -14,7 +14,7 @@ import basis.util.MurmurHash._
   * 
   * @author Chris Sachs
   * 
-  * @constructor  Creates a `Real` value from a `Double` value.
+  * @constructor Constructs a `Real` value from a `Double` value.
   * @param  value   The `Double` value.
   * 
   * @define Element   Real
