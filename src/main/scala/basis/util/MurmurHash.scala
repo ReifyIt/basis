@@ -42,10 +42,10 @@ object MurmurHash {
   @inline def hash(value: Char): Int = value.toInt
   
   /** Hashes a `Float` value. */
-  @inline def hash(value: Float): Int = hash(floatToIntBits(value))
+  @inline def hash(value: Float): Int = if (value == 0.0F) 0 else hash(floatToIntBits(value))
   
   /** Hashes a `Double` value. */
-  @inline def hash(value: Double): Int = hash(doubleToLongBits(value))
+  @inline def hash(value: Double): Int = if (value == 0.0) 0 else hash(doubleToLongBits(value))
   
   /** Hashes a `Boolean` value. */
   @inline def hash(value: Boolean): Int = if (value) 1231 else 1237
