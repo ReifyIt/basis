@@ -117,7 +117,10 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
   override def toString: String = {
     if (isNaN) "NaN"
     else if (isInfinite) "Infinity"
-    else new StringBuilder().append(real).append('+').append(imaginary).append('i').toString
+    else if (java.lang.Double.compare(imaginary, 0.0) < 0)
+      "("+ real +" - "+ -imaginary +"i"+")"
+    else
+      "("+ real +" + "+  imaginary +"i"+")"
   }
 }
 
