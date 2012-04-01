@@ -9,28 +9,22 @@ package basis.signal
 
 import basis.algebra._
 
-/** A discrete 1-dimensional image.
+/** A discrete unary function on a bounded domain. Supports non-strict,
+  * non-destructive algebraic operations.
   * 
   * @author Chris Sachs
   * 
-  * @tparam A   the image's sample type.
+  * @tparam A   the sample type.
   */
-trait Image1[A] extends PartialFunction[Long, A] { imageA =>
+trait Image1[A] extends (Long => A) { imageA =>
   /** The lower bound of the domain. */
-  def min: Long
+  def lower: Long
   
   /** The upper bound of the domain. */
-  def max: Long
+  def upper: Long
   
-  /** Returns a sample of this image.
-    * 
-    * @param  i   the sample's coordinate; in the interval [`min`, `max`].
-    * @return the image sample.
-    */
+  /** Returns a sample of this image. */
   def apply(i: Long): A
-  
-  /** Returns `true` if a given coordinate is in the domain. */
-  def isDefinedAt(i: Long): Boolean = min <= i && i <= max
   
   /** Translates the domain of this image. The returned image behaves according
     * to the identity `image(x) = image.offset(dx)(x + dx)`
@@ -46,7 +40,7 @@ trait Image1[A] extends PartialFunction[Long, A] { imageA =>
     * 
     * @param  that      the other image to composite.
     * @param  operator  the function that combines image samples.
-    * @return an image that composites the samples at each coordinate.
+    * @return the composition of corresponding values at each element of the domain.
     */
   def composite[B, C](that: Image1[B])(operator: (A, B) => C): Image1[C] =
     new Composite[B, C](that)(operator)
@@ -102,8 +96,8 @@ trait Image1[A] extends PartialFunction[Long, A] { imageA =>
     new ContinuousConvolution[B](filter)
   
   protected class Translation(val delta: Long) extends Image1[A] {
-    val min = imageA.min + delta
-    val max = imageA.max + delta
+    val lower = imageA.lower + delta
+    val upper = imageA.upper + delta
     
     def apply(i: Long): A = imageA(i + delta)
     
@@ -115,8 +109,8 @@ trait Image1[A] extends PartialFunction[Long, A] { imageA =>
       (imageB: Image1[B])(operator: (A, B) => C)
     extends Image1[C] {
     
-    val min = math.max(imageA.min, imageB.min)
-    val max = math.min(imageA.max, imageB.max)
+    val lower = math.max(imageA.lower, imageB.lower)
+    val upper = math.min(imageA.upper, imageB.upper)
     
     def apply(i: Long): C = operator(imageA(i), imageB(i))
   }
@@ -125,12 +119,12 @@ trait Image1[A] extends PartialFunction[Long, A] { imageA =>
       (imageB: Image1[B])(implicit isVector: A <:< Vector[A, B])
     extends Image1[A] {
     
-    val min = imageA.min + imageB.min
-    val max = imageA.max + imageB.max
+    val lower = imageA.lower + imageB.lower
+    val upper = imageA.upper + imageB.upper
     
     def apply(i: Long): A = {
-      val lower = math.max(imageA.min, i - imageB.max)
-      val upper = math.min(imageA.max, i - imageB.min)
+      val lower = math.max(imageA.lower, i - imageB.upper)
+      val upper = math.min(imageA.upper, i - imageB.lower)
       var j = lower
       var sample = imageA(j) :* imageB(i - j)
       j += 1L
@@ -147,8 +141,8 @@ trait Image1[A] extends PartialFunction[Long, A] { imageA =>
     extends (Double => A) {
     
     def apply(x: Double): A = {
-      var lower = imageA.min
-      var upper = imageA.max
+      var lower = imageA.lower
+      var upper = imageA.upper
       var j = lower
       var sample = imageA(j) :* filter(x - j)
       j += 1L

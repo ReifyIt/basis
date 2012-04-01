@@ -11,26 +11,26 @@ import basis.memory._
 
 class ValImage1[A]
     (val data: Data, val baseAddress: Long)
-    (val min: Long, val max: Long)
+    (val lower: Long, val upper: Long)
     (implicit val struct: Struct[A])
-  extends MutableImage1[A] {
+  extends Raster1[A] {
   
-  assert(min < max)
-  assert(baseAddress + struct.size * (max - min + 1L) <= data.size)
+  assert(lower < upper)
+  assert(baseAddress + struct.size * (upper - lower + 1L) <= data.size)
   
-  def this(min: Long, max: Long)(implicit allocator: Allocator, struct: Struct[A]) =
-    this(Data.alloc[A](max - min + 1L), 0L)(min, max)
+  def this(lower: Long, upper: Long)(implicit allocator: Allocator, struct: Struct[A]) =
+    this(Data.alloc[A](upper - lower + 1L), 0L)(lower, upper)
   
   def apply(i: Long): A = {
-    if (i < min || i > max) throw new IndexOutOfBoundsException(i.toString)
-    struct.load(data, baseAddress + struct.size * (i - min))
+    if (i < lower || i > upper) throw new IndexOutOfBoundsException(i.toString)
+    struct.load(data, baseAddress + struct.size * (i - lower))
   }
   
   def update(i: Long, sample: A) {
-    if (i < min || i > max) throw new IndexOutOfBoundsException(i.toString)
-    struct.store(data, baseAddress + struct.size * (i - min), sample)
+    if (i < lower || i > upper) throw new IndexOutOfBoundsException(i.toString)
+    struct.store(data, baseAddress + struct.size * (i - lower), sample)
   }
   
   override def translate(delta: Long): ValImage1[A] =
-    new ValImage1[A](data, baseAddress)(min + delta, max + delta)
+    new ValImage1[A](data, baseAddress)(lower + delta, upper + delta)
 }

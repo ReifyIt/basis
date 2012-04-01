@@ -9,31 +9,27 @@ package basis.signal
 
 import basis.algebra._
 
-/** A discrete 2-dimensional image.
+/** A discrete binary function on a bounded domain. Supports non-strict,
+  * non-destructive algebraic operations.
   * 
   * @author Chris Sachs
   * 
-  * @tparam A   the image's sample type.
+  * @tparam A   the sample type.
   */
 trait Image2[A] extends ((Long, Long) => A) { imageA =>
-  /** The lower bound of the domain's 1st dimension. */
-  def min1: Long
+  /** The lower bound of the domain's first component. */
+  def lower1: Long
   
-  /** The upper bound of the domain's 1st dimension. */
-  def max1: Long
+  /** The upper bound of the domain's first component. */
+  def upper1: Long
   
-  /** The lower bound of the domain's 2nd dimension. */
-  def min2: Long
+  /** The lower bound of the domain's second component. */
+  def lower2: Long
   
-  /** The upper bound of the domain's 2nd dimension. */
-  def max2: Long
+  /** The upper bound of the domain's second component. */
+  def upper2: Long
   
-  /** Returns a sample of this image.
-    * 
-    * @param  i   the sample's 1st coordinate; in the interval [`min1`, `max1`].
-    * @param  j   the sample's 2nd coordinate; in the interval [`min2`, `max2`].
-    * @return the image sample.
-    */
+  /** Returns a sample of this image. */
   def apply(i: Long, j: Long): A
   
   /** Translates the domain of this image. The returned image behaves according
@@ -52,7 +48,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     * 
     * @param  that      the other image to composite.
     * @param  operator  the function that combines image samples.
-    * @return an image that composites the samples at each coordinate.
+    * @return the composition of corresponding values at each element of the domain.
     */
   def composite[B, C](that: Image2[B])(operator: (A, B) => C): Image2[C] =
     new Composite[B, C](that)(operator)
@@ -152,10 +148,10 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     new ContinuousSeparableConvolution[B](filter, filter)
   
   protected class Translation(val delta1: Long, val delta2: Long) extends Image2[A] {
-    val min1 = imageA.min1 + delta1
-    val max1 = imageA.max1 + delta1
-    val min2 = imageA.min2 + delta2
-    val max2 = imageA.max2 + delta2
+    val lower1 = imageA.lower1 + delta1
+    val upper1 = imageA.upper1 + delta1
+    val lower2 = imageA.lower2 + delta2
+    val upper2 = imageA.upper2 + delta2
     
     def apply(i: Long, j: Long): A = imageA(i + delta1, j + delta2)
     
@@ -167,10 +163,10 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
       (imageB: Image2[B])(operator: (A, B) => C)
     extends Image2[C] {
     
-    val min1 = math.max(imageA.min1, imageB.min1)
-    val max1 = math.min(imageA.max1, imageB.max1)
-    val min2 = math.max(imageA.min2, imageB.min2)
-    val max2 = math.min(imageA.max2, imageB.max2)
+    val lower1 = math.max(imageA.lower1, imageB.lower1)
+    val upper1 = math.min(imageA.upper1, imageB.upper1)
+    val lower2 = math.max(imageA.lower2, imageB.lower2)
+    val upper2 = math.min(imageA.upper2, imageB.upper2)
     
     def apply(i: Long, j: Long): C = operator(imageA(i, j), imageB(i, j))
   }
@@ -179,16 +175,16 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
       (imageB: Image2[B])(implicit isVector: A <:< Vector[A, B])
     extends Image2[A] {
     
-    val min1 = imageA.min1 + imageB.min1
-    val max1 = imageA.max1 + imageB.max1
-    val min2 = imageA.min2 + imageB.min2
-    val max2 = imageA.max2 + imageB.max2
+    val lower1 = imageA.lower1 + imageB.lower1
+    val upper1 = imageA.upper1 + imageB.upper1
+    val lower2 = imageA.lower2 + imageB.lower2
+    val upper2 = imageA.upper2 + imageB.upper2
     
     def apply(i: Long, j: Long): A = {
-      val lower1 = math.max(imageA.min1, i - imageB.max1)
-      val upper1 = math.min(imageA.max1, i - imageB.min1)
-      val lower2 = math.max(imageA.min2, j - imageB.max2)
-      val upper2 = math.min(imageA.max2, j - imageB.min2)
+      val lower1 = math.max(imageA.lower1, i - imageB.upper1)
+      val upper1 = math.min(imageA.upper1, i - imageB.lower1)
+      val lower2 = math.max(imageA.lower2, j - imageB.upper2)
+      val upper2 = math.min(imageA.upper2, j - imageB.lower2)
       var y = lower2
       var x = lower1
       var sample = imageA(x, y) :* imageB(i - x, j - y)
@@ -210,17 +206,17 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
       (implicit isVector: A <:< Vector[A, B])
     extends Image2[A] {
     
-    val min1 = imageA.min1 + imageB1.min
-    val max1 = imageA.max1 + imageB1.max
-    val min2 = imageA.min2 + imageB2.min
-    val max2 = imageA.max2 + imageB2.max
+    val lower1 = imageA.lower1 + imageB1.lower
+    val upper1 = imageA.upper1 + imageB1.upper
+    val lower2 = imageA.lower2 + imageB2.lower
+    val upper2 = imageA.upper2 + imageB2.upper
     
     def apply(i: Long, j: Long): A = {
       // TODO: caching strategy
-      val lower1 = math.max(imageA.min1, i - imageB1.max)
-      val upper1 = math.min(imageA.max1, i - imageB1.min)
-      val lower2 = math.max(imageA.min2, j - imageB2.max)
-      val upper2 = math.min(imageA.max2, j - imageB2.min)
+      val lower1 = math.max(imageA.lower1, i - imageB1.upper)
+      val upper1 = math.min(imageA.upper1, i - imageB1.lower)
+      val lower2 = math.max(imageA.lower2, j - imageB2.upper)
+      val upper2 = math.min(imageA.upper2, j - imageB2.lower)
       var y = lower2
       var x = lower1
       var sample = imageA(x, y) :* (imageB1(i - x) * imageB2(j - y))
@@ -242,10 +238,10 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     extends ((Double, Double) => A) {
     
     def apply(i: Double, j: Double): A = {
-      var lower1 = imageA.min1
-      var upper1 = imageA.max1
-      var lower2 = imageA.min2
-      var upper2 = imageA.max2
+      var lower1 = imageA.lower1
+      var upper1 = imageA.upper1
+      var lower2 = imageA.lower2
+      var upper2 = imageA.upper2
       var y = lower2
       var x = lower1
       var sample = imageA(x, y) :* filter(i - x, j - y)
@@ -269,10 +265,10 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     
     def apply(i: Double, j: Double): A = {
       // TODO: ad-hoc caching strategy
-      var lower1 = imageA.min1
-      var upper1 = imageA.max1
-      var lower2 = imageA.min2
-      var upper2 = imageA.max2
+      var lower1 = imageA.lower1
+      var upper1 = imageA.upper1
+      var lower2 = imageA.lower2
+      var upper2 = imageA.upper2
       var y = lower2
       var x = lower1
       var sample = imageA(x, y) :* (filter1(i - x) * filter2(j - y))

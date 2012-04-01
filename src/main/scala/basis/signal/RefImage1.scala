@@ -9,25 +9,25 @@ package basis.signal
 
 class RefImage1[A]
     (val array: Array[AnyRef], val base: Int)
-    (val min: Long, val max: Long)
-  extends MutableImage1[A] {
+    (val lower: Long, val upper: Long)
+  extends Raster1[A] {
   
-  assert(min < max)
-  assert(base + (max - min + 1L) <= array.length)
+  assert(lower < upper)
+  assert(base + (upper - lower + 1L) <= array.length)
   
-  def this(min: Long, max: Long) =
-    this(new Array[AnyRef]((max - min + 1L).toInt), 0)(min, max)
+  def this(lower: Long, upper: Long) =
+    this(new Array[AnyRef]((upper - lower + 1L).toInt), 0)(lower, upper)
   
   def apply(i: Long): A = {
-    if (i < min || i > max) throw new IndexOutOfBoundsException(i.toString)
-    array(base + (i - min).toInt).asInstanceOf[A]
+    if (i < lower || i > upper) throw new IndexOutOfBoundsException(i.toString)
+    array(base + (i - lower).toInt).asInstanceOf[A]
   }
   
   def update(i: Long, sample: A) {
-    if (i < min || i > max) throw new IndexOutOfBoundsException(i.toString)
-    array(base + (i - min).toInt) = sample.asInstanceOf[AnyRef]
+    if (i < lower || i > upper) throw new IndexOutOfBoundsException(i.toString)
+    array(base + (i - lower).toInt) = sample.asInstanceOf[AnyRef]
   }
   
   override def translate(delta: Long): RefImage1[A] =
-    new RefImage1[A](array, base)(min + delta, max + delta)
+    new RefImage1[A](array, base)(lower + delta, upper + delta)
 }

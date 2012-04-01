@@ -7,12 +7,22 @@
 
 package basis.signal
 
-trait MutableImage1[A] extends Image1[A] { imageA =>
+/** An updateable discrete unary function on a bounded domain.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam A   the sample type.
+  */
+trait Raster1[A] extends Image1[A] { imageA =>
+  /** Updates a sample of this image. */
   def update(i: Long, sample: A): Unit
   
+  /** Replaces a subset of this image with another image. Eagerly updates the
+    * samples at the domains' intersection with the values of the other image.
+    * The name ''blit'' stands for '''bl'''ock '''i'''mage '''t'''ransfer. */
   def blit[B <: A](that: Image1[B]) {
-    val lower = math.max(this.min, that.min)
-    val upper = math.min(this.max, that.max)
+    val lower = math.max(this.lower, that.lower)
+    val upper = math.min(this.upper, that.upper)
     var i = lower
     while (i <= upper) {
       this(i) = that(i)
@@ -20,13 +30,13 @@ trait MutableImage1[A] extends Image1[A] { imageA =>
     }
   }
   
-  override def translate(delta: Long): MutableImage1[A] = new Translation(delta)
+  override def translate(delta: Long): Raster1[A] = new Translation(delta)
   
-  protected class Translation(delta: Long) extends super.Translation(delta) with MutableImage1[A] {
+  protected class Translation(delta: Long) extends super.Translation(delta) with Raster1[A] {
     def update(i: Long, sample: A): Unit =
       imageA.update(i + delta, sample)
     
-    override def translate(delta: Long): MutableImage1[A] =
+    override def translate(delta: Long): Raster1[A] =
       new imageA.Translation(this.delta + delta)
   }
 }
