@@ -30,7 +30,7 @@ import scala.math.max
   * @tparam T   the type of this struct.
   * @see [[basis.memory.Data]]
   */
-@implicitNotFound("No implicit struct for ${T}")
+@implicitNotFound("Cannot find implicit struct for ${T}.")
 abstract class Struct[@specialized T] { struct =>
   /** The power-of-two alignment of this struct's frame. Storage addresses must
     * be multiples of this alignment. */

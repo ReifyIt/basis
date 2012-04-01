@@ -13,7 +13,7 @@ import scala.annotation.implicitNotFound
   * 
   * @author Chris Sachs
   */
-@implicitNotFound("No implicit allocator")
+@implicitNotFound("Cannot find implicit allocator.")
 abstract class Allocator {
   /** The maximum number of bytes this allocator can allocate. */
   def MaxSize: Long
