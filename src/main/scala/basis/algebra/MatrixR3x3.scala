@@ -166,20 +166,6 @@ final class MatrixR3x3(
 
 /** Contains factory methods for matrices in `R3x3`. */
 object MatrixR3x3 {
-  /** The zero matrix of `R3x3`. */
-  def Zero: MatrixR3x3 =
-    new MatrixR3x3(
-      0.0, 0.0, 0.0,
-      0.0, 0.0, 0.0,
-      0.0, 0.0, 0.0)
-  
-  /** The identity matrix of `R3x3`. */
-  def Identity: MatrixR3x3 =
-    new MatrixR3x3(
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0)
-  
   def apply(
       _1_1: Double, _1_2: Double, _1_3: Double,
       _2_1: Double, _2_2: Double, _2_3: Double,
@@ -206,4 +192,12 @@ object MatrixR3x3 {
       row1.x, row1.y, row1.z,
       row2.x, row2.y, row2.z,
       row3.x, row3.y, row3.z)
+  
+  /** The additive identity of `R3x3`. */
+  implicit val additiveIdentity =
+    new AdditiveIdentity(
+      new MatrixR3x3(
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0))
 }

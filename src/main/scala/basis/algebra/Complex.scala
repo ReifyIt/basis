@@ -126,14 +126,11 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
 
 /** Contains factory methods and implicit conversions for `Complex` values. */
 object Complex {
-  /** The additive identity of the `Complex` field. */
-  val Zero: Complex = new Complex(0.0, 0.0)
+  def apply(real: Double, imaginary: Double): Complex = new Complex(real, imaginary)
   
-  /** The multiplicative identity of the `Complex` field. */
-  val One: Complex = new Complex(1.0, 0.0)
+  def apply(real: Double): Complex = new Complex(real)
   
-  /** The imaginary unit of the `Complex` field. */
-  val i: Complex = new Complex(0.0, 1.0)
+  def unapply(complex: Complex): Some[(Double, Double)] = Some(complex.real, complex.imaginary)
   
   /** Constructs a `Complex` value with polar coordinates.
     * 
@@ -143,14 +140,14 @@ object Complex {
     */
   def polar(r: Double, φ: Double): Complex = new Complex(r * math.cos(φ), r * math.sin(φ))
   
-  def apply(real: Double, imaginary: Double): Complex = new Complex(real, imaginary)
-  
-  def apply(real: Double): Complex = new Complex(real)
-  
-  def unapply(complex: Complex): Some[(Double, Double)] = Some(complex.real, complex.imaginary)
-  
   /** Implicitly converts a `Double` value to a `Complex` value. */
   implicit def box(real: Double): Complex = new Complex(real)
+  
+  /** The additive identity of the `Complex` field. */
+  implicit val additiveIdentity = new AdditiveIdentity(new Complex(0.0, 0.0))
+  
+  /** The multiplicative identity of the `Complex` field. */
+  implicit val multiplicativeIdentity = new MultiplicativeIdentity(new Complex(1.0, 0.0))
   
   /** The default struct for `Complex` values. */
   implicit lazy val struct = new StructComplex

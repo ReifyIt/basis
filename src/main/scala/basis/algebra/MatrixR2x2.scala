@@ -120,18 +120,6 @@ final class MatrixR2x2(
 
 /** Contains factory methods for matrices in `R2x2`. */
 object MatrixR2x2 {
-  /** The zero matrix of `R2x2`. */
-  def Zero: MatrixR2x2 =
-    new MatrixR2x2(
-      0.0, 0.0,
-      0.0, 0.0)
-  
-  /** The identity matrix of `R2x2`. */
-  def Identity: MatrixR2x2 =
-    new MatrixR2x2(
-      1.0, 0.0,
-      0.0, 1.0)
-  
   def apply(
       _1_1: Double, _1_2: Double,
       _2_1: Double, _2_2: Double): MatrixR2x2 =
@@ -152,4 +140,11 @@ object MatrixR2x2 {
     new MatrixR2x2(
       row1.x, row1.y,
       row2.x, row2.y)
+  
+  /** The additive identity of `R2x2`. */
+  implicit val additiveIdentity =
+    new AdditiveIdentity(
+      new MatrixR2x2(
+        0.0, 0.0,
+        0.0, 0.0))
 }

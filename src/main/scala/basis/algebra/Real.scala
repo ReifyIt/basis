@@ -103,12 +103,6 @@ final class Real(protected val value: Double)
 
 /** Contains factory methods and implicit conversions for `Real` values. */
 object Real {
-  /** The additive identity of the `Real` field. */
-  val Zero: Real = new Real(0.0)
-  
-  /** The multiplicative identity of the `Real` field. */
-  val One: Real = new Real(1.0)
-  
   def apply(value: Double): Real = new Real(value)
   
   def unapply(real: Real): Some[Double] = Some(real.value)
@@ -118,6 +112,12 @@ object Real {
   
   /** Implicitly converts a `Real` value to a `Double` value. */
   implicit def unbox(real: Real): Double = real.value
+  
+  /** The additive identity of the `Real` field. */
+  implicit val additiveIdentity = new AdditiveIdentity(new Real(0.0))
+  
+  /** The multiplicative identity of the `Real` field. */
+  implicit val multiplicativeIdentity = new MultiplicativeIdentity(new Real(1.0))
   
   /** The default struct for `Real` values. */
   implicit lazy val struct = new StructReal

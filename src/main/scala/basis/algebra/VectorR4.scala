@@ -65,14 +65,14 @@ final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
 
 /** Contains factory methods for vectors in `R4`. */
 object VectorR4 {
-  /** The zero vector of `R4`. */
-  def Zero: VectorR4 = new VectorR4(0.0, 0.0, 0.0, 0.0)
-  
   def apply(x: Double, y: Double, z: Double, w: Double): VectorR4 =
     new VectorR4(x, y, z, w)
   
   def unapply(vector: VectorR4): Some[(Double, Double, Double, Double)] =
     Some(vector.x, vector.y, vector.z, vector.w)
+  
+  /** The additive identity of `R4`. */
+  implicit val additiveIdentity = new AdditiveIdentity(new VectorR4(0.0, 0.0, 0.0, 0.0))
   
   /** The default struct for vectors in `R4`. */
   implicit lazy val struct = new StructVectorR4

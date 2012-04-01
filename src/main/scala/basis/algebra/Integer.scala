@@ -88,12 +88,6 @@ final class Integer(protected val value: Long) extends OrderedRing[Integer] {
 
 /** Contains factory methods and implicit conversions for `Integer` values. */
 object Integer {
-  /** The additive identity of the `Integer` ring. */
-  val Zero: Integer = new Integer(0L)
-  
-  /** The multiplicative identity of the `Integer` ring. */
-  val One: Integer = new Integer(1L)
-  
   def apply(value: Long): Integer = new Integer(value)
   
   def unapply(integer: Integer): Some[Long] = Some(integer.value)
@@ -103,6 +97,12 @@ object Integer {
   
   /** Implicitly converts an `Integer` value to a `Long` value. */
   implicit def unbox(integer: Integer): Long = integer.value
+  
+  /** The additive identity of the `Integer` ring. */
+  implicit val additiveIdentity = new AdditiveIdentity(new Integer(0L))
+  
+  /** The multiplicative identity of the `Integer` ring. */
+  implicit val multiplicativeIdentity = new MultiplicativeIdentity(new Integer(1L))
   
   /** The default struct for `Integer` values. */
   implicit lazy val struct = new StructInteger
