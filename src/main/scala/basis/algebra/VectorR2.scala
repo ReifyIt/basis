@@ -61,8 +61,8 @@ final class VectorR2(val x: Double, val y: Double)
     "VectorR2"+"("+ x +", "+ y +")"
 }
 
-/** Contains factory methods for vectors in `R2`. Serves as a struct for vectors in `R2`. */
-object VectorR2 extends Struct2[Double, Double, VectorR2] {
+/** Contains factory methods for vectors in `R2`. */
+object VectorR2 {
   /** The zero vector of `R2`. */
   def Zero: VectorR2 = new VectorR2(0.0, 0.0)
   
@@ -72,24 +72,35 @@ object VectorR2 extends Struct2[Double, Double, VectorR2] {
   def unapply(vector: VectorR2): Some[(Double, Double)] =
     Some(vector.x, vector.y)
   
-  def load(data: Data, address: Long): VectorR2 = {
-    val x = data.loadDouble(address + offset1)
-    val y = data.loadDouble(address + offset2)
-    new VectorR2(x, y)
+  /** The default struct for vectors in `R2`. */
+  implicit lazy val struct = new StructVectorR2
+  
+  /** A struct for vectors in `R2`. */
+  class StructVectorR2(frameOffset: Long, frameSize: Long, frameAlignment: Long)
+    extends Struct2[Double, Double, VectorR2](frameOffset, frameSize, frameAlignment) {
+    
+    def this() = this(0L, 0L, 0L)
+    
+    /** The `x` field projection of this struct. */
+    def x: Struct[Double] = field1
+    
+    /** The `y` field projection of this struct. */
+    def y: Struct[Double] = field2
+    
+    def load(data: Data, address: Long): VectorR2 = {
+      val x = data.loadDouble(address + offset1)
+      val y = data.loadDouble(address + offset2)
+      new VectorR2(x, y)
+    }
+    
+    def store(data: Data, address: Long, vector: VectorR2) {
+      data.storeDouble(address + offset1, vector.x)
+      data.storeDouble(address + offset2, vector.y)
+    }
+    
+    override def project(offset: Long, size: Long, alignment: Long): StructVectorR2 =
+      new StructVectorR2(offset1 + offset, size, alignment)
+    
+    override def toString: String = "StructVectorR2"
   }
-  
-  def store(data: Data, address: Long, vector: VectorR2) {
-    data.storeDouble(address + offset1, vector.x)
-    data.storeDouble(address + offset2, vector.y)
-  }
-  
-  /** The projection of the `x` field of the `VectorR2` struct. */
-  def x: Struct[Double] = field1
-  
-  /** The projection of the `y` field of the `VectorR2` struct. */
-  def y: Struct[Double] = field2
-  
-  implicit def struct: this.type = this
-  
-  override def toString: String = "VectorR2"
 }

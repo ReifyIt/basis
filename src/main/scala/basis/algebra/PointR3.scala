@@ -45,8 +45,8 @@ final class PointR3(val x: Double, val y: Double, val z: Double)
     "PointR3"+"("+ x +", "+ y +", "+ z +")"
 }
 
-/** Contains factory methods for points in `R3`. Serves as a struct for points in `R3`. */
-object PointR3 extends Struct3[Double, Double, Double, PointR3] {
+/** Contains factory methods for points in `R3`. */
+object PointR3 {
    /** the origin of `R3`. */
   def Origin: PointR3 = new PointR3(0.0, 0.0, 0.0)
   
@@ -56,29 +56,40 @@ object PointR3 extends Struct3[Double, Double, Double, PointR3] {
   def unapply(point: PointR3): Some[(Double, Double, Double)] =
     Some(point.x, point.y, point.z)
   
-  def load(data: Data, address: Long): PointR3 = {
-    val x = data.loadDouble(address + offset1)
-    val y = data.loadDouble(address + offset2)
-    val z = data.loadDouble(address + offset3)
-    new PointR3(x, y, z)
+  /** The default struct for points in `R3`. */
+  implicit lazy val struct = new StructPointR3
+  
+  /** A struct for points in `R3`. */
+  class StructPointR3(frameOffset: Long, frameSize: Long, frameAlignment: Long)
+    extends Struct3[Double, Double, Double, PointR3](frameOffset, frameSize, frameAlignment) {
+    
+    def this() = this(0L, 0L, 0L)
+    
+    /** The `x` field projection of this struct. */
+    def x: Struct[Double] = field1
+    
+    /** The `y` field projection of this struct. */
+    def y: Struct[Double] = field2
+    
+    /** The `z` field projection of this struct. */
+    def z: Struct[Double] = field3
+    
+    def load(data: Data, address: Long): PointR3 = {
+      val x = data.loadDouble(address + offset1)
+      val y = data.loadDouble(address + offset2)
+      val z = data.loadDouble(address + offset3)
+      new PointR3(x, y, z)
+    }
+    
+    def store(data: Data, address: Long, point: PointR3) {
+      data.storeDouble(address + offset1, point.x)
+      data.storeDouble(address + offset2, point.y)
+      data.storeDouble(address + offset3, point.z)
+    }
+    
+    override def project(offset: Long, size: Long, alignment: Long): StructPointR3 =
+      new StructPointR3(offset1 + offset, size, alignment)
+    
+    override def toString: String = "StructPointR3"
   }
-  
-  def store(data: Data, address: Long, point: PointR3) {
-    data.storeDouble(address + offset1, point.x)
-    data.storeDouble(address + offset2, point.y)
-    data.storeDouble(address + offset3, point.z)
-  }
-  
-  /** The projection of the `x` field of the `PointR3` struct. */
-  def x: Struct[Double] = field1
-  
-  /** The projection of the `y` field of the `PointR3` struct. */
-  def y: Struct[Double] = field2
-  
-  /** The projection of the `z` field of the `PointR3` struct. */
-  def z: Struct[Double] = field3
-  
-  implicit def struct: this.type = this
-  
-  override def toString: String = "PointR3"
 }

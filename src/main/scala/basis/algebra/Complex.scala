@@ -124,9 +124,8 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
   }
 }
 
-/** Contains factory methods for `Complex` values. Serves as a struct for `Complex` values.
-  * Contains an implicit conversion from `Double` values to `Complex` values. */
-object Complex extends Struct2[Double, Double, Complex] {
+/** Contains factory methods and implicit conversions for `Complex` values. */
+object Complex {
   /** The additive identity of the `Complex` field. */
   val Zero: Complex = new Complex(0.0, 0.0)
   
@@ -146,28 +145,42 @@ object Complex extends Struct2[Double, Double, Complex] {
   
   def apply(real: Double, imaginary: Double): Complex = new Complex(real, imaginary)
   
-  implicit def apply(real: Double): Complex = new Complex(real)
+  def apply(real: Double): Complex = new Complex(real)
   
   def unapply(complex: Complex): Some[(Double, Double)] = Some(complex.real, complex.imaginary)
   
-  def load(data: Data, address: Long): Complex = {
-    val real      = data.loadDouble(address + offset1)
-    val imaginary = data.loadDouble(address + offset2)
-    new Complex(real, imaginary)
+  /** Implicitly converts a `Double` value to a `Complex` value. */
+  implicit def box(real: Double): Complex = new Complex(real)
+  
+  /** The default struct for `Complex` values. */
+  implicit lazy val struct = new StructComplex
+  
+  /** A struct for `Complex` values. */
+  class StructComplex(frameOffset: Long, frameSize: Long, frameAlignment: Long)
+    extends Struct2[Double, Double, Complex](frameOffset, frameSize, frameAlignment) {
+    
+    def this() = this(0L, 0L, 0L)
+    
+    /** The `real` field projection of this struct. */
+    def real: Struct[Double] = field1
+    
+    /** The `imaginary` field projection of this struct. */
+    def imaginary: Struct[Double] = field2
+    
+    def load(data: Data, address: Long): Complex = {
+      val real      = data.loadDouble(address + offset1)
+      val imaginary = data.loadDouble(address + offset2)
+      new Complex(real, imaginary)
+    }
+    
+    def store(data: Data, address: Long, complex: Complex) {
+      data.storeDouble(address + offset1, complex.real)
+      data.storeDouble(address + offset2, complex.imaginary)
+    }
+    
+    override def project(offset: Long, size: Long, alignment: Long): StructComplex =
+      new StructComplex(offset1 + offset, size, alignment)
+    
+    override def toString: String = "StructComplex"
   }
-  
-  def store(data: Data, address: Long, complex: Complex) {
-    data.storeDouble(address + offset1, complex.real)
-    data.storeDouble(address + offset2, complex.imaginary)
-  }
-  
-  /** The projection of the `real` field of the `Complex` struct. */
-  def real: Struct[Double] = field1
-  
-  /** The projection of the `imaginary` field of the `Complex` struct. */
-  def imaginary: Struct[Double] = field2
-  
-  implicit def struct: this.type = this
-  
-  override def toString: String = "Complex"
 }

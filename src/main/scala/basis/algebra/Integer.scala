@@ -86,9 +86,8 @@ final class Integer(protected val value: Long) extends OrderedRing[Integer] {
   def toDouble: Double = value.toDouble
 }
 
-/** Contains factory methods for `Integer` values. Serves as a struct for `Integer` values.
-  * Contains implicit conversions between `Long` values and `Integer` values. */
-object Integer extends Struct1[Long, Integer] {
+/** Contains factory methods and implicit conversions for `Integer` values. */
+object Integer {
   /** The additive identity of the `Integer` ring. */
   val Zero: Integer = new Integer(0L)
   
@@ -105,13 +104,24 @@ object Integer extends Struct1[Long, Integer] {
   /** Implicitly converts an `Integer` value to a `Long` value. */
   implicit def unbox(integer: Integer): Long = integer.value
   
-  def load(data: Data, address: Long): Integer =
-    new Integer(data.loadLong(address))
+  /** The default struct for `Integer` values. */
+  implicit lazy val struct = new StructInteger
   
-  def store(data: Data, address: Long, integer: Integer): Unit =
-    data.storeLong(address, integer.value)
-  
-  implicit def struct: this.type = this
-  
-  override def toString: String = "Integer"
+  /** A struct for `Integer` values. */
+  class StructInteger(fieldOffset: Long, fieldSize: Long, fieldAlignment: Long)
+    extends Struct1[Long, Integer](fieldOffset, fieldSize, fieldAlignment) {
+    
+    def this() = this(0L, 0L, 0L)
+    
+    def load(data: Data, address: Long): Integer =
+      new Integer(data.loadLong(address + offset))
+    
+    def store(data: Data, address: Long, integer: Integer): Unit =
+      data.storeLong(address + offset, integer.value)
+    
+    override def project(offset: Long, size: Long, alignment: Long): StructInteger =
+      new StructInteger(this.offset + offset, size, alignment)
+    
+    override def toString: String = "StructInteger"
+  }
 }

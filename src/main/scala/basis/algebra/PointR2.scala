@@ -44,8 +44,8 @@ final class PointR2(val x: Double, val y: Double)
     "PointR2"+"("+ x +", "+ y +")"
 }
 
-/** Contains factory methods for points in `R2`. Serves as a struct for points in `R2`. */
-object PointR2 extends Struct2[Double, Double, PointR2] {
+/** Contains factory methods for points in `R2`. */
+object PointR2 {
   /** the origin of `R2`. */
   def Origin: PointR2 = new PointR2(0.0, 0.0)
   
@@ -55,24 +55,35 @@ object PointR2 extends Struct2[Double, Double, PointR2] {
   def unapply(point: PointR2): Some[(Double, Double)] =
     Some(point.x, point.y)
   
-  def load(data: Data, address: Long): PointR2 = {
-    val x = data.loadDouble(address + offset1)
-    val y = data.loadDouble(address + offset2)
-    new PointR2(x, y)
+  /** The default struct for points in `R2`. */
+  implicit lazy val struct = new StructPointR2
+  
+  /** A struct for points in `R2`. */
+  class StructPointR2(frameOffset: Long, frameSize: Long, frameAlignment: Long)
+    extends Struct2[Double, Double, PointR2](frameOffset, frameSize, frameAlignment) {
+    
+    def this() = this(0L, 0L, 0L)
+    
+    /** The `x` field projection of this struct. */
+    def x: Struct[Double] = field1
+    
+    /** The `y` field projection of this struct. */
+    def y: Struct[Double] = field2
+    
+    def load(data: Data, address: Long): PointR2 = {
+      val x = data.loadDouble(address + offset1)
+      val y = data.loadDouble(address + offset2)
+      new PointR2(x, y)
+    }
+    
+    def store(data: Data, address: Long, point: PointR2) {
+      data.storeDouble(address + offset1, point.x)
+      data.storeDouble(address + offset2, point.y)
+    }
+    
+    override def project(offset: Long, size: Long, alignment: Long): StructPointR2 =
+      new StructPointR2(offset1 + offset, size, alignment)
+    
+    override def toString: String = "StructPointR2"
   }
-  
-  def store(data: Data, address: Long, point: PointR2) {
-    data.storeDouble(address + offset1, point.x)
-    data.storeDouble(address + offset2, point.y)
-  }
-  
-  /** The projection of the `x` field of the `PointR2` struct. */
-  def x: Struct[Double] = field1
-  
-  /** The projection of the `y` field of the `PointR2` struct. */
-  def y: Struct[Double] = field2
-  
-  implicit def struct: this.type = this
-  
-  override def toString: String = "PointR2"
 }

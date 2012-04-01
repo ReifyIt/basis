@@ -101,9 +101,8 @@ final class Real(protected val value: Double)
   def toDouble: Double = value
 }
 
-/** Contains factory methods for `Real` values. Serves as a struct for `Real` values.
-  * Contains implicit conversions between `Double` values and `Real` values. */
-object Real extends Struct1[Double, Real] {
+/** Contains factory methods and implicit conversions for `Real` values. */
+object Real {
   /** The additive identity of the `Real` field. */
   val Zero: Real = new Real(0.0)
   
@@ -120,13 +119,24 @@ object Real extends Struct1[Double, Real] {
   /** Implicitly converts a `Real` value to a `Double` value. */
   implicit def unbox(real: Real): Double = real.value
   
-  def load(data: Data, address: Long): Real =
-    new Real(data.loadDouble(address))
+  /** The default struct for `Real` values. */
+  implicit lazy val struct = new StructReal
   
-  def store(data: Data, address: Long, real: Real): Unit =
-    data.storeDouble(address, real.value)
-  
-  implicit def struct: this.type = this
-  
-  override def toString: String = "Real"
+  /** A struct for `Real` values. */
+  class StructReal(frameOffset: Long, frameSize: Long, frameAlignment: Long)
+    extends Struct1[Double, Real](frameOffset, frameSize, frameAlignment) {
+    
+    def this() = this(0L, 0L, 0L)
+    
+    def load(data: Data, address: Long): Real =
+      new Real(data.loadDouble(address))
+    
+    def store(data: Data, address: Long, real: Real): Unit =
+      data.storeDouble(address, real.value)
+    
+    override def project(offset: Long, size: Long, alignment: Long): StructReal =
+      new StructReal(this.offset + offset, size, alignment)
+    
+    override def toString: String = "StructReal"
+  }
 }

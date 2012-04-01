@@ -71,8 +71,8 @@ final class VectorR3(val x: Double, val y: Double, val z: Double)
     "VectorR3"+"("+ x +", "+ y +", "+ z +")"
 }
 
-/** Contains factory methods for vectors in `R3`. Serves as a struct for vectors in `R3`. */
-object VectorR3 extends Struct3[Double, Double, Double, VectorR3] {
+/** Contains factory methods for vectors in `R3`. */
+object VectorR3 {
   /** The zero vector of `R3`. */
   def Zero: VectorR3 = new VectorR3(0.0, 0.0, 0.0)
   
@@ -82,29 +82,40 @@ object VectorR3 extends Struct3[Double, Double, Double, VectorR3] {
   def unapply(vector: VectorR3): Some[(Double, Double, Double)] =
     Some(vector.x, vector.y, vector.z)
   
-  def load(data: Data, address: Long): VectorR3 = {
-    val x = data.loadDouble(address + offset1)
-    val y = data.loadDouble(address + offset2)
-    val z = data.loadDouble(address + offset3)
-    new VectorR3(x, y, z)
+  /** The default struct for vectors in `R3`. */
+  implicit lazy val struct = new StructVectorR3
+  
+  /** A struct for vectors in `R3`. */
+  class StructVectorR3(frameOffset: Long, frameSize: Long, frameAlignment: Long)
+    extends Struct3[Double, Double, Double, VectorR3](frameOffset, frameSize, frameAlignment) {
+    
+    def this() = this(0L, 0L, 0L)
+    
+    /** The `x` field projection of this struct. */
+    def x: Struct[Double] = field1
+    
+    /** The `y` field projection of this struct. */
+    def y: Struct[Double] = field2
+    
+    /** The `z` field projection of this struct. */
+    def z: Struct[Double] = field3
+    
+    def load(data: Data, address: Long): VectorR3 = {
+      val x = data.loadDouble(address + offset1)
+      val y = data.loadDouble(address + offset2)
+      val z = data.loadDouble(address + offset3)
+      new VectorR3(x, y, z)
+    }
+    
+    def store(data: Data, address: Long, vector: VectorR3) {
+      data.storeDouble(address + offset1, vector.x)
+      data.storeDouble(address + offset2, vector.y)
+      data.storeDouble(address + offset3, vector.z)
+    }
+    
+    override def project(offset: Long, alignment: Long, size: Long): StructVectorR3 =
+      new StructVectorR3(offset1 + offset, alignment, size)
+    
+    override def toString: String = "StructVectorR3"
   }
-  
-  def store(data: Data, address: Long, vector: VectorR3) {
-    data.storeDouble(address + offset1, vector.x)
-    data.storeDouble(address + offset2, vector.y)
-    data.storeDouble(address + offset3, vector.z)
-  }
-  
-  /** The projection of the `x` field of the `VectorR3` struct. */
-  def x: Struct[Double] = field1
-  
-  /** The projection of the `y` field of the `VectorR3` struct. */
-  def y: Struct[Double] = field2
-  
-  /** The projection of the `z` field of the `VectorR3` struct. */
-  def z: Struct[Double] = field3
-  
-  implicit def struct: this.type = this
-  
-  override def toString: String = "VectorR3"
 }
