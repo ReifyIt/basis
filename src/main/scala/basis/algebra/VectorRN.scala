@@ -142,7 +142,7 @@ final class VectorRN(protected val coordinates: Array[Double])
   override def toString: String =
     coordinates.mkString("VectorRN(", ", ", ")")
   
-  /** Converts this vector to a coordinate sequence. */
+  /** Converts this $vector to a coordinate sequence. */
   def toSeq: Seq[Double] = coordinates
 }
 
