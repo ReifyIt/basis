@@ -22,6 +22,7 @@ package basis.algebra
   * multiplicative identity to its additive identity.
   * 
   * @define vector    $element
+  * @define scalar    $element
   * @define Element   Ring
   * @define element   `Ring` value
   */
