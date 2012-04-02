@@ -42,10 +42,20 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
   def translate(delta1: Long, delta2: Long): Image2[A] =
     new Translation(delta1, delta2)
   
+  /** Returns an image that applies a function to each sample of this image.
+    * 
+    * @tparam B   the sample type of the returned image.
+    * @param  f   the function to apply to each sample.
+    * @return the non-strict mapping of this image.
+    */
+  def map[B](f: A => B): Image2[B] = new Map[B](f)
+  
   /** Composites this image and another image using an operator function. The
     * returned image's domain is the intersection of this image's domain and
     * the other image's domain.
     * 
+    * @param  B         the sample type of the other image.
+    * @param  C         the sample type of the returned image.
     * @param  that      the other image to composite.
     * @param  operator  the function that combines image samples.
     * @return the composition of corresponding values at each element of the domain.
@@ -66,6 +76,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
   /** Convolves this vector image with a scalar image on the right. The name of
     * this method uses the unicode asterisk operator U+2217.
     * 
+    * @param  B         the scalar sample type of the other image.
     * @param  filter    the scalar filter to convolve with.
     * @param  isVector  implicit evidence that this image has vector samples.
     * @return the discrete convolution of this image with the filter.
@@ -76,6 +87,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
   /** Convolves this vector image with a scalar image on the left. The name of
     * this method uses the unicode asterisk operator U+2217.
     * 
+    * @param  B         the scalar sample type of the other image.
     * @param  filter    the scalar filter to convolve with.
     * @param  isVector  implicit evidence that this image has vector samples.
     * @return the discrete convolution of this image with the filter.
@@ -86,6 +98,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
   /** Convolves this vector image with a 1-dimensional scalar image on the right.
     * Equivalent to a convolving with `(x, y) => filter(x) * filter(y)`.
     * 
+    * @param  B         the scalar sample type of the other image.
     * @param  filter    the 1-dimensional scalar filter.
     * @param  isVector  implicit evidence that this image has vector samples.
     * @return the discrete convolution of this image with the filter.
@@ -97,6 +110,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     * Equivalent to a convolving with `(x, y) => filter(x) * filter(y)`. The
     * name of this method uses the unicode asterisk operator U+2217.
     * 
+    * @param  B         the scalar sample type of the other image.
     * @param  filter    the 1-dimensional scalar filter.
     * @param  isVector  implicit evidence that this image has vector samples.
     * @return the discrete convolution of this image with the filter.
@@ -108,6 +122,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     * The name of this method uses the unicode asterisk operator U+2217. The
     * name of this method uses the unicode asterisk operator U+2217.
     * 
+    * @param  B         the scalar sample type of the other image.
     * @param  filter    the continuous scalar filter function.
     * @param  isVector  implicit evidence that this image has vector samples.
     * @return the discrete-continuous convolution of this image with the filter.
@@ -118,6 +133,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
   /** Convolves this vector image with a continuous scalar filter on the left.
     * The name of this method uses the unicode asterisk operator U+2217.
     * 
+    * @param  B         the scalar sample type of the other image.
     * @param  filter    the continuous scalar filter function.
     * @param  isVector  implicit evidence that this image has vector samples.
     * @return the discrete-continuous convolution of this image with the filter.
@@ -129,6 +145,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     * the right. Equivalent to convolving with `(x, y) => filter(x) * filter(y)`.
     * The name of this method uses the unicode asterisk operator U+2217.
     * 
+    * @param  B         the scalar sample type of the other image.
     * @param  filter    the 1-dimensional continuous scalar filter function.
     * @param  isVector  implicit evidence that this image has vector samples.
     * @return the discrete-continuous convolution of this image with the filter.
@@ -140,6 +157,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     * the left. Equivalent to convolving with `(x, y) => filter(x) * filter(y)`.
     * The name of this method uses the unicode asterisk operator U+2217.
     * 
+    * @param  B         the scalar sample type of the other image.
     * @param  filter    the 1-dimensional continuous scalar filter function.
     * @param  isVector  implicit evidence that this image has vector samples.
     * @return the discrete-continuous convolution of this image with the filter.
@@ -157,6 +175,15 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     
     override def translate(delta1: Long, delta2: Long): Image2[A] =
       new imageA.Translation(this.delta1 + delta1, this.delta2 + delta2)
+  }
+  
+  protected class Map[B](f: A => B) extends Image2[B] {
+    def lower1 = imageA.lower1
+    def upper1 = imageA.upper1
+    def lower2 = imageA.lower2
+    def upper2 = imageA.upper2
+    
+    def apply(i: Long, j: Long): B = f(imageA(i, j))
   }
   
   protected class Composite[B, C]
