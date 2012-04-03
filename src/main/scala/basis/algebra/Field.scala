@@ -9,7 +9,7 @@ package basis.algebra
 
 /** An element of a field.
   * 
-  * $IntMorphismInfo
+  * $LongMorphismInfo
   * 
   * @author Chris Sachs
   * 
@@ -29,10 +29,10 @@ trait Field[Field] extends Ring[Field] {
     */
   def / (that: Field): Field
   
-  /** Divides this $element by an `Int` value.
+  /** Divides this $element by an `Long` value.
     * 
-    * @param  n   the `Int` value to divide by.
-    * @return the quotient of this $element and the `Int` value.
+    * @param  n   the `Long` value to divide by.
+    * @return the quotient of this $element and the `Long` value.
     */
-  def / (n: Int): Field
+  def / (n: Long): Field
 }

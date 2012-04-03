@@ -24,19 +24,19 @@ import basis.util.MurmurHash._
 final class Integer(protected val value: Long) extends OrderedRing[Integer] {
   def + (that: Integer): Integer = new Integer(value + that.value)
   
-  def + (n: Int): Integer = new Integer(value + n)
+  def + (n: Long): Integer = new Integer(value + n)
   
   def unary_- : Integer = new Integer(-value)
   
   def - (that: Integer): Integer = new Integer(value - that.value)
   
-  def - (n: Int): Integer = new Integer(value - n)
+  def - (n: Long): Integer = new Integer(value - n)
   
   def * (that: Integer): Integer = new Integer(value * that.value)
   
-  def * (n: Int): Integer = new Integer(value * n)
+  def * (n: Long): Integer = new Integer(value * n)
   
-  def pow(n: Int): Integer = new Integer(math.pow(value, n).toLong)
+  def pow(n: Long): Integer = new Integer(math.pow(value, n).toLong)
   
   /** Returns the greatest common divisor of this $element and another $element. */
   def gcd(that: Integer): Integer = {

@@ -9,7 +9,7 @@ package basis.algebra
 
 /** An element of a complete field.
   * 
-  * $IntMorphismInfo
+  * $LongMorphismInfo
   * 
   * $DoubleMorphismInfo
   * 
@@ -76,18 +76,18 @@ trait CompleteField[CompleteField] extends Field[CompleteField] {
     * $NotAlgebraicallyClosedWarning */
   def sqrt: CompleteField
   
-  def + (n: Int): CompleteField = this + n.toDouble
+  def + (n: Long): CompleteField = this + n.toDouble
   
-  def - (n: Int): CompleteField = this - n.toDouble
+  def - (n: Long): CompleteField = this - n.toDouble
   
-  def * (n: Int): CompleteField = this * n.toDouble
+  def * (n: Long): CompleteField = this * n.toDouble
   
-  def / (n: Int): CompleteField = this / n.toDouble
+  def / (n: Long): CompleteField = this / n.toDouble
   
-  /** Raises this $element to an `Int` power.
+  /** Raises this $element to an `Long` power.
     * 
-    * @param  n   the `Int` exponent.
-    * @return the exponentiation of this $element by the `Int` exponent.
+    * @param  n   the `Long` exponent.
+    * @return the exponentiation of this $element by the `Long` exponent.
     */
-  def pow(n: Int): CompleteField = pow(n.toDouble)
+  def pow(n: Long): CompleteField = pow(n.toDouble)
 }

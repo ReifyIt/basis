@@ -43,7 +43,7 @@ final class Interval private (val lower: Long, val upper: Long) extends Ring[Int
     else new Interval(lower + that.lower, upper + that.upper)
   }
   
-  def + (n: Int): Interval = {
+  def + (n: Long): Interval = {
     if (isEmpty) this
     else new Interval(lower + n, upper + n)
   }
@@ -58,7 +58,7 @@ final class Interval private (val lower: Long, val upper: Long) extends Ring[Int
     else new Interval(lower - that.upper, upper - that.lower)
   }
   
-  def - (n: Int): Interval = {
+  def - (n: Long): Interval = {
     if (isEmpty) this
     else new Interval(lower - n, upper - n)
   }
@@ -74,19 +74,19 @@ final class Interval private (val lower: Long, val upper: Long) extends Ring[Int
     }
   }
   
-  def * (n: Int): Interval = {
+  def * (n: Long): Interval = {
     if (isEmpty) this
     else if (n >= 0) new Interval(lower * n, upper * n)
     else new Interval(upper * n, lower * n)
   }
   
-  def pow(n: Int): Interval = {
-    require(n >= 0, "negative exponent")
+  def pow(n: Long): Interval = {
+    require(n >= 0L, "negative exponent")
     if (isEmpty) this
     else {
       val lowerN = math.pow(lower, n).toLong
       val upperN = math.pow(upper, n).toLong
-      if ((n & 1) != 0 || lower >= 0L) // odd exponent or positive interval
+      if ((n & 1L) != 0L || lower >= 0L) // odd exponent or positive interval
         new Interval(lowerN, upperN)
       else if (upper <  0L) // negative interval
         new Interval(upperN, lowerN)

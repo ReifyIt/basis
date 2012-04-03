@@ -9,7 +9,7 @@ package basis.algebra
 
 /** An element of a commutative ring with a total order.
   * 
-  * $IntMorphismInfo
+  * $LongMorphismInfo
   * 
   * @author Chris Sachs
   * 
