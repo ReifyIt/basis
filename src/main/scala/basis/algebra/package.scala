@@ -52,6 +52,18 @@ package basis
   * }}}
   */
 package object algebra {
+  /** Returns the inner product of two vectors. This convenience function
+    * delegates to an implicit `InnerProduct` typeclass. */
+  @inline def innerProduct[Vector, Scalar](u: Vector, v: Vector)
+      (implicit innerProduct: InnerProduct[Vector, Scalar]): Scalar =
+    innerProduct.apply(u, v)
+  
+  /** Returns the norm of a vector. This convenience function delegates to an
+    * imlicit `Norm` typeclass. */
+  @inline def norm[Vector, Scalar](u: Vector)
+      (implicit norm: Norm[Vector, Scalar]): Scalar =
+    norm.apply(u)
+  
   /** An abstract linear space over a ring. */
   type Module = Singleton {
     type Vector <: algebra.Vector[Vector, Scalar]

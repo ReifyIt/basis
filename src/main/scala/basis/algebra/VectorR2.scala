@@ -75,6 +75,12 @@ object VectorR2 {
   /** The additive identity typeclass for `R2`. */
   implicit val additiveIdentity = Zero(zero)
   
+  /** The inner product typeclass for `R2`. */
+  implicit val innerProduct = InnerProduct[VectorR2, Real](_ ⋅ _)
+  
+  /** The norm typeclass for `R2`. */
+  implicit val norm = Norm[VectorR2, Real](_.norm)
+  
   /** The default struct for vectors in `R2`. */
   implicit lazy val struct = new StructVectorR2
   

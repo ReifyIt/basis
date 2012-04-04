@@ -156,4 +156,10 @@ object VectorRN {
   
   def unapplySeq(vector: VectorRN): Some[Seq[Double]] =
     Some(vector.toSeq)
+  
+  /** The inner product typeclass for `RN`. */
+  implicit val innerProduct = InnerProduct[VectorRN, Real](_ ⋅ _)
+  
+  /** The norm typeclass for `RN`. */
+  implicit val norm = Norm[VectorRN, Real](_.norm)
 }
