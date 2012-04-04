@@ -7,9 +7,15 @@
 
 package basis.algebra
 
-/** A typeclass for an inner product on a vector space.
+/** A typeclass for an inner product on a vector space. Use the `innerProduct`
+  * function in the package object to evaluate inner products.
   * 
   * @author Chris Sachs
+  * 
+  * @example {{{
+  * scala> innerProduct(VectorR2(0.866, 0.5), VectorR2(0.707, 0.707))
+  * res0: basis.algebra.Real = 0.965762
+  * }}}
   * 
   * @tparam Vector  the vector type of the inner product space.
   * @tparam Scalar  the scalar type of the inner product space.

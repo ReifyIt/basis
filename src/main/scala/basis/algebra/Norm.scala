@@ -7,9 +7,15 @@
 
 package basis.algebra
 
-/** A typeclass for a norm on a vector space.
+/** A typeclass for a norm on a vector space. Use the `norm` function in the
+  * package object to evaluate vector norms.
   * 
   * @author Chris Sachs
+  * 
+  * @example {{{
+  * scala> norm(VectorR2(3.0, 4.0))
+  * res0: basis.algebra.Real = 5.0
+  * }}}
   * 
   * @tparam Vector  the vector type of the normed vector space.
   * @tparam Scalar  the scalar type of the normed vector space.
