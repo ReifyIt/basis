@@ -128,6 +128,11 @@ object Real {
   /** The euclidean norm typeclass for the `Real` field. */
   implicit val euclideanNorm = Norm[Real, Real](identity)
   
+  /** The euclidean metric typeclass for the `Real` field. */
+  implicit val euclideanMetric = Metric[Real, Real] {
+    (x, y) => new Real(math.abs(y.value - x.value))
+  }
+  
   /** The default struct for `Real` values. */
   implicit lazy val struct = new StructReal
   

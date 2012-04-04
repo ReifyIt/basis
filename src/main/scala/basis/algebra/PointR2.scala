@@ -55,6 +55,13 @@ object PointR2 {
   def unapply(point: PointR2): Some[(Double, Double)] =
     Some(point.x, point.y)
   
+  /** The euclidean metric typeclass for points in `R2`. */
+  implicit val euclideanMetric = Metric[PointR2, Real] { (p, q) =>
+    val dx = q.x - p.x
+    val dy = q.y - p.y
+    math.sqrt(dx * dx + dy * dy)
+  }
+  
   /** The default struct for points in `R2`. */
   implicit lazy val struct = new StructPointR2
   

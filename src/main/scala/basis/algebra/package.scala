@@ -52,6 +52,12 @@ package basis
   * }}}
   */
 package object algebra {
+  /** Returns the distance between two points. This convenience function
+    * delegates to an implicit `Metric` typeclass. */
+  @inline def distance[Point, Scalar](p: Point, q: Point)
+      (implicit metric: Metric[Point, Scalar]): Scalar =
+    metric.apply(p, q)
+  
   /** Returns the inner product of two vectors. This convenience function
     * delegates to an implicit `InnerProduct` typeclass. */
   @inline def innerProduct[Vector, Scalar](u: Vector, v: Vector)
