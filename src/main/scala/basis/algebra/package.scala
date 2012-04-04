@@ -135,20 +135,6 @@ package object algebra {
     type Scalar  = algebra.Real
   }
   
-  /** An abstract euclidean space. */
-  type EuclideanSpace = Singleton {
-    type Point  <: algebra.AffinePoint[Point, Vector, Scalar]
-    type Vector <: algebra.EuclideanVector[Vector, Scalar]
-    type Scalar <: algebra.OrderedRing[Scalar] with algebra.CompleteField[Scalar]
-  }
-  
-  /** An abstract euclidean space over the `Real` field. */
-  type RealEuclideanSpace = Singleton {
-    type Point  <: algebra.AffinePoint[Point, Vector, Scalar]
-    type Vector <: algebra.EuclideanVector[Vector, Scalar] with algebra.RealVector[Vector]
-    type Scalar  = algebra.Real
-  }
-  
   /** An abstract linear space of matrices over a field. */
   type MatrixSpace = Singleton {
     type Matrix       <: algebra.Matrix[Matrix, Transpose, ColumnVector, RowVector, Scalar]

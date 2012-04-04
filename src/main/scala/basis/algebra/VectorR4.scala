@@ -23,7 +23,7 @@ import basis.util.MurmurHash._
   * @define scalar  `Real` value
   */
 final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
-  extends EuclideanVector[VectorR4, Real] with RealVector[VectorR4] {
+  extends RealVector[VectorR4] {
   
   def + (that: VectorR4): VectorR4 =
     new VectorR4(x + that.x, y + that.y, z + that.z, w + that.w)
@@ -43,12 +43,16 @@ final class VectorR4(val x: Double, val y: Double, val z: Double, val w: Double)
   def / (scalar: Double): VectorR4 =
     new VectorR4(x / scalar, y / scalar, z / scalar, w / scalar)
   
+  /** Returns the dot product of this $vector and another $vector. The name of
+    * this method uses the unicode dot operator U+22C5.
+    * 
+    * @param  that  the other $vector.
+    * @return the scalar product of this $vector and the other $vector.
+    */
   def ⋅ (that: VectorR4): Real =
     new Real(x * that.x + y * that.y + z * that.z + w * that.w)
   
-  def norm: Real = new Real(length)
-  
-  /** Returns the length of this $vector. */
+  /** Returns the length (euclidean norm) of this $vector. */
   def length: Double = math.sqrt(x * x + y * y + z * z + w * w)
   
   override def equals(other: Any): Boolean = other match {
@@ -81,7 +85,7 @@ object VectorR4 {
   implicit val dotProduct = InnerProduct[VectorR4, Real](_ ⋅ _)
   
   /** The euclidean norm typeclass for `R4`. */
-  implicit val euclideanNorm = Norm[VectorR4, Real](_.norm)
+  implicit val euclideanNorm = Norm[VectorR4, Real](u => new Real(u.length))
   
   /** The default struct for vectors in `R4`. */
   implicit lazy val struct = new StructVectorR4

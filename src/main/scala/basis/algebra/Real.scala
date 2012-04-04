@@ -22,8 +22,7 @@ import basis.util.MurmurHash._
   * @define scalar    `Real` value
   */
 final class Real(protected val value: Double)
-  extends EuclideanVector[Real, Real]
-    with RealVector[Real]
+  extends RealVector[Real]
     with OrderedRing[Real]
     with CompleteField[Real] {
   
@@ -54,8 +53,6 @@ final class Real(protected val value: Double)
   override def / (that: Real): Real = new Real(value / that.value)
   
   def / (x: Double): Real = new Real(value / x)
-  
-  def ⋅ (that: Real): Real = new Real(value * that.value)
   
   def norm: Real = this
   
@@ -124,6 +121,12 @@ object Real {
   
   /** The multiplicative identity typeclass for the `Real` field. */
   implicit val multiplicativeIdentity = One(one)
+  
+  /** The inner product typeclass for the `Real` field. */
+  implicit val product = InnerProduct[Real, Real](_ * _)
+  
+  /** The euclidean norm typeclass for the `Real` field. */
+  implicit val euclideanNorm = Norm[Real, Real](identity)
   
   /** The default struct for `Real` values. */
   implicit lazy val struct = new StructReal

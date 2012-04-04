@@ -19,7 +19,7 @@ import basis.util.MurmurHash._
   * @define scalar  `Real` value
   */
 final class VectorRN(protected val coordinates: Array[Double])
-  extends EuclideanVector[VectorRN, Real] with RealVector[VectorRN] {
+  extends RealVector[VectorRN] {
   
   /** Constructs a vector with repeated coordinate parameters.
     * 
@@ -92,6 +92,12 @@ final class VectorRN(protected val coordinates: Array[Double])
     new VectorRN(coordinates)
   }
   
+  /** Returns the dot product of this $vector and another $vector. The name of
+    * this method uses the unicode dot operator U+22C5.
+    * 
+    * @param  that  the other $vector.
+    * @return the scalar product of this $vector and the other $vector.
+    */
   def ⋅ (that: VectorRN): Real = {
     if (dimension != that.dimension || dimension == 0) throw new DimensionException
     var dp = 0.0
@@ -103,9 +109,7 @@ final class VectorRN(protected val coordinates: Array[Double])
     new Real(dp)
   }
   
-  def norm: Real = new Real(length)
-  
-  /** Returns the length of this $vector. */
+  /** Returns the length (euclidean norm) of this $vector. */
   def length: Double = {
     if (dimension == 0) throw new DimensionException
     var dp = 0.0
@@ -161,5 +165,5 @@ object VectorRN {
   implicit val dotProduct = InnerProduct[VectorRN, Real](_ ⋅ _)
   
   /** The euclidean norm typeclass for `RN`. */
-  implicit val euclideanNorm = Norm[VectorRN, Real](_.norm)
+  implicit val euclideanNorm = Norm[VectorRN, Real](u => new Real(u.length))
 }
