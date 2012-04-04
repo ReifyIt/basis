@@ -94,6 +94,9 @@ final class IntervalZ2(val x: Interval, val y: Interval)
 
 /** Contains factory methods and implicit conversions for 2D interval vectors. */
 object IntervalZ2 {
+  /** The zero vector of 2D intervals. */
+  val zero: IntervalZ2 = new IntervalZ2(Zero, Zero)
+  
   def apply(x: Interval, y: Interval): IntervalZ2 =
     new IntervalZ2(x, y)
   
@@ -105,7 +108,7 @@ object IntervalZ2 {
     new IntervalZ2(vector.x, vector.y)
   
   /** The 2D interval vector additive identity typeclass. */
-  implicit val additiveIdentity = Zero(apply(Zero, Zero))
+  implicit val additiveIdentity = new Zero(zero)
   
   /** The default struct for 2D interval vectors. */
   implicit lazy val struct = new StructIntervalZ2

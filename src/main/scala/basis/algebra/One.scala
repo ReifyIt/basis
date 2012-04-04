@@ -17,16 +17,11 @@ import scala.annotation.implicitNotFound
   * effectively making `One` a polymorphic identifier for the multiplicative
   * identity of a type.
   * 
-  * Incorporate identity elements into broader typeclasses when possible.
-  * Passing identity elements around pollutes method signatures and gets
-  * annoying. The verbose name `MultiplicativeIdentity` was partly chosen to
-  * discourage excessive use.
-  * 
   * @author Chris Sachs
   * 
   * @example {{{
-  * scala> implicit val one = new MultiplicativeIdentity(1.0)
-  * one: basis.algebra.MultiplicativeIdentity[Double] = MultiplicativeIdentity(0.0)
+  * scala> implicit val one = new One(1.0)
+  * one: basis.algebra.One[Double] = One(0.0)
   * 
   * scala> One: Double
   * res0: Double = 1.0
@@ -39,13 +34,13 @@ import scala.annotation.implicitNotFound
   * @tparam T       the type of the identity element.
   * @param  value   the multiplicative identity element.
   */
-@implicitNotFound("Cannot find implicit MultiplicativeIdentity typeclass for ${T}.")
-final class MultiplicativeIdentity[T](value: T) extends (One.type => T) {
+@implicitNotFound("Cannot find implicit One typeclass for ${T}.")
+final class One[T](value: T) extends (One.type => T) {
   /** Returns the multiplicative identity element of this typeclass. */
   def apply(id: One.type): T = value
   
   override def toString: String =
-    "MultiplicativeIdentity"+"("+ value +")"
+    "One"+"("+ value +")"
 }
 
 /** A polymorphic identifier for the multiplicative identity, or ''one'' element of a type. */
@@ -54,15 +49,11 @@ object One {
     * type of element to return, `One[T]` eliminates ambiguities that arise
     * when implicitly converting `One: T` where `T` is inferred.
     * 
-    * @tparam T         the type of the identity element to return.
-    * @param  identity  the typeclass containing the identity element.
+    * @tparam T     the type of the identity element to return.
+    * @param  one   the typeclass containing the identity element.
     * @return the value obtained from the typeclass.
     */
-  def apply[T](implicit identity: MultiplicativeIdentity[T]): T = One
-  
-  /** Returns a new multiplicative identity typeclass for the given value. */
-  def apply[T](value: T): MultiplicativeIdentity[T] =
-    new MultiplicativeIdentity[T](value)
+  def apply[T](implicit one: One[T]): T = One
   
   override def toString: String = "One"
 }

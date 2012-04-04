@@ -116,10 +116,10 @@ object Integer {
   implicit def unbox(integer: Integer): Long = integer.value
   
   /** The additive identity typeclass for the `Integer` ring. */
-  implicit val additiveIdentity = Zero(zero)
+  implicit val additiveIdentity = new Zero(zero)
   
   /** The multiplicative identity typeclass for the `Integer` ring. */
-  implicit val multiplicativeIdentity = One(one)
+  implicit val multiplicativeIdentity = new One(one)
   
   /** The default struct for `Integer` values. */
   implicit lazy val struct = new StructInteger

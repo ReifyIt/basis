@@ -148,10 +148,10 @@ object Complex {
   def imaginary(value: Double): Complex = new Complex(0.0, value)
   
   /** The additive identity typeclass for the `Complex` field. */
-  implicit val additiveIdentity = Zero(zero)
+  implicit val additiveIdentity = new Zero(zero)
   
   /** The multiplicative identity typeclass for the `Complex` field. */
-  implicit val multiplicativeIdentity = One(one)
+  implicit val multiplicativeIdentity = new One(one)
   
   /** The euclidean norm typeclass for the `Complex` field. */
   implicit val euclideanNorm = Norm[Complex, Real] {

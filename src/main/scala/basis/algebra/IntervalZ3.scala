@@ -105,6 +105,9 @@ final class IntervalZ3(val x: Interval, val y: Interval, val z: Interval)
 
 /** Contains factory methods and implicit conversions for 3D interval vectors. */
 object IntervalZ3 {
+  /** The zero vector of 3D intervals. */
+  val zero: IntervalZ3 = new IntervalZ3(Zero, Zero, Zero)
+  
   def apply(x: Interval, y: Interval, z: Interval): IntervalZ3 =
     new IntervalZ3(x, y, z)
   
@@ -116,7 +119,7 @@ object IntervalZ3 {
     new IntervalZ3(vector.x, vector.y, vector.z)
   
   /** The 3D interval vector additive identity typeclass. */
-  implicit val additiveIdentity = Zero(apply(Zero, Zero, Zero))
+  implicit val additiveIdentity = new Zero(zero)
   
   /** The default struct for 3D interval vectors. */
   implicit lazy val struct = new StructIntervalZ3

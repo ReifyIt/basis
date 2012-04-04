@@ -154,5 +154,5 @@ object MatrixR2x2 {
       row2.x, row2.y)
   
   /** The additive identity typeclass for `R2x2`. */
-  implicit val additiveIdentity = Zero(zero)
+  implicit val additiveIdentity = new Zero(zero)
 }

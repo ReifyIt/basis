@@ -63,7 +63,7 @@ object VectorZ3 {
     Some(vector.x, vector.y, vector.z)
   
   /** The additive identity typeclass for `Z3`. */
-  implicit val additiveIdentity = Zero(zero)
+  implicit val additiveIdentity = new Zero(zero)
   
   /** The default struct for vectors in `Z3`. */
   implicit lazy val struct = new StructVectorZ3

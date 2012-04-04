@@ -134,11 +134,17 @@ final class Interval private (val lower: Long, val upper: Long) extends Ring[Int
 
 /** Contains factory methods and implicit conversions for discrete intervals. */
 object Interval {
-  /** The '''N'''ot '''a'''n '''I'''nterval value. */
-  val NaI: Interval = new Interval(1L, 0L)
+  /** The degenerate interval containing just the zero value. */
+  val zero: Interval = new Interval(0L, 0L)
+  
+  /** The degenerate interval containing just the unit value. */
+  val one: Interval = new Interval(1L, 1L)
   
   /** The empty interval. */
   val empty: Interval = new Interval(0L, -1L)
+  
+  /** The '''N'''ot '''a'''n '''I'''nterval value. */
+  val NaI: Interval = new Interval(1L, 0L)
   
   /** Creates a new interval with a lower and upper bound.
     * 
@@ -156,10 +162,10 @@ object Interval {
   implicit def degenerate(value: Long): Interval = new Interval(value, value)
   
   /** The discrete interval additive identity typeclass. */
-  implicit val additiveIdentity = Zero(degenerate(0L))
+  implicit val additiveIdentity = new Zero(zero)
   
   /** The discrete interval multiplicative identity typeclass. */
-  implicit val multiplicativeIdentity = One(degenerate(1L))
+  implicit val multiplicativeIdentity = new One(one)
   
   /** The default struct for discrete intervals. */
   implicit lazy val struct = new StructInterval

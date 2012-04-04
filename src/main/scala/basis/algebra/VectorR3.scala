@@ -87,12 +87,12 @@ object VectorR3 {
     Some(vector.x, vector.y, vector.z)
   
   /** The additive identity typeclass for `R3`. */
-  implicit val additiveIdentity = Zero(zero)
+  implicit val additiveIdentity = new Zero(zero)
   
-  /** The inner dot product typeclass for `R3`. */
+  /** The inner dot product typeclass for vectors in `R3`. */
   implicit val dotProduct = InnerProduct[VectorR3, Real](_ ⋅ _)
   
-  /** The euclidean norm typeclass for `R3`. */
+  /** The euclidean norm typeclass for vectors in `R3`. */
   implicit val euclideanNorm = Norm[VectorR3, Real](u => new Real(u.length))
   
   /** The default struct for vectors in `R3`. */

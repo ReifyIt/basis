@@ -161,7 +161,7 @@ object VectorRN {
   def unapplySeq(vector: VectorRN): Some[Seq[Double]] =
     Some(vector.toSeq)
   
-  /** The inner dot product typeclass for `RN`. */
+  /** The inner dot product typeclass for vectors in `RN`. */
   implicit val dotProduct = InnerProduct[VectorRN, Real](_ ⋅ _)
   
   /** The euclidean norm typeclass for `RN`. */

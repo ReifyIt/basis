@@ -288,5 +288,5 @@ object MatrixR4x4 {
       row4.x, row4.y, row4.z, row4.w)
   
   /** The additive identity typeclass for `R4x4`. */
-  implicit val additiveIdentity = Zero(zero)
+  implicit val additiveIdentity = new Zero(zero)
 }

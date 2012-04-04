@@ -117,10 +117,10 @@ object Real {
   implicit def unbox(real: Real): Double = real.value
   
   /** The additive identity typeclass for the `Real` field. */
-  implicit val additiveIdentity = Zero(zero)
+  implicit val additiveIdentity = new Zero(zero)
   
   /** The multiplicative identity typeclass for the `Real` field. */
-  implicit val multiplicativeIdentity = One(one)
+  implicit val multiplicativeIdentity = new One(one)
   
   /** The inner product typeclass for the `Real` field. */
   implicit val product = InnerProduct[Real, Real](_ * _)

@@ -87,8 +87,8 @@ object Vector4 {
     Some(vector.x, vector.y, vector.z, vector.w)
   
   /** Returns the additive identity typeclass for a kind of 4-dimensional vector. */
-  implicit def additiveIdentity[Scalar <: Ring[Scalar] : AdditiveIdentity] =
-    Zero(apply[Scalar](Zero, Zero, Zero, Zero))
+  implicit def additiveIdentity[Scalar <: Ring[Scalar] : Zero] =
+    new Zero(new Vector4[Scalar](Zero, Zero, Zero, Zero))
   
   /** Returns the inner dot product typeclass for a kind of 4-dimensional vector. */
   implicit def dotProduct[Scalar <: Ring[Scalar]] =

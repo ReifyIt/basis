@@ -16,16 +16,11 @@ import scala.annotation.implicitNotFound
   * additive identity element of an expression's inferred type; effectively
   * making `Zero` a polymorphic identifier for the additive identity of a type.
   * 
-  * Incorporate identity elements into broader typeclasses when possible.
-  * Passing identity elements around pollutes method signatures and gets
-  * annoying. The verbose name `AdditiveIdentity` was partly chosen to
-  * discourage excessive use.
-  * 
   * @author Chris Sachs
   * 
   * @example {{{
-  * scala> implicit val zero = new AdditiveIdentity(0.0)
-  * zero: basis.algebra.AdditiveIdentity[Double] = AdditiveIdentity(0.0)
+  * scala> implicit val zero = new Zero(0.0)
+  * zero: basis.algebra.Zero[Double] = Zero(0.0)
   * 
   * scala> Zero: Double
   * res0: Double = 0.0
@@ -38,13 +33,13 @@ import scala.annotation.implicitNotFound
   * @tparam T       the type of the identity element.
   * @param  value   the additive identity element.
   */
-@implicitNotFound("Cannot find implicit AdditiveIdentity typeclass for ${T}.")
-final class AdditiveIdentity[T](value: T) extends (Zero.type => T) {
+@implicitNotFound("Cannot find implicit Zero typeclass for ${T}.")
+final class Zero[T](value: T) extends (Zero.type => T) {
   /** Returns the additive identity element of this typeclass. */
   def apply(id: Zero.type): T = value
   
   override def toString: String =
-    "AdditiveIdentity"+"("+ value +")"
+    "Zero"+"("+ value +")"
 }
 
 /** A polymorphic identifier for the additive identity, or ''zero'' element of a type. */
@@ -53,15 +48,11 @@ object Zero {
     * of element to return, `Zero[T]` eliminates ambiguities that arise when
     * implicitly converting `Zero: T` where `T` is inferred.
     * 
-    * @tparam T         the type of the identity element to return.
-    * @param  identity  the typeclass containing the identity element.
+    * @tparam T     the type of the identity element to return.
+    * @param  zero  the typeclass containing the identity element.
     * @return the value obtained from the typeclass.
     */
-  def apply[T](implicit identity: AdditiveIdentity[T]): T = Zero
-  
-  /** Returns a new additive identity typeclass for the given value. */
-  def apply[T](value: T): AdditiveIdentity[T] =
-    new AdditiveIdentity[T](value)
+  def apply[T](implicit zero: Zero[T]): T = Zero
   
   override def toString: String = "Zero"
 }
