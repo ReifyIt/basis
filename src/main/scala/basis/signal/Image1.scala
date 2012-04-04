@@ -17,17 +17,14 @@ import basis.algebra._
   * @tparam A   the sample type.
   */
 trait Image1[A] extends (Long => A) { imageA =>
-  /** The lower bound of the domain. */
-  def lower: Long
-  
-  /** The upper bound of the domain. */
-  def upper: Long
+  /** The bounded domain of this image. */
+  def domain: Interval
   
   /** Returns a sample of this image. */
   def apply(i: Long): A
   
   /** Translates the domain of this image. The returned image behaves according
-    * to the identity `image(x) = image.offset(dx)(x + dx)`
+    * to the identity `image(x) = image.translate(dx)(x + dx)`
     * 
     * @param  delta   the amount to offset this image's domain.
     * @return a view of this image with the domain translated.
@@ -110,8 +107,7 @@ trait Image1[A] extends (Long => A) { imageA =>
     new ContinuousConvolution[B](filter)
   
   protected class Translation(val delta: Long) extends Image1[A] {
-    val lower = imageA.lower + delta
-    val upper = imageA.upper + delta
+    val domain: Interval = imageA.domain + delta
     
     def apply(i: Long): A = imageA(i + delta)
     
@@ -123,15 +119,13 @@ trait Image1[A] extends (Long => A) { imageA =>
       (imageB: Image1[B])(operator: (A, B) => C)
     extends Image1[C] {
     
-    val lower = math.max(imageA.lower, imageB.lower)
-    val upper = math.min(imageA.upper, imageB.upper)
+    val domain: Interval = imageA.domain intersect imageB.domain
     
     def apply(i: Long): C = operator(imageA(i), imageB(i))
   }
   
   protected class Map[B](f: A => B) extends Image1[B] {
-    def lower = imageA.lower
-    def upper = imageA.upper
+    def domain: Interval = imageA.domain
     
     def apply(i: Long): B = f(imageA(i))
   }
@@ -140,12 +134,11 @@ trait Image1[A] extends (Long => A) { imageA =>
       (imageB: Image1[B])(implicit isVector: A <:< Vector[A, B])
     extends Image1[A] {
     
-    val lower = imageA.lower + imageB.lower
-    val upper = imageA.upper + imageB.upper
+    val domain: Interval = imageA.domain + imageB.domain
     
     def apply(i: Long): A = {
-      val lower = math.max(imageA.lower, i - imageB.upper)
-      val upper = math.min(imageA.upper, i - imageB.lower)
+      val lower = math.max(imageA.domain.lower, i - imageB.domain.upper)
+      val upper = math.min(imageA.domain.upper, i - imageB.domain.lower)
       var j = lower
       var sample = imageA(j) :* imageB(i - j)
       j += 1L
@@ -162,8 +155,8 @@ trait Image1[A] extends (Long => A) { imageA =>
     extends (Double => A) {
     
     def apply(x: Double): A = {
-      var lower = imageA.lower
-      var upper = imageA.upper
+      var lower = imageA.domain.lower
+      var upper = imageA.domain.upper
       var j = lower
       var sample = imageA(j) :* filter(x - j)
       j += 1L

@@ -7,6 +7,8 @@
 
 package basis.signal
 
+import basis.algebra._
+
 /** An updateable discrete binary function on a bounded domain.
   * 
   * @author Chris Sachs
@@ -21,10 +23,10 @@ trait Raster2[A] extends Image2[A] { imageA =>
     * samples at the domains' intersection with the values of the other image.
     * The name ''blit'' stands for '''bl'''ock '''i'''mage '''t'''ransfer. */
   def blit[B <: A](that: Image2[B]) {
-    val lower1 = math.max(this.lower1, that.lower1)
-    val upper1 = math.min(this.upper1, that.upper1)
-    val lower2 = math.max(this.lower2, that.lower2)
-    val upper2 = math.min(this.upper2, that.upper2)
+    val lower1 = math.max(domain.x.lower, that.domain.x.lower)
+    val upper1 = math.min(domain.y.upper, that.domain.y.upper)
+    val lower2 = math.max(domain.x.lower, that.domain.x.lower)
+    val upper2 = math.min(domain.y.upper, that.domain.y.upper)
     var j = lower2
     while (j <= upper2) {
       var i = lower1
@@ -36,16 +38,15 @@ trait Raster2[A] extends Image2[A] { imageA =>
     }
   }
   
-  override def translate(delta1: Long, delta2: Long): Raster2[A] =
-    new Translation(delta1, delta2)
+  override def translate(delta: VectorZ2): Raster2[A] = new Translation(delta)
   
-  protected class Translation(delta1: Long, delta2: Long)
-    extends super.Translation(delta1, delta2) with Raster2[A] {
+  protected class Translation(override val delta: VectorZ2)
+    extends super.Translation(delta) with Raster2[A] {
     
     def update(i: Long, j: Long, sample: A): Unit =
-      imageA.update(i + delta1, j + delta2, sample)
+      imageA.update(i + delta.x, j + delta.y, sample)
     
-    override def translate(delta1: Long, delta2: Long): Raster2[A] =
-      new imageA.Translation(this.delta1 + delta1, this.delta2 + delta2)
+    override def translate(delta: VectorZ2): Raster2[A] =
+      new imageA.Translation(this.delta + delta)
   }
 }

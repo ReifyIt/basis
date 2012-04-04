@@ -21,8 +21,8 @@ trait Raster1[A] extends Image1[A] { imageA =>
     * samples at the domains' intersection with the values of the other image.
     * The name ''blit'' stands for '''bl'''ock '''i'''mage '''t'''ransfer. */
   def blit[B <: A](that: Image1[B]) {
-    val lower = math.max(this.lower, that.lower)
-    val upper = math.min(this.upper, that.upper)
+    val lower = math.max(domain.lower, that.domain.lower)
+    val upper = math.min(domain.upper, that.domain.upper)
     var i = lower
     while (i <= upper) {
       this(i) = that(i)
@@ -32,7 +32,9 @@ trait Raster1[A] extends Image1[A] { imageA =>
   
   override def translate(delta: Long): Raster1[A] = new Translation(delta)
   
-  protected class Translation(delta: Long) extends super.Translation(delta) with Raster1[A] {
+  protected class Translation(override val delta: Long)
+    extends super.Translation(delta) with Raster1[A] {
+    
     def update(i: Long, sample: A): Unit =
       imageA.update(i + delta, sample)
     

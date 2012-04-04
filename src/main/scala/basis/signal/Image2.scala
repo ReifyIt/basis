@@ -17,17 +17,8 @@ import basis.algebra._
   * @tparam A   the sample type.
   */
 trait Image2[A] extends ((Long, Long) => A) { imageA =>
-  /** The lower bound of the domain's first component. */
-  def lower1: Long
-  
-  /** The upper bound of the domain's first component. */
-  def upper1: Long
-  
-  /** The lower bound of the domain's second component. */
-  def lower2: Long
-  
-  /** The upper bound of the domain's second component. */
-  def upper2: Long
+  /** The 2D domain of this image. */
+  def domain: IntervalZ2
   
   /** Returns a sample of this image. */
   def apply(i: Long, j: Long): A
@@ -35,12 +26,10 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
   /** Translates the domain of this image. The returned image behaves according
     * to this identity: `image(x, y) = image.offset(dx, dy)(x + dx, y + dy)`
     * 
-    * @param  delta1  the amount to offset the 1st dimension of this image's domain.
-    * @param  delta2  the amount to offset the 2nd dimension of this image's domain.
+    * @param  delta   the amount to offset this image's domain.
     * @return a view of this image with the domain translated.
     */
-  def translate(delta1: Long, delta2: Long): Image2[A] =
-    new Translation(delta1, delta2)
+  def translate(delta: VectorZ2): Image2[A] = new Translation(delta)
   
   /** Returns an image that applies a function to each sample of this image.
     * 
@@ -165,23 +154,17 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
   def ∗: [B <: Ring[B]](filter: Double => B)(implicit isVector: A <:< Vector[A, B]): ((Double, Double) => A) =
     new ContinuousSeparableConvolution[B](filter, filter)
   
-  protected class Translation(val delta1: Long, val delta2: Long) extends Image2[A] {
-    val lower1 = imageA.lower1 + delta1
-    val upper1 = imageA.upper1 + delta1
-    val lower2 = imageA.lower2 + delta2
-    val upper2 = imageA.upper2 + delta2
+  protected class Translation(val delta: VectorZ2) extends Image2[A] {
+    val domain: IntervalZ2 = imageA.domain + delta
     
-    def apply(i: Long, j: Long): A = imageA(i + delta1, j + delta2)
+    def apply(i: Long, j: Long): A = imageA(i + delta.x, j + delta.y)
     
-    override def translate(delta1: Long, delta2: Long): Image2[A] =
-      new imageA.Translation(this.delta1 + delta1, this.delta2 + delta2)
+    override def translate(delta: VectorZ2): Image2[A] =
+      new imageA.Translation(this.delta + delta)
   }
   
   protected class Map[B](f: A => B) extends Image2[B] {
-    def lower1 = imageA.lower1
-    def upper1 = imageA.upper1
-    def lower2 = imageA.lower2
-    def upper2 = imageA.upper2
+    def domain: IntervalZ2 = imageA.domain
     
     def apply(i: Long, j: Long): B = f(imageA(i, j))
   }
@@ -190,10 +173,7 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
       (imageB: Image2[B])(operator: (A, B) => C)
     extends Image2[C] {
     
-    val lower1 = math.max(imageA.lower1, imageB.lower1)
-    val upper1 = math.min(imageA.upper1, imageB.upper1)
-    val lower2 = math.max(imageA.lower2, imageB.lower2)
-    val upper2 = math.min(imageA.upper2, imageB.upper2)
+    val domain: IntervalZ2 = imageA.domain intersect imageB.domain
     
     def apply(i: Long, j: Long): C = operator(imageA(i, j), imageB(i, j))
   }
@@ -202,27 +182,24 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
       (imageB: Image2[B])(implicit isVector: A <:< Vector[A, B])
     extends Image2[A] {
     
-    val lower1 = imageA.lower1 + imageB.lower1
-    val upper1 = imageA.upper1 + imageB.upper1
-    val lower2 = imageA.lower2 + imageB.lower2
-    val upper2 = imageA.upper2 + imageB.upper2
+    val domain: IntervalZ2 = imageA.domain + imageB.domain
     
     def apply(i: Long, j: Long): A = {
-      val lower1 = math.max(imageA.lower1, i - imageB.upper1)
-      val upper1 = math.min(imageA.upper1, i - imageB.lower1)
-      val lower2 = math.max(imageA.lower2, j - imageB.upper2)
-      val upper2 = math.min(imageA.upper2, j - imageB.lower2)
-      var y = lower2
-      var x = lower1
+      val lowerX = math.max(imageA.domain.x.lower, i - imageB.domain.x.upper)
+      val upperX = math.min(imageA.domain.x.upper, i - imageB.domain.x.lower)
+      val lowerY = math.max(imageA.domain.y.lower, j - imageB.domain.y.upper)
+      val upperY = math.min(imageA.domain.y.upper, j - imageB.domain.y.lower)
+      var y = lowerY
+      var x = lowerX
       var sample = imageA(x, y) :* imageB(i - x, j - y)
       x += 1L
-      while (y <= upper2) {
-        while (x <= upper1) {
+      while (y <= upperY) {
+        while (x <= upperX) {
           sample += imageA(x, y) :* imageB(i - x, j - y)
           x += 1L
         }
         y += 1L
-        x = lower1
+        x = lowerX
       }
       sample
     }
@@ -233,28 +210,26 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
       (implicit isVector: A <:< Vector[A, B])
     extends Image2[A] {
     
-    val lower1 = imageA.lower1 + imageB1.lower
-    val upper1 = imageA.upper1 + imageB1.upper
-    val lower2 = imageA.lower2 + imageB2.lower
-    val upper2 = imageA.upper2 + imageB2.upper
+     val domain: IntervalZ2 =
+      imageA.domain + new IntervalZ2(imageB1.domain, imageB2.domain)
     
     def apply(i: Long, j: Long): A = {
       // TODO: caching strategy
-      val lower1 = math.max(imageA.lower1, i - imageB1.upper)
-      val upper1 = math.min(imageA.upper1, i - imageB1.lower)
-      val lower2 = math.max(imageA.lower2, j - imageB2.upper)
-      val upper2 = math.min(imageA.upper2, j - imageB2.lower)
-      var y = lower2
-      var x = lower1
+      val lowerX = math.max(imageA.domain.x.lower, i - imageB1.domain.upper)
+      val upperX = math.min(imageA.domain.x.upper, i - imageB1.domain.lower)
+      val lowerY = math.max(imageA.domain.y.lower, j - imageB2.domain.upper)
+      val upperY = math.min(imageA.domain.y.upper, j - imageB2.domain.lower)
+      var y = lowerY
+      var x = lowerX
       var sample = imageA(x, y) :* (imageB1(i - x) * imageB2(j - y))
       x += 1L
-      while (y <= upper2) {
-        while (x <= upper1) {
+      while (y <= upperY) {
+        while (x <= upperX) {
           sample += imageA(x, y) :* (imageB1(i - x) * imageB2(j - y))
           x += 1L
         }
         y += 1L
-        x = lower1
+        x = lowerX
       }
       sample
     }
@@ -265,21 +240,21 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     extends ((Double, Double) => A) {
     
     def apply(i: Double, j: Double): A = {
-      var lower1 = imageA.lower1
-      var upper1 = imageA.upper1
-      var lower2 = imageA.lower2
-      var upper2 = imageA.upper2
-      var y = lower2
-      var x = lower1
+      var lowerX = imageA.domain.x.lower
+      var upperX = imageA.domain.x.upper
+      var lowerY = imageA.domain.y.lower
+      var upperY = imageA.domain.y.upper
+      var y = lowerY
+      var x = lowerX
       var sample = imageA(x, y) :* filter(i - x, j - y)
       x += 1L
-      while (y <= upper2) {
-        while (x <= upper1) {
+      while (y <= upperY) {
+        while (x <= upperX) {
           sample += imageA(x, y) :* filter(i - x, j - y)
           x += 1L
         }
         y += 1L
-        x = lower1
+        x = lowerX
       }
       sample
     }
@@ -292,21 +267,21 @@ trait Image2[A] extends ((Long, Long) => A) { imageA =>
     
     def apply(i: Double, j: Double): A = {
       // TODO: ad-hoc caching strategy
-      var lower1 = imageA.lower1
-      var upper1 = imageA.upper1
-      var lower2 = imageA.lower2
-      var upper2 = imageA.upper2
-      var y = lower2
-      var x = lower1
+      var lowerX = imageA.domain.x.lower
+      var upperX = imageA.domain.x.upper
+      var lowerY = imageA.domain.y.lower
+      var upperY = imageA.domain.y.upper
+      var y = lowerY
+      var x = lowerX
       var sample = imageA(x, y) :* (filter1(i - x) * filter2(j - y))
       x += 1L
-      while (y <= upper2) {
-        while (x <= upper1) {
+      while (y <= upperY) {
+        while (x <= upperX) {
           sample += imageA(x, y) :* (filter1(i - x) * filter2(j - y))
           x += 1L
         }
         y += 1L
-        x = lower1
+        x = lowerX
       }
       sample
     }
