@@ -90,6 +90,22 @@ object Vector4 {
   implicit def additiveIdentity[Scalar <: Ring[Scalar] : AdditiveIdentity] =
     Zero(apply[Scalar](Zero, Zero, Zero, Zero))
   
+  /** Returns the inner dot product typeclass for a kind of 4-dimensional vector. */
+  implicit def dotProduct[Scalar <: Ring[Scalar]] =
+    genericDotProduct.asInstanceOf[InnerProduct[Vector4[Scalar], Scalar]]
+  
+  private val genericDotProduct = InnerProduct[Vector4[Nothing], Ring[Nothing]] {
+    (u, v) => (u ⋅ v).asInstanceOf[Ring[Nothing]]
+  }
+  
+  /** Returns the euclidean norm typeclass for a kind of 4-dimensional vector. */
+  implicit def euclideanNorm[Scalar <: CompleteField[Scalar]] =
+    genericEuclideanNorm.asInstanceOf[Norm[Vector4[Scalar], Scalar]]
+  
+  private val genericEuclideanNorm = Norm[Vector4[Nothing], CompleteField[Nothing]] {
+    u => u.norm.asInstanceOf[CompleteField[Nothing]]
+  }
+  
   /** Returns a default struct for a kind of 4-dimensional vector. */
   implicit def struct[Scalar <: Ring[Scalar] : Struct] = new StructVector4[Scalar]
   

@@ -98,6 +98,22 @@ object Vector3 {
   implicit def additiveIdentity[Scalar <: Ring[Scalar] : AdditiveIdentity] =
     Zero(apply[Scalar](Zero, Zero, Zero))
   
+  /** Returns the inner dot product typeclass for a kind of 3-dimensional vector. */
+  implicit def dotProduct[Scalar <: Ring[Scalar]] =
+    genericDotProduct.asInstanceOf[InnerProduct[Vector3[Scalar], Scalar]]
+  
+  private val genericDotProduct = InnerProduct[Vector3[Nothing], Ring[Nothing]] {
+    (u, v) => (u ⋅ v).asInstanceOf[Ring[Nothing]]
+  }
+  
+  /** Returns the euclidean norm typeclass for a kind of 3-dimensional vector. */
+  implicit def euclideanNorm[Scalar <: CompleteField[Scalar]] =
+    genericEuclideanNorm.asInstanceOf[Norm[Vector3[Scalar], Scalar]]
+  
+  private val genericEuclideanNorm = Norm[Vector3[Nothing], CompleteField[Nothing]] {
+    u => u.norm.asInstanceOf[CompleteField[Nothing]]
+  }
+  
   /** Returns a default struct for a kind of 3-dimensional vector. */
   implicit def struct[Scalar <: Ring[Scalar] : Struct] = new StructVector3[Scalar]
   

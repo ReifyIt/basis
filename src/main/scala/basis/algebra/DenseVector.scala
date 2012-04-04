@@ -175,4 +175,20 @@ object DenseVector {
   
   def unapplySeq[Scalar <: Ring[Scalar]](vector: DenseVector[Scalar]): Some[Seq[Scalar]] =
     Some(vector.toSeq)
+  
+  /** Returns the inner dot product typeclass for a kind of ''N''-dimensional vector. */
+  implicit def dotProduct[Scalar <: Ring[Scalar]] =
+    genericDotProduct.asInstanceOf[InnerProduct[DenseVector[Scalar], Scalar]]
+  
+  private val genericDotProduct = InnerProduct[DenseVector[Nothing], Ring[Nothing]] {
+    (u, v) => (u ⋅ v).asInstanceOf[Ring[Nothing]]
+  }
+  
+  /** Returns the euclidean norm typeclass for a kind of ''N''-dimensional vector. */
+  implicit def euclideanNorm[Scalar <: CompleteField[Scalar]] =
+    genericEuclideanNorm.asInstanceOf[Norm[DenseVector[Scalar], Scalar]]
+  
+  private val genericEuclideanNorm = Norm[DenseVector[Nothing], CompleteField[Nothing]] {
+    u => u.norm.asInstanceOf[CompleteField[Nothing]]
+  }
 }
