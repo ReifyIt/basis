@@ -153,6 +153,11 @@ object Complex {
   /** The multiplicative identity typeclass for the `Complex` field. */
   implicit val multiplicativeIdentity = One(one)
   
+  /** The euclidean norm typeclass for the `Complex` field. */
+  implicit val euclideanNorm = Norm[Complex, Real] {
+    complex => new Real(math.hypot(complex.real, complex.imaginary))
+  }
+  
   /** The default struct for `Complex` values. */
   implicit lazy val struct = new StructComplex
   
