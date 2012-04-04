@@ -29,6 +29,9 @@ final class IntervalZ2(val x: Interval, val y: Interval)
   /** Returns the number of values enclosed by this $vector. */
   def size: Long = x.size * y.size
   
+  /** Returns `true` if this $vector contains the given vector. */
+  def contains(vector: VectorZ2): Boolean = contains(vector.x, vector.y)
+  
   /** Returns `true` if this $vector encloses the given coordinates.
     * 
     * @param  i   the ''x''-coordinate; tested against the ''x''-axis bounds.
