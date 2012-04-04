@@ -89,13 +89,16 @@ final class IntervalZ2(val x: Interval, val y: Interval)
     "IntervalZ2"+"("+ x +", "+ y +")"
 }
 
-/** Contains factory methods for 2D interval vectors. */
+/** Contains factory methods and implicit conversions for 2D interval vectors. */
 object IntervalZ2 {
   def apply(x: Interval, y: Interval): IntervalZ2 =
     new IntervalZ2(x, y)
   
   def unapply(vector: IntervalZ2): Some[(Interval, Interval)] =
     Some(vector.x, vector.y)
+  
+  /** Returns a 2D interval containing just the given vector. */
+  implicit def degenerate(vector: VectorZ2): IntervalZ2 = new IntervalZ2(vector.x, vector.y)
   
   /** The 2D interval vector additive identity. */
   implicit val additiveIdentity = new AdditiveIdentity(new IntervalZ2(Zero, Zero))

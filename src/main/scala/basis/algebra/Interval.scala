@@ -152,14 +152,14 @@ object Interval {
   def unapply(interval: Interval): Option[(Long, Long)] =
     if (interval.isEmpty) None else Some(interval.lower, interval.upper)
   
-  /** Returns an improper interval containing just the given value. */
-  implicit def improper(value: Long): Interval = new Interval(value, value)
+  /** Returns an interval containing just the given value. */
+  implicit def degenerate(value: Long): Interval = new Interval(value, value)
   
   /** The discrete interval additive identity. */
-  implicit val additiveIdentity = new AdditiveIdentity(improper(0L))
+  implicit val additiveIdentity = new AdditiveIdentity(degenerate(0L))
   
   /** The discrete interval multiplicative identity. */
-  implicit val multiplicativeIdentity = new MultiplicativeIdentity(improper(1L))
+  implicit val multiplicativeIdentity = new MultiplicativeIdentity(degenerate(1L))
   
   /** The default struct for discrete intervals. */
   implicit lazy val struct = new StructInterval
