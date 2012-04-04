@@ -21,7 +21,10 @@ import basis.util.MurmurHash._
   * @define element   `Integer` value
   * @define scalar    `Integer` value
   */
-final class Integer(protected val value: Long) extends OrderedRing[Integer] {
+final class Integer(protected val value: Long)
+  extends IntegerVector[Integer]
+    with OrderedRing[Integer] {
+  
   def + (that: Integer): Integer = new Integer(value + that.value)
   
   def + (n: Long): Integer = new Integer(value + n)
@@ -35,6 +38,14 @@ final class Integer(protected val value: Long) extends OrderedRing[Integer] {
   def * (that: Integer): Integer = new Integer(value * that.value)
   
   def * (n: Long): Integer = new Integer(value * n)
+  
+  override def :* (that: Integer): Integer = new Integer(value * that.value)
+  
+  def :* (n: Long): Integer = new Integer(value * n)
+  
+  override def *: (that: Integer): Integer = new Integer(that.value * value)
+  
+  def *: (n: Long): Integer = new Integer(n * value)
   
   def pow(n: Long): Integer = new Integer(math.pow(value, n).toLong)
   

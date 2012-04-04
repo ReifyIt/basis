@@ -177,6 +177,34 @@ package object algebra {
     type Vector       >: Matrix <: Matrix
   }
   
+  /** A concrete 1-dimensional `Integer` module. */
+  type Z1 = Singleton {
+    type Point  = Integer
+    type Vector = Integer
+    type Scalar = Integer
+  }
+  
+  /** A concrete 2-dimensional `Integer` module. */
+  type Z2 = Singleton {
+    type Point  = VectorZ2
+    type Vector = VectorZ2
+    type Scalar = Integer
+  }
+  
+  /** A concrete 3-dimensional `Integer` module. */
+  type Z3 = Singleton {
+    type Point  = VectorZ3
+    type Vector = VectorZ3
+    type Scalar = Integer
+  }
+  
+  /** A concrete ''N''-dimensional `Integer` module. */
+  type ZN = Singleton {
+    type Point  = VectorZN
+    type Vector = VectorZN
+    type Scalar = Integer
+  }
+  
   /** A concrete 1-dimensional `Real` euclidean space. */
   type R1 = Singleton {
     type Point  = Real
