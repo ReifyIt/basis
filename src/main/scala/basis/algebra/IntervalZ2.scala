@@ -101,7 +101,8 @@ object IntervalZ2 {
     Some(vector.x, vector.y)
   
   /** Returns a 2D interval containing just the given vector. */
-  implicit def degenerate(vector: VectorZ2): IntervalZ2 = new IntervalZ2(vector.x, vector.y)
+  implicit def degenerate(vector: VectorZ2): IntervalZ2 =
+    new IntervalZ2(vector.x, vector.y)
   
   /** The 2D interval vector additive identity typeclass. */
   implicit val additiveIdentity = Zero(apply(Zero, Zero))
