@@ -238,6 +238,22 @@ final class MatrixR4x4(
 
 /** Contains factory methods for matrices in `R4x4`. */
 object MatrixR4x4 {
+  /** The zero matrix of `R4x4`. */
+  val zero: MatrixR4x4 =
+    new MatrixR4x4(
+      0.0, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0)
+  
+  /** The identity matrix of `R4x4`. */
+  val identity: MatrixR4x4 =
+    new MatrixR4x4(
+      1.0, 0.0, 0.0, 0.0,
+      0.0, 1.0, 0.0, 0.0,
+      0.0, 0.0, 1.0, 0.0,
+      0.0, 0.0, 0.0, 1.0)
+  
   def apply(
       _1_1: Double, _1_2: Double, _1_3: Double, _1_4: Double,
       _2_1: Double, _2_2: Double, _2_3: Double, _2_4: Double,
@@ -271,12 +287,6 @@ object MatrixR4x4 {
       row3.x, row3.y, row3.z, row3.w,
       row4.x, row4.y, row4.z, row4.w)
   
-  /** The additive identity of `R4x4`. */
-  implicit val additiveIdentity =
-    new AdditiveIdentity(
-      new MatrixR4x4(
-        0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0))
+  /** The additive identity typeclass for `R4x4`. */
+  implicit val additiveIdentity = Zero(zero)
 }

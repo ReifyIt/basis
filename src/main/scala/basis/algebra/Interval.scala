@@ -155,11 +155,11 @@ object Interval {
   /** Returns an interval containing just the given value. */
   implicit def degenerate(value: Long): Interval = new Interval(value, value)
   
-  /** The discrete interval additive identity. */
-  implicit val additiveIdentity = new AdditiveIdentity(degenerate(0L))
+  /** The discrete interval additive identity typeclass. */
+  implicit val additiveIdentity = Zero(degenerate(0L))
   
-  /** The discrete interval multiplicative identity. */
-  implicit val multiplicativeIdentity = new MultiplicativeIdentity(degenerate(1L))
+  /** The discrete interval multiplicative identity typeclass. */
+  implicit val multiplicativeIdentity = One(degenerate(1L))
   
   /** The default struct for discrete intervals. */
   implicit lazy val struct = new StructInterval

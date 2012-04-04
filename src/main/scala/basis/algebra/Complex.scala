@@ -23,12 +23,6 @@ import basis.util.MurmurHash._
   * @define scalar    `Complex` value
   */
 final class Complex(val real: Double, val imaginary: Double) extends CompleteField[Complex] {
-  /** Constructs a `Complex` value with a real part.
-    * 
-    * @param  real  the real part.
-    */
-  def this(real: Double) = this(real, 0.0)
-  
   /** Returns `true` if this $element is not a number. */
   def isNaN: Boolean = java.lang.Double.isNaN(real) || java.lang.Double.isNaN(imaginary)
   
@@ -126,9 +120,16 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
 
 /** Contains factory methods and implicit conversions for `Complex` values. */
 object Complex {
-  def apply(real: Double, imaginary: Double): Complex = new Complex(real, imaginary)
+  /** The zero `Complex` value. */
+  val zero: Complex = new Complex(0.0, 0.0)
   
-  def apply(real: Double): Complex = new Complex(real)
+  /** The unit `Complex` value. */
+  val one: Complex = new Complex(1.0, 0.0)
+  
+  /** The imaginary unit `Complex` value. */
+  val i: Complex = new Complex(0.0, 1.0)
+  
+  def apply(real: Double, imaginary: Double): Complex = new Complex(real, imaginary)
   
   def unapply(complex: Complex): Some[(Double, Double)] = Some(complex.real, complex.imaginary)
   
@@ -140,14 +141,17 @@ object Complex {
     */
   def polar(r: Double, φ: Double): Complex = new Complex(r * math.cos(φ), r * math.sin(φ))
   
-  /** Implicitly converts a `Double` value to a `Complex` value. */
-  implicit def box(real: Double): Complex = new Complex(real)
+  /** Implicitly converts a `Double` value to a real `Complex` value. */
+  implicit def real(value: Double): Complex = new Complex(value, 0.0)
   
-  /** The additive identity of the `Complex` field. */
-  implicit val additiveIdentity = new AdditiveIdentity(new Complex(0.0, 0.0))
+  /** Converts a `Double` value to an imaginary `Complex` value. */
+  def imaginary(value: Double): Complex = new Complex(0.0, value)
   
-  /** The multiplicative identity of the `Complex` field. */
-  implicit val multiplicativeIdentity = new MultiplicativeIdentity(new Complex(1.0, 0.0))
+  /** The additive identity typeclass for the `Complex` field. */
+  implicit val additiveIdentity = Zero(zero)
+  
+  /** The multiplicative identity typeclass for the `Complex` field. */
+  implicit val multiplicativeIdentity = One(one)
   
   /** The default struct for `Complex` values. */
   implicit lazy val struct = new StructComplex

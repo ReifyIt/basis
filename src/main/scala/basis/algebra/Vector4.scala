@@ -86,9 +86,9 @@ object Vector4 {
   def unapply[Scalar <: Ring[Scalar]](vector: Vector4[Scalar]): Some[(Scalar, Scalar, Scalar, Scalar)] =
     Some(vector.x, vector.y, vector.z, vector.w)
   
-  /** Returns the additive identity of a kind of 4-dimensional vector. */
+  /** Returns the additive identity typeclass for a kind of 4-dimensional vector. */
   implicit def additiveIdentity[Scalar <: Ring[Scalar] : AdditiveIdentity] =
-    new AdditiveIdentity(new Vector4[Scalar](Zero, Zero, Zero, Zero))
+    Zero(apply[Scalar](Zero, Zero, Zero, Zero))
   
   /** Returns a default struct for a kind of 4-dimensional vector. */
   implicit def struct[Scalar <: Ring[Scalar] : Struct] = new StructVector4[Scalar]

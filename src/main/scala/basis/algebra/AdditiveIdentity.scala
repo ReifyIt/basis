@@ -59,5 +59,9 @@ object Zero {
     */
   def apply[T](implicit identity: AdditiveIdentity[T]): T = Zero
   
+  /** Returns a new additive identity typeclass for the given value. */
+  def apply[T](value: T): AdditiveIdentity[T] =
+    new AdditiveIdentity[T](value)
+  
   override def toString: String = "Zero"
 }

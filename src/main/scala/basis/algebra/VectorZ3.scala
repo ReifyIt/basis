@@ -53,14 +53,17 @@ final class VectorZ3(val x: Long, val y: Long, val z: Long)
 
 /** Contains factory methods for vectors in `Z3`. */
 object VectorZ3 {
+  /** The zero vector of `Z3`. */
+  val zero: VectorZ3 = new VectorZ3(0L, 0L, 0L)
+  
   def apply(x: Long, y: Long, z: Long): VectorZ3 =
     new VectorZ3(x, y, z)
   
   def unapply(vector: VectorZ3): Some[(Long, Long, Long)] =
     Some(vector.x, vector.y, vector.z)
   
-  /** The additive identity of `Z3`. */
-  implicit val additiveIdentity = new AdditiveIdentity(new VectorZ3(0L, 0L, 0L))
+  /** The additive identity typeclass for `Z3`. */
+  implicit val additiveIdentity = Zero(zero)
   
   /** The default struct for vectors in `Z3`. */
   implicit lazy val struct = new StructVectorZ3

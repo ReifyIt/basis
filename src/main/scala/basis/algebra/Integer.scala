@@ -99,6 +99,12 @@ final class Integer(protected val value: Long)
 
 /** Contains factory methods and implicit conversions for `Integer` values. */
 object Integer {
+  /** The zero `Integer` value. */
+  val zero: Integer = new Integer(0L)
+  
+  /** The unit `Integer` value. */
+  val one: Integer = new Integer(1L)
+  
   def apply(value: Long): Integer = new Integer(value)
   
   def unapply(integer: Integer): Some[Long] = Some(integer.value)
@@ -109,11 +115,11 @@ object Integer {
   /** Implicitly converts an `Integer` value to a `Long` value. */
   implicit def unbox(integer: Integer): Long = integer.value
   
-  /** The additive identity of the `Integer` ring. */
-  implicit val additiveIdentity = new AdditiveIdentity(new Integer(0L))
+  /** The additive identity typeclass for the `Integer` ring. */
+  implicit val additiveIdentity = Zero(zero)
   
-  /** The multiplicative identity of the `Integer` ring. */
-  implicit val multiplicativeIdentity = new MultiplicativeIdentity(new Integer(1L))
+  /** The multiplicative identity typeclass for the `Integer` ring. */
+  implicit val multiplicativeIdentity = One(one)
   
   /** The default struct for `Integer` values. */
   implicit lazy val struct = new StructInteger

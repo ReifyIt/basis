@@ -60,5 +60,9 @@ object One {
     */
   def apply[T](implicit identity: MultiplicativeIdentity[T]): T = One
   
+  /** Returns a new multiplicative identity typeclass for the given value. */
+  def apply[T](value: T): MultiplicativeIdentity[T] =
+    new MultiplicativeIdentity[T](value)
+  
   override def toString: String = "One"
 }

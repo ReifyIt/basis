@@ -84,9 +84,9 @@ object Vector2 {
   def unapply[Scalar <: Ring[Scalar]](vector: Vector2[Scalar]): Some[(Scalar, Scalar)] =
     Some(vector.x, vector.y)
   
-  /** Returns the additive identity of a kind of 2-dimensional vector. */
+  /** Returns the additive identity typeclass for a kind of 2-dimensional vector. */
   implicit def additiveIdentity[Scalar <: Ring[Scalar] : AdditiveIdentity] =
-    new AdditiveIdentity(new Vector2[Scalar](Zero, Zero))
+    Zero(apply[Scalar](Zero, Zero))
   
   /** Returns a default struct for a kind of 2-dimensional vector. */
   implicit def struct[Scalar <: Ring[Scalar] : Struct] = new StructVector2[Scalar]

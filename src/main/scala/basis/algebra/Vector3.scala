@@ -94,9 +94,9 @@ object Vector3 {
   def unapply[Scalar <: Ring[Scalar]](vector: Vector3[Scalar]): Some[(Scalar, Scalar, Scalar)] =
     Some(vector.x, vector.y, vector.z)
   
-  /** Returns the additive identity of a kind of 3-dimensional vector. */
+  /** Returns the additive identity typeclass for a kind of 3-dimensional vector. */
   implicit def additiveIdentity[Scalar <: Ring[Scalar] : AdditiveIdentity] =
-    new AdditiveIdentity(new Vector3[Scalar](Zero, Zero, Zero))
+    Zero(apply[Scalar](Zero, Zero, Zero))
   
   /** Returns a default struct for a kind of 3-dimensional vector. */
   implicit def struct[Scalar <: Ring[Scalar] : Struct] = new StructVector3[Scalar]

@@ -63,14 +63,17 @@ final class VectorR2(val x: Double, val y: Double)
 
 /** Contains factory methods for vectors in `R2`. */
 object VectorR2 {
+  /** The zero vector of `R2`. */
+  val zero: VectorR2 = new VectorR2(0.0, 0.0)
+  
   def apply(x: Double, y: Double): VectorR2 =
     new VectorR2(x, y)
   
   def unapply(vector: VectorR2): Some[(Double, Double)] =
     Some(vector.x, vector.y)
   
-  /** The additive identity of `R2`. */
-  implicit val additiveIdentity = new AdditiveIdentity(new VectorR2(0.0, 0.0))
+  /** The additive identity typeclass for `R2`. */
+  implicit val additiveIdentity = Zero(zero)
   
   /** The default struct for vectors in `R2`. */
   implicit lazy val struct = new StructVectorR2

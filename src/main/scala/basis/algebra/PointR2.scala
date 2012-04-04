@@ -46,6 +46,9 @@ final class PointR2(val x: Double, val y: Double)
 
 /** Contains factory methods for points in `R2`. */
 object PointR2 {
+  /** The origin of `R2`. */
+  val origin: PointR2 = new PointR2(0.0, 0.0)
+  
   def apply(x: Double, y: Double): PointR2 =
     new PointR2(x, y)
   

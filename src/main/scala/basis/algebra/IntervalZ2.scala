@@ -103,8 +103,8 @@ object IntervalZ2 {
   /** Returns a 2D interval containing just the given vector. */
   implicit def degenerate(vector: VectorZ2): IntervalZ2 = new IntervalZ2(vector.x, vector.y)
   
-  /** The 2D interval vector additive identity. */
-  implicit val additiveIdentity = new AdditiveIdentity(new IntervalZ2(Zero, Zero))
+  /** The 2D interval vector additive identity typeclass. */
+  implicit val additiveIdentity = Zero(apply(Zero, Zero))
   
   /** The default struct for 2D interval vectors. */
   implicit lazy val struct = new StructIntervalZ2

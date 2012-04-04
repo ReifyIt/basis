@@ -52,14 +52,17 @@ final class VectorZ2(val x: Long, val y: Long)
 
 /** Contains factory methods for vectors in `Z2`. */
 object VectorZ2 {
+  /** The zero vector of `Z2`. */
+  val zero: VectorZ2 = new VectorZ2(0L, 0L)
+  
   def apply(x: Long, y: Long): VectorZ2 =
     new VectorZ2(x, y)
   
   def unapply(vector: VectorZ2): Some[(Long, Long)] =
     Some(vector.x, vector.y)
   
-  /** The additive identity of `Z2`. */
-  implicit val additiveIdentity = new AdditiveIdentity(new VectorZ2(0L, 0L))
+  /** The additive identity typeclass for `Z2`. */
+  implicit val additiveIdentity = Zero(zero)
   
   /** The default struct for vectors in `Z2`. */
   implicit lazy val struct = new StructVectorZ2
