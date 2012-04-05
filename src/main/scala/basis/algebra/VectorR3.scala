@@ -57,8 +57,7 @@ final class VectorR3(val x: Double, val y: Double, val z: Double)
     * @param  that  the other $vector.
     * @return the scalar product of this $vector and the other $vector.
     */
-  def ⋅ (that: VectorR3): Real =
-    new Real(x * that.x + y * that.y + z * that.z)
+  def ⋅ (that: VectorR3): Double = x * that.x + y * that.y + z * that.z
   
   /** Returns the length (euclidean norm) of this $vector. */
   def length: Double = math.sqrt(x * x + y * y + z * z)
@@ -90,7 +89,7 @@ object VectorR3 {
   implicit val additiveIdentity = new Zero(zero)
   
   /** The inner dot product typeclass for vectors in `R3`. */
-  implicit val dotProduct = InnerProduct[VectorR3, Real](_ ⋅ _)
+  implicit val dotProduct = InnerProduct[VectorR3, Real]((u, v) => new Real(u ⋅ v))
   
   /** The euclidean norm typeclass for vectors in `R3`. */
   implicit val euclideanNorm = Norm[VectorR3, Real](u => new Real(u.length))

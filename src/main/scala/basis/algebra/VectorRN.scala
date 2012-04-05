@@ -98,7 +98,7 @@ final class VectorRN(protected val coordinates: Array[Double])
     * @param  that  the other $vector.
     * @return the scalar product of this $vector and the other $vector.
     */
-  def ⋅ (that: VectorRN): Real = {
+  def ⋅ (that: VectorRN): Double = {
     if (dimension != that.dimension || dimension == 0) throw new DimensionException
     var dp = 0.0
     var i = 0
@@ -106,7 +106,7 @@ final class VectorRN(protected val coordinates: Array[Double])
       dp += this(i) * that(i)
       i += 1
     }
-    new Real(dp)
+    dp
   }
   
   /** Returns the length (euclidean norm) of this $vector. */
@@ -162,7 +162,7 @@ object VectorRN {
     Some(vector.toSeq)
   
   /** The inner dot product typeclass for vectors in `RN`. */
-  implicit val dotProduct = InnerProduct[VectorRN, Real](_ ⋅ _)
+  implicit val dotProduct = InnerProduct[VectorRN, Real]((u, v) => new Real(u ⋅ v))
   
   /** The euclidean norm typeclass for `RN`. */
   implicit val euclideanNorm = Norm[VectorRN, Real](u => new Real(u.length))
