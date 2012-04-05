@@ -211,23 +211,23 @@ package object algebra {
   
   /** A concrete 1-dimensional discrete interval module. */
   type IZ1 = Singleton {
-    type Point  = Interval
-    type Vector = Interval
-    type Scalar = Interval
+    type Point  = IntervalZ1
+    type Vector = IntervalZ1
+    type Scalar = IntervalZ1
   }
   
   /** A concrete 2-dimensional discrete interval module. */
   type IZ2 = Singleton {
     type Point  = IntervalZ2
     type Vector = IntervalZ2
-    type Scalar = Interval
+    type Scalar = IntervalZ1
   }
   
   /** A concrete 3-dimensional discrete interval module. */
   type IZ3 = Singleton {
     type Point  = IntervalZ3
     type Vector = IntervalZ3
-    type Scalar = Interval
+    type Scalar = IntervalZ1
   }
   
   /** A concrete 1-dimensional `Real` euclidean space. */

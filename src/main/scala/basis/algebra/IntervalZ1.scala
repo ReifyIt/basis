@@ -17,100 +17,98 @@ import basis.util.MurmurHash._
   * @author Chris Sachs
   * 
   * @constructor Constructs an interval with a lower and upper bound.
-  * @param  lower   The lower bound of this $interval.
-  * @param  upper   The upper bound of this $interval.
+  * @param  lower   The lower bound of this $element.
+  * @param  upper   The upper bound of this $element.
   * 
-  * @define Element   $Interval
-  * @define element   $interval
-  * @define Interval  Interval
-  * @define interval  discrete interval
+  * @define Element   Interval
+  * @define element   discrete interval
   */
-final class Interval private (val lower: Long, val upper: Long) extends Ring[Interval] {
+final class IntervalZ1 private (val lower: Long, val upper: Long) extends Ring[IntervalZ1] {
   /** Returns `true` if this is '''N'''ot '''a'''n '''I'''nterval. */
   def isNaI: Boolean = lower > upper && lower > 0L
   
-  /** Returns `true` if this $interval contains no values. */
+  /** Returns `true` if this $element contains no values. */
   def isEmpty: Boolean = lower > upper
   
-  /** Returns the number of values enclosed by this $interval. */
+  /** Returns the number of values enclosed by this $element. */
   def size: Long = upper - lower + 1L
   
-  /** Returns `true` if this $interval encloses the given value. */
+  /** Returns `true` if this $element encloses the given value. */
   def contains(i: Long): Boolean = lower <= i && i <= upper
   
-  def + (that: Interval): Interval = {
+  def + (that: IntervalZ1): IntervalZ1 = {
     if (that.isEmpty) { if (isNaI) this else that } else if (isEmpty) this
-    else new Interval(lower + that.lower, upper + that.upper)
+    else new IntervalZ1(lower + that.lower, upper + that.upper)
   }
   
-  def + (n: Long): Interval = {
+  def + (n: Long): IntervalZ1 = {
     if (isEmpty) this
-    else new Interval(lower + n, upper + n)
+    else new IntervalZ1(lower + n, upper + n)
   }
   
-  def unary_- : Interval = {
+  def unary_- : IntervalZ1 = {
     if (isEmpty) this
-    else new Interval(-upper, -lower)
+    else new IntervalZ1(-upper, -lower)
   }
   
-  def - (that: Interval): Interval = {
+  def - (that: IntervalZ1): IntervalZ1 = {
     if (that.isEmpty) { if (isNaI) this else that } else if (isEmpty) this
-    else new Interval(lower - that.upper, upper - that.lower)
+    else new IntervalZ1(lower - that.upper, upper - that.lower)
   }
   
-  def - (n: Long): Interval = {
+  def - (n: Long): IntervalZ1 = {
     if (isEmpty) this
-    else new Interval(lower - n, upper - n)
+    else new IntervalZ1(lower - n, upper - n)
   }
   
-  def * (that: Interval): Interval = {
+  def * (that: IntervalZ1): IntervalZ1 = {
     if (that.isEmpty) { if (isNaI) this else that } else if (isEmpty) this
     else {
       val ll = lower * that.lower
       val lu = lower * that.upper
       val ul = upper * that.lower
       val uu = upper * that.upper
-      new Interval(min(min(min(ll, lu), ul), uu), max(max(max(ll, lu), ul), uu))
+      new IntervalZ1(min(min(min(ll, lu), ul), uu), max(max(max(ll, lu), ul), uu))
     }
   }
   
-  def * (n: Long): Interval = {
+  def * (n: Long): IntervalZ1 = {
     if (isEmpty) this
-    else if (n >= 0) new Interval(lower * n, upper * n)
-    else new Interval(upper * n, lower * n)
+    else if (n >= 0) new IntervalZ1(lower * n, upper * n)
+    else new IntervalZ1(upper * n, lower * n)
   }
   
-  def pow(n: Long): Interval = {
+  def pow(n: Long): IntervalZ1 = {
     require(n >= 0L, "negative exponent")
     if (isEmpty) this
     else {
       val lowerN = math.pow(lower, n).toLong
       val upperN = math.pow(upper, n).toLong
       if ((n & 1L) != 0L || lower >= 0L) // odd exponent or positive interval
-        new Interval(lowerN, upperN)
+        new IntervalZ1(lowerN, upperN)
       else if (upper <  0L) // negative interval
-        new Interval(upperN, lowerN)
+        new IntervalZ1(upperN, lowerN)
       else // interval spans zero
-        new Interval(0L, max(lowerN, upperN))
+        new IntervalZ1(0L, max(lowerN, upperN))
     }
   }
   
-  /** Returns the intersection of this $interval and another $interval.
+  /** Returns the intersection of this $element and another $element.
     * 
-    * @param  that  the $interval to intersect with.
+    * @param  that  the $element to intersect with.
     * @return the intersecting interval or else the empty interval.
     */
-  def intersect(that: Interval): Interval = {
+  def intersect(that: IntervalZ1): IntervalZ1 = {
     if (that.isEmpty) { if (isNaI) this else that } else if (isEmpty) this
     else {
       val greatestLower = max(lower, that.lower)
       val leastUpper = min(upper, that.upper)
-      if (greatestLower <= leastUpper) new Interval(greatestLower, leastUpper)
-      else Interval.empty
+      if (greatestLower <= leastUpper) new IntervalZ1(greatestLower, leastUpper)
+      else IntervalZ1.empty
     }
   }
   
-  /** Applies a function to each value contained by this $interval. */
+  /** Applies a function to each value contained by this $element. */
   @inline final def foreach[@specialized(Unit) U](f: Long => U) {
     var i = lower
     val upper = this.upper
@@ -121,7 +119,7 @@ final class Interval private (val lower: Long, val upper: Long) extends Ring[Int
   }
   
   override def equals(other: Any): Boolean = other match {
-    case that: Interval => lower == that.lower && upper == that.upper
+    case that: IntervalZ1 => lower == that.lower && upper == that.upper
     case _ => false
   }
   
@@ -133,33 +131,33 @@ final class Interval private (val lower: Long, val upper: Long) extends Ring[Int
 }
 
 /** Contains factory methods and implicit conversions for discrete intervals. */
-object Interval {
-  /** The degenerate interval containing just the zero value. */
-  val zero: Interval = new Interval(0L, 0L)
+object IntervalZ1 {
+  /** The degenerate discrete interval containing just the zero value. */
+  val zero: IntervalZ1 = new IntervalZ1(0L, 0L)
   
-  /** The degenerate interval containing just the unit value. */
-  val one: Interval = new Interval(1L, 1L)
+  /** The degenerate discrete interval containing just the unit value. */
+  val one: IntervalZ1 = new IntervalZ1(1L, 1L)
   
-  /** The empty interval. */
-  val empty: Interval = new Interval(0L, -1L)
+  /** The empty discrete interval. */
+  val empty: IntervalZ1 = new IntervalZ1(0L, -1L)
   
   /** The '''N'''ot '''a'''n '''I'''nterval value. */
-  val NaI: Interval = new Interval(1L, 0L)
+  val NaI: IntervalZ1 = new IntervalZ1(1L, 0L)
   
-  /** Creates a new interval with a lower and upper bound.
+  /** Returns a new discrete interval with a lower and upper bound.
     * 
-    * @param  lower   the lower bound of the interval.
-    * @param  upper   the upper bound of the interval.
+    * @param  lower   the lower bound of the discrete interval.
+    * @param  upper   the upper bound of the discrete interval.
     * @return the interval [`lower`, `upper`] or `NaI` if `lower` > `upper`.
     */
-  def apply(lower: Long, upper: Long): Interval =
-    if (lower <= upper) new Interval(lower, upper) else NaI
+  def apply(lower: Long, upper: Long): IntervalZ1 =
+    if (lower <= upper) new IntervalZ1(lower, upper) else NaI
   
-  def unapply(interval: Interval): Option[(Long, Long)] =
+  def unapply(interval: IntervalZ1): Option[(Long, Long)] =
     if (interval.isEmpty) None else Some(interval.lower, interval.upper)
   
   /** Returns an interval containing just the given value. */
-  implicit def degenerate(value: Long): Interval = new Interval(value, value)
+  implicit def degenerate(value: Long): IntervalZ1 = new IntervalZ1(value, value)
   
   /** The discrete interval additive identity typeclass. */
   implicit val additiveIdentity = new Zero(zero)
@@ -168,11 +166,11 @@ object Interval {
   implicit val multiplicativeIdentity = new One(one)
   
   /** The default struct for discrete intervals. */
-  implicit lazy val struct = new StructInterval
+  implicit lazy val struct = new StructIntervalZ1
   
   /** A struct for discrete intervals. */
-  class StructInterval(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    extends Struct2[Long, Long, Interval](frameOffset, frameSize, frameAlignment) {
+  class StructIntervalZ1(frameOffset: Long, frameSize: Long, frameAlignment: Long)
+    extends Struct2[Long, Long, IntervalZ1](frameOffset, frameSize, frameAlignment) {
     
     def this() = this(0L, 0L, 0L)
     
@@ -182,20 +180,20 @@ object Interval {
     /** The `upper` bound field projection of this struct. */
     def upper: Struct[Long] = field2
     
-    def load(data: Data, address: Long): Interval = {
+    def load(data: Data, address: Long): IntervalZ1 = {
       val lower = data.loadLong(address + offset1)
       val upper = data.loadLong(address + offset2)
-      new Interval(lower, upper)
+      new IntervalZ1(lower, upper)
     }
     
-    def store(data: Data, address: Long, interval: Interval) {
+    def store(data: Data, address: Long, interval: IntervalZ1) {
       data.storeLong(address + offset1, interval.lower)
       data.storeLong(address + offset2, interval.upper)
     }
     
-    override def project(offset: Long, size: Long, alignment: Long): StructInterval =
-      new StructInterval(offset1 + offset, size, alignment)
+    override def project(offset: Long, size: Long, alignment: Long): StructIntervalZ1 =
+      new StructIntervalZ1(offset1 + offset, size, alignment)
     
-    override def toString: String = "StructInterval"
+    override def toString: String = "StructIntervalZ1"
   }
 }

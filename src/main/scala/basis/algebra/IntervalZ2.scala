@@ -12,7 +12,7 @@ import scala.math.{min, max}
 import basis.memory._
 import basis.util.MurmurHash._
 
-/** A 2-dimensional vector of discrete intervals.
+/** A vector representing the cartesian product of two discrete intervals.
   * 
   * @author Chris Sachs
   * 
@@ -20,11 +20,11 @@ import basis.util.MurmurHash._
   * @param  x   The ''x''-axis bounds.
   * @param  y   The ''y''-axis bounds.
   * 
-  * @define vector  2D interval vector
+  * @define vector  2D interval
   * @define scalar  discrete interval
   */
-final class IntervalZ2(val x: Interval, val y: Interval)
-  extends Vector[IntervalZ2, Interval] {
+final class IntervalZ2(val x: IntervalZ1, val y: IntervalZ1)
+  extends Vector[IntervalZ2, IntervalZ1] {
   
   /** Returns the number of values enclosed by this $vector. */
   def size: Long = x.size * y.size
@@ -49,10 +49,10 @@ final class IntervalZ2(val x: Interval, val y: Interval)
   def - (that: IntervalZ2): IntervalZ2 =
     new IntervalZ2(x - that.x, y - that.y)
   
-  def :* (scalar: Interval): IntervalZ2 =
+  def :* (scalar: IntervalZ1): IntervalZ2 =
     new IntervalZ2(x * scalar, y * scalar)
   
-  def *: (scalar: Interval): IntervalZ2 = this :* scalar
+  def *: (scalar: IntervalZ1): IntervalZ2 = this :* scalar
   
   /** Returns the intersection of this $vector and another $vector.
     * 
@@ -97,10 +97,10 @@ object IntervalZ2 {
   /** The zero vector of 2D intervals. */
   val zero: IntervalZ2 = new IntervalZ2(Zero, Zero)
   
-  def apply(x: Interval, y: Interval): IntervalZ2 =
+  def apply(x: IntervalZ1, y: IntervalZ1): IntervalZ2 =
     new IntervalZ2(x, y)
   
-  def unapply(vector: IntervalZ2): Some[(Interval, Interval)] =
+  def unapply(vector: IntervalZ2): Some[(IntervalZ1, IntervalZ1)] =
     Some(vector.x, vector.y)
   
   /** Returns a 2D interval containing just the given vector. */
@@ -115,21 +115,21 @@ object IntervalZ2 {
   
   /** A struct for 2D interval vectors. */
   class StructIntervalZ2(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    extends Struct2[Interval, Interval, IntervalZ2](frameOffset, frameSize, frameAlignment) {
+    extends Struct2[IntervalZ1, IntervalZ1, IntervalZ2](frameOffset, frameSize, frameAlignment) {
     
-    import Interval.StructInterval
+    import IntervalZ1.StructIntervalZ1
     
     def this() = this(0L, 0L, 0L)
     
-    protected override val field1 = new StructInterval(offset1, size, alignment)
+    protected override val field1 = new StructIntervalZ1(offset1, size, alignment)
     
-    protected override val field2 = new StructInterval(offset2, size, alignment)
+    protected override val field2 = new StructIntervalZ1(offset2, size, alignment)
     
     /** The `x`-interval field projection of this struct. */
-    def x: StructInterval = field1
+    def x: StructIntervalZ1 = field1
     
     /** The `y`-interval field projection of this struct. */
-    def y: StructInterval = field2
+    def y: StructIntervalZ1 = field2
     
     def load(data: Data, address: Long): IntervalZ2 = {
       val x = field1.load(data, address)

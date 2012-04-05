@@ -18,7 +18,7 @@ import basis.algebra._
   */
 trait Image1[A] extends (Long => A) { imageA =>
   /** The bounded domain of this image. */
-  def domain: Interval
+  def domain: IntervalZ1
   
   /** Returns a sample of this image. */
   def apply(i: Long): A
@@ -107,7 +107,7 @@ trait Image1[A] extends (Long => A) { imageA =>
     new ContinuousConvolution[B](filter)
   
   protected class Translation(val delta: Long) extends Image1[A] {
-    val domain: Interval = imageA.domain + delta
+    val domain: IntervalZ1 = imageA.domain + delta
     
     def apply(i: Long): A = imageA(i + delta)
     
@@ -119,13 +119,13 @@ trait Image1[A] extends (Long => A) { imageA =>
       (imageB: Image1[B])(operator: (A, B) => C)
     extends Image1[C] {
     
-    val domain: Interval = imageA.domain intersect imageB.domain
+    val domain: IntervalZ1 = imageA.domain intersect imageB.domain
     
     def apply(i: Long): C = operator(imageA(i), imageB(i))
   }
   
   protected class Map[B](f: A => B) extends Image1[B] {
-    def domain: Interval = imageA.domain
+    def domain: IntervalZ1 = imageA.domain
     
     def apply(i: Long): B = f(imageA(i))
   }
@@ -134,7 +134,7 @@ trait Image1[A] extends (Long => A) { imageA =>
       (imageB: Image1[B])(implicit isVector: A <:< Vector[A, B])
     extends Image1[A] {
     
-    val domain: Interval = imageA.domain + imageB.domain
+    val domain: IntervalZ1 = imageA.domain + imageB.domain
     
     def apply(i: Long): A = {
       val lower = math.max(imageA.domain.lower, i - imageB.domain.upper)

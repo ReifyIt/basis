@@ -23,14 +23,14 @@ import basis.memory._
   * @param  struct        The sample struct.
   */
 class ValImage1[A]
-    (val data: Data, val baseAddress: Long, val domain: Interval)
+    (val data: Data, val baseAddress: Long, val domain: IntervalZ1)
     (implicit val struct: Struct[A])
   extends Raster1[A] {
   
   assert(baseAddress + struct.size * domain.size <= data.size)
   
   /** Constructs an un-initialized image on a given domain. */
-  def this(domain: Interval)(implicit allocator: Allocator, struct: Struct[A]) =
+  def this(domain: IntervalZ1)(implicit allocator: Allocator, struct: Struct[A]) =
     this(Data.alloc[A](domain.size), 0L, domain)
   
   def apply(i: Long): A = {

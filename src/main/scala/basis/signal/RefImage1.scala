@@ -21,13 +21,13 @@ import basis.algebra._
   *                 domain corresponds to the first sample in the array.
   */
 class RefImage1[A]
-    (val array: Array[AnyRef], val base: Int, val domain: Interval)
+    (val array: Array[AnyRef], val base: Int, val domain: IntervalZ1)
   extends Raster1[A] {
   
   assert(base + domain.size <= array.length)
   
   /** Constructs an un-initialized image on a given domain. */
-  def this(domain: Interval) =
+  def this(domain: IntervalZ1) =
     this(new Array[AnyRef](domain.size.toInt), 0, domain)
   
   def apply(i: Long): A = {
