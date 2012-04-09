@@ -9,22 +9,24 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-class R(val dimension: Int) extends HilbertSpace { RN =>
-  type Scalar = Real
+class F[S <: Field[S]](val dimension: Int)(field: ScalarSpace[S])
+  extends VectorSpace { FN =>
   
-  final class Vector(private val coordinates: Array[Double])
-    extends RealVector[Vector] {
+  type Scalar = S
+  
+  final class Vector(private val coordinates: Array[AnyRef])
+    extends basis.algebra.Vector[Vector, Scalar] {
     
-    if (dimension != RN.dimension)
+    if (dimension != FN.dimension)
       throw new DimensionException(dimension.toString)
     
     def dimension: Int = coordinates.length
     
-    def apply(n: Int): Double = coordinates(n)
+    def apply(n: Int): Scalar = coordinates(n).asInstanceOf[Scalar]
     
     def + (that: Vector): Vector = {
       if (dimension != that.dimension) throw new DimensionException
-      val coordinates = new Array[Double](dimension)
+      val coordinates = new Array[AnyRef](dimension)
       var i = 0
       while (i < dimension) {
         coordinates(i) = this(i) + that(i)
@@ -34,7 +36,7 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
     }
     
     def unary_- : Vector = {
-      val coordinates = new Array[Double](dimension)
+      val coordinates = new Array[AnyRef](dimension)
       var i = 0
       while (i < dimension) {
         coordinates(i) = -this(i)
@@ -45,7 +47,7 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
     
     def - (that: Vector): Vector = {
       if (dimension != that.dimension) throw new DimensionException
-      val coordinates = new Array[Double](dimension)
+      val coordinates = new Array[AnyRef](dimension)
       var i = 0
       while (i < dimension) {
         coordinates(i) = this(i) - that(i)
@@ -54,8 +56,8 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
       new Vector(coordinates)
     }
     
-    def :* (scalar: Double): Vector = {
-      val coordinates = new Array[Double](dimension)
+    def :* (scalar: Scalar): Vector = {
+      val coordinates = new Array[AnyRef](dimension)
       var i = 0
       while (i < dimension) {
         coordinates(i) = this(i) * scalar
@@ -64,10 +66,18 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
       new Vector(coordinates)
     }
     
-    def *: (scalar: Double): Vector = this :* scalar
+    def *: (scalar: Scalar): Vector = {
+      val coordinates = new Array[AnyRef](dimension)
+      var i = 0
+      while (i < dimension) {
+        coordinates(i) = scalar * this(i)
+        i += 1
+      }
+      new Vector(coordinates)
+    }
     
-    def / (scalar: Double): Vector = {
-      val coordinates = new Array[Double](dimension)
+    def / (scalar: Scalar): Vector = {
+      val coordinates = new Array[AnyRef](dimension)
       var i = 0
       while (i < dimension) {
         coordinates(i) = this(i) / scalar
@@ -76,33 +86,12 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
       new Vector(coordinates)
     }
     
-    def ⋅ (that: Vector): Double = {
-      if (dimension != that.dimension) throw new DimensionException
-      var x = 0.0
-      var i = 0
-      while (i < dimension) {
-        x += this(i) * that(i)
-        i += 1
-      }
-      x
-    }
-    
-    def norm: Double = {
-      var x = 0.0
-      var i = 0
-      while (i < dimension) {
-        x += this(i) * this(i)
-        i += 1
-      }
-      math.sqrt(x)
-    }
-    
     override def equals(other: Any): Boolean = other match {
       case that: Vector =>
         var equal = dimension == that.dimension
         var i = 0
         while (i < dimension && equal) {
-          equal = this(i) == that(i)
+          equal = this(i).equals(that(i))
           i += 1
         }
         equal
@@ -110,7 +99,7 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
     }
     
     override def hashCode: Int = {
-      var h = 112329823
+      var h = -906602559
       var i = 0
       while (i < dimension) {
         mix(h, this(i))
@@ -132,35 +121,36 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
       s.toString
     }
     
-    private[R] def toSeq: Seq[Double] = wrapDoubleArray(coordinates)
+    private[F] def toSeq: Seq[Scalar] =
+      wrapRefArray(coordinates).asInstanceOf[Seq[Scalar]]
   }
   
-  final class Matrix[RM <: R with Singleton](
-      RM: RM, private val entries: Array[Double])
-    extends RealVector[Matrix[RM]] {
+  final class Matrix[FM <: F[Scalar] with Singleton](
+      FM: FM, private val entries: Array[AnyRef])
+    extends basis.algebra.Vector[Matrix[FM], Scalar] {
     
-    private def ColumnSpace: RM = RM
+    private def ColumnSpace: FM = FM
     
-    private def RowSpace: RN.type = RN
+    private def RowSpace: FN.type = FN
     
-    def M: Int = RM.dimension
+    def M: Int = FM.dimension
     
-    def N: Int = RN.dimension
+    def N: Int = FN.dimension
     
     if (entries.length != M * N)
       throw new DimensionException(entries.length.toString)
     
-    def apply(i: Int, j: Int): Double = {
+    def apply(i: Int, j: Int): Scalar = {
       if (i < 0 || i >= M || j < 0 || j >= N)
         throw new IndexOutOfBoundsException("row "+ i +", "+"column "+ j)
-      entries(N * i + j)
+      entries(N * i + j).asInstanceOf[Scalar]
     }
     
-    def apply(k: Int): Double = entries(k)
+    def apply(k: Int): Scalar = entries(k).asInstanceOf[Scalar]
     
-    def column(j: Int): RM#Vector = {
+    def column(j: Int): FM#Vector = {
       if (j < 0 || j >= N) throw new IndexOutOfBoundsException("column "+ j)
-      val coordinates = new Array[Double](M)
+      val coordinates = new Array[AnyRef](M)
       var i = 0
       var m = j
       while (i < M) {
@@ -168,12 +158,12 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
         i += 1
         m += N
       }
-      new RM.Vector(coordinates)
+      new FM.Vector(coordinates)
     }
     
-    def row(i: Int): RN.Vector = {
+    def row(i: Int): FN.Vector = {
       if (i < 0 || i >= M) throw new IndexOutOfBoundsException("row "+ i)
-      val coordinates = new Array[Double](N)
+      val coordinates = new Array[AnyRef](N)
       var j = 0
       var n = N * i
       while (j < N) {
@@ -181,70 +171,78 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
         j += 1
         n += 1
       }
-      new RN.Vector(coordinates)
+      new FN.Vector(coordinates)
     }
     
-    def + (that: Matrix[RM]): Matrix[RM] = {
+    def + (that: Matrix[FM]): Matrix[FM] = {
       if (M != that.M || N != that.N) throw new DimensionException
-      val entries = new Array[Double](this.entries.length)
+      val entries = new Array[AnyRef](this.entries.length)
       var k = 0
       while (k < entries.length) {
         entries(k) = this(k) + that(k)
         k += 1
       }
-      new Matrix(RM, entries)
+      new Matrix(FM, entries)
     }
     
-    def unary_- : Matrix[RM] = {
-      val entries = new Array[Double](this.entries.length)
+    def unary_- : Matrix[FM] = {
+      val entries = new Array[AnyRef](this.entries.length)
       var k = 0
       while (k < entries.length) {
         entries(k) = -this(k)
         k += 1
       }
-      new Matrix(RM, entries)
+      new Matrix(FM, entries)
     }
     
-    def - (that: Matrix[RM]): Matrix[RM] = {
+    def - (that: Matrix[FM]): Matrix[FM] = {
       if (M != that.M || N != that.N) throw new DimensionException
-      val entries = new Array[Double](this.entries.length)
+      val entries = new Array[AnyRef](this.entries.length)
       var k = 0
       while (k < entries.length) {
         entries(k) = this(k) - that(k)
         k += 1
       }
-      new Matrix(RM, entries)
+      new Matrix(FM, entries)
     }
     
-    def :* (scalar: Double): Matrix[RM] = {
-      val entries = new Array[Double](this.entries.length)
+    def :* (scalar: Scalar): Matrix[FM] = {
+      val entries = new Array[AnyRef](this.entries.length)
       var k = 0
       while (k < entries.length) {
         entries(k) = this(k) * scalar
         k += 1
       }
-      new Matrix(RM, entries)
+      new Matrix(FM, entries)
     }
     
-    def *: (scalar: Double): Matrix[RM] = this :* scalar
+    def *: (scalar: Scalar): Matrix[FM] = {
+      val entries = new Array[AnyRef](this.entries.length)
+      var k = 0
+      while (k < entries.length) {
+        entries(k) = scalar * this(k)
+        k += 1
+      }
+      new Matrix(FM, entries)
+    }
     
-    def / (scalar: Double): Matrix[RM] = {
-      val entries = new Array[Double](this.entries.length)
+    def / (scalar: Scalar): Matrix[FM] = {
+      val entries = new Array[AnyRef](this.entries.length)
       var k = 0
       while (k < entries.length) {
         entries(k) = this(k) / scalar
         k += 1
       }
-      new Matrix(RM, entries)
+      new Matrix(FM, entries)
     }
     
-    def :* (column: RN.Vector): RM#Vector = {
+    def :* (column: FN.Vector): FM#Vector = {
       if (N != column.dimension) throw new DimensionException
-      val coordinates = new Array[Double](M)
+      val coordinates = new Array[AnyRef](M)
       var i = 0
       var i0 = 0
       while (i < M) {
-        var x = 0.0
+        var x = Scalar.zero
         var n = i0
         var j = 0
         while (j < N) {
@@ -256,15 +254,15 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
         i += 1
         i0 += N
       }
-      new RM.Vector(coordinates)
+      new FM.Vector(coordinates)
     }
     
-    def *: (row: RM#Vector): RN.Vector = {
+    def *: (row: FM#Vector): FN.Vector = {
       if (row.dimension != M) throw new DimensionException
-      val coordinates = new Array[Double](N)
+      val coordinates = new Array[AnyRef](N)
       var j = 0
       while (j < N) {
-        var x = 0.0
+        var x = Scalar.zero
         var n = j
         var i = 0
         while (i < M) {
@@ -275,22 +273,22 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
         coordinates(j) = x
         j += 1
       }
-      new RN.Vector(coordinates)
+      new FN.Vector(coordinates)
     }
     
-    type Map[RP <: R with Singleton] = RN.Matrix[RP]
+    type Map[FP <: F[Scalar] with Singleton] = FN.Matrix[FP]
     
-    def * (that: RP.Matrix[RN.type] forSome { val RP: R }): that.Map[RM] = {
+    def * (that: FP.Matrix[FN.type] forSome { val FP: F[Scalar] }): that.Map[FM] = {
       if (N != that.M) throw new DimensionException
       val P = that.N
-      val entries = new Array[Double](M * P)
+      val entries = new Array[AnyRef](M * P)
       var k = 0
       var i = 0
       var i0 = 0
       while (i < M) {
         var j = 0
         while (j < P) {
-          var x = 0.0
+          var x = Scalar.zero
           var m = i0
           var n = j
           var d = 0
@@ -307,14 +305,14 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
         i += 1
         i0 += N
       }
-      val RP = that.RowSpace
-      new RP.Matrix(RM, entries)
+      val FP = that.RowSpace
+      new FP.Matrix(FM, entries)
     }
     
-    def inverse: Option[RM#Matrix[RN.type]] = None
+    def inverse: Option[FM#Matrix[FN.type]] = None
     
-    def transpose: RM#Matrix[RN.type] = {
-      val entries = new Array[Double](this.entries.length)
+    def transpose: FM#Matrix[FN.type] = {
+      val entries = new Array[AnyRef](this.entries.length)
       var k = 0
       var j = 0
       while (j < N) {
@@ -328,7 +326,7 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
         }
         j += 1
       }
-      new RM.Matrix[RN.type](RN, entries)
+      new FM.Matrix[FN.type](FN, entries)
     }
     
     override def equals(other: Any): Boolean = other match {
@@ -336,7 +334,7 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
         var equal = M == that.M && N == that.N
         var k = 0
         while (k < entries.length && equal) {
-          equal = this(k) == that(k)
+          equal = this(k).equals(that(k))
           k += 1
         }
         equal
@@ -344,7 +342,7 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
     }
     
     override def hashCode: Int = {
-      var h = -1728567117
+      var h = -1167454657
       var k = 0
       while (k < entries.length) {
         mix(h, this(k))
@@ -375,76 +373,79 @@ class R(val dimension: Int) extends HilbertSpace { RN =>
     }
   }
   
-  class Morphism[RM <: R with Singleton](RM: RM) extends VectorSpace {
-    type Scalar = Real
+  class Morphism[FM <: F[Scalar] with Singleton](FM: FM) extends VectorSpace {
+    type Scalar = FN.Scalar
     type Vector = Matrix
-    type ColumnVector = RM#Vector
-    type RowVector = RN.Vector
-    type Matrix = RN.Matrix[RM]
+    type ColumnVector = FM#Vector
+    type RowVector = FN.Vector
+    type Matrix = FN.Matrix[FM]
     
-    val Scalar = Real
+    val Scalar = FN.Scalar
     
-    def M: Int = RM.dimension
+    def M: Int = FM.dimension
     
-    def N: Int = RN.dimension
+    def N: Int = FN.dimension
     
     def dimension: Int = M * N
     
-    lazy val zero: Matrix = new Matrix(RM, new Array[Double](dimension))
+    lazy val zero: Matrix = {
+      val entries = new Array[AnyRef](dimension)
+      var k = 0
+      while (k < dimension) {
+        entries(k) = Scalar.zero
+        k += 1
+      }
+      new Matrix(FM, entries)
+    }
     
-    def apply(entries: Double*): Matrix =
-      new Matrix(RM, entries.toArray[Double])
+    def apply(entries: Scalar*): Matrix =
+      new Matrix(FM, entries.toArray[AnyRef])
     
-    def map(RP: R): Morphism[RP.type] = new Morphism[RP.type](RP)
+    def map(FP: F[Scalar]): Morphism[FP.type] = new Morphism[FP.type](FP)
     
-    override def toString: String = "<"+ RM +" => "+ RN +">"
+    override def toString: String = "<"+ FM +" => "+ FN +">"
   }
   
-  class Endomorphism extends Morphism[RN.type](RN) {
+  class Endomorphism extends Morphism[FN.type](FN) {
     lazy val identity: Matrix = {
-      val entries = new Array[Double](dimension)
+      val entries = new Array[AnyRef](dimension)
+      var k = 0
+      var j = 0
       var i = 0
-      var i0 = 0
       while (i < M) {
-        entries(i0 + i) = 1.0
-        i0 += N
-        i += 1
+        while (j < N) {
+          entries(k) = if (i == j) Scalar.unit else Scalar.zero
+          k += 1
+          j += 1
+        }
+        i += 1 
+        j = 0
       }
-      new Matrix(RN, entries)
+      new Matrix(FN, entries)
     }
   }
   
-  val Scalar = Real
+  val Scalar = field: ScalarSpace[Scalar]
   
   lazy val Matrix = new Endomorphism
   
-  lazy val zero: Vector = new Vector(new Array[Double](dimension))
-  
-  def apply(coordinates: Double*): Vector =
-    new Vector(coordinates.toArray[Double])
-  
-  def unapply(vector: Vector): Option[Seq[Double]] =
-    if (vector.dimension == dimension) Some(vector.toSeq) else None
-  
-  def innerProduct(u: Vector, v: Vector): Scalar = new Scalar(u ⋅ v)
-  
-  override def norm(u: Vector): Scalar = new Scalar(u.norm)
-  
-  override def normalize(u: Vector): Vector = u / u.norm
-  
-  override def distance(u: Vector, v: Vector): Scalar = {
-    if (u.dimension != v.dimension) throw new DimensionException
-    var x = 0.0
+  lazy val zero: Vector = {
+    val coordinates = new Array[AnyRef](dimension)
     var i = 0
     while (i < dimension) {
-      val di = u(i) - v(i)
-      x += di * di
+      coordinates(i) = Scalar.zero
       i += 1
     }
-    new Scalar(math.sqrt(x))
+    new Vector(coordinates)
   }
   
-  def map(RM: R): Morphism[RM.type] = new Morphism[RM.type](RM)
+  def apply(coordinates: Scalar*): Vector =
+    new Vector(coordinates.toArray[AnyRef])
   
-  override def toString: String = "R"+"("+ dimension +")"
+  def unapplySeq(vector: Vector): Option[Seq[Scalar]] =
+    if (vector.dimension == dimension) Some(vector.toSeq) else None
+  
+  def map(FM: F[Scalar]): Morphism[FM.type] = new Morphism[FM.type](FM)
+  
+  override def toString: String = "F"+"("+ dimension +")"+"("+ Scalar +")"
 }

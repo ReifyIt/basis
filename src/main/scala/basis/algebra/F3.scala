@@ -9,8 +9,8 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-class F3[F <: Field[F]](field: ScalarSpace[F]) extends VectorSpace {
-  type Scalar = F
+class F3[S <: Field[S]](field: ScalarSpace[S]) extends VectorSpace {
+  type Scalar = S
   
   final class Vector(val x: Scalar, val y: Scalar, val z: Scalar)
     extends basis.algebra.Vector[Vector, Scalar] {

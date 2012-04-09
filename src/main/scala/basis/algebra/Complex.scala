@@ -143,4 +143,6 @@ object Complex extends ScalarSpace[Complex] {
     * @return a new `Complex` value.
     */
   def polar(r: Double, φ: Double): Complex = new Complex(r * math.cos(φ), r * math.sin(φ))
+  
+  override def toString: String = "Complex"
 }
