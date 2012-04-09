@@ -44,6 +44,15 @@ object BasisBuild extends Build {
     )
   )
   
+  lazy val basisGraphics = Project(
+    id           = "basis-graphics",
+    base         = file("."),
+    dependencies = Seq(basisAlgebra, basisUtil),
+    settings     = commonSettings ++ Seq(
+      modulePath := "basis/graphics"
+    )
+  )
+  
   lazy val commonSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.scalabasis",
     version      := "0.0-SNAPSHOT",
