@@ -9,14 +9,14 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-class R(val dimension: Int) extends VectorSpace { RN =>
+class R(val dimension: Int) extends HilbertSpace { RN =>
   type Scalar = Real
   
   final class Vector(private val coordinates: Array[Double])
     extends RealVector[Vector] {
     
-    if (coordinates.length != R.this.dimension)
-      throw new DimensionException(coordinates.length.toString)
+    if (dimension != RN.dimension)
+      throw new DimensionException(dimension.toString)
     
     def dimension: Int = coordinates.length
     
@@ -87,7 +87,7 @@ class R(val dimension: Int) extends VectorSpace { RN =>
       x
     }
     
-    def length: Double = {
+    def norm: Double = {
       var x = 0.0
       var i = 0
       while (i < dimension) {
@@ -425,6 +425,24 @@ class R(val dimension: Int) extends VectorSpace { RN =>
   
   def unapply(vector: Vector): Option[Seq[Double]] =
     if (vector.dimension == dimension) Some(vector.toSeq) else None
+  
+  def innerProduct(u: Vector, v: Vector): Scalar = new Scalar(u ⋅ v)
+  
+  override def norm(u: Vector): Scalar = new Scalar(u.norm)
+  
+  override def normalize(u: Vector): Vector = u / u.norm
+  
+  override def distance(u: Vector, v: Vector): Scalar = {
+    if (u.dimension != v.dimension) throw new DimensionException
+    var x = 0.0
+    var i = 0
+    while (i < dimension) {
+      val di = u(i) - v(i)
+      x += di * di
+      i += 1
+    }
+    new Scalar(math.sqrt(x))
+  }
   
   def map(RM: R): Morphism[RM.type] = new Morphism[RM.type](RM)
   
