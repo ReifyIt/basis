@@ -35,17 +35,14 @@ trait RealVector[RealVector] extends Vector[RealVector, Real] {
     */
   def / (scalar: Double): RealVector
   
-  def :* (scalar: Real): RealVector =
-    this :* scalar.toDouble
+  def :* (scalar: Real): RealVector = this :* scalar.toDouble
   
-  def *: (scalar: Real): RealVector =
-    scalar.toDouble *: this
+  def *: (scalar: Real): RealVector = scalar.toDouble *: this
   
   /** Divides this $vector by a $scalar.
     * 
     * @param  scalar  the $scalar to divide by.
     * @return the scaled $vector.
     */
-  def / (scalar: Real): RealVector =
-    this / scalar.toDouble
+  def / (scalar: Real): RealVector = this / scalar.toDouble
 }

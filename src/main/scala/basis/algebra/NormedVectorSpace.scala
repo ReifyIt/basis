@@ -5,8 +5,10 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.algebra
 
-package object algebra {
+trait NormedVectorSpace extends VectorSpace {
+  def norm(u: Vector): Scalar
   
+  def normalize(u: Vector): Vector = u :* norm(u).reciprocal
 }

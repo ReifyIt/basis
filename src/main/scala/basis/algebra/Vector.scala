@@ -14,10 +14,10 @@ package basis.algebra
   * @tparam Vector  the vector type of the module.
   * @tparam Scalar  the scalar type of the module.
   * 
-  * @define point   $vector
   * @define vector  vector
+  * @define scalar  scalar
   */
-trait Vector[Vector, -Scalar] extends AffinePoint[Vector, Vector, Scalar] {
+trait Vector[Vector, -Scalar] {
   /** Adds a $vector to this $vector.
     * 
     * @param  that  the $vector to add.
@@ -51,8 +51,4 @@ trait Vector[Vector, -Scalar] extends AffinePoint[Vector, Vector, Scalar] {
     * @return the scaled $vector.
     */
   def *: (scalar: Scalar): Vector
-  
-  def :+ (that: Vector): Vector = this + that
-  
-  def :- (that: Vector): Vector = this - that
 }

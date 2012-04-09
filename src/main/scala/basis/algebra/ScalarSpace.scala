@@ -5,8 +5,16 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.algebra
 
-package object algebra {
+trait ScalarSpace[F <: Field[F]] extends VectorSpace {
+  type Scalar = F
   
+  type Vector = F
+  
+  val Scalar: ScalarSpace[F] = this
+  
+  def zero: F
+  
+  def unit: F
 }

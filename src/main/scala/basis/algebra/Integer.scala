@@ -7,7 +7,6 @@
 
 package basis.algebra
 
-import basis.memory._
 import basis.util.MurmurHash._
 
 /** An integer modeled by a `Long` value.
@@ -103,7 +102,7 @@ object Integer {
   val zero: Integer = new Integer(0L)
   
   /** The unit `Integer` value. */
-  val one: Integer = new Integer(1L)
+  val unit: Integer = new Integer(1L)
   
   def apply(value: Long): Integer = new Integer(value)
   
@@ -115,30 +114,5 @@ object Integer {
   /** Implicitly converts an `Integer` value to a `Long` value. */
   implicit def unbox(integer: Integer): Long = integer.value
   
-  /** The additive identity typeclass for the `Integer` ring. */
-  implicit val additiveIdentity = new Zero(zero)
-  
-  /** The multiplicative identity typeclass for the `Integer` ring. */
-  implicit val multiplicativeIdentity = new One(one)
-  
-  /** The default struct for `Integer` values. */
-  implicit lazy val struct = new StructInteger
-  
-  /** A struct for `Integer` values. */
-  class StructInteger(fieldOffset: Long, fieldSize: Long, fieldAlignment: Long)
-    extends Struct1[Long, Integer](fieldOffset, fieldSize, fieldAlignment) {
-    
-    def this() = this(0L, 0L, 0L)
-    
-    def load(data: Data, address: Long): Integer =
-      new Integer(data.loadLong(address + offset))
-    
-    def store(data: Data, address: Long, integer: Integer): Unit =
-      data.storeLong(address + offset, integer.value)
-    
-    override def project(offset: Long, size: Long, alignment: Long): StructInteger =
-      new StructInteger(this.offset + offset, size, alignment)
-    
-    override def toString: String = "StructInteger"
-  }
+  override def toString: String = "Integer"
 }

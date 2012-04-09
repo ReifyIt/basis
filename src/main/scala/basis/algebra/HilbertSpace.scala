@@ -5,8 +5,16 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.algebra
 
-package object algebra {
+trait HilbertSpace
+  extends InnerProductSpace
+    with NormedVectorSpace
+    with MetricSpace {
   
+  type Scalar <: CompleteField[Scalar]
+  
+  def norm(u: Vector): Scalar = innerProduct(u, u).sqrt
+  
+  def distance(u: Vector, v: Vector): Scalar = norm(u - v)
 }

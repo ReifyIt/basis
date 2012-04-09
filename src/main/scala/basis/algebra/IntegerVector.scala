@@ -11,26 +11,24 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
-  * @tparam IntegralVector  the vector type of the module.
+  * @tparam IntegerVector   the vector type of the module.
   */
-trait IntegerVector[IntegralVector] extends Vector[IntegralVector, Integer] {
+trait IntegerVector[IntegerVector] extends Vector[IntegerVector, Integer] {
   /** Multiplies this $vector by a `Long` value on the right.
     * 
     * @param  scalar  the `Long` value to multiply by.
     * @return the scaled $vector.
     */
-  def :* (scalar: Long): IntegralVector
+  def :* (scalar: Long): IntegerVector
   
   /** Multiplies this $vector by a `Long` value on the left.
     * 
     * @param  scalar  the `Long` value to multiply by.
     * @return the scaled $vector.
     */
-  def *: (scalar: Long): IntegralVector
+  def *: (scalar: Long): IntegerVector
   
-  def :* (scalar: Integer): IntegralVector =
-    this :* scalar.toLong
+  def :* (scalar: Integer): IntegerVector = this :* scalar.toLong
   
-  def *: (scalar: Integer): IntegralVector =
-    scalar.toLong *: this
+  def *: (scalar: Integer): IntegerVector = scalar.toLong *: this
 }

@@ -7,7 +7,6 @@
 
 package basis.algebra
 
-import basis.memory._
 import basis.util.MurmurHash._
 
 /** A complex number modeled by a `Double` real part and a `Double` imaginary part.
@@ -109,9 +108,7 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
   }
   
   override def toString: String = {
-    if (isNaN) "NaN"
-    else if (isInfinite) "Infinity"
-    else if (java.lang.Double.compare(imaginary, 0.0) < 0)
+    if (java.lang.Double.compare(imaginary, 0.0) < 0)
       "("+ real +" - "+ -imaginary +"i"+")"
     else
       "("+ real +" + "+  imaginary +"i"+")"
@@ -119,12 +116,12 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
 }
 
 /** Contains factory methods and implicit conversions for `Complex` values. */
-object Complex {
+object Complex extends ScalarSpace[Complex] {
   /** The zero `Complex` value. */
   val zero: Complex = new Complex(0.0, 0.0)
   
   /** The unit `Complex` value. */
-  val one: Complex = new Complex(1.0, 0.0)
+  val unit: Complex = new Complex(1.0, 0.0)
   
   /** The imaginary unit `Complex` value. */
   val i: Complex = new Complex(0.0, 1.0)
@@ -133,6 +130,12 @@ object Complex {
   
   def unapply(complex: Complex): Some[(Double, Double)] = Some(complex.real, complex.imaginary)
   
+  /** Implicitly converts a `Double` value to a real `Complex` value. */
+  implicit def real(value: Double): Complex = new Complex(value, 0.0)
+  
+  /** Converts a `Double` value to an imaginary `Complex` value. */
+  def imaginary(value: Double): Complex = new Complex(0.0, value)
+  
   /** Constructs a `Complex` value with polar coordinates.
     * 
     * @param  r   the modulus of the complex number.
@@ -140,53 +143,4 @@ object Complex {
     * @return a new `Complex` value.
     */
   def polar(r: Double, φ: Double): Complex = new Complex(r * math.cos(φ), r * math.sin(φ))
-  
-  /** Implicitly converts a `Double` value to a real `Complex` value. */
-  implicit def real(value: Double): Complex = new Complex(value, 0.0)
-  
-  /** Converts a `Double` value to an imaginary `Complex` value. */
-  def imaginary(value: Double): Complex = new Complex(0.0, value)
-  
-  /** The additive identity typeclass for the `Complex` field. */
-  implicit val additiveIdentity = new Zero(zero)
-  
-  /** The multiplicative identity typeclass for the `Complex` field. */
-  implicit val multiplicativeIdentity = new One(one)
-  
-  /** The euclidean norm typeclass for the `Complex` field. */
-  implicit val euclideanNorm = Norm[Complex, Real] {
-    complex => new Real(math.hypot(complex.real, complex.imaginary))
-  }
-  
-  /** The default struct for `Complex` values. */
-  implicit lazy val struct = new StructComplex
-  
-  /** A struct for `Complex` values. */
-  class StructComplex(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    extends Struct2[Double, Double, Complex](frameOffset, frameSize, frameAlignment) {
-    
-    def this() = this(0L, 0L, 0L)
-    
-    /** The `real` field projection of this struct. */
-    def real: Struct[Double] = field1
-    
-    /** The `imaginary` field projection of this struct. */
-    def imaginary: Struct[Double] = field2
-    
-    def load(data: Data, address: Long): Complex = {
-      val real      = data.loadDouble(address + offset1)
-      val imaginary = data.loadDouble(address + offset2)
-      new Complex(real, imaginary)
-    }
-    
-    def store(data: Data, address: Long, complex: Complex) {
-      data.storeDouble(address + offset1, complex.real)
-      data.storeDouble(address + offset2, complex.imaginary)
-    }
-    
-    override def project(offset: Long, size: Long, alignment: Long): StructComplex =
-      new StructComplex(offset1 + offset, size, alignment)
-    
-    override def toString: String = "StructComplex"
-  }
 }

@@ -38,7 +38,7 @@ object BasisBuild extends Build {
   lazy val basisAlgebra = Project(
     id           = "basis-algebra",
     base         = file("."),
-    dependencies = Seq(basisMemory, basisUtil),
+    dependencies = Seq(basisUtil),
     settings     = commonSettings ++ Seq(
       modulePath := "basis/algebra"
     )
@@ -60,7 +60,7 @@ object BasisBuild extends Build {
     scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
     scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
     target <<= (target, name)(_ / _),
-    scalacOptions ++= Seq("-optimise", "-Xno-forwarders"),
+    scalacOptions ++= Seq("-optimise", "-Xno-forwarders", "-Ydependent-method-types"),
     scalacOptions in (Compile, doc) <++= (version, baseDirectory in LocalProject("basis")) map {
       (version, baseDirectory) =>
         val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version

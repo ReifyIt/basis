@@ -5,8 +5,12 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.algebra
 
-package object algebra {
+trait Module {
+  type Scalar <: Ring[Scalar]
   
+  type Vector <: basis.algebra.Vector[Vector, Scalar]
+  
+  def zero: Vector
 }

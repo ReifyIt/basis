@@ -5,8 +5,8 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.algebra
 
-package object algebra {
-  
+trait InnerProductSpace extends VectorSpace {
+  def innerProduct(u: Vector, v: Vector): Scalar
 }

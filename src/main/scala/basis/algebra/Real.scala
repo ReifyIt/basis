@@ -7,7 +7,6 @@
 
 package basis.algebra
 
-import basis.memory._
 import basis.util.MurmurHash._
 
 /** A real number modeled by a `Double` value.
@@ -54,8 +53,6 @@ final class Real(protected val value: Double)
   
   def / (x: Double): Real = new Real(value / x)
   
-  def norm: Real = this
-  
   def pow(that: Real): Real = new Real(math.pow(value, that.value))
   
   def pow(x: Double): Real = new Real(math.pow(value, x))
@@ -98,59 +95,18 @@ final class Real(protected val value: Double)
   def toDouble: Double = value
 }
 
-/** Contains factory methods and implicit conversions for `Real` values. */
-object Real {
-  /** The zero `Real` value. */
+object Real extends ScalarSpace[Real] {
   val zero: Real = new Real(0.0)
   
-  /** The unit `Real` value. */
-  val one: Real = new Real(1.0)
+  val unit: Real = new Real(1.0)
   
   def apply(value: Double): Real = new Real(value)
   
   def unapply(real: Real): Some[Double] = Some(real.value)
   
-  /** Implicitly converts a `Double` value to a `Real` value. */
   implicit def box(value: Double): Real = new Real(value)
   
-  /** Implicitly converts a `Real` value to a `Double` value. */
   implicit def unbox(real: Real): Double = real.value
   
-  /** The additive identity typeclass for the `Real` field. */
-  implicit val additiveIdentity = new Zero(zero)
-  
-  /** The multiplicative identity typeclass for the `Real` field. */
-  implicit val multiplicativeIdentity = new One(one)
-  
-  /** The inner product typeclass for the `Real` field. */
-  implicit val product = InnerProduct[Real, Real](_ * _)
-  
-  /** The euclidean norm typeclass for the `Real` field. */
-  implicit val euclideanNorm = Norm[Real, Real](identity)
-  
-  /** The euclidean metric typeclass for the `Real` field. */
-  implicit val euclideanMetric = Metric[Real, Real] {
-    (x, y) => new Real(math.abs(y.value - x.value))
-  }
-  
-  /** The default struct for `Real` values. */
-  implicit lazy val struct = new StructReal
-  
-  /** A struct for `Real` values. */
-  class StructReal(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    extends Struct1[Double, Real](frameOffset, frameSize, frameAlignment) {
-    
-    def this() = this(0L, 0L, 0L)
-    
-    def load(data: Data, address: Long): Real =
-      new Real(data.loadDouble(address))
-    
-    def store(data: Data, address: Long, real: Real): Unit =
-      data.storeDouble(address, real.value)
-    
-    override def project(offset: Long, size: Long, alignment: Long): StructReal =
-      new StructReal(this.offset + offset, size, alignment)
-    
-    override def toString: String = "StructReal"
-  }
+  override def toString: String = "Real"
 }
