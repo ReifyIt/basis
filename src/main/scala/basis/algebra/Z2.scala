@@ -40,6 +40,8 @@ object Z2 extends Module {
       "<"+ x +", "+ y +">"
   }
   
+  val Scalar = Integer
+  
   val zero: Vector = new Vector(0L, 0L)
   
   def apply(x: Long, y: Long): Vector =
