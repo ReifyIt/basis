@@ -15,97 +15,74 @@ trait MatrixR3x3[M <: MatrixR3x3[M, V], V <: VectorR3[V]]
     type RowVector = V
   }
   
-  def _1_1: Double
-  def _1_2: Double
-  def _1_3: Double
-  def _2_1: Double
-  def _2_2: Double
-  def _2_3: Double
-  def _3_1: Double
-  def _3_2: Double
-  def _3_3: Double
+  override def column1: V = Space.Column(this(0), this(3), this(6))
   
-  def apply(k: Int): Double = k match {
-    case 0 => _1_1
-    case 1 => _1_2
-    case 2 => _1_3
-    case 3 => _2_1
-    case 4 => _2_2
-    case 5 => _2_3
-    case 6 => _3_1
-    case 7 => _3_2
-    case 8 => _3_3
-    case _ => throw new IndexOutOfBoundsException(k.toString)
-  }
+  override def column2: V = Space.Column(this(1), this(4), this(7))
   
-  override def column1: V = Space.Column(_1_1, _2_1, _3_1)
+  override def column3: V = Space.Column(this(2), this(5), this(8))
   
-  override def column2: V = Space.Column(_1_2, _2_2, _3_2)
+  override def row1: V = Space.Row(this(0), this(1), this(2))
   
-  override def column3: V = Space.Column(_1_3, _2_3, _3_3)
+  override def row2: V = Space.Row(this(3), this(4), this(5))
   
-  override def row1: V = Space.Row(_1_1, _1_2, _1_3)
-  
-  override def row2: V = Space.Row(_2_1, _2_2, _2_3)
-  
-  override def row3: V = Space.Row(_3_1, _3_2, _3_3)
+  override def row3: V = Space.Row(this(6), this(7), this(8))
   
   override def + (that: M): M =
-    Space(_1_1 + that._1_1, _1_2 + that._1_2, _1_3 + that._1_3,
-          _2_1 + that._2_1, _2_2 + that._2_2, _2_3 + that._2_3,
-          _3_1 + that._3_1, _3_2 + that._3_2, _3_3 + that._3_3)
+    Space(this(0) + that(0), this(1) + that(1), this(2) + that(2),
+          this(3) + that(3), this(4) + that(4), this(5) + that(5),
+          this(6) + that(6), this(7) + that(7), this(8) + that(8))
   
   override def unary_- : M =
-    Space(-_1_1, -_1_2, -_1_3,
-          -_2_1, -_2_2, -_2_3,
-          -_3_1, -_3_2, -_3_3)
+    Space(-this(0), -this(1), -this(2),
+          -this(3), -this(4), -this(5),
+          -this(6), -this(7), -this(8))
   
   override def - (that: M): M =
-    Space(_1_1 - that._1_1, _1_2 - that._1_2, _1_3 - that._1_3,
-          _2_1 - that._2_1, _2_2 - that._2_2, _2_3 - that._2_3,
-          _3_1 - that._3_1, _3_2 - that._3_2, _3_3 - that._3_3)
+    Space(this(0) - that(0), this(1) - that(1), this(2) - that(2),
+          this(3) - that(3), this(4) - that(4), this(5) - that(5),
+          this(6) - that(6), this(7) - that(7), this(8) - that(8))
   
   override def :* (scalar: Double): M =
-    Space(_1_1 * scalar, _1_2 * scalar, _1_3 * scalar,
-          _2_1 * scalar, _2_2 * scalar, _2_3 * scalar,
-          _3_1 * scalar, _3_2 * scalar, _3_3 * scalar)
+    Space(this(0) * scalar, this(1) * scalar, this(2) * scalar,
+          this(3) * scalar, this(4) * scalar, this(5) * scalar,
+          this(6) * scalar, this(7) * scalar, this(8) * scalar)
   
   override def *: (scalar: Double): M = this :* scalar
   
   override def :* (vector: V): V =
-    Space.Column(_1_1 * vector(0) + _1_2 * vector(1) + _1_3 * vector(2),
-                 _2_1 * vector(0) + _2_2 * vector(1) + _2_3 * vector(2),
-                 _3_1 * vector(0) + _3_2 * vector(1) + _3_3 * vector(2))
+    Space.Column(this(0) * vector(0) + this(1) * vector(1) + this(2) * vector(2),
+                 this(3) * vector(0) + this(4) * vector(1) + this(5) * vector(2),
+                 this(6) * vector(0) + this(7) * vector(1) + this(8) * vector(2))
   
   override def *: (vector: V): V =
-    Space.Row(vector(0) * _1_1 + vector(1) * _2_1 + vector(2) * _3_1,
-              vector(0) * _1_2 + vector(1) * _2_2 + vector(2) * _3_2,
-              vector(0) * _1_3 + vector(1) * _2_3 + vector(2) * _3_3)
+    Space.Row(vector(0) * this(0) + vector(1) * this(3) + vector(2) * this(6),
+              vector(0) * this(1) + vector(1) * this(4) + vector(2) * this(7),
+              vector(0) * this(2) + vector(1) * this(5) + vector(2) * this(8))
   
   override def * (that: M): M =
-    Space(_1_1 * that._1_1 + _1_2 * that._2_1 + _1_3 * that._3_1,
-          _1_1 * that._1_2 + _1_2 * that._2_2 + _1_3 * that._3_2,
-          _1_1 * that._1_3 + _1_2 * that._2_3 + _1_3 * that._3_3,
-          _2_1 * that._1_1 + _2_2 * that._2_1 + _2_3 * that._3_1,
-          _2_1 * that._1_2 + _2_2 * that._2_2 + _2_3 * that._3_2,
-          _2_1 * that._1_3 + _2_2 * that._2_3 + _2_3 * that._3_3,
-          _3_1 * that._1_1 + _3_2 * that._2_1 + _3_3 * that._3_1,
-          _3_1 * that._1_2 + _3_2 * that._2_2 + _3_3 * that._3_2,
-          _3_1 * that._1_3 + _3_2 * that._2_3 + _3_3 * that._3_3)
+    Space(this(0) * that(0) + this(1) * that(3) + this(2) * that(6),
+          this(0) * that(1) + this(1) * that(4) + this(2) * that(7),
+          this(0) * that(2) + this(1) * that(5) + this(2) * that(8),
+          this(3) * that(0) + this(4) * that(3) + this(5) * that(6),
+          this(3) * that(1) + this(4) * that(4) + this(5) * that(7),
+          this(3) * that(2) + this(4) * that(5) + this(5) * that(8),
+          this(6) * that(0) + this(7) * that(3) + this(8) * that(6),
+          this(6) * that(1) + this(7) * that(4) + this(8) * that(7),
+          this(6) * that(2) + this(7) * that(5) + this(8) * that(8))
   
   override def inverse: Option[M] = {
     // all 2x2 determinants minor_i_j with row i and column j blocked out.
-    val minor_1_1 = _2_2 * _3_3 - _2_3 * _3_2
-    val minor_1_2 = _2_1 * _3_3 - _2_3 * _3_1
-    val minor_1_3 = _2_1 * _3_2 - _2_2 * _3_1
-    val minor_2_1 = _1_2 * _3_3 - _1_3 * _3_2
-    val minor_2_2 = _1_1 * _3_3 - _1_3 * _3_1
-    val minor_2_3 = _1_1 * _3_2 - _1_2 * _3_1
-    val minor_3_1 = _1_2 * _2_3 - _1_3 * _2_2
-    val minor_3_2 = _1_1 * _2_3 - _1_3 * _2_1
-    val minor_3_3 = _1_1 * _2_2 - _1_2 * _2_1
+    val minor_1_1 = this(4) * this(8) - this(5) * this(7)
+    val minor_1_2 = this(3) * this(8) - this(5) * this(6)
+    val minor_1_3 = this(3) * this(7) - this(4) * this(6)
+    val minor_2_1 = this(1) * this(8) - this(2) * this(7)
+    val minor_2_2 = this(0) * this(8) - this(2) * this(6)
+    val minor_2_3 = this(0) * this(7) - this(1) * this(6)
+    val minor_3_1 = this(1) * this(5) - this(2) * this(4)
+    val minor_3_2 = this(0) * this(5) - this(2) * this(3)
+    val minor_3_3 = this(0) * this(4) - this(1) * this(3)
     
-    val det = _1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3
+    val det = this(0) * minor_1_1 - this(1) * minor_1_2 + this(2) * minor_1_3
     if (math.abs(det) >= java.lang.Double.MIN_NORMAL)
       Some(Space(minor_1_1 / det, -minor_2_1 / det,  minor_3_1 / det,
                 -minor_1_2 / det,  minor_2_2 / det, -minor_3_2 / det,
@@ -114,15 +91,15 @@ trait MatrixR3x3[M <: MatrixR3x3[M, V], V <: VectorR3[V]]
   }
   
   override def transpose: M =
-    Space(_1_1, _2_1, _3_1,
-          _1_2, _2_2, _3_2,
-          _1_3, _2_3, _3_3)
+    Space(this(0), this(3), this(6),
+          this(1), this(4), this(7),
+          this(2), this(5), this(8))
   
   override def determinant: Real = {
     // 2x2 determinants minor_i_j with row i and column j blocked out.
-    val minor_1_1 = _2_2 * _3_3 - _2_3 * _3_2
-    val minor_1_2 = _2_1 * _3_3 - _2_3 * _3_1
-    val minor_1_3 = _2_1 * _3_2 - _2_2 * _3_1
-    new Real(_1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3)
+    val minor_1_1 = this(4) * this(8) - this(5) * this(7)
+    val minor_1_2 = this(3) * this(8) - this(5) * this(6)
+    val minor_1_3 = this(3) * this(7) - this(4) * this(6)
+    new Real(this(0) * minor_1_1 - this(1) * minor_1_2 + this(2) * minor_1_3)
   }
 }

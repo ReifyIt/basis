@@ -15,69 +15,57 @@ trait MatrixR2x2[M <: MatrixR2x2[M, V], V <: VectorR2[V]]
     type RowVector = V
   }
   
-  def _1_1: Double
-  def _1_2: Double
-  def _2_1: Double
-  def _2_2: Double
+  override def column1: V = Space.Column(this(0), this(2))
   
-  def apply(k: Int): Double = k match {
-    case 0 => _1_1
-    case 1 => _1_2
-    case 2 => _2_1
-    case 3 => _2_2
-    case _ => throw new IndexOutOfBoundsException(k.toString)
-  }
+  override def column2: V = Space.Column(this(1), this(3))
   
-  override def column1: V = Space.Column(_1_1, _2_1)
+  override def row1: V = Space.Row(this(0), this(1))
   
-  override def column2: V = Space.Column(_1_2, _2_2)
-  
-  override def row1: V = Space.Row(_1_1, _1_2)
-  
-  override def row2: V = Space.Row(_2_1, _2_2)
+  override def row2: V = Space.Row(this(2), this(3))
   
   override def + (that: M): M =
-    Space(_1_1 + that._1_1, _1_2 + that._1_2,
-          _2_1 + that._2_1, _2_2 + that._2_2)
+    Space(this(0) + that(0), this(1) + that(1),
+          this(2) + that(2), this(3) + that(3))
   
   override def unary_- : M =
-    Space(-_1_1, -_1_2,
-          -_2_1, -_2_2)
+    Space(-this(0), -this(1),
+          -this(2), -this(3))
   
   override def - (that: M): M =
-    Space(_1_1 - that._1_1, _1_2 - that._1_2,
-          _2_1 - that._2_1, _2_2 - that._2_2)
+    Space(this(0) - that(0), this(1) - that(1),
+          this(2) - that(2), this(3) - that(3))
   
   override def :* (scalar: Double): M =
-    Space(_1_1 * scalar, _1_2 * scalar,
-          _2_1 * scalar, _2_2 * scalar)
+    Space(this(0) * scalar, this(1) * scalar,
+          this(2) * scalar, this(3) * scalar)
   
   override def *: (scalar: Double): M = this :* scalar
   
   override def :* (vector: V): V =
-    Space.Column(_1_1 * vector(0) + _1_2 * vector(1),
-                 _2_1 * vector(0) + _2_2 * vector(1))
+    Space.Column(this(0) * vector(0) + this(1) * vector(1),
+                 this(2) * vector(0) + this(3) * vector(1))
   
   override def *: (vector: V): V =
-    Space.Row(vector(0) * _1_1 + vector(1) * _2_1,
-              vector(0) * _1_2 + vector(1) * _2_2)
+    Space.Row(vector(0) * this(0) + vector(1) * this(2),
+              vector(0) * this(1) + vector(1) * this(3))
   
   override def * (that: M): M =
-    Space(_1_1 * that._1_1 + _1_2 * that._2_1,
-          _1_1 * that._1_2 + _1_2 * that._2_2,
-          _2_1 * that._1_1 + _2_2 * that._2_1,
-          _2_1 * that._1_2 + _2_2 * that._2_2)
+    Space(this(0) * that(0) + this(1) * that(2),
+          this(0) * that(1) + this(1) * that(3),
+          this(2) * that(0) + this(3) * that(2),
+          this(2) * that(1) + this(3) * that(3))
   
   override def inverse: Option[M] = {
-    val det = _1_1 * _2_2 - _1_2 * _2_1
+    val det = this(0) * this(3) - this(1) * this(2)
     if (math.abs(det) >= java.lang.Double.MIN_NORMAL)
-      Some(Space(_2_2 / det, -_1_2 / det,
-                -_2_1 / det,  _1_1 / det))
+      Some(Space(this(3) / det, -this(1) / det,
+                -this(2) / det,  this(0) / det))
     else None
   }
   
   override def transpose: M =
-    Space.Transpose(_1_1, _2_1,  _1_2, _2_2)
+    Space.Transpose(this(0), this(2),  this(1), this(3))
   
-  override def determinant: Real = new Real(_1_1 * _2_2 - _1_2 * _2_1)
+  override def determinant: Real =
+    new Real(this(0) * this(3) - this(1) * this(2))
 }

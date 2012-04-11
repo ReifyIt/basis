@@ -55,6 +55,19 @@ object R3x3 extends R3x3 {
     extends MatrixR3x3[Matrix, R3.Vector] {
     
     def Space = R3x3
+    
+    def apply(k: Int): Double = k match {
+      case 0 => _1_1
+      case 1 => _1_2
+      case 2 => _1_3
+      case 3 => _2_1
+      case 4 => _2_2
+      case 5 => _2_3
+      case 6 => _3_1
+      case 7 => _3_2
+      case 8 => _3_3
+      case _ => throw new IndexOutOfBoundsException(k.toString)
+    }
   }
   
   type RowVector = R3.Vector

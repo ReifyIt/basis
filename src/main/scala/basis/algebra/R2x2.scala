@@ -48,6 +48,14 @@ object R2x2 extends R2x2 {
     extends MatrixR2x2[Matrix, R2.Vector] {
     
     def Space = R2x2
+    
+    def apply(k: Int): Double = k match {
+      case 0 => _1_1
+      case 1 => _1_2
+      case 2 => _2_1
+      case 3 => _2_2
+      case _ => throw new IndexOutOfBoundsException(k.toString)
+    }
   }
   
   type RowVector = R2.Vector

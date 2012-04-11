@@ -75,5 +75,6 @@ trait MatrixF2x2[M <: MatrixF2x2[M, V, S],
   override def transpose: M =
     Space.Transpose(entry(0), entry(2),  entry(1), entry(3))
   
-  def determinant: S = entry(0) * entry(3) - entry(1) * entry(2)
+  def determinant: S =
+    entry(0) * entry(3) - entry(1) * entry(2)
 }
