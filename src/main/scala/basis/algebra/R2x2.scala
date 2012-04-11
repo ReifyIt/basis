@@ -35,7 +35,7 @@ trait R2x2 extends F2x2 with RealMatrixSpace { self =>
   
   def apply(_1_1: Scalar, _1_2: Scalar,
             _2_1: Scalar, _2_2: Scalar): Matrix =
-    apply(_1_1, _1_2,  _2_1, _2_2)
+    apply(_1_1.toDouble, _1_2.toDouble,  _2_1.toDouble, _2_2.toDouble)
   
   def apply(_1_1: Double, _1_2: Double,
             _2_1: Double, _2_2: Double): Matrix
