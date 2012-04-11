@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait GeneralVector[V, S] {
+trait VectorElement[V, S] {
   def Space: FreeModule {
     type Vector = V
     type Scalar = S

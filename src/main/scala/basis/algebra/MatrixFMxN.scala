@@ -9,14 +9,14 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-trait GeneralMatrix[M <: GeneralMatrix[M, T, C, R, S], 
-                    T <: GeneralMatrix[T, M, R, C, S],
-                    C <: CoordinateVector[C, S],
-                    R <: CoordinateVector[R, S],
-                    S <: RingElement[S]]
-  extends Equals with GeneralVector[M, S] {
+trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S], 
+                 T <: MatrixFMxN[T, M, R, C, S],
+                 C <: VectorFN[C, S],
+                 R <: VectorFN[R, S],
+                 S <: RingElement[S]]
+  extends Equals with VectorElement[M, S] {
   
-  def Space: MatrixModule {
+  def Space: FMxN {
     type Matrix = M
     type Transpose = T
     type ColumnVector = C
@@ -177,10 +177,10 @@ trait GeneralMatrix[M <: GeneralMatrix[M, T, C, R, S],
   }
   
   def canEqual(other: Any): Boolean =
-    other.isInstanceOf[GeneralMatrix[_, _, _, _, _]]
+    other.isInstanceOf[MatrixFMxN[_, _, _, _, _]]
   
   override def equals(other: Any): Boolean = other match {
-    case that: GeneralMatrix[_, _, _, _, _] =>
+    case that: MatrixFMxN[_, _, _, _, _] =>
       val size = M * N
       var equal = that.canEqual(this) && M == that.M && N == that.N
       var k = 0

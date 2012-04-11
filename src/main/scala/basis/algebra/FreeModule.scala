@@ -8,7 +8,7 @@
 package basis.algebra
 
 trait FreeModule { self =>
-  type Vector <: GeneralVector[Vector, Scalar]
+  type Vector <: VectorElement[Vector, Scalar]
   
   type Scalar <: RingElement[Scalar]
   

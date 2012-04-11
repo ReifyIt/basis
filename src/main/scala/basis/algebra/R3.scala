@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait R3 extends F3 with RealCoordinateSpace {
+trait R3 extends F3 with RN {
   type Vector <: VectorR3[Vector]
   
   override def zero: Vector = apply(0.0, 0.0, 0.0)

@@ -7,8 +7,8 @@
 
 package basis.algebra
 
-trait RealCoordinateSpace extends CoordinateSpace {
-  type Vector <: RealCoordinateVector[Vector]
+trait RN extends VectorSpace with FN {
+  type Vector <: VectorRN[Vector]
   
   type Scalar = Real
   

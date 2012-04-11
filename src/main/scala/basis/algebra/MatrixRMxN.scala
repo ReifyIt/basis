@@ -7,13 +7,13 @@
 
 package basis.algebra
 
-trait RealMatrix[M <: RealMatrix[M, T, C, R], 
-                 T <: RealMatrix[T, M, R, C],
-                 C <: RealCoordinateVector[C],
-                 R <: RealCoordinateVector[R]]
-  extends GeneralMatrix[M, T, C, R, Real] {
+trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R], 
+                 T <: MatrixRMxN[T, M, R, C],
+                 C <: VectorRN[C],
+                 R <: VectorRN[R]]
+  extends MatrixFMxN[M, T, C, R, Real] {
   
-  def Space: RealMatrixSpace {
+  def Space: RMxN {
     type Matrix = M
     type Transpose = T
     type ColumnVector = C

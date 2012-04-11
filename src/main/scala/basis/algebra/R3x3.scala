@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait R3x3 extends F3x3 with RealMatrixSpace { self =>
+trait R3x3 extends F3x3 with RMxN { self =>
   type Matrix <: MatrixR3x3[Matrix, RowVector]
   
   type RowVector <: VectorR3[RowVector]

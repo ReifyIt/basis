@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait R4x4 extends F4x4 with RealMatrixSpace { self =>
+trait R4x4 extends F4x4 with RMxN { self =>
   type Matrix <: MatrixR4x4[Matrix, RowVector]
   
   type RowVector <: VectorR4[RowVector]

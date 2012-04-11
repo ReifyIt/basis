@@ -7,18 +7,20 @@
 
 package basis.algebra
 
-trait MatrixModule extends FreeModule { self =>
-  type Matrix <: GeneralMatrix[Matrix, Transpose, ColumnVector, RowVector, Scalar]
+trait RMxN extends VectorSpace with FMxN { self =>
+  type Matrix <: MatrixRMxN[Matrix, Transpose, ColumnVector, RowVector]
   
-  type Transpose <: GeneralMatrix[Transpose, Matrix, RowVector, ColumnVector, Scalar]
+  type Transpose <: MatrixRMxN[Transpose, Matrix, RowVector, ColumnVector]
   
-  type ColumnVector <: CoordinateVector[ColumnVector, Scalar]
+  type ColumnVector <: VectorRN[ColumnVector]
   
-  type RowVector <: CoordinateVector[RowVector, Scalar]
+  type RowVector <: VectorRN[RowVector]
   
-  type Vector = Matrix
+  type Scalar = Real
   
-  def Transpose: MatrixModule {
+  val Scalar = Real
+  
+  def Transpose: RMxN {
     type Matrix = self.Transpose
     type Transpose = self.Matrix
     type ColumnVector = self.RowVector
@@ -26,28 +28,28 @@ trait MatrixModule extends FreeModule { self =>
     type Scalar = self.Scalar
   }
   
-  def Column: CoordinateModule {
+  def Column: RN {
     type Vector = self.ColumnVector
     type Scalar = self.Scalar
   }
   
-  def Row: CoordinateModule {
+  def Row: RN {
     type Vector = self.RowVector
     type Scalar = self.Scalar
   }
   
-  def zero: Matrix = {
-    val z = Scalar.zero
-    val entries = new Array[AnyRef](dimension)
-    var k = 0
-    while (k < entries.length) {
-      entries(k) = z
-      k += 1
+  override def zero: Matrix = apply(new Array[Double](dimension))
+  
+  override def apply(entries: Seq[Scalar]): Matrix = {
+    if (entries.length != dimension) throw new DimensionException
+    val xs = new Array[Double](dimension)
+    var i = 0
+    while (i < xs.length) {
+      xs(i) = entries(i).toDouble
+      i += 1
     }
-    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+    apply(xs)
   }
   
-  def dimension: Int = Column.dimension * Row.dimension
-  
-  def apply(entries: Seq[Scalar]): Matrix
+  def apply(entries: Array[Double]): Matrix
 }

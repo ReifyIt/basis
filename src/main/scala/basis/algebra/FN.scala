@@ -7,22 +7,21 @@
 
 package basis.algebra
 
-trait MatrixSpace extends VectorSpace with MatrixModule { self =>
-  def Transpose: MatrixSpace {
-    type Matrix = self.Transpose
-    type Transpose = self.Matrix
-    type ColumnVector = self.RowVector
-    type RowVector = self.ColumnVector
-    type Scalar = self.Scalar
+trait FN extends FreeModule {
+  type Vector <: VectorFN[Vector, Scalar]
+  
+  def zero: Vector = {
+    val z = Scalar.zero
+    val coords = new Array[AnyRef](dimension)
+    var i = 0
+    while (i < dimension) {
+      coords(i) = z
+      i += 1
+    }
+    apply(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def Column: CoordinateSpace {
-    type Vector = self.ColumnVector
-    type Scalar = self.Scalar
-  }
+  def apply(coords: Seq[Scalar]): Vector
   
-  def Row: CoordinateSpace {
-    type Vector = self.RowVector
-    type Scalar = self.Scalar
-  }
+  def dimension: Int
 }

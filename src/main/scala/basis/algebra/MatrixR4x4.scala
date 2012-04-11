@@ -8,7 +8,7 @@
 package basis.algebra
 
 trait MatrixR4x4[M <: MatrixR4x4[M, V], V <: VectorR4[V]]
-  extends MatrixF4x4[M, V, Real] with RealMatrix[M, M, V, V] {
+  extends MatrixF4x4[M, V, Real] with MatrixRMxN[M, M, V, V] {
   
   def Space: R4x4 {
     type Matrix = M

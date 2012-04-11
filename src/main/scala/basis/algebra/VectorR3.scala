@@ -7,10 +7,7 @@
 
 package basis.algebra
 
-trait VectorR3[V <: VectorR3[V]]
-  extends VectorF3[V, Real]
-    with RealCoordinateVector[V] {
-  
+trait VectorR3[V <: VectorR3[V]] extends VectorF3[V, Real] with VectorRN[V] {
   def Space: R3 {
     type Vector = V
   }

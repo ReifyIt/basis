@@ -10,7 +10,7 @@ package basis.algebra
 trait MatrixF2x2[M <: MatrixF2x2[M, V, S],
                  V <: VectorF2[V, S],
                  S <: FieldElement[S]]
-  extends GeneralMatrix[M, M, V, V, S] {
+  extends MatrixFMxN[M, M, V, V, S] {
   
   def Space: F2x2 {
     type Matrix = M

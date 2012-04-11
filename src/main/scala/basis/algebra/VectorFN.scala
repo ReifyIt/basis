@@ -9,10 +9,10 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-trait CoordinateVector[V <: CoordinateVector[V, S], S <: RingElement[S]]
-  extends Equals with GeneralVector[V, S] {
+trait VectorFN[V <: VectorFN[V, S], S <: RingElement[S]]
+  extends Equals with VectorElement[V, S] {
   
-  def Space: CoordinateModule {
+  def Space: FN {
     type Vector = V
     type Scalar = S
   }
@@ -76,10 +76,10 @@ trait CoordinateVector[V <: CoordinateVector[V, S], S <: RingElement[S]]
   }
   
   def canEqual(other: Any): Boolean =
-    other.isInstanceOf[CoordinateVector[_, _]]
+    other.isInstanceOf[VectorFN[_, _]]
   
   override def equals(other: Any): Boolean = other match {
-    case that: CoordinateVector[_, _] =>
+    case that: VectorFN[_, _] =>
       var equal = that.canEqual(this) && dimension == that.dimension
       var i = 0
       while (i < dimension && equal) {

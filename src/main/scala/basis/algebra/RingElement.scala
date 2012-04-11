@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait RingElement[G] extends GeneralVector[G, G] {
+trait RingElement[G] extends VectorElement[G, G] {
   def Space: Ring {
     type Scalar = G
   }

@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait F2 extends CoordinateSpace {
+trait F2 extends VectorSpace with FN {
   type Vector <: VectorF2[Vector, Scalar]
   
   final def dimension: Int = 2
