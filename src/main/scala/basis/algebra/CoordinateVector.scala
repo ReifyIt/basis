@@ -9,10 +9,10 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-trait CoordinateVector[V <: CoordinateVector[V, S], S <: FieldElement[S]]
+trait CoordinateVector[V <: CoordinateVector[V, S], S <: RingElement[S]]
   extends Equals with GeneralVector[V, S] {
   
-  def Space: CoordinateSpace {
+  def Space: CoordinateModule {
     type Vector = V
     type Scalar = S
   }

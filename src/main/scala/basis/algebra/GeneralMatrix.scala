@@ -13,10 +13,10 @@ trait GeneralMatrix[M <: GeneralMatrix[M, T, C, R, S],
                     T <: GeneralMatrix[T, M, R, C, S],
                     C <: CoordinateVector[C, S],
                     R <: CoordinateVector[R, S],
-                    S <: FieldElement[S]]
+                    S <: RingElement[S]]
   extends Equals with GeneralVector[M, S] {
   
-  def Space: MatrixSpace {
+  def Space: MatrixModule {
     type Matrix = M
     type Transpose = T
     type ColumnVector = C

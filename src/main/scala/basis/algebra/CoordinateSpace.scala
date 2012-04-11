@@ -7,21 +7,4 @@
 
 package basis.algebra
 
-trait CoordinateSpace extends VectorSpace {
-  type Vector <: CoordinateVector[Vector, Scalar]
-  
-  def zero: Vector = {
-    val z = Scalar.zero
-    val coords = new Array[AnyRef](dimension)
-    var i = 0
-    while (i < dimension) {
-      coords(i) = z
-      i += 1
-    }
-    apply(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
-  }
-  
-  def apply(coords: Seq[Scalar]): Vector
-  
-  def dimension: Int
-}
+trait CoordinateSpace extends VectorSpace with CoordinateModule
