@@ -9,53 +9,31 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-/** A real number modeled by a `Double` value.
-  * 
-  * @author Chris Sachs
-  * 
-  * @constructor Constructs a `Real` value from a `Double` value.
-  * @param  value   The `Double` value.
-  * 
-  * @define Element   Real
-  * @define element   `Real` value
-  * @define scalar    `Real` value
-  */
-final class Real(protected val value: Double)
-  extends RealVector[Real]
-    with OrderedRing[Real]
-    with CompleteField[Real] {
+final class Real(private val value: Double)
+  extends OrderedRingElement[Real]
+    with CompleteFieldElement[Real] {
+  
+  def Space = Real
   
   def + (that: Real): Real = new Real(value + that.value)
-  
-  def + (x: Double): Real = new Real(value + x)
   
   def unary_- : Real = new Real(-value)
   
   def - (that: Real): Real = new Real(value - that.value)
   
-  def - (x: Double): Real = new Real(value - x)
-  
   def * (that: Real): Real = new Real(value * that.value)
   
-  def * (x: Double): Real = new Real(value * x)
+  def :* (that: Real): Real = new Real(value * that.value)
   
-  override def :* (that: Real): Real = new Real(value * that.value)
+  def *: (that: Real): Real = new Real(that.value * value)
   
-  def :* (x: Double): Real = new Real(value * x)
+  def inverse: Real = new Real(1.0 / value)
   
-  override def *: (that: Real): Real = new Real(that.value * value)
-  
-  def *: (x: Double): Real = new Real(x * value)
-  
-  def reciprocal: Real = new Real(1.0 / value)
-  
-  override def / (that: Real): Real = new Real(value / that.value)
-  
-  def / (x: Double): Real = new Real(value / x)
+  def / (that: Real): Real = new Real(value / that.value)
   
   def pow(that: Real): Real = new Real(math.pow(value, that.value))
   
-  def pow(x: Double): Real = new Real(math.pow(value, x))
+  def pow(n: Int): Real = new Real(math.pow(value, n))
   
   def sqrt: Real = new Real(math.sqrt(value))
   
@@ -82,31 +60,29 @@ final class Real(protected val value: Double)
   
   override def toString: String = value.toString
   
-  /** Converts this `Real` value to an `Int` value. */
   def toInt: Int = value.toInt
   
-  /** Converts this `Real` value to a `Long` value. */
   def toLong: Long = value.toLong
   
-  /** Converts this `Real` value to a `Float` value. */
   def toFloat: Float = value.toFloat
   
-  /** Returns the `Double` value of this `Real` value. */
   def toDouble: Double = value
 }
 
-object Real extends ScalarSpace[Real] {
+object Real extends OrderedRing with CompleteField {
+  type Scalar = Real
+  
   val zero: Real = new Real(0.0)
   
   val unit: Real = new Real(1.0)
   
   def apply(value: Double): Real = new Real(value)
   
-  def unapply(real: Real): Some[Double] = Some(real.value)
+  def unapply(real: Real): Some[Double] = Some(real.toDouble)
   
   implicit def box(value: Double): Real = new Real(value)
   
-  implicit def unbox(real: Real): Double = real.value
+  implicit def unbox(real: Real): Double = real.toDouble
   
   override def toString: String = "Real"
 }

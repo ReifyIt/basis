@@ -7,6 +7,22 @@
 
 package basis.algebra
 
-trait CompleteField extends Field {
-  type Scalar <: CompleteFieldElement[Scalar]
+trait OrderedRingElement[G] extends RingElement[G] {
+  def Space: OrderedRing {
+    type Scalar = G
+  }
+  
+  def abs: G
+  
+  def min(that: G): G
+  
+  def max(that: G): G
+  
+  def < (that: G): Boolean
+  
+  def <= (that: G): Boolean
+  
+  def >= (that: G): Boolean
+  
+  def > (that: G): Boolean
 }

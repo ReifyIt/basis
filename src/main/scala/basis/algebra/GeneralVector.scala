@@ -5,12 +5,21 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.graphics
+package basis.algebra
 
-import basis.algebra._
-
-trait ColorModel extends VectorSpace {
-  type Vector = Color
+trait GeneralVector[V, S] {
+  def Space: FreeModule {
+    type Vector = V
+    type Scalar = S
+  }
   
-  type Color <: basis.algebra.Vector[Color, Scalar]
+  def + (that: V): V
+  
+  def unary_- : V
+  
+  def - (that: V): V
+  
+  def :* (scalar: S): V
+  
+  def *: (scalar: S): V
 }

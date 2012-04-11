@@ -9,23 +9,13 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-/** A complex number modeled by a `Double` real part and a `Double` imaginary part.
-  * 
-  * @author Chris Sachs
-  * 
-  * @constructor Constructs a `Complex` value with a real part and an imaginary part.
-  * @param  real        The real part.
-  * @param  imaginary   The imaginary part.
-  * 
-  * @define Element   Complex
-  * @define element   `Complex` value
-  * @define scalar    `Complex` value
-  */
-final class Complex(val real: Double, val imaginary: Double) extends CompleteField[Complex] {
-  /** Returns `true` if this $element is not a number. */
+final class Complex(val real: Double, val imaginary: Double)
+  extends CompleteFieldElement[Complex] {
+  
+  def Space = Complex
+  
   def isNaN: Boolean = java.lang.Double.isNaN(real) || java.lang.Double.isNaN(imaginary)
   
-  /** Returns `true` if this $element is infinite. */
   def isInfinite: Boolean = !isNaN && (java.lang.Double.isInfinite(real) || java.lang.Double.isInfinite(imaginary))
   
   def + (that: Complex): Complex = new Complex(real + that.real, imaginary + that.imaginary)
@@ -43,9 +33,13 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
       real * that.real - imaginary * that.imaginary,
       imaginary * that.real + real * that.imaginary)
   
+  def :* (that: Complex): Complex = this * that
+  
+  def *: (that: Complex): Complex = that * this
+  
   def * (x: Double): Complex = new Complex(real * x, imaginary * x)
   
-  def reciprocal: Complex = {
+  def inverse: Complex = {
     val absoluteSquare = real * real + imaginary * imaginary
     new Complex(real / absoluteSquare, -imaginary / absoluteSquare)
   }
@@ -73,13 +67,11 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
   
   def pow(x: Double): Complex = (this.log * x).exp
   
-  /** Returns the exponential of this $element. */
   def exp: Complex =
     new Complex(
       math.exp(real) * math.cos(imaginary),
       math.exp(real) * math.sin(imaginary))
   
-  /** Returns the natural logarithm of this $element. */
   def log: Complex = {
     val modulus = math.hypot(real, imaginary)
     val argument = math.atan2(imaginary, real)
@@ -92,7 +84,6 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
     new Complex(r * math.cos(φ), r * math.sin(φ))
   }
   
-  /** Returns the conjugate of this $element. */
   def conjugate: Complex = new Complex(real, -imaginary)
   
   override def equals(other: Any): Boolean = other match {
@@ -115,33 +106,23 @@ final class Complex(val real: Double, val imaginary: Double) extends CompleteFie
   }
 }
 
-/** Contains factory methods and implicit conversions for `Complex` values. */
-object Complex extends ScalarSpace[Complex] {
-  /** The zero `Complex` value. */
+object Complex extends CompleteField {
+  type Scalar = Complex
+  
   val zero: Complex = new Complex(0.0, 0.0)
   
-  /** The unit `Complex` value. */
   val unit: Complex = new Complex(1.0, 0.0)
   
-  /** The imaginary unit `Complex` value. */
   val i: Complex = new Complex(0.0, 1.0)
   
   def apply(real: Double, imaginary: Double): Complex = new Complex(real, imaginary)
   
   def unapply(complex: Complex): Some[(Double, Double)] = Some(complex.real, complex.imaginary)
   
-  /** Implicitly converts a `Double` value to a real `Complex` value. */
   implicit def real(value: Double): Complex = new Complex(value, 0.0)
   
-  /** Converts a `Double` value to an imaginary `Complex` value. */
   def imaginary(value: Double): Complex = new Complex(0.0, value)
   
-  /** Constructs a `Complex` value with polar coordinates.
-    * 
-    * @param  r   the modulus of the complex number.
-    * @param  φ   the argument of the complex number.
-    * @return a new `Complex` value.
-    */
   def polar(r: Double, φ: Double): Complex = new Complex(r * math.cos(φ), r * math.sin(φ))
   
   override def toString: String = "Complex"

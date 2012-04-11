@@ -7,18 +7,6 @@
 
 package basis.algebra
 
-/** An element of a commutative ring with a total order.
-  * 
-  * $LongMorphismInfo
-  * 
-  * @author Chris Sachs
-  * 
-  * @tparam OrderedRing   the element type of the ordered ring.
-  * 
-  * @define Element   OrderedRing
-  * @define element   `OrderedRing` value
-  */
-trait OrderedRing[OrderedRing] extends Ordered[OrderedRing] with Ring[OrderedRing] {
-  /** Returns the absolute value of this $element. */
-  def abs: OrderedRing
+trait OrderedRing extends Ring {
+  type Scalar <: OrderedRingElement[Scalar]
 }

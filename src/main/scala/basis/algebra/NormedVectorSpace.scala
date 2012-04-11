@@ -10,5 +10,5 @@ package basis.algebra
 trait NormedVectorSpace extends VectorSpace {
   def norm(u: Vector): Scalar
   
-  def normalize(u: Vector): Vector = u :* norm(u).reciprocal
+  def normalize(u: Vector): Vector = u :* norm(u).inverse
 }

@@ -7,6 +7,12 @@
 
 package basis.algebra
 
-trait CompleteField extends Field {
-  type Scalar <: CompleteFieldElement[Scalar]
+trait FieldElement[F] extends RingElement[F] {
+  def Space: Field {
+    type Scalar = F
+  }
+  
+  def inverse: F
+  
+  def / (that: F): F
 }

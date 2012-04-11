@@ -10,9 +10,13 @@ package basis.algebra
 trait HilbertSpace
   extends InnerProductSpace
     with NormedVectorSpace
-    with MetricSpace {
+    with MetricSpace { self =>
   
-  type Scalar <: CompleteField[Scalar]
+  type Scalar <: CompleteFieldElement[Scalar]
+  
+  val Scalar: CompleteField {
+    type Scalar = self.Scalar
+  }
   
   def norm(u: Vector): Scalar = innerProduct(u, u).sqrt
   

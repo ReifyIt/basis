@@ -7,6 +7,14 @@
 
 package basis.algebra
 
-trait CompleteField extends Field {
-  type Scalar <: CompleteFieldElement[Scalar]
+trait FreeModule { self =>
+  type Vector <: GeneralVector[Vector, Scalar]
+  
+  type Scalar <: RingElement[Scalar]
+  
+  def Scalar: Ring {
+    type Scalar = self.Scalar
+  }
+  
+  def zero: Vector
 }

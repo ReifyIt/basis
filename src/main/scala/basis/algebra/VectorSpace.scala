@@ -7,8 +7,10 @@
 
 package basis.algebra
 
-trait VectorSpace extends Module {
-  type Scalar <: Field[Scalar]
+trait VectorSpace extends FreeModule { self =>
+  type Scalar <: FieldElement[Scalar]
   
-  val Scalar: ScalarSpace[Scalar]
+  def Scalar: Field {
+    type Scalar = self.Scalar
+  }
 }

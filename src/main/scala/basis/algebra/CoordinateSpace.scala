@@ -7,6 +7,21 @@
 
 package basis.algebra
 
-trait CompleteField extends Field {
-  type Scalar <: CompleteFieldElement[Scalar]
+trait CoordinateSpace extends VectorSpace {
+  type Vector <: CoordinateVector[Vector, Scalar]
+  
+  def zero: Vector = {
+    val z = Scalar.zero
+    val coords = new Array[AnyRef](dimension)
+    var i = 0
+    while (i < dimension) {
+      coords(i) = z
+      i += 1
+    }
+    apply(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
+  }
+  
+  def apply(coords: Seq[Scalar]): Vector
+  
+  def dimension: Int
 }

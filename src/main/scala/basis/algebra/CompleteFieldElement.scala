@@ -7,14 +7,10 @@
 
 package basis.algebra
 
-trait ScalarSpace[F <: Field[F]] extends VectorSpace {
-  type Scalar = F
+trait CompleteFieldElement[F] extends FieldElement[F] {
+  def Space: CompleteField {
+    type Scalar = F
+  }
   
-  type Vector = F
-  
-  val Scalar: ScalarSpace[F] = this
-  
-  def zero: F
-  
-  def unit: F
+  def sqrt: F
 }
