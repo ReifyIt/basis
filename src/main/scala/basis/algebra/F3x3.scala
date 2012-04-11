@@ -32,13 +32,17 @@ trait F3x3 extends MatrixSpace { self =>
   
   override def zero: Matrix = {
     val z = Scalar.zero
-    apply(z, z, z,  z, z, z,  z, z, z)
+    apply(z, z, z,
+          z, z, z,
+          z, z, z)
   }
   
   def identity: Matrix = {
     val z = Scalar.zero
     val u = Scalar.unit
-    apply(u, z, z,  z, u, z,  z, z, u)
+    apply(u, z, z,
+          z, u, z,
+          z, z, u)
   }
   
   def apply(entries: Seq[Scalar]): Matrix = {

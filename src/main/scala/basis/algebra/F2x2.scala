@@ -32,18 +32,21 @@ trait F2x2 extends MatrixSpace { self =>
   
   override def zero: Matrix = {
     val z = Scalar.zero
-    apply(z, z,  z, z)
+    apply(z, z,
+          z, z)
   }
   
   def identity: Matrix = {
     val z = Scalar.zero
     val u = Scalar.unit
-    apply(u, z,  z, u)
+    apply(u, z,
+          z, u)
   }
   
   def apply(entries: Seq[Scalar]): Matrix = {
     if (entries.length != 4) throw new DimensionException
-    apply(entries(0), entries(1),  entries(2), entries(3))
+    apply(entries(0), entries(1),
+          entries(2), entries(3))
   }
   
   def apply(_1_1: Scalar, _1_2: Scalar,

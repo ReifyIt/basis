@@ -23,10 +23,14 @@ trait R3x3 extends F3x3 with RealMatrixSpace { self =>
   }
   
   override def zero: Matrix =
-    apply(0.0, 0.0, 0.0,  0.0, 0.0, 0.0,  0.0, 0.0, 0.0)
+    apply(0.0, 0.0, 0.0,
+          0.0, 0.0, 0.0,
+          0.0, 0.0, 0.0)
   
   override def identity: Matrix =
-    apply(1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0)
+    apply(1.0, 0.0, 0.0,
+          0.0, 1.0, 0.0,
+          0.0, 0.0, 1.0)
   
   def apply(entries: Array[Double]): Matrix = {
     if (entries.length != 9) throw new DimensionException
@@ -83,7 +87,9 @@ object R3x3 extends R3x3 {
   def apply(_1_1: Double, _1_2: Double, _1_3: Double,
             _2_1: Double, _2_2: Double, _2_3: Double,
             _3_1: Double, _3_2: Double, _3_3: Double): Matrix =
-    new Matrix(_1_1, _1_2, _1_3,  _2_1, _2_2, _2_3,  _3_1, _3_2, _3_3)
+    new Matrix(_1_1, _1_2, _1_3,
+               _2_1, _2_2, _2_3,
+               _3_1, _3_2, _3_3)
   
   override def toString: String = "R3x3"
 }

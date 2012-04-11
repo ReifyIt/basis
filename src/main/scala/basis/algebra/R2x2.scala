@@ -23,19 +23,23 @@ trait R2x2 extends F2x2 with RealMatrixSpace { self =>
   }
   
   override def zero: Matrix =
-    apply(0.0, 0.0,  0.0, 0.0)
+    apply(0.0, 0.0,
+          0.0, 0.0)
   
   override def identity: Matrix =
-    apply(1.0, 0.0,  0.0, 1.0)
+    apply(1.0, 0.0,
+          0.0, 1.0)
   
   def apply(entries: Array[Double]): Matrix = {
     if (entries.length != 4) throw new DimensionException
-    apply(entries(0), entries(1),  entries(2), entries(3))
+    apply(entries(0), entries(1),
+          entries(2), entries(3))
   }
   
   def apply(_1_1: Scalar, _1_2: Scalar,
             _2_1: Scalar, _2_2: Scalar): Matrix =
-    apply(_1_1.toDouble, _1_2.toDouble,  _2_1.toDouble, _2_2.toDouble)
+    apply(_1_1.toDouble, _1_2.toDouble,
+          _2_1.toDouble, _2_2.toDouble)
   
   def apply(_1_1: Double, _1_2: Double,
             _2_1: Double, _2_2: Double): Matrix
@@ -70,7 +74,8 @@ object R2x2 extends R2x2 {
   
   def apply(_1_1: Double, _1_2: Double,
             _2_1: Double, _2_2: Double): Matrix =
-    new Matrix(_1_1, _1_2,  _2_1, _2_2)
+    new Matrix(_1_1, _1_2,
+               _2_1, _2_2)
   
   override def toString: String = "R2x2"
 }
