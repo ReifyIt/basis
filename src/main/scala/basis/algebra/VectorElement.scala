@@ -7,8 +7,10 @@
 
 package basis.algebra
 
-trait VectorElement[V, S] {
-  def Space: FreeModule {
+trait VectorElement[V <: VectorElement[V, S], S <: RingElement[S]]
+  extends AffinePoint[V, V, S] {
+  
+  def Space: VectorModule {
     type Vector = V
     type Scalar = S
   }

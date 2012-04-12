@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait FN extends FreeModule {
+trait FN extends VectorModule {
   type Vector <: VectorFN[Vector, Scalar]
   
   def zero: Vector = {

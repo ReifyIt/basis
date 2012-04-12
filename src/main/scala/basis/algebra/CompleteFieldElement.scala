@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait CompleteFieldElement[F] extends FieldElement[F] {
+trait CompleteFieldElement[F <: CompleteFieldElement[F]] extends FieldElement[F] {
   def Space: CompleteField {
     type Scalar = F
   }

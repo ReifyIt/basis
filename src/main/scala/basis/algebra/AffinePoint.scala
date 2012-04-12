@@ -7,4 +7,19 @@
 
 package basis.algebra
 
-trait VectorSpace extends VectorModule with AffineSpace
+trait AffinePoint[P <: AffinePoint[P, V, S],
+                  V <: VectorElement[V, S],
+                  S <: RingElement[S]] {
+  
+  def Space: AffineModule {
+    type Point = P
+    type Vector = V
+    type Scalar = S
+  }
+  
+  def + (vector: V): P
+  
+  def - (vector: V): P
+  
+  def - (that: P): V
+}

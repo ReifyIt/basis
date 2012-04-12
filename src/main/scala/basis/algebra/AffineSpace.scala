@@ -7,4 +7,15 @@
 
 package basis.algebra
 
-trait VectorSpace extends VectorModule with AffineSpace
+trait AffineSpace extends AffineModule { self =>
+  type Scalar <: FieldElement[Scalar]
+  
+  def Vector: VectorSpace {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
+  
+  def Scalar: Field {
+    type Scalar = self.Scalar
+  }
+}

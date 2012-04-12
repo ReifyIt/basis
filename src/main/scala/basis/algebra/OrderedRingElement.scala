@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait OrderedRingElement[G] extends RingElement[G] {
+trait OrderedRingElement[G <: OrderedRingElement[G]] extends RingElement[G] {
   def Space: OrderedRing {
     type Scalar = G
   }

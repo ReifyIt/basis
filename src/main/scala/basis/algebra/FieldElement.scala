@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait FieldElement[F] extends RingElement[F] {
+trait FieldElement[F <: FieldElement[F]] extends RingElement[F] {
   def Space: Field {
     type Scalar = F
   }

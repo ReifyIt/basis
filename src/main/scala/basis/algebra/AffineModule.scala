@@ -7,14 +7,19 @@
 
 package basis.algebra
 
-trait FreeModule { self =>
+trait AffineModule { self =>
+  type Point <: AffinePoint[Point, Vector, Scalar]
+  
   type Vector <: VectorElement[Vector, Scalar]
   
   type Scalar <: RingElement[Scalar]
   
-  def Scalar: Ring {
+  def Vector: VectorModule {
+    type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  def zero: Vector
+  def Scalar: Ring {
+    type Scalar = self.Scalar
+  }
 }
