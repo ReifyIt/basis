@@ -36,10 +36,6 @@ object R4 extends HilbertSpace with R4 {
       case 3 => w
       case _ => throw new IndexOutOfBoundsException(i.toString)
     }
-    
-    def ⋅ (that: Vector): Double = x * that.x + y * that.y + z * that.z + w * that.w
-    
-    def norm: Double = math.sqrt(x * x + y * y + z * z + w * w)
   }
   
   override val zero: Vector = super.zero
@@ -50,19 +46,7 @@ object R4 extends HilbertSpace with R4 {
   def unapply(vector: Vector): Some[(Double, Double, Double, Double)] =
     Some(vector.x, vector.y, vector.z, vector.w)
   
-  def innerProduct(u: Vector, v: Vector): Real = new Real(u ⋅ v)
-  
-  override def norm(u: Vector): Scalar = new Scalar(u.norm)
-  
-  override def normalize(u: Vector): Vector = u :* (1.0 / u.norm)
-  
-  override def distance(u: Vector, v: Vector): Scalar = {
-    val dx = u.x - v.x
-    val dy = u.y - v.y
-    val dz = u.z - v.z
-    val dw = u.w - v.w
-    new Scalar(math.sqrt(dx * dx + dy * dy + dz * dz + dw * dw))
-  }
+  def innerProduct(u: Vector, v: Vector): Real = u ⋅ v
   
   override def toString: String = "R4"
 }

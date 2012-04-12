@@ -29,4 +29,7 @@ trait VectorF3[V <: VectorF3[V, S], S <: Ring[S]] extends VectorFN[V, S] {
   
   override def *: (scalar: S): V =
     Space(scalar * coord(0), scalar * coord(1), scalar * coord(2))
+  
+  override def ⋅ (that: V): S =
+    coord(0) * that.coord(0) + coord(1) * that.coord(1) + coord(2) * that.coord(2)
 }

@@ -75,6 +75,18 @@ trait VectorFN[V <: VectorFN[V, S], S <: Ring[S]]
     Space(wrapRefArray(coords).asInstanceOf[Seq[S]])
   }
   
+  def ⋅ (that: V): S = {
+    if (dimension != that.dimension)
+      throw new DimensionException(Space.toString +" ⋅ "+ that.Space.toString)
+    var s = Space.Scalar.zero
+    var i = 0
+    while (i < dimension) {
+      s += coord(i) * that.coord(i)
+      i += 1
+    }
+    s
+  }
+  
   def canEqual(other: Any): Boolean =
     other.isInstanceOf[VectorFN[_, _]]
   

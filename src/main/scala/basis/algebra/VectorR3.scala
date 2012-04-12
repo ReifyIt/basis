@@ -25,4 +25,7 @@ trait VectorR3[V <: VectorR3[V]] extends VectorF3[V, Real] with VectorRN[V] {
     Space(this(0) * scalar, this(1) * scalar, this(2) * scalar)
   
   override def *: (scalar: Double): V = this :* scalar
+  
+  override def ⋅ (that: V): Real =
+    new Real(this(0) * that(0) + this(1) * that(1) + this(2) * that(2))
 }

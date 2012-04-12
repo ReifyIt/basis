@@ -65,4 +65,16 @@ trait VectorRN[V <: VectorRN[V]] extends VectorFN[V, Real] {
   override def *: (scalar: Real): V = this :* scalar.toDouble
   
   def *: (scalar: Double): V = this :* scalar
+  
+  override def ⋅ (that: V): Real = {
+    if (dimension != that.dimension)
+      throw new DimensionException(Space.toString +" ⋅ "+ that.Space.toString)
+    var s = 0.0
+    var i = 0
+    while (i < dimension) {
+      s += this(i) * that(i)
+      i += 1
+    }
+    new Real(s)
+  }
 }

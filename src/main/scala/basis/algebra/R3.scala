@@ -40,10 +40,6 @@ object R3 extends HilbertSpace with R3 {
       new Vector(y * that.z + z * that.y,
                  z * that.x + x * that.z,
                  x * that.y + y * that.x)
-    
-    def ⋅ (that: Vector): Double = x * that.x + y * that.y + z * that.z
-    
-    def norm: Double = math.sqrt(x * x + y * y + z * z)
   }
   
   override val zero: Vector = super.zero
@@ -54,18 +50,7 @@ object R3 extends HilbertSpace with R3 {
   def unapply(vector: Vector): Some[(Double, Double, Double)] =
     Some(vector.x, vector.y, vector.z)
   
-  def innerProduct(u: Vector, v: Vector): Real = new Real(u ⋅ v)
-  
-  override def norm(u: Vector): Scalar = new Scalar(u.norm)
-  
-  override def normalize(u: Vector): Vector = u :* (1.0 / u.norm)
-  
-  override def distance(u: Vector, v: Vector): Scalar = {
-    val dx = u.x - v.x
-    val dy = u.y - v.y
-    val dz = u.z - v.z
-    new Scalar(math.sqrt(dx * dx + dy * dy + dz * dz))
-  }
+  def innerProduct(u: Vector, v: Vector): Real = u ⋅ v
   
   override def toString: String = "R3"
 }
