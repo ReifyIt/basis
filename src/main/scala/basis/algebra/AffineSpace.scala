@@ -8,14 +8,14 @@
 package basis.algebra
 
 trait AffineSpace extends AffineModule { self =>
-  type Scalar <: FieldElement[Scalar]
+  type Scalar <: Field[Scalar]
   
   def Vector: VectorSpace {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  def Scalar: Field {
+  def Scalar: ScalarSpace {
     type Scalar = self.Scalar
   }
 }

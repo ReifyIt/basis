@@ -7,10 +7,12 @@
 
 package basis.algebra
 
-trait CompleteFieldElement[F <: CompleteFieldElement[F]] extends FieldElement[F] {
-  def Space: CompleteField {
-    type Scalar = F
-  }
+trait ScalarModule extends VectorModule {
+  type Vector = Scalar
   
-  def sqrt: F
+  type Scalar <: Ring[Scalar]
+  
+  def Scalar: this.type = this
+  
+  def unit: Scalar
 }

@@ -9,7 +9,7 @@ package basis.algebra
 
 trait MatrixF4x4[M <: MatrixF4x4[M, V, S],
                  V <: VectorF4[V, S],
-                 S <: FieldElement[S]]
+                 S <: Field[S]]
   extends MatrixFMxN[M, M, V, V, S] {
   
   def Space: F4x4 {

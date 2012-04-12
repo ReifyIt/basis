@@ -8,8 +8,8 @@
 package basis.algebra
 
 trait AffinePoint[P <: AffinePoint[P, V, S],
-                  V <: VectorElement[V, S],
-                  S <: RingElement[S]] {
+                  V <: LinearVector[V, S],
+                  S <: Ring[S]] {
   
   def Space: AffineModule {
     type Point = P

@@ -10,7 +10,7 @@ package basis.algebra
 import basis.util.MurmurHash._
 
 final class Complex(val real: Double, val imaginary: Double)
-  extends CompleteFieldElement[Complex] {
+  extends CompleteField[Complex] {
   
   def Space = Complex
   
@@ -106,7 +106,7 @@ final class Complex(val real: Double, val imaginary: Double)
   }
 }
 
-object Complex extends CompleteField {
+object Complex extends ScalarSpace {
   type Scalar = Complex
   
   val zero: Complex = new Complex(0.0, 0.0)

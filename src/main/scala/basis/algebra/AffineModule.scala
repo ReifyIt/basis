@@ -10,16 +10,16 @@ package basis.algebra
 trait AffineModule { self =>
   type Point <: AffinePoint[Point, Vector, Scalar]
   
-  type Vector <: VectorElement[Vector, Scalar]
+  type Vector <: LinearVector[Vector, Scalar]
   
-  type Scalar <: RingElement[Scalar]
+  type Scalar <: Ring[Scalar]
   
   def Vector: VectorModule {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  def Scalar: Ring {
+  def Scalar: ScalarModule {
     type Scalar = self.Scalar
   }
 }

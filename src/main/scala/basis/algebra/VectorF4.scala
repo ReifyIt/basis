@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait VectorF4[V <: VectorF4[V, S], S <: FieldElement[S]] extends VectorFN[V, S] {
+trait VectorF4[V <: VectorF4[V, S], S <: Ring[S]] extends VectorFN[V, S] {
   def Space: F4 {
     type Vector = V
     type Scalar = S

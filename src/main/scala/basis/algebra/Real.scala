@@ -10,8 +10,7 @@ package basis.algebra
 import basis.util.MurmurHash._
 
 final class Real(private val value: Double)
-  extends OrderedRingElement[Real]
-    with CompleteFieldElement[Real] {
+  extends OrderedRing[Real] with CompleteField[Real] {
   
   def Space = Real
   
@@ -69,7 +68,7 @@ final class Real(private val value: Double)
   def toDouble: Double = value
 }
 
-object Real extends OrderedRing with CompleteField {
+object Real extends ScalarSpace {
   type Scalar = Real
   
   val zero: Real = new Real(0.0)

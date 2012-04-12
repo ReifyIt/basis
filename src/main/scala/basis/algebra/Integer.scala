@@ -9,9 +9,7 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-final class Integer(private val value: Long)
-  extends OrderedRingElement[Integer] {
-  
+final class Integer(private val value: Long) extends OrderedRing[Integer] {
   def Space = Integer
   
   def + (that: Integer): Integer = new Integer(value + that.value)
@@ -71,7 +69,7 @@ final class Integer(private val value: Long)
   def toDouble: Double = value.toDouble
 }
 
-object Integer extends OrderedRing {
+object Integer extends ScalarModule {
   type Scalar = Integer
   
   val zero: Integer = new Integer(0L)

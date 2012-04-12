@@ -9,8 +9,8 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-trait VectorFN[V <: VectorFN[V, S], S <: RingElement[S]]
-  extends Equals with VectorElement[V, S] {
+trait VectorFN[V <: VectorFN[V, S], S <: Ring[S]]
+  extends Equals with LinearVector[V, S] {
   
   def Space: FN {
     type Vector = V

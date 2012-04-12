@@ -7,12 +7,10 @@
 
 package basis.algebra
 
-trait Ring extends VectorModule {
-  type Vector = Scalar
+trait Ring[G <: Ring[G]] extends LinearVector[G, G] {
+  def Space: ScalarModule {
+    type Scalar = G
+  }
   
-  type Scalar <: RingElement[Scalar]
-  
-  def Scalar: this.type = this
-  
-  def unit: Scalar
+  def * (that: G): G
 }

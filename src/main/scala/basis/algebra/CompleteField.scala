@@ -7,6 +7,6 @@
 
 package basis.algebra
 
-trait CompleteField extends Field {
-  type Scalar <: CompleteFieldElement[Scalar]
+trait CompleteField[F <: CompleteField[F]] extends Field[F] {
+  def sqrt: F
 }

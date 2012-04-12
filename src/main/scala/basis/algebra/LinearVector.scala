@@ -7,10 +7,21 @@
 
 package basis.algebra
 
-trait RingElement[G <: RingElement[G]] extends VectorElement[G, G] {
-  def Space: Ring {
-    type Scalar = G
+trait LinearVector[V <: LinearVector[V, S], S <: Ring[S]]
+  extends AffinePoint[V, V, S] {
+  
+  def Space: VectorModule {
+    type Vector = V
+    type Scalar = S
   }
   
-  def * (that: G): G
+  def + (that: V): V
+  
+  def unary_- : V
+  
+  def - (that: V): V
+  
+  def :* (scalar: S): V
+  
+  def *: (scalar: S): V
 }

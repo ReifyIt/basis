@@ -13,8 +13,8 @@ trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S],
                  T <: MatrixFMxN[T, M, R, C, S],
                  C <: VectorFN[C, S],
                  R <: VectorFN[R, S],
-                 S <: RingElement[S]]
-  extends Equals with VectorElement[M, S] {
+                 S <: Ring[S]]
+  extends Equals with LinearVector[M, S] {
   
   def Space: FMxN {
     type Matrix = M
