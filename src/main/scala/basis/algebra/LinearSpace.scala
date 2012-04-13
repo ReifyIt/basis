@@ -7,4 +7,4 @@
 
 package basis.algebra
 
-trait VectorSpace extends VectorModule with AffineSpace
+trait LinearSpace extends LinearModule with AffineSpace

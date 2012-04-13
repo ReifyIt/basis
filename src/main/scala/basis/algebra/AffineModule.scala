@@ -14,7 +14,7 @@ trait AffineModule { self =>
   
   type Scalar <: Ring[Scalar]
   
-  def Vector: VectorModule {
+  def Vector: LinearModule {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }

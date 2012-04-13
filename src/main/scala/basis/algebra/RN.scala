@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait RN extends VectorSpace with FN {
+trait RN extends LinearSpace with FN {
   type Vector <: VectorRN[Vector]
   
   type Scalar = Real

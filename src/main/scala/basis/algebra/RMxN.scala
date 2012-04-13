@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait RMxN extends VectorSpace with FMxN { self =>
+trait RMxN extends LinearSpace with FMxN { self =>
   type Matrix <: MatrixRMxN[Matrix, Transpose, ColumnVector, RowVector]
   
   type Transpose <: MatrixRMxN[Transpose, Matrix, RowVector, ColumnVector]

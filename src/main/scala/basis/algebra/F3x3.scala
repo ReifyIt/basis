@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait F3x3 extends VectorSpace with FMxN { self =>
+trait F3x3 extends LinearSpace with FMxN { self =>
   type Matrix <: MatrixF3x3[Matrix, RowVector, Scalar]
   
   type Transpose = Matrix

@@ -10,7 +10,7 @@ package basis.algebra
 trait AffineSpace extends AffineModule { self =>
   type Scalar <: Field[Scalar]
   
-  def Vector: VectorSpace {
+  def Vector: LinearSpace {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }

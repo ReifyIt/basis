@@ -7,6 +7,6 @@
 
 package basis.algebra
 
-trait InnerProductSpace extends VectorSpace {
+trait InnerProductSpace extends LinearSpace {
   def innerProduct(u: Vector, v: Vector): Scalar
 }

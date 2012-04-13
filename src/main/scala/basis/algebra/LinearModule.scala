@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait VectorModule extends AffineModule { self =>
+trait LinearModule extends AffineModule { self =>
   type Point = Vector
   
   def Vector: this.type = this

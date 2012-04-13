@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait NormedVectorSpace extends VectorSpace {
+trait NormedVectorSpace extends LinearSpace {
   def norm(u: Vector): Scalar
   
   def normalize(u: Vector): Vector = u :* norm(u).inverse

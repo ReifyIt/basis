@@ -10,7 +10,7 @@ package basis.algebra
 trait LinearVector[V <: LinearVector[V, S], S <: Ring[S]]
   extends AffinePoint[V, V, S] {
   
-  def Space: VectorModule {
+  def Space: LinearModule {
     type Vector = V
     type Scalar = S
   }

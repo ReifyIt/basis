@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait FMxN extends VectorModule { self =>
+trait FMxN extends LinearModule { self =>
   type Matrix <: MatrixFMxN[Matrix, Transpose, ColumnVector, RowVector, Scalar]
   
   type Transpose <: MatrixFMxN[Transpose, Matrix, RowVector, ColumnVector, Scalar]

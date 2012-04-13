@@ -7,6 +7,6 @@
 
 package basis.algebra
 
-trait MetricSpace extends VectorSpace {
+trait MetricSpace extends LinearSpace {
   def distance(u: Vector, v: Vector): Scalar
 }

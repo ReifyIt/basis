@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait ScalarModule extends VectorModule {
+trait ScalarModule extends LinearModule {
   type Vector = Scalar
   
   type Scalar <: Ring[Scalar]
