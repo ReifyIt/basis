@@ -15,4 +15,8 @@ trait ScalarModule extends VectorModule {
   def Scalar: this.type = this
   
   def unit: Scalar
+  
+  def apply(n: Long): Scalar
+  
+  def apply(n: Int): Scalar
 }

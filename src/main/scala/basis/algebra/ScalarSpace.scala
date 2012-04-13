@@ -9,4 +9,8 @@ package basis.algebra
 
 trait ScalarSpace extends ScalarModule with VectorSpace {
   type Scalar <: Field[Scalar]
+  
+  def apply(x: Double): Scalar
+  
+  def apply(x: Float): Scalar
 }

@@ -77,6 +77,12 @@ object Real extends ScalarSpace {
   
   def apply(value: Double): Real = new Real(value)
   
+  def apply(value: Float): Real = new Real(value)
+  
+  def apply(value: Long): Real = new Real(value)
+  
+  def apply(value: Int): Real = new Real(value)
+  
   def unapply(real: Real): Some[Double] = Some(real.toDouble)
   
   implicit def box(value: Double): Real = new Real(value)

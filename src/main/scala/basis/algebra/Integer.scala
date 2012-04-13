@@ -78,6 +78,8 @@ object Integer extends ScalarModule {
   
   def apply(value: Long): Integer = new Integer(value)
   
+  def apply(value: Int): Integer = new Integer(value)
+  
   def unapply(integer: Integer): Some[Long] = Some(integer.value)
   
   implicit def box(value: Long): Integer = new Integer(value)

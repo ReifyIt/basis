@@ -117,6 +117,14 @@ object Complex extends ScalarSpace {
   
   def apply(real: Double, imaginary: Double): Complex = new Complex(real, imaginary)
   
+  def apply(value: Double): Complex = new Complex(value, 0.0)
+  
+  def apply(value: Float): Complex = new Complex(value, 0.0)
+  
+  def apply(value: Long): Complex = new Complex(value, 0.0)
+  
+  def apply(value: Int): Complex = new Complex(value, 0.0)
+  
   def unapply(complex: Complex): Some[(Double, Double)] = Some(complex.real, complex.imaginary)
   
   implicit def real(value: Double): Complex = new Complex(value, 0.0)
