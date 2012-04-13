@@ -7,17 +7,36 @@
 
 package basis.algebra
 
-trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R], 
-                 T <: MatrixRMxN[T, M, R, C],
-                 C <: VectorRN[C],
-                 R <: VectorRN[R]]
-  extends MatrixFMxN[M, T, C, R, Real] {
+trait MatrixRMxN extends MatrixFMxN { self =>
+  override type Matrix >: self.type <: MatrixRMxN {
+    type Matrix       = self.Matrix
+    type Transpose    = self.Transpose
+    type RowVector    = self.RowVector
+    type ColumnVector = self.ColumnVector
+  }
   
-  def Space: RMxN {
-    type Matrix = M
-    type Transpose = T
-    type ColumnVector = C
-    type RowVector = R
+  override type Transpose <: MatrixRMxN {
+    type Matrix       = self.Transpose
+    type Transpose    = self.Matrix
+    type RowVector    = self.ColumnVector
+    type ColumnVector = self.RowVector
+  }
+  
+  override type RowVector <: VectorRN {
+    type Vector = self.RowVector
+  }
+  
+  override type ColumnVector <: VectorRN {
+    type Vector = self.ColumnVector
+  }
+  
+  override type Scalar = Real
+  
+  override def Space: RMxN {
+    type Matrix       = self.Matrix
+    type Transpose    = self.Transpose
+    type ColumnVector = self.ColumnVector
+    type RowVector    = self.RowVector
   }
   
   def apply(k: Int): Double
@@ -32,20 +51,7 @@ trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R],
   
   override def entry(i: Int, j: Int): Real = new Real(this(i, j))
   
-  override def column(j: Int): C = {
-    if (j < 0 || j >= N) throw new IndexOutOfBoundsException("column "+ j)
-    val coords = new Array[Double](M)
-    var i = 0
-    var m = j
-    while (i < M) {
-      coords(i) = this(m)
-      i += 1
-      m += N
-    }
-    Space.Column(coords)
-  }
-  
-  override def row(i: Int): R = {
+  override def row(i: Int): RowVector = {
     if (i < 0 || i >= M) throw new IndexOutOfBoundsException("row "+ i)
     val coords = new Array[Double](N)
     var j = 0
@@ -58,7 +64,20 @@ trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R],
     Space.Row(coords)
   }
   
-  override def + (that: M): M = {
+  override def column(j: Int): ColumnVector = {
+    if (j < 0 || j >= N) throw new IndexOutOfBoundsException("column "+ j)
+    val coords = new Array[Double](M)
+    var i = 0
+    var m = j
+    while (i < M) {
+      coords(i) = this(m)
+      i += 1
+      m += N
+    }
+    Space.Column(coords)
+  }
+  
+  override def + (that: Matrix): Matrix = {
     if (M != that.M || N != that.N)
       throw new DimensionException(Space.toString +" + "+ that.Space.toString)
     val entries = new Array[Double](M * N)
@@ -70,7 +89,7 @@ trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R],
     Space(entries)
   }
   
-  override def unary_- : M = {
+  override def unary_- : Matrix = {
     val entries = new Array[Double](M * N)
     var k = 0
     while (k < entries.length) {
@@ -80,7 +99,7 @@ trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R],
     Space(entries)
   }
   
-  override def - (that: M): M = {
+  override def - (that: Matrix): Matrix = {
     if (M != that.M || N != that.N)
       throw new DimensionException(Space.toString +" + "+ that.Space.toString)
     val entries = new Array[Double](M * N)
@@ -92,9 +111,9 @@ trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R],
     Space(entries)
   }
   
-  override def :* (scalar: Real): M = this :* scalar.toDouble
+  override def :* (scalar: Real): Matrix = this :* scalar.toDouble
   
-  def :* (scalar: Double): M = {
+  def :* (scalar: Double): Matrix = {
     val entries = new Array[Double](M * N)
     var k = 0
     while (k < entries.length) {
@@ -104,11 +123,11 @@ trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R],
     Space(entries)
   }
   
-  override def *: (scalar: Real): M = this :* scalar.toDouble
+  override def *: (scalar: Real): Matrix = this :* scalar.toDouble
   
-  def *: (scalar: Double): M = this :* scalar
+  def *: (scalar: Double): Matrix = this :* scalar
   
-  override def :* (vector: R): C = {
+  override def :* (vector: RowVector): ColumnVector = {
     if (N != vector.dimension)
       throw new DimensionException(Space.toString +" :* "+ vector.Space.toString)
     val coords = new Array[Double](M)
@@ -130,7 +149,7 @@ trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R],
     Space.Column(coords)
   }
   
-  override def *: (vector: C): R = {
+  override def *: (vector: ColumnVector): RowVector = {
     if (vector.dimension != M)
       throw new DimensionException(vector.Space.toString +" *: "+ Space.toString)
     val coords = new Array[Double](N)
@@ -150,7 +169,7 @@ trait MatrixRMxN[M <: MatrixRMxN[M, T, C, R],
     Space.Row(coords)
   }
   
-  override def transpose: T = {
+  override def transpose: Transpose = {
     val entries = new Array[Double](N * M)
     var k = 0
     var j = 0

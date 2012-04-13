@@ -9,24 +9,48 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S], 
-                 T <: MatrixFMxN[T, M, R, C, S],
-                 C <: VectorFN[C, S],
-                 R <: VectorFN[R, S],
-                 S <: Ring[S]]
-  extends Equals with LinearVector[M, S] {
-  
-  def Space: FMxN {
-    type Matrix = M
-    type Transpose = T
-    type ColumnVector = C
-    type RowVector = R
-    type Scalar = S
+trait MatrixFMxN extends Equals with LinearVector { self =>
+  type Matrix >: self.type <: MatrixFMxN {
+    type Matrix       = self.Matrix
+    type Transpose    = self.Transpose
+    type RowVector    = self.RowVector
+    type ColumnVector = self.ColumnVector
+    type Scalar       = self.Scalar
   }
   
-  def entry(k: Int): S
+  type Transpose <: MatrixFMxN {
+    type Matrix       = self.Transpose
+    type Transpose    = self.Matrix
+    type RowVector    = self.ColumnVector
+    type ColumnVector = self.RowVector
+    type Scalar       = self.Scalar
+  }
   
-  def entry(i: Int, j: Int): S = {
+  type RowVector <: VectorFN {
+    type Vector = self.RowVector
+    type Scalar = self.Scalar
+  }
+  
+  type ColumnVector <: VectorFN {
+    type Vector = self.ColumnVector
+    type Scalar = self.Scalar
+  }
+  
+  override type Point = Matrix
+  
+  override type Vector = Matrix
+  
+  override def Space: FMxN {
+    type Matrix       = self.Matrix
+    type Transpose    = self.Transpose
+    type ColumnVector = self.ColumnVector
+    type RowVector    = self.RowVector
+    type Scalar       = self.Scalar
+  }
+  
+  def entry(k: Int): Scalar
+  
+  def entry(i: Int, j: Int): Scalar = {
     if (i < 0 || i >= M || j < 0 || j >= N)
       throw new IndexOutOfBoundsException("row "+ i +", "+"column "+ j)
     entry(N * i + j)
@@ -36,20 +60,7 @@ trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S],
   
   def N: Int = Space.Row.dimension
   
- def column(j: Int): C = {
-    if (j < 0 || j >= N) throw new IndexOutOfBoundsException("column "+ j)
-    val coords = new Array[AnyRef](M)
-    var i = 0
-    var m = j
-    while (i < M) {
-      coords(i) = entry(m)
-      i += 1
-      m += N
-    }
-    Space.Column(wrapRefArray(coords).asInstanceOf[Seq[S]])
-  }
-  
-  def row(i: Int): R = {
+  def row(i: Int): RowVector = {
     if (i < 0 || i >= M) throw new IndexOutOfBoundsException("row "+ i)
     val coords = new Array[AnyRef](N)
     var j = 0
@@ -59,10 +70,23 @@ trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S],
       j += 1
       n += 1
     }
-    Space.Row(wrapRefArray(coords).asInstanceOf[Seq[S]])
+    Space.Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def + (that: M): M = {
+ def column(j: Int): ColumnVector = {
+    if (j < 0 || j >= N) throw new IndexOutOfBoundsException("column "+ j)
+    val coords = new Array[AnyRef](M)
+    var i = 0
+    var m = j
+    while (i < M) {
+      coords(i) = entry(m)
+      i += 1
+      m += N
+    }
+    Space.Column(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
+  }
+  
+  def + (that: Matrix): Matrix = {
     if (M != that.M || N != that.N)
       throw new DimensionException(Space.toString +" + "+ that.Space.toString)
     val entries = new Array[AnyRef](M * N)
@@ -71,20 +95,20 @@ trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S],
       entries(k) = entry(k) + that.entry(k)
       k += 1
     }
-    Space(wrapRefArray(entries).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
   
-  def unary_- : M = {
+  def unary_- : Matrix = {
     val entries = new Array[AnyRef](M * N)
     var k = 0
     while (k < entries.length) {
       entries(k) = -entry(k)
       k += 1
     }
-    Space(wrapRefArray(entries).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
   
-  def - (that: M): M = {
+  def - (that: Matrix): Matrix = {
     if (M != that.M || N != that.N)
       throw new DimensionException(Space.toString +" + "+ that.Space.toString)
     val entries = new Array[AnyRef](M * N)
@@ -93,30 +117,30 @@ trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S],
       entries(k) = entry(k) - that.entry(k)
       k += 1
     }
-    Space(wrapRefArray(entries).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
   
-  def :* (scalar: S): M = {
+  def :* (scalar: Scalar): Matrix = {
     val entries = new Array[AnyRef](M * N)
     var k = 0
     while (k < entries.length) {
       entries(k) = entry(k) * scalar
       k += 1
     }
-    Space(wrapRefArray(entries).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
   
-  def *: (scalar: S): M = {
+  def *: (scalar: Scalar): Matrix = {
     val entries = new Array[AnyRef](M * N)
     var k = 0
     while (k < entries.length) {
       entries(k) = scalar * entry(k)
       k += 1
     }
-    Space(wrapRefArray(entries).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
   
-  def :* (vector: R): C = {
+  def :* (vector: RowVector): ColumnVector = {
     if (N != vector.dimension)
       throw new DimensionException(Space.toString +" :* "+ vector.Space.toString)
     val coords = new Array[AnyRef](M)
@@ -135,10 +159,10 @@ trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S],
       i += 1
       i0 += N
     }
-    Space.Column(wrapRefArray(coords).asInstanceOf[Seq[S]])
+    Space.Column(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def *: (vector: C): R = {
+  def *: (vector: ColumnVector): RowVector = {
     if (vector.dimension != M)
       throw new DimensionException(vector.Space.toString +" *: "+ Space.toString)
     val coords = new Array[AnyRef](N)
@@ -155,10 +179,10 @@ trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S],
       coords(j) = x
       j += 1
     }
-    Space.Row(wrapRefArray(coords).asInstanceOf[Seq[S]])
+    Space.Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def transpose: T = {
+  def transpose: Transpose = {
     val entries = new Array[AnyRef](N * M)
     var k = 0
     var j = 0
@@ -173,14 +197,13 @@ trait MatrixFMxN[M <: MatrixFMxN[M, T, C, R, S],
       }
       j += 1
     }
-    Space.Transpose(wrapRefArray(entries).asInstanceOf[Seq[S]])
+    Space.Transpose(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
   
-  def canEqual(other: Any): Boolean =
-    other.isInstanceOf[MatrixFMxN[_, _, _, _, _]]
+  def canEqual(other: Any): Boolean = other.isInstanceOf[MatrixFMxN]
   
   override def equals(other: Any): Boolean = other match {
-    case that: MatrixFMxN[_, _, _, _, _] =>
+    case that: MatrixFMxN =>
       val size = M * N
       var equal = that.canEqual(this) && M == that.M && N == that.N
       var k = 0

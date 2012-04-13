@@ -7,12 +7,18 @@
 
 package basis.algebra
 
-trait ScalarModule extends LinearModule {
-  type Vector = Scalar
+trait ScalarModule extends LinearModule { self =>
+  override type Point = Scalar
   
-  type Scalar <: Ring[Scalar]
+  override type Vector = Scalar
   
-  def Scalar: this.type = this
+  override type Scalar <: Ring {
+    type Scalar = self.Scalar
+  }
+  
+  override def Scalar: this.type = this
+  
+  override def zero: Scalar
   
   def unit: Scalar
   

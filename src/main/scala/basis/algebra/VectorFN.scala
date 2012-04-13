@@ -9,19 +9,22 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-trait VectorFN[V <: VectorFN[V, S], S <: Ring[S]]
-  extends Equals with LinearVector[V, S] {
-  
-  def Space: FN {
-    type Vector = V
-    type Scalar = S
+trait VectorFN extends Equals with LinearVector { self =>
+  override type Vector >: self.type <: VectorFN {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
   }
   
-  def coord(i: Int): S
+  override def Space: FN {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
+  
+  def coord(i: Int): Scalar
   
   def dimension: Int = Space.dimension
   
-  def + (that: V): V = {
+  def + (that: Vector): Vector = {
     if (dimension != that.dimension)
       throw new DimensionException(Space.toString +" + "+ that.Space.toString)
     val coords = new Array[AnyRef](dimension)
@@ -30,20 +33,20 @@ trait VectorFN[V <: VectorFN[V, S], S <: Ring[S]]
       coords(i) = coord(i) + that.coord(i)
       i += 1
     }
-    Space(wrapRefArray(coords).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def unary_- : V = {
+  def unary_- : Vector = {
     val coords = new Array[AnyRef](dimension)
     var i = 0
     while (i < dimension) {
       coords(i) = -coord(i)
       i += 1
     }
-    Space(wrapRefArray(coords).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def - (that: V): V = {
+  def - (that: Vector): Vector = {
     if (dimension != that.dimension)
       throw new DimensionException(Space.toString +" - "+ that.Space.toString)
     val coords = new Array[AnyRef](dimension)
@@ -52,30 +55,30 @@ trait VectorFN[V <: VectorFN[V, S], S <: Ring[S]]
       coords(i) = coord(i) - that.coord(i)
       i += 1
     }
-    Space(wrapRefArray(coords).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def :* (scalar: S): V = {
+  def :* (scalar: Scalar): Vector = {
     val coords = new Array[AnyRef](dimension)
     var i = 0
     while (i < dimension) {
       coords(i) = coord(i) * scalar
       i += 1
     }
-    Space(wrapRefArray(coords).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def *: (scalar: S): V = {
+  def *: (scalar: Scalar): Vector = {
     val coords = new Array[AnyRef](dimension)
     var i = 0
     while (i < dimension) {
       coords(i) = scalar * coord(i)
       i += 1
     }
-    Space(wrapRefArray(coords).asInstanceOf[Seq[S]])
+    Space(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def ⋅ (that: V): S = {
+  def ⋅ (that: Vector): Scalar = {
     if (dimension != that.dimension)
       throw new DimensionException(Space.toString +" ⋅ "+ that.Space.toString)
     var s = Space.Scalar.zero
@@ -88,10 +91,10 @@ trait VectorFN[V <: VectorFN[V, S], S <: Ring[S]]
   }
   
   def canEqual(other: Any): Boolean =
-    other.isInstanceOf[VectorFN[_, _]]
+    other.isInstanceOf[VectorFN]
   
   override def equals(other: Any): Boolean = other match {
-    case that: VectorFN[_, _] =>
+    case that: VectorFN =>
       var equal = that.canEqual(this) && dimension == that.dimension
       var i = 0
       while (i < dimension && equal) {

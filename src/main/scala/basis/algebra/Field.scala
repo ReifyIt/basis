@@ -7,12 +7,24 @@
 
 package basis.algebra
 
-trait Field[F <: Field[F]] extends Ring[F] {
-  def Space: ScalarSpace {
-    type Scalar = F
+trait Field extends Ring { self =>
+  override type Scalar >: self.type <: Field {
+    type Scalar = self.Scalar
   }
   
-  def inverse: F
+  override def Space: ScalarSpace {
+    type Scalar = self.Scalar
+  }
   
-  def / (that: F): F
+  def + (that: Scalar): Scalar
+  
+  def unary_- : Scalar
+  
+  def - (that: Scalar): Scalar
+  
+  def * (that: Scalar): Scalar
+  
+  def inverse: Scalar
+  
+  def / (that: Scalar): Scalar
 }

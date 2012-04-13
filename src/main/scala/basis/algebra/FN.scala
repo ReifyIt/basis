@@ -7,10 +7,13 @@
 
 package basis.algebra
 
-trait FN extends LinearModule {
-  type Vector <: VectorFN[Vector, Scalar]
+trait FN extends LinearModule { self =>
+  override type Vector <: VectorFN {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
   
-  def zero: Vector = {
+  override def zero: Vector = {
     val z = Scalar.zero
     val coords = new Array[AnyRef](dimension)
     var i = 0
@@ -21,7 +24,7 @@ trait FN extends LinearModule {
     apply(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
   
-  def apply(coords: Seq[Scalar]): Vector
-  
   def dimension: Int
+  
+  def apply(coords: Seq[Scalar]): Vector
 }

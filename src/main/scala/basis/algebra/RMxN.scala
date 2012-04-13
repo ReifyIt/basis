@@ -8,34 +8,46 @@
 package basis.algebra
 
 trait RMxN extends LinearSpace with FMxN { self =>
-  type Matrix <: MatrixRMxN[Matrix, Transpose, ColumnVector, RowVector]
+  override type Matrix <: MatrixRMxN {
+    type Matrix       = self.Matrix
+    type Transpose    = self.Transpose
+    type RowVector    = self.RowVector
+    type ColumnVector = self.ColumnVector
+  }
   
-  type Transpose <: MatrixRMxN[Transpose, Matrix, RowVector, ColumnVector]
-  
-  type ColumnVector <: VectorRN[ColumnVector]
-  
-  type RowVector <: VectorRN[RowVector]
-  
-  type Scalar = Real
-  
-  val Scalar = Real
-  
-  def Transpose: RMxN {
-    type Matrix = self.Transpose
-    type Transpose = self.Matrix
+  override type Transpose <: MatrixRMxN {
+    type Matrix       = self.Transpose
+    type Transpose    = self.Matrix
+    type RowVector    = self.ColumnVector
     type ColumnVector = self.RowVector
-    type RowVector = self.ColumnVector
-    type Scalar = self.Scalar
   }
   
-  def Column: RN {
-    type Vector = self.ColumnVector
-    type Scalar = self.Scalar
-  }
-  
-  def Row: RN {
+  override type RowVector <: VectorRN {
     type Vector = self.RowVector
-    type Scalar = self.Scalar
+  }
+  
+  override type ColumnVector <: VectorRN {
+    type Vector = self.ColumnVector
+  }
+  
+  override type Scalar = Real
+  
+  override def Scalar = Real
+  
+  override def Transpose: RMxN {
+    type Matrix       = self.Transpose
+    type Transpose    = self.Matrix
+    type RowVector    = self.ColumnVector
+    type ColumnVector = self.RowVector
+    type Scalar       = self.Scalar
+  }
+  
+  override def Row: RN {
+    type Vector = self.RowVector
+  }
+  
+  override def Column: RN {
+    type Vector = self.ColumnVector
   }
   
   override def zero: Matrix = apply(new Array[Double](dimension))

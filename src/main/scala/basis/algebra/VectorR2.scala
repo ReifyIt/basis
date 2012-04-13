@@ -7,25 +7,29 @@
 
 package basis.algebra
 
-trait VectorR2[V <: VectorR2[V]] extends VectorF2[V, Real] with VectorRN[V] {
-  def Space: R2 {
-    type Vector = V
+trait VectorR2 extends VectorF2 with VectorRN { self =>
+  override type Vector >: self.type <: VectorR2 {
+    type Vector = self.Vector
   }
   
-  override def + (that: V): V =
+  override def Space: R2 {
+    type Vector = self.Vector
+  }
+  
+  override def + (that: Vector): Vector =
     Space(this(0) + that(0), this(1) + that(1))
   
-  override def unary_- : V =
+  override def unary_- : Vector =
     Space(-this(0), -this(1))
   
-  override def - (that: V): V =
+  override def - (that: Vector): Vector =
     Space(this(0) - that(0), this(1) - that(1))
   
-  override def :* (scalar: Double): V =
+  override def :* (scalar: Double): Vector =
     Space(this(0) * scalar, this(1) * scalar)
   
-  override def *: (scalar: Double): V = this :* scalar
+  override def *: (scalar: Double): Vector = this :* scalar
   
-  override def ⋅ (that: V): Real =
+  override def ⋅ (that: Vector): Real =
     new Real(this(0) * that(0) + this(1) * that(1))
 }

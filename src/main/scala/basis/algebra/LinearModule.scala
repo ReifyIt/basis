@@ -8,9 +8,9 @@
 package basis.algebra
 
 trait LinearModule extends AffineModule { self =>
-  type Point = Vector
+  override type Point = Vector
   
-  def Vector: this.type = this
+  override def Vector: this.type = this
   
   def zero: Vector
 }

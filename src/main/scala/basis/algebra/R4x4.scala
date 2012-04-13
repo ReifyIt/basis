@@ -8,19 +8,24 @@
 package basis.algebra
 
 trait R4x4 extends F4x4 with RMxN { self =>
-  type Matrix <: MatrixR4x4[Matrix, RowVector]
+  type Matrix <: MatrixR4x4 {
+    type Matrix    = self.Matrix
+    type RowVector = self.RowVector
+  }
   
-  type RowVector <: VectorR4[RowVector]
+  type RowVector <: VectorR4 {
+    type Vector = self.RowVector
+  }
+  
+  override def Row: R4 {
+    type Vector = self.RowVector
+    type Scalar = self.Scalar
+  }
   
   override def Column: R4 {
     type Vector = self.ColumnVector
     type Scalar = self.Scalar
   } = Row
-  
-  def Row: R4 {
-    type Vector = self.RowVector
-    type Scalar = self.Scalar
-  }
   
   override def zero: Matrix =
     apply(0.0, 0.0, 0.0, 0.0,
@@ -34,7 +39,7 @@ trait R4x4 extends F4x4 with RMxN { self =>
           0.0, 0.0, 1.0, 0.0,
           0.0, 0.0, 0.0, 1.0)
   
-  def apply(entries: Array[Double]): Matrix = {
+  override def apply(entries: Array[Double]): Matrix = {
     if (entries.length != 16) throw new DimensionException
     apply(entries( 0), entries( 1), entries( 2), entries( 3),
           entries( 4), entries( 5), entries( 6), entries( 7),
@@ -42,10 +47,10 @@ trait R4x4 extends F4x4 with RMxN { self =>
           entries(12), entries(13), entries(14), entries(15))
   }
   
-  def apply(_1_1: Scalar, _1_2: Scalar, _1_3: Scalar, _1_4: Scalar,
-            _2_1: Scalar, _2_2: Scalar, _2_3: Scalar, _2_4: Scalar,
-            _3_1: Scalar, _3_2: Scalar, _3_3: Scalar, _3_4: Scalar,
-            _4_1: Scalar, _4_2: Scalar, _4_3: Scalar, _4_4: Scalar): Matrix =
+  override def apply(_1_1: Scalar, _1_2: Scalar, _1_3: Scalar, _1_4: Scalar,
+                     _2_1: Scalar, _2_2: Scalar, _2_3: Scalar, _2_4: Scalar,
+                     _3_1: Scalar, _3_2: Scalar, _3_3: Scalar, _3_4: Scalar,
+                     _4_1: Scalar, _4_2: Scalar, _4_3: Scalar, _4_4: Scalar): Matrix =
     apply(_1_1.toDouble, _1_2.toDouble, _1_3.toDouble, _1_4.toDouble,
           _2_1.toDouble, _2_2.toDouble, _2_3.toDouble, _2_4.toDouble,
           _3_1.toDouble, _3_2.toDouble, _3_3.toDouble, _3_4.toDouble,
@@ -63,9 +68,12 @@ object R4x4 extends R4x4 {
       val _2_1: Double, val _2_2: Double, val _2_3: Double, val _2_4: Double,
       val _3_1: Double, val _3_2: Double, val _3_3: Double, val _3_4: Double,
       val _4_1: Double, val _4_2: Double, val _4_3: Double, val _4_4: Double)
-    extends MatrixR4x4[Matrix, R4.Vector] {
+    extends MatrixR4x4 {
     
-    def Space = R4x4
+    override type Matrix = R4x4.Matrix
+    override type RowVector = R4.Vector
+    
+    override def Space = R4x4
     
     def apply(k: Int): Double = k match {
       case  0 => _1_1
@@ -88,11 +96,11 @@ object R4x4 extends R4x4 {
     }
   }
   
-  type RowVector = R4.Vector
+  override type RowVector = R4.Vector
+  override type ColumnVector = R4.Vector
   
+  override def Row = R4
   override def Column = R4
-  
-  def Row = R4
   
   override val zero: Matrix = super.zero
   

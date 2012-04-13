@@ -7,16 +7,22 @@
 
 package basis.algebra
 
-trait VectorRN[V <: VectorRN[V]] extends VectorFN[V, Real] {
-  def Space: RN {
-    type Vector = V
+trait VectorRN extends VectorFN { self =>
+  override type Vector >: self.type <: VectorRN {
+    type Vector = self.Vector
+  }
+  
+  override type Scalar = Real
+  
+  override def Space: RN {
+    type Vector = self.Vector
   }
   
   def apply(i: Int): Double
   
   def coord(i: Int): Real = new Real(this(i))
   
-  override def + (that: V): V = {
+  override def + (that: Vector): Vector = {
     if (dimension != that.dimension)
       throw new DimensionException(Space.toString +" + "+ that.Space.toString)
     val coords = new Array[Double](dimension)
@@ -28,7 +34,7 @@ trait VectorRN[V <: VectorRN[V]] extends VectorFN[V, Real] {
     Space(coords)
   }
   
-  override def unary_- : V = {
+  override def unary_- : Vector = {
     val coords = new Array[Double](dimension)
     var i = 0
     while (i < dimension) {
@@ -38,7 +44,7 @@ trait VectorRN[V <: VectorRN[V]] extends VectorFN[V, Real] {
     Space(coords)
   }
   
-  override def - (that: V): V = {
+  override def - (that: Vector): Vector = {
     if (dimension != that.dimension)
       throw new DimensionException(Space.toString +" - "+ that.Space.toString)
     val coords = new Array[Double](dimension)
@@ -50,9 +56,9 @@ trait VectorRN[V <: VectorRN[V]] extends VectorFN[V, Real] {
     Space(coords)
   }
   
-  override def :* (scalar: Real): V = this :* scalar.toDouble
+  override def :* (scalar: Real): Vector = this :* scalar.toDouble
   
-  def :* (scalar: Double): V = {
+  def :* (scalar: Double): Vector = {
     val coords = new Array[Double](dimension)
     var i = 0
     while (i < dimension) {
@@ -62,11 +68,11 @@ trait VectorRN[V <: VectorRN[V]] extends VectorFN[V, Real] {
     Space(coords)
   }
   
-  override def *: (scalar: Real): V = this :* scalar.toDouble
+  override def *: (scalar: Real): Vector = this :* scalar.toDouble
   
-  def *: (scalar: Double): V = this :* scalar
+  def *: (scalar: Double): Vector = this :* scalar
   
-  override def ⋅ (that: V): Real = {
+  override def ⋅ (that: Vector): Real = {
     if (dimension != that.dimension)
       throw new DimensionException(Space.toString +" ⋅ "+ that.Space.toString)
     var s = 0.0

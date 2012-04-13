@@ -7,8 +7,10 @@
 
 package basis.algebra
 
-trait ScalarSpace extends ScalarModule with LinearSpace {
-  type Scalar <: Field[Scalar]
+trait ScalarSpace extends ScalarModule with LinearSpace { self =>
+  override type Scalar <: Field {
+    type Scalar = self.Scalar
+  }
   
   def apply(x: Double): Scalar
   

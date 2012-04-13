@@ -7,27 +7,29 @@
 
 package basis.algebra
 
-trait R3 extends F3 with RN {
-  type Vector <: VectorR3[Vector]
+trait R3 extends F3 with RN { self =>
+  override type Vector <: VectorR3 {
+    type Vector = self.Vector
+  }
   
   override def zero: Vector = apply(0.0, 0.0, 0.0)
   
-  def apply(coords: Array[Double]): Vector = {
+  override def apply(coords: Array[Double]): Vector = {
     if (coords.length != 3) throw new DimensionException
     apply(coords(0), coords(1), coords(2))
   }
   
-  def apply(x: Scalar, y: Scalar, z: Scalar): Vector =
+  override def apply(x: Scalar, y: Scalar, z: Scalar): Vector =
     apply(x.toDouble, y.toDouble, z.toDouble)
   
   def apply(x: Double, y: Double, z: Double): Vector
 }
 
 object R3 extends HilbertSpace with R3 {
-  final class Vector(val x: Double, val y: Double, val z: Double)
-    extends VectorR3[Vector] {
+  final class Vector(val x: Double, val y: Double, val z: Double) extends VectorR3 {
+    override type Vector = R3.Vector
     
-    def Space = R3
+    override def Space = R3
     
     def apply(i: Int): Double = i match {
       case 0 => x

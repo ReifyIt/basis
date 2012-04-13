@@ -7,21 +7,26 @@
 
 package basis.algebra
 
-trait LinearVector[V <: LinearVector[V, S], S <: Ring[S]]
-  extends AffinePoint[V, V, S] {
+trait LinearVector extends AffinePoint { self =>
+  override type Point = Vector
   
-  def Space: LinearModule {
-    type Vector = V
-    type Scalar = S
+  override type Vector >: self.type <: LinearVector {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
   }
   
-  def + (that: V): V
+  override def Space: LinearModule {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
   
-  def unary_- : V
+  def + (that: Vector): Vector
   
-  def - (that: V): V
+  def unary_- : Vector
   
-  def :* (scalar: S): V
+  def - (that: Vector): Vector
   
-  def *: (scalar: S): V
+  def :* (scalar: Scalar): Vector
+  
+  def *: (scalar: Scalar): Vector
 }

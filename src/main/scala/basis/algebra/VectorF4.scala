@@ -7,29 +7,34 @@
 
 package basis.algebra
 
-trait VectorF4[V <: VectorF4[V, S], S <: Ring[S]] extends VectorFN[V, S] {
-  def Space: F4 {
-    type Vector = V
-    type Scalar = S
+trait VectorF4 extends VectorFN { self =>
+  override type Vector >: self.type <: VectorF4 {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
+  
+  override def Space: F4 {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
   }
   
   final override def dimension: Int = 4
   
-  override def + (that: V): V =
+  override def + (that: Vector): Vector =
     Space(coord(0) + that.coord(0), coord(1) + that.coord(1), coord(2) + that.coord(2), coord(3) + that.coord(3))
   
-  override def unary_- : V =
+  override def unary_- : Vector =
     Space(-coord(0), -coord(1), -coord(2), -coord(3))
   
-  override def - (that: V): V =
+  override def - (that: Vector): Vector =
     Space(coord(0) - that.coord(0), coord(1) - that.coord(1), coord(2) - that.coord(2), coord(3) - that.coord(3))
   
-  override def :* (scalar: S): V =
+  override def :* (scalar: Scalar): Vector =
     Space(coord(0) * scalar, coord(1) * scalar, coord(2) * scalar, coord(3) * scalar)
   
-  override def *: (scalar: S): V =
+  override def *: (scalar: Scalar): Vector =
     Space(scalar * coord(0), scalar * coord(1), scalar * coord(2), scalar * coord(3))
   
-  override def ⋅ (that: V): S =
+  override def ⋅ (that: Vector): Scalar =
     coord(0) * that.coord(0) + coord(1) * that.coord(1) + coord(2) * that.coord(2) + coord(3) * that.coord(3)
 }

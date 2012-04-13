@@ -12,9 +12,13 @@ trait HilbertSpace
     with NormedVectorSpace
     with MetricSpace { self =>
   
-  type Scalar <: CompleteField[Scalar]
+  override type Scalar <: CompleteField {
+    type Scalar = self.Scalar
+  }
   
-  def norm(u: Vector): Scalar = innerProduct(u, u).sqrt
+  def innerProduct(u: Vector, v: Vector): Scalar
   
-  def distance(u: Vector, v: Vector): Scalar = norm(u - v)
+  override def norm(u: Vector): Scalar = innerProduct(u, u).sqrt
+  
+  override def distance(u: Vector, v: Vector): Scalar = norm(u - v)
 }

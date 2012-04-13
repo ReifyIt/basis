@@ -7,19 +7,31 @@
 
 package basis.algebra
 
-trait AffinePoint[P <: AffinePoint[P, V, S],
-                  V <: LinearVector[V, S],
-                  S <: Ring[S]] {
-  
-  def Space: AffineModule {
-    type Point = P
-    type Vector = V
-    type Scalar = S
+trait AffinePoint { self =>
+  type Point >: self.type <: AffinePoint {
+    type Point  = self.Point
+    type Vector = self.Vector
+    type Scalar = self.Scalar
   }
   
-  def + (vector: V): P
+  type Vector <: LinearVector {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
   
-  def - (vector: V): P
+  type Scalar <: Ring {
+    type Scalar = self.Scalar
+  }
   
-  def - (that: P): V
+  def Space: AffineModule {
+    type Point  = self.Point
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
+  
+  def + (vector: Vector): Point
+  
+  def - (vector: Vector): Point
+  
+  def - (that: Point): Vector
 }

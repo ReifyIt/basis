@@ -9,8 +9,8 @@ package basis.algebra
 
 import basis.util.MurmurHash._
 
-final class Real(private val value: Double)
-  extends OrderedRing[Real] with CompleteField[Real] {
+final class Real(private val value: Double) extends OrderedRing with CompleteField {
+  type Scalar = Real
   
   def Space = Real
   
@@ -21,10 +21,6 @@ final class Real(private val value: Double)
   def - (that: Real): Real = new Real(value - that.value)
   
   def * (that: Real): Real = new Real(value * that.value)
-  
-  def :* (that: Real): Real = new Real(value * that.value)
-  
-  def *: (that: Real): Real = new Real(that.value * value)
   
   def inverse: Real = new Real(1.0 / value)
   

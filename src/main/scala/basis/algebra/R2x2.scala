@@ -8,19 +8,24 @@
 package basis.algebra
 
 trait R2x2 extends F2x2 with RMxN { self =>
-  type Matrix <: MatrixR2x2[Matrix, RowVector]
+  override type Matrix <: MatrixR2x2 {
+    type Matrix    = self.Matrix
+    type RowVector = self.RowVector
+  }
   
-  type RowVector <: VectorR2[RowVector]
+  override type RowVector <: VectorR2 {
+    type Vector = self.RowVector
+  }
+  
+  override def Row: R2 {
+    type Vector = self.RowVector
+    type Scalar = self.Scalar
+  }
   
   override def Column: R2 {
     type Vector = self.ColumnVector
     type Scalar = self.Scalar
   } = Row
-  
-  def Row: R2 {
-    type Vector = self.RowVector
-    type Scalar = self.Scalar
-  }
   
   override def zero: Matrix =
     apply(0.0, 0.0,
@@ -30,14 +35,14 @@ trait R2x2 extends F2x2 with RMxN { self =>
     apply(1.0, 0.0,
           0.0, 1.0)
   
-  def apply(entries: Array[Double]): Matrix = {
+  override def apply(entries: Array[Double]): Matrix = {
     if (entries.length != 4) throw new DimensionException
     apply(entries(0), entries(1),
           entries(2), entries(3))
   }
   
-  def apply(_1_1: Scalar, _1_2: Scalar,
-            _2_1: Scalar, _2_2: Scalar): Matrix =
+  override def apply(_1_1: Scalar, _1_2: Scalar,
+                     _2_1: Scalar, _2_2: Scalar): Matrix =
     apply(_1_1.toDouble, _1_2.toDouble,
           _2_1.toDouble, _2_2.toDouble)
   
@@ -49,9 +54,12 @@ object R2x2 extends R2x2 {
   final class Matrix(
       val _1_1: Double, val _1_2: Double,
       val _2_1: Double, val _2_2: Double)
-    extends MatrixR2x2[Matrix, R2.Vector] {
+    extends MatrixR2x2 {
     
-    def Space = R2x2
+    override type Matrix = R2x2.Matrix
+    override type RowVector = R2.Vector
+    
+    override def Space = R2x2
     
     def apply(k: Int): Double = k match {
       case 0 => _1_1
@@ -62,11 +70,11 @@ object R2x2 extends R2x2 {
     }
   }
   
-  type RowVector = R2.Vector
+  override type RowVector = R2.Vector
+  override type ColumnVector = R2.Vector
   
+  override def Row = R2
   override def Column = R2
-  
-  def Row = R2
   
   override val zero: Matrix = super.zero
   

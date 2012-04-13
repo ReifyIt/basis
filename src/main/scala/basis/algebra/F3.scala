@@ -7,17 +7,20 @@
 
 package basis.algebra
 
-trait F3 extends FN {
-  type Vector <: VectorF3[Vector, Scalar]
+trait F3 extends FN { self =>
+  override type Vector <: VectorF3 {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
   
-  final def dimension: Int = 3
+  final override def dimension: Int = 3
   
   override def zero: Vector = {
     val z = Scalar.zero
     apply(z, z, z)
   }
   
-  def apply(coords: Seq[Scalar]): Vector = {
+  override def apply(coords: Seq[Scalar]): Vector = {
     if (coords.length != 3) throw new DimensionException
     apply(coords(0), coords(1), coords(2))
   }

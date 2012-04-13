@@ -7,12 +7,14 @@
 
 package basis.algebra
 
-trait RN extends LinearSpace with FN {
-  type Vector <: VectorRN[Vector]
+trait RN extends LinearSpace with FN { self =>
+  override type Vector <: VectorRN {
+    type Vector = self.Vector
+  }
   
-  type Scalar = Real
+  override type Scalar = Real
   
-  val Scalar = Real
+  override def Scalar = Real
   
   override def zero: Vector = apply(new Array[Double](dimension))
   

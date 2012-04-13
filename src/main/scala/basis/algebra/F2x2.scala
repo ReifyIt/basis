@@ -8,25 +8,32 @@
 package basis.algebra
 
 trait F2x2 extends LinearSpace with FMxN { self =>
-  type Matrix <: MatrixF2x2[Matrix, RowVector, Scalar]
+  override type Matrix <: MatrixF2x2 {
+    type Matrix    = self.Matrix
+    type RowVector = self.RowVector
+    type Scalar    = self.Scalar
+  }
   
-  type Transpose = Matrix
+  override type Transpose = Matrix
   
-  type ColumnVector = RowVector
-  
-  type RowVector <: VectorF2[RowVector, Scalar]
-  
-  def Transpose: this.type = this
-  
-  def Column: F2 {
-    type Vector = self.ColumnVector
-    type Scalar = self.Scalar
-  } = Row
-  
-  def Row: F2 {
+  override type RowVector <: VectorF2 {
     type Vector = self.RowVector
     type Scalar = self.Scalar
   }
+  
+  override type ColumnVector = RowVector
+  
+  override def Transpose: this.type = this
+  
+  override def Row: F2 {
+    type Vector = self.RowVector
+    type Scalar = self.Scalar
+  }
+  
+  override def Column: F2 {
+    type Vector = self.ColumnVector
+    type Scalar = self.Scalar
+  } = Row
   
   final override def dimension: Int = 4
   
@@ -43,7 +50,7 @@ trait F2x2 extends LinearSpace with FMxN { self =>
           z, u)
   }
   
-  def apply(entries: Seq[Scalar]): Matrix = {
+  override def apply(entries: Seq[Scalar]): Matrix = {
     if (entries.length != 4) throw new DimensionException
     apply(entries(0), entries(1),
           entries(2), entries(3))

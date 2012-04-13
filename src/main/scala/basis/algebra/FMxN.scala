@@ -8,21 +8,46 @@
 package basis.algebra
 
 trait FMxN extends LinearModule { self =>
-  type Matrix <: MatrixFMxN[Matrix, Transpose, ColumnVector, RowVector, Scalar]
+  type Matrix <: MatrixFMxN {
+    type Matrix       = self.Matrix
+    type Transpose    = self.Transpose
+    type RowVector    = self.RowVector
+    type ColumnVector = self.ColumnVector
+    type Scalar       = self.Scalar
+  }
   
-  type Transpose <: MatrixFMxN[Transpose, Matrix, RowVector, ColumnVector, Scalar]
+  type Transpose <: MatrixFMxN {
+    type Matrix       = self.Transpose
+    type Transpose    = self.Matrix
+    type RowVector    = self.ColumnVector
+    type ColumnVector = self.RowVector
+    type Scalar       = self.Scalar
+  }
   
-  type ColumnVector <: VectorFN[ColumnVector, Scalar]
+  type RowVector <: VectorFN {
+    type Vector = self.RowVector
+    type Scalar = self.Scalar
+  }
   
-  type RowVector <: VectorFN[RowVector, Scalar]
+  type ColumnVector <: VectorFN {
+    type Vector = self.ColumnVector
+    type Scalar = self.Scalar
+  }
   
-  type Vector = Matrix
+  override type Point = Matrix
+  
+  override type Vector = Matrix
   
   def Transpose: FMxN {
-    type Matrix = self.Transpose
-    type Transpose = self.Matrix
+    type Matrix       = self.Transpose
+    type Transpose    = self.Matrix
+    type RowVector    = self.ColumnVector
     type ColumnVector = self.RowVector
-    type RowVector = self.ColumnVector
+    type Scalar       = self.Scalar
+  }
+  
+  def Row: FN {
+    type Vector = self.RowVector
     type Scalar = self.Scalar
   }
   
@@ -31,10 +56,7 @@ trait FMxN extends LinearModule { self =>
     type Scalar = self.Scalar
   }
   
-  def Row: FN {
-    type Vector = self.RowVector
-    type Scalar = self.Scalar
-  }
+  def dimension: Int = Column.dimension * Row.dimension
   
   def zero: Matrix = {
     val z = Scalar.zero
@@ -46,8 +68,6 @@ trait FMxN extends LinearModule { self =>
     }
     apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
-  
-  def dimension: Int = Column.dimension * Row.dimension
   
   def apply(entries: Seq[Scalar]): Matrix
 }

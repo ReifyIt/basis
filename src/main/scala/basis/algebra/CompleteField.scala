@@ -7,6 +7,10 @@
 
 package basis.algebra
 
-trait CompleteField[F <: CompleteField[F]] extends Field[F] {
-  def sqrt: F
+trait CompleteField extends Field { self =>
+  override type Scalar >: self.type <: CompleteField {
+    type Scalar = self.Scalar
+  }
+  
+  def sqrt: Scalar
 }

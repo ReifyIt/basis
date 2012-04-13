@@ -8,11 +8,20 @@
 package basis.algebra
 
 trait AffineModule { self =>
-  type Point <: AffinePoint[Point, Vector, Scalar]
+  type Point <: AffinePoint {
+    type Point  = self.Point
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
   
-  type Vector <: LinearVector[Vector, Scalar]
+  type Vector <: LinearVector {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
   
-  type Scalar <: Ring[Scalar]
+  type Scalar <: Ring {
+    type Scalar = self.Scalar
+  }
   
   def Vector: LinearModule {
     type Vector = self.Vector
