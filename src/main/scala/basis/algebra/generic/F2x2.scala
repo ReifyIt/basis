@@ -6,9 +6,10 @@
 \*                                                                      */
 
 package basis.algebra
+package generic
 
-trait F3x3 extends LinearSpace with FMxN { self =>
-  override type Matrix <: MatrixF3x3 {
+trait F2x2 extends LinearSpace with FMxN { self =>
+  override type Matrix <: MatrixF2x2 {
     type Matrix    = self.Matrix
     type RowVector = self.RowVector
     type Scalar    = self.Scalar
@@ -16,7 +17,7 @@ trait F3x3 extends LinearSpace with FMxN { self =>
   
   override type Transpose = Matrix
   
-  override type RowVector <: VectorF3 {
+  override type RowVector <: VectorF2 {
     type Vector = self.RowVector
     type Scalar = self.Scalar
   }
@@ -25,41 +26,37 @@ trait F3x3 extends LinearSpace with FMxN { self =>
   
   override def Transpose: this.type = this
   
-  override def Row: F3 {
+  override def Row: F2 {
     type Vector = self.RowVector
     type Scalar = self.Scalar
   }
   
-  override def Column: F3 {
+  override def Column: F2 {
     type Vector = self.ColumnVector
     type Scalar = self.Scalar
   } = Row
   
-  final override def dimension: Int = 9
+  final override def dimension: Int = 4
   
   override def zero: Matrix = {
     val z = Scalar.zero
-    apply(z, z, z,
-          z, z, z,
-          z, z, z)
+    apply(z, z,
+          z, z)
   }
   
   def identity: Matrix = {
     val z = Scalar.zero
     val u = Scalar.unit
-    apply(u, z, z,
-          z, u, z,
-          z, z, u)
+    apply(u, z,
+          z, u)
   }
   
   override def apply(entries: Seq[Scalar]): Matrix = {
-    if (entries.length != 9) throw new DimensionException
-    apply(entries(0), entries(1), entries(2),
-          entries(3), entries(4), entries(5),
-          entries(6), entries(7), entries(8))
+    if (entries.length != 4) throw new DimensionException
+    apply(entries(0), entries(1),
+          entries(2), entries(3))
   }
   
-  def apply(_1_1: Scalar, _1_2: Scalar, _1_3: Scalar,
-            _2_1: Scalar, _2_2: Scalar, _2_3: Scalar,
-            _3_1: Scalar, _3_2: Scalar, _3_3: Scalar): Matrix
+  def apply(_1_1: Scalar, _1_2: Scalar,
+            _2_1: Scalar, _2_2: Scalar): Matrix
 }

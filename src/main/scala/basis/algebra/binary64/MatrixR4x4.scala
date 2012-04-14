@@ -8,6 +8,8 @@
 package basis.algebra
 package binary64
 
+import generic._
+
 trait MatrixR4x4 extends MatrixF4x4 with MatrixRMxN { self =>
   override type Matrix >: self.type <: MatrixR4x4 {
     type Matrix    = self.Matrix

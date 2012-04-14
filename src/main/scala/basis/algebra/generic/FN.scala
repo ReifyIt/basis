@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package generic
 
 trait FN extends LinearModule { self =>
   override type Vector <: VectorFN {

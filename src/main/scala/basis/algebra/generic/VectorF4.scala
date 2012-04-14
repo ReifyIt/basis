@@ -6,35 +6,36 @@
 \*                                                                      */
 
 package basis.algebra
+package generic
 
-trait VectorF2 extends VectorFN { self =>
-  override type Vector >: self.type <: VectorF2 {
+trait VectorF4 extends VectorFN { self =>
+  override type Vector >: self.type <: VectorF4 {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  override def Space: F2 {
+  override def Space: F4 {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  final override def dimension: Int = 2
+  final override def dimension: Int = 4
   
   override def + (that: Vector): Vector =
-    Space(coord(0) + that.coord(0), coord(1) + that.coord(1))
+    Space(coord(0) + that.coord(0), coord(1) + that.coord(1), coord(2) + that.coord(2), coord(3) + that.coord(3))
   
   override def unary_- : Vector =
-    Space(-coord(0), -coord(1))
+    Space(-coord(0), -coord(1), -coord(2), -coord(3))
   
   override def - (that: Vector): Vector =
-    Space(coord(0) - that.coord(0), coord(1) - that.coord(1))
+    Space(coord(0) - that.coord(0), coord(1) - that.coord(1), coord(2) - that.coord(2), coord(3) - that.coord(3))
   
   override def :* (scalar: Scalar): Vector =
-    Space(coord(0) * scalar, coord(1) * scalar)
+    Space(coord(0) * scalar, coord(1) * scalar, coord(2) * scalar, coord(3) * scalar)
   
   override def *: (scalar: Scalar): Vector =
-    Space(scalar * coord(0), scalar * coord(1))
+    Space(scalar * coord(0), scalar * coord(1), scalar * coord(2), scalar * coord(3))
   
   override def ⋅ (that: Vector): Scalar =
-    coord(0) * that.coord(0) + coord(1) * that.coord(1)
+    coord(0) * that.coord(0) + coord(1) * that.coord(1) + coord(2) * that.coord(2) + coord(3) * that.coord(3)
 }

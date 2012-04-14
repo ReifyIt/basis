@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package generic
 
 trait FMxN extends LinearModule { self =>
   type Matrix <: MatrixFMxN {

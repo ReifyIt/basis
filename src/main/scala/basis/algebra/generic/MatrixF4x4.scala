@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package generic
 
 trait MatrixF4x4 extends MatrixFMxN { self =>
   override type Matrix >: self.type <: MatrixF4x4 {

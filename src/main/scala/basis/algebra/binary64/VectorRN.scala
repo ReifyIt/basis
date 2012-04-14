@@ -8,6 +8,8 @@
 package basis.algebra
 package binary64
 
+import generic._
+
 trait VectorRN extends VectorFN { self =>
   override type Vector >: self.type <: VectorRN {
     type Vector = self.Vector

@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package generic
 
 trait VectorF3 extends VectorFN { self =>
   override type Vector >: self.type <: VectorF3 {

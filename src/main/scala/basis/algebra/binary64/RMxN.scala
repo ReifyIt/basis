@@ -8,6 +8,8 @@
 package basis.algebra
 package binary64
 
+import generic._
+
 trait RMxN extends LinearSpace with FMxN { self =>
   override type Matrix <: MatrixRMxN {
     type Matrix       = self.Matrix

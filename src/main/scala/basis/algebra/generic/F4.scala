@@ -6,31 +6,25 @@
 \*                                                                      */
 
 package basis.algebra
-package binary64
+package generic
 
-import generic._
-
-trait RN extends LinearSpace with FN { self =>
-  override type Vector <: VectorRN {
+trait F4 extends FN { self =>
+  override type Vector <: VectorF4 {
     type Vector = self.Vector
+    type Scalar = self.Scalar
   }
   
-  override type Scalar = Real
+  final override def dimension: Int = 4
   
-  override def Scalar = Real
-  
-  override def zero: Vector = apply(new Array[Double](dimension))
+  override def zero: Vector = {
+    val z = Scalar.zero
+    apply(z, z, z, z)
+  }
   
   override def apply(coords: Seq[Scalar]): Vector = {
-    if (coords.length != dimension) throw new DimensionException
-    val xs = new Array[Double](dimension)
-    var i = 0
-    while (i < xs.length) {
-      xs(i) = coords(i).toDouble
-      i += 1
-    }
-    apply(xs)
+    if (coords.length != 4) throw new DimensionException
+    apply(coords(0), coords(1), coords(2), coords(3))
   }
   
-  def apply(coords: Array[Double]): Vector
+  def apply(x: Scalar, y: Scalar, z: Scalar, w: Scalar): Vector
 }
