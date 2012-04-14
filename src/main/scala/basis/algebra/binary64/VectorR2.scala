@@ -6,30 +6,31 @@
 \*                                                                      */
 
 package basis.algebra
+package binary64
 
-trait VectorR4 extends VectorF4 with VectorRN { self =>
-  override type Vector >: self.type <: VectorR4 {
+trait VectorR2 extends VectorF2 with VectorRN { self =>
+  override type Vector >: self.type <: VectorR2 {
     type Vector = self.Vector
   }
   
-  override def Space: R4 {
+  override def Space: R2 {
     type Vector = self.Vector
   }
   
   override def + (that: Vector): Vector =
-    Space(this(0) + that(0), this(1) + that(1), this(2) + that(2), this(3) + that(3))
+    Space(this(0) + that(0), this(1) + that(1))
   
   override def unary_- : Vector =
-    Space(-this(0), -this(1), -this(2), -this(3))
+    Space(-this(0), -this(1))
   
   override def - (that: Vector): Vector =
-    Space(this(0) - that(0), this(1) - that(1), this(2) - that(2), this(3) - that(3))
+    Space(this(0) - that(0), this(1) - that(1))
   
   override def :* (scalar: Double): Vector =
-    Space(this(0) * scalar, this(1) * scalar, this(2) * scalar, this(3) * scalar)
+    Space(this(0) * scalar, this(1) * scalar)
   
   override def *: (scalar: Double): Vector = this :* scalar
   
   override def ⋅ (that: Vector): Real =
-    new Real(this(0) * that(0) + this(1) * that(1) + this(2) * that(2) + this(3) * that(3))
+    new Real(this(0) * that(0) + this(1) * that(1))
 }

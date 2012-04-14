@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package binary64
 
 trait R2x2 extends F2x2 with RMxN { self =>
   override type Matrix <: MatrixR2x2 {

@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package binary64
 
 import basis.util.MurmurHash._
 

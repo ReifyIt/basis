@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package binary64
 
 trait VectorRN extends VectorFN { self =>
   override type Vector >: self.type <: VectorRN {

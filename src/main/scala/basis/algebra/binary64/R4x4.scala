@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package binary64
 
 trait R4x4 extends F4x4 with RMxN { self =>
   type Matrix <: MatrixR4x4 {

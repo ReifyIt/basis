@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package binary64
 
 trait R3x3 extends F3x3 with RMxN { self =>
   override type Matrix <: MatrixR3x3 {

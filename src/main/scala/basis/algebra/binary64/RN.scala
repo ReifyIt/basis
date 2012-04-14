@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package binary64
 
 trait RN extends LinearSpace with FN { self =>
   override type Vector <: VectorRN {

@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.algebra
+package binary64
 
 trait RMxN extends LinearSpace with FMxN { self =>
   override type Matrix <: MatrixRMxN {
