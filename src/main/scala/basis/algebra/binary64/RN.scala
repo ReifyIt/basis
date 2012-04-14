@@ -21,15 +21,17 @@ trait RN extends LinearSpace with FN { self =>
   
   override def zero: Vector = apply(new Array[Double](dimension))
   
-  override def apply(coords: Seq[Scalar]): Vector = {
-    if (coords.length != dimension) throw new DimensionException
-    val xs = new Array[Double](dimension)
+  override def apply(coords: TraversableOnce[Scalar]): Vector = {
+    val xs = coords.toSeq
+    if (xs.length != dimension) throw new DimensionException
+    // apply(xs.map(_.toDouble).toArray[Double]) // I know.
+    val array = new Array[Double](dimension)
     var i = 0
-    while (i < xs.length) {
-      xs(i) = coords(i).toDouble
+    while (i < array.length) {
+      array(i) = xs(i).toDouble
       i += 1
     }
-    apply(xs)
+    apply(array)
   }
   
   def apply(coords: Array[Double]): Vector

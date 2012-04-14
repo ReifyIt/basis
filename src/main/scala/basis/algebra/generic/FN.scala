@@ -27,5 +27,5 @@ trait FN extends LinearModule { self =>
   
   def dimension: Int
   
-  def apply(coords: Seq[Scalar]): Vector
+  def apply(coords: TraversableOnce[Scalar]): Vector
 }

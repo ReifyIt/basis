@@ -70,5 +70,5 @@ trait FMxN extends LinearModule { self =>
     apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
   
-  def apply(entries: Seq[Scalar]): Matrix
+  def apply(entries: TraversableOnce[Scalar]): Matrix
 }

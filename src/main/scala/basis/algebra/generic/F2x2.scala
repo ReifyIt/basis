@@ -51,10 +51,11 @@ trait F2x2 extends LinearSpace with FMxN { self =>
           z, u)
   }
   
-  override def apply(entries: Seq[Scalar]): Matrix = {
-    if (entries.length != 4) throw new DimensionException
-    apply(entries(0), entries(1),
-          entries(2), entries(3))
+  override def apply(entries: TraversableOnce[Scalar]): Matrix = {
+    val xs = entries.toSeq
+    if (xs.length != 4) throw new DimensionException
+    apply(xs(0), xs(1),
+          xs(2), xs(3))
   }
   
   def apply(_1_1: Scalar, _1_2: Scalar,

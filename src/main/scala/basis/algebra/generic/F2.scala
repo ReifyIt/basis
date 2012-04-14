@@ -21,9 +21,10 @@ trait F2 extends FN { self =>
     apply(z, z)
   }
   
-  override def apply(coords: Seq[Scalar]): Vector = {
-    if (coords.length != 2) throw new DimensionException
-    apply(coords(0), coords(1))
+  override def apply(coords: TraversableOnce[Scalar]): Vector = {
+    val xs = coords.toSeq
+    if (xs.length != 2) throw new DimensionException
+    apply(xs(0), xs(1))
   }
   
   def apply(x: Scalar, y: Scalar): Vector
