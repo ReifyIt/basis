@@ -28,4 +28,24 @@ trait FN extends LinearModule { self =>
   def dimension: Int
   
   def apply(coords: TraversableOnce[Scalar]): Vector
+  
+  def map(that: FN { type Scalar = self.Scalar }):
+      FMxN {
+        type RowVector    = self.Vector
+        type ColumnVector = that.Vector
+        type Scalar       = self.Scalar
+      } =
+    new DenseMatrixModule(this, that)
+}
+
+object FN {
+  def apply[S <: Ring { type Scalar = S }]
+      (Scalar: ScalarModule { type Scalar = S })
+      (dimension: Int): DenseVectorModule[S] =
+    new DenseVectorModule[S](Scalar)(dimension)
+  
+  def apply[S <: Field { type Scalar = S }]
+      (Scalar: ScalarSpace { type Scalar = S })
+      (dimension: Int): DenseVectorSpace[S] =
+    new DenseVectorSpace[S](Scalar)(dimension)
 }

@@ -59,6 +59,7 @@ object R2x2 extends R2x2 {
       val _2_1: Double, val _2_2: Double)
     extends MatrixR2x2 {
     
+    override type Space  = R2x2.type
     override type Matrix = R2x2.Matrix
     override type RowVector = R2.Vector
     

@@ -9,12 +9,12 @@ package basis.algebra
 package generic
 
 trait VectorF2 extends VectorFN { self =>
-  override type Vector >: self.type <: VectorF2 {
+  override type Space <: F2 with Singleton {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  override def Space: F2 {
+  override type Vector >: self.type <: VectorF2 {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }

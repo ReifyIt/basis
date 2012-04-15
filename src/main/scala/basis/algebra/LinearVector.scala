@@ -8,14 +8,14 @@
 package basis.algebra
 
 trait LinearVector extends AffinePoint { self =>
-  override type Point = Vector
-  
-  override type Vector >: self.type <: LinearVector {
+  override type Space <: LinearModule with Singleton {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  override def Space: LinearModule {
+  override type Point = Vector
+  
+  override type Vector >: self.type <: LinearVector {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }

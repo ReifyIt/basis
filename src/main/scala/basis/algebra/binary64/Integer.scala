@@ -11,6 +11,7 @@ package binary64
 import basis.util.MurmurHash._
 
 final class Integer(private val value: Long) extends OrderedRing {
+  type Space  = Integer.type
   type Scalar = Integer
   
   def Space = Integer

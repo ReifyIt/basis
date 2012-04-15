@@ -11,6 +11,7 @@ package binary64
 import basis.util.MurmurHash._
 
 final class Real(private val value: Double) extends OrderedRing with CompleteField {
+  type Space  = Real.type
   type Scalar = Real
   
   def Space = Real

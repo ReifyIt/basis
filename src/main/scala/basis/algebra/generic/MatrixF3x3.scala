@@ -9,6 +9,12 @@ package basis.algebra
 package generic
 
 trait MatrixF3x3 extends MatrixFMxN { self =>
+  override type Space <: F3x3 with Singleton {
+    type Matrix    = self.Matrix
+    type RowVector = self.RowVector
+    type Scalar    = self.Scalar
+  }
+  
   override type Matrix >: self.type <: MatrixF3x3 {
     type Matrix    = self.Matrix
     type RowVector = self.RowVector
@@ -26,12 +32,6 @@ trait MatrixF3x3 extends MatrixFMxN { self =>
   
   override type Scalar <: Field {
     type Scalar = self.Scalar
-  }
-  
-  override def Space: F3x3 {
-    type Matrix    = self.Matrix
-    type RowVector = self.RowVector
-    type Scalar    = self.Scalar
   }
   
   final override def M: Int = 3

@@ -8,6 +8,12 @@
 package basis.algebra
 
 trait AffinePoint { self =>
+  type Space <: AffineModule with Singleton {
+    type Point  = self.Point
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
+  
   type Point >: self.type <: AffinePoint {
     type Point  = self.Point
     type Vector = self.Vector
@@ -23,11 +29,7 @@ trait AffinePoint { self =>
     type Scalar = self.Scalar
   }
   
-  def Space: AffineModule {
-    type Point  = self.Point
-    type Vector = self.Vector
-    type Scalar = self.Scalar
-  }
+  def Space: Space
   
   def + (vector: Vector): Point
   

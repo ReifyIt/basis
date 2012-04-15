@@ -11,6 +11,14 @@ package generic
 import basis.util.MurmurHash._
 
 trait MatrixFMxN extends Equals with LinearVector { self =>
+  override type Space <: FMxN with Singleton {
+    type Matrix       = self.Matrix
+    type Transpose    = self.Transpose
+    type RowVector    = self.RowVector
+    type ColumnVector = self.ColumnVector
+    type Scalar       = self.Scalar
+  }
+  
   type Matrix >: self.type <: MatrixFMxN {
     type Matrix       = self.Matrix
     type Transpose    = self.Transpose
@@ -40,14 +48,6 @@ trait MatrixFMxN extends Equals with LinearVector { self =>
   override type Point = Matrix
   
   override type Vector = Matrix
-  
-  override def Space: FMxN {
-    type Matrix       = self.Matrix
-    type Transpose    = self.Transpose
-    type ColumnVector = self.ColumnVector
-    type RowVector    = self.RowVector
-    type Scalar       = self.Scalar
-  }
   
   def entry(k: Int): Scalar
   
@@ -181,6 +181,46 @@ trait MatrixFMxN extends Equals with LinearVector { self =>
       j += 1
     }
     Space.Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
+  }
+  
+  def * (that: MatrixFMxN {
+           type ColumnVector = self.RowVector
+           type Scalar       = self.Scalar
+         }):
+      MatrixFMxN {
+        type RowVector    = self.ColumnVector
+        type ColumnVector = that.RowVector
+        type Scalar       = self.Scalar
+      } = {
+    if (N != that.M) throw new DimensionException
+    val P = that.N
+    val zero = Space.Scalar.zero
+    val entries = new Array[AnyRef](M * P)
+    var k = 0
+    var i = 0
+    var i0 = 0
+    while (i < M) {
+      var j = 0
+      while (j < P) {
+        var x = zero
+        var m = i0
+        var n = j
+        var d = 0
+        while (d < N) {
+          x += entry(m) * that.entry(n)
+          m += 1
+          n += P
+          d += 1
+        }
+        entries(k) = x
+        k += 1
+        j += 1
+      }
+      i += 1
+      i0 += N
+    }
+    val MxP = Space compose that.Space
+    MxP(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
   }
   
   def transpose: Transpose = {

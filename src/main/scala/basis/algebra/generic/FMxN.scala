@@ -71,4 +71,12 @@ trait FMxN extends LinearModule { self =>
   }
   
   def apply(entries: TraversableOnce[Scalar]): Matrix
+  
+  def compose(that: FMxN { type ColumnVector = self.RowVector; type Scalar = self.Scalar }):
+      FMxN {
+        type RowVector    = self.ColumnVector
+        type ColumnVector = that.RowVector
+        type Scalar       = self.Scalar
+      } =
+    new DenseMatrixModule(Column, that.Row)
 }

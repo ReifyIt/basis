@@ -11,6 +11,11 @@ package binary64
 import generic._
 
 trait MatrixR2x2 extends MatrixF2x2 with MatrixRMxN { self =>
+  override type Space <: R2x2 with Singleton {
+    type Matrix    = self.Matrix
+    type RowVector = self.RowVector
+  }
+  
   override type Matrix >: self.type <: MatrixR2x2 {
     type Matrix    = self.Matrix
     type RowVector = self.RowVector
@@ -18,11 +23,6 @@ trait MatrixR2x2 extends MatrixF2x2 with MatrixRMxN { self =>
   
   override type RowVector <: VectorR2 {
     type Vector = self.RowVector
-  }
-  
-  override def Space: R2x2 {
-    type Matrix    = self.Matrix
-    type RowVector = self.RowVector
   }
   
   override def row1: RowVector = Space.Row(this(0), this(1))

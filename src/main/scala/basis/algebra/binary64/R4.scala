@@ -30,6 +30,7 @@ trait R4 extends F4 with RN { self =>
 
 object R4 extends HilbertSpace with R4 {
   final class Vector(val x: Double, val y: Double, val z: Double, val w: Double) extends VectorR4 {
+    override type Space  = R4.type
     override type Vector = R4.Vector
     
     override def Space = R4

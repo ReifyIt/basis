@@ -66,6 +66,7 @@ object R3x3 extends R3x3 {
       val _3_1: Double, val _3_2: Double, val _3_3: Double)
     extends MatrixR3x3 {
     
+    override type Space  = R3x3.type
     override type Matrix = R3x3.Matrix
     override type RowVector = R3.Vector
     

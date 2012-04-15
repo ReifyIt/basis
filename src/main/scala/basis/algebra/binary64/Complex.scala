@@ -11,6 +11,7 @@ package binary64
 import basis.util.MurmurHash._
 
 final class Complex(val real: Double, val imaginary: Double) extends CompleteField {
+  type Space  = Complex.type
   type Scalar = Complex
   
   def Space = Complex

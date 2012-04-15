@@ -8,15 +8,15 @@
 package basis.algebra
 
 trait Ring extends LinearVector { self =>
+  override type Space <: ScalarModule with Singleton {
+    type Scalar = self.Scalar
+  }
+  
   override type Point = Scalar
   
   override type Vector = Scalar
   
   override type Scalar >: self.type <: Ring {
-    type Scalar = self.Scalar
-  }
-  
-  override def Space: ScalarModule {
     type Scalar = self.Scalar
   }
   

@@ -11,12 +11,12 @@ package generic
 import basis.util.MurmurHash._
 
 trait VectorFN extends Equals with LinearVector { self =>
-  override type Vector >: self.type <: VectorFN {
+  override type Space <: FN with Singleton {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  override def Space: FN {
+  override type Vector >: self.type <: VectorFN {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }

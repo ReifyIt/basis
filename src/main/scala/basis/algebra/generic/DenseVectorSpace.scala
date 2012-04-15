@@ -6,25 +6,9 @@
 \*                                                                      */
 
 package basis.algebra
+package generic
 
-trait Field extends Ring { self =>
-  override type Space <: ScalarSpace with Singleton {
-    type Scalar = self.Scalar
-  }
-  
-  override type Scalar >: self.type <: Field {
-    type Scalar = self.Scalar
-  }
-  
-  def + (that: Scalar): Scalar
-  
-  def unary_- : Scalar
-  
-  def - (that: Scalar): Scalar
-  
-  def * (that: Scalar): Scalar
-  
-  def inverse: Scalar
-  
-  def / (that: Scalar): Scalar
-}
+class DenseVectorSpace[S <: Field { type Scalar = S }]
+    (override val Scalar: ScalarSpace { type Scalar = S })
+    (dimension: Int)
+  extends DenseVectorModule[S](Scalar)(dimension) with LinearSpace

@@ -11,6 +11,13 @@ package binary64
 import generic._
 
 trait MatrixRMxN extends MatrixFMxN { self =>
+  override type Space <: RMxN with Singleton {
+    type Matrix       = self.Matrix
+    type Transpose    = self.Transpose
+    type RowVector    = self.RowVector
+    type ColumnVector = self.ColumnVector
+  }
+  
   override type Matrix >: self.type <: MatrixRMxN {
     type Matrix       = self.Matrix
     type Transpose    = self.Transpose
@@ -34,13 +41,6 @@ trait MatrixRMxN extends MatrixFMxN { self =>
   }
   
   override type Scalar = Real
-  
-  override def Space: RMxN {
-    type Matrix       = self.Matrix
-    type Transpose    = self.Transpose
-    type ColumnVector = self.ColumnVector
-    type RowVector    = self.RowVector
-  }
   
   def apply(k: Int): Double
   

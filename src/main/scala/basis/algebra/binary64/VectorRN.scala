@@ -11,15 +11,15 @@ package binary64
 import generic._
 
 trait VectorRN extends VectorFN { self =>
+  override type Space <: RN with Singleton {
+    type Vector = self.Vector
+  }
+  
   override type Vector >: self.type <: VectorRN {
     type Vector = self.Vector
   }
   
   override type Scalar = Real
-  
-  override def Space: RN {
-    type Vector = self.Vector
-  }
   
   def apply(i: Int): Double
   

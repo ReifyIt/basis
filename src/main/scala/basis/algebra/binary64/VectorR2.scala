@@ -11,11 +11,11 @@ package binary64
 import generic._
 
 trait VectorR2 extends VectorF2 with VectorRN { self =>
-  override type Vector >: self.type <: VectorR2 {
+  override type Space <: R2 with Singleton {
     type Vector = self.Vector
   }
   
-  override def Space: R2 {
+  override type Vector >: self.type <: VectorR2 {
     type Vector = self.Vector
   }
   
