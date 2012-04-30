@@ -8,31 +8,17 @@
 package basis.algebra
 package binary64
 
-import generic._
-
-trait RN extends LinearSpace with FN { self =>
-  override type Vector <: VectorRN {
-    type Vector = self.Vector
-  }
+class RN(val N: Int) extends RealVectorSpace {
+  override type Vector = VectorRN
   
-  override type Scalar = Real
+  override def apply(coords: TraversableOnce[Real]): Vector =
+    new Vector(this, coords.map(_.toDouble).toArray[Double])
   
-  override def Scalar = Real
+  override def apply(coords: Array[Double]): Vector =
+    new Vector(this, coords)
   
-  override def zero: Vector = apply(new Array[Double](dimension))
+  def apply(coords: Double*): Vector =
+    new Vector(this, coords.toArray[Double])
   
-  override def apply(coords: TraversableOnce[Scalar]): Vector = {
-    val xs = coords.toSeq
-    if (xs.length != dimension) throw new DimensionException
-    // apply(xs.map(_.toDouble).toArray[Double]) // I know.
-    val array = new Array[Double](dimension)
-    var i = 0
-    while (i < array.length) {
-      array(i) = xs(i).toDouble
-      i += 1
-    }
-    apply(array)
-  }
-  
-  def apply(coords: Array[Double]): Vector
+  override def toString: String = "R"+"("+ N + ")"
 }

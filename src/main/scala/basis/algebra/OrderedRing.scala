@@ -7,22 +7,28 @@
 
 package basis.algebra
 
-trait OrderedRing extends Ring { self =>
-  override type Scalar >: self.type <: OrderedRing {
-    type Scalar = self.Scalar
-  }
+trait OrderedRing extends Any with Ring {
+  override type Vector
   
-  def abs: Scalar
+  override def + (that: Vector): Vector
   
-  def min(that: Scalar): Scalar
+  override def unary_- : Vector
   
-  def max(that: Scalar): Scalar
+  override def - (that: Vector): Vector
   
-  def < (that: Scalar): Boolean
+  override def * (that: Vector): Vector
   
-  def <= (that: Scalar): Boolean
+  def abs: Vector
   
-  def >= (that: Scalar): Boolean
+  def min(that: Vector): Vector
   
-  def > (that: Scalar): Boolean
+  def max(that: Vector): Vector
+  
+  def < (that: Vector): Boolean
+  
+  def <= (that: Vector): Boolean
+  
+  def > (that: Vector): Boolean
+  
+  def >= (that: Vector): Boolean
 }

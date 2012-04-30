@@ -8,27 +8,27 @@
 package basis.algebra
 package binary64
 
-import basis.util.MurmurHash._
+import language.implicitConversions
 
-final class Integer(private val value: Long) extends OrderedRing {
-  type Space  = Integer.type
-  type Scalar = Integer
+final class Integer(val value: Long) extends AnyVal with Linear with OrderedRing {
+  override type Vector = Integer
+  override type Scalar = Integer
   
-  def Space = Integer
+  @inline override def + (that: Integer): Integer = new Integer(value + that.value)
   
-  def + (that: Integer): Integer = new Integer(value + that.value)
+  @inline override def unary_- : Integer = new Integer(-value)
   
-  def unary_- : Integer = new Integer(-value)
+  @inline override def - (that: Integer): Integer = new Integer(value - that.value)
   
-  def - (that: Integer): Integer = new Integer(value - that.value)
+  @inline override def * (that: Integer): Integer = new Integer(value * that.value)
   
-  def * (that: Integer): Integer = new Integer(value * that.value)
+  @inline override def :* (that: Integer): Integer = new Integer(value * that.value)
   
-  def pow(n: Long): Integer = new Integer(math.pow(value, n).toLong)
+  @inline override def *: (that: Integer): Integer = new Integer(that.value * value)
   
-  def gcd(that: Integer): Integer = {
-    var a = math.abs(value)
-    var b = math.abs(that.value)
+  @inline def gcd(that: Integer): Integer = {
+    var a = java.lang.Math.abs(value)
+    var b = java.lang.Math.abs(that.value)
     while (b != 0L) {
       val t = b
       b = a % b
@@ -37,54 +37,51 @@ final class Integer(private val value: Long) extends OrderedRing {
     new Integer(a)
   }
   
-  def abs: Integer = if (value >= 0L) this else -this
+  @inline override def abs: Integer = new Integer(java.lang.Math.abs(value))
   
-  def min(that: Integer): Integer = if (value <= that.value) this else that
+  @inline override def min(that: Integer): Integer = new Integer(java.lang.Math.min(value, that.value))
   
-  def max(that: Integer): Integer = if (value >= that.value) this else that
+  @inline override def max(that: Integer): Integer = new Integer(java.lang.Math.max(value, that.value))
   
-  def < (that: Integer): Boolean = value < that.value
+  @inline override def < (that: Integer): Boolean = value < that.value
   
-  def <= (that: Integer): Boolean = value <= that.value
+  @inline override def <= (that: Integer): Boolean = value <= that.value
   
-  def >= (that: Integer): Boolean = value >= that.value
+  @inline override def > (that: Integer): Boolean = value > that.value
   
-  def > (that: Integer): Boolean = value > that.value
+  @inline override def >= (that: Integer): Boolean = value >= that.value
   
-  override def equals(other: Any): Boolean = other match {
+  @inline def toInt: Int = value.toInt
+  
+  @inline def toLong: Long = value
+  
+  @inline def toFloat: Float = value.toFloat
+  
+  @inline def toDouble: Double = value.toDouble
+  
+  @inline override def equals(other: Any): Boolean = other match {
     case that: Integer => value == that.value
     case _ => false
   }
   
-  override def hashCode: Int = hash(value)
+  @inline override def hashCode: Int = basis.util.MurmurHash.hash(value)
   
-  override def toString: String = value.toString
-  
-  def toInt: Int = value.toInt
-  
-  def toLong: Long = value
-  
-  def toFloat: Float = value.toFloat
-  
-  def toDouble: Double = value.toDouble
+  @inline override def toString: String = java.lang.Long.toString(value)
 }
 
-object Integer extends ScalarModule {
-  type Scalar = Integer
+object Integer extends LinearSpace {
+  override type Vector = Integer
+  override type Scalar = Integer
   
-  val zero: Integer = new Integer(0L)
+  @inline def zero: Integer = new Integer(0L)
   
-  val unit: Integer = new Integer(1L)
+  @inline def unit: Integer = new Integer(1L)
   
-  def apply(value: Long): Integer = new Integer(value)
+  @inline def apply(value: Long): Integer = new Integer(value)
   
-  def apply(value: Int): Integer = new Integer(value)
+  @inline implicit def box(value: Long): Integer = new Integer(value)
   
-  def unapply(integer: Integer): Some[Long] = Some(integer.value)
-  
-  implicit def box(value: Long): Integer = new Integer(value)
-  
-  implicit def unbox(integer: Integer): Long = integer.value
+  @inline implicit def unbox(integer: Integer): Long = integer.value
   
   override def toString: String = "Integer"
 }

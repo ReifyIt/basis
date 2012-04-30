@@ -8,82 +8,15 @@
 package basis.algebra
 package binary64
 
-import generic._
-
-trait VectorRN extends VectorFN { self =>
-  override type Space <: RN with Singleton {
-    type Vector = self.Vector
-  }
+final class VectorRN private[binary64]
+    (val Vector: RN, coords: Array[Double])
+  extends RealVectorLike {
   
-  override type Vector >: self.type <: VectorRN {
-    type Vector = self.Vector
-  }
+  if (coords.length != Vector.N) throw new DimensionException
   
-  override type Scalar = Real
+  override type Vector = VectorRN
   
-  def apply(i: Int): Double
+  override def N: Int = coords.length
   
-  def coord(i: Int): Real = new Real(this(i))
-  
-  override def + (that: Vector): Vector = {
-    if (dimension != that.dimension)
-      throw new DimensionException(Space.toString +" + "+ that.Space.toString)
-    val coords = new Array[Double](dimension)
-    var i = 0
-    while (i < dimension) {
-      coords(i) = this(i) + that(i)
-      i += 1
-    }
-    Space(coords)
-  }
-  
-  override def unary_- : Vector = {
-    val coords = new Array[Double](dimension)
-    var i = 0
-    while (i < dimension) {
-      coords(i) = -this(i)
-      i += 1
-    }
-    Space(coords)
-  }
-  
-  override def - (that: Vector): Vector = {
-    if (dimension != that.dimension)
-      throw new DimensionException(Space.toString +" - "+ that.Space.toString)
-    val coords = new Array[Double](dimension)
-    var i = 0
-    while (i < dimension) {
-      coords(i) = this(i) - that(i)
-      i += 1
-    }
-    Space(coords)
-  }
-  
-  override def :* (scalar: Real): Vector = this :* scalar.toDouble
-  
-  def :* (scalar: Double): Vector = {
-    val coords = new Array[Double](dimension)
-    var i = 0
-    while (i < dimension) {
-      coords(i) = this(i) * scalar
-      i += 1
-    }
-    Space(coords)
-  }
-  
-  override def *: (scalar: Real): Vector = this :* scalar.toDouble
-  
-  def *: (scalar: Double): Vector = this :* scalar
-  
-  override def ⋅ (that: Vector): Real = {
-    if (dimension != that.dimension)
-      throw new DimensionException(Space.toString +" ⋅ "+ that.Space.toString)
-    var s = 0.0
-    var i = 0
-    while (i < dimension) {
-      s += this(i) * that(i)
-      i += 1
-    }
-    new Real(s)
-  }
+  override def apply(i: Int): Real = coords(i)
 }

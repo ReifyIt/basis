@@ -7,12 +7,20 @@
 
 package basis.algebra
 
-trait ScalarSpace extends ScalarModule with LinearSpace { self =>
-  override type Scalar <: Field {
-    type Scalar = self.Scalar
-  }
+trait Linear extends Any with Affine {
+  override type Point = Vector
   
-  def apply(x: Double): Scalar
+  override type Vector
   
-  def apply(x: Float): Scalar
+  type Scalar
+  
+  override def + (that: Vector): Vector
+  
+  def unary_- : Vector
+  
+  override def - (that: Vector): Vector
+  
+  def :* (scalar: Scalar): Vector
+  
+  def *: (scalar: Scalar): Vector
 }

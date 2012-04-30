@@ -7,26 +7,26 @@
 
 package basis.algebra
 
-trait LinearVector extends AffinePoint { self =>
-  override type Space <: LinearModule with Singleton {
+trait Vector3Space extends VectorSpace { self =>
+  override type Vector <: Vector3 {
     type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  override type Point = Vector
-  
-  override type Vector >: self.type <: LinearVector {
-    type Vector = self.Vector
-    type Scalar = self.Scalar
+  override type Scalar <: Ring {
+    type Vector = self.Scalar
   }
   
-  def + (that: Vector): Vector
+  override def N: Int = 3
   
-  def unary_- : Vector
+  override def apply(coords: TraversableOnce[Scalar]): Vector = {
+    val xs = coords.toSeq
+    if (xs.length != 3) throw new DimensionException
+    apply(xs(0), xs(1), xs(2))
+  }
   
-  def - (that: Vector): Vector
+  def apply(x: Scalar, y: Scalar, z: Scalar): Vector
   
-  def :* (scalar: Scalar): Vector
-  
-  def *: (scalar: Scalar): Vector
+  def unapply(vector: Vector): Option[(Scalar, Scalar, Scalar)] =
+    Some(vector.x, vector.y, vector.z)
 }

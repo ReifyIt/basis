@@ -7,10 +7,22 @@
 
 package basis.algebra
 
-trait CompleteField extends Field { self =>
-  override type Scalar >: self.type <: CompleteField {
-    type Scalar = self.Scalar
-  }
+trait CompleteField extends Any with Field {
+  override type Vector
   
-  def sqrt: Scalar
+  override def + (that: Vector): Vector
+  
+  override def unary_- : Vector
+  
+  override def - (that: Vector): Vector
+  
+  override def * (that: Vector): Vector
+  
+  override def inverse: Vector
+  
+  override def / (that: Vector): Vector
+  
+  def pow(that: Vector): Vector
+  
+  def sqrt: Vector
 }

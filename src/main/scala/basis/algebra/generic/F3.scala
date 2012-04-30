@@ -8,24 +8,12 @@
 package basis.algebra
 package generic
 
-trait F3 extends FN { self =>
-  override type Vector <: VectorF3 {
-    type Vector = self.Vector
-    type Scalar = self.Scalar
-  }
+class F3[F <: Ring { type Vector = F }] extends Vector3Space {
+  override type Vector = VectorF3[F]
+  override type Scalar = F
   
-  final override def dimension: Int = 3
+  override def apply(x: Scalar, y: Scalar, z: Scalar): Vector =
+    new Vector(this, x, y, z)
   
-  override def zero: Vector = {
-    val z = Scalar.zero
-    apply(z, z, z)
-  }
-  
-  override def apply(coords: TraversableOnce[Scalar]): Vector = {
-    val xs = coords.toSeq
-    if (xs.length != 3) throw new DimensionException
-    apply(xs(0), xs(1), xs(2))
-  }
-  
-  def apply(x: Scalar, y: Scalar, z: Scalar): Vector
+  override def toString: String = "F3"
 }

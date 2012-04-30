@@ -7,28 +7,14 @@
 
 package basis.algebra
 
-trait Ring extends LinearVector { self =>
-  override type Space <: ScalarModule with Singleton {
-    type Scalar = self.Scalar
-  }
+trait Ring extends Any {
+  type Vector
   
-  override type Point = Scalar
+  def + (that: Vector): Vector
   
-  override type Vector = Scalar
+  def unary_- : Vector
   
-  override type Scalar >: self.type <: Ring {
-    type Scalar = self.Scalar
-  }
+  def - (that: Vector): Vector
   
-  def + (that: Scalar): Scalar
-  
-  def unary_- : Scalar
-  
-  def - (that: Scalar): Scalar
-  
-  def * (that: Scalar): Scalar
-  
-  def :* (that: Scalar): Scalar = this * that
-  
-  def *: (that: Scalar): Scalar = that * (this: Scalar)
+  def * (that: Vector): Vector
 }

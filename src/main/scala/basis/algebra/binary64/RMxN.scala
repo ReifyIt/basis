@@ -8,65 +8,43 @@
 package basis.algebra
 package binary64
 
-import generic._
-
-trait RMxN extends LinearSpace with FMxN { self =>
-  override type Matrix <: MatrixRMxN {
-    type Matrix       = self.Matrix
-    type Transpose    = self.Transpose
-    type RowVector    = self.RowVector
-    type ColumnVector = self.ColumnVector
-  }
+class RMxN
+    [V <: RealVector { type Vector = V },
+     W <: RealVector { type Vector = W }]
+    (val Row: RealVectorSpace { type Vector = V },
+     val Col: RealVectorSpace { type Vector = W })
+  extends RealMatrixSpace {
   
-  override type Transpose <: MatrixRMxN {
-    type Matrix       = self.Transpose
-    type Transpose    = self.Matrix
-    type RowVector    = self.ColumnVector
-    type ColumnVector = self.RowVector
-  }
+  override type Matrix = MatrixRMxN[V, W]
+  override type T      = MatrixRMxN[W, V]
+  override type Row    = V
+  override type Col    = W
   
-  override type RowVector <: VectorRN {
-    type Vector = self.RowVector
-  }
+  private var Transpose: RMxN[W, V] = null
   
-  override type ColumnVector <: VectorRN {
-    type Vector = self.ColumnVector
-  }
-  
-  override type Scalar = Real
-  
-  override def Scalar = Real
-  
-  override def Transpose: RMxN {
-    type Matrix       = self.Transpose
-    type Transpose    = self.Matrix
-    type RowVector    = self.ColumnVector
-    type ColumnVector = self.RowVector
-    type Scalar       = self.Scalar
-  }
-  
-  override def Row: RN {
-    type Vector = self.RowVector
-  }
-  
-  override def Column: RN {
-    type Vector = self.ColumnVector
-  }
-  
-  override def zero: Matrix = apply(new Array[Double](dimension))
-  
-  override def apply(entries: TraversableOnce[Scalar]): Matrix = {
-    val xs = entries.toSeq
-    if (xs.length != dimension) throw new DimensionException
-    // apply(xs.map(_.toDouble).toArray[Double]) // I know.
-    val array = new Array[Double](dimension)
-    var i = 0
-    while (i < array.length) {
-      array(i) = xs(i).toDouble
-      i += 1
+  override def T: RMxN[W, V] = synchronized {
+    if (Transpose == null) {
+      Transpose = new RMxN[W, V](Col, Row)
+      Transpose.Transpose = this
     }
-    apply(array)
+    Transpose
   }
   
-  def apply(entries: Array[Double]): Matrix
+  override def M: Int = Col.N
+  override def N: Int = Row.N
+  
+  override def apply(entries: TraversableOnce[Real]): Matrix =
+    new Matrix(this, entries.map(_.toDouble).toArray[Double])
+  
+  override def apply(entries: Array[Double]): Matrix =
+    new Matrix(this, entries)
+  
+  def apply(entries: Double*): Matrix =
+    new Matrix(this, entries.toArray[Double])
+  
+  def rows(vectors: Row*): Matrix = super.rows(vectors)
+  
+  def cols(vectors: Col*): Matrix = super.cols(vectors)
+  
+  override def toString: String = "("+ Row +" map "+ Col +")"
 }

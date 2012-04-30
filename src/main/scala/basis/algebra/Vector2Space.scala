@@ -7,22 +7,26 @@
 
 package basis.algebra
 
-trait ScalarModule extends LinearModule { self =>
-  override type Point = Scalar
-  
-  override type Vector = Scalar
-  
-  override type Scalar <: Ring {
+trait Vector2Space extends VectorSpace { self =>
+  override type Vector <: Vector2 {
+    type Vector = self.Vector
     type Scalar = self.Scalar
   }
   
-  override def Scalar: this.type = this
+  override type Scalar <: Ring {
+    type Vector = self.Scalar
+  }
   
-  override def zero: Scalar
+  override def N: Int = 2
   
-  def unit: Scalar
+  override def apply(coords: TraversableOnce[Scalar]): Vector = {
+    val xs = coords.toSeq
+    if (xs.length != 2) throw new DimensionException
+    apply(xs(0), xs(1))
+  }
   
-  def apply(n: Long): Scalar
+  def apply(x: Scalar, y: Scalar): Vector
   
-  def apply(n: Int): Scalar
+  def unapply(vector: Vector): Option[(Scalar, Scalar)] =
+    Some(vector.x, vector.y)
 }

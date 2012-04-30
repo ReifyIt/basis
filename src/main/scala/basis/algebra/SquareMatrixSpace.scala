@@ -7,28 +7,31 @@
 
 package basis.algebra
 
-trait AffineModule { self =>
-  type Point <: AffinePoint {
-    type Point  = self.Point
-    type Vector = self.Vector
+trait SquareMatrixSpace extends MatrixSpace { self =>
+  override type Matrix <: SquareMatrix {
+    type Matrix = self.Matrix
+    type Vec    = self.Vec
     type Scalar = self.Scalar
   }
   
-  type Vector <: LinearVector {
-    type Vector = self.Vector
+  override type T = Matrix
+  
+  type Vec <: basis.algebra.Vector {
+    type Vector = self.Vec
     type Scalar = self.Scalar
   }
   
-  type Scalar <: Ring {
-    type Scalar = self.Scalar
-  }
+  override type Row = Vec
   
-  def Vector: LinearModule {
-    type Vector = self.Vector
-    type Scalar = self.Scalar
-  }
+  override type Col = Vec
   
-  def Scalar: ScalarModule {
-    type Scalar = self.Scalar
-  }
+  override type Scalar
+  
+  override def T: this.type = this
+  
+  override def M: Int
+  
+  override def N: Int
+  
+  override def apply(entries: TraversableOnce[Scalar]): Matrix
 }

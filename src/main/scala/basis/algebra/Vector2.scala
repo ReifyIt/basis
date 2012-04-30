@@ -6,16 +6,28 @@
 \*                                                                      */
 
 package basis.algebra
-package generic
 
-final class DenseVector[S <: Ring { type Scalar = S }] private[generic]
-    (val Space: DenseVectorModule[S] with Singleton)
-    (coords: Array[AnyRef])
-  extends VectorFN {
+trait Vector2 extends Any with Vector {
+  override type Vector
   
-  type Space  = DenseVectorModule[S] with Singleton
-  type Vector = DenseVector[S]
-  type Scalar = S
+  override type Scalar
   
-  def coord(i: Int): Scalar = coords(i).asInstanceOf[Scalar]
+  def x: Scalar
+  def y: Scalar
+  
+  override def N: Int
+  
+  override def apply(i: Int): Scalar
+  
+  override def + (that: Vector): Vector
+  
+  override def unary_- : Vector
+  
+  override def - (that: Vector): Vector
+  
+  override def :* (scalar: Scalar): Vector
+  
+  override def *: (scalar: Scalar): Vector
+  
+  override def ⋅ (that: Vector): Scalar
 }

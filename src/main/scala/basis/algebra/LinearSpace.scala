@@ -7,4 +7,13 @@
 
 package basis.algebra
 
-trait LinearSpace extends LinearModule with AffineSpace
+trait LinearSpace extends AffineSpace { self =>
+  override type Point = Vector
+  
+  override type Vector <: Linear {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
+  
+  override type Scalar
+}

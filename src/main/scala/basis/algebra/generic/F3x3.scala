@@ -8,60 +8,24 @@
 package basis.algebra
 package generic
 
-trait F3x3 extends LinearSpace with FMxN { self =>
-  override type Matrix <: MatrixF3x3 {
-    type Matrix    = self.Matrix
-    type RowVector = self.RowVector
-    type Scalar    = self.Scalar
-  }
+class F3x3
+    [V <: Vector3 { type Vector = V; type Scalar = F },
+     F <: Field { type Vector = F }]
+    (val Vec: Vector3Space { type Vector = V; type Scalar = F })
+  extends Matrix3x3Space {
   
-  override type Transpose = Matrix
+  override type Matrix = MatrixF3x3[V, F]
+  override type Vec    = V
+  override type Scalar = F
   
-  override type RowVector <: VectorF3 {
-    type Vector = self.RowVector
-    type Scalar = self.Scalar
-  }
+  override def apply(
+      _1_1: Scalar, _1_2: Scalar, _1_3: Scalar,
+      _2_1: Scalar, _2_2: Scalar, _2_3: Scalar,
+      _3_1: Scalar, _3_2: Scalar, _3_3: Scalar) =
+    new Matrix(this)(
+      _1_1, _1_2, _1_3,
+      _2_1, _2_2, _2_3,
+      _3_1, _3_2, _3_3)
   
-  override type ColumnVector = RowVector
-  
-  override def Transpose: this.type = this
-  
-  override def Row: F3 {
-    type Vector = self.RowVector
-    type Scalar = self.Scalar
-  }
-  
-  override def Column: F3 {
-    type Vector = self.ColumnVector
-    type Scalar = self.Scalar
-  } = Row
-  
-  final override def dimension: Int = 9
-  
-  override def zero: Matrix = {
-    val z = Scalar.zero
-    apply(z, z, z,
-          z, z, z,
-          z, z, z)
-  }
-  
-  def identity: Matrix = {
-    val z = Scalar.zero
-    val u = Scalar.unit
-    apply(u, z, z,
-          z, u, z,
-          z, z, u)
-  }
-  
-  override def apply(entries: TraversableOnce[Scalar]): Matrix = {
-    val xs = entries.toSeq
-    if (xs.length != 9) throw new DimensionException
-    apply(xs(0), xs(1), xs(2),
-          xs(3), xs(4), xs(5),
-          xs(6), xs(7), xs(8))
-  }
-  
-  def apply(_1_1: Scalar, _1_2: Scalar, _1_3: Scalar,
-            _2_1: Scalar, _2_2: Scalar, _2_3: Scalar,
-            _3_1: Scalar, _3_2: Scalar, _3_3: Scalar): Matrix
+  override def toString: String = "("+ Vec +" map "+ Vec +")"
 }

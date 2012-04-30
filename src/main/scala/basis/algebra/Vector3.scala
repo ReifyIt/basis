@@ -7,18 +7,30 @@
 
 package basis.algebra
 
-trait HilbertSpace
-  extends InnerProductSpace
-    with NormedVectorSpace
-    with MetricSpace { self =>
+trait Vector3 extends Any with Vector {
+  override type Vector
   
-  override type Scalar <: CompleteField {
-    type Scalar = self.Scalar
-  }
+  override type Scalar
   
-  def innerProduct(u: Vector, v: Vector): Scalar
+  def x: Scalar
+  def y: Scalar
+  def z: Scalar
   
-  override def norm(u: Vector): Scalar = innerProduct(u, u).sqrt
+  override def N: Int
   
-  override def distance(u: Vector, v: Vector): Scalar = norm(u - v)
+  override def apply(i: Int): Scalar
+  
+  override def + (that: Vector): Vector
+  
+  override def unary_- : Vector
+  
+  override def - (that: Vector): Vector
+  
+  override def :* (scalar: Scalar): Vector
+  
+  override def *: (scalar: Scalar): Vector
+  
+  override def ⋅ (that: Vector): Scalar
+  
+  def ⨯ (that: Vector): Vector
 }

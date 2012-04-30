@@ -8,84 +8,77 @@
 package basis.algebra
 package binary64
 
-import basis.util.MurmurHash._
+import language.implicitConversions
 
-final class Real(private val value: Double) extends OrderedRing with CompleteField {
-  type Space  = Real.type
-  type Scalar = Real
+final class Real(val value: Double) extends AnyVal with Linear with RealField {
+  override type Vector = Real
+  override type Scalar = Real
   
-  def Space = Real
+  @inline override def + (that: Real): Real = new Real(value + that.value)
   
-  def + (that: Real): Real = new Real(value + that.value)
+  @inline override def unary_- : Real = new Real(-value)
   
-  def unary_- : Real = new Real(-value)
+  @inline override def - (that: Real): Real = new Real(value - that.value)
   
-  def - (that: Real): Real = new Real(value - that.value)
+  @inline override def * (that: Real): Real = new Real(value * that.value)
   
-  def * (that: Real): Real = new Real(value * that.value)
+  @inline override def :* (that: Real): Real = new Real(value * that.value)
   
-  def inverse: Real = new Real(1.0 / value)
+  @inline override def *: (that: Real): Real = new Real(that.value * value)
   
-  def / (that: Real): Real = new Real(value / that.value)
+  @inline override def inverse: Real = new Real(1.0 / value)
   
-  def pow(that: Real): Real = new Real(math.pow(value, that.value))
+  @inline override def / (that: Real): Real = new Real(value / that.value)
   
-  def pow(n: Int): Real = new Real(math.pow(value, n))
+  @inline override def pow(that: Real): Real = new Real(java.lang.Math.pow(value, that.value))
   
-  def sqrt: Real = new Real(math.sqrt(value))
+  @inline override def sqrt: Real = new Real(java.lang.Math.sqrt(value))
   
-  def abs: Real = if (value >= 0.0) this else -this
+  @inline override def abs: Real = new Real(java.lang.Math.abs(value))
   
-  def min(that: Real): Real = if (value <= that.value) this else that
+  @inline override def min(that: Real): Real = new Real(java.lang.Math.min(value, that.value))
   
-  def max(that: Real): Real = if (value >= that.value) this else that
+  @inline override def max(that: Real): Real = new Real(java.lang.Math.max(value, that.value))
   
-  def < (that: Real): Boolean = value < that.value
+  @inline override def < (that: Real): Boolean = value < that.value
   
-  def <= (that: Real): Boolean = value <= that.value
+  @inline override def <= (that: Real): Boolean = value <= that.value
   
-  def >= (that: Real): Boolean = value >= that.value
+  @inline override def > (that: Real): Boolean = value > that.value
   
-  def > (that: Real): Boolean = value > that.value
+  @inline override def >= (that: Real): Boolean = value >= that.value
   
-  override def equals(other: Any): Boolean = other match {
+  @inline def toInt: Int = value.toInt
+  
+  @inline def toLong: Long = value.toLong
+  
+  @inline def toFloat: Float = value.toFloat
+  
+  @inline def toDouble: Double = value
+  
+  @inline override def equals(other: Any): Boolean = other match {
     case that: Real => value == that.value
     case _ => false
   }
   
-  override def hashCode: Int = hash(value)
+  @inline override def hashCode: Int = basis.util.MurmurHash.hash(value)
   
-  override def toString: String = value.toString
-  
-  def toInt: Int = value.toInt
-  
-  def toLong: Long = value.toLong
-  
-  def toFloat: Float = value.toFloat
-  
-  def toDouble: Double = value
+  @inline override def toString: String = java.lang.Double.toString(value)
 }
 
-object Real extends ScalarSpace {
-  type Scalar = Real
+object Real extends LinearSpace {
+  override type Vector = Real
+  override type Scalar = Real
   
-  val zero: Real = new Real(0.0)
+  @inline def zero: Real = new Real(0.0)
   
-  val unit: Real = new Real(1.0)
+  @inline def unit: Real = new Real(1.0)
   
-  def apply(value: Double): Real = new Real(value)
+  @inline def apply(value: Double): Real = new Real(value)
   
-  def apply(value: Float): Real = new Real(value)
+  @inline implicit def box(value: Double): Real = new Real(value)
   
-  def apply(value: Long): Real = new Real(value)
-  
-  def apply(value: Int): Real = new Real(value)
-  
-  def unapply(real: Real): Some[Double] = Some(real.toDouble)
-  
-  implicit def box(value: Double): Real = new Real(value)
-  
-  implicit def unbox(real: Real): Double = real.toDouble
+  @inline implicit def unbox(real: Real): Double = real.value
   
   override def toString: String = "Real"
 }

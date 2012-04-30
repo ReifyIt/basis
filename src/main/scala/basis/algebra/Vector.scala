@@ -7,6 +7,24 @@
 
 package basis.algebra
 
-trait InnerProductSpace extends LinearSpace {
-  def innerProduct(u: Vector, v: Vector): Scalar
+trait Vector extends Any with Linear {
+  override type Vector
+  
+  override type Scalar
+  
+  def N: Int
+  
+  def apply(i: Int): Scalar
+  
+  override def + (that: Vector): Vector
+  
+  override def unary_- : Vector
+  
+  override def - (that: Vector): Vector
+  
+  override def :* (scalar: Scalar): Vector
+  
+  override def *: (scalar: Scalar): Vector
+  
+  def ⋅ (that: Vector): Scalar
 }

@@ -8,34 +8,10 @@
 package basis.algebra
 package generic
 
-trait VectorF2 extends VectorFN { self =>
-  override type Space <: F2 with Singleton {
-    type Vector = self.Vector
-    type Scalar = self.Scalar
-  }
+final class VectorF2[F <: Ring { type Vector = F }] private[generic]
+    (val Vector: F2[F], val x: F, val y: F)
+  extends Vector2Like {
   
-  override type Vector >: self.type <: VectorF2 {
-    type Vector = self.Vector
-    type Scalar = self.Scalar
-  }
-  
-  final override def dimension: Int = 2
-  
-  override def + (that: Vector): Vector =
-    Space(coord(0) + that.coord(0), coord(1) + that.coord(1))
-  
-  override def unary_- : Vector =
-    Space(-coord(0), -coord(1))
-  
-  override def - (that: Vector): Vector =
-    Space(coord(0) - that.coord(0), coord(1) - that.coord(1))
-  
-  override def :* (scalar: Scalar): Vector =
-    Space(coord(0) * scalar, coord(1) * scalar)
-  
-  override def *: (scalar: Scalar): Vector =
-    Space(scalar * coord(0), scalar * coord(1))
-  
-  override def ⋅ (that: Vector): Scalar =
-    coord(0) * that.coord(0) + coord(1) * that.coord(1)
+  override type Vector = VectorF2[F]
+  override type Scalar = F
 }

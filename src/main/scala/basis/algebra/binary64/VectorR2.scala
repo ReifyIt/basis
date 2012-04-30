@@ -8,31 +8,34 @@
 package basis.algebra
 package binary64
 
-import generic._
-
-trait VectorR2 extends VectorF2 with VectorRN { self =>
-  override type Space <: R2 with Singleton {
-    type Vector = self.Vector
-  }
+final class VectorR2(val x: Real, val y: Real)
+  extends Vector2Like with RealVectorLike {
   
-  override type Vector >: self.type <: VectorR2 {
-    type Vector = self.Vector
+  override type Vector = VectorR2
+  
+  override def Vector: R2 = R2
+  
+  override def N: Int = 2
+  
+  override def apply(i: Int): Real = i match {
+    case 0 => x
+    case 1 => y
+    case _ => throw new IndexOutOfBoundsException(i.toString)
   }
   
   override def + (that: Vector): Vector =
-    Space(this(0) + that(0), this(1) + that(1))
+    new Vector(x + that.x, y + that.y)
   
-  override def unary_- : Vector =
-    Space(-this(0), -this(1))
+  override def unary_- : Vector = new Vector(-x, -y)
   
   override def - (that: Vector): Vector =
-    Space(this(0) - that(0), this(1) - that(1))
+    new Vector(x - that.x, y - that.y)
   
-  override def :* (scalar: Double): Vector =
-    Space(this(0) * scalar, this(1) * scalar)
+  override def :* (scalar: Real): Vector =
+    new Vector(x * scalar, y * scalar)
   
-  override def *: (scalar: Double): Vector = this :* scalar
+  override def *: (scalar: Real): Vector = this :* scalar
   
   override def ⋅ (that: Vector): Real =
-    new Real(this(0) * that(0) + this(1) * that(1))
+    x * that.x + y * that.y
 }

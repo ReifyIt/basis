@@ -56,18 +56,19 @@ object BasisBuild extends Build {
   lazy val commonSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.scalabasis",
     version      := "0.0-SNAPSHOT",
-    scalaVersion := "2.9.1-1",
+    scalaVersion := "2.10.0-SNAPSHOT",
     scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
     scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
     target <<= (target, name)(_ / _),
-    scalacOptions ++= Seq("-optimise", "-Xno-forwarders", "-Ydependent-method-types"),
+    scalacOptions ++= Seq("-optimise", "-Xno-forwarders"),
     scalacOptions in (Compile, doc) <++= (version, baseDirectory in LocalProject("basis")) map {
       (version, baseDirectory) =>
         val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
         val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
         Seq("-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
     },
-    libraryDependencies += "org.scalatest" %% "scalatest" % "1.7.1" % "test"
+    // libraryDependencies += "org.scalatest" %% "scalatest" % "1.7.1" % "test"
+    resolvers += Resolver.sonatypeRepo("snapshots")
   )
   
   val modulePath = SettingKey[String]("module-path", "the relative path of the module's root package")

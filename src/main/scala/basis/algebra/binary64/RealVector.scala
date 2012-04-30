@@ -6,9 +6,26 @@
 \*                                                                      */
 
 package basis.algebra
-package generic
+package binary64
 
-class DenseVectorSpace[S <: Field { type Scalar = S }]
-    (override val Scalar: ScalarSpace { type Scalar = S })
-    (dimension: Int)
-  extends DenseVectorModule[S](Scalar)(dimension) with LinearSpace
+trait RealVector extends Any with Vector {
+  override type Vector
+  
+  override type Scalar = Real
+  
+  override def N: Int
+  
+  override def apply(i: Int): Real
+  
+  override def + (that: Vector): Vector
+  
+  override def unary_- : Vector
+  
+  override def - (that: Vector): Vector
+  
+  override def :* (scalar: Real): Vector
+  
+  override def *: (scalar: Real): Vector
+  
+  override def ⋅ (that: Vector): Real
+}

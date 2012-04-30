@@ -7,10 +7,12 @@
 
 package basis.algebra
 
-trait LinearModule extends AffineModule { self =>
-  override type Point = Vector
+trait Affine extends Any {
+  type Point
   
-  override def Vector: this.type = this
+  type Vector
   
-  def zero: Vector
+  def + (that: Vector): Point
+  
+  def - (that: Point): Vector
 }
