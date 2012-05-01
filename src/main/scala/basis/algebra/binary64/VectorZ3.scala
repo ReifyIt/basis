@@ -8,16 +8,16 @@
 package basis.algebra
 package binary64
 
-final class VectorR3(val x: Real, val y: Real, val z: Real)
-  extends Vector3.Template with RealVector.Template {
+final class VectorZ3(val x: Integer, val y: Integer, val z: Integer)
+  extends Vector3.Template with IntegerVector.Template {
   
-  override type Vector = VectorR3
+  override type Vector = VectorZ3
   
-  override def Vector = VectorR3
+  override def Vector = VectorZ3
   
   override def N: Int = 3
   
-  override def apply(i: Int): Real = i match {
+  override def apply(i: Int): Integer = i match {
     case 0 => x
     case 1 => y
     case 2 => z
@@ -32,12 +32,12 @@ final class VectorR3(val x: Real, val y: Real, val z: Real)
   override def - (that: Vector): Vector =
     new Vector(x - that.x, y - that.y, z - that.z)
   
-  override def :* (scalar: Real): Vector =
+  override def :* (scalar: Integer): Vector =
     new Vector(x * scalar, y * scalar, z * scalar)
   
-  override def *: (scalar: Real): Vector = this :* scalar
+  override def *: (scalar: Integer): Vector = this :* scalar
   
-  override def ⋅ (that: Vector): Real =
+  override def ⋅ (that: Vector): Integer =
     x * that.x + y * that.y + z * that.z
   
   override def ⨯ (that: Vector): Vector =
@@ -46,16 +46,16 @@ final class VectorR3(val x: Real, val y: Real, val z: Real)
                x * that.y + y * that.x)
 }
 
-object VectorR3 extends Vector3.Space with RealVector.Space {
-  override type Vector = VectorR3
+object VectorZ3 extends Vector3.Space with IntegerVector.Space {
+  override type Vector = VectorZ3
   
-  override def apply(coords: Array[Double]): Vector = {
+  override def apply(coords: Array[Long]): Vector = {
     if (coords.length != 3) throw new DimensionException
     new Vector(coords(0), coords(1), coords(2))
   }
   
-  override def apply(x: Real, y: Real, z: Real): Vector =
+  def apply(x: Integer, y: Integer, z: Integer): Vector =
     new Vector(x, y, z)
   
-  override def toString: String = "R3"
+  override def toString: String = "Z3"
 }

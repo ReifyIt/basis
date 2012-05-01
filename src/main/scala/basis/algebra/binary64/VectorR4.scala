@@ -9,11 +9,11 @@ package basis.algebra
 package binary64
 
 final class VectorR4(val x: Real, val y: Real, val z: Real, val w: Real)
-  extends Vector4Like with RealVectorLike {
+  extends Vector4.Template with RealVector.Template {
   
   override type Vector = VectorR4
   
-  override def Vector: R4 = R4
+  override def Vector = VectorR4
   
   override def N: Int = 4
   
@@ -40,4 +40,18 @@ final class VectorR4(val x: Real, val y: Real, val z: Real, val w: Real)
   
   override def ⋅ (that: Vector): Real =
     x * that.x + y * that.y + z * that.z + w * that.w
+}
+
+object VectorR4 extends Vector4.Space with RealVector.Space {
+  override type Vector = VectorR4
+  
+  override def apply(coords: Array[Double]): Vector = {
+    if (coords.length != 4) throw new DimensionException
+    new Vector(coords(0), coords(1), coords(2), coords(3))
+  }
+  
+  override def apply(x: Real, y: Real, z: Real, w: Real): Vector =
+    new Vector(x, y, z, w)
+  
+  override def toString: String = "R4"
 }

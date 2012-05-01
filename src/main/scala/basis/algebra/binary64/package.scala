@@ -8,19 +8,33 @@
 package basis.algebra
 
 package object binary64 {
-  type SomeRealVectorSpace = RealVectorSpace with Singleton
+  type RealVectorSpace = RealVector.Space with Singleton
   
-  type SomeRealMatrixSpace = RealMatrixSpace with Singleton
+  type RealMatrixSpace = RealMatrix.Space with Singleton
   
-  lazy val R2 = new R2
+  type IntegerVectorSpace = IntegerVector.Space with Singleton
   
-  lazy val R2x2 = new R2x2
+  type R2 = R2.type
+  lazy val R2 = VectorR2
   
-  lazy val R3 = new R3
+  type R2x2 = R2x2.type
+  lazy val R2x2 = MatrixR2x2
   
-  lazy val R3x3 = new R3x3
+  type R3 = R3.type
+  lazy val R3 = VectorR3
   
-  lazy val R4 = new R4
+  type R3x3 = R3x3.type
+  lazy val R3x3 = MatrixR3x3
   
-  lazy val R4x4 = new R4x4
+  type R4 = R4.type
+  lazy val R4 = VectorR4
+  
+  type R4x4 = R4x4.type
+  lazy val R4x4 = MatrixR4x4
+  
+  type Z2 = Z2.type
+  lazy val Z2 = VectorZ2
+  
+  type Z3 = Z3.type
+  lazy val Z3 = VectorZ3
 }

@@ -8,9 +8,8 @@
 package basis.algebra
 package binary64
 
-final class VectorRN private[binary64]
-    (val Vector: RN, coords: Array[Double])
-  extends RealVectorLike {
+final class VectorRN private (val Vector: VectorRN.Space, coords: Array[Double])
+  extends RealVector.Template {
   
   if (coords.length != Vector.N) throw new DimensionException
   
@@ -19,4 +18,23 @@ final class VectorRN private[binary64]
   override def N: Int = coords.length
   
   override def apply(i: Int): Real = coords(i)
+}
+
+object VectorRN {
+  def apply(N: Int) = new Space(N)
+  
+  class Space(val N: Int) extends RealVector.Space {
+    override type Vector = VectorRN
+    
+    override def apply(coords: TraversableOnce[Real]): Vector =
+      new Vector(this, coords.map(_.toDouble).toArray[Double])
+    
+    override def apply(coords: Array[Double]): Vector =
+      new Vector(this, coords)
+    
+    def apply(coords: Double*): Vector =
+      new Vector(this, coords.toArray[Double])
+    
+    override def toString: String = "R"+"("+ N + ")"
+  }
 }

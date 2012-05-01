@@ -8,14 +8,14 @@
 package basis.algebra
 package binary64
 
-trait RealVector extends Any with Vector {
+trait IntegerVector extends Any with Vector {
   override type Vector
   
-  override type Scalar = Real
+  override type Scalar = Integer
   
   override def N: Int
   
-  override def apply(i: Int): Real
+  override def apply(i: Int): Integer
   
   override def + (that: Vector): Vector
   
@@ -23,60 +23,44 @@ trait RealVector extends Any with Vector {
   
   override def - (that: Vector): Vector
   
-  override def :* (scalar: Real): Vector
+  override def :* (scalar: Integer): Vector
   
-  override def *: (scalar: Real): Vector
+  override def *: (scalar: Integer): Vector
   
-  override def ⋅ (that: Vector): Real
+  override def ⋅ (that: Vector): Integer
 }
 
-object RealVector {
+object IntegerVector {
   trait Space extends Vector.Space { self =>
-    override type Vector <: RealVector {
+    override type Vector <: IntegerVector {
       type Vector = self.Vector
     }
     
-    override type Scalar = Real
+    override type Scalar = Integer
     
     override def N: Int
     
-    override def apply(coords: TraversableOnce[Real]): Vector
+    override def apply(coords: TraversableOnce[Integer]): Vector
     
-    def apply(coords: Array[Double]): Vector
-    
-    override def map[W <: basis.algebra.Vector { type Vector = W; type Scalar = Real }]
-        (that: Vector.Space { type Vector = W; type Scalar = Real })
-      : Matrix.Space { type Row = self.Vector; type Col = W; type Scalar = Real } = {
-      if (that.isInstanceOf[RealMatrix]) {
-        type SomeRealVector[V] = RealVector { type Vector = V }
-        this.map(that.asInstanceOf[Space { type Vector <: SomeRealVector[Vector] }]).
-          asInstanceOf[Matrix.Space { type Row = self.Vector; type Col = W; type Scalar = Real}]
-      }
-      else super.map(that)
-    }
-    
-    def map[W <: RealVector { type Vector = W }]
-        (that: Space { type Vector = W })
-      : RealMatrix.Space { type Row = self.Vector; type Col = W } =
-      new MatrixRMxN.Space(this, that)
+    def apply(coords: Array[Long]): Vector
   }
   
-  trait Template extends Any with Vector.Template with RealVector { self =>
-    override type Vector <: RealVector {
+  trait Template extends Any with Vector.Template with IntegerVector { self =>
+    override type Vector <: IntegerVector {
       type Vector = self.Vector
     }
     
-    override def Vector: RealVector.Space {
+    override def Vector: IntegerVector.Space {
       type Vector = self.Vector
     }
     
     override def N: Int
     
-    override def apply(i: Int): Real
+    override def apply(i: Int): Integer
     
     override def + (that: Vector): Vector = {
       if (N != that.N) throw new DimensionException
-      val coords = new Array[Double](N)
+      val coords = new Array[Long](N)
       var i = 0
       while (i < coords.length) {
         coords(i) = apply(i) + that.apply(i)
@@ -86,7 +70,7 @@ object RealVector {
     }
     
     override def unary_- : Vector = {
-      val coords = new Array[Double](N)
+      val coords = new Array[Long](N)
       var i = 0
       while (i < coords.length) {
         coords(i) = -apply(i)
@@ -97,7 +81,7 @@ object RealVector {
     
     override def - (that: Vector): Vector = {
       if (N != that.N) throw new DimensionException
-      val coords = new Array[Double](N)
+      val coords = new Array[Long](N)
       var i = 0
       while (i < coords.length) {
         coords(i) = apply(i) - that.apply(i)
@@ -106,8 +90,8 @@ object RealVector {
       Vector(coords)
     }
     
-    override def :* (scalar: Real): Vector = {
-      val coords = new Array[Double](N)
+    override def :* (scalar: Integer): Vector = {
+      val coords = new Array[Long](N)
       var i = 0
       while (i < coords.length) {
         coords(i) = apply(i) * scalar
@@ -116,11 +100,11 @@ object RealVector {
       Vector(coords)
     }
     
-    override def *: (scalar: Real): Vector = this :* scalar
+    override def *: (scalar: Integer): Vector = this :* scalar
     
-    override def ⋅ (that: Vector): Real = {
+    override def ⋅ (that: Vector): Integer = {
       if (N != that.N || N <= 0) throw new DimensionException
-      var s = 0.0
+      var s = 0L
       var i = 0
       while (i < N) {
         s += apply(i) * that.apply(i)
@@ -130,7 +114,7 @@ object RealVector {
     }
     
     override def equals(other: Any): Boolean = other match {
-      case that: RealVector.Template =>
+      case that: IntegerVector.Template =>
         var equal = that.canEqual(this) && N == that.N
         var i = 0
         while (i < N && equal) {

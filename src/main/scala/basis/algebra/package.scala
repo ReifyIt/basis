@@ -8,27 +8,27 @@
 package basis
 
 package object algebra {
-  type SomeAffineSpace = AffineSpace with Singleton
+  type AffineSpace = Affine.Space with Singleton
   
-  type SomeLinearSpace = LinearSpace with Singleton
+  type LinearSpace = Linear.Space with Singleton
   
-  type SomeVectorSpace = VectorSpace with Singleton
+  type VectorSpace = Vector.Space with Singleton
   
-  type SomeVector2Space = Vector2Space with Singleton
+  type Vector2Space = Vector2.Space with Singleton
   
-  type SomeVector3Space = Vector3Space with Singleton
+  type Vector3Space = Vector3.Space with Singleton
   
-  type SomeVector4Space = Vector4Space with Singleton
+  type Vector4Space = Vector4.Space with Singleton
   
-  type SomeMatrixSpace = MatrixSpace with Singleton
+  type MatrixSpace = Matrix.Space with Singleton
   
-  type SomeSquareMatrixSpace = SquareMatrixSpace with Singleton
+  type SquareMatrixSpace = SquareMatrix.Space with Singleton
   
-  type SomeMatrix2x2Space = Matrix2x2Space with Singleton
+  type Matrix2x2Space = Matrix2x2.Space with Singleton
   
-  type SomeMatrix3x3Space = Matrix3x3Space with Singleton
+  type Matrix3x3Space = Matrix3x3.Space with Singleton
   
-  type SomeMatrix4x4Space = Matrix4x4Space with Singleton
+  type Matrix4x4Space = Matrix4x4.Space with Singleton
   
   type SomeRing = Singleton {
     type Scalar <: Ring { type Vector = Scalar }

@@ -16,3 +16,19 @@ trait Affine extends Any {
   
   def - (that: Point): Vector
 }
+
+object Affine {
+  trait Space { self =>
+    type Point <: Affine {
+      type Point  = self.Point
+      type Vector = self.Vector
+    }
+    
+    type Vector <: Linear {
+      type Vector = self.Vector
+      type Scalar = self.Scalar
+    }
+    
+    type Scalar
+  }
+}

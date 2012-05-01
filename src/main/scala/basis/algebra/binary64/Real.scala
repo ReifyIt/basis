@@ -10,9 +10,14 @@ package binary64
 
 import language.implicitConversions
 
-final class Real(val value: Double) extends AnyVal with Linear with RealField {
+final class Real(val value: Double) extends AnyVal with Linear with RealField with RealVector {
   override type Vector = Real
   override type Scalar = Real
+  
+  @inline override def N: Int = 1
+  
+  @inline override def apply(i: Int): Real =
+    if (i == 0) this else throw new IndexOutOfBoundsException(i.toString)
   
   @inline override def + (that: Real): Real = new Real(value + that.value)
   
@@ -25,6 +30,8 @@ final class Real(val value: Double) extends AnyVal with Linear with RealField {
   @inline override def :* (that: Real): Real = new Real(value * that.value)
   
   @inline override def *: (that: Real): Real = new Real(that.value * value)
+  
+  @inline override def ⋅ (that: Real): Real = new Real(value * that.value)
   
   @inline override def inverse: Real = new Real(1.0 / value)
   
@@ -66,13 +73,23 @@ final class Real(val value: Double) extends AnyVal with Linear with RealField {
   @inline override def toString: String = java.lang.Double.toString(value)
 }
 
-object Real extends LinearSpace {
+object Real extends RealVector.Space {
   override type Vector = Real
   override type Scalar = Real
   
   @inline def zero: Real = new Real(0.0)
   
   @inline def unit: Real = new Real(1.0)
+  
+  @inline override def N: Int = 1
+  
+  override def apply(coords: TraversableOnce[Real]): Real = {
+    val xs = coords.toSeq
+    if (xs.length == 1) xs.head else throw new DimensionException
+  }
+  
+  override def apply(coords: Array[Double]): Real =
+    if (coords.length == 1) coords(0) else throw new DimensionException
   
   @inline def apply(value: Double): Real = new Real(value)
   

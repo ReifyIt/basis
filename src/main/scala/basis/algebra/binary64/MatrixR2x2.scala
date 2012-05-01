@@ -11,14 +11,14 @@ package binary64
 final class MatrixR2x2(
     val _1_1: Real, val _1_2: Real,
     val _2_1: Real, val _2_2: Real)
-  extends Matrix2x2Like with RealMatrixLike {
+  extends Matrix2x2.Template with RealMatrix.Template {
   
   override type Matrix = MatrixR2x2
   override type Vec    = VectorR2
   
-  override def Matrix: R2x2 = R2x2
-  override def Row: R2 = R2
-  override def Col: R2 = R2
+  override def Matrix = MatrixR2x2
+  override def Row = VectorR2
+  override def Col = VectorR2
   
   override def M: Int = 2
   override def N: Int = 2
@@ -111,4 +111,35 @@ final class MatrixR2x2(
   override def det: Real = _1_1 * _2_2 - _1_2 * _2_1
   
   override def trace: Real = _1_1 + _2_2
+}
+
+object MatrixR2x2 extends Matrix2x2.Space with RealMatrix.Space {
+  override type Matrix = MatrixR2x2
+  override type Vec = VectorR2
+  
+  override def apply(entries: Array[Double]): Matrix = {
+    if (entries.length != 4) throw new DimensionException
+    new Matrix(
+      entries(0), entries(1),
+      entries(2), entries(3))
+  }
+  
+  override def apply(
+      _1_1: Real, _1_2: Real,
+      _2_1: Real, _2_2: Real): Matrix =
+    new Matrix(
+      _1_1, _1_2,
+      _2_1, _2_2)
+  
+  override def rows(row1: Row, row2: Row): Matrix =
+    new Matrix(
+      row1.x, row1.y,
+      row2.x, row2.y)
+  
+  override def cols(col1: Col, col2: Col): Matrix =
+    new Matrix(
+      col1.x, col2.x,
+      col1.y, col2.y)
+  
+  override def toString: String = "R2x2"
 }

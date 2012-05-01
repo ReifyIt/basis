@@ -8,16 +8,16 @@
 package basis.algebra
 package binary64
 
-final class VectorR2(val x: Real, val y: Real)
-  extends Vector2.Template with RealVector.Template {
+final class VectorZ2(val x: Integer, val y: Integer)
+  extends Vector2.Template with IntegerVector.Template {
   
-  override type Vector = VectorR2
+  override type Vector = VectorZ2
   
-  override def Vector = VectorR2
+  override def Vector = VectorZ2
   
   override def N: Int = 2
   
-  override def apply(i: Int): Real = i match {
+  override def apply(i: Int): Integer = i match {
     case 0 => x
     case 1 => y
     case _ => throw new IndexOutOfBoundsException(i.toString)
@@ -31,25 +31,25 @@ final class VectorR2(val x: Real, val y: Real)
   override def - (that: Vector): Vector =
     new Vector(x - that.x, y - that.y)
   
-  override def :* (scalar: Real): Vector =
+  override def :* (scalar: Integer): Vector =
     new Vector(x * scalar, y * scalar)
   
-  override def *: (scalar: Real): Vector = this :* scalar
+  override def *: (scalar: Integer): Vector = this :* scalar
   
-  override def ⋅ (that: Vector): Real =
+  override def ⋅ (that: Vector): Integer =
     x * that.x + y * that.y
 }
 
-object VectorR2 extends Vector2.Space with RealVector.Space {
-  override type Vector = VectorR2
+object VectorZ2 extends Vector2.Space with IntegerVector.Space {
+  override type Vector = VectorZ2
   
-  override def apply(coords: Array[Double]): Vector = {
+  override def apply(coords: Array[Long]): Vector = {
     if (coords.length != 2) throw new DimensionException
     new Vector(coords(0), coords(1))
   }
   
-  override def apply(x: Real, y: Real): Vector =
+  override def apply(x: Integer, y: Integer): Vector =
     new Vector(x, y)
   
-  override def toString: String = "R2"
+  override def toString: String = "Z2"
 }

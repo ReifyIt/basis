@@ -11,9 +11,9 @@ package generic
 final class MatrixFMxN
     [V <: Vector { type Vector = V; type Scalar = F },
      W <: Vector { type Vector = W; type Scalar = F },
-     F <: Ring { type Vector = F }] private[generic]
-    (val Matrix: FMxN[V, W, F], entries: Array[AnyRef])
-  extends MatrixLike { self =>
+     F <: Ring { type Vector = F }] private
+    (val Matrix: MatrixFMxN.Space[V, W, F], entries: Array[AnyRef])
+  extends Matrix.Template { self =>
   
   if (entries.length != Col.N * Row.N) throw new DimensionException
   
@@ -23,12 +23,12 @@ final class MatrixFMxN
   override type Col    = W
   override type Scalar = F
   
-  override def Row: VectorSpace {
+  override def Row: Vector.Space {
     type Vector = self.Row
     type Scalar = self.Scalar
   } = Matrix.Row
   
-  override def Col: VectorSpace {
+  override def Col: Vector.Space {
     type Vector = self.Col
     type Scalar = self.Scalar
   } = Matrix.Col
@@ -37,4 +37,50 @@ final class MatrixFMxN
   override val N: Int = Row.N
   
   override def apply(k: Int): Scalar = entries(k).asInstanceOf[Scalar]
+}
+
+object MatrixFMxN {
+  def apply[F <: Ring { type Vector = F }]
+      (Row: Vector.Space { type Scalar = F }, Col: Vector.Space { type Scalar = F }) =
+    new Space[Row.type#Vector, Col.type#Vector, F](Row, Col)
+  
+  class Space
+      [V <: Vector { type Vector = V; type Scalar = F },
+       W <: Vector { type Vector = W; type Scalar = F },
+       F <: Ring { type Vector = F }]
+      (val Row: Vector.Space { type Vector = V; type Scalar = F },
+       val Col: Vector.Space { type Vector = W; type Scalar = F })
+    extends Matrix.Space {
+    
+    override type Matrix = MatrixFMxN[V, W, F]
+    override type T      = MatrixFMxN[W, V, F]
+    override type Row    = V
+    override type Col    = W
+    override type Scalar = F
+    
+    private var Transpose: MatrixFMxN.Space[W, V, F] = null
+    
+    override def T: MatrixFMxN.Space[W, V, F] = synchronized {
+      if (Transpose == null) {
+        Transpose = new MatrixFMxN.Space[W, V, F](Col, Row)
+        Transpose.Transpose = this
+      }
+      Transpose
+    }
+    
+    override def M: Int = Col.N
+    override def N: Int = Row.N
+    
+    override def apply(entries: TraversableOnce[Scalar]): Matrix =
+      new Matrix(this, entries.asInstanceOf[TraversableOnce[AnyRef]].toArray[AnyRef])
+    
+    def apply(entries: Scalar*): Matrix =
+      new Matrix(this, entries.asInstanceOf[Seq[AnyRef]].toArray[AnyRef])
+    
+    def rows(vectors: Row*): Matrix = super.rows(vectors)
+    
+    def cols(vectors: Col*): Matrix = super.cols(vectors)
+    
+    override def toString: String = "("+ Row +" map "+ Col +")"
+  }
 }

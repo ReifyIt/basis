@@ -20,12 +20,12 @@ trait SquareMatrix extends Any with Linear with Ring with Matrix { self =>
   
   override type Scalar
   
-  override def Row: VectorSpace {
+  override def Row: Vector.Space {
     type Vector = self.Vec
     type Scalar = self.Scalar
   }
   
-  override def Col: VectorSpace {
+  override def Col: Vector.Space {
     type Vector = self.Vec
     type Scalar = self.Scalar
   }
@@ -69,4 +69,68 @@ trait SquareMatrix extends Any with Linear with Ring with Matrix { self =>
   def det: Scalar
   
   def trace: Scalar
+}
+
+object SquareMatrix {
+  trait Space extends Matrix.Space { self =>
+    override type Matrix <: SquareMatrix {
+      type Matrix = self.Matrix
+      type Vec    = self.Vec
+      type Scalar = self.Scalar
+    }
+    
+    override type T = Matrix
+    
+    type Vec <: basis.algebra.Vector {
+      type Vector = self.Vec
+      type Scalar = self.Scalar
+    }
+    
+    override type Row = Vec
+    
+    override type Col = Vec
+    
+    override type Scalar
+    
+    override def T: this.type = this
+    
+    override def M: Int
+    
+    override def N: Int
+    
+    override def apply(entries: TraversableOnce[Scalar]): Matrix
+  }
+  
+  trait Template extends Any with Equals with Linear with Ring with Matrix.Template with SquareMatrix { self =>
+    override type Matrix <: SquareMatrix {
+      type Matrix = self.Matrix
+      type Vec    = self.Vec
+      type Scalar = self.Scalar
+    }
+    
+    override type Vec <: basis.algebra.Vector {
+      type Vector = self.Vec
+      type Scalar = self.Scalar
+    }
+    
+    override type Scalar <: Ring {
+      type Vector = self.Scalar
+    }
+    
+    override def Matrix: SquareMatrix.Space {
+      type Matrix = self.Matrix
+      type Vec    = self.Vec
+      type Scalar = self.Scalar
+    }
+    
+    override def Row: Vector.Space {
+      type Vector = self.Vec
+      type Scalar = self.Scalar
+    }
+    
+    override def Col: Vector.Space {
+      type Vector = self.Vec
+      type Scalar = self.Scalar
+    }
+  }
 }
