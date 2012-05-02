@@ -40,8 +40,11 @@ final class VectorZ2(val x: Integer, val y: Integer)
     x * that.x + y * that.y
 }
 
-object VectorZ2 extends Vector2.Space with IntegerVector.Space {
+object VectorZ2 extends OrderedRing.Scalar with Affine.Space with Vector2.Space with IntegerVector.Space {
+  override type Point  = Vector
   override type Vector = VectorZ2
+  
+  override def zero: Vector = new Vector(0L, 0L)
   
   override def apply(coords: Array[Long]): Vector = {
     if (coords.length != 2) throw new DimensionException

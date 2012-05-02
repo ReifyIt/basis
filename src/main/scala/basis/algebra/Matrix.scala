@@ -67,8 +67,6 @@ trait Matrix extends Any with Linear { self =>
 
 object Matrix {
   trait Space extends Linear.Space { self =>
-    override type Point = Matrix
-    
     override type Vector = Matrix
     
     type Matrix <: basis.algebra.Matrix {

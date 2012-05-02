@@ -14,7 +14,7 @@ final class MatrixR2x2(
   extends Matrix2x2.Template with RealMatrix.Template {
   
   override type Matrix = MatrixR2x2
-  override type Vec    = VectorR2
+  override type Span = VectorR2
   
   override def Matrix = MatrixR2x2
   override def Row = VectorR2
@@ -113,9 +113,15 @@ final class MatrixR2x2(
   override def trace: Real = _1_1 + _2_2
 }
 
-object MatrixR2x2 extends Matrix2x2.Space with RealMatrix.Space {
+object MatrixR2x2 extends RealField.Scalar with Matrix2x2.Space with RealMatrix.Space {
   override type Matrix = MatrixR2x2
-  override type Vec = VectorR2
+  override type Span = VectorR2
+  
+  override lazy val zero: Matrix =
+    new Matrix(0.0, 0.0,  0.0, 0.0)
+  
+  override lazy val unit: Matrix =
+    new Matrix(1.0, 0.0,  0.0, 1.0)
   
   override def apply(entries: Array[Double]): Matrix = {
     if (entries.length != 4) throw new DimensionException

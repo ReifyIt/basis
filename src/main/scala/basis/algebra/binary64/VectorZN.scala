@@ -23,8 +23,11 @@ final class VectorZN private (val Vector: VectorZN.Space, coords: Array[Long])
 object VectorZN {
   def apply(N: Int): Space = new Space(N)
   
-  class Space(val N: Int) extends IntegerVector.Space {
+  class Space(val N: Int) extends OrderedRing.Scalar with Affine.Space with IntegerVector.Space {
+    override type Point  = Vector
     override type Vector = VectorZN
+    
+    override lazy val zero: Vector = new Vector(this, new Array[Long](N))
     
     override def apply(coords: TraversableOnce[Integer]): Vector =
       new Vector(this, coords.map(_.toLong).toArray[Long])

@@ -32,3 +32,25 @@ trait OrderedRing extends Any with Ring {
   
   def >= (that: Vector): Boolean
 }
+
+object OrderedRing {
+  trait Space extends Ring.Space { self =>
+    override type Vector <: OrderedRing {
+      type Vector = self.Vector
+    }
+    
+    override def zero: Vector
+    
+    override def unit: Vector
+  }
+  
+  trait Scalar extends Ring.Scalar { self =>
+    override type Scalar <: OrderedRing {
+      type Vector = self.Scalar
+    }
+    
+    override def Scalar: OrderedRing.Space {
+      type Vector = self.Scalar
+    }
+  }
+}

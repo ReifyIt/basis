@@ -56,7 +56,7 @@ object BasisBuild extends Build {
   lazy val commonSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.scalabasis",
     version      := "0.0-SNAPSHOT",
-    scalaVersion := "2.10.0-SNAPSHOT",
+    scalaVersion := "2.10.0-M3",
     scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
     scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
     target <<= (target, name)(_ / _),

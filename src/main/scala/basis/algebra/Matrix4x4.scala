@@ -7,20 +7,20 @@
 
 package basis.algebra
 
-trait Matrix4x4 extends Any with SquareMatrix { self =>
+trait Matrix4x4 extends Any with MatrixRing { self =>
   override type Matrix
   
-  override type Vec
+  override type Span
   
   override type Scalar
   
   override def Row: Vector4.Space {
-    type Vector = self.Vec
+    type Vector = self.Span
     type Scalar = self.Scalar
   }
   
   override def Col: Vector4.Space {
-    type Vector = self.Vec
+    type Vector = self.Span
     type Scalar = self.Scalar
   }
   
@@ -99,15 +99,15 @@ trait Matrix4x4 extends Any with SquareMatrix { self =>
 }
 
 object Matrix4x4 {
-  trait Space extends SquareMatrix.Space { self =>
+  trait Space extends MatrixRing.Space { self =>
     override type Matrix <: Matrix4x4 {
       type Matrix = self.Matrix
-      type Vec    = self.Vec
+      type Span   = self.Span
       type Scalar = self.Scalar
     }
     
-    override type Vec <: Vector4 {
-      type Vector = self.Vec
+    override type Span <: Vector4 {
+      type Vector = self.Span
       type Scalar = self.Scalar
     }
     
@@ -157,15 +157,15 @@ object Matrix4x4 {
             col1.w, col2.w, col3.w, col4.w)
   }
   
-  trait Template extends Any with SquareMatrix.Template with Matrix4x4 { self =>
+  trait Template extends Any with MatrixRing.Template with Matrix4x4 { self =>
     override type Matrix <: Matrix4x4 {
       type Matrix = self.Matrix
-      type Vec    = self.Vec
+      type Span   = self.Span
       type Scalar = self.Scalar
     }
     
-    override type Vec <: Vector4 {
-      type Vector = self.Vec
+    override type Span <: Vector4 {
+      type Vector = self.Span
       type Scalar = self.Scalar
     }
     
@@ -175,17 +175,17 @@ object Matrix4x4 {
     
     override def Matrix: Matrix4x4.Space {
       type Matrix = self.Matrix
-      type Vec    = self.Vec
+      type Span   = self.Span
       type Scalar = self.Scalar
     }
     
     override def Row: Vector4.Space {
-      type Vector = self.Vec
+      type Vector = self.Span
       type Scalar = self.Scalar
     }
     
     override def Col: Vector4.Space {
-      type Vector = self.Vec
+      type Vector = self.Span
       type Scalar = self.Scalar
     }
     

@@ -44,7 +44,7 @@ object MatrixRMxN {
        W <: RealVector { type Vector = W }]
       (val Row: RealVector.Space { type Vector = V },
        val Col: RealVector.Space { type Vector = W })
-    extends RealMatrix.Space {
+    extends RealField.Scalar with RealMatrix.Space {
     
     override type Matrix = MatrixRMxN[V, W]
     override type T      = MatrixRMxN[W, V]
@@ -63,6 +63,9 @@ object MatrixRMxN {
     
     override def M: Int = Col.N
     override def N: Int = Row.N
+    
+    override lazy val zero: Matrix =
+      new Matrix(this, new Array[Double](M * N))
     
     override def apply(entries: TraversableOnce[Real]): Matrix =
       new Matrix(this, entries.map(_.toDouble).toArray[Double])

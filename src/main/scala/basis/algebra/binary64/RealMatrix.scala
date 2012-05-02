@@ -65,7 +65,7 @@ trait RealMatrix extends Any with Matrix { self =>
 }
 
 object RealMatrix {
-  trait Space extends Matrix.Space { self =>
+  trait Space extends RealField.Scalar with Matrix.Space { self =>
     override type Matrix <: RealMatrix {
       type Matrix = self.Matrix
       type T      = self.T
@@ -91,6 +91,8 @@ object RealMatrix {
     }
     
     override type Scalar = Real
+    
+    override def Scalar = Real
     
     override def T: Space {
       type Matrix = self.T

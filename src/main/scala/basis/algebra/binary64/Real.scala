@@ -10,7 +10,7 @@ package binary64
 
 import language.implicitConversions
 
-final class Real(val value: Double) extends AnyVal with Linear with RealField with RealVector {
+final class Real(val value: Double) extends AnyVal with RealField with RealVector {
   override type Vector = Real
   override type Scalar = Real
   
@@ -73,13 +73,13 @@ final class Real(val value: Double) extends AnyVal with Linear with RealField wi
   @inline override def toString: String = java.lang.Double.toString(value)
 }
 
-object Real extends RealVector.Space {
+object Real extends RealField.Scalar with RealField.Space with RealVector.Space {
   override type Vector = Real
   override type Scalar = Real
   
-  @inline def zero: Real = new Real(0.0)
+  @inline override def zero: Real = new Real(0.0)
   
-  @inline def unit: Real = new Real(1.0)
+  @inline override def unit: Real = new Real(1.0)
   
   @inline override def N: Int = 1
   

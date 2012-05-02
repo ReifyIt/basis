@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-trait Field extends Any with Ring {
+trait OrderedField extends Any with OrderedRing with Field {
   override type Vector
   
   override def + (that: Vector): Vector
@@ -18,14 +18,28 @@ trait Field extends Any with Ring {
   
   override def * (that: Vector): Vector
   
-  def inverse: Vector
+  override def inverse: Vector
   
-  def / (that: Vector): Vector
+  override def / (that: Vector): Vector
+  
+  override def abs: Vector
+  
+  override def min(that: Vector): Vector
+  
+  override def max(that: Vector): Vector
+  
+  override def < (that: Vector): Boolean
+  
+  override def <= (that: Vector): Boolean
+  
+  override def > (that: Vector): Boolean
+  
+  override def >= (that: Vector): Boolean
 }
 
-object Field {
-  trait Space extends Ring.Space { self =>
-    override type Vector <: Field {
+object OrderedField {
+  trait Space extends OrderedRing.Space with Field.Space { self =>
+    override type Vector <: OrderedField {
       type Vector = self.Vector
     }
     
@@ -34,12 +48,12 @@ object Field {
     override def unit: Vector
   }
   
-  trait Scalar extends Ring.Scalar { self =>
-    override type Scalar <: Field {
+  trait Scalar extends OrderedRing.Scalar with Field.Scalar { self =>
+    override type Scalar <: OrderedField {
       type Vector = self.Scalar
     }
     
-    override def Scalar: Field.Space {
+    override def Scalar: OrderedField.Space {
       type Vector = self.Scalar
     }
   }

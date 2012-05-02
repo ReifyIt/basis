@@ -31,12 +31,14 @@ trait RealVector extends Any with Vector {
 }
 
 object RealVector {
-  trait Space extends Vector.Space { self =>
+  trait Space extends RealField.Scalar with Vector.Space { self =>
     override type Vector <: RealVector {
       type Vector = self.Vector
     }
     
     override type Scalar = Real
+    
+    override def Scalar = Real
     
     override def N: Int
     

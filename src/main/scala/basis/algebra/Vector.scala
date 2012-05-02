@@ -30,13 +30,17 @@ trait Vector extends Any with Linear {
 }
 
 object Vector {
-  trait Space extends Linear.Space { self =>
+  trait Space extends Ring.Scalar with Linear.Space { self =>
     override type Vector <: basis.algebra.Vector {
       type Vector = self.Vector
       type Scalar = self.Scalar
     }
     
     override type Scalar <: Ring {
+      type Vector = self.Scalar
+    }
+    
+    override def Scalar: Ring.Space {
       type Vector = self.Scalar
     }
     
@@ -47,7 +51,7 @@ object Vector {
     def map[W <: basis.algebra.Vector { type Vector = W; type Scalar = self.Scalar }]
         (that: Vector.Space { type Vector = W; type Scalar = self.Scalar })
       : Matrix.Space { type Row = self.Vector; type Col = W; type Scalar = self.Scalar } =
-      new generic.MatrixFMxN.Space(this, that)
+      new generic.MatrixFMxN.Space(this, that, Scalar)
   }
   
   trait Template extends Any with Equals with Vector { self =>

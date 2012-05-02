@@ -15,7 +15,7 @@ final class MatrixR3x3(
   extends Matrix3x3.Template with RealMatrix.Template {
   
   override type Matrix = MatrixR3x3
-  override type Vec    = VectorR3
+  override type Span = VectorR3
   
   override def Matrix = MatrixR3x3
   override def Row = VectorR3
@@ -152,9 +152,15 @@ final class MatrixR3x3(
   override def trace: Real = _1_1 + _2_2 + _3_3
 }
 
-object MatrixR3x3 extends Matrix3x3.Space with RealMatrix.Space {
+object MatrixR3x3 extends RealField.Scalar with Matrix3x3.Space with RealMatrix.Space {
   override type Matrix = MatrixR3x3
-  override type Vec = VectorR3
+  override type Span = VectorR3
+  
+  override lazy val zero: Matrix =
+    new Matrix(0.0, 0.0, 0.0,  0.0, 0.0, 0.0,  0.0, 0.0, 0.0)
+  
+  override lazy val unit: Matrix =
+    new Matrix(1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0)
   
   override def apply(entries: Array[Double]): Matrix = {
     if (entries.length != 9) throw new DimensionException

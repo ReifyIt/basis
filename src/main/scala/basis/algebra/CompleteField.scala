@@ -26,3 +26,25 @@ trait CompleteField extends Any with Field {
   
   def sqrt: Vector
 }
+
+object CompleteField {
+  trait Space extends Field.Space { self =>
+    override type Vector <: CompleteField {
+      type Vector = self.Vector
+    }
+    
+    override def zero: Vector
+    
+    override def unit: Vector
+  }
+  
+  trait Scalar extends Field.Scalar { self =>
+    override type Scalar <: CompleteField {
+      type Vector = self.Scalar
+    }
+    
+    override def Scalar: CompleteField.Space {
+      type Vector = self.Scalar
+    }
+  }
+}

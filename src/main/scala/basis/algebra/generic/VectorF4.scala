@@ -17,17 +17,26 @@ final class VectorF4[F <: Ring { type Vector = F }] private
 }
 
 object VectorF4 {
-  def apply[F <: Ring { type Vector = F }] = Space.asInstanceOf[Space[F]]
+  def apply[F <: Ring { type Vector = F }]
+      (Scalar: Ring.Space { type Vector = F }): Space[F] =
+    new Space[F](Scalar)
   
-  private val Space = new Space[Nothing]
-  
-  class Space[F <: Ring { type Vector = F }] extends Vector4.Space {
+  class Space[F <: Ring { type Vector = F }]
+      (val Scalar: Ring.Space { type Vector = F })
+    extends Ring.Scalar with Affine.Space with Vector4.Space {
+    
+    override type Point  = Vector
     override type Vector = VectorF4[F]
     override type Scalar = F
+    
+    lazy val zero: Vector = {
+      val z = Scalar.zero
+      apply(z, z, z, z)
+    }
     
     override def apply(x: Scalar, y: Scalar, z: Scalar, w: Scalar): Vector =
       new Vector(this, x, y, z, w)
     
-    override def toString: String = "F4"
+    override def toString: String = "F4"+"("+ Scalar +")"
   }
 }

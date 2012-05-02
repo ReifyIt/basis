@@ -18,33 +18,47 @@ final class MatrixF3x3
   extends Matrix3x3.Template { self =>
   
   override type Matrix = MatrixF3x3[V, F]
-  override type Vec    = V
+  override type Span   = V
   override type Scalar = F
   
   override def Row: Vector3.Space {
-    type Vector = self.Vec
+    type Vector = self.Span
     type Scalar = self.Scalar
-  } = Matrix.Vec
+  } = Matrix.Span
   
   override def Col: Vector3.Space {
-    type Vector = self.Vec
+    type Vector = self.Span
     type Scalar = self.Scalar
-  } = Matrix.Vec
+  } = Matrix.Span
 }
 
 object MatrixF3x3 {
-  def apply(Vec: Vector3.Space { type Scalar <: Field { type Vector = Scalar } }) =
-    new Space[Vec.type#Vector, Vec.type#Scalar](Vec)
+  def apply[F <: Field { type Vector = F }]
+      (Span: Vector3.Space { type Scalar = F },
+       Scalar: Field.Space { type Vector = F }) =
+    new Space[Span.type#Vector, F](Span, Scalar)
   
   class Space
       [V <: Vector3 { type Vector = V; type Scalar = F },
        F <: Field { type Vector = F }]
-      (val Vec: Vector3.Space { type Vector = V; type Scalar = F })
-    extends Matrix3x3.Space {
+      (val Span: Vector3.Space { type Vector = V; type Scalar = F },
+       val Scalar: Field.Space { type Vector = F })
+    extends Field.Scalar with Matrix3x3.Space {
     
     override type Matrix = MatrixF3x3[V, F]
-    override type Vec    = V
+    override type Span   = V
     override type Scalar = F
+    
+    lazy val zero: Matrix = {
+      val z = Scalar.zero
+      apply(z, z, z,  z, z, z,  z, z, z)
+    }
+    
+    lazy val unit: Matrix = {
+      val z = Scalar.zero
+      val u = Scalar.unit
+      apply(u, z, z,  z, u, z,  z, z, u)
+    }
     
     override def apply(
         _1_1: Scalar, _1_2: Scalar, _1_3: Scalar,
@@ -55,6 +69,6 @@ object MatrixF3x3 {
         _2_1, _2_2, _2_3,
         _3_1, _3_2, _3_3)
     
-    override def toString: String = "("+ Vec +" map "+ Vec +")"
+    override def toString: String = "("+ Span +" map "+ Span +")"
   }
 }

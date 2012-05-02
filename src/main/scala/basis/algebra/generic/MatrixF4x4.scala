@@ -19,33 +19,47 @@ final class MatrixF4x4
   extends Matrix4x4.Template { self =>
   
   override type Matrix = MatrixF4x4[V, F]
-  override type Vec    = V
+  override type Span   = V
   override type Scalar = F
   
   override def Row: Vector4.Space {
-    type Vector = self.Vec
+    type Vector = self.Span
     type Scalar = self.Scalar
-  } = Matrix.Vec
+  } = Matrix.Span
   
   override def Col: Vector4.Space {
-    type Vector = self.Vec
+    type Vector = self.Span
     type Scalar = self.Scalar
-  } = Matrix.Vec
+  } = Matrix.Span
 }
 
 object MatrixF4x4 {
-  def apply(Vec: Vector4.Space { type Scalar <: Field { type Vector = Scalar } }) =
-    new Space[Vec.type#Vector, Vec.type#Scalar](Vec)
+  def apply[F <: Field { type Vector = F }]
+      (Span: Vector4.Space { type Scalar = F },
+       Scalar: Field.Space { type Vector = F }) =
+    new Space[Span.type#Vector, F](Span, Scalar)
   
   class Space
       [V <: Vector4 { type Vector = V; type Scalar = F },
        F <: Field { type Vector = F }]
-      (val Vec: Vector4.Space { type Vector = V; type Scalar = F })
-    extends Matrix4x4.Space {
+      (val Span: Vector4.Space { type Vector = V; type Scalar = F },
+       val Scalar: Field.Space { type Vector = F })
+    extends Field.Scalar with Matrix4x4.Space {
     
     override type Matrix = MatrixF4x4[V, F]
-    override type Vec    = V
+    override type Span   = V
     override type Scalar = F
+    
+    lazy val zero: Matrix = {
+      val z = Scalar.zero
+      apply(z, z, z, z,  z, z, z, z,  z, z, z, z,  z, z, z, z)
+    }
+    
+    lazy val unit: Matrix = {
+      val z = Scalar.zero
+      val u = Scalar.unit
+      apply(u, z, z, z,  z, u, z, z,  z, z, u, z,  z, z, z, u)
+    }
     
     override def apply(
         _1_1: Scalar, _1_2: Scalar, _1_3: Scalar, _1_4: Scalar,
@@ -58,6 +72,6 @@ object MatrixF4x4 {
         _3_1, _3_2, _3_3, _3_4,
         _4_1, _4_2, _4_3, _4_4)
     
-    override def toString: String = "("+ Vec +" map "+ Vec +")"
+    override def toString: String = "("+ Span +" map "+ Span +")"
   }
 }

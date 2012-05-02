@@ -22,7 +22,7 @@ package object algebra {
   
   type MatrixSpace = Matrix.Space with Singleton
   
-  type SquareMatrixSpace = SquareMatrix.Space with Singleton
+  type MatrixRingSpace = MatrixRing.Space with Singleton
   
   type Matrix2x2Space = Matrix2x2.Space with Singleton
   
@@ -30,31 +30,27 @@ package object algebra {
   
   type Matrix4x4Space = Matrix4x4.Space with Singleton
   
-  type SomeRing = Singleton {
-    type Scalar <: Ring { type Vector = Scalar }
-  }
+  type RingSpace = Ring.Space with Singleton
   
-  type SomeOrderedRing = Singleton {
-    type Scalar <: OrderedRing { type Vector = Scalar }
-  }
+  type RingScalar = Ring.Scalar with Singleton
   
-  type SomeField = Singleton {
-    type Scalar <: Field { type Vector = Scalar }
-  }
+  type FieldSpace = Field.Space with Singleton
   
-  type SomeOrderedField = Singleton {
-    type Scalar <: OrderedRing with Field { type Vector = Scalar }
-  }
+  type FieldScalar = Field.Scalar with Singleton
   
-  type SomeCompleteField = Singleton {
-    type Scalar <: CompleteField { type Vector = Scalar }
-  }
+  type OrderedRingSpace = OrderedRing.Space with Singleton
   
-  type SomeCompleteOrderedField = Singleton {
-    type Scalar <: OrderedRing with CompleteField { type Vector = Scalar }
-  }
+  type OrderedRingScalar = OrderedRing.Scalar with Singleton
   
-  type SomeRealField = Singleton {
-    type Scalar <: RealField { type Vector = Scalar }
-  }
+  type OrderedFieldSpace = OrderedField.Space with Singleton
+  
+  type OrderedFieldScalar = OrderedField.Scalar with Singleton
+  
+  type CompleteFieldSpace = CompleteField.Space with Singleton
+  
+  type CompleteFieldScalar = CompleteField.Scalar with Singleton
+  
+  type RealFieldSpace = RealField.Space with Singleton
+  
+  type RealFieldScalar = RealField.Scalar with Singleton
 }

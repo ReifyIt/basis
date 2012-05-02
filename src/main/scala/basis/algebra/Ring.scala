@@ -18,3 +18,25 @@ trait Ring extends Any {
   
   def * (that: Vector): Vector
 }
+
+object Ring {
+  trait Space { self =>
+    type Vector <: Ring {
+      type Vector = self.Vector
+    }
+    
+    def zero: Vector
+    
+    def unit: Vector
+  }
+  
+  trait Scalar { self =>
+    type Scalar <: Ring {
+      type Vector = self.Scalar
+    }
+    
+    def Scalar: Ring.Space {
+      type Vector = self.Scalar
+    }
+  }
+}

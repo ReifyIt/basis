@@ -7,26 +7,26 @@
 
 package basis.algebra
 
-trait SquareMatrix extends Any with Linear with Ring with Matrix { self =>
+trait MatrixRing extends Any with Ring with Matrix { self =>
   override type Matrix
   
   override type T = Matrix
   
-  type Vec
+  type Span
   
-  override type Row = Vec
+  override type Row = Span
   
-  override type Col = Vec
+  override type Col = Span
   
   override type Scalar
   
   override def Row: Vector.Space {
-    type Vector = self.Vec
+    type Vector = self.Span
     type Scalar = self.Scalar
   }
   
   override def Col: Vector.Space {
-    type Vector = self.Vec
+    type Vector = self.Span
     type Scalar = self.Scalar
   }
   
@@ -71,24 +71,24 @@ trait SquareMatrix extends Any with Linear with Ring with Matrix { self =>
   def trace: Scalar
 }
 
-object SquareMatrix {
-  trait Space extends Matrix.Space { self =>
-    override type Matrix <: SquareMatrix {
+object MatrixRing {
+  trait Space extends Ring.Space with Matrix.Space { self =>
+    override type Matrix <: MatrixRing {
       type Matrix = self.Matrix
-      type Vec    = self.Vec
+      type Span   = self.Span
       type Scalar = self.Scalar
     }
     
     override type T = Matrix
     
-    type Vec <: basis.algebra.Vector {
-      type Vector = self.Vec
+    type Span <: basis.algebra.Vector {
+      type Vector = self.Span
       type Scalar = self.Scalar
     }
     
-    override type Row = Vec
+    override type Row = Span
     
-    override type Col = Vec
+    override type Col = Span
     
     override type Scalar
     
@@ -98,18 +98,22 @@ object SquareMatrix {
     
     override def N: Int
     
+    override def zero: Matrix
+    
+    override def unit: Matrix
+    
     override def apply(entries: TraversableOnce[Scalar]): Matrix
   }
   
-  trait Template extends Any with Equals with Linear with Ring with Matrix.Template with SquareMatrix { self =>
-    override type Matrix <: SquareMatrix {
+  trait Template extends Any with Equals with Linear with Ring with Matrix.Template with MatrixRing { self =>
+    override type Matrix <: MatrixRing {
       type Matrix = self.Matrix
-      type Vec    = self.Vec
+      type Span   = self.Span
       type Scalar = self.Scalar
     }
     
-    override type Vec <: basis.algebra.Vector {
-      type Vector = self.Vec
+    override type Span <: basis.algebra.Vector {
+      type Vector = self.Span
       type Scalar = self.Scalar
     }
     
@@ -117,19 +121,19 @@ object SquareMatrix {
       type Vector = self.Scalar
     }
     
-    override def Matrix: SquareMatrix.Space {
+    override def Matrix: MatrixRing.Space {
       type Matrix = self.Matrix
-      type Vec    = self.Vec
+      type Span   = self.Span
       type Scalar = self.Scalar
     }
     
     override def Row: Vector.Space {
-      type Vector = self.Vec
+      type Vector = self.Span
       type Scalar = self.Scalar
     }
     
     override def Col: Vector.Space {
-      type Vector = self.Vec
+      type Vector = self.Span
       type Scalar = self.Scalar
     }
   }

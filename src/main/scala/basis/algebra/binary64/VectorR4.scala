@@ -42,8 +42,11 @@ final class VectorR4(val x: Real, val y: Real, val z: Real, val w: Real)
     x * that.x + y * that.y + z * that.z + w * that.w
 }
 
-object VectorR4 extends Vector4.Space with RealVector.Space {
+object VectorR4 extends RealField.Scalar with Affine.Space with Vector4.Space with RealVector.Space {
+  override type Point  = Vector
   override type Vector = VectorR4
+  
+  override def zero: Vector = new Vector(0.0, 0.0, 0.0, 0.0)
   
   override def apply(coords: Array[Double]): Vector = {
     if (coords.length != 4) throw new DimensionException

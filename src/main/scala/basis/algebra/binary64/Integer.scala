@@ -10,7 +10,7 @@ package binary64
 
 import language.implicitConversions
 
-final class Integer(val value: Long) extends AnyVal with Linear with OrderedRing with IntegerVector {
+final class Integer(val value: Long) extends AnyVal with OrderedRing with IntegerVector {
   override type Vector = Integer
   override type Scalar = Integer
   
@@ -76,7 +76,7 @@ final class Integer(val value: Long) extends AnyVal with Linear with OrderedRing
   @inline override def toString: String = java.lang.Long.toString(value)
 }
 
-object Integer extends IntegerVector.Space {
+object Integer extends OrderedRing.Scalar with OrderedRing.Space with IntegerVector.Space {
   override type Vector = Integer
   override type Scalar = Integer
   

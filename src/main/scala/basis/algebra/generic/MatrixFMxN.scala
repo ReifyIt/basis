@@ -41,16 +41,19 @@ final class MatrixFMxN
 
 object MatrixFMxN {
   def apply[F <: Ring { type Vector = F }]
-      (Row: Vector.Space { type Scalar = F }, Col: Vector.Space { type Scalar = F }) =
-    new Space[Row.type#Vector, Col.type#Vector, F](Row, Col)
+      (Row: Vector.Space { type Scalar = F },
+       Col: Vector.Space { type Scalar = F },
+       Scalar: Ring.Space { type Vector = F }) =
+    new Space[Row.type#Vector, Col.type#Vector, F](Row, Col, Scalar)
   
   class Space
       [V <: Vector { type Vector = V; type Scalar = F },
        W <: Vector { type Vector = W; type Scalar = F },
        F <: Ring { type Vector = F }]
       (val Row: Vector.Space { type Vector = V; type Scalar = F },
-       val Col: Vector.Space { type Vector = W; type Scalar = F })
-    extends Matrix.Space {
+       val Col: Vector.Space { type Vector = W; type Scalar = F },
+       val Scalar: Ring.Space { type Vector = F })
+    extends Ring.Scalar with Matrix.Space {
     
     override type Matrix = MatrixFMxN[V, W, F]
     override type T      = MatrixFMxN[W, V, F]
@@ -62,7 +65,7 @@ object MatrixFMxN {
     
     override def T: MatrixFMxN.Space[W, V, F] = synchronized {
       if (Transpose == null) {
-        Transpose = new MatrixFMxN.Space[W, V, F](Col, Row)
+        Transpose = new MatrixFMxN.Space[W, V, F](Col, Row, Scalar)
         Transpose.Transpose = this
       }
       Transpose
@@ -70,6 +73,17 @@ object MatrixFMxN {
     
     override def M: Int = Col.N
     override def N: Int = Row.N
+    
+    lazy val zero: Matrix = {
+      val z = Scalar.zero.asInstanceOf[AnyRef]
+      val entries = new Array[AnyRef](M * N)
+      var i = 0
+      while (i < entries.length) {
+        entries(i) = z
+        i += 1
+      }
+      apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
+    }
     
     override def apply(entries: TraversableOnce[Scalar]): Matrix =
       new Matrix(this, entries.asInstanceOf[TraversableOnce[AnyRef]].toArray[AnyRef])

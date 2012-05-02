@@ -26,14 +26,14 @@ trait Linear extends Any with Affine {
 }
 
 object Linear {
-  trait Space extends Affine.Space { self =>
-    override type Point = Vector
-    
-    override type Vector <: Linear {
+  trait Space { self =>
+    type Vector <: Linear {
       type Vector = self.Vector
       type Scalar = self.Scalar
     }
     
-    override type Scalar
+    type Scalar
+    
+    def zero: Vector
   }
 }

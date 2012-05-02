@@ -16,7 +16,7 @@ final class MatrixR4x4(
   extends Matrix4x4.Template with RealMatrix.Template {
   
   override type Matrix = MatrixR4x4
-  override type Vec    = VectorR4
+  override type Span = VectorR4
   
   override def Matrix = MatrixR4x4
   override def Row = VectorR4
@@ -217,9 +217,15 @@ final class MatrixR4x4(
   override def trace: Real = _1_1 + _2_2 + _3_3 + _4_4
 }
 
-object MatrixR4x4 extends Matrix4x4.Space with RealMatrix.Space {
+object MatrixR4x4 extends RealField.Scalar with Matrix4x4.Space with RealMatrix.Space {
   override type Matrix = MatrixR4x4
-  override type Vec = VectorR4
+  override type Span = VectorR4
+  
+  override lazy val zero: Matrix =
+    new Matrix(0.0, 0.0, 0.0, 0.0,  0.0, 0.0, 0.0, 0.0,  0.0, 0.0, 0.0, 0.0,  0.0, 0.0, 0.0, 0.0)
+  
+  override lazy val unit: Matrix =
+    new Matrix(1.0, 0.0, 0.0, 0.0,  0.0, 1.0, 0.0, 0.0,  0.0, 0.0, 1.0, 0.0,  0.0, 0.0, 0.0, 1.0)
   
   override def apply(entries: Array[Double]): Matrix = {
     if (entries.length != 16) throw new DimensionException

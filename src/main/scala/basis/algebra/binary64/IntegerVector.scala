@@ -31,12 +31,14 @@ trait IntegerVector extends Any with Vector {
 }
 
 object IntegerVector {
-  trait Space extends Vector.Space { self =>
+  trait Space extends OrderedRing.Scalar with Vector.Space { self =>
     override type Vector <: IntegerVector {
       type Vector = self.Vector
     }
     
     override type Scalar = Integer
+    
+    override def Scalar = Integer
     
     override def N: Int
     
