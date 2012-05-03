@@ -8,19 +8,24 @@
 package basis.algebra
 
 trait Matrix3x3 extends Any with MatrixRing { self =>
-  override type Matrix
+  override type Matrix <: Matrix3x3 {
+    type Matrix = self.Matrix
+    type Span   = self.Span
+    type Scalar = self.Scalar
+  }
   
-  override type Span
-  
-  override type Scalar
-  
-  override def Row: Vector3.Space {
+  override type Span <: Vector3 {
     type Vector = self.Span
     type Scalar = self.Scalar
   }
   
-  override def Col: Vector3.Space {
-    type Vector = self.Span
+  override type Scalar <: Field {
+    type Vector = self.Scalar
+  }
+  
+  override def Matrix: Matrix3x3.Space {
+    type Matrix = self.Matrix
+    type Span   = self.Span
     type Scalar = self.Scalar
   }
   
@@ -34,61 +39,132 @@ trait Matrix3x3 extends Any with MatrixRing { self =>
   def _3_2: Scalar
   def _3_3: Scalar
   
-  override def M: Int
+  override def M: Int = 3
+  override def N: Int = 3
   
-  override def N: Int
+  override def apply(k: Int): Scalar = k match {
+    case 0 => _1_1
+    case 1 => _1_2
+    case 2 => _1_3
+    case 3 => _2_1
+    case 4 => _2_2
+    case 5 => _2_3
+    case 6 => _3_1
+    case 7 => _3_2
+    case 8 => _3_3
+    case _ => throw new IndexOutOfBoundsException(k.toString)
+  }
   
-  override def apply(k: Int): Scalar
+  override def apply(i: Int, j: Int): Scalar = {
+    if (i < 0 || i >= 3 || j < 0 || j >= 3)
+      throw new IndexOutOfBoundsException("row "+ i +", "+"col "+ j)
+    apply(3 * i + j)
+  }
   
-  override def apply(i: Int, j: Int): Scalar
+  override def row(i: Int): Row = i match {
+    case 0 => row1
+    case 1 => row2
+    case 2 => row3
+    case _ => throw new IndexOutOfBoundsException("row "+ i)
+  }
   
-  override def row(i: Int): Row
+  def row1: Row = Matrix.Row(_1_1, _1_2, _1_3)
+  def row2: Row = Matrix.Row(_2_1, _2_2, _2_3)
+  def row3: Row = Matrix.Row(_3_1, _3_2, _3_3)
   
-  def row1: Row
+  override def col(j: Int): Col = j match {
+    case 0 => col1
+    case 1 => col2
+    case 2 => col3
+    case _ => throw new IndexOutOfBoundsException("col "+ j)
+  }
   
-  def row2: Row
+  def col1: Col = Matrix.Col(_1_1, _2_1, _3_1)
+  def col2: Col = Matrix.Col(_1_2, _2_2, _3_2)
+  def col3: Col = Matrix.Col(_1_3, _2_3, _3_3)
   
-  def row3: Row
+  override def + (that: Matrix): Matrix =
+    Matrix(_1_1 + that._1_1, _1_2 + that._1_2, _1_3 + that._1_3,
+           _2_1 + that._2_1, _2_2 + that._2_2, _2_3 + that._2_3,
+           _3_1 + that._3_1, _3_2 + that._3_2, _3_3 + that._3_3)
   
-  override def col(j: Int): Col
+  override def unary_- : Matrix =
+    Matrix(-_1_1, -_1_2, -_1_3,
+           -_2_1, -_2_2, -_2_3,
+           -_3_1, -_3_2, -_3_3)
   
-  def col1: Col
+  override def - (that: Matrix): Matrix =
+    Matrix(_1_1 - that._1_1, _1_2 - that._1_2, _1_3 - that._1_3,
+           _2_1 - that._2_1, _2_2 - that._2_2, _2_3 - that._2_3,
+           _3_1 - that._3_1, _3_2 - that._3_2, _3_3 - that._3_3)
   
-  def col2: Col
+  override def :* (scalar: Scalar): Matrix =
+    Matrix(_1_1 * scalar, _1_2 * scalar, _1_3 * scalar,
+           _2_1 * scalar, _2_2 * scalar, _2_3 * scalar,
+           _3_1 * scalar, _3_2 * scalar, _3_3 * scalar)
   
-  def col3: Col
+  override def *: (scalar: Scalar): Matrix =
+    Matrix(scalar * _1_1, scalar * _1_2, scalar * _1_3,
+           scalar * _2_1, scalar * _2_2, scalar * _2_3,
+           scalar * _3_1, scalar * _3_2, scalar * _3_3)
   
-  override def + (that: Matrix): Matrix
+  override def :⋅ (vector: Row): Col =
+    Matrix.Col(_1_1 * vector.x + _1_2 * vector.y + _1_3 * vector.z,
+               _2_1 * vector.x + _2_2 * vector.y + _2_3 * vector.z,
+               _3_1 * vector.x + _3_2 * vector.y + _3_3 * vector.z)
   
-  override def unary_- : Matrix
+  override def ⋅: (vector: Col): Row =
+    Matrix.Row(vector.x * _1_1 + vector.y * _2_1 + vector.z * _3_1,
+               vector.x * _1_2 + vector.y * _2_2 + vector.z * _3_2,
+               vector.x * _1_3 + vector.y * _2_3 + vector.z * _3_3)
   
-  override def - (that: Matrix): Matrix
+  override def T: T =
+    Matrix.T(_1_1, _2_1, _3_1,
+             _1_2, _2_2, _3_2,
+             _1_3, _2_3, _3_3)
   
-  override def :* (scalar: Scalar): Matrix
+  override def * (that: Matrix): Matrix =
+    Matrix(_1_1 * that._1_1 + _1_2 * that._2_1 + _1_3 * that._3_1,
+           _1_1 * that._1_2 + _1_2 * that._2_2 + _1_3 * that._3_2,
+           _1_1 * that._1_3 + _1_2 * that._2_3 + _1_3 * that._3_3,
+           _2_1 * that._1_1 + _2_2 * that._2_1 + _2_3 * that._3_1,
+           _2_1 * that._1_2 + _2_2 * that._2_2 + _2_3 * that._3_2,
+           _2_1 * that._1_3 + _2_2 * that._2_3 + _2_3 * that._3_3,
+           _3_1 * that._1_1 + _3_2 * that._2_1 + _3_3 * that._3_1,
+           _3_1 * that._1_2 + _3_2 * that._2_2 + _3_3 * that._3_2,
+           _3_1 * that._1_3 + _3_2 * that._2_3 + _3_3 * that._3_3)
   
-  override def *: (scalar: Scalar): Matrix
+  override def inverse: Option[Matrix] = {
+    val minor_1_1 = _2_2 * _3_3 - _2_3 * _3_2
+    val minor_1_2 = _2_1 * _3_3 - _2_3 * _3_1
+    val minor_1_3 = _2_1 * _3_2 - _2_2 * _3_1
+    val minor_2_1 = _1_2 * _3_3 - _1_3 * _3_2
+    val minor_2_2 = _1_1 * _3_3 - _1_3 * _3_1
+    val minor_2_3 = _1_1 * _3_2 - _1_2 * _3_1
+    val minor_3_1 = _1_2 * _2_3 - _1_3 * _2_2
+    val minor_3_2 = _1_1 * _2_3 - _1_3 * _2_1
+    val minor_3_3 = _1_1 * _2_2 - _1_2 * _2_1
+    
+    val det = _1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3
+    Some(Matrix(
+       minor_1_1 / det, -minor_2_1 / det,  minor_3_1 / det,
+      -minor_1_2 / det,  minor_2_2 / det, -minor_3_2 / det,
+       minor_1_3 / det, -minor_2_3 / det,  minor_3_3 / det))
+  }
   
-  override def :⋅ (vector: Row): Col
+  override def det: Scalar = {
+    val minor_1_1 = _2_2 * _3_3 - _2_3 * _3_2
+    val minor_1_2 = _2_1 * _3_3 - _2_3 * _3_1
+    val minor_1_3 = _2_1 * _3_2 - _2_2 * _3_1
+    
+    _1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3
+  }
   
-  override def ⋅: (vector: Col): Row
-  
-  override def ⋅ [U <: basis.algebra.Vector { type Vector = U; type Scalar = self.Scalar }]
-      (that: basis.algebra.Matrix { type Row = U; type Col = self.Row; type Scalar = self.Scalar })
-    : basis.algebra.Matrix { type Row = U; type Col = self.Col; type Scalar = self.Scalar }
-  
-  override def T: T
-  
-  override def * (that: Matrix): Matrix
-  
-  override def inverse: Option[Matrix]
-  
-  override def det: Scalar
-  
-  override def trace: Scalar
+  override def trace: Scalar = _1_1 + _2_2 + _3_3
 }
 
 object Matrix3x3 {
-  trait Space extends MatrixRing.Space { self =>
+  trait Space extends Field.Scalar with MatrixRing.Space { self =>
     override type Matrix <: Matrix3x3 {
       type Matrix = self.Matrix
       type Span   = self.Span
@@ -100,7 +176,34 @@ object Matrix3x3 {
       type Scalar = self.Scalar
     }
     
-    override type Scalar
+    override type Scalar <: Field {
+      type Vector = self.Scalar
+    }
+    
+    override def Row: Vector3.Space {
+      type Vector = self.Span
+      type Scalar = self.Scalar
+    }
+    
+    override def Col: Vector3.Space {
+      type Vector = self.Span
+      type Scalar = self.Scalar
+    }
+    
+    override def Scalar: Field.Space {
+      type Vector = self.Scalar
+    }
+    
+    override def zero: Matrix = {
+      val z = Scalar.zero
+      apply(z, z, z,  z, z, z,  z, z, z)
+    }
+    
+    override def unit: Matrix = {
+      val z = Scalar.zero
+      val u = Scalar.unit
+      apply(u, z, z,  z, u, z,  z, z, u)
+    }
     
     override def M: Int = 3
     
@@ -140,171 +243,5 @@ object Matrix3x3 {
       apply(col1.x, col2.x, col3.x,
             col1.y, col2.y, col3.y,
             col1.z, col2.z, col3.z)
-  }
-  
-  trait Template extends Any with MatrixRing.Template with Matrix3x3 { self =>
-    override type Matrix <: Matrix3x3 {
-      type Matrix = self.Matrix
-      type Span   = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override type Span <: Vector3 {
-      type Vector = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override type Scalar <: Field {
-      type Vector = self.Scalar
-    }
-    
-    override def Matrix: Matrix3x3.Space {
-      type Matrix = self.Matrix
-      type Span   = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override def Row: Vector3.Space {
-      type Vector = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override def Col: Vector3.Space {
-      type Vector = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override def _1_1: Scalar
-    override def _1_2: Scalar
-    override def _1_3: Scalar
-    override def _2_1: Scalar
-    override def _2_2: Scalar
-    override def _2_3: Scalar
-    override def _3_1: Scalar
-    override def _3_2: Scalar
-    override def _3_3: Scalar
-    
-    override def M: Int = 3
-    override def N: Int = 3
-    
-    override def apply(k: Int): Scalar = k match {
-      case 0 => _1_1
-      case 1 => _1_2
-      case 2 => _1_3
-      case 3 => _2_1
-      case 4 => _2_2
-      case 5 => _2_3
-      case 6 => _3_1
-      case 7 => _3_2
-      case 8 => _3_3
-      case _ => throw new IndexOutOfBoundsException(k.toString)
-    }
-    
-    override def apply(i: Int, j: Int): Scalar = {
-      if (i < 0 || i >= 3 || j < 0 || j >= 3)
-        throw new IndexOutOfBoundsException("row "+ i +", "+"col "+ j)
-      apply(3 * i + j)
-    }
-    
-    override def row(i: Int): Row = i match {
-      case 0 => row1
-      case 1 => row2
-      case 2 => row3
-      case _ => throw new IndexOutOfBoundsException("row "+ i)
-    }
-    
-    override def row1: Row = Row(_1_1, _1_2, _1_3)
-    override def row2: Row = Row(_2_1, _2_2, _2_3)
-    override def row3: Row = Row(_3_1, _3_2, _3_3)
-    
-    override def col(j: Int): Col = j match {
-      case 0 => col1
-      case 1 => col2
-      case 2 => col3
-      case _ => throw new IndexOutOfBoundsException("col "+ j)
-    }
-    
-    override def col1: Col = Col(_1_1, _2_1, _3_1)
-    override def col2: Col = Col(_1_2, _2_2, _3_2)
-    override def col3: Col = Col(_1_3, _2_3, _3_3)
-    
-    override def + (that: Matrix): Matrix =
-      Matrix(_1_1 + that._1_1, _1_2 + that._1_2, _1_3 + that._1_3,
-             _2_1 + that._2_1, _2_2 + that._2_2, _2_3 + that._2_3,
-             _3_1 + that._3_1, _3_2 + that._3_2, _3_3 + that._3_3)
-    
-    override def unary_- : Matrix =
-      Matrix(-_1_1, -_1_2, -_1_3,
-             -_2_1, -_2_2, -_2_3,
-             -_3_1, -_3_2, -_3_3)
-    
-    override def - (that: Matrix): Matrix =
-      Matrix(_1_1 - that._1_1, _1_2 - that._1_2, _1_3 - that._1_3,
-             _2_1 - that._2_1, _2_2 - that._2_2, _2_3 - that._2_3,
-             _3_1 - that._3_1, _3_2 - that._3_2, _3_3 - that._3_3)
-    
-    override def :* (scalar: Scalar): Matrix =
-      Matrix(_1_1 * scalar, _1_2 * scalar, _1_3 * scalar,
-             _2_1 * scalar, _2_2 * scalar, _2_3 * scalar,
-             _3_1 * scalar, _3_2 * scalar, _3_3 * scalar)
-    
-    override def *: (scalar: Scalar): Matrix =
-      Matrix(scalar * _1_1, scalar * _1_2, scalar * _1_3,
-             scalar * _2_1, scalar * _2_2, scalar * _2_3,
-             scalar * _3_1, scalar * _3_2, scalar * _3_3)
-    
-    override def :⋅ (vector: Row): Col =
-      Col(_1_1 * vector.x + _1_2 * vector.y + _1_3 * vector.z,
-          _2_1 * vector.x + _2_2 * vector.y + _2_3 * vector.z,
-          _3_1 * vector.x + _3_2 * vector.y + _3_3 * vector.z)
-    
-    override def ⋅: (vector: Col): Row =
-      Row(vector.x * _1_1 + vector.y * _2_1 + vector.z * _3_1,
-          vector.x * _1_2 + vector.y * _2_2 + vector.z * _3_2,
-          vector.x * _1_3 + vector.y * _2_3 + vector.z * _3_3)
-    
-    override def T: T =
-      Matrix.T(_1_1, _2_1, _3_1,
-               _1_2, _2_2, _3_2,
-               _1_3, _2_3, _3_3)
-    
-    override def * (that: Matrix): Matrix =
-      Matrix(_1_1 * that._1_1 + _1_2 * that._2_1 + _1_3 * that._3_1,
-             _1_1 * that._1_2 + _1_2 * that._2_2 + _1_3 * that._3_2,
-             _1_1 * that._1_3 + _1_2 * that._2_3 + _1_3 * that._3_3,
-             _2_1 * that._1_1 + _2_2 * that._2_1 + _2_3 * that._3_1,
-             _2_1 * that._1_2 + _2_2 * that._2_2 + _2_3 * that._3_2,
-             _2_1 * that._1_3 + _2_2 * that._2_3 + _2_3 * that._3_3,
-             _3_1 * that._1_1 + _3_2 * that._2_1 + _3_3 * that._3_1,
-             _3_1 * that._1_2 + _3_2 * that._2_2 + _3_3 * that._3_2,
-             _3_1 * that._1_3 + _3_2 * that._2_3 + _3_3 * that._3_3)
-    
-    override def inverse: Option[Matrix] = {
-      val minor_1_1 = _2_2 * _3_3 - _2_3 * _3_2
-      val minor_1_2 = _2_1 * _3_3 - _2_3 * _3_1
-      val minor_1_3 = _2_1 * _3_2 - _2_2 * _3_1
-      val minor_2_1 = _1_2 * _3_3 - _1_3 * _3_2
-      val minor_2_2 = _1_1 * _3_3 - _1_3 * _3_1
-      val minor_2_3 = _1_1 * _3_2 - _1_2 * _3_1
-      val minor_3_1 = _1_2 * _2_3 - _1_3 * _2_2
-      val minor_3_2 = _1_1 * _2_3 - _1_3 * _2_1
-      val minor_3_3 = _1_1 * _2_2 - _1_2 * _2_1
-      
-      val det = _1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3
-      Some(Matrix(
-         minor_1_1 / det, -minor_2_1 / det,  minor_3_1 / det,
-        -minor_1_2 / det,  minor_2_2 / det, -minor_3_2 / det,
-         minor_1_3 / det, -minor_2_3 / det,  minor_3_3 / det))
-    }
-    
-    override def det: Scalar = {
-      val minor_1_1 = _2_2 * _3_3 - _2_3 * _3_2
-      val minor_1_2 = _2_1 * _3_3 - _2_3 * _3_1
-      val minor_1_3 = _2_1 * _3_2 - _2_2 * _3_1
-      
-      _1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3
-    }
-    
-    override def trace: Scalar = _1_1 + _2_2 + _3_3
   }
 }

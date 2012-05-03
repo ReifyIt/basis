@@ -14,6 +14,8 @@ final class Integer(val value: Long) extends AnyVal with OrderedRing with Intege
   override type Vector = Integer
   override type Scalar = Integer
   
+  @inline override def Vector = Integer
+  
   @inline override def N: Int = 1
   
   @inline override def apply(i: Int): Integer =
@@ -80,9 +82,9 @@ object Integer extends OrderedRing.Scalar with OrderedRing.Space with IntegerVec
   override type Vector = Integer
   override type Scalar = Integer
   
-  @inline def zero: Integer = new Integer(0L)
+  @inline override def zero: Integer = new Integer(0L)
   
-  @inline def unit: Integer = new Integer(1L)
+  @inline override def unit: Integer = new Integer(1L)
   
   @inline override def N: Int = 1
   

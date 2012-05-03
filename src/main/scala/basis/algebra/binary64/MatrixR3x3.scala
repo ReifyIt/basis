@@ -12,14 +12,12 @@ final class MatrixR3x3(
     val _1_1: Real, val _1_2: Real, val _1_3: Real,
     val _2_1: Real, val _2_2: Real, val _2_3: Real,
     val _3_1: Real, val _3_2: Real, val _3_3: Real)
-  extends Matrix3x3.Template with RealMatrix.Template {
+  extends Matrix3x3 with RealMatrix {
   
   override type Matrix = MatrixR3x3
   override type Span = VectorR3
   
   override def Matrix = MatrixR3x3
-  override def Row = VectorR3
-  override def Col = VectorR3
   
   override def M: Int = 3
   override def N: Int = 3
@@ -155,6 +153,9 @@ final class MatrixR3x3(
 object MatrixR3x3 extends RealField.Scalar with Matrix3x3.Space with RealMatrix.Space {
   override type Matrix = MatrixR3x3
   override type Span = VectorR3
+  
+  override def Row = VectorR3
+  override def Col = VectorR3
   
   override lazy val zero: Matrix =
     new Matrix(0.0, 0.0, 0.0,  0.0, 0.0, 0.0,  0.0, 0.0, 0.0)

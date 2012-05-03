@@ -12,25 +12,14 @@ final class MatrixRMxN
     [V <: RealVector { type Vector = V },
      W <: RealVector { type Vector = W }] private
     (val Matrix: MatrixRMxN.Space[V, W], entries: Array[Double])
-  extends RealMatrix.Template { self =>
+  extends RealMatrix { self =>
   
-  if (entries.length != Col.N * Row.N) throw new DimensionException
+  if (entries.length != M * N) throw new DimensionException
   
   override type Matrix = MatrixRMxN[V, W]
   override type T      = MatrixRMxN[W, V]
   override type Row    = V
   override type Col    = W
-  
-  override def Row: RealVector.Space {
-    type Vector = self.Row
-  } = Matrix.Row
-  
-  override def Col: RealVector.Space {
-    type Vector = self.Col
-  } = Matrix.Col
-  
-  override val M: Int = Col.N
-  override val N: Int = Row.N
   
   override def apply(k: Int): Real = entries(k)
 }
@@ -61,11 +50,7 @@ object MatrixRMxN {
       Transpose
     }
     
-    override def M: Int = Col.N
-    override def N: Int = Row.N
-    
-    override lazy val zero: Matrix =
-      new Matrix(this, new Array[Double](M * N))
+    override lazy val zero: Matrix = super.zero
     
     override def apply(entries: TraversableOnce[Real]): Matrix =
       new Matrix(this, entries.map(_.toDouble).toArray[Double])

@@ -10,7 +10,7 @@ package generic
 
 final class VectorF2[F <: Ring { type Vector = F }] private
     (val Vector: VectorF2.Space[F], val x: F, val y: F)
-  extends Vector2.Template {
+  extends Vector2 {
   
   override type Vector = VectorF2[F]
   override type Scalar = F
@@ -29,10 +29,7 @@ object VectorF2 {
     override type Vector = VectorF2[F]
     override type Scalar = F
     
-    lazy val zero: Vector = {
-      val z = Scalar.zero
-      apply(z, z)
-    }
+    override lazy val zero: Vector = super.zero
     
     override def apply(x: Scalar, y: Scalar): Vector =
       new Vector(this, x, y)

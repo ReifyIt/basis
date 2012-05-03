@@ -14,21 +14,11 @@ final class MatrixF2x2
     (val Matrix: MatrixF2x2.Space[V, F])
     (val _1_1: F, val _1_2: F,
      val _2_1: F, val _2_2: F)
-  extends Matrix2x2.Template { self =>
+  extends Matrix2x2 { self =>
   
   override type Matrix = MatrixF2x2[V, F]
   override type Span  = V
   override type Scalar = F
-  
-  override def Row: Vector2.Space {
-    type Vector = self.Span
-    type Scalar = self.Scalar
-  } = Matrix.Span
-  
-  override def Col: Vector2.Space {
-    type Vector = self.Span
-    type Scalar = self.Scalar
-  } = Matrix.Span
 }
 
 object MatrixF2x2 {
@@ -42,22 +32,17 @@ object MatrixF2x2 {
        F <: Field { type Vector = F }]
       (val Span: Vector2.Space { type Vector = V; type Scalar = F },
        val Scalar: Field.Space { type Vector = F })
-    extends Field.Scalar with Matrix2x2.Space {
+    extends Matrix2x2.Space {
     
     override type Matrix = MatrixF2x2[V, F]
     override type Span   = V
     override type Scalar = F
     
-    lazy val zero: Matrix = {
-      val z = Scalar.zero
-      apply(z, z,  z, z)
-    }
+    override def Row = Span
+    override def Col = Span
     
-    lazy val unit: Matrix = {
-      val z = Scalar.zero
-      val u = Scalar.unit
-      apply(u, z,  z, u)
-    }
+    override lazy val zero: Matrix = super.zero
+    override lazy val unit: Matrix = super.unit
     
     override def apply(
         _1_1: Scalar, _1_2: Scalar,

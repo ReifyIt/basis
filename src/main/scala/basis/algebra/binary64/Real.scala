@@ -14,6 +14,8 @@ final class Real(val value: Double) extends AnyVal with RealField with RealVecto
   override type Vector = Real
   override type Scalar = Real
   
+  @inline override def Vector = Real
+  
   @inline override def N: Int = 1
   
   @inline override def apply(i: Int): Real =

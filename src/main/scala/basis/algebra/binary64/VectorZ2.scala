@@ -9,7 +9,7 @@ package basis.algebra
 package binary64
 
 final class VectorZ2(val x: Integer, val y: Integer)
-  extends Vector2.Template with IntegerVector.Template {
+  extends Vector2 with IntegerVector {
   
   override type Vector = VectorZ2
   

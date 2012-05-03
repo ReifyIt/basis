@@ -10,7 +10,7 @@ package generic
 
 final class VectorFN[F <: Ring { type Vector = F }] private
     (val Vector: VectorFN.Space[F], coords: Array[AnyRef])
-  extends Vector.Template {
+  extends Vector {
   
   if (coords.length != Vector.N) throw new DimensionException
   
@@ -36,16 +36,7 @@ object VectorFN {
     override type Vector = VectorFN[F]
     override type Scalar = F
     
-    lazy val zero: Vector = {
-      val z = Scalar.zero.asInstanceOf[AnyRef]
-      val coords = new Array[AnyRef](N)
-      var i = 0
-      while (i < coords.length) {
-        coords(i) = z
-        i += 1
-      }
-      apply(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
-    }
+    override lazy val zero: Vector = super.zero
     
     override def apply(coords: TraversableOnce[Scalar]): Vector =
       new Vector(this, coords.asInstanceOf[TraversableOnce[AnyRef]].toArray[AnyRef])

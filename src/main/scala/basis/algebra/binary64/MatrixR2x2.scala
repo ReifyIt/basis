@@ -11,14 +11,12 @@ package binary64
 final class MatrixR2x2(
     val _1_1: Real, val _1_2: Real,
     val _2_1: Real, val _2_2: Real)
-  extends Matrix2x2.Template with RealMatrix.Template {
+  extends Matrix2x2 with RealMatrix {
   
   override type Matrix = MatrixR2x2
   override type Span = VectorR2
   
   override def Matrix = MatrixR2x2
-  override def Row = VectorR2
-  override def Col = VectorR2
   
   override def M: Int = 2
   override def N: Int = 2
@@ -116,6 +114,9 @@ final class MatrixR2x2(
 object MatrixR2x2 extends RealField.Scalar with Matrix2x2.Space with RealMatrix.Space {
   override type Matrix = MatrixR2x2
   override type Span = VectorR2
+  
+  override def Row = VectorR2
+  override def Col = VectorR2
   
   override lazy val zero: Matrix =
     new Matrix(0.0, 0.0,  0.0, 0.0)

@@ -7,29 +7,48 @@
 
 package basis.algebra
 
-trait Vector2 extends Any with Vector {
-  override type Vector
+trait Vector2 extends Any with Vector { self =>
+  override type Vector <: Vector2 {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
   
-  override type Scalar
+  override type Scalar <: Ring {
+    type Vector = self.Scalar
+  }
+  
+  override def Vector: Vector2.Space {
+    type Vector = self.Vector
+    type Scalar = self.Scalar
+  }
   
   def x: Scalar
   def y: Scalar
   
-  override def N: Int
+  override def N: Int = 2
   
-  override def apply(i: Int): Scalar
+  override def apply(i: Int): Scalar = i match {
+    case 0 => x
+    case 1 => y
+    case _ => throw new IndexOutOfBoundsException(i.toString)
+  }
   
-  override def + (that: Vector): Vector
+  override def + (that: Vector): Vector =
+    Vector(x + that.x, y + that.y)
   
-  override def unary_- : Vector
+  override def unary_- : Vector = Vector(-x, -y)
   
-  override def - (that: Vector): Vector
+  override def - (that: Vector): Vector =
+    Vector(x - that.x, y - that.y)
   
-  override def :* (scalar: Scalar): Vector
+  override def :* (scalar: Scalar): Vector =
+    Vector(x * scalar, y * scalar)
   
-  override def *: (scalar: Scalar): Vector
+  override def *: (scalar: Scalar): Vector =
+    Vector(scalar * x, scalar * y)
   
-  override def ⋅ (that: Vector): Scalar
+  override def ⋅ (that: Vector): Scalar =
+    x * that.x + y * that.y
 }
 
 object Vector2 {
@@ -41,6 +60,11 @@ object Vector2 {
     
     override type Scalar <: Ring {
       type Vector = self.Scalar
+    }
+    
+    override def zero: Vector = {
+      val z = Scalar.zero
+      apply(z, z)
     }
     
     override def N: Int = 2
@@ -55,49 +79,5 @@ object Vector2 {
     
     def unapply(vector: Vector): Option[(Scalar, Scalar)] =
       Some(vector.x, vector.y)
-  }
-  
-  trait Template extends Any with Vector.Template with Vector2 { self =>
-    override type Vector <: Vector2 {
-      type Vector = self.Vector
-      type Scalar = self.Scalar
-    }
-    
-    override type Scalar <: Ring {
-      type Vector = self.Scalar
-    }
-    
-    override def Vector: Vector2.Space {
-      type Vector = self.Vector
-      type Scalar = self.Scalar
-    }
-    
-    override def x: Scalar
-    override def y: Scalar
-    
-    override def N: Int = 2
-    
-    override def apply(i: Int): Scalar = i match {
-      case 0 => x
-      case 1 => y
-      case _ => throw new IndexOutOfBoundsException(i.toString)
-    }
-    
-    override def + (that: Vector): Vector =
-      Vector(x + that.x, y + that.y)
-    
-    override def unary_- : Vector = Vector(-x, -y)
-    
-    override def - (that: Vector): Vector =
-      Vector(x - that.x, y - that.y)
-    
-    override def :* (scalar: Scalar): Vector =
-      Vector(x * scalar, y * scalar)
-    
-    override def *: (scalar: Scalar): Vector =
-      Vector(scalar * x, scalar * y)
-    
-    override def ⋅ (that: Vector): Scalar =
-      x * that.x + y * that.y
   }
 }

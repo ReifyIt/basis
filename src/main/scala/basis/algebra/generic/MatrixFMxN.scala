@@ -13,28 +13,15 @@ final class MatrixFMxN
      W <: Vector { type Vector = W; type Scalar = F },
      F <: Ring { type Vector = F }] private
     (val Matrix: MatrixFMxN.Space[V, W, F], entries: Array[AnyRef])
-  extends Matrix.Template { self =>
+  extends Matrix { self =>
   
-  if (entries.length != Col.N * Row.N) throw new DimensionException
+  if (entries.length != M * N) throw new DimensionException
   
   override type Matrix = MatrixFMxN[V, W, F]
   override type T      = MatrixFMxN[W, V, F]
   override type Row    = V
   override type Col    = W
   override type Scalar = F
-  
-  override def Row: Vector.Space {
-    type Vector = self.Row
-    type Scalar = self.Scalar
-  } = Matrix.Row
-  
-  override def Col: Vector.Space {
-    type Vector = self.Col
-    type Scalar = self.Scalar
-  } = Matrix.Col
-  
-  override val M: Int = Col.N
-  override val N: Int = Row.N
   
   override def apply(k: Int): Scalar = entries(k).asInstanceOf[Scalar]
 }
@@ -53,7 +40,7 @@ object MatrixFMxN {
       (val Row: Vector.Space { type Vector = V; type Scalar = F },
        val Col: Vector.Space { type Vector = W; type Scalar = F },
        val Scalar: Ring.Space { type Vector = F })
-    extends Ring.Scalar with Matrix.Space {
+    extends Matrix.Space {
     
     override type Matrix = MatrixFMxN[V, W, F]
     override type T      = MatrixFMxN[W, V, F]
@@ -71,19 +58,7 @@ object MatrixFMxN {
       Transpose
     }
     
-    override def M: Int = Col.N
-    override def N: Int = Row.N
-    
-    lazy val zero: Matrix = {
-      val z = Scalar.zero.asInstanceOf[AnyRef]
-      val entries = new Array[AnyRef](M * N)
-      var i = 0
-      while (i < entries.length) {
-        entries(i) = z
-        i += 1
-      }
-      apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
-    }
+    override lazy val zero: Matrix = super.zero
     
     override def apply(entries: TraversableOnce[Scalar]): Matrix =
       new Matrix(this, entries.asInstanceOf[TraversableOnce[AnyRef]].toArray[AnyRef])

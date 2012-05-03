@@ -9,7 +9,7 @@ package basis.algebra
 package binary64
 
 final class VectorRN private (val Vector: VectorRN.Space, coords: Array[Double])
-  extends RealVector.Template {
+  extends RealVector {
   
   if (coords.length != Vector.N) throw new DimensionException
   
@@ -27,7 +27,7 @@ object VectorRN {
     override type Point  = Vector
     override type Vector = VectorRN
     
-    override lazy val zero: Vector = new Vector(this, new Array[Double](N))
+    override lazy val zero: Vector = super.zero
     
     override def apply(coords: TraversableOnce[Real]): Vector =
       new Vector(this, coords.map(_.toDouble).toArray[Double])

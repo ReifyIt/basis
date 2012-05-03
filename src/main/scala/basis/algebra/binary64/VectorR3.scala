@@ -9,7 +9,7 @@ package basis.algebra
 package binary64
 
 final class VectorR3(val x: Real, val y: Real, val z: Real)
-  extends Vector3.Template with RealVector.Template {
+  extends Vector3 with RealVector {
   
   override type Vector = VectorR3
   

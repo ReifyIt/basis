@@ -13,14 +13,12 @@ final class MatrixR4x4(
     val _2_1: Real, val _2_2: Real, val _2_3: Real, val _2_4: Real,
     val _3_1: Real, val _3_2: Real, val _3_3: Real, val _3_4: Real,
     val _4_1: Real, val _4_2: Real, val _4_3: Real, val _4_4: Real)
-  extends Matrix4x4.Template with RealMatrix.Template {
+  extends Matrix4x4 with RealMatrix {
   
   override type Matrix = MatrixR4x4
   override type Span = VectorR4
   
   override def Matrix = MatrixR4x4
-  override def Row = VectorR4
-  override def Col = VectorR4
   
   override def M: Int = 4
   override def N: Int = 4
@@ -220,6 +218,9 @@ final class MatrixR4x4(
 object MatrixR4x4 extends RealField.Scalar with Matrix4x4.Space with RealMatrix.Space {
   override type Matrix = MatrixR4x4
   override type Span = VectorR4
+  
+  override def Row = VectorR4
+  override def Col = VectorR4
   
   override lazy val zero: Matrix =
     new Matrix(0.0, 0.0, 0.0, 0.0,  0.0, 0.0, 0.0, 0.0,  0.0, 0.0, 0.0, 0.0,  0.0, 0.0, 0.0, 0.0)

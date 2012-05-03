@@ -7,29 +7,34 @@
 
 package basis.algebra
 
-trait MatrixRing extends Any with Ring with Matrix { self =>
-  override type Matrix
+trait MatrixRing extends Any with Equals with Ring with Matrix { self =>
+  override type Matrix <: MatrixRing {
+    type Matrix = self.Matrix
+    type Span   = self.Span
+    type Scalar = self.Scalar
+  }
   
   override type T = Matrix
   
-  type Span
+  type Span <: basis.algebra.Vector {
+    type Vector = self.Span
+    type Scalar = self.Scalar
+  }
   
   override type Row = Span
   
   override type Col = Span
   
-  override type Scalar
-  
-  override def Row: Vector.Space {
-    type Vector = self.Span
-    type Scalar = self.Scalar
+  override type Scalar <: Ring {
+    type Vector = self.Scalar
   }
   
-  override def Col: Vector.Space {
-    type Vector = self.Span
+  override def Matrix: MatrixRing.Space {
+    type Matrix = self.Matrix
+    type Span   = self.Span
     type Scalar = self.Scalar
   }
-  
+  /*
   override def M: Int
   
   override def N: Int
@@ -63,7 +68,7 @@ trait MatrixRing extends Any with Ring with Matrix { self =>
   override def T: T
   
   override def * (that: Matrix): Matrix
-  
+  */
   def inverse: Option[Matrix]
   
   def det: Scalar
@@ -72,7 +77,7 @@ trait MatrixRing extends Any with Ring with Matrix { self =>
 }
 
 object MatrixRing {
-  trait Space extends Ring.Space with Matrix.Space { self =>
+  trait Space extends Ring.Scalar with Ring.Space with Matrix.Space { self =>
     override type Matrix <: MatrixRing {
       type Matrix = self.Matrix
       type Span   = self.Span
@@ -90,51 +95,34 @@ object MatrixRing {
     
     override type Col = Span
     
-    override type Scalar
+    override type Scalar <: Ring {
+      type Vector = self.Scalar
+    }
     
     override def T: this.type = this
     
-    override def M: Int
+    override def Row: Vector.Space {
+      type Vector = self.Row
+      type Scalar = self.Scalar
+    }
     
-    override def N: Int
+    override def Col: Vector.Space {
+      type Vector = self.Col
+      type Scalar = self.Scalar
+    }
+    
+    override def Scalar: Ring.Space {
+      type Vector = self.Scalar
+    }
+    
+    override def M: Int = Col.N
+    
+    override def N: Int = Row.N
     
     override def zero: Matrix
     
     override def unit: Matrix
     
     override def apply(entries: TraversableOnce[Scalar]): Matrix
-  }
-  
-  trait Template extends Any with Equals with Linear with Ring with Matrix.Template with MatrixRing { self =>
-    override type Matrix <: MatrixRing {
-      type Matrix = self.Matrix
-      type Span   = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override type Span <: basis.algebra.Vector {
-      type Vector = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override type Scalar <: Ring {
-      type Vector = self.Scalar
-    }
-    
-    override def Matrix: MatrixRing.Space {
-      type Matrix = self.Matrix
-      type Span   = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override def Row: Vector.Space {
-      type Vector = self.Span
-      type Scalar = self.Scalar
-    }
-    
-    override def Col: Vector.Space {
-      type Vector = self.Span
-      type Scalar = self.Scalar
-    }
   }
 }
