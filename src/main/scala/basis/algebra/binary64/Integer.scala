@@ -10,7 +10,7 @@ package binary64
 
 import language.implicitConversions
 
-final class Integer(val value: Long) extends AnyVal with OrderedRing with IntegerVector {
+final class Integer(val value: Long) extends AnyVal with Equals with OrderedRing with IntegerVector {
   override type Vector = Integer
   override type Scalar = Integer
   

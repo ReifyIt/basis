@@ -12,6 +12,7 @@ package object algebra {
   
   type LinearSpace = Linear.Space with Singleton
   
+  
   type VectorSpace = Vector.Space with Singleton
   
   type Vector2Space = Vector2.Space with Singleton
@@ -19,6 +20,7 @@ package object algebra {
   type Vector3Space = Vector3.Space with Singleton
   
   type Vector4Space = Vector4.Space with Singleton
+  
   
   type MatrixSpace = Matrix.Space with Singleton
   
@@ -29,6 +31,7 @@ package object algebra {
   type Matrix3x3Space = Matrix3x3.Space with Singleton
   
   type Matrix4x4Space = Matrix4x4.Space with Singleton
+  
   
   type RingSpace = Ring.Space with Singleton
   
@@ -53,4 +56,13 @@ package object algebra {
   type RealFieldSpace = RealField.Space with Singleton
   
   type RealFieldScalar = RealField.Scalar with Singleton
+  
+  
+  type IntervalRingSpace = IntervalRing.Space with Singleton
+  
+  type IntervalRingScalar = IntervalRing.Scalar with Singleton
+  
+  type IntervalFieldSpace = IntervalField.Space with Singleton
+  
+  type IntervalFieldScalar = IntervalField.Scalar with Singleton
 }

@@ -10,7 +10,7 @@ package binary64
 
 import language.implicitConversions
 
-final class Real(val value: Double) extends AnyVal with RealField with RealVector {
+final class Real(val value: Double) extends AnyVal with Equals with RealField with RealVector {
   override type Vector = Real
   override type Scalar = Real
   

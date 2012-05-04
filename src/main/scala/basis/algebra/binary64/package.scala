@@ -14,6 +14,9 @@ package object binary64 {
   
   type IntegerVectorSpace = IntegerVector.Space with Singleton
   
+  type R1 = Real.type
+  lazy val R1 = Real
+  
   type R2 = R2.type
   lazy val R2 = VectorR2
   
@@ -31,6 +34,9 @@ package object binary64 {
   
   type R4x4 = R4x4.type
   lazy val R4x4 = MatrixR4x4
+  
+  type Z1 = Integer.type
+  lazy val Z1 = Integer
   
   type Z2 = Z2.type
   lazy val Z2 = VectorZ2
