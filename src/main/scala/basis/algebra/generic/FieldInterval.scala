@@ -8,37 +8,20 @@
 package basis.algebra
 package generic
 
-final class FieldInterval[F <: OrderedField { type Vector = F }] private
-    (val Interval: FieldInterval.Space[F], val lower: F, val upper: F)
-  extends IntervalField {
+class FieldInterval[S <: OrderedField with Singleton](val Member: S) extends IntervalField[S] {
+  final class Element private[FieldInterval] (val lower: Member, val upper: Member) extends super.Element
   
-  override type Interval = FieldInterval[F]
-  override type Element  = F
-}
-
-object FieldInterval {
-  def apply[F <: OrderedField { type Vector = F }]
-      (Element: OrderedField.Space { type Vector = F }) =
-    new Space[F](Element)
+  override type Interval = Element
   
-  class Space[F <: OrderedField { type Vector = F }]
-      (val Element: OrderedField.Space { type Vector = F })
-    extends IntervalField.Space {
-    
-    override type Interval = FieldInterval[F]
-    override type Element  = F
-    
-    override lazy val zero: Interval = super.zero
-    override lazy val unit: Interval = super.unit
-    
-    override lazy val empty: Interval =
-      new Interval(this, Element.unit, Element.zero)
-    
-    override def apply(lower: Element, upper: Element): Interval = {
-      if (lower > upper) throw new IllegalArgumentException("lower > upper")
-      else new Interval(this, lower, upper)
-    }
-    
-    override def toString: String = "FieldInterval"+"("+ Element +")"
+  override lazy val zero: Interval = super.zero
+  override lazy val unit: Interval = super.unit
+  
+  override lazy val empty: Interval = new Interval(Member.unit, Member.zero)
+  
+  override def apply(lower: Member, upper: Member): Interval = {
+    if (lower > upper) throw new IllegalArgumentException("lower > upper")
+    else new Interval(lower, upper)
   }
+  
+  override def toString: String = "FieldInterval"+"("+ Member +")"
 }

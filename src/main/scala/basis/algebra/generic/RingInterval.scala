@@ -8,37 +8,20 @@
 package basis.algebra
 package generic
 
-final class RingInterval[F <: OrderedRing { type Vector = F }] private
-    (val Interval: RingInterval.Space[F], val lower: F, val upper: F)
-  extends IntervalRing {
+class RingInterval[S <: OrderedRing with Singleton](val Member: S) extends IntervalRing[S] {
+  final class Element private[RingInterval] (val lower: Member, val upper: Member) extends super.Element
   
-  override type Interval = RingInterval[F]
-  override type Element  = F
-}
-
-object RingInterval {
-  def apply[F <: OrderedRing { type Vector = F }]
-      (Element: OrderedRing.Space { type Vector = F }) =
-    new Space[F](Element)
+  override type Interval = Element
   
-  class Space[F <: OrderedRing { type Vector = F }]
-      (val Element: OrderedRing.Space { type Vector = F })
-    extends IntervalRing.Space {
-    
-    override type Interval = RingInterval[F]
-    override type Element  = F
-    
-    override lazy val zero: Interval = super.zero
-    override lazy val unit: Interval = super.unit
-    
-    override lazy val empty: Interval =
-      new Interval(this, Element.unit, Element.zero)
-    
-    override def apply(lower: Element, upper: Element): Interval = {
-      if (lower > upper) throw new IllegalArgumentException("lower > upper")
-      else new Interval(this, lower, upper)
-    }
-    
-    override def toString: String = "RingInterval"+"("+ Element +")"
+  override lazy val zero: Interval = super.zero
+  override lazy val unit: Interval = super.unit
+  
+  override lazy val empty: Interval = new Interval(Member.unit, Member.zero)
+  
+  override def apply(lower: Member, upper: Member): Interval = {
+    if (lower > upper) throw new IllegalArgumentException("lower > upper")
+    else new Interval(lower, upper)
   }
+  
+  override def toString: String = "RingInterval"+"("+ Member +")"
 }

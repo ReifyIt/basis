@@ -7,28 +7,24 @@
 
 package basis.algebra
 
-trait CompleteField extends Field {
-  trait Element extends Any with super.Element {
-    override def + (that: Vector): Vector
+trait LinearSpace[S <: Ring with Singleton] {
+  trait Element extends Any {
+    def + (that: Vector): Vector
     
-    override def unary_- : Vector
+    def unary_- : Vector
     
-    override def - (that: Vector): Vector
+    def - (that: Vector): Vector
     
-    override def * (that: Vector): Vector
+    def :* (scalar: Scalar): Vector
     
-    override def inverse: Vector
-    
-    override def / (that: Vector): Vector
-    
-    def pow(that: Vector): Vector
-    
-    def sqrt: Vector
+    def *: (scalar: Scalar): Vector
   }
   
-  override type Vector <: Element
+  type Vector <: Element
   
-  override def zero: Vector
+  type Scalar = S#Vector
   
-  override def unit: Vector
+  def Scalar: S
+  
+  def zero: Vector
 }

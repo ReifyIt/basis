@@ -7,126 +7,90 @@
 
 package basis.algebra
 
-trait IntervalRing extends Any with Equals with Ring { self =>
+trait IntervalRing[S <: OrderedRing with Singleton] extends Ring {
+  trait Element extends Any with super.Element {
+    protected def Interval: IntervalRing.this.type = IntervalRing.this
+    
+    def lower: Member
+    
+    def upper: Member
+    
+    def isEmpty: Boolean = lower > upper
+    
+    def contains(value: Member): Boolean =
+      lower <= value && upper >= value
+    
+    override def + (that: Interval): Interval = {
+      if (isEmpty || that.isEmpty) Interval.empty
+      else Interval(lower + that.lower, upper + that.upper)
+    }
+    
+    override def unary_- : Interval = {
+      if (isEmpty) Interval.empty
+      else Interval(-upper, -lower)
+    }
+    
+    override def - (that: Interval): Interval = {
+      if (isEmpty || that.isEmpty) Interval.empty
+      else Interval(lower - that.upper, upper - that.lower)
+    }
+    
+    override def * (that: Interval): Interval = {
+      if (isEmpty || that.isEmpty) Interval.empty
+      else {
+        val ll = lower * that.lower
+        val lu = lower * that.upper
+        val ul = upper * that.lower
+        val uu = upper * that.upper
+        Interval(ll min lu min ul min uu, ll max lu max ul max uu)
+      }
+    }
+    
+    def intersect(that: Interval): Interval = {
+      if (isEmpty || that.isEmpty) Interval.empty
+      else {
+        val greatestLower = lower max that.lower
+        val leastUpper    = upper min that.upper
+        if (greatestLower > leastUpper) Interval.empty
+        else Interval(greatestLower, leastUpper)
+      }
+    }
+    
+    override def equals(other: Any): Boolean = other match {
+      case that: Element => lower.equals(that.lower) && upper.equals(that.upper)
+      case _ => false
+    }
+    
+    override def hashCode: Int = {
+      import basis.util.MurmurHash._
+      mash(mix(mix(635062501, lower), upper))
+    }
+    
+    override def toString: String = {
+      if (isEmpty) "{}"
+      else if (lower == upper) "{"+ lower +"}"
+      else "["+ lower +", "+ upper +"]"
+    }
+  }
+  
   override type Vector = Interval
   
-  type Interval <: IntervalRing {
-    type Interval = self.Interval
-    type Element  = self.Element
-  }
+  type Interval <: Element
   
-  type Element <: OrderedRing {
-    type Vector = self.Element
-  }
+  type Member = S#Vector
   
-  def Interval: IntervalRing.Space {
-    type Interval = self.Interval
-    type Element  = self.Element
-  }
+  def Member: S
   
-  def lower: Element
+  override def zero: Interval = apply(Member.zero)
   
-  def upper: Element
+  override def unit: Interval = apply(Member.unit)
   
-  def isEmpty: Boolean = lower > upper
+  def empty: Interval
   
-  def contains(element: Element): Boolean =
-    lower <= element && upper >= element
+  def apply(lower: Member, upper: Member): Interval
   
-  override def + (that: Interval): Interval = {
-    if (isEmpty || that.isEmpty) Interval.empty
-    else Interval(lower + that.lower, upper + that.upper)
-  }
+  def apply(value: Member): Interval = apply(value, value)
   
-  override def unary_- : Interval = {
-    if (isEmpty) Interval.empty
-    else Interval(-upper, -lower)
-  }
-  
-  override def - (that: Interval): Interval = {
-    if (isEmpty || that.isEmpty) Interval.empty
-    else Interval(lower - that.upper, upper - that.lower)
-  }
-  
-  override def * (that: Interval): Interval = {
-    if (isEmpty || that.isEmpty) Interval.empty
-    else {
-      val ll = lower * that.lower
-      val lu = lower * that.upper
-      val ul = upper * that.lower
-      val uu = upper * that.upper
-      Interval(ll min lu min ul min uu, ll max lu max ul max uu)
-    }
-  }
-  
-  def intersect(that: Interval): Interval = {
-    if (isEmpty || that.isEmpty) Interval.empty
-    else {
-      val greatestLower = lower max that.lower
-      val leastUpper = upper min that.upper
-      if (greatestLower > leastUpper) Interval.empty
-      else Interval(greatestLower, leastUpper)
-    }
-  }
-  
-  override def canEqual(other: Any): Boolean = other.isInstanceOf[IntervalRing]
-  
-  override def equals(other: Any): Boolean = other match {
-    case that: IntervalRing =>
-      that.canEqual(this) && lower.equals(that.lower) && upper.equals(that.upper)
-    case _ => false
-  }
-  
-  override def hashCode: Int = {
-    import basis.util.MurmurHash._
-    mash(mix(mix(635062501, lower), upper))
-  }
-  
-  override def toString: String = {
-    if (isEmpty) "{}"
-    else if (lower == upper) "{"+ lower +"}"
-    else "["+ lower +", "+ upper +"]"
-  }
-}
-
-object IntervalRing {
-  trait Space extends Ring.Space { self =>
-    override type Vector = Interval
-    
-    type Interval <: IntervalRing {
-      type Interval = self.Interval
-      type Element  = self.Element
-    }
-    
-    type Element <: OrderedRing {
-      type Vector = self.Element
-    }
-    
-    def Element: OrderedRing.Space {
-      type Vector = self.Element
-    }
-    
-    override def zero: Interval = apply(Element.zero)
-    
-    override def unit: Interval = apply(Element.unit)
-    
-    def empty: Interval
-    
-    def apply(lower: Element, upper: Element): Interval
-    
-    def apply(element: Element): Interval = apply(element, element)
-    
-    def unapply(interval: Interval): Option[(Element, Element)] =
-      if (!interval.isEmpty) Some(interval.lower, interval.upper) else None
-  }
-  
-  trait Scalar extends Ring.Scalar { self =>
-    override type Scalar <: IntervalRing {
-      type Interval = self.Scalar
-    }
-    
-    override def Scalar: IntervalRing.Space {
-      type Interval = self.Scalar
-    }
-  }
+  def unapply(interval: Interval): Option[(Member, Member)] =
+    if (interval.isEmpty) None else Some(interval.lower, interval.upper)
 }

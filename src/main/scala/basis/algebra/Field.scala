@@ -7,40 +7,24 @@
 
 package basis.algebra
 
-trait Field extends Any with Ring {
-  override type Vector
-  
-  override def + (that: Vector): Vector
-  
-  override def unary_- : Vector
-  
-  override def - (that: Vector): Vector
-  
-  override def * (that: Vector): Vector
-  
-  def inverse: Vector
-  
-  def / (that: Vector): Vector
-}
-
-object Field {
-  trait Space extends Ring.Space { self =>
-    override type Vector <: Field {
-      type Vector = self.Vector
-    }
+trait Field extends Ring {
+  trait Element extends Any with super.Element {
+    override def + (that: Vector): Vector
     
-    override def zero: Vector
+    override def unary_- : Vector
     
-    override def unit: Vector
+    override def - (that: Vector): Vector
+    
+    override def * (that: Vector): Vector
+    
+    def inverse: Vector
+    
+    def / (that: Vector): Vector
   }
   
-  trait Scalar extends Ring.Scalar { self =>
-    override type Scalar <: Field {
-      type Vector = self.Scalar
-    }
-    
-    override def Scalar: Field.Space {
-      type Vector = self.Scalar
-    }
-  }
+  override type Vector <: Element
+  
+  override def zero: Vector
+  
+  override def unit: Vector
 }

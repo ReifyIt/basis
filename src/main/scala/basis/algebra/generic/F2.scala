@@ -6,21 +6,17 @@
 \*                                                                      */
 
 package basis.algebra
+package generic
 
-trait Ring {
-  trait Element extends Any {
-    def + (that: Vector): Vector
-    
-    def unary_- : Vector
-    
-    def - (that: Vector): Vector
-    
-    def * (that: Vector): Vector
-  }
+class F2[S <: Ring with Singleton](val Scalar: S) extends Vector2Space[S] {
+  final class Element(val x: Scalar, val y: Scalar) extends super.Element
   
-  type Vector <: Element
+  override type Vector = Element
   
-  def zero: Vector
+  override lazy val zero: Vector = super.zero
   
-  def unit: Vector
+  override def apply(x: Scalar, y: Scalar): Vector =
+    new Vector(x, y)
+  
+  override def toString: String = "F2"+"("+ Scalar +")"
 }

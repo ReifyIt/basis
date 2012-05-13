@@ -10,17 +10,7 @@ package binary64
 
 import language.implicitConversions
 
-final class Real(val value: Double) extends AnyVal with Equals with RealField with RealVector {
-  override type Vector = Real
-  override type Scalar = Real
-  
-  @inline override def Vector = Real
-  
-  @inline override def N: Int = 1
-  
-  @inline override def apply(i: Int): Real =
-    if (i == 0) this else throw new IndexOutOfBoundsException(i.toString)
-  
+final class Real(val value: Double) extends AnyVal with Real.Element {
   @inline override def + (that: Real): Real = new Real(value + that.value)
   
   @inline override def unary_- : Real = new Real(-value)
@@ -28,12 +18,6 @@ final class Real(val value: Double) extends AnyVal with Equals with RealField wi
   @inline override def - (that: Real): Real = new Real(value - that.value)
   
   @inline override def * (that: Real): Real = new Real(value * that.value)
-  
-  @inline override def :* (that: Real): Real = new Real(value * that.value)
-  
-  @inline override def *: (that: Real): Real = new Real(that.value * value)
-  
-  @inline override def ⋅ (that: Real): Real = new Real(value * that.value)
   
   @inline override def inverse: Real = new Real(1.0 / value)
   
@@ -75,23 +59,12 @@ final class Real(val value: Double) extends AnyVal with Equals with RealField wi
   @inline override def toString: String = java.lang.Double.toString(value)
 }
 
-object Real extends RealField.Scalar with RealField.Space with RealVector.Space {
+object Real extends RealField {
   override type Vector = Real
-  override type Scalar = Real
   
   @inline override def zero: Real = new Real(0.0)
   
   @inline override def unit: Real = new Real(1.0)
-  
-  @inline override def N: Int = 1
-  
-  override def apply(coords: TraversableOnce[Real]): Real = {
-    val xs = coords.toSeq
-    if (xs.length == 1) xs.head else throw new DimensionException
-  }
-  
-  override def apply(coords: Array[Double]): Real =
-    if (coords.length == 1) coords(0) else throw new DimensionException
   
   @inline def apply(value: Double): Real = new Real(value)
   
