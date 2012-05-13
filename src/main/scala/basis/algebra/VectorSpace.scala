@@ -7,8 +7,8 @@
 
 package basis.algebra
 
-trait VectorSpace[S <: Ring with Singleton] extends LinearSpace[S] {
-  trait Element extends Any with super.Element {
+trait VectorSpace[S <: Ring with Singleton] extends AffineSpace[S] with LinearSpace[S] {
+  trait Element extends Any with super[AffineSpace].Element with super[LinearSpace].Element {
     protected def Vector: VectorSpace.this.type = VectorSpace.this
     
     def N: Int = Vector.N
@@ -119,6 +119,8 @@ trait VectorSpace[S <: Ring with Singleton] extends LinearSpace[S] {
   
   override type Vector <: Element
   
+  override type Point = Vector
+  
   def N: Int
   
   def apply(coords: TraversableOnce[Scalar]): Vector
@@ -133,4 +135,6 @@ trait VectorSpace[S <: Ring with Singleton] extends LinearSpace[S] {
     }
     apply(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
   }
+  
+  override def origin: Point = zero
 }
