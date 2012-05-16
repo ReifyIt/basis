@@ -8,6 +8,8 @@
 package basis.collection
 package generic
 
+import language.higherKinds
+
 import scala.collection.generic._
 import scala.collection.mutable.Builder
 

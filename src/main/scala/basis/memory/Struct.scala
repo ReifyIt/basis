@@ -28,7 +28,7 @@ import scala.math.max
   * @author Chris Sachs
   * 
   * @tparam T   the type of this struct.
-  * @see [[basis.memory.Data]]
+  * @see  [[basis.memory.Data]]
   */
 @implicitNotFound("Cannot find implicit struct for ${T}.")
 abstract class Struct[@specialized T] { struct =>

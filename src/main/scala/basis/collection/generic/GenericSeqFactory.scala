@@ -8,6 +8,8 @@
 package basis.collection
 package generic
 
+import language.higherKinds
+
 import scala.collection._
 import scala.collection.generic._
 
@@ -28,7 +30,7 @@ abstract class GenericSeqFactory[CC[X] <: GenSeq[X]] {
   
   def concat[A](xss: Traversable[A]*)(implicit bf: CanBuildFrom[Nothing, A, CC[A]]): CC[A] = {
     val builder = bf()
-    builder.sizeHint(xss map (_.size) sum) // assuming extra traversal is faster than extra copying
+    builder.sizeHint(xss.map(_.size).sum) // assuming extra traversal is faster than extra copying
     for (xs <- xss.seq) builder ++= xs
     builder.result
   }
