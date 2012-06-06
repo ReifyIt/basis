@@ -5,15 +5,20 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
+package basis.memory
+package collection
 package mutable
 
-import scala.collection._
-import scala.collection.generic._
+import scala.collection.CustomParallelizable
+import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.GenericTraversableTemplate
 import scala.collection.mutable.Builder
+import scala.collection.mutable.IndexedSeqLike
+import scala.collection.mutable.IndexedSeqOptimized
 import scala.collection.parallel.mutable.ParArray
 
-import basis.collection.generic._
+import basis.memory.collection.generic.BuilderProxy
+import basis.memory.collection.generic.RefSeqFactory
 
 /** An array that stores its elements by reference.
   * 
@@ -22,8 +27,8 @@ import basis.collection.generic._
 class RefArray[A](val array: Array[AnyRef], val base: Int, override val length: Int)
   extends RawArray[A]
     with GenericTraversableTemplate[A, RawArray]
-    with mutable.IndexedSeqLike[A, RefArray[A]]
-    with mutable.IndexedSeqOptimized[A, RefArray[A]]
+    with IndexedSeqLike[A, RefArray[A]]
+    with IndexedSeqOptimized[A, RefArray[A]]
     with CustomParallelizable[A, ParArray[A]] {
   
   require(base + length <= array.length)

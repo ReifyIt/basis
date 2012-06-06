@@ -41,6 +41,6 @@ trait Allocator {
 
 /** Contains the implicit default allocator. */
 object Allocator {
-  /** The default allocator. */
+  /** The implicit default allocator. */
   implicit val default: Allocator = ArrayData
 }

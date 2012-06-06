@@ -5,10 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
+package basis.memory
+package collection
 package generic
 
-import scala.collection._
+import scala.collection.TraversableLike
 import scala.collection.mutable.Builder
 
 /** A builder that forwards calls to a different builder.

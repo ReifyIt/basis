@@ -5,15 +5,18 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
+package basis.memory
+package collection
 package mutable
 
-import scala.collection._
-import scala.collection.generic._
+import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.GenericTraversableTemplate
 import scala.collection.mutable.Builder
+import scala.collection.mutable.IndexedSeqLike
+import scala.collection.mutable.IndexedSeqOptimized
 
-import basis.collection.generic._
-import basis.memory._
+import basis.memory.collection.generic.BuilderProxy
+import basis.memory.collection.generic.ValSeqFactory
 
 /** An array that stores its elements by value.
   * 
@@ -24,8 +27,8 @@ class ValArray[A]
     (implicit protected val allocator: Allocator, val struct: Struct[A])
   extends RawArray[A]
     with GenericTraversableTemplate[A, RawArray]
-    with mutable.IndexedSeqLike[A, ValArray[A]]
-    with mutable.IndexedSeqOptimized[A, ValArray[A]] {
+    with IndexedSeqLike[A, ValArray[A]]
+    with IndexedSeqOptimized[A, ValArray[A]] {
   
   require(baseAddress + struct.size * length <= data.size)
   

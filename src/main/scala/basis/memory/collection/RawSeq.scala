@@ -5,25 +5,26 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
-package mutable
+package basis.memory
+package collection
 
-import scala.collection._
-import scala.collection.generic._
+import scala.collection.IndexedSeq
+import scala.collection.IndexedSeqLike
+import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.GenericCompanion
+import scala.collection.generic.GenericTraversableTemplate
 import scala.collection.mutable.Builder
 
-import basis.collection.generic._
-import basis.memory._
+import basis.memory.collection.generic.RawSeqFactory
 
-/** A mutable indexed sequence that optionally stores its elements by value.
+/** An indexed sequence that optionally stores its elements by value.
   * 
   * @author Chris Sachs
   */
-trait RawSeq[A]
-  extends mutable.IndexedSeq[A]
-    with basis.collection.RawSeq[A]
+trait RawSeq[+A]
+  extends IndexedSeq[A]
     with GenericTraversableTemplate[A, RawSeq]
-    with mutable.IndexedSeqLike[A, RawSeq[A]] {
+    with IndexedSeqLike[A, RawSeq[A]] {
   
   override def companion: GenericCompanion[RawSeq] = RawSeq.opponent
 }
@@ -34,5 +35,5 @@ object RawSeq extends RawSeqFactory[RawSeq] {
     new RawBuilderFactory[A]
   
   def newBuilder[A](implicit allocator: Allocator, raw: Option[Struct[A]]): Builder[A, RawSeq[A]] =
-    RawBuffer.newBuilder[A]
+    basis.memory.collection.mutable.RawSeq.newBuilder[A]
 }

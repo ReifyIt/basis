@@ -5,7 +5,8 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
+package basis.memory
+package collection
 
 /** Contains factories for collections that optionally store their elements by value. */
 package object generic

@@ -5,6 +5,8 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.memory
+package collection
 
-package object graphics
+/** Contains mutable collections that optionally store their elements by value. */
+package object mutable

@@ -5,15 +5,17 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
+package basis.memory
+package collection
 package mutable
 
-import scala.collection._
-import scala.collection.generic._
+import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.GenericCompanion
+import scala.collection.generic.GenericTraversableTemplate
 import scala.collection.mutable.Builder
+import scala.collection.mutable.IndexedSeqLike
 
-import basis.collection.generic._
-import basis.memory._
+import basis.memory.collection.generic.RawSeqFactory
 
 /** An array that optionally stores its elements by value.
   * 
@@ -22,7 +24,7 @@ import basis.memory._
 trait RawArray[A]
   extends RawSeq[A]
     with GenericTraversableTemplate[A, RawArray]
-    with mutable.IndexedSeqLike[A, RawArray[A]] {
+    with IndexedSeqLike[A, RawArray[A]] {
   
   override def companion: GenericCompanion[RawArray] = RawArray.opponent
 }

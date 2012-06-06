@@ -5,15 +5,20 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
+package basis.memory
+package collection
 package mutable
 
-import scala.collection._
-import scala.collection.generic._
+import scala.collection.CustomParallelizable
+import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.GenericTraversableTemplate
+import scala.collection.mutable.BufferLike
 import scala.collection.mutable.Builder
+import scala.collection.mutable.IndexedSeqLike
+import scala.collection.mutable.IndexedSeqOptimized
 import scala.collection.parallel.mutable.ParArray
 
-import basis.collection.generic._
+import basis.memory.collection.generic.RefSeqFactory
 
 /** A buffer that stores its elements by reference.
   * 
@@ -22,9 +27,9 @@ import basis.collection.generic._
 class RefBuffer[A](protected val initialCapacity: Int)
   extends RawBuffer[A]
     with GenericTraversableTemplate[A, RawBuffer]
-    with mutable.BufferLike[A, RefBuffer[A]]
-    with mutable.IndexedSeqLike[A, RefBuffer[A]]
-    with mutable.IndexedSeqOptimized[A, RefBuffer[A]]
+    with BufferLike[A, RefBuffer[A]]
+    with IndexedSeqLike[A, RefBuffer[A]]
+    with IndexedSeqOptimized[A, RefBuffer[A]]
     with Builder[A, RefBuffer[A]]
     with CustomParallelizable[A, ParArray[A]] {
   

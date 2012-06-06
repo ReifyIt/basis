@@ -5,15 +5,18 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
+package basis.memory
+package collection
 package mutable
 
-import scala.collection._
-import scala.collection.generic._
+import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.GenericTraversableTemplate
+import scala.collection.mutable.BufferLike
 import scala.collection.mutable.Builder
+import scala.collection.mutable.IndexedSeqLike
+import scala.collection.mutable.IndexedSeqOptimized
 
-import basis.collection.generic._
-import basis.memory._
+import basis.memory.collection.generic.ValSeqFactory
 
 /** A buffer that stores its elements by value.
   * 
@@ -24,9 +27,9 @@ class ValBuffer[A]
     (implicit protected val allocator: Allocator, val struct: Struct[A])
   extends RawBuffer[A]
     with GenericTraversableTemplate[A, RawBuffer]
-    with mutable.BufferLike[A, ValBuffer[A]]
-    with mutable.IndexedSeqLike[A, ValBuffer[A]]
-    with mutable.IndexedSeqOptimized[A, ValBuffer[A]]
+    with BufferLike[A, ValBuffer[A]]
+    with IndexedSeqLike[A, ValBuffer[A]]
+    with IndexedSeqOptimized[A, ValBuffer[A]]
     with Builder[A, ValBuffer[A]] {
   
   def this()(implicit allocator: Allocator, struct: Struct[A]) = this(16)

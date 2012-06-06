@@ -5,15 +5,15 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collection
+package basis.memory
+package collection
 package generic
 
-import language.higherKinds
-
-import scala.collection.generic._
+import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.GenericCompanion
 import scala.collection.mutable.Builder
 
-import basis.memory._
+import language.higherKinds
 
 /** A factory for sequences that optionally store their elements by value.
   * 
