@@ -10,11 +10,12 @@ object BasisBuild extends Build {
     )
   )
   
-  lazy val basisUtil = Project(
-    id       = "basis-util",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/util"
+  lazy val basisAlgebra = Project(
+    id           = "basis-algebra",
+    base         = file("."),
+    dependencies = Seq(basisUtil),
+    settings     = commonSettings ++ Seq(
+      modulePath := "basis/algebra"
     )
   )
   
@@ -26,12 +27,19 @@ object BasisBuild extends Build {
     )
   )
   
-  lazy val basisAlgebra = Project(
-    id           = "basis-algebra",
+  lazy val basisJSON = Project(
+    id           = "basis-json",
     base         = file("."),
-    dependencies = Seq(basisUtil),
-    settings     = commonSettings ++ Seq(
-      modulePath := "basis/algebra"
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/json"
+    )
+  )
+  
+  lazy val basisUtil = Project(
+    id       = "basis-util",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/util"
     )
   )
   
