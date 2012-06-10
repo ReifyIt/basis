@@ -9,6 +9,50 @@ package basis.json
 
 import language.experimental.macros
 
+/** A JSON model implemented by general Scala types and supporting compile-time
+  * string interpolation.
+  * 
+  * ==Data types==
+  * 
+  * This implementation maps JSON values to the following:
+  * 
+  *   - `JSValue`   ⇒ `scala.Any`
+  *   - `JSObject`  ⇒ `scala.collection.Map[java.lang.String, scala.Any]`
+  *   - `JSArray`   ⇒ `scala.collection.Seq[scala.Any]`
+  *   - `JSString`  ⇒ `java.lang.String`
+  *   - `JSNumber`  ⇒ `scala.Any`
+  *   - `JSInteger` ⇒ `scala.Long`
+  *   - `JSDecimal` ⇒ `scala.Double`
+  *   - `JSBoolean` ⇒ `scala.Boolean`
+  *   - `JSNull`    ⇒ `scala.Null`
+  * 
+  * ==String interpolation==
+  * 
+  * The implicit `JSStringContext` class provides these string interpolators:
+  * 
+  *   - `json""` – statically parses any JSON value.
+  *   - `jsobject""` – statically parses a JSON object.
+  *   - `jsarray""` – statically parses a JSON array.
+  * 
+  * The embedded `JSStaticParser` object contains the macro implementations of
+  * the string interpolators.
+  * 
+  * @author Chris Sachs
+  * 
+  * @example {{{
+  * scala> import basis.json.JSONType._
+  * import basis.json.JSONType._
+  * 
+  * scala> json""" [{}, [], "", 0, 0.0, true, false, null] """
+  * res0: Seq[Any] = Vector(Map(), Vector(), "", 0, 0.0, true, false, null)
+  * 
+  * scala> jsarray"[0,1,2,3,4]" map { case n: Long => math.pow(2, n).toLong }
+  * res1: Seq[Long] = Vector(1, 2, 4, 8, 16)
+  * 
+  * scala> ((n: Int, s: String) => jsarray"[$n, $s]")(0, "zero")
+  * res2: Seq[Any] = Vector(0, zero)
+  * }}}
+  */
 object JSONType extends JSONFactory {
   override type JSValue = Any
   
@@ -88,12 +132,14 @@ object JSONType extends JSONFactory {
   override def JSNull: Null = null
   
   
+  /** Provides `json`, `jsobject`, and `jsarray` string interpolators. */
   implicit class JSStringContext(context: StringContext) {
     def json(args: Any*): Any = macro JSStaticParser.parseJSValue
     def jsobject(args: Any*): Map[String, Any] = macro JSStaticParser.parseJSObject
     def jsarray(args: Any*): Seq[Any] = macro JSStaticParser.parseJSArray
   }
   
+  /** Contains string interpolation macro implementations. */
   object JSStaticParser {
     import scala.reflect.makro.Context
     
@@ -108,19 +154,19 @@ object JSONType extends JSONFactory {
     
     def parseJSValue(c: Context)(args: c.Expr[Any]*): c.Expr[Any] = {
       val parser = newPrefixParser(c)(args)
-      parser.parseWhitespace()
+      parser.skipWhitespace()
       parser.parseJSValue()
     }
     
     def parseJSObject(c: Context)(args: c.Expr[Any]*): c.Expr[Map[String, Any]] = {
       val parser = newPrefixParser(c)(args)
-      parser.parseWhitespace()
+      parser.skipWhitespace()
       parser.parseJSObject()
     }
     
     def parseJSArray(c: Context)(args: c.Expr[Any]*): c.Expr[Seq[Any]] = {
       val parser = newPrefixParser(c)(args)
-      parser.parseWhitespace()
+      parser.skipWhitespace()
       parser.parseJSArray()
     }
   }

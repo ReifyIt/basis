@@ -10,7 +10,60 @@ package basis.json
 import language.implicitConversions
 import language.experimental.macros
 
+/** An optimized JSON tree model supporting jquery-style selectors and
+  * compile-time sting interpolation.
+  * 
+  * ==Data types==
+  * 
+  * The sealed `JSValue` algebraic data type has the following variants:
+  * 
+  *   - `JSObject` – a linear map of ''name'', ''value'' pairs.
+  *   - `JSArray` – an indexed sequence of values.
+  *   - `JSString` – a native `String` wrapper.
+  *   - `JSNumber` – the root of the number types.
+  *   - `JSInteger` – a native `Long` wrapper.
+  *   - `JSDecimal` – a native `Double` wrapper.
+  *   - `JSBoolean` – a native `Boolean` wrapper.
+  *   - `JSNull` – the nullary constructor.
+  * 
+  * ==String interpolation==
+  * 
+  * The implicit `JSStringContext` class provides these string interpolators:
+  * 
+  *   - `json""` – statically parses any JSON value.
+  *   - `jsobject""` – statically parses a JSON object.
+  *   - `jsarray""` – statically parses a JSON array.
+  * 
+  * The embedded `JSStaticParser` object contains the macro implementations of
+  * the string interpolators.
+  * 
+  * @author Chris Sachs
+  * 
+  * @example {{{
+  * scala> import basis.json.JSONTree._
+  * import basis.json.JSONTree._
+  * 
+  * scala> json""" [{}, [], "", 0, 0.0, true, false, null] """
+  * res0: basis.json.JSONTree.JSArray = [{},[],"",0,0.0,true,false,null]
+  * 
+  * scala> val places = jsobject"""{"San Francisco":{"areaCode":415},"New York":{"areaCode":212}}"""
+  * places: basis.json.JSONTree.JSObject = {"San Francisco":{"areaCode":415},"New York":{"areaCode":212}}
+  * 
+  * scala> for (JSInteger(areaCode) <- places \ "San Francisco" \ "areaCode") yield areaCode + 235
+  * res1: basis.json.JSONTree.JSObject = {"San Francisco":{"areaCode":650},"New York":{"areaCode":212}}
+  * 
+  * scala> (jsarray""" ["Hello", 0, ", ", [null, "world", "!"]] """ \\ +JSString).toSeq.map(_.value).mkString
+  * res2: String = Hello, world!
+  * }}}
+  */
 object JSONTree extends JSONFactory {
+  /** The universal selector. */
+  object * extends PartialFunction[Any, JSValue] {
+    override def isDefinedAt(value: Any): Boolean = value.isInstanceOf[JSValue]
+    override def apply(value: Any): JSValue = value.asInstanceOf[JSValue]
+    override def toString: String = "*"
+  }
+  
   sealed abstract class JSValue { tree =>
     protected type Root >: this.type <: JSValue
     
@@ -24,11 +77,22 @@ object JSONTree extends JSONFactory {
     
     def withFilter(p: JSValue => Boolean): Root = filter(p)
     
+    /** Selects the values of all the fields of this object with the given name. */
+    def \ (name: String): Vine[JSValue] = new SelectAll
+    
+    /** Selects all the children of this value matching a selector. */
     def \ [A <: JSValue](sel: PartialFunction[JSValue, A]): Vine[A] = new \ [A](sel)
     
+    /** Selects all the descendants of this value matching a selector. */
     def \\ [A <: JSValue](sel: PartialFunction[JSValue, A]): Vine[A] = new \\ [A](sel)
     
+    /** Writes the minimal textual form of this JSON value. */
     def write(s: Appendable): Unit
+    
+    protected class SelectAll extends Vine[JSValue] {
+      override def foreach[U](f: JSValue => U): Unit = tree foreach f
+      override def map(f: JSValue => JSValue): Root = tree map f
+    }
     
     protected class \ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Vine[A] {
       override def foreach[U](f: A => U): Unit = tree foreach { value =>
@@ -65,14 +129,32 @@ object JSONTree extends JSONFactory {
       
       def withFilter(p: A => Boolean): Vine[A] = new WithFilter(p)
       
+      /** Selects the values of all the fields of all selected objects with the given name. */
+      def \ (name: String): Vine[JSValue] = new SelectName(name)
+      
+      /** Selects all the children of all the selected values matching a selector. */
       def \ [B <: JSValue](sel: PartialFunction[JSValue, B]): Vine[B] = new \ [B](sel)
       
+      /** Selects all the descendents of all the selected values matching a selector. */
       def \\ [B <: JSValue](sel: PartialFunction[JSValue, B]): Vine[B] = new \\ [B](sel)
+      
+      /** Returns a sequence containing the selected values. */
+      def toSeq: Seq[A] = {
+        val builder = Vector.newBuilder[A]
+        for (value <- this) builder += value
+        builder.result
+      }
       
       protected class WithFilter(p: A => Boolean) extends Vine[A] {
         override def foreach[U](f: A => U): Unit = vine foreach (value => if (p(value)) f(value))
         override def map(f: A => JSValue): Root = vine map (value => if (p(value)) f(value) else value)
         override def toString: String = "("+ vine +" withFilter "+ p +")"
+      }
+      
+      protected class SelectName(name: String) extends Vine[JSValue] {
+        override def foreach[U](f: JSValue => U): Unit = vine foreach (value => value \ name foreach f)
+        override def map(f: JSValue => JSValue): Root = vine map (value => value \ name map f)
+        override def toString: String = "("+ vine +" \\ "+ name +")"
       }
       
       protected class \ [+B <: JSValue](sel: PartialFunction[JSValue, B]) extends Vine[B] {
@@ -89,6 +171,7 @@ object JSONTree extends JSONFactory {
     }
   }
   
+  /** Contains factory methods for and implicit conversions to JSON values. */
   object JSValue extends JSValueFactory {
     implicit def apply(s: String): JSString = new JSString(s)
     
@@ -153,6 +236,8 @@ object JSONTree extends JSONFactory {
       }
       new JSObject(newNames, newValues, k)
     }
+    
+    override def \ (name: String): Vine[JSValue] = new SelectName(name)
     
     def foreachField[U](f: (String, JSValue) => U) {
       var i = 0
@@ -290,26 +375,14 @@ object JSONTree extends JSONFactory {
       new JSObject(newNames, newValues, newLength)
     }
     
-    def toSeq: Seq[(String, JSValue)] = {
-      val fields = new Array[(String, JSValue)](length)
-      var i = 0
-      while (i < length) {
-        fields(i) = (names(i), values(i))
-        i += 1
-      }
-      wrapRefArray(fields)
-    }
+    /** Returns an iterator over this JSON object's fields. */
+    def iterator: Iterator[(String, JSValue)] = new FieldsIterator
     
-    def toMap: Map[String, JSValue] = {
-      val builder = Map.newBuilder[String, JSValue]
-      builder.sizeHint(length)
-      var i = length - 1
-      while (i >= 0) {
-        builder += ((names(i), values(i)))
-        i -= 1
-      }
-      builder.result
-    }
+    /** Returns an iterator over this JSON object's field names. */
+    def namesIterator: Iterator[String] = new NamesIterator
+    
+    /** Returns an iterator over this JSON object's field values. */
+    def valuesIterator: Iterator[JSValue] = new ValuesIterator
     
     override def write(s: Appendable) {
       s.append('{')
@@ -357,6 +430,52 @@ object JSONTree extends JSONFactory {
       write(s)
       s.toString
     }
+    
+    private final class FieldsIterator extends Iterator[(String, JSValue)] {
+      private[this] var index = 0
+      override def hasNext: Boolean = index < JSObject.this.length
+      override def next(): (String, JSValue) = {
+        val field = JSObject.this.apply(index)
+        index += 1
+        field
+      }
+    }
+    
+    protected class SelectName(key: String) extends Vine[JSValue] {
+      override def foreach[U](f: JSValue => U): Unit = JSObject.this.foreachField {
+        case (name, value) if key.equals(name) => f(value)
+        case field => ()
+      }
+      
+      override def map(f: JSValue => JSValue): JSObject = JSObject.this.mapFields {
+        case (name, value) if key.equals(name) => (name, f(value))
+        case field => field
+      }
+      
+      override def toString: String = "("+"_"+" \\ "+ key +")"
+    }
+    
+    private final class NamesIterator extends Iterator[String] {
+      private[this] var index = 0
+      override def hasNext: Boolean = index < JSObject.this.length
+      override def next(): String = {
+        if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+        val name = JSObject.this.names(index)
+        index += 1
+        name
+      }
+    }
+    
+    private final class ValuesIterator extends Iterator[JSValue] {
+      private[this] var index = 0
+      override def hasNext: Boolean = index < JSObject.this.length
+      override def next(): JSValue = {
+        if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+        val value = JSObject.this.values(index)
+        index += 1
+        value
+      }
+    }
   }
   
   object JSObject extends JSObjectFactory {
@@ -366,7 +485,7 @@ object JSONTree extends JSONFactory {
     
     override def apply(fields: (String, JSValue)*): JSObject = new JSObject(fields)
     
-    def unapplySeq(json: JSObject): Some[Seq[(String, JSValue)]] = Some(json.toSeq)
+    def unapplySeq(json: JSObject): Some[Seq[(String, JSValue)]] = Some(json.iterator.toSeq)
     
     object unary_+ extends PartialFunction[Any, JSObject] {
       override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSObject]
@@ -473,10 +592,7 @@ object JSONTree extends JSONFactory {
       new JSArray(newValues, newLength)
     }
     
-    def toSeq: Seq[JSValue] = {
-      if (values.length == length) wrapRefArray(values)
-      else wrapRefArray(values).slice(0, length)
-    }
+    def iterator: Iterator[JSValue] = new ValuesIterator
     
     override def write(s: Appendable) {
       s.append('[')
@@ -518,6 +634,16 @@ object JSONTree extends JSONFactory {
       write(s)
       s.toString
     }
+    
+    private final class ValuesIterator extends Iterator[JSValue] {
+      private[this] var index = 0
+      override def hasNext: Boolean = index < JSArray.this.length
+      override def next(): JSValue = {
+        val value = JSArray.this.apply(index)
+        index += 1
+        value
+      }
+    }
   }
   
   object JSArray extends JSArrayFactory {
@@ -527,7 +653,7 @@ object JSONTree extends JSONFactory {
     
     override def apply(values: JSValue*): JSArray = new JSArray(values)
     
-    def unapplySeq(json: JSArray): Some[Seq[JSValue]] = Some(json.toSeq)
+    def unapplySeq(json: JSArray): Some[Seq[JSValue]] = Some(json.iterator.toSeq)
     
     object unary_+ extends PartialFunction[Any, JSArray] {
       override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSArray]
@@ -736,6 +862,7 @@ object JSONTree extends JSONFactory {
     override def toString: String = if (value) "true" else "false"
   }
   
+  /** Contains factory methods for JSON boolean values. */
   object JSBoolean {
     def apply(bool: Boolean): JSBoolean = if (bool) JSTrue else JSFalse
     
@@ -748,9 +875,9 @@ object JSONTree extends JSONFactory {
     }
   }
   
-  lazy val JSTrue = new JSBoolean(true)
+  override val JSTrue = new JSBoolean(true)
   
-  lazy val JSFalse = new JSBoolean(false)
+  override val JSFalse = new JSBoolean(false)
   
   
   final class JSNull private[JSONTree] extends JSValue {
@@ -761,9 +888,10 @@ object JSONTree extends JSONFactory {
     override def toString: String = "null"
   }
   
-  lazy val JSNull = new JSNull
+  override val JSNull = new JSNull
   
   
+  /** Provides `json`, `jsobject`, and `jsarray` string interpolators. */
   implicit class JSStringContext(context: StringContext) {
     def json(args: JSValue*): JSValue = macro JSStaticParser.parseJSValue
     
@@ -772,6 +900,7 @@ object JSONTree extends JSONFactory {
     def jsarray(args: JSValue*): JSArray = macro JSStaticParser.parseJSArray
   }
   
+  /** Contains string interpolation macro implementations. */
   object JSStaticParser {
     import scala.reflect.makro.Context
     
@@ -786,19 +915,19 @@ object JSONTree extends JSONFactory {
     
     def parseJSValue(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSValue] = {
       val parser = newPrefixParser(c)(args)
-      parser.parseWhitespace()
+      parser.skipWhitespace()
       parser.parseJSValue()
     }
     
     def parseJSObject(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSObject] = {
       val parser = newPrefixParser(c)(args)
-      parser.parseWhitespace()
+      parser.skipWhitespace()
       parser.parseJSObject()
     }
     
     def parseJSArray(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSArray] = {
       val parser = newPrefixParser(c)(args)
-      parser.parseWhitespace()
+      parser.skipWhitespace()
       parser.parseJSArray()
     }
   }
