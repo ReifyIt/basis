@@ -12,7 +12,7 @@ package basis
   * 
   * ==Data types==
   * 
-  * [[basis.json.JSONFactory]] serves as the foundation for all JSON
+  * [[basis.json.JSONContext]] serves as the foundation for all JSON
   * implementations and provides abstract types and builders for JSON values.
   * Implementations include:
   * 
@@ -27,7 +27,7 @@ package basis
   * ==Parsers==
   * 
   * [[basis.json.JSONParser]] provides a fast, single-character lookahead
-  * recursive descent parser. [[basis.json.JSONFactory]] instances compose
+  * recursive descent parser. [[basis.json.JSONContext]] instances compose
   * with parsers to build JSON values. `JSONParser`'s companion object
   * contains parser implementations for various input sources.
   * 

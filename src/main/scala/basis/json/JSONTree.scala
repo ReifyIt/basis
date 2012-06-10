@@ -31,14 +31,11 @@ import language.experimental.macros
   * 
   * ==String interpolation==
   * 
-  * The implicit `JSStringContext` class provides these string interpolators:
+  * The `JSStringContext` class provides these string interpolation macros:
   * 
   *   - `json""` – statically parses any JSON value.
   *   - `jsobject""` – statically parses a JSON object.
   *   - `jsarray""` – statically parses a JSON array.
-  * 
-  * The embedded `JSStaticParser` object contains the macro implementations of
-  * the string interpolators.
   * 
   * @author Chris Sachs
   * 
@@ -59,7 +56,7 @@ import language.experimental.macros
   * res2: String = Hello, world!
   * }}}
   */
-object JSONTree extends JSONFactory {
+object JSONTree extends JSONContext {
   /** The universal selector. */
   object * extends PartialFunction[Any, JSValue] {
     override def isDefinedAt(value: Any): Boolean = value.isInstanceOf[JSValue]
@@ -985,43 +982,27 @@ object JSONTree extends JSONFactory {
   
   
   /** Provides `json`, `jsobject`, and `jsarray` string interpolators. */
-  implicit class JSStringContext(context: StringContext) {
-    def json(args: JSValue*): JSValue = macro JSStaticParser.parseJSValue
+  class JSStringContext(sc: StringContext) {
+    def json(args: JSValue*): JSValue = macro JSStringContext.json
     
-    def jsobject(args: JSValue*): JSObject = macro JSStaticParser.parseJSObject
+    def jsobject(args: JSValue*): JSObject = macro JSStringContext.jsobject
     
-    def jsarray(args: JSValue*): JSArray = macro JSStaticParser.parseJSArray
+    def jsarray(args: JSValue*): JSArray = macro JSStringContext.jsarray
   }
   
   /** Contains string interpolation macro implementations. */
-  object JSStaticParser {
+  implicit object JSStringContext extends (StringContext => JSStringContext) {
     import scala.reflect.makro.Context
     
-    def newPrefixParser(c: Context)(args: Seq[c.Expr[JSValue]])
-      : JSONParser[JSONExpr[c.mirror.type, JSONTree.type] with Singleton] = {
-      import c.mirror._
-      val Apply(_, List(Apply(_, literals))) = c.prefix.tree
-      val parts = literals map { case Literal(Constant(part: String)) => part }
-      val jsonExpr = new JSONExpr[c.mirror.type, JSONTree.type](c.mirror)(reify(JSONTree))
-      new JSONParser.Interpolating[jsonExpr.type](jsonExpr, parts)(args)
-    }
+    override def apply(sc: StringContext) = new JSStringContext(sc)
     
-    def parseJSValue(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSValue] = {
-      val parser = newPrefixParser(c)(args)
-      parser.skipWhitespace()
-      parser.parseJSValue()
-    }
+    def json(context: Context)(args: context.Expr[JSValue]*): context.Expr[JSValue] =
+      JSONParser.StaticInterpolator.parseJSValue[JSONTree.type](context)(context.reify(JSONTree), args)
     
-    def parseJSObject(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSObject] = {
-      val parser = newPrefixParser(c)(args)
-      parser.skipWhitespace()
-      parser.parseJSObject()
-    }
+    def jsobject(context: Context)(args: context.Expr[JSValue]*): context.Expr[JSObject] =
+      JSONParser.StaticInterpolator.parseJSObject[JSONTree.type](context)(context.reify(JSONTree), args)
     
-    def parseJSArray(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSArray] = {
-      val parser = newPrefixParser(c)(args)
-      parser.skipWhitespace()
-      parser.parseJSArray()
-    }
+    def jsarray(context: Context)(args: context.Expr[JSValue]*): context.Expr[JSArray] =
+      JSONParser.StaticInterpolator.parseJSArray[JSONTree.type](context)(context.reify(JSONTree), args)
   }
 }

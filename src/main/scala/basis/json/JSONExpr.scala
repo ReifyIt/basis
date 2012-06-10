@@ -20,11 +20,11 @@ import scala.reflect.api.Universe
   * import scala.reflect.mirror
   * import basis.json._
   * 
-  * scala> val json = new JSONExpr[mirror.type, JSONTree.type](mirror)(mirror.reify(JSONTree))
+  * scala> val JSON = new JSONExpr[mirror.type, JSONTree.type](mirror)(mirror.reify(JSONTree))
   * json: basis.json.JSONExpr[reflect.mirror.type,basis.json.JSONTree.type] = JSONExpr
   * 
-  * scala> json.JSValue.parse("[null]")
-  * res0: json.JSValue = Expr[Nothing](basis.json.JSONTree.JSArray.newBuilder(1).$plus$eq(basis.json.JSONTree.JSNull).result)
+  * scala> JSON.JSValue.parse("[null]")
+  * res0: JSON.JSValue = Expr[Nothing](basis.json.JSONTree.JSArray.newBuilder(1).$plus$eq(basis.json.JSONTree.JSNull).result)
   * }}}
   * 
   * @constructor Constructs a JSON implementation that generates builder expressions
@@ -35,9 +35,9 @@ import scala.reflect.api.Universe
   * @param  context   The reflection universe used to generate expressions.
   * @param  jsonExpr  An expression in `context` that evals to the composed JSON implementation.
   */
-class JSONExpr[+Context <: Universe with Singleton, JSON <: JSONFactory with Singleton]
+class JSONExpr[+Context <: Universe with Singleton, JSON <: JSONContext]
     (val context: Context)(jsonExpr: Context#Expr[JSON])
-  extends JSONFactory {
+  extends JSONContext {
   
   import context._
   
@@ -152,16 +152,13 @@ class JSONExpr[+Context <: Universe with Singleton, JSON <: JSONFactory with Sin
   
   override type JSBoolean = Expr[JSON#JSBoolean]
   
-  //override def JSTrue: JSBoolean = reify(json.eval.JSTrue)
   override def JSTrue: JSBoolean = Expr(Select(json.tree, newTermName("JSTrue")))
   
-  //override def JSFalse: JSBoolean = reify(json.eval.JSFalse)
   override def JSFalse: JSBoolean = Expr(Select(json.tree, newTermName("JSFalse")))
   
   
   override type JSNull = Expr[JSON#JSNull]
   
-  //override def JSNull: JSNull = reify(json.eval.JSNull)
   override def JSNull: JSNull = Expr(Select(json.tree, newTermName("JSNull")))
   
   override def toString: String = "JSONExpr"

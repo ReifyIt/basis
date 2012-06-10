@@ -21,14 +21,8 @@ import scala.annotation.switch
   * before parsing top-level JSON values.
   * 
   * @author Chris Sachs
-  * 
-  * @constructor Constructs a JSON parser with a `JSONFactory`.
-  * @tparam JSON  The singleton type of the `JSONFactory` composed with this parser.
-  * @param  json  The `JSONFactory` used by this parser to construct JSON values.
   */
-abstract class JSONParser[+JSON <: JSONFactory with Singleton](protected val json: JSON) {
-  import json._
-  
+abstract class JSONParser[-JSON <: JSONContext] {
   /** Returns the next character in the input stream without consuming it.
     * Returns a negative value to indicate end-of-input. Calls to `lookahead`
     * MUST be idempotent between calls to `readChar()`. */
@@ -74,35 +68,37 @@ abstract class JSONParser[+JSON <: JSONFactory with Singleton](protected val jso
   }
   
   /** Returns a JSON value parsed from the input stream. */
-  def parseJSValue(): JSValue = {
+  def parseJSValue(JSON: JSON): JSON.JSValue = {
     (lookahead: @switch) match {
-      case '{' => parseJSObject()
-      case '[' => parseJSArray()
-      case '"' => parseJSString()
-      case '-' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => parseJSNumber()
-      case 't' => parseJSTrue()
-      case 'f' => parseJSFalse()
-      case 'n' => parseJSNull()
+      case '{' => parseJSObject(JSON)
+      case '[' => parseJSArray(JSON)
+      case '"' => parseJSString(JSON)
+      case '-' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => parseJSNumber(JSON)
+      case 't' => parseJSTrue(JSON)
+      case 'f' => parseJSFalse(JSON)
+      case 'n' => parseJSNull(JSON)
       case _ => syntaxError("Expected value")
     }
   }
   
   /** Returns a JSON object parsed from the input stream. */
-  def parseJSObject(): JSObject = {
-    val builder = JSObject.newBuilder()
+  def parseJSObject(JSON: JSON): JSON.JSObject = {
+    val builder = JSON.JSObject.newBuilder()
     
     if (lookahead == '{') readChar()
     else syntaxError("Expected object")
     
     skipWhitespace()
     if (lookahead != '}') {
-      parseJSField(builder)
+      val (name, value) = parseJSField(JSON)
+      builder += (name, value)
       skipWhitespace()
     }
     while (lookahead == ',') {
       readChar()
       skipWhitespace()
-      parseJSField(builder)
+      val (name, value) = parseJSField(JSON)
+      builder += (name, value)
       skipWhitespace()
     }
     
@@ -113,32 +109,32 @@ abstract class JSONParser[+JSON <: JSONFactory with Singleton](protected val jso
   }
   
   /** Parses an object field from the input stream and adds it to `builder`. */
-  protected def parseJSField(builder: JSObjectBuilder) {
+  def parseJSField(JSON: JSON): (String, JSON.JSValue) = {
     if (lookahead != '\"') syntaxError("Expected field")
     val name = parseString()
     skipWhitespace()
     parseChar(':')
     skipWhitespace()
-    val value = parseJSValue()
-    builder += (name, value)
+    val value = parseJSValue(JSON)
+    (name, value)
   }
   
   /** Returns a JSON array parsed from the input stream. */
-  def parseJSArray(): JSArray = {
-    val builder = JSArray.newBuilder()
+  def parseJSArray(JSON: JSON): JSON.JSArray = {
+    val builder = JSON.JSArray.newBuilder()
     
     if (lookahead == '[') readChar()
     else syntaxError("Expected array")
     
     skipWhitespace()
     if (lookahead != ']') {
-      builder += parseJSValue()
+      builder += parseJSValue(JSON)
       skipWhitespace()
     }
     while (lookahead == ',') {
       readChar()
       skipWhitespace()
-      builder += parseJSValue()
+      builder += parseJSValue(JSON)
       skipWhitespace()
     }
     
@@ -149,7 +145,7 @@ abstract class JSONParser[+JSON <: JSONFactory with Singleton](protected val jso
   }
   
   /** Returns a JSON string parsed from the input stream. */
-  def parseJSString(): JSString = JSString(parseString())
+  def parseJSString(JSON: JSON): JSON.JSString = JSON.JSString(parseString())
   
   /** Parses and unescapes a quoted JSON string from the input stream.
     * Returns a Scala string. */
@@ -192,7 +188,7 @@ abstract class JSONParser[+JSON <: JSONFactory with Singleton](protected val jso
   }
   
   /** Returns a JSON number parsed from the input stream. */
-  def parseJSNumber(): JSNumber = {
+  def parseJSNumber(JSON: JSON): JSON.JSNumber = {
     val s = new java.lang.StringBuilder
     var decimal = false
     
@@ -221,34 +217,34 @@ abstract class JSONParser[+JSON <: JSONFactory with Singleton](protected val jso
       while (lookahead >= '0' && lookahead <= '9') s.append(readChar())
     }
     
-    if (!decimal) JSInteger(s.toString) else JSDecimal(s.toString)
+    if (!decimal) JSON.JSInteger(s.toString) else JSON.JSDecimal(s.toString)
   }
   
   /** Returns a JSON boolean parsed from the input stream. */
-  def parseJSBoolean(): JSBoolean = {
+  def parseJSBoolean(JSON: JSON): JSON.JSBoolean = {
     lookahead match {
-      case 't' => parseJSTrue()
-      case 'f' => parseJSFalse()
+      case 't' => parseJSTrue(JSON)
+      case 'f' => parseJSFalse(JSON)
       case _ => syntaxError("Expected \"true\" or \"false\"")
     }
   }
   
   /** Parses and returns the `true` JSON boolean value. */
-  def parseJSTrue(): JSBoolean = {
+  def parseJSTrue(JSON: JSON): JSON.JSBoolean = {
     parseChars("true")
-    json.JSTrue
+    JSON.JSTrue
   }
   
   /** Parses and returns the `false` JSON boolean value. */
-  def parseJSFalse(): JSBoolean = {
+  def parseJSFalse(JSON: JSON): JSON.JSBoolean = {
     parseChars("false")
-    json.JSFalse
+    JSON.JSFalse
   }
   
   /** Parses and returns the `null` JSON boolean value. */
-  def parseJSNull(): JSNull = {
+  def parseJSNull(JSON: JSON): JSON.JSNull = {
     parseChars("null")
-    json.JSNull
+    JSON.JSNull
   }
   
   /** Signals a syntax error and throws a `JSONException` with a message.
@@ -260,10 +256,7 @@ abstract class JSONParser[+JSON <: JSONFactory with Singleton](protected val jso
 /** Contains JSON parser implementations for various input sources. */
 object JSONParser {
   /** A JSON parser that consumes a character sequence. */
-  class FromCharSequence[+JSON <: JSONFactory with Singleton]
-      (json: JSON, cs: CharSequence)
-    extends JSONParser[JSON](json) {
-    
+  class FromCharSequence[-JSON <: JSONContext](cs: CharSequence) extends JSONParser[JSON] {
     private[this] final var line: Int = 0
     private[this] final var column: Int = 0
     
@@ -286,10 +279,7 @@ object JSONParser {
   }
   
   /** A JSON parser that consumes a `java.io.Reader`. */
-  class FromReader[+JSON <: JSONFactory with Singleton]
-      (json: JSON, reader: java.io.Reader)
-    extends JSONParser[JSON](json) {
-    
+  class FromReader[-JSON <: JSONContext](reader: java.io.Reader) extends JSONParser[JSON] {
     private[this] final var line: Int = 0
     private[this] final var column: Int = 0
     
@@ -318,16 +308,14 @@ object JSONParser {
     * encounters this character it returns the next JSON value in the `args`
     * sequence as if it has just been parsed.
     */
-  class Interpolating[+JSON <: JSONFactory with Singleton]
-      (override protected val json: JSON, parts: Seq[String])(args: Seq[JSON#JSValue])
-    extends JSONParser[JSON](json) {
-    
-    import json._
+  class Interpolating[JSON <: JSONContext with Singleton]
+      (parts: Seq[String], args: Seq[JSON#JSValue])
+    extends JSONParser[JSON] {
     
     private[this] final var part: String = parts(0)
     private[this] final var nextPartIndex: Int = 1
     
-    private[this] final var nextChar: Int = -1
+    private[this] final var nextChar: Int = 0
     private[this] final var nextCharIndex: Int = 0
     
     private[this] final var nextArgIndex: Int = 0
@@ -361,23 +349,61 @@ object JSONParser {
     /** Consumes the next JSON value in the `args` sequence as well as the
       * substitution character in the input stream. Fails if the parser is not
       * at a substitution point. */
-    protected def readJSValue(): JSValue = {
+    protected def readJSValue(JSON: JSON): JSON.JSValue = {
       if (lookahead == '\u001A') readChar()
       else syntaxError("Expected interpolated value")
       
       val arg = args(nextArgIndex)
       nextArgIndex += 1
-      arg.asInstanceOf[JSValue]
+      arg.asInstanceOf[JSON.JSValue]
     }
     
     /** Returns a JSON value parsed from the input stream. Interpolates a JSON
       * value if the parser is at a substitution point. */
-    override def parseJSValue(): JSValue = {
-      if (lookahead == '\u001A') readJSValue()
-      else super.parseJSValue()
+    override def parseJSValue(JSON: JSON): JSON.JSValue = {
+      if (lookahead == '\u001A') readJSValue(JSON)
+      else super.parseJSValue(JSON)
     }
     
     override protected def syntaxError(message: String): Nothing =
       throw new JSONException(message +" in part "+ (nextPartIndex - 1) +" at index "+ (nextCharIndex - 1))
+  }
+  
+  object StaticInterpolator {
+    import scala.reflect.makro.Context
+    import language.experimental.macros
+    
+    private def prefixStringParts(context: Context): Seq[String] = {
+      import context.mirror._
+      val Apply(_, List(Apply(_, literals))) = context.prefix.tree
+      literals map { case Literal(Constant(part: String)) => part }
+    }
+    
+    def parseJSValue[Target <: JSONContext](context: Context)
+        (target: context.Expr[Target], args: Seq[context.Expr[Target#JSValue]]): context.Expr[Target#JSValue] = {
+      val parts = prefixStringParts(context)
+      val factory = new JSONExpr[context.mirror.type, Target](context.mirror)(target)
+      val parser = new JSONParser.Interpolating[factory.type](parts, args)
+      parser.skipWhitespace()
+      parser.parseJSValue(factory)
+    }
+    
+    def parseJSObject[Target <: JSONContext](context: Context)
+        (target: context.Expr[Target], args: Seq[context.Expr[Target#JSValue]]): context.Expr[Target#JSObject] = {
+      val parts = prefixStringParts(context)
+      val factory = new JSONExpr[context.mirror.type, Target](context.mirror)(target)
+      val parser = new JSONParser.Interpolating[factory.type](parts, args)
+      parser.skipWhitespace()
+      parser.parseJSObject(factory)
+    }
+    
+    def parseJSArray[Target <: JSONContext](context: Context)
+        (target: context.Expr[Target], args: Seq[context.Expr[Target#JSValue]]): context.Expr[Target#JSArray] = {
+      val parts = prefixStringParts(context)
+      val factory = new JSONExpr[context.mirror.type, Target](context.mirror)(target)
+      val parser = new JSONParser.Interpolating[factory.type](parts, args)
+      parser.skipWhitespace()
+      parser.parseJSArray(factory)
+    }
   }
 }

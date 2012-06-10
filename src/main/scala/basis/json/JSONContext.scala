@@ -11,7 +11,7 @@ package basis.json
   * 
   * @author Chris Sachs
   */
-abstract class JSONFactory {
+abstract class JSONContext {
   /** The root type of all JSON values. */
   type JSValue
   
@@ -21,7 +21,7 @@ abstract class JSONFactory {
     def parse(cs: CharSequence): JSValue = {
       val parser = JSParser(cs)
       parser.skipWhitespace()
-      parser.parseJSValue()
+      parser.parseJSValue(JSONContext.this)
     }
   }
   
@@ -47,7 +47,7 @@ abstract class JSONFactory {
     def parse(cs: CharSequence): JSObject = {
       val parser = JSParser(cs)
       parser.skipWhitespace()
-      parser.parseJSObject()
+      parser.parseJSObject(JSONContext.this)
     }
   }
   
@@ -83,7 +83,7 @@ abstract class JSONFactory {
     def parse(cs: CharSequence): JSArray = {
       val parser = JSParser(cs)
       parser.skipWhitespace()
-      parser.parseJSArray()
+      parser.parseJSArray(JSONContext.this)
     }
   }
   
@@ -112,7 +112,7 @@ abstract class JSONFactory {
     def parse(cs: CharSequence): JSString = {
       val parser = JSParser(cs)
       parser.skipWhitespace()
-      parser.parseJSString()
+      parser.parseJSString(JSONContext.this)
     }
   }
   
@@ -129,7 +129,7 @@ abstract class JSONFactory {
     def parse(cs: CharSequence): JSNumber = {
       val parser = JSParser(cs)
       parser.skipWhitespace()
-      parser.parseJSNumber()
+      parser.parseJSNumber(JSONContext.this)
     }
   }
   
@@ -192,6 +192,6 @@ abstract class JSONFactory {
   def JSNull: JSNull
   
   /** Returns a JSON parser for the givene char sequence. */
-  def JSParser(cs: CharSequence): JSONParser[JSONFactory.this.type] =
-    new JSONParser.FromCharSequence(JSONFactory.this, cs)
+  protected def JSParser(cs: CharSequence): JSONParser[JSONContext.this.type] =
+    new JSONParser.FromCharSequence[JSONContext.this.type](cs)
 }
