@@ -7,6 +7,9 @@
 
 package basis.json
 
+import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable.Builder
+
 import language.implicitConversions
 import language.experimental.macros
 
@@ -77,6 +80,10 @@ object JSONTree extends JSONFactory {
     
     def withFilter(p: JSValue => Boolean): Root = filter(p)
     
+    def foldLeft[A](z: A)(op: (A, JSValue) => A): A = z
+    
+    def foldRight[A](z: A)(op: (JSValue, A) => A): A = z
+    
     /** Selects the values of all the fields of this object with the given name. */
     def \ (name: String): Vine[JSValue] = new SelectAll
     
@@ -128,6 +135,12 @@ object JSONTree extends JSONFactory {
       def filter(p: A => Boolean): Vine[A] = withFilter(p)
       
       def withFilter(p: A => Boolean): Vine[A] = new WithFilter(p)
+      
+      def foldLeft[B](z: B)(op: (B, A) => B): B = {
+        var result = z
+        for (value <- this) result = op(result, value)
+        result
+      }
       
       /** Selects the values of all the fields of all selected objects with the given name. */
       def \ (name: String): Vine[JSValue] = new SelectName(name)
@@ -237,6 +250,26 @@ object JSONTree extends JSONFactory {
       new JSObject(newNames, newValues, k)
     }
     
+    override def foldLeft[A](z: A)(op: (A, JSValue) => A): A = {
+      var result = z
+      var i = 0
+      while (i < length) {
+        result = op(result, values(i))
+        i += 1
+      }
+      result
+    }
+    
+    override def foldRight[A](z: A)(op: (JSValue, A) => A): A = {
+      var result = z
+      var i = length - 1
+      while (length >= 0) {
+        result = op(values(i), result)
+        i -= 1
+      }
+      result
+    }
+    
     override def \ (name: String): Vine[JSValue] = new SelectName(name)
     
     def foreachField[U](f: (String, JSValue) => U) {
@@ -274,6 +307,49 @@ object JSONTree extends JSONFactory {
         i += 1
       }
       new JSObject(newNames, newValues, k)
+    }
+    
+    def apply(index: Int): (String, JSValue) = {
+      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+      (names(index), values(index))
+    }
+    
+    def updated(index: Int, field: (String, JSValue)): JSObject = {
+      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+      val (name, value) = field
+      val newNames = new Array[String](length)
+      val newValues = new Array[JSValue](length)
+      System.arraycopy(names, 0, newNames, 0, index)
+      newNames(index) = name
+      System.arraycopy(names, index + 1, newNames, index + 1, length - (index + 1))
+      System.arraycopy(values, 0, newValues, 0, index)
+      newValues(index) = value
+      System.arraycopy(values, index + 1, newValues, index + 1, length - (index + 1))
+      new JSObject(newNames, newValues, length)
+    }
+    
+    def :+ (field: (String, JSValue)): JSObject = {
+      val (name, value) = field
+      val newLength = length + 1
+      val newNames = new Array[String](newLength)
+      val newValues = new Array[JSValue](newLength)
+      System.arraycopy(names, 0, newNames, 0, length)
+      System.arraycopy(values, 0, newValues, 0, length)
+      newNames(length) = name
+      newValues(length) = value
+      new JSObject(newNames, newValues, newLength)
+    }
+    
+    def +: (field: (String, JSValue)): JSObject = {
+      val (name, value) = field
+      val newLength = length + 1
+      val newNames = new Array[String](newLength)
+      val newValues = new Array[JSValue](newLength)
+      newNames(0) = name
+      newValues(0) = value
+      System.arraycopy(names, 0, newNames, 1, length)
+      System.arraycopy(values, 0, newValues, 1, length)
+      new JSObject(newNames, newValues, newLength)
     }
     
     def contains(name: String): Boolean = {
@@ -330,49 +406,6 @@ object JSONTree extends JSONFactory {
         new JSObject(newNames, newValues, newLength)
       }
       else this
-    }
-    
-    def apply(index: Int): (String, JSValue) = {
-      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      (names(index), values(index))
-    }
-    
-    def updated(index: Int, field: (String, JSValue)): JSObject = {
-      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      val (name, value) = field
-      val newNames = new Array[String](length)
-      val newValues = new Array[JSValue](length)
-      System.arraycopy(names, 0, newNames, 0, index)
-      newNames(index) = name
-      System.arraycopy(names, index + 1, newNames, index + 1, length - (index + 1))
-      System.arraycopy(values, 0, newValues, 0, index)
-      newValues(index) = value
-      System.arraycopy(values, index + 1, newValues, index + 1, length - (index + 1))
-      new JSObject(newNames, newValues, length)
-    }
-    
-    def :+ (field: (String, JSValue)): JSObject = {
-      val (name, value) = field
-      val newLength = length + 1
-      val newNames = new Array[String](newLength)
-      val newValues = new Array[JSValue](newLength)
-      System.arraycopy(names, 0, newNames, 0, length)
-      System.arraycopy(values, 0, newValues, 0, length)
-      newNames(length) = name
-      newValues(length) = value
-      new JSObject(newNames, newValues, newLength)
-    }
-    
-    def +: (field: (String, JSValue)): JSObject = {
-      val (name, value) = field
-      val newLength = length + 1
-      val newNames = new Array[String](newLength)
-      val newValues = new Array[JSValue](newLength)
-      newNames(0) = name
-      newValues(0) = value
-      System.arraycopy(names, 0, newNames, 1, length)
-      System.arraycopy(values, 0, newValues, 1, length)
-      new JSObject(newNames, newValues, newLength)
     }
     
     /** Returns an iterator over this JSON object's fields. */
@@ -487,6 +520,15 @@ object JSONTree extends JSONFactory {
     
     def unapplySeq(json: JSObject): Some[Seq[(String, JSValue)]] = Some(json.iterator.toSeq)
     
+    implicit def canBuildFrom[A <: JSValue] = BuilderFactory.asInstanceOf[CanBuildFrom[Nothing, (String, A), JSObject]]
+    
+    private lazy val BuilderFactory = new BuilderFactory[Nothing]
+    
+    private class BuilderFactory[A <: JSValue] extends CanBuildFrom[Nothing, (String, A), JSObject] {
+      def apply(): JSObjectBuilder = newBuilder()
+      def apply(from: Nothing): JSObjectBuilder = newBuilder()
+    }
+    
     object unary_+ extends PartialFunction[Any, JSObject] {
       override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSObject]
       override def apply(x: Any): JSObject = x.asInstanceOf[JSObject]
@@ -494,7 +536,7 @@ object JSONTree extends JSONFactory {
     }
   }
   
-  final class JSObjectBuilder(sizeHint: Int) extends super.JSObjectBuilder {
+  final class JSObjectBuilder(sizeHint: Int) extends super.JSObjectBuilder with Builder[(String, JSValue), JSObject] {
     private[this] var names = new Array[String](sizeHint)
     
     private[this] var values = new Array[JSValue](sizeHint)
@@ -512,14 +554,28 @@ object JSONTree extends JSONFactory {
       values = newValues
     }
     
-    override def += (name: String, value: JSValue) {
+    override def sizeHint(size: Int): Unit = ensureCapacity(size)
+    
+    override def += (name: String, value: JSValue): this.type = {
       ensureCapacity(length + 1)
       names(length) = name
       values(length) = value
       length += 1
+      this
+    }
+    
+    override def += (field: (String, JSValue)): this.type = {
+      val (name, value) = field
+      this += (name, value)
     }
     
     override def result: JSObject = if (length != 0) new JSObject(names, values, length) else JSObject.empty
+    
+    override def clear() {
+      names = new Array[String](sizeHint)
+      values = new Array[JSValue](sizeHint)
+      length = 0
+    }
   }
   
   
@@ -560,6 +616,26 @@ object JSONTree extends JSONFactory {
         i += 1
       }
       new JSArray(newValues, k)
+    }
+    
+    override def foldLeft[A](z: A)(op: (A, JSValue) => A): A = {
+      var result = z
+      var i = 0
+      while (i < length) {
+        result = op(result, values(i))
+        i += 1
+      }
+      result
+    }
+    
+    override def foldRight[A](z: A)(op: (JSValue, A) => A): A = {
+      var result = z
+      var i = length - 1
+      while (length >= 0) {
+        result = op(values(i), result)
+        i -= 1
+      }
+      result
     }
     
     def apply(index: Int): JSValue = {
@@ -655,6 +731,15 @@ object JSONTree extends JSONFactory {
     
     def unapplySeq(json: JSArray): Some[Seq[JSValue]] = Some(json.iterator.toSeq)
     
+    implicit def canBuildFrom[A <: JSValue] = BuilderFactory.asInstanceOf[CanBuildFrom[Nothing, A, JSArray]]
+    
+    private lazy val BuilderFactory = new BuilderFactory[Nothing]
+    
+    private class BuilderFactory[A <: JSValue] extends CanBuildFrom[Nothing, A, JSArray] {
+      def apply(): JSArrayBuilder = newBuilder()
+      def apply(from: Nothing): JSArrayBuilder = newBuilder()
+    }
+    
     object unary_+ extends PartialFunction[Any, JSArray] {
       override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSArray]
       override def apply(x: Any): JSArray = x.asInstanceOf[JSArray]
@@ -662,7 +747,7 @@ object JSONTree extends JSONFactory {
     }
   }
   
-  final class JSArrayBuilder(sizeHint: Int) extends super.JSArrayBuilder {
+  final class JSArrayBuilder(sizeHint: Int) extends super.JSArrayBuilder with Builder[JSValue, JSArray] {
     private[this] var values = new Array[JSValue](sizeHint)
     
     private[this] var length = 0
@@ -675,13 +760,21 @@ object JSONTree extends JSONFactory {
       values = newValues
     }
     
-    override def += (value: JSValue) {
+    override def sizeHint(size: Int): Unit = ensureCapacity(size)
+    
+    override def += (value: JSValue): this.type = {
       ensureCapacity(length + 1)
       values(length) = value
       length += 1
+      this
     }
     
     override def result: JSArray = if (length != 0) new JSArray(values, length) else JSArray.empty
+    
+    override def clear() {
+      values = new Array[JSValue](sizeHint)
+      length = 0
+    }
   }
   
   
@@ -909,7 +1002,7 @@ object JSONTree extends JSONFactory {
       import c.mirror._
       val Apply(_, List(Apply(_, literals))) = c.prefix.tree
       val parts = literals map { case Literal(Constant(part: String)) => part }
-      val jsonExpr = new JSONExpr[c.mirror.type, JSONTree.type](c.mirror)(c.reify(JSONTree))
+      val jsonExpr = new JSONExpr[c.mirror.type, JSONTree.type](c.mirror)(reify(JSONTree))
       new JSONParser.Interpolating[jsonExpr.type](jsonExpr, parts)(args)
     }
     

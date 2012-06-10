@@ -7,7 +7,6 @@
 
 package basis.json
 
-import scala.collection.breakOut
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.api.Universe
 
@@ -16,34 +15,24 @@ import scala.reflect.api.Universe
   * 
   * @author Chris Sachs
   * 
-  * @note This implementation currently generates expressions non-hygienically.
-  *       The typechecker will not warn you if the `JSONFactory` API changes.
-  *       Simple reifications fail when splicing the `json` factory expression
-  *       (Cannot materialize Expr). And I don't know how to generate the
-  *       builder block expressions reifically (awesome, new word!).
-  *       Suggestions welcome (send to [[mailto:c9r@me.com Chris Sachs]])!
-  * 
   * @example {{{
-  * // The expression json""" [{}, [], "", 0, 0.0, true, false, null] """
-  * // generates the following code for the givem json implementation:
-  * val builder = json.newBuilder(8)
-  * builder += json.JSObject.empty
-  * builder += json.JSArray.empty
-  * builder += json.JSString("")
-  * builder += json.JSInteger(0L)
-  * builder += json.JSDecimal(0.0)
-  * builder += json.JSTrue
-  * builder += json.JSFalse
-  * builder += json.JSNull
-  * builder.result
+  * scala> import scala.reflect.mirror; import basis.json._
+  * import scala.reflect.mirror
+  * import basis.json._
+  * 
+  * scala> val json = new JSONExpr[mirror.type, JSONTree.type](mirror)(mirror.reify(JSONTree))
+  * json: basis.json.JSONExpr[reflect.mirror.type,basis.json.JSONTree.type] = JSONExpr
+  * 
+  * scala> json.JSValue.parse("[null]")
+  * res0: json.JSValue = Expr[Nothing](basis.json.JSONTree.JSArray.newBuilder(1).$plus$eq(basis.json.JSONTree.JSNull).result)
   * }}}
   * 
   * @constructor Constructs a JSON implementation that generates builder expressions
-  *              in the given reflective universe for JSON values produced by the
+  *              in the given reflection universe for JSON values produced by the
   *              parameterized JSON implementation.
   * @tparam Context   The singleton type of the reflective universe in which to generate expressions.
   * @tparam JSON      The singleton type of the JSON implementation to produce expressions for.
-  * @param  context   The reflective universe used to generate expressions.
+  * @param  context   The reflection universe used to generate expressions.
   * @param  jsonExpr  An expression in `context` that evals to the composed JSON implementation.
   */
 class JSONExpr[+Context <: Universe with Singleton, JSON <: JSONFactory with Singleton]
@@ -69,26 +58,20 @@ class JSONExpr[+Context <: Universe with Singleton, JSON <: JSONFactory with Sin
     override def empty: JSObject = Expr(Select(Select(json.tree, newTermName("JSObject")), newTermName("empty")))
     
     override def apply(fields: (String, JSValue)*): JSObject = {
-      val builderDef =
-        ValDef(Modifiers(), newTermName("builder"), TypeTree(),
-               Apply(Select(Select(json.tree, newTermName("JSObject")), newTermName("newBuilder")),
-                     List(Literal(Constant(fields.length)))))
-      
-      val builderAppends: List[Tree] = fields.map { case (name, expr) =>
-        Apply(Select(Ident(newTermName("builder")), newTermName("$plus$eq")),
-              List(Literal(Constant(name)), expr.tree))
-      } (breakOut)
-      
-      val builderResult = Select(Ident(newTermName("builder")), newTermName("result"))
-      
-      Expr(Block(builderDef :: builderAppends, builderResult))
+      val newBuilderTree = Apply(Select(Select(json.tree, newTermName("JSObject")), newTermName("newBuilder")),
+                                 List(Literal(Constant(fields.length))))
+      val buildTree = fields.foldLeft(newBuilderTree) { (builderTree, field) =>
+        val (name, valueExpr) = field
+        Apply(Select(builderTree, newTermName("$plus$eq")), List(Literal(Constant(name)), valueExpr.tree))
+      }
+      Expr(Select(buildTree, newTermName("result")))
     }
   }
   
   class JSObjectBuilder(sizeHint: Int) extends super.JSObjectBuilder {
     private[this] val fields = new ArrayBuffer[(String, JSValue)]
     if (sizeHint > 0) fields.sizeHint(sizeHint)
-    override def += (name: String, value: JSValue): Unit = fields += ((name, value))
+    override def += (name: String, value: JSValue): this.type = { fields += ((name, value)); this }
     override def result: JSObject = if (fields.length != 0) JSObject(fields: _*) else JSObject.empty
   }
   
@@ -103,25 +86,19 @@ class JSONExpr[+Context <: Universe with Singleton, JSON <: JSONFactory with Sin
     override def empty: JSArray = Expr(Select(Select(json.tree, newTermName("JSArray")), newTermName("empty")))
     
     override def apply(values: JSValue*): JSArray = {
-      val builderDef =
-        ValDef(Modifiers(), newTermName("builder"), TypeTree(),
-               Apply(Select(Select(json.tree, newTermName("JSArray")), newTermName("newBuilder")),
-                     List(Literal(Constant(values.length)))))
-      
-      val builderAppends: List[Tree] = values.map { expr =>
-        Apply(Select(Ident(newTermName("builder")), newTermName("$plus$eq")), List(expr.tree))
-      } (breakOut)
-      
-      val builderResult = Select(Ident(newTermName("builder")), newTermName("result"))
-      
-      Expr(Block(builderDef :: builderAppends, builderResult))
+      val newBuilderTree = Apply(Select(Select(json.tree, newTermName("JSArray")), newTermName("newBuilder")),
+                                 List(Literal(Constant(values.length))))
+      val buildTree = values.foldLeft(newBuilderTree) { (builderTree, valueExpr) =>
+        Apply(Select(builderTree, newTermName("$plus$eq")), List(valueExpr.tree))
+      }
+      Expr(Select(buildTree, newTermName("result")))
     }
   }
   
   class JSArrayBuilder(sizeHint: Int) extends super.JSArrayBuilder {
     private[this] val values = new ArrayBuffer[JSValue]
     if (sizeHint > 0) values.sizeHint(sizeHint)
-    override def += (value: JSValue): Unit = values += value
+    override def += (value: JSValue): this.type = { values += value; this }
     override def result: JSArray = if (values.length != 0) JSArray(values: _*) else JSArray.empty
   }
   
@@ -186,4 +163,6 @@ class JSONExpr[+Context <: Universe with Singleton, JSON <: JSONFactory with Sin
   
   //override def JSNull: JSNull = reify(json.eval.JSNull)
   override def JSNull: JSNull = Expr(Select(json.tree, newTermName("JSNull")))
+  
+  override def toString: String = "JSONExpr"
 }

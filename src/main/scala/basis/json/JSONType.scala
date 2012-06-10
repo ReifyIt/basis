@@ -7,6 +7,8 @@
 
 package basis.json
 
+import scala.collection.mutable.Builder
+
 import language.experimental.macros
 
 /** A JSON model implemented by general Scala types and supporting compile-time
@@ -62,32 +64,37 @@ object JSONType extends JSONFactory {
   override type JSObject = Map[String, Any]
   
   object JSObject extends JSObjectFactory {
-    override def newBuilder(sizeHint: Int): JSObjectBuilder = new JSObjectBuilder(sizeHint)
+    override def newBuilder(sizeHint: Int = 0): JSObjectBuilder = new JSObjectBuilder(sizeHint)
     override lazy val empty: Map[String, Any] = Map.empty
     override def apply(fields: (String, Any)*): Map[String, Any] = Map(fields: _*)
   }
   
-  final class JSObjectBuilder(sizeHint: Int) extends super.JSObjectBuilder {
-    private[this] val fields = Map.newBuilder[String, Any]
-    if (sizeHint > 0) fields.sizeHint(sizeHint)
-    override def += (name: String, value: Any): Unit = fields += ((name, value))
-    override def result: Map[String, Any] = fields.result
+  final class JSObjectBuilder(sizeHint: Int) extends super.JSObjectBuilder with Builder[(String, Any), JSObject] {
+    private[this] var builder = Map.newBuilder[String, Any]
+    if (sizeHint > 0) builder.sizeHint(sizeHint)
+    override def sizeHint(size: Int): Unit = builder.sizeHint(size)
+    override def += (name: String, value: Any): this.type = { builder += ((name, value)); this }
+    override def += (field: (String, Any)): this.type = { builder += field; this }
+    override def result: Map[String, Any] = builder.result
+    override def clear(): Unit = builder = Map.newBuilder[String, Any]
   }
   
   
   override type JSArray = Seq[Any]
   
   object JSArray extends JSArrayFactory {
-    override def newBuilder(sizeHint: Int): JSArrayBuilder = new JSArrayBuilder(sizeHint)
+    override def newBuilder(sizeHint: Int = 0): JSArrayBuilder = new JSArrayBuilder(sizeHint)
     override lazy val empty: Seq[Any] = Vector.empty
     override def apply(values: Any*): Seq[Any] = Vector(values: _*)
   }
   
-  final class JSArrayBuilder(sizeHint: Int) extends super.JSArrayBuilder {
-    private[this] val values = Vector.newBuilder[Any]
-    if (sizeHint > 0) values.sizeHint(sizeHint)
-    override def += (value: Any): Unit = values += value
-    override def result: Seq[Any] = values.result
+  final class JSArrayBuilder(sizeHint: Int) extends super.JSArrayBuilder with Builder[Any, JSArray] {
+    private[this] var builder = Vector.newBuilder[Any]
+    if (sizeHint > 0) builder.sizeHint(sizeHint)
+    override def sizeHint(size: Int): Unit = builder.sizeHint(size)
+    override def += (value: Any): this.type = { builder += value; this }
+    override def result: Seq[Any] = builder.result
+    override def clear(): Unit = builder = Vector.newBuilder[Any]
   }
   
   
@@ -148,7 +155,7 @@ object JSONType extends JSONFactory {
       import c.mirror._
       val Apply(_, List(Apply(_, literals))) = c.prefix.tree
       val parts = literals map { case Literal(Constant(part: String)) => part }
-      val jsonExpr = new JSONExpr[c.mirror.type, JSONType.type](c.mirror)(c.reify(JSONType))
+      val jsonExpr = new JSONExpr[c.mirror.type, JSONType.type](c.mirror)(reify(JSONType))
       new JSONParser.Interpolating[jsonExpr.type](jsonExpr, parts)(args)
     }
     

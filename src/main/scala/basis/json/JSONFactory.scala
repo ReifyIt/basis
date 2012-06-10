@@ -55,7 +55,7 @@ abstract class JSONFactory {
     * generated code size of interpolated JSON text. */
   abstract class JSObjectBuilder {
     /** Includes a ''name'', ''value'' pair in the constructed JSON object. */
-    def += (name: String, value: JSValue): Unit
+    def += (name: String, value: JSValue): this.type
     
     /** Returns the constructed object and invalidates the builder. */
     def result: JSObject
@@ -91,7 +91,7 @@ abstract class JSONFactory {
     * generated code size of interpolated JSON text. */
   abstract class JSArrayBuilder {
     /** Appends a value to the constructed array. */
-    def += (json: JSValue): Unit
+    def += (json: JSValue): this.type
     
     /** Returns the constructed array and invalidates the builder. */
     def result: JSArray
