@@ -12,7 +12,7 @@ import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-import scala.reflect.ArrayTag
+import scala.reflect.ClassTag
 
 import Endianness._
 
@@ -409,13 +409,13 @@ trait Data extends Any {
     * @param  address   the aligned address to load.
     * @param  count     the number of values to load.
     * @param  struct    the implicit struct.
-    * @param  arrayTag  the reflective type of the array to load.
+    * @param  classTag  the reflective type of the array to load.
     * @return the loaded array of Scala values.
     */
   def loadArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, count: Int)
-      (implicit struct: Struct[T], arrayTag: ArrayTag[T]): Array[T] = {
-    val array = arrayTag.newArray(count)
+      (implicit struct: Struct[T], classTag: ClassTag[T]): Array[T] = {
+    val array = classTag.newArray(count)
     copyToArray[T](address, array, 0, count)
     array
   }
