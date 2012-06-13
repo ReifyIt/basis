@@ -10,20 +10,11 @@ package basis
 /** Contains data types, parsers, and string interpolation macros for
   * '''J'''avascript '''O'''bject '''NO'''tation.
   * 
-  * ==Parsers==
+  * ==String interpolation==
   * 
-  * [[basis.json.JSONParser]] provides a fast, single-character lookahead
-  * recursive descent parser. [[basis.json.JSONContext]] instances compose
-  * with parsers to build JSON values.
-  * 
-  * ==String interpolators==
-  * 
-  * Parsing of interpolated JSON text happens at compile-time when using one
-  * of the following interpolation methods:
-  * 
-  *   - `json""` – statically parses any JSON value.
-  *   - `jsobject""` – statically parses a JSON object.
-  *   - `jsarray""` – statically parses a JSON array.
+  * The `json""` string prefix parses and interpolates JSON text at compile-time.
+  * Interpolated JSON text gets replaced by code that efficiently generates an
+  * equivalent tree at runtime with interpolated arguments built-in.
   * 
   * @example {{{
   * scala> import basis.json._
@@ -32,25 +23,30 @@ package basis
   * scala> json""" [{}, [], "", 0, 0.0, true, false, null] """
   * res0: basis.json.JSArray = [{},[],"",0,0.0,true,false,null]
   * 
-  * scala> def person(name: String, age: Int) = jsobject""" { "name" : $name, "age" : $age } """
+  * scala> def person(name: String, age: Int) = json""" { "name" : $name, "age" : $age } """
   * person: (name: String, age: Int)basis.json.JSObject
   * 
   * scala> person("Bart Simpson", 10)
   * res1: basis.json.JSObject = {"name":"Bart Simpson","age":10}
+  * 
+  * scala> val places = json"""{"San Francisco":{"areaCode":415},"New York":{"areaCode":212}}"""
+  * places: basis.json.JSONTree.JSObject = {"San Francisco":{"areaCode":415},"New York":{"areaCode":212}}
+  * 
+  * scala> for (JSInteger(areaCode) <- places \ "San Francisco" \ "areaCode") yield areaCode + 235
+  * res2: basis.json.JSObject = {"San Francisco":{"areaCode":650},"New York":{"areaCode":212}}
+  * 
+  * scala> (json""" ["Hello", 0, ", ", [null, "world", "!"]] """ \\ +JSString).foldLeft("")(_ + _.value)
+  * res3: String = Hello, world!
   * }}}
   */
 package object json {
   implicit class JSONStringContext(stringContext: StringContext) {
     import language.experimental.macros
     
-    def jsarray(args: JSValue*): JSArray = macro JSONMacros.buildJSArray
-    
-    def jsobject(args: JSValue*): JSObject = macro JSONMacros.buildJSObject
-    
     object json {
-      def apply(args: JSValue*): JSValue = macro JSONMacros.buildJSValue
+      def apply(args: JSValue*): JSValue = macro JSONMacros.buildJSON
       
-      def unapplySeq(jsvalue: JSValue): Option[Seq[JSValue]] = macro JSONMacros.matchJSValue
+      def unapplySeq(jsvalue: JSValue): Option[Seq[JSValue]] = macro JSONMacros.matchJSON
     }
   }
 }

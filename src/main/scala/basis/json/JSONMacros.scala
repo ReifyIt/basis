@@ -14,33 +14,7 @@ import scala.reflect.makro.Context
 import language.experimental.macros
 
 object JSONMacros {
-  def buildJSArray(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSArray] = {
-    import c.universe._
-    val Apply(_, List(Apply(_, literalParts))) = c.prefix.tree
-    val parts = literalParts map { case Literal(Constant(part: String)) => part }
-    
-    val macros = new JSONMacros[c.type](c)
-    val builder = new macros.BuildExpr
-    val interpolator = new JSONInterpolator[builder.type](parts, args)
-    
-    interpolator.skipWhitespace()
-    interpolator.parseJSArray[builder.type](builder)
-  }
-  
-  def buildJSObject(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSObject] = {
-    import c.universe._
-    val Apply(_, List(Apply(_, literalParts))) = c.prefix.tree
-    val parts = literalParts map { case Literal(Constant(part: String)) => part }
-    
-    val macros = new JSONMacros[c.type](c)
-    val builder = new macros.BuildExpr
-    val interpolator = new JSONInterpolator[builder.type](parts, args)
-    
-    interpolator.skipWhitespace()
-    interpolator.parseJSObject[builder.type](builder)
-  }
-  
-  def buildJSValue(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSValue] = {
+  def buildJSON(c: Context)(args: c.Expr[JSValue]*): c.Expr[JSValue] = {
     import c.universe._
     val Select(Apply(_, List(Apply(_, literalParts))), _) = c.prefix.tree
     val parts = literalParts map { case Literal(Constant(part: String)) => part }
@@ -53,7 +27,7 @@ object JSONMacros {
     interpolator.parseJSValue[builder.type](builder)
   }
   
-  def matchJSValue(c: Context)(jsvalue: c.Expr[JSValue]): c.Expr[Option[Seq[JSValue]]] = {
+  def matchJSON(c: Context)(jsvalue: c.Expr[JSValue]): c.Expr[Option[Seq[JSValue]]] = {
     import c.universe.{Expr => _, reify => _, _}
     import c._
     val Select(Apply(_, List(Apply(_, literalParts))), _) = prefix.tree
