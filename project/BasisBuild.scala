@@ -46,7 +46,7 @@ object BasisBuild extends Build {
   lazy val commonSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.scalabasis",
     version      := "0.0-SNAPSHOT",
-    scalaVersion := "2.10.0-SNAPSHOT",
+    scalaVersion := "2.10.0-M4",
     scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
     scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
     target <<= (target, name)(_ / _),
@@ -56,8 +56,7 @@ object BasisBuild extends Build {
         val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
         val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
         Seq("-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
-    },
-    resolvers += Resolver.sonatypeRepo("snapshots")
+    }
     // libraryDependencies += "org.scalatest" %% "scalatest" % "1.7.1" % "test"
   )
   
