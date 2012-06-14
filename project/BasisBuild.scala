@@ -10,15 +10,6 @@ object BasisBuild extends Build {
     )
   )
   
-  lazy val basisAlgebra = Project(
-    id           = "basis-algebra",
-    base         = file("."),
-    dependencies = Seq(basisUtil),
-    settings     = commonSettings ++ Seq(
-      modulePath := "basis/algebra"
-    )
-  )
-  
   lazy val basisMemory = Project(
     id       = "basis-memory",
     base     = file("."),
@@ -35,11 +26,11 @@ object BasisBuild extends Build {
     )
   )
   
-  lazy val basisUtil = Project(
-    id       = "basis-util",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/util"
+  lazy val basisAlgebra = Project(
+    id           = "basis-algebra",
+    base         = file("."),
+    settings     = commonSettings ++ Seq(
+      modulePath := "basis/algebra"
     )
   )
   
@@ -56,8 +47,9 @@ object BasisBuild extends Build {
         val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
         val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
         Seq("-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
-    }
-    // libraryDependencies += "org.scalatest" %% "scalatest" % "1.7.1" % "test"
+    },
+    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-M4" % "1.8-SNAPSHOT" % "test",
+    resolvers += Resolver.sonatypeRepo("snapshots")
   )
   
   val modulePath = SettingKey[String]("module-path", "the relative path of the module's root package")

@@ -62,8 +62,8 @@ trait IntervalRing[S <: OrderedRing with Singleton] extends Ring {
     }
     
     override def hashCode: Int = {
-      import basis.util.MurmurHash._
-      mash(mix(mix(635062501, lower), upper))
+      import scala.util.hashing.MurmurHash3._
+      finalizeHash(mixLast(mix(635062501, lower.##), upper.##), 2)
     }
     
     override def toString: String = {

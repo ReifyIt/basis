@@ -185,15 +185,15 @@ trait MatrixSpace
     }
     
     override def hashCode: Int = {
-      import basis.util.MurmurHash._
+      import scala.util.hashing.MurmurHash3._
       var dim = M * N
       var h = -1997372447
       var k = 0
       while (k < dim) {
-        h = mix(h, this(k))
+        h = mix(h, this(k).##)
         k += 1
       }
-      mash(h)
+      finalizeHash(h, dim)
     }
     
     override def toString: String = {

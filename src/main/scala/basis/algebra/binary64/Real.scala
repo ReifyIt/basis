@@ -54,7 +54,7 @@ final class Real(val value: Double) extends AnyVal with Real.Element {
     case _ => false
   }
   
-  @inline override def hashCode: Int = basis.util.MurmurHash.hash(value)
+  @inline override def hashCode: Int = value.##
   
   @inline override def toString: String = java.lang.Double.toString(value)
 }

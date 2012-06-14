@@ -82,14 +82,14 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
     }
     
     override def hashCode: Int = {
-      import basis.util.MurmurHash._
+      import scala.util.hashing.MurmurHash3._
       var h = -1736520349
       var i = 0
       while (i < N) {
-        h = mix(h, this(i).value)
+        h = mix(h, this(i).##)
         i += 1
       }
-      mash(h)
+      finalizeHash(h, N)
     }
   }
   

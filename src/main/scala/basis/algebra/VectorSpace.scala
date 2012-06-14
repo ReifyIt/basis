@@ -91,14 +91,14 @@ trait VectorSpace[S <: Ring with Singleton] extends AffineSpace[S] with LinearSp
     }
     
     override def hashCode: Int = {
-      import basis.util.MurmurHash._
+      import scala.util.hashing.MurmurHash3._
       var h = -1736520349
       var i = 0
       while (i < N) {
-        h = mix(h, this(i))
+        h = mix(h, this(i).##)
         i += 1
       }
-      mash(h)
+      finalizeHash(h, N)
     }
     
     override def toString: String = {
