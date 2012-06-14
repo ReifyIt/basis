@@ -6,7 +6,8 @@ object BasisBuild extends Build {
     id       = "basis",
     base     = file("."),
     settings = commonSettings ++ Seq(
-      modulePath := "."
+      modulePath := ".",
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4"
     )
   )
   
@@ -19,28 +20,36 @@ object BasisBuild extends Build {
   )
   
   lazy val basisJSON = Project(
-    id           = "basis-json",
-    base         = file("."),
+    id       = "basis-json",
+    base     = file("."),
     settings = commonSettings ++ Seq(
-      modulePath := "basis/json"
+      modulePath := "basis/json",
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4"
     )
   )
   
   lazy val basisAlgebra = Project(
-    id           = "basis-algebra",
-    base         = file("."),
-    settings     = commonSettings ++ Seq(
+    id       = "basis-algebra",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
       modulePath := "basis/algebra"
     )
   )
   
-  lazy val commonSettings = Defaults.defaultSettings ++ Seq(
-    organization := "com.scalabasis",
+  lazy val commonSettings = Defaults.defaultSettings ++ projectSettings ++ compileSettings ++ publishSettings
+  
+  lazy val projectSettings = Seq(
     version      := "0.0-SNAPSHOT",
+    organization := "com.scalabasis",
+    description  := "A library of scalable building blocks",
+    homepage     := Some(url("http://www.scalabasis.com/")),
+    licenses     := Seq("MIT" -> url("http://www.opensource.org/licenses/mit-license.php")),
+  )
+  
+  lazy val compileSettings = Seq(
     scalaVersion := "2.10.0-M4",
     scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
     scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
-    target <<= (target, name)(_ / _),
     scalacOptions ++= Seq("-optimise", "-Xno-forwarders"),
     scalacOptions in (Compile, doc) <++= (version, baseDirectory in LocalProject("basis")) map {
       (version, baseDirectory) =>
@@ -48,8 +57,32 @@ object BasisBuild extends Build {
         val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
         Seq("-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
     },
-    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-M4" % "1.8-SNAPSHOT" % "test",
-    resolvers += Resolver.sonatypeRepo("snapshots")
+    target <<= (target, name)(_ / _),
+    resolvers += Resolver.sonatypeRepo("snapshots"),
+    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-M4" % "1.8-SNAPSHOT" % "test"
+  )
+  
+  lazy val publishSettings = Seq(
+    publishMavenStyle := true,
+    publishTo <<= version { version =>
+      val nexus = "https://oss.sonatype.org/"
+      if (version.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
+      else Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    },
+    pomIncludeRepository := (_ => false),
+    pomExtra := {
+      <scm>
+        <url>git@github.com:scalabasis/basis.git</url>
+        <connection>scm:git:git@github.com:scalabasis/basis.git</connection>
+      </scm>
+      <developers>
+        <developer>
+          <id>c9r</id>
+          <name>Chris Sachs</name>
+          <email>chris@scalabasis.com</email>
+        </developer>
+      </developers>
+    }
   )
   
   val modulePath = SettingKey[String]("module-path", "the relative path of the module's root package")
