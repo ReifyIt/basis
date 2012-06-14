@@ -15,10 +15,10 @@ class DataSpec
     with ShouldMatchers
     with DataBehaviors {
   
-  override def suiteName = "Data Specification"
+  override def suiteName = "Data specification"
   
-  describe("Big-endian Block1 Data") {
-    implicit val allocator = Data.Block1BE
+  describe("Big-endian Byte Data") {
+    implicit val allocator = ByteDataBE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -27,8 +27,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Little-endian Block1 Data") {
-    implicit val allocator = Data.Block1LE
+  describe("Little-endian Byte Data") {
+    implicit val allocator = ByteDataLE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -37,8 +37,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Big-endian Block2 Data") {
-    implicit val allocator = Data.Block2BE
+  describe("Big-endian Short Data") {
+    implicit val allocator = ShortDataBE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -47,8 +47,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Little-endian Block2 Data") {
-    implicit val allocator = Data.Block2LE
+  describe("Little-endian Short Data") {
+    implicit val allocator = ShortDataLE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -57,8 +57,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Big-endian Block4 Data") {
-    implicit val allocator = Data.Block4BE
+  describe("Big-endian Int Data") {
+    implicit val allocator = IntDataBE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -67,8 +67,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Little-endian Block4 Data") {
-    implicit val allocator = Data.Block4LE
+  describe("Little-endian Int Data") {
+    implicit val allocator = IntDataLE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -77,8 +77,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Big-endian Block8 Data") {
-    implicit val allocator = Data.Block8BE
+  describe("Big-endian Long Data") {
+    implicit val allocator = LongDataBE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -87,8 +87,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Little-endian Block8 Data") {
-    implicit val allocator = Data.Block8LE
+  describe("Little-endian Long Data") {
+    implicit val allocator = LongDataLE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -97,8 +97,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Big-endian Chunk Data") {
-    implicit val allocator = Data.ChunkBE
+  describe("Big-endian Buffer Data") {
+    implicit val allocator = BufferDataBE
     
     it should behave like primitiveValueStore(allocator)
     
@@ -107,8 +107,8 @@ class DataSpec
     it should behave like primitiveStructStore(allocator)
   }
   
-  describe("Little-endian Chunk Data") {
-    implicit val allocator = Data.ChunkLE
+  describe("Little-endian Buffer Data") {
+    implicit val allocator = BufferDataLE
     
     it should behave like primitiveValueStore(allocator)
     

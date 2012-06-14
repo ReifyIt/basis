@@ -11,7 +11,7 @@ import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 class StructSpec extends FunSpec with ShouldMatchers {
-  override def suiteName = "Struct Specification"
+  override def suiteName = "Struct specification"
   
   describe("Packed Byte Struct") {
     val struct = Struct.PackedByte
