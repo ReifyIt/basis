@@ -183,9 +183,9 @@ abstract class JSONParser[-Target <: JSONContext] {
         case '\\' =>
           (readChar(): @switch) match {
             case '\"' => s.append('"')
-            case '/'  => s.append('/')
             case '\'' => s.append('\'')
             case '\\' => s.append('\\')
+            case '/'  => s.append('/')
             case 'b'  => s.append('\b')
             case 'f'  => s.append('\f')
             case 'n'  => s.append('\n')
@@ -212,7 +212,7 @@ abstract class JSONParser[-Target <: JSONContext] {
     val s = new java.lang.StringBuilder
     var decimal = false
     
-    if (lookahead == '-') s.append(readChar())
+    if (lookahead == '+' || lookahead == '-') s.append(readChar())
     
     if (lookahead == '0') s.append(readChar())
     else if (lookahead >= '1' && lookahead <= '9') {
@@ -230,6 +230,7 @@ abstract class JSONParser[-Target <: JSONContext] {
     }
     
     if (lookahead == 'e' || lookahead == 'E') {
+      decimal = true // TODO: enable integers with positive exponents
       s.append(readChar())
       if (lookahead == '+' || lookahead == '-') s.append(readChar())
       if (lookahead >= '0' && lookahead <= '9') s.append(readChar())

@@ -57,6 +57,8 @@ final class JSString(val value: String) extends JSValue {
 }
 
 object JSString {
+  lazy val empty: JSString = new JSString("")
+  
   def apply(s: String): JSString = new JSString(s)
   
   def unapply(json: JSString): Some[String] = Some(json.value)

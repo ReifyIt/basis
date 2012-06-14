@@ -160,6 +160,8 @@ object JSValue {
   
   implicit def apply(value: Double): JSDecimal = new JSDecimal(value)
   
+  implicit def apply(value: Boolean): JSBoolean = if (value) JSTrue else JSFalse
+  
   def parse(string: String): JSValue = {
     val parser = new JSONReader[JSON.type](string)
     parser.skipWhitespace()
