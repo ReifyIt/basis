@@ -64,7 +64,7 @@ trait MatrixSpace
         entries(k) = (this(k) + that(k)).asInstanceOf[AnyRef]
         k += 1
       }
-      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     override def unary_- : Matrix = {
@@ -74,7 +74,7 @@ trait MatrixSpace
         entries(k) = (-this(k)).asInstanceOf[AnyRef]
         k += 1
       }
-      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     override def - (that: Matrix): Matrix = {
@@ -85,7 +85,7 @@ trait MatrixSpace
         entries(k) = (this(k) - that(k)).asInstanceOf[AnyRef]
         k += 1
       }
-      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     override def :* (scalar: Scalar): Matrix = {
@@ -95,7 +95,7 @@ trait MatrixSpace
         entries(k) = (this(k) * scalar).asInstanceOf[AnyRef]
         k += 1
       }
-      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     override def *: (scalar: Scalar): Matrix = {
@@ -105,7 +105,7 @@ trait MatrixSpace
         entries(k) = (scalar * this(k)).asInstanceOf[AnyRef]
         k += 1
       }
-      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+      Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     def :⋅ (vector: Row): Col = {
@@ -168,7 +168,7 @@ trait MatrixSpace
         }
         j += 1
       }
-      Transpose(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+      Transpose(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     override def equals(other: Any): Boolean = other match {
@@ -237,10 +237,9 @@ trait MatrixSpace
   
   def N: Int = Row.N
   
-  def apply(entries: TraversableOnce[Scalar]): Matrix
+  def apply(entries: Scalar*): Matrix
   
-  def rows(vectors: TraversableOnce[Row]): Matrix = {
-    val rows = vectors.toSeq
+  def rows(rows: Row*): Matrix = {
     if (rows.length != M) throw new DimensionException
     val entries = new Array[AnyRef](M * N)
     var k = 0
@@ -256,11 +255,10 @@ trait MatrixSpace
       }
       i += 1
     }
-    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
   }
   
-  def cols(vectors: TraversableOnce[Col]): Matrix = {
-    val cols = vectors.toSeq
+  def cols(cols: Col*): Matrix = {
     if (cols.length != N) throw new DimensionException
     val entries = new Array[AnyRef](M * N)
     var j = 0
@@ -276,7 +274,7 @@ trait MatrixSpace
       }
       j += 1
     }
-    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
   }
   
   override def zero: Matrix = {
@@ -287,12 +285,12 @@ trait MatrixSpace
       entries(i) = z
       i += 1
     }
-    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
   }
   
   def compose[U <: VectorSpace[S] with Singleton]
       (that: MatrixSpace[U, V, S]): MatrixSpace[U, W, S] =
-    new generic.FMxN[U, W, S](Scalar)(that.Row, Col)
+    Col ⨯ that.Row
   
   def product[U <: VectorSpace[S] with Singleton](
       matrixA: A#Matrix forSome { type A <: MatrixSpace[U, W, S] },
@@ -325,6 +323,6 @@ trait MatrixSpace
       i += 1
       i0 += N
     }
-    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
   }
 }

@@ -24,18 +24,11 @@ class RMxN[V <: RealVectorSpace with Singleton, W <: RealVectorSpace with Single
   
   override lazy val zero: Matrix = super.zero
   
-  override def apply(entries: TraversableOnce[Real]): Matrix =
+  override def apply(entries: Real*): Matrix =
     new Matrix(entries.map(_.toDouble).toArray[Double])
   
   override def apply(entries: Array[Double]): Matrix =
     new Matrix(entries)
-  
-  def apply(entries: Double*): Matrix =
-    new Matrix(entries.toArray[Double])
-  
-  def rows(vectors: Row*): Matrix = rows(vectors)
-  
-  def cols(vectors: Col*): Matrix = cols(vectors)
   
   override def toString: String = "RMxN"+"("+ Row +", "+ Col +")"
 }

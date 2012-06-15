@@ -244,13 +244,12 @@ trait Matrix4x4Space
   override def M: Int = 4
   override def N: Int = 4
   
-  override def apply(entries: TraversableOnce[Scalar]): Matrix = {
-    val xs = entries.toSeq
-    if (xs.length != 16) throw new DimensionException
-    apply(xs( 0), xs( 1), xs( 2), xs( 3),
-          xs( 4), xs( 5), xs( 6), xs( 7),
-          xs( 8), xs( 9), xs(10), xs(11),
-          xs(12), xs(13), xs(14), xs(15))
+  override def apply(entries: Scalar*): Matrix = {
+    if (entries.length != 16) throw new DimensionException
+    apply(entries( 0), entries( 1), entries( 2), entries( 3),
+          entries( 4), entries( 5), entries( 6), entries( 7),
+          entries( 8), entries( 9), entries(10), entries(11),
+          entries(12), entries(13), entries(14), entries(15))
   }
   
   def apply(
@@ -259,10 +258,9 @@ trait Matrix4x4Space
       _3_1: Scalar, _3_2: Scalar, _3_3: Scalar, _3_4: Scalar,
       _4_1: Scalar, _4_2: Scalar, _4_3: Scalar, _4_4: Scalar): Matrix
   
-  override def rows(vectors: TraversableOnce[Row]): Matrix = {
-    val vs = vectors.toSeq
-    if (vs.length != 4) throw new DimensionException
-    rows(vs(0), vs(1), vs(2), vs(3))
+  override def rows(rows: Row*): Matrix = {
+    if (rows.length != 4) throw new DimensionException
+    this.rows(rows(0), rows(1), rows(2), rows(3))
   }
   
   def rows(row1: Row, row2: Row, row3: Row, row4: Row): Matrix =
@@ -271,10 +269,9 @@ trait Matrix4x4Space
           row3.x, row3.y, row3.z, row3.w,
           row4.x, row4.y, row4.z, row4.w)
   
-  override def cols(vectors: TraversableOnce[Col]): Matrix = {
-    val ws = vectors.toSeq
-    if (ws.length != 4) throw new DimensionException
-    cols(ws(0), ws(1), ws(2), ws(3))
+  override def cols(cols: Col*): Matrix = {
+    if (cols.length != 4) throw new DimensionException
+    this.cols(cols(0), cols(1), cols(2), cols(3))
   }
   
   def cols(col1: Col, col2: Col, col3: Col, col4: Col): Matrix =

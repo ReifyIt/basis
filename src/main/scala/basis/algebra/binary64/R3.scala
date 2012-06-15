@@ -56,5 +56,12 @@ object R3 extends Vector3Space[Real.type] with RealVectorSpace {
   override def apply(x: Real, y: Real, z: Real): Vector =
     new Vector(x, y, z)
   
+  override def ⨯ (that: RealVectorSpace): RealMatrixSpace[that.type, this.type] = {
+    if (that.isInstanceOf[R3.type]) R3x3.asInstanceOf[RealMatrixSpace[that.type, this.type]]
+    else super.⨯(that)
+  }
+  
+  def ⨯ (that: R3.type): R3x3.type = R3x3
+  
   override def toString: String = "R3"
 }

@@ -168,12 +168,11 @@ trait Matrix3x3Space
   override def M: Int = 3
   override def N: Int = 3
   
-  override def apply(entries: TraversableOnce[Scalar]): Matrix = {
-    val xs = entries.toSeq
-    if (xs.length != 9) throw new DimensionException
-    apply(xs(0), xs(1), xs(2),
-          xs(3), xs(4), xs(5),
-          xs(6), xs(7), xs(8))
+  override def apply(entries: Scalar*): Matrix = {
+    if (entries.length != 9) throw new DimensionException
+    apply(entries(0), entries(1), entries(2),
+          entries(3), entries(4), entries(5),
+          entries(6), entries(7), entries(8))
   }
   
   def apply(
@@ -181,10 +180,9 @@ trait Matrix3x3Space
       _2_1: Scalar, _2_2: Scalar, _2_3: Scalar,
       _3_1: Scalar, _3_2: Scalar, _3_3: Scalar): Matrix
   
-  override def rows(vectors: TraversableOnce[Row]): Matrix = {
-    val vs = vectors.toSeq
-    if (vs.length != 3) throw new DimensionException
-    rows(vs(0), vs(1), vs(2))
+  override def rows(rows: Row*): Matrix = {
+    if (rows.length != 3) throw new DimensionException
+    this.rows(rows(0), rows(1), rows(2))
   }
   
   def rows(row1: Row, row2: Row, row3: Row): Matrix =
@@ -192,10 +190,9 @@ trait Matrix3x3Space
           row2.x, row2.y, row2.z,
           row3.x, row3.y, row3.z)
   
-  override def cols(vectors: TraversableOnce[Col]): Matrix = {
-    val ws = vectors.toSeq
-    if (ws.length != 3) throw new DimensionException
-    cols(ws(0), ws(1), ws(2))
+  override def cols(cols: Col*): Matrix = {
+    if (cols.length != 3) throw new DimensionException
+    this.cols(cols(0), cols(1), cols(2))
   }
   
   def cols(col1: Col, col2: Col, col3: Col): Matrix =

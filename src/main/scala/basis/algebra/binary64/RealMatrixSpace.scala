@@ -136,6 +136,11 @@ trait RealMatrixSpace
      Row(coords)
     }
     
+    def ⋅ [U <: RealVectorSpace with Singleton]
+        (that: B#Matrix forSome { type B <: RealMatrixSpace[U, V] })
+      : C#Matrix forSome { type C <: RealMatrixSpace[U, W] } =
+      compose(that.Matrix).product(this, that)
+    
     override def T: Transpose.Matrix = {
       val entries = new Array[Double](N * M)
       var k = 0
@@ -192,12 +197,11 @@ trait RealMatrixSpace
   
   override def Scalar = Real
   
-  override def apply(entries: TraversableOnce[Real]): Matrix
+  override def apply(entries: Real*): Matrix
   
   def apply(entries: Array[Double]): Matrix
   
-  override def rows(vectors: TraversableOnce[Row]): Matrix = {
-    val rows = vectors.toSeq
+  override def rows(rows: Row*): Matrix = {
     if (rows.length != M) throw new DimensionException
     val entries = new Array[Double](M * N)
     var k = 0
@@ -216,8 +220,7 @@ trait RealMatrixSpace
     apply(entries)
   }
   
-  override def cols(vectors: TraversableOnce[Col]): Matrix = {
-    val cols = vectors.toSeq
+  override def cols(cols: Col*): Matrix = {
     if (cols.length != N) throw new DimensionException
     val entries = new Array[Double](M * N)
     var j = 0
@@ -247,7 +250,7 @@ trait RealMatrixSpace
   
   def compose[U <: RealVectorSpace with Singleton]
       (that: RealMatrixSpace[U, V]): RealMatrixSpace[U, W] =
-    new RMxN[U, W](that.Row, Col)
+    Col ⨯ that.Row
   
   override def product[U <: VectorSpace[Real.type] with Singleton](
       matrixA: A#Matrix forSome { type A <: MatrixSpace[U, W, Real.type] },

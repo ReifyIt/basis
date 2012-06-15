@@ -106,4 +106,13 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
   def apply(coords: Array[Double]): Vector
   
   override def zero: Vector = apply(new Array[Double](N))
+  
+  override def ⨯ (that: VectorSpace[Real.type]): MatrixSpace[that.type, this.type, Real.type] = {
+    if (that.isInstanceOf[RealVectorSpace])
+      (this ⨯ that.asInstanceOf[RealVectorSpace]).asInstanceOf[MatrixSpace[that.type, this.type, Real.type]]
+    else super.⨯(that)
+  }
+  
+  def ⨯ (that: RealVectorSpace): RealMatrixSpace[that.type, this.type] =
+    new RMxN[that.type, this.type](that, this)
 }

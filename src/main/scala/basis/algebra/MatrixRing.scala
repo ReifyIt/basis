@@ -27,8 +27,6 @@ trait MatrixRing
   
   override val Transpose: MatrixRing[W, V, S]
   
-  override def apply(entries: TraversableOnce[Scalar]): Matrix
-  
   override def unit: Matrix = {
     val z = Scalar.zero.asInstanceOf[AnyRef]
     val u = Scalar.unit.asInstanceOf[AnyRef]
@@ -45,6 +43,6 @@ trait MatrixRing
       j = 0
       i += 1
     }
-    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]])
+    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
   }
 }

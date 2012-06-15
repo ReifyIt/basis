@@ -24,15 +24,8 @@ class FMxN[V <: VectorSpace[S] with Singleton, W <: VectorSpace[S] with Singleto
   
   override lazy val zero: Matrix = super.zero
   
-  override def apply(entries: TraversableOnce[Scalar]): Matrix =
-    new Matrix(entries.asInstanceOf[TraversableOnce[AnyRef]].toArray[AnyRef])
-  
-  def apply(entries: Scalar*): Matrix =
+  override def apply(entries: Scalar*): Matrix =
     new Matrix(entries.asInstanceOf[Seq[AnyRef]].toArray[AnyRef])
-  
-  def rows(vectors: Row*): Matrix = rows(vectors)
-  
-  def cols(vectors: Col*): Matrix = cols(vectors)
   
   override def toString: String = "FMxN"+"("+ Scalar +")"+"("+ Row +", "+ Col +")"
 }

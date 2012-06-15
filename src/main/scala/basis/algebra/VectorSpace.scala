@@ -137,4 +137,7 @@ trait VectorSpace[S <: Ring with Singleton] extends AffineSpace[S] with LinearSp
   }
   
   override def origin: Point = zero
+  
+  def ⨯ (that: VectorSpace[S]): MatrixSpace[that.type, this.type, S] =
+    new generic.FMxN[that.type, this.type, S](Scalar)(that, this)
 }
