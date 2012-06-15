@@ -13,7 +13,7 @@ import org.scalatest.matchers.ShouldMatchers
 trait StructBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def structType[T](value: T)(implicit allocator: Allocator, struct: Struct[T]) {
+  def StructType[T](value: T)(implicit allocator: Allocator, struct: Struct[T]) {
     it("should store values") {
       val data = Data.alloc[T](1L)
       struct.store(data, 0L, value)

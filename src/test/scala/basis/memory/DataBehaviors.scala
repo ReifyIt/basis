@@ -19,7 +19,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
   import ShouldMatchers._
   import HexMatchers._
   
-  def primitiveValueStore(implicit allocator: Allocator) {
+  def PrimitiveValueStore(implicit allocator: Allocator) {
     it("should store Byte values") {
       val data = Data.alloc[Byte](1L)
       data.storeByte(0L, 0xF7.toByte)
@@ -211,7 +211,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
     }
   }
   
-  def bigEndianValueStore(implicit allocator: Allocator) {
+  def BigEndianValueStore(implicit allocator: Allocator) {
     it("should be big-endian") {
       val data = Data.alloc[Byte](0L)
       data.endian should be (BigEndian)
@@ -334,7 +334,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
     }
   }
   
-  def littleEndianValueStore(implicit allocator: Allocator) {
+  def LittleEndianValueStore(implicit allocator: Allocator) {
     it("should be little-endian") {
       val data = Data.alloc[Byte](0L)
       data.endian should be (LittleEndian)
@@ -457,89 +457,75 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
     }
   }
   
-  def primitiveStructStore(implicit allocator: Allocator) {
+  def PrimitiveStructStore(implicit allocator: Allocator) {
     describe("Packed Byte Struct") {
       val struct = Struct.PackedByte
-      
-      it should behave like structType(0x7F.toByte)(allocator, struct)
+      it should behave like StructType(0x7F.toByte)(allocator, struct)
     }
     
     describe("Padded Short Struct") {
       val struct = Struct.PaddedShort
-      
-      it should behave like structType(0x7F6F.toShort)(allocator, struct)
+      it should behave like StructType(0x7F6F.toShort)(allocator, struct)
     }
     
     describe("Padded Int Struct") {
       val struct = Struct.PaddedInt
-      
-      it should behave like structType(0x7F6F5F4F)(allocator, struct)
+      it should behave like StructType(0x7F6F5F4F)(allocator, struct)
     }
     
     describe("Padded Long Struct") {
       val struct = Struct.PaddedLong
-      
-      it should behave like structType(0x7F6F5F4F3F2F1F0FL)(allocator, struct)
+      it should behave like StructType(0x7F6F5F4F3F2F1F0FL)(allocator, struct)
     }
     
     describe("Padded Char Struct") {
       val struct = Struct.PaddedChar
-      
-      it should behave like structType(0x7F6F.toChar)(allocator, struct)
+      it should behave like StructType(0x7F6F.toChar)(allocator, struct)
     }
     
     describe("Padded Float Struct") {
       val struct = Struct.PaddedFloat
-      
-      it should behave like structType(intBitsToFloat(0x7F6F5F4F))(allocator, struct)
+      it should behave like StructType(intBitsToFloat(0x7F6F5F4F))(allocator, struct)
     }
     
     describe("Padded Double Struct") {
       val struct = Struct.PaddedDouble
-      
-      it should behave like structType(longBitsToDouble(0x7F6F5F4F3F2F1F0FL))(allocator, struct)
+      it should behave like StructType(longBitsToDouble(0x7F6F5F4F3F2F1F0FL))(allocator, struct)
     }
     
     describe("Packed Short Struct") {
       val struct = Struct.PackedShort
-      
-      it should behave like structType(0x7F6F.toShort)(allocator, struct)
+      it should behave like StructType(0x7F6F.toShort)(allocator, struct)
     }
     
     describe("Packed Int Struct") {
       val struct = Struct.PackedInt
-      
-      it should behave like structType(0x7F6F5F4F)(allocator, struct)
+      it should behave like StructType(0x7F6F5F4F)(allocator, struct)
     }
     
     describe("Packed Long Struct") {
       val struct = Struct.PackedLong
-      
-      it should behave like structType(0x7F6F5F4F3F2F1F0FL)(allocator, struct)
+      it should behave like StructType(0x7F6F5F4F3F2F1F0FL)(allocator, struct)
     }
     
     describe("Packed Char Struct") {
       val struct = Struct.PackedChar
-      
-      it should behave like structType(0x7F6F.toChar)(allocator, struct)
+      it should behave like StructType(0x7F6F.toChar)(allocator, struct)
     }
     
     describe("Packed Float Struct") {
       val struct = Struct.PackedFloat
-      
-      it should behave like structType(intBitsToFloat(0x7F6F5F4F))(allocator, struct)
+      it should behave like StructType(intBitsToFloat(0x7F6F5F4F))(allocator, struct)
     }
     
     describe("Packed Double Struct") {
       val struct = Struct.PackedDouble
-      
-      it should behave like structType(longBitsToDouble(0x7F6F5F4F3F2F1F0FL))(allocator, struct)
+      it should behave like StructType(longBitsToDouble(0x7F6F5F4F3F2F1F0FL))(allocator, struct)
     }
     
     describe("Packed Boolean Struct") {
       val struct = Struct.PackedBoolean
-      
-      it should behave like structType(true)(allocator, struct)
+      it should behave like StructType(true)(allocator, struct)
     }
   }
 }

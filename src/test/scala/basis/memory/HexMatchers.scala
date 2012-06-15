@@ -10,7 +10,8 @@ package basis.memory
 import java.lang.Float.floatToRawIntBits
 import java.lang.Double.doubleToRawLongBits
 
-import org.scalatest.matchers.{Matcher, MatchResult}
+import org.scalatest.matchers.Matcher
+import org.scalatest.matchers.MatchResult
 
 trait HexMatchers {
   def equalByte(right: Byte) = new Matcher[Byte] {

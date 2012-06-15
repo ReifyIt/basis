@@ -13,13 +13,63 @@ import org.scalatest.matchers.ShouldMatchers
 class JSONStringContextSpec extends FunSpec with ShouldMatchers {
   override def suiteName = "JSONStringContext specification"
   
+  describe("json\"\" strings") {
+    it("should parse preceding line comments") {
+      json"""// comment
+      true"""
+    }
+    
+    it("should parse succeeding line comments") {
+      json"true // comment"
+    }
+    
+    it("should parse preceding block comments") {
+      json"/* comment */ true"
+    }
+    
+    it("should parse succeeding block comments") {
+      json"true /* comment */"
+    }
+    
+    it("should parse line comments in objects") {
+      json""" { // here
+        "true"  // here
+        :       // here
+        true    // here
+        ,       // here
+        "false" // here
+        :       // here
+        false   // and here
+      } """
+    }
+    
+    it("should parse line comments in arrays") {
+      json""" [ // here
+      true      // here
+      ,         // here
+      false     // and here
+      ] """
+    }
+    
+    it("should parse block comments in objects") {
+      json""" {
+        /* here */ "true"  /* here */ : /* here */ true  /* and here */ ,
+        /* here */ "false" /* here */ : /* here */ false /* and here */
+      } """
+    }
+    
+    it("should parse block comments in arrays") {
+      json"[ /* here */ true /* here */ , /* here */ false /* and here */ ]"
+    }
+  }
+  
   describe("json\"\" literals") {
     it("should parse empty objects") {
-      json" { } " should equal (JSObject.empty)
+      json"{}" should equal (JSObject.empty)
     }
     
     it("should parse empty arrays") {
-      json" [ ] " should equal (JSArray.empty)
+      json"[]" should equal (JSArray.empty)
     }
     
     it("should parse empty strings") {
@@ -27,85 +77,85 @@ class JSONStringContextSpec extends FunSpec with ShouldMatchers {
     }
     
     it("should parse positive integers") {
-      json" 0 "  should equal (JSInteger(0))
-      json" 1 "  should equal (JSInteger(1))
-      json" 5 "  should equal (JSInteger(5))
-      json" 10 " should equal (JSInteger(10))
-      json" 11 " should equal (JSInteger(11))
-      json" 15 " should equal (JSInteger(15))
+      json"0"  should equal (JSInteger(0))
+      json"1"  should equal (JSInteger(1))
+      json"5"  should equal (JSInteger(5))
+      json"10" should equal (JSInteger(10))
+      json"11" should equal (JSInteger(11))
+      json"15" should equal (JSInteger(15))
     }
     
     it("should parse negative integers") {
-      json" -0 "  should equal (JSInteger(-0))
-      json" -1 "  should equal (JSInteger(-1))
-      json" -5 "  should equal (JSInteger(-5))
-      json" -10 " should equal (JSInteger(-10))
-      json" -11 " should equal (JSInteger(-11))
-      json" -15 " should equal (JSInteger(-15))
+      json"-0"  should equal (JSInteger(-0))
+      json"-1"  should equal (JSInteger(-1))
+      json"-5"  should equal (JSInteger(-5))
+      json"-10" should equal (JSInteger(-10))
+      json"-11" should equal (JSInteger(-11))
+      json"-15" should equal (JSInteger(-15))
     }
     
     it("should parse positive decimals") {
-      json" 0.0 "   should equal (JSDecimal(0.0))
-      json" 0.5 "   should equal (JSDecimal(0.5))
-      json" 1.0 "   should equal (JSDecimal(1.0))
-      json" 1.5 "   should equal (JSDecimal(1.5))
-      json" 10.0 "  should equal (JSDecimal(10.0))
-      json" 10.5 "  should equal (JSDecimal(10.5))
-      json" 10.00 " should equal (JSDecimal(10.00))
-      json" 10.50 " should equal (JSDecimal(10.50))
+      json"0.0"   should equal (JSDecimal(0.0))
+      json"0.5"   should equal (JSDecimal(0.5))
+      json"1.0"   should equal (JSDecimal(1.0))
+      json"1.5"   should equal (JSDecimal(1.5))
+      json"10.0"  should equal (JSDecimal(10.0))
+      json"10.5"  should equal (JSDecimal(10.5))
+      json"10.00" should equal (JSDecimal(10.00))
+      json"10.50" should equal (JSDecimal(10.50))
     }
     
     it("should parse negative decimals") {
-      json" -0.0 "   should equal (JSDecimal(-0.0))
-      json" -0.5 "   should equal (JSDecimal(-0.5))
-      json" -1.0 "   should equal (JSDecimal(-1.0))
-      json" -1.5 "   should equal (JSDecimal(-1.5))
-      json" -10.0 "  should equal (JSDecimal(-10.0))
-      json" -10.5 "  should equal (JSDecimal(-10.5))
-      json" -10.00 " should equal (JSDecimal(-10.00))
-      json" -10.50 " should equal (JSDecimal(-10.50))
+      json"-0.0"   should equal (JSDecimal(-0.0))
+      json"-0.5"   should equal (JSDecimal(-0.5))
+      json"-1.0"   should equal (JSDecimal(-1.0))
+      json"-1.5"   should equal (JSDecimal(-1.5))
+      json"-10.0"  should equal (JSDecimal(-10.0))
+      json"-10.5"  should equal (JSDecimal(-10.5))
+      json"-10.00" should equal (JSDecimal(-10.00))
+      json"-10.50" should equal (JSDecimal(-10.50))
     }
     
     it("should parse positive decimals with exponents") {
-      json" 4e2 "    should equal (JSDecimal(4e2))
-      json" 4E2 "    should equal (JSDecimal(4E2))
-      json" 4e+2 "   should equal (JSDecimal(4e+2))
-      json" 4E+2 "   should equal (JSDecimal(4E+2))
-      json" 4e-2 "   should equal (JSDecimal(4e-2))
-      json" 4E-2 "   should equal (JSDecimal(4E-2))
-      json" 4.0e2 "  should equal (JSDecimal(4.0e2))
-      json" 4.0E2 "  should equal (JSDecimal(4.0E2))
-      json" 4.0e+2 " should equal (JSDecimal(4.0e+2))
-      json" 4.0E+2 " should equal (JSDecimal(4.0E+2))
-      json" 4.0e-2 " should equal (JSDecimal(4.0e-2))
-      json" 4.0E-2 " should equal (JSDecimal(4.0E-2))
+      json"4e2"    should equal (JSDecimal(4e2))
+      json"4E2"    should equal (JSDecimal(4E2))
+      json"4e+2"   should equal (JSDecimal(4e+2))
+      json"4E+2"   should equal (JSDecimal(4E+2))
+      json"4e-2"   should equal (JSDecimal(4e-2))
+      json"4E-2"   should equal (JSDecimal(4E-2))
+      json"4.0e2"  should equal (JSDecimal(4.0e2))
+      json"4.0E2"  should equal (JSDecimal(4.0E2))
+      json"4.0e+2" should equal (JSDecimal(4.0e+2))
+      json"4.0E+2" should equal (JSDecimal(4.0E+2))
+      json"4.0e-2" should equal (JSDecimal(4.0e-2))
+      json"4.0E-2" should equal (JSDecimal(4.0E-2))
     }
     
     it("should parse negative decimals with exponents") {
-      json" -4e2 "    should equal (JSDecimal(-4e2))
-      json" -4E2 "    should equal (JSDecimal(-4E2))
-      json" -4e+2 "   should equal (JSDecimal(-4e+2))
-      json" -4E+2 "   should equal (JSDecimal(-4E+2))
-      json" -4e-2 "   should equal (JSDecimal(-4e-2))
-      json" -4E-2 "   should equal (JSDecimal(-4E-2))
-      json" -4.0e2 "  should equal (JSDecimal(-4.0e2))
-      json" -4.0E2 "  should equal (JSDecimal(-4.0E2))
-      json" -4.0e+2 " should equal (JSDecimal(-4.0e+2))
-      json" -4.0E+2 " should equal (JSDecimal(-4.0E+2))
-      json" -4.0e-2 " should equal (JSDecimal(-4.0e-2))
-      json" -4.0E-2 " should equal (JSDecimal(-4.0E-2))
+      json"-4e2"    should equal (JSDecimal(-4e2))
+      json"-4E2"    should equal (JSDecimal(-4E2))
+      json"-4e+2"   should equal (JSDecimal(-4e+2))
+      json"-4E+2"   should equal (JSDecimal(-4E+2))
+      json"-4e-2"   should equal (JSDecimal(-4e-2))
+      json"-4E-2"   should equal (JSDecimal(-4E-2))
+      json"-4.0e2"  should equal (JSDecimal(-4.0e2))
+      json"-4.0E2"  should equal (JSDecimal(-4.0E2))
+      json"-4.0e+2" should equal (JSDecimal(-4.0e+2))
+      json"-4.0E+2" should equal (JSDecimal(-4.0E+2))
+      json"-4.0e-2" should equal (JSDecimal(-4.0e-2))
+      json"-4.0E-2" should equal (JSDecimal(-4.0E-2))
     }
     
     it("should parse \"true\"") {
-      json" true " should equal (JSTrue)
+      json"true" should equal (JSTrue)
     }
     
     it("should parse \"false\"") {
-      json" false " should equal (JSFalse)
+      json"false" should equal (JSFalse)
     }
     
     it("should parse \"null\"") {
-      json" null " should equal (JSNull)
+      json"null" should equal (JSNull)
     }
     
     it("should orderly parse non-empty objects") {
@@ -167,47 +217,40 @@ class JSONStringContextSpec extends FunSpec with ShouldMatchers {
     }
   }
   
-  describe("json\"\" interpolation") {
+  describe("json\"\" interpolations") {
     it("should interpolate JSObject") {
       val x = JSObject.empty
-      json"$x"   should equal (x)
-      json" $x " should equal (x)
+      json"$x" should equal (x)
     }
     
     it("should interpolate JSArray") {
       val x = JSArray.empty
-      json"$x"   should equal (x)
-      json" $x " should equal (x)
+      json"$x" should equal (x)
     }
     
     it("should interpolate JSString") {
       val x = JSString.empty
-      json"$x"   should equal (x)
-      json" $x " should equal (x)
+      json"$x" should equal (x)
     }
     
     it("should interpolate JSInteger") {
       val x = JSInteger(1)
-      json"$x"   should equal (x)
-      json" $x " should equal (x)
+      json"$x" should equal (x)
     }
     
     it("should interpolate JSDecimal") {
       val x = JSDecimal(1.0)
-      json"$x"   should equal (x)
-      json" $x " should equal (x)
+      json"$x" should equal (x)
     }
     
     it("should interpolate JSBoolean") {
       val x = JSTrue
-      json"$x"   should equal (x)
-      json" $x " should equal (x)
+      json"$x" should equal (x)
     }
     
     it("should interpolate JSNull") {
       val x = JSNull
-      json"$x"   should equal (x)
-      json" $x " should equal (x)
+      json"$x" should equal (x)
     }
     
     it("should interpolate Map[String, JSValue] like JSObject") {
