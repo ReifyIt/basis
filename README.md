@@ -1,30 +1,33 @@
-### Mission
+# Scala Basis
 
-This library intends to serve as a basis for building Scala application frameworks. The library focuses on providing well designed solutions to common problems. The motivation for this project stems from a belief that good performance and high level design aren't mutually exclusive goals. By its nature Scala casts doubt on long-lived dogmas of software design–principally among them the extant view that design doesn't matter. I believe that Scala is the catalyst of a coming renaissance in software design. Design is the compression of complexity into its fundamental state. Shepherded by design, Scala leads the way towards compressing the bloated mess that is today's software landscape into something much smaller and much simpler. And much more powerful.
+A set of _independent_ software packages that combine together to fill a space–this the Scala Basis framework strives to be. The name _Basis_ references the analogous concept from linear algebra. Like the _vectors_ of a basis, packages in this library aim for fundamental simplicity and independence. And like a _vector space_, the framework's usefulness derives from the combination of its orthogonal elements. Components are _designed_ together–not _tied_ together.
 
-### Design principles
+## Basis Components
 
-These ideas guide the development of this library:
+### \[[API](http://scalabasis.github.com/latest/api/#basis.algebra.package)\] [Algebra Basis](https://github.com/scalabasis/basis/wiki/Algebra-Basis)
 
-1. Components should be simple, composable, and performant. Power comes from composability. Composability requires simplicity. And simplicity begets composability and performance. It's a virtuous cycle.
-2. Be bold in making design decisions. Many decisions are easy for the developer of a library to make but difficult for the library's users to make. Make it easy for users to do the right thing.
-3. One size does not fit all. Making it easy for users to do the right thing doesn't require you to force them to do it your way.
+Elegant math does not usually translate into elegant code. But this can change. The Algebra Basis library provides abstract algebraic interfaces with tightly coupled implementations. You can write generic mathematical code that performs well too. Here's a quick taste:
 
-The process of design involves balancing these principles so that they all apply. A first attempt at solving a problem often only satisfies one of these goals. It takes wisdom and diligence to arrive at a solution satisfying all three. I stake no claims to success in this endeavor. But I will always try.
+```scala
+scala> def combine[V <: LinearSpace[_] with Singleton](a: V#Scalar, x: V#Vector, b: V#Scalar, y: V#Vector): V#Vector = a *: x + b *: y
+combine: [V <: basis.algebra.LinearSpace[_] with Singleton](a: V#Scalar, x: V#Vector, b: V#Scalar, y: V#Vector)V#Vector
 
-### Core packages
+scala> combine[R2.type](3, R2(5, 7), 9, R2(0, 1)) // works with any linear space
+res0: basis.algebra.binary64.R2.Vector = R2(15.0, 30.0)
 
-The library so far includes the following packages:
+scala> (R2⨯R3)(1, 0, 0,  0, 1, 0) ⋅ (R3⨯R2)(1, 0,  0, 1,  0, 0) // type safe, generic matrix composition
+res1: basis.algebra.binary64.RealMatrixSpace[basis.algebra.binary64.R2.type,basis.algebra.binary64.R2.type]#Matrix = R2x2(1.0, 0.0,  0.0, 1.0)
+```
 
-- \[[API](http://scalabasis.github.com/latest/api/#basis.memory.package)\] [basis.memory](https://github.com/scalabasis/basis/wiki/basis.memory) – implements an abstract memory model with struct typeclasses and store-by-value collections.
-- \[[API](http://scalabasis.github.com/latest/api/#basis.json.package)\] [basis.json](https://github.com/scalabasis/basis/wiki/basis.json) – supports compile-time JSON interpolation and pattern matching, and jquery-style tree selectors.
-- \[[API](http://scalabasis.github.com/latest/api/#basis.algebra.package)\] [basis.algebra](https://github.com/scalabasis/basis/wiki/basis.algebra) – implements efficient, family-polymorphic mathematical structures.
+To use the Algebra Basis library with Scala 2.10.0-M4 or later, add this to your SBT build definition:
 
-### Key Features
+```scala
+libraryDependencies += "com.scalabasis" % "basis-algebra_2.10" % "0.0-SNAPSHOT"
+```
 
-#### Value collections
+### \[[API](http://scalabasis.github.com/latest/api/#basis.memory.package)\] [Memory Basis](https://github.com/scalabasis/basis/wiki/Memory-Basis)
 
-Application that deal with large sets of small values (images, vertex arrays, etc.) may benefit from [store-by-value](https://github.com/scalabasis/basis/wiki/basis.memory) collections. Combining the expressiveness of Scala collections with the memory footprint of primitive arrays takes little effort on your part.
+Sometimes you need low-level memory access. The Memory Basis library enables this with little-to-no overhead. But beyond immitating C, Memory Basis lets you abstract over Struct types and Data implementations. This culminates in full-blown Scala collections that transparently store their elements by value. It works like this:
 
 ```scala
 scala> val xs = RawSeq(1, 2, 3, 4, 5) // create a sequence of Int values.
@@ -37,9 +40,15 @@ scala> val zs = ys map (_.toDouble) // map Strings to Doubles.
 zs: basis.memory.collection.RawSeq[Double] = ValBuffer(1.0, 2.0, 3.0, 4.0, 5.0) // stored by value again.
 ```
 
-#### JSON interpolation
+To use the Memory Basis library with Scala 2.10.0-M4 or later, add this to your SBT build definition:
 
-Interpolating JSON text makes it easy to construct JSON trees. And because parsing happens at compile-time you can have confidence that your application will always produce valid results. [Efficient bytecode](https://github.com/scalabasis/basis/wiki/basis.json#wiki-Bytecode_generation) replaces the interpolated text.
+```scala
+libraryDependencies += "com.scalabasis" % "basis-memory_2.10" % "0.0-SNAPSHOT"
+```
+
+### \[[API](http://scalabasis.github.com/latest/api/#basis.json.package)\] [JSON Basis](https://github.com/scalabasis/basis/wiki/JSON-Basis)
+
+You can't hide from JSON; it's ubiquitous. But you can deal with it simply and elegantly. The JSON Basis library has a fast JSON parser. But why repeatedly parse templates at run-time when you can parse them once at compile-time? JSON Basis does this too. And it throws in jquery-style selectors to boot. Take a look:
 
 ```scala
 def message(id: Int, content: String) = json""" {
@@ -48,12 +57,16 @@ def message(id: Int, content: String) = json""" {
 } """
 ```
 
-JSON trees are immutable so you can safely share them and cache them. Yet you can still easily make targeted updates to [selections](https://github.com/scalabasis/basis/wiki/basis.json#wiki-Selections).
-
 ```scala
 scala> val wall = JSArray(message(0, "Hello"), message(1, "First post"))
 wall: basis.json.JSArray = [{"id":0,"content":"Hello"},{"id":1,"content":"First post"}]
 
 scala> for (post <- wall \\ +JSObject if post("id") == json"1") yield message(1, "[$redacted]\n")
 res0: basis.json.JSArray = [{"id":0,"content":"Hello"},{"id":1,"content":"[$redacted]\n"}]
+```
+
+To use the JSON Basis library with Scala 2.10.0-M4 or later, add this to your SBT build definition:
+
+```scala
+libraryDependencies += "com.scalabasis" % "basis-json_2.10" % "0.0-SNAPSHOT"
 ```
