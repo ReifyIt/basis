@@ -7,7 +7,7 @@ object BasisBuild extends Build {
     base     = file("."),
     settings = commonSettings ++ Seq(
       modulePath := ".",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4"
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4" % "provided"
     )
   )
   
@@ -24,7 +24,7 @@ object BasisBuild extends Build {
     base     = file("."),
     settings = commonSettings ++ Seq(
       modulePath := "basis/json",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4"
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4" % "provided"
     )
   )
   
@@ -43,7 +43,7 @@ object BasisBuild extends Build {
     organization := "com.scalabasis",
     description  := "A library of scalable building blocks",
     homepage     := Some(url("http://www.scalabasis.com/")),
-    licenses     := Seq("MIT" -> url("http://www.opensource.org/licenses/mit-license.php")),
+    licenses     := Seq("MIT" -> url("http://www.opensource.org/licenses/mit-license.php"))
   )
   
   lazy val compileSettings = Seq(
