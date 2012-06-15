@@ -23,7 +23,10 @@ object JSNumber {
   def parse(string: String): JSNumber = {
     val parser = new JSONReader[JSON.type](string)
     parser.skipWhitespace()
-    parser.parseJSNumber[JSON.type](JSON)
+    val jsnumber = parser.parseJSNumber[JSON.type](JSON)
+    parser.skipWhitespace()
+    parser.parseEnd()
+    jsnumber
   }
   
   object unary_+ extends PartialFunction[Any, JSNumber] {

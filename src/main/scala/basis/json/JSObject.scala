@@ -337,7 +337,10 @@ object JSObject {
   def parse(string: String): JSObject = {
     val parser = new JSONReader[JSON.type](string)
     parser.skipWhitespace()
-    parser.parseJSObject[JSON.type](JSON)
+    val jsobject = parser.parseJSObject[JSON.type](JSON)
+    parser.skipWhitespace()
+    parser.parseEnd()
+    jsobject
   }
   
   def newBuilder: JSObjectBuilder = new JSObjectBuilder

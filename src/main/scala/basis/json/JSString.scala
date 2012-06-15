@@ -66,7 +66,10 @@ object JSString {
   def parse(string: String): JSString = {
     val parser = new JSONReader[JSON.type](string)
     parser.skipWhitespace()
-    parser.parseJSString[JSON.type](JSON)
+    val jsstring = parser.parseJSString[JSON.type](JSON)
+    parser.skipWhitespace()
+    parser.parseEnd()
+    jsstring
   }
   
   object unary_+ extends PartialFunction[Any, JSString] {

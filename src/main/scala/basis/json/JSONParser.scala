@@ -42,13 +42,40 @@ abstract class JSONParser[-Target <: JSONContext] {
     parseJSValue(target)
   }
   
-  /** Consumes zero or more whitespace characters. */
+  /** Skips zero or more whitespace characters and/or comments. */
   def skipWhitespace() {
     while (lookahead match {
-      case ' ' | '\t' | '\n' | '\r' => true
+      case ' ' | '\t' | '\n' | '\r' | '/' => true
       case _ => false
-    }) readChar()
+    }) {
+      if (lookahead == '/') skipComment()
+      else readChar()
+    }
   }
+  
+  /** Skips a line or block comment. */
+  protected def skipComment() {
+    if (lookahead == '/') readChar() else syntaxError("Expected comment")
+    if (lookahead == '/') {
+      readChar()
+      while (lookahead > 0 && lookahead != '\r' && lookahead != '\n') readChar()
+      if (lookahead == '\r') readChar()
+      if (lookahead == '\n') readChar()
+    }
+    else if (lookahead == '*') {
+      readChar()
+      do if (lookahead <= 0) syntaxError("Unclosed comment")
+      while (readChar() != '*' || readChar() != '/')
+    }
+    else syntaxError("Expected comment")
+  }
+  
+  /** Fails if the parser has not consumed all its input. Call this method
+    * after parsing your JSON value and after one final `skipWhitespace()`
+    * to ensure that no extraneous input remains. Extra input usually
+    * indicates an error that the user would like to know about (such as
+    * preemptively closing an object or array). */
+  def parseEnd(): Unit = if (lookahead >= 0) syntaxError("Unexpected input")
   
   /** Consumes the next character in the input stream and fails if the consumed
     * character doesn't match the given character. */
@@ -112,13 +139,14 @@ abstract class JSONParser[-Target <: JSONContext] {
     }
     
     if (lookahead == '}') readChar()
-    else syntaxError("Unterminated object")
+    else syntaxError("Unclosed object")
     
     builder.result
   }
   
   /** Parses an object field from the input stream and adds it to `builder`. */
   protected def parseJSField[T <: Target](target: T): (String, T#JSValue) = {
+    if (lookahead == '}') syntaxError("Trailing comma")
     if (lookahead != '\"') syntaxError("Expected field")
     val name = parseString()
     skipWhitespace()
@@ -149,13 +177,14 @@ abstract class JSONParser[-Target <: JSONContext] {
     while (lookahead == ',') {
       readChar()
       skipWhitespace()
+      if (lookahead == ']') syntaxError("Trailing comma")
       builder += parseJSArrayValue(target, index)
       index += 1
       skipWhitespace()
     }
     
     if (lookahead == ']') readChar()
-    else syntaxError("Unterminated array")
+    else syntaxError("Unclosed array")
     
     builder.result
   }
@@ -202,7 +231,7 @@ abstract class JSONParser[-Target <: JSONContext] {
     }
     
     if (lookahead == '\"') readChar()
-    else syntaxError("Unterminated string")
+    else syntaxError("Unclosed string")
     
     s.toString
   }
@@ -214,7 +243,10 @@ abstract class JSONParser[-Target <: JSONContext] {
     
     if (lookahead == '+' || lookahead == '-') s.append(readChar())
     
-    if (lookahead == '0') s.append(readChar())
+    if (lookahead == '0') {
+      s.append(readChar())
+      if (lookahead >= '0' && lookahead <= '9') syntaxError("Leading zero")
+    }
     else if (lookahead >= '1' && lookahead <= '9') {
       s.append(readChar())
       while (lookahead >= '0' && lookahead <= '9') s.append(readChar())
@@ -230,7 +262,7 @@ abstract class JSONParser[-Target <: JSONContext] {
     }
     
     if (lookahead == 'e' || lookahead == 'E') {
-      decimal = true // TODO: enable integers with positive exponents
+      decimal = true
       s.append(readChar())
       if (lookahead == '+' || lookahead == '-') s.append(readChar())
       if (lookahead >= '0' && lookahead <= '9') s.append(readChar())

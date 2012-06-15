@@ -165,7 +165,10 @@ object JSValue {
   def parse(string: String): JSValue = {
     val parser = new JSONReader[JSON.type](string)
     parser.skipWhitespace()
-    parser.parseJSValue[JSON.type](JSON)
+    val jsvalue = parser.parseJSValue[JSON.type](JSON)
+    parser.skipWhitespace()
+    parser.parseEnd()
+    jsvalue
   }
   
   object unary_+ extends PartialFunction[Any, JSValue] {

@@ -24,7 +24,10 @@ object JSONMacros {
     val interpolator = new JSONInterpolator[builder.type](parts, args)
     
     interpolator.skipWhitespace()
-    interpolator.parseJSValue[builder.type](builder)
+    val buildExpr = interpolator.parseJSValue[builder.type](builder)
+    interpolator.skipWhitespace()
+    interpolator.parseEnd()
+    buildExpr
   }
   
   def matchJSON(c: Context)(jsvalue: c.Expr[JSValue]): c.Expr[Option[Seq[JSValue]]] = {
@@ -40,10 +43,12 @@ object JSONMacros {
     
     val macros = new JSONMacros[c.type](c)
     val matcher = new macros.MatchExpr(jsvalue)
-    val matchParser = new macros.MatchParser(parts, bindingsExpr)
+    val parser = new macros.MatchParser(parts, bindingsExpr)
     
-    matchParser.skipWhitespace()
-    val matchExpr = matchParser.parseJSValue(matcher)
+    parser.skipWhitespace()
+    val matchExpr = parser.parseJSValue(matcher)
+    parser.skipWhitespace()
+    parser.parseEnd()
     
     reify {
       bindingsDefExpr.splice

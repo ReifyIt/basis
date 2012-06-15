@@ -163,7 +163,10 @@ object JSArray {
   def parse(string: String): JSArray = {
     val parser = new JSONReader[JSON.type](string)
     parser.skipWhitespace()
-    parser.parseJSArray[JSON.type](JSON)
+    val jsarray = parser.parseJSArray[JSON.type](JSON)
+    parser.skipWhitespace()
+    parser.parseEnd()
+    jsarray
   }
   
   def newBuilder: JSArrayBuilder = new JSArrayBuilder
