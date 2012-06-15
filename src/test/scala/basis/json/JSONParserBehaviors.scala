@@ -14,6 +14,18 @@ trait JSONParserBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
   def ParsesComments(parse: String => JSValue) {
+    it("should parse empty line comments") {
+      parse("true //")
+    }
+    
+    it("should parse empty block comments") {
+      parse("true /**/")
+    }
+    
+    it("should parse block comments containing slashes and asterisks") {
+      parse("true /** /** /* / * // ** **/")
+    }
+    
     it("should parse preceding line comments") {
       parse("""// comment
       true""")

@@ -23,11 +23,17 @@ object JSONMacros {
     val builder = new macros.BuildExpr
     val interpolator = new JSONInterpolator[builder.type](parts, args)
     
-    interpolator.skipWhitespace()
-    val buildExpr = interpolator.parseJSValue[builder.type](builder)
-    interpolator.skipWhitespace()
-    interpolator.parseEnd()
-    buildExpr
+    try {
+      interpolator.skipWhitespace()
+      val buildExpr = interpolator.parseJSValue[builder.type](builder)
+      interpolator.skipWhitespace()
+      interpolator.parseEnd()
+      buildExpr
+    }
+    catch {
+      case e: JSONException => c.abort(c.enclosingPosition, e.getMessage)
+      case e => throw e
+    }
   }
   
   def matchJSON(c: Context)(jsvalue: c.Expr[JSValue]): c.Expr[Option[Seq[JSValue]]] = {
@@ -45,10 +51,17 @@ object JSONMacros {
     val matcher = new macros.MatchExpr(jsvalue)
     val parser = new macros.MatchParser(parts, bindingsExpr)
     
-    parser.skipWhitespace()
-    val matchExpr = parser.parseJSValue(matcher)
-    parser.skipWhitespace()
-    parser.parseEnd()
+    val matchExpr = try {
+      parser.skipWhitespace()
+      val matchExpr = parser.parseJSValue(matcher)
+      parser.skipWhitespace()
+      parser.parseEnd()
+      matchExpr
+    }
+    catch {
+      case e: JSONException => c.abort(c.enclosingPosition, e.getMessage)
+      case e => throw e
+    }
     
     reify {
       bindingsDefExpr.splice

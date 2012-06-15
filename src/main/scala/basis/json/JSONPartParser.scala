@@ -47,7 +47,7 @@ class JSONPartParser[-Target <: JSONContext](parts: Seq[String]) extends JSONPar
   
   override protected final def readChar(): Char = {
     val c = nextChar
-    if (c < 0) syntaxError("Unexpected end of input")
+    if (c < 0) syntaxError("unexpected end of input")
     processNextChar()
     c.toChar
   }

@@ -26,7 +26,7 @@ class JSONReader[-Target <: JSONContext](reader: Reader) extends JSONParser[Targ
   
   override protected final def readChar(): Char = {
     val c = nextChar
-    if (c < 0) syntaxError("Unexpected end of input")
+    if (c < 0) syntaxError("unexpected end of input")
     nextChar = reader.read()
     if (c == '\n' || (c == '\r' && nextChar != '\n')) { line += 1; column = 0 }
     else column += 1
