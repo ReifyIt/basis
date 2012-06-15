@@ -2,9 +2,11 @@
 
 A set of _independent_ software packages that combine together to fill a space–this the Scala Basis framework strives to be. The name _Basis_ references the analogous concept from linear algebra. Like the _vectors_ of a basis, packages in this library aim for fundamental simplicity and independence. And like a _vector space_, the framework's usefulness derives from the combination of its orthogonal elements. Components are _designed_ together–not _tied_ together.
 
+**Quick Overview**: [Algebra](#Algebra) – [Memory](#Memory) – [JSON](#JSON)
+
 ## Basis Components
 
-### \[[API](http://scalabasis.github.com/latest/api/#basis.algebra.package)\] [Algebra Basis](https://github.com/scalabasis/basis/wiki/Algebra-Basis)
+### <a name="Algebra"/>\[[API](http://scalabasis.github.com/latest/api/#basis.algebra.package)\] [Algebra Basis](https://github.com/scalabasis/basis/wiki/Algebra-Basis)
 
 Elegant math does not usually translate into elegant code. But this can change. The Algebra Basis library provides abstract algebraic interfaces with tightly coupled implementations. You can write generic mathematical code that performs well too. Here's a quick taste:
 
@@ -25,7 +27,7 @@ To use the Algebra Basis library with Scala 2.10.0-M4 or later, add this to your
 libraryDependencies += "com.scalabasis" % "basis-algebra_2.10" % "0.0-SNAPSHOT"
 ```
 
-### \[[API](http://scalabasis.github.com/latest/api/#basis.memory.package)\] [Memory Basis](https://github.com/scalabasis/basis/wiki/Memory-Basis)
+### <a name="Memory"/>\[[API](http://scalabasis.github.com/latest/api/#basis.memory.package)\] [Memory Basis](https://github.com/scalabasis/basis/wiki/Memory-Basis)
 
 Sometimes you need low-level memory access. The Memory Basis library enables this with little-to-no overhead. But beyond immitating C, Memory Basis lets you abstract over Struct types and Data implementations. This culminates in full-blown Scala collections that transparently store their elements by value. It works like this:
 
@@ -46,7 +48,7 @@ To use the Memory Basis library with Scala 2.10.0-M4 or later, add this to your 
 libraryDependencies += "com.scalabasis" % "basis-memory_2.10" % "0.0-SNAPSHOT"
 ```
 
-### \[[API](http://scalabasis.github.com/latest/api/#basis.json.package)\] [JSON Basis](https://github.com/scalabasis/basis/wiki/JSON-Basis)
+### <a name="JSON"/>\[[API](http://scalabasis.github.com/latest/api/#basis.json.package)\] [JSON Basis](https://github.com/scalabasis/basis/wiki/JSON-Basis)
 
 You can't hide from JSON; it's ubiquitous. But you can deal with it simply and elegantly. The JSON Basis library has a fast JSON parser. But why repeatedly parse templates at run-time when you can parse them once at compile-time? JSON Basis does this too. And it throws in jquery-style selectors to boot. Take a look:
 
