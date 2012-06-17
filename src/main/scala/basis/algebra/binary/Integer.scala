@@ -202,7 +202,7 @@ final class Integer private
     i -= 1
     if (sign < 0) s.append('-')
     while (i >= 0) {
-      s.append("0123456789abcdefghijklmnopqrstuvwxyz".charAt(digits(i)))
+      s.append("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(digits(i)))
       i -= 1
     }
   }
@@ -275,9 +275,9 @@ object Integer extends OrderedRing {
   
   def apply(cs: CharSequence, radix: Int = 10): Integer = {
     def parseDigit(c: Char): Int =
-      if (c >= '0' && c <= '0' + math.min(radix, 9)) c - '0'
-      else if (c >= 'A' && c <= 'A' + (radix - 10)) c - 'A'
-      else if (c >= 'a' && c <= 'a' + (radix - 10)) c - 'a'
+      if (c >= '0' && c < '0' + math.min(radix, 10)) c - '0'
+      else if (c >= 'A' && c < 'A' + (radix - 10)) 10 + c - 'A'
+      else if (c >= 'a' && c < 'a' + (radix - 10)) 10 + c - 'a'
       else throw new NumberFormatException(s"'$c' is not a base-$radix digit")
     assert(2 <= radix && radix <= 36)
     var i = 0
@@ -399,7 +399,7 @@ object Integer extends OrderedRing {
       }
       while (i > 1 && w(i - 1) == 0L) i -= 1
       w.size = i
-      w.sign = u.sign
+      w.sign = if (w.size == 1 && w(0) == 0L) 1 else u.sign
       w
     }
   }
@@ -432,7 +432,7 @@ object Integer extends OrderedRing {
       }
       while (i > 1 && w(i - 1) == 0L) i -= 1
       w.size = i
-      w.sign = u.sign
+      w.sign = if (w.size == 1 && w(0) == 0L) 1 else u.sign
       w
     }
   }
