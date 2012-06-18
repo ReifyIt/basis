@@ -10,17 +10,17 @@ package binary
 
 import language.implicitConversions
 
-final class Integer private
+final class Integer private[algebra]
     (private var words: Array[Long],
      private var size: Int,
      private var _sign: Int)
   extends Integer.Element {
   
-  private def this() = this(null, 0, 1)
+  private[algebra] def this() = this(null, 0, 1)
   
   def sign: Int = _sign
   
-  private def sign_= (sign: Int): Unit = _sign = sign
+  private[algebra] def sign_= (sign: Int): Unit = _sign = sign
   
   override def + (that: Integer): Integer = Integer.add(this, that, new Integer)
   
@@ -95,9 +95,22 @@ final class Integer private
     s.toString
   }
   
+  def toInt: Int = toLong.toInt
+  
   def toLong: Long = {
     if (size == 1) sign * this(0)
     else sign * ((this(1) << 63) | this(0))
+  }
+  
+  def toFloat: Float = toDouble.toFloat
+  
+  def toDouble: Double = {
+    if (size == 1) (sign * this(0)).toDouble
+    else {
+      val n = size - 1
+      val shift = 63 * n - (63 - java.lang.Long.numberOfLeadingZeros(this(n)))
+      binary.mkDouble(sign * (this >>> shift)(0), 2, shift)
+    }
   }
   
   def toBytes: Array[Byte] = {
@@ -226,9 +239,9 @@ final class Integer private
 object Integer extends OrderedRing {
   override type Vector = Integer
   
-  override lazy val zero: Integer = apply(0L)
+  override val zero: Integer = apply(0L)
   
-  override lazy val unit: Integer = apply(1L)
+  override val unit: Integer = apply(1L)
   
   implicit def apply(value: Long): Integer = {
     if (value == Long.MinValue) {
@@ -785,4 +798,6 @@ object Integer extends OrderedRing {
   @inline private def Mask63 = 0x7FFFFFFFFFFFFFFFL
   @inline private def Mask32 = 0xFFFFFFFFL
   @inline private def Mask8  = 0xFFL
+  
+  override def toString: String = "Integer'"
 }
