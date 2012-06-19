@@ -11,12 +11,20 @@ package binary
 import language.implicitConversions
 
 final class Integer private[algebra]
-    (private var words: Array[Long],
-     private var size: Int,
-     private var _sign: Int)
+    (private[this] var _words: Array[Long],
+     private[this] var _size: Int,
+     private[this] var _sign: Int)
   extends Integer.Element {
   
   private[algebra] def this() = this(null, 0, 1)
+  
+  private[algebra] def words: Array[Long] = _words
+  
+  private[algebra] def words_= (words: Array[Long]): Unit = _words = words
+  
+  private[algebra] def size: Int = _size
+  
+  private[algebra] def size_= (size: Int): Unit = _size = size
   
   def sign: Int = _sign
   
@@ -109,7 +117,7 @@ final class Integer private[algebra]
     else {
       val n = size - 1
       val shift = 63 * n - (63 - java.lang.Long.numberOfLeadingZeros(this(n)))
-      binary.mkDouble(sign * (this >>> shift)(0), 2, shift)
+      Numeral.mkDouble(sign * (this >>> shift)(0), 2, shift)
     }
   }
   
@@ -201,30 +209,14 @@ final class Integer private[algebra]
     i == n && this(i) == java.lang.Long.highestOneBit(this(i))
   }
   
-  def writeString(s: Appendable, radix: Int) {
-    assert(2 <= radix && radix <= 36)
-    val digitLength = length(radix)
-    val digits = new Array[Byte](math.max(1, digitLength))
-    val q = new Integer
-    digits(0) = Integer.divide(this, radix, q).toByte
-    var i = 1
-    while (q.size > 1 || q(0) != 0L) {
-      digits(i) = Integer.divide(q, radix, q).toByte
-      i += 1
-    }
-    i -= 1
-    if (sign < 0) s.append('-')
-    while (i >= 0) {
-      s.append("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(digits(i)))
-      i -= 1
-    }
-  }
+  def writeString(s: Appendable, radix: Int = 10): Unit =
+    Numeral.writePositionalNumber(s, radix)(this)
   
-  private def apply(i: Int): Long = words(i)
+  private[algebra] def apply(i: Int): Long = words(i)
   
-  private def update(i: Int, value: Long): Unit = words(i) = value
+  private[algebra] def update(i: Int, value: Long): Unit = words(i) = value
   
-  private def ensureCapacity(capacity: Int) {
+  private[algebra] def ensureCapacity(capacity: Int) {
     if (words == null || words.length < capacity) {
       var n = capacity - 1
       n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
@@ -799,5 +791,5 @@ object Integer extends OrderedRing {
   @inline private def Mask32 = 0xFFFFFFFFL
   @inline private def Mask8  = 0xFFL
   
-  override def toString: String = "Integer'"
+  override def toString: String = "Integer"
 }
