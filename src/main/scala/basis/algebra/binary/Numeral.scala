@@ -21,9 +21,10 @@ private[algebra] object Numeral {
       digits(i) = Integer.divide(q, radix, q).toByte
       i += 1
     }
-    i -= 1
     
     if (significand.sign < 0) s.append('-')
+    if (i == radixPoint) s.append('0').append('.')
+    i -= 1
     while (i >= 0) {
       val digit = digits(i)
       assume(0 <= digit && digit < radix)
@@ -36,11 +37,17 @@ private[algebra] object Numeral {
   def writeExponentialNumber(s: Appendable, radix: Int = 10)(significand: Integer, error: Integer, base: Int, exponent: Int) {
     if (radix != base) sys.error("change of base not yet implemented")
     if (error == Integer.zero) {
-      writePositionalNumber(s, radix)(significand)
-      if (exponent != 0) s.append('⨯').append(base.toString).append('^').append(exponent.toString)
+      val digitLength = math.max(1, significand.length(radix))
+      val radixPoint =
+        if (digitLength == 0) 0
+        else if (exponent < 0 && (-exponent <= digitLength)) -exponent
+        else digitLength - 1
+      val e = exponent + radixPoint
+      
+      writePositionalNumber(s, radix, radixPoint)(significand)
+      if (e != 0) s.append('⨯').append(base.toString).append('^').append(e.toString)
     }
     else {
-      assume(radix == base)
       val errorDigits = error.length(radix)
       val mantissa = if (significand.sign > 0) Integer(radix / 2) else Integer(-radix / 2)
       Integer.scale(mantissa, radix, errorDigits - 1, mantissa)

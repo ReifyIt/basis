@@ -150,6 +150,12 @@ abstract class FloatingPoint extends RealField {
       s.toString
     }
     
+    def toInt: Int = toDouble.toInt
+    
+    def toLong: Long = toDouble.toLong
+    
+    def toFloat: Float = toDouble.toFloat
+    
     def toDouble: Double = {
       if (this == NaN) Double.NaN
       else {
@@ -201,6 +207,12 @@ abstract class FloatingPoint extends RealField {
       val error = Numeral.mkLong(math.ulp(value), radix, -exponent) + 1
       apply(Integer(significand), Integer(error), exponent)
     }
+  }
+  
+  def apply(string: String): Vector = {
+    val parser = new NumeralReader(string, radix)
+    val (significand, error, exponent) = parser.parseExponentialNumber()
+    apply(significand, error, exponent)
   }
   
   private[algebra] def normalize(significand: Integer, error: Integer, exponent: Int): Vector = {

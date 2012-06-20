@@ -278,28 +278,9 @@ object Integer extends OrderedRing {
     if (sign > 0) result else subtract(result, unit, result)
   }
   
-  def apply(cs: CharSequence, radix: Int = 10): Integer = {
-    def parseDigit(c: Char): Int =
-      if (c >= '0' && c < '0' + math.min(radix, 10)) c - '0'
-      else if (c >= 'A' && c < 'A' + (radix - 10)) 10 + c - 'A'
-      else if (c >= 'a' && c < 'a' + (radix - 10)) 10 + c - 'a'
-      else throw new NumberFormatException(s"'$c' is not a base-$radix digit")
-    assert(2 <= radix && radix <= 36)
-    var i = 0
-    val sign = cs.charAt(0) match {
-      case '-' => i += 1; -1
-      case '+' => i += 1;  1
-      case _ => 1
-    }
-    val w = Integer(0L)
-    while (i < cs.length) {
-      val digit = parseDigit(cs.charAt(i))
-      multiply(w, radix, w)
-      add(w, digit, w)
-      i += 1
-    }
-    w.sign = if (w.size == 1 && w(0) == 0L) 1 else sign
-    w
+  def apply(string: String, radix: Int = 10): Integer = {
+    val parser = new NumeralReader(string, radix)
+    parser.parsePositionalNumber()
   }
   
   private[algebra] def copy(u: Integer, w: Integer): w.type = {
