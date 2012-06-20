@@ -172,9 +172,26 @@ abstract class FloatingPoint extends RealField {
       apply(significand.scale(radix, scale), Integer.unit, exponent - scale)
     }
     
+    def exact: Vector = {
+      val errorDigits = error.length(radix)
+      val significand = if (this.significand.sign > 0) Integer(radix / 2) else Integer(-radix / 2)
+      Integer.scale(significand, radix, errorDigits - 1, significand)
+      Integer.add(this.significand, significand, significand)
+      Integer.scale(significand, radix, -errorDigits, significand)
+      apply(significand, Integer.zero, exponent + errorDigits)
+    }
+    
     def writeString(s: Appendable, radix: Int = 10) {
       if (this == NaN) s.append("NaN")
-      else Numeral.writeExponentialNumber(s, radix)(significand, error, FloatingPoint.this.radix, exponent)
+      else if (error == Integer.zero) {
+        val writer = new NumeralWriter(s, radix)
+        writer.writePositionalNotation(significand, exponent)
+      }
+      else {
+        val x = exact
+        val writer = new NumeralWriter(s, radix)
+        writer.writeScientificNotation(x.significand, x.exponent)
+      }
     }
   }
   
@@ -211,7 +228,7 @@ abstract class FloatingPoint extends RealField {
   
   def apply(string: String): Vector = {
     val parser = new NumeralReader(string, radix)
-    val (significand, error, exponent) = parser.parseExponentialNumber()
+    val (significand, error, exponent) = parser.parseFloatingPoint()
     apply(significand, error, exponent)
   }
   

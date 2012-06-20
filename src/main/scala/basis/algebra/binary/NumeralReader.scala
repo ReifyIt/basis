@@ -8,11 +8,8 @@
 package basis.algebra
 package binary
 
-import java.io.Reader
-import java.io.StringReader
-
-private[algebra]class NumeralReader(reader: Reader, val radix: Int) {
-  def this(string: String, radix: Int) = this(new StringReader(string), radix: Int)
+private[algebra] class NumeralReader(reader: java.io.Reader, val radix: Int) {
+  def this(string: String, radix: Int) = this(new java.io.StringReader(string), radix: Int)
   
   assert(2 <= radix && radix <= 36)
   
@@ -37,14 +34,14 @@ private[algebra]class NumeralReader(reader: Reader, val radix: Int) {
     else -1
   }
   
-  def parsePositionalNumber(): Integer = {
+  def parseInteger(): Integer = {
     val significand = Integer(0L)
     val sign = parseWhole(significand)
     significand.sign = if (significand.size == 1 && significand(0) == 0L) 1 else sign
     significand
   }
   
-  def parseExponentialNumber(): (Integer, Integer, Int) = {
+  def parseFloatingPoint(): (Integer, Integer, Int) = {
     val significand = Integer(0L)
     val error = Integer(0L)
     var exponent = 0

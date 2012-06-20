@@ -9,64 +9,6 @@ package basis.algebra
 package binary
 
 private[algebra] object Numeral {
-  def writePositionalNumber(s: Appendable, radix: Int = 10, radixPoint: Int = 0)(significand: Integer) {
-    require(2 <= radix && radix <= 36)
-    val digitLength = math.max(1, significand.length(radix))
-    val digits = new Array[Byte](digitLength)
-    
-    val q = new Integer
-    digits(0) = Integer.divide(significand, radix, q).toByte
-    var i = 1
-    while (q.size > 1 || q(0) != 0L) {
-      digits(i) = Integer.divide(q, radix, q).toByte
-      i += 1
-    }
-    
-    if (significand.sign < 0) s.append('-')
-    if (i == radixPoint) s.append('0').append('.')
-    i -= 1
-    while (i >= 0) {
-      val digit = digits(i)
-      assume(0 <= digit && digit < radix)
-      s.append((if (digit < 10) '0' + digit else 'A' + digit - 10).toChar)
-      if (i > 0 && i == radixPoint) s.append('.')
-      i -= 1
-    }
-  }
-  
-  def writeExponentialNumber(s: Appendable, radix: Int = 10)(significand: Integer, error: Integer, base: Int, exponent: Int) {
-    if (radix != base) sys.error("change of base not yet implemented")
-    if (error == Integer.zero) {
-      val digitLength = math.max(1, significand.length(radix))
-      val radixPoint =
-        if (digitLength == 0) 0
-        else if (exponent < 0 && (-exponent <= digitLength)) -exponent
-        else digitLength - 1
-      val e = exponent + radixPoint
-      
-      writePositionalNumber(s, radix, radixPoint)(significand)
-      if (e != 0) s.append('⨯').append(base.toString).append('^').append(e.toString)
-    }
-    else {
-      val errorDigits = error.length(radix)
-      val mantissa = if (significand.sign > 0) Integer(radix / 2) else Integer(-radix / 2)
-      Integer.scale(mantissa, radix, errorDigits - 1, mantissa)
-      Integer.add(significand, mantissa, mantissa)
-      Integer.scale(mantissa, radix, -errorDigits, mantissa)
-      val sigfigs = exponent + errorDigits
-      
-      val digitLength = math.max(1, mantissa.length(radix))
-      val radixPoint =
-        if (digitLength == 0) 0
-        else if (sigfigs < 0 && (-sigfigs < digitLength)) -sigfigs
-        else digitLength - 1
-      val e = sigfigs + radixPoint
-      
-      writePositionalNumber(s, radix, radixPoint)(mantissa)
-      if (e != 0) s.append('⨯').append(base.toString).append('^').append(e.toString)
-    }
-  }
-  
   /** Return the closest Double value to `a * b^n`. */
   def mkDouble(a: Long, b: Int, n: Int): Double = {
     if (a == 0L) 0.0

@@ -209,8 +209,10 @@ final class Integer private[algebra]
     i == n && this(i) == java.lang.Long.highestOneBit(this(i))
   }
   
-  def writeString(s: Appendable, radix: Int = 10): Unit =
-    Numeral.writePositionalNumber(s, radix)(this)
+  def writeString(s: Appendable, radix: Int = 10) {
+    val writer = new NumeralWriter(s, radix)
+    writer.writeInteger(this)
+  }
   
   private[algebra] def apply(i: Int): Long = words(i)
   
@@ -280,7 +282,7 @@ object Integer extends OrderedRing {
   
   def apply(string: String, radix: Int = 10): Integer = {
     val parser = new NumeralReader(string, radix)
-    parser.parsePositionalNumber()
+    parser.parseInteger()
   }
   
   private[algebra] def copy(u: Integer, w: Integer): w.type = {
