@@ -43,7 +43,7 @@ private[algebra] class NumeralWriter(s: Appendable, val radix: Int) {
     val digitLength = math.max(1, significand.length(radix))
     val digits = new Array[Byte](digitLength)
     
-    val q = new Integer
+    val q = Integer.alloc
     digits(0) = Integer.divide(significand, radix, q).toByte
     var i = 1
     while (q.size > 1 || q(0) != 0L) {

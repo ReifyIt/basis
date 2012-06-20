@@ -23,10 +23,10 @@ abstract class FloatingPoint extends RealField {
       else if (this.exponent > that.exponent) that + this
       else {
         val scale = that.exponent - this.exponent
-        val significand = new Integer
+        val significand = Integer.alloc
         Integer.scale(that.significand, radix, scale, significand)
         Integer.add(this.significand, significand, significand)
-        val error = new Integer
+        val error = Integer.alloc
         Integer.scale(that.error, radix, scale, error)
         Integer.add(this.error, error, error)
         normalize(significand, error, this.exponent)
@@ -76,10 +76,10 @@ abstract class FloatingPoint extends RealField {
           else {
             val min = FloatingPoint.this.inverse(upper, 2 * digits)
             val max = FloatingPoint.this.inverse(lower, 2 * digits)
-            val significand = new Integer
+            val significand = Integer.alloc
             Integer.add(min, max, significand)
             Integer.shiftRight(significand, 1, significand)
-            val error = new Integer
+            val error = Integer.alloc
             Integer.subtract(max, min, error)
             Integer.add(error, 1L, error)
             normalize(significand, error, exponent.toInt)

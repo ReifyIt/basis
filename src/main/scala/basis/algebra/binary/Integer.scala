@@ -16,8 +16,6 @@ final class Integer private[algebra]
      private[this] var _sign: Int)
   extends Integer.Element {
   
-  private[algebra] def this() = this(null, 0, 1)
-  
   private[algebra] def words: Array[Long] = _words
   
   private[algebra] def words_= (words: Array[Long]): Unit = _words = words
@@ -30,31 +28,31 @@ final class Integer private[algebra]
   
   private[algebra] def sign_= (sign: Int): Unit = _sign = sign
   
-  override def + (that: Integer): Integer = Integer.add(this, that, new Integer)
+  override def + (that: Integer): Integer = Integer.add(this, that, Integer.alloc)
   
   override def unary_- : Integer = new Integer(words, size, -sign)
   
-  override def - (that: Integer): Integer = Integer.subtract(this, that, new Integer)
+  override def - (that: Integer): Integer = Integer.subtract(this, that, Integer.alloc)
   
-  override def * (that: Integer): Integer = Integer.multiply(this, that, new Integer)
+  override def * (that: Integer): Integer = Integer.multiply(this, that, Integer.alloc)
   
   def inverse(p: Int): Integer = Integer.fixedInverse(this, p)
   
-  def /% (that: Integer): (Integer, Integer) = Integer.divide(this, that, new Integer, new Integer)
+  def /% (that: Integer): (Integer, Integer) = Integer.divide(this, that, Integer.alloc, Integer.alloc)
   
   def / (that: Integer): Integer = (this /% that)._1
   
   def % (that: Integer): Integer = (this /% that)._2
   
-  def << (n: Int): Integer = Integer.shiftLeft(this, n, new Integer)
+  def << (n: Int): Integer = Integer.shiftLeft(this, n, Integer.alloc)
   
-  def >> (n: Int): Integer = Integer.shiftRight(this, n, new Integer)
+  def >> (n: Int): Integer = Integer.shiftRight(this, n, Integer.alloc)
   
-  def >>> (n: Int): Integer = Integer.unsignedShiftRight(this, n, new Integer)
+  def >>> (n: Int): Integer = Integer.unsignedShiftRight(this, n, Integer.alloc)
   
   def gcd(that: Integer): Integer = Integer.gcd(this, that)
   
-  def scale(b: Int, n: Int): Integer = Integer.scale(this, b, n, new Integer)
+  def scale(b: Int, n: Int): Integer = Integer.scale(this, b, n, Integer.alloc)
   
   def sqrt: Integer = Integer.sqrt(this)
   
@@ -284,6 +282,8 @@ object Integer extends OrderedRing {
     val parser = new NumeralReader(string, radix)
     parser.parseInteger()
   }
+  
+  private[algebra] def alloc: Integer = new Integer(null, 0, 1)
   
   private[algebra] def copy(u: Integer, w: Integer): w.type = {
     w.ensureCapacity(u.size)
@@ -663,8 +663,8 @@ object Integer extends OrderedRing {
     if (a == zero) b
     else if (b == zero) a
     else {
-      var u = copy(a, new Integer)
-      var v = copy(b, new Integer)
+      var u = copy(a, Integer.alloc)
+      var v = copy(b, Integer.alloc)
       u.sign = 1
       v.sign = 1
       while (math.abs(u.size - v.size) > 1 && v != zero) {
