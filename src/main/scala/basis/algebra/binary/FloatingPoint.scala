@@ -55,7 +55,8 @@ abstract class FloatingPoint extends RealField {
             if (minB > -maxB) (minA * maxB, maxA * minB)
             else              (maxA * maxB, minA * minB)
           }
-        val significand = min + max
+        val significand = Integer.alloc
+        Integer.add(min, max, significand)
         Integer.shiftRight(significand, 1, significand)
         val error = max - min
         normalize(significand, error, exponent.toInt)
@@ -106,12 +107,12 @@ abstract class FloatingPoint extends RealField {
             Integer.scale(lower, radix, 1, lower)
             Integer.scale(upper, radix, 1, upper)
           }
-          var minSqrt = lower.sqrt
-          var maxSqrt = upper.sqrt
-          maxSqrt = Integer.add(maxSqrt, 1L, maxSqrt)
-          var sqrt = Integer.add(minSqrt, maxSqrt, minSqrt) // clobber minSqrt
-          sqrt = Integer.shiftRight(sqrt, 1, sqrt)
-          var error = Integer.subtract(maxSqrt, sqrt, maxSqrt) // clobber maxSqrt
+          val minSqrt = lower.sqrt
+          val maxSqrt = upper.sqrt
+          Integer.add(maxSqrt, 1L, maxSqrt)
+          val sqrt = Integer.add(minSqrt, maxSqrt, minSqrt) // clobbers minSqrt
+          Integer.shiftRight(sqrt, 1, sqrt)
+          var error = Integer.subtract(maxSqrt, sqrt, maxSqrt) // clobbers maxSqrt
           normalize(sqrt, error, exponent)
         }
       }
