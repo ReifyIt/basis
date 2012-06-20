@@ -34,8 +34,13 @@ object R2 extends Vector2Space[Real.type] with RealVectorSpace {
     
     override def *: (scalar: Real): Vector = this :* scalar
     
+    override def / (scalar: Real): Vector =
+      new Vector(x / scalar, y / scalar)
+    
     override def ⋅ (that: Vector): Real =
       x * that.x + y * that.y
+    
+    override def norm: Real = (x * x + y * y).sqrt
   }
   
   override type Vector = Element

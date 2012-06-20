@@ -10,11 +10,15 @@ package binary
 
 import language.implicitConversions
 
-class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
-  final class Element(val significand: Integer, val error: Integer, val exponent: Int) extends super.Element {
-    def radix: Int = FloatingPoint.this.radix
+abstract class FloatingPoint extends RealField {
+  abstract class Element protected extends super.Element { this: Vector =>
+    def significand: Integer
     
-    override def + (that: Element): Element = {
+    def error: Integer
+    
+    def exponent: Int
+    
+    override def + (that: Vector): Vector = {
       if (this == NaN || that == NaN) NaN
       else if (this.exponent > that.exponent) that + this
       else {
@@ -29,11 +33,11 @@ class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
       }
     }
     
-    override def unary_- : Element = new Element(-significand, error, exponent)
+    override def unary_- : Vector = apply(-significand, error, exponent)
     
-    override def - (that: Element): Element = this + -that
+    override def - (that: Vector): Vector = this + -that
     
-    override def * (that: Element): Element = {
+    override def * (that: Vector): Vector = {
       val exponent = this.exponent.toLong + that.exponent.toLong
       if (this == NaN || that == NaN ||
           exponent < Int.MinValue || exponent > Int.MaxValue) NaN
@@ -58,7 +62,7 @@ class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
       }
     }
     
-    override def inverse: Element = {
+    override def inverse: Vector = {
       if (this == zero || this == NaN) NaN
       else if (this.error == Integer.zero) inexact.inverse
       else {
@@ -84,11 +88,11 @@ class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
       }
     }
     
-    override def / (that: Element): Element = this * that.inverse
+    override def / (that: Vector): Vector = this * that.inverse
     
-    override def pow(that: Element): Element = sys.error("not implemented")
+    override def pow(that: Vector): Vector = sys.error("not implemented")
     
-    override def sqrt: Element = {
+    override def sqrt: Vector = {
       if (this == NaN) NaN
       else if (this == zero) zero
       else if (error == Integer.zero) inexact.sqrt
@@ -113,19 +117,19 @@ class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
       }
     }
     
-    override def abs: Element = if (significand.sign > 0) this else -this
+    override def abs: Vector = if (significand.sign > 0) this else -this
     
-    override def min(that: Element): Element = if (this <= that) this else that
+    override def min(that: Vector): Vector = if (this <= that) this else that
     
-    override def max(that: Element): Element = if (this >= that) this else that
+    override def max(that: Vector): Vector = if (this >= that) this else that
     
-    override def < (that: Element): Boolean = compare(this, that) < 0
+    override def < (that: Vector): Boolean = compare(this, that) < 0
     
-    override def <= (that: Element): Boolean = compare(this, that) <= 0
+    override def <= (that: Vector): Boolean = compare(this, that) <= 0
     
-    override def > (that: Element): Boolean = compare(this, that) > 0
+    override def > (that: Vector): Boolean = compare(this, that) > 0
     
-    override def >= (that: Element): Boolean = compare(this, that) >= 0
+    override def >= (that: Vector): Boolean = compare(this, that) >= 0
     
     override def equals(other: Any): Boolean = other match {
       case that: Element =>
@@ -156,55 +160,58 @@ class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
       }
     }
     
-    def inexact: Element = {
+    def inexact: Vector = {
       val length = significand.length(radix)
       val scale = precision - length + 1
-      new Element(significand.scale(radix, scale), Integer.unit, exponent - scale)
+      apply(significand.scale(radix, scale), Integer.unit, exponent - scale)
     }
     
     def writeString(s: Appendable, radix: Int = 10) {
       if (this == NaN) s.append("NaN")
-      else Numeral.writeExponentialNumber(s, radix)(significand, error, this.radix, exponent)
+      else Numeral.writeExponentialNumber(s, radix)(significand, error, FloatingPoint.this.radix, exponent)
     }
   }
   
-  override type Vector = Element
+  override type Vector <: Element
   
-  override val zero: Element = new Element(Integer.zero, Integer.zero, 0)
+  override lazy val zero: Vector = apply(Integer.zero, Integer.zero, 0)
   
-  override val unit: Element = new Element(Integer.unit, Integer.zero, 0)
+  override lazy val unit: Vector = apply(Integer.unit, Integer.zero, 0)
   
-  val NaN: Element = new Element(Integer.zero, Integer.unit, Int.MaxValue)
+  lazy val NaN: Vector = apply(Integer.zero, Integer.unit, Int.MaxValue)
   
-  def apply(significand: Integer, error: Integer, exponent: Int): Element =
-    new Element(significand, error, exponent)
+  def radix: Int
   
-  implicit def apply(value: Int): Element = apply(value.toLong)
+  def precision: Int
   
-  implicit def apply(value: Long): Element = new Element(Integer(value), Integer.zero, 0)
+  def apply(significand: Integer, error: Integer, exponent: Int): Vector
   
-  implicit def apply(value: Float): Element = apply(value.toDouble)
+  implicit def apply(value: Int): Vector = apply(value.toLong)
   
-  implicit def apply(value: Double): Element = {
+  implicit def apply(value: Long): Vector = apply(Integer(value), Integer.zero, 0)
+  
+  implicit def apply(value: Float): Vector = apply(value.toDouble)
+  
+  implicit def apply(value: Double): Vector = {
     if (value == 0.0) zero
     else if (java.lang.Double.isNaN(value) || java.lang.Double.isInfinite(value)) NaN
     else {
       val exponent = Numeral.floorLog(math.abs(value), radix) - 18 + 1 // 18 digit significand
       val significand = Numeral.mkLong(value, radix, -exponent)
       val error = Numeral.mkLong(math.ulp(value), radix, -exponent) + 1
-      new Element(Integer(significand), Integer(error), exponent)
+      apply(Integer(significand), Integer(error), exponent)
     }
   }
   
-  private[algebra] def normalize(significand: Integer, error: Integer, exponent: Int): Element = {
+  private[algebra] def normalize(significand: Integer, error: Integer, exponent: Int): Vector = {
     val errorDigits = error.length(radix)
     val scale = radix - errorDigits - 1
-    if (scale >= 0) new Element(significand, error, exponent)
+    if (scale >= 0) apply(significand, error, exponent)
     else {
       Integer.scale(significand, radix, scale, significand)
       Integer.scale(error, radix, scale, error)
       Integer.add(error, 1L, error)
-      new Element(significand, error, exponent - scale)
+      apply(significand, error, exponent - scale)
     }
   }
   
@@ -217,10 +224,8 @@ class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
     Integer.shiftRight(reciprocal, scale + 1, reciprocal)
   }
   
-  private[algebra] def compare(x: Element, y: Element): Int = {
+  private[algebra] def compare(x: Vector, y: Vector): Int = {
     val difference = x - y
     if (difference.significand == Integer.zero) 0 else difference.significand.sign
   }
-  
-  override def toString: String = "FloatingPoint"+"("+ radix +")"+"("+ precision +")"
 }

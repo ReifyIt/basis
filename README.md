@@ -19,6 +19,9 @@ res0: basis.algebra.binary64.R2.Vector = R2(15.0, 30.0)
 
 scala> (R2⨯R3)(1, 0, 0,  0, 1, 0) ⋅ (R3⨯R2)(1, 0,  0, 1,  0, 0) // type safe, generic matrix composition
 res1: basis.algebra.binary64.RealMatrixSpace[basis.algebra.binary64.R2.type,basis.algebra.binary64.R2.type]#Matrix = R2x2(1.0, 0.0,  0.0, 1.0)
+
+scala> decimal.R2(1, 1).norm // arbitrary precision (not a BigDecimal wrapper)
+res2: basis.algebra.decimal.R2.Scalar = 1.414213562373095048801688724209698078569671875376948073176679738
 ```
 
 To use the Algebra Basis library with Scala 2.10.0-M4 or later, add this to your SBT build definition:

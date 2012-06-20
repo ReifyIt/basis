@@ -7,7 +7,11 @@
 
 package basis.algebra
 
-package object binary {
+package object decimal {
+  type Integer = binary.Integer
+  
+  val Integer: binary.Integer.type = binary.Integer
+  
   type RN = generic.FN[Real.type]
   
   def RN(N: Int): RN = new generic.FN[Real.type](Real)(N)

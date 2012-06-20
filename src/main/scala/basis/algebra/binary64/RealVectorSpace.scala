@@ -58,6 +58,16 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
     
     override def *: (scalar: Real): Vector = this :* scalar
     
+    def / (scalar: Real): Vector = {
+      val coords = new Array[Double](N)
+      var i = 0
+      while (i < coords.length) {
+        coords(i) = this(i).value / scalar.value
+        i += 1
+      }
+      Vector(coords)
+    }
+    
     override def ⋅ (that: Vector): Real = {
       if (N != that.N) throw new DimensionException
       var s = 0.0
@@ -68,6 +78,18 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
       }
       s
     }
+    
+    def norm: Real = {
+      var s = 0.0
+      var i = 0
+      while (i < N) {
+        s += this(i).value * this(i).value
+        i += 1
+      }
+      new Real(s).sqrt
+    }
+    
+    def normalized: Vector = this / norm
     
     override def equals(other: Any): Boolean = other match {
       case that: Element =>

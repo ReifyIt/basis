@@ -35,6 +35,9 @@ object R3 extends Vector3Space[Real.type] with RealVectorSpace {
     
     override def *: (scalar: Real): Vector = this :* scalar
     
+    override def / (scalar: Real): Vector =
+      new Vector(x / scalar, y / scalar, z / scalar)
+    
     override def ⋅ (that: Vector): Real =
       x * that.x + y * that.y + z * that.z
     
@@ -42,6 +45,8 @@ object R3 extends Vector3Space[Real.type] with RealVectorSpace {
       new Vector(y * that.z + z * that.y,
                  z * that.x + x * that.z,
                  x * that.y + y * that.x)
+    
+    override def norm: Real = (x * x + y * y + z * z).sqrt
   }
   
   override type Vector = Element
