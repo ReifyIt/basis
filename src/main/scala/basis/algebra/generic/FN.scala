@@ -26,7 +26,7 @@ class FN[S <: Ring with Singleton](val Scalar: S)(val N: Int) extends VectorSpac
         coords(i) = (this(i) / scalar).asInstanceOf[AnyRef]
         i += 1
       }
-      Vector(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
+      Vector(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     def norm[E <: F#Element forSome { type F <: CompleteField { type Value = Scalar } }]
@@ -42,11 +42,7 @@ class FN[S <: Ring with Singleton](val Scalar: S)(val N: Int) extends VectorSpac
   
   override lazy val zero: Vector = super.zero
   
-  override def apply(coords: TraversableOnce[Scalar]): Vector =
-    new Vector(coords.asInstanceOf[TraversableOnce[AnyRef]].toArray[AnyRef])
-  
-  def apply(coords: Scalar*): Vector =
-    new Vector(coords.asInstanceOf[Seq[AnyRef]].toArray[AnyRef])
+  def apply(coords: Scalar*): Vector = new Vector(coords.asInstanceOf[Seq[AnyRef]].toArray[AnyRef])
   
   override def toString: String = "FN"+"("+ Scalar +")"+"("+ N +")"
 }

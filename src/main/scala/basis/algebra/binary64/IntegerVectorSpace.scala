@@ -101,7 +101,7 @@ trait IntegerVectorSpace extends VectorSpace[Integer.type] {
   
   override def N: Int
   
-  override def apply(coords: TraversableOnce[Integer]): Vector
+  override def apply(coords: Integer*): Vector = apply(coords.map(_.toLong).toArray[Long])
   
   def apply(coords: Array[Long]): Vector
   

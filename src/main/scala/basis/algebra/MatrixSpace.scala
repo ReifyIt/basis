@@ -40,7 +40,7 @@ trait MatrixSpace
         j += 1
         n += 1
       }
-      Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
+      Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     def col(j: Int): Col = {
@@ -53,7 +53,7 @@ trait MatrixSpace
         i += 1
         m += N
       }
-      Col(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
+      Col(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     override def + (that: Matrix): Matrix = {
@@ -126,7 +126,7 @@ trait MatrixSpace
         i += 1
         i0 += N
       }
-      Col(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
+      Col(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     def ⋅: (vector: Col): Row = {
@@ -145,7 +145,7 @@ trait MatrixSpace
         coords(j) = s.asInstanceOf[AnyRef]
         j += 1
       }
-      Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
+      Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
     }
     
     def ⋅ [U <: VectorSpace[S] with Singleton]

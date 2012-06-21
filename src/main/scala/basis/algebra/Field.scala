@@ -7,7 +7,7 @@
 
 package basis.algebra
 
-/** An algebraic field structure. Addition associates and commutes, and
+/** A mathematical field structure. Addition associates and commutes, and
   * multiplication associates, commutes, and distributes over addition.
   * Addition and multiplication both have an identity element, every element
   * has an additive inverse, and every element except zero has a multiplicative
@@ -15,53 +15,51 @@ package basis.algebra
   * field axioms should hold.
   * 
   * '''Axioms for addition''':
-  *   - if ''a'' is in `this` and ''b'' is in `this`, then their sum ''a'' + ''b'' is in `this`.
-  *   - ''a'' + ''b'' == ''b'' + ''a'' for all ''a'', ''b'' in `this`.
-  *   - (''a'' + ''b'') + ''c'' == ''a'' + (''b'' + ''c'') for all ''a'', ''b'', ''c'' in `this`.
-  *   - `zero` + ''a'' == ''a'' for every ''a'' in `this`.
-  *   - to every ''a'' in `this` corresponds an element -''a'' in `this`
-  *     such that ''a'' + (-''a'') == `zero`.
+  *   - if 𝑎 and 𝑏 are elements in `this`, then their sum 𝑎 + 𝑏 is also an element in `this`.
+  *   - 𝑎 + 𝑏 == 𝑏 + 𝑎 for all elements 𝑎, 𝑏 in `this`.
+  *   - (𝑎 + 𝑏) + 𝑐 == 𝑎 + (𝑏 + 𝑐) for all elements 𝑎, 𝑏, 𝑐 in `this`.
+  *   - `this` has an element `zero` such that `zero` + 𝑎 == 𝑎 for every element 𝑎 in `this`.
+  *   - to every element 𝑎 in `this` corresponds an element -𝑎 in `this` such that 𝑎 + (-𝑎) == `zero`.
   * 
   * '''Axioms for multiplication''':
-  *   - if ''a'' is in `this` and ''b'' is in `this`, then their product ''a'' * ''b'' is in `this`.
-  *   - ''a'' * ''b'' == ''b'' * ''a'' for all ''a'', ''b'' in `this`.
-  *   - (''a'' * ''b'') * ''c'' == ''a'' * (''b'' * ''c'') for all ''a'', ''b'', ''c'' in `this`.
-  *   - `unit` != `zero` and `unit` * ''a'' == ''a'' for every ''a'' in `this`.
-  *   - if ''a'' is in `this` and ''a'' != `zero` then there exisrs an element
-  *     ''a''.`inverse` such that ''a'' * ''a''.`inverse` == `unit`.
+  *   - if 𝑎 and 𝑏 are elements in `this`, then their product 𝑎 * 𝑏 is also an element in `this`.
+  *   - 𝑎 * 𝑏 == 𝑏 * 𝑎 for all 𝑎, 𝑏 elements in `this`.
+  *   - (𝑎 * 𝑏) * 𝑐 == 𝑎 * (𝑏 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in `this`.
+  *   - `this` has an element `unit` != `zero` such that `unit` * 𝑎 == 𝑎 for every element 𝑎 in `this`.
+  *   - if 𝑎 is in `this` and 𝑎 != `zero` then there exists an element 𝑎.`inverse` such that 𝑎 * 𝑎.`inverse` == `unit`.
   * 
   * '''The distributive law''':
-  *   - ''a'' * (''b'' + ''c') == ''a'' * ''b'' + ''a'' * ''c'' for all ''a'', ''b'', ''c'' in `this`.
+  *   - 𝑎 * (𝑏 + 𝑐) == 𝑎 * 𝑏 + 𝑎 * 𝑐 for all elements 𝑎, 𝑏, 𝑐 in `this`.
   * 
   * @author Chris Sachs
   * 
   * @example {{{
-  * // You can abstract over fields by parameterizing a class or function with
-  * // a subtype of Field with Singleton. Type elements with the Value type
-  * // projection of your Field type parameter.
+  * // You can abstract over fields by parameterizing a class or
+  * // function with a subtype of Field with Singleton. Type elements
+  * // with the #Value type projection of your Field type parameter.
   * def testFieldOperations[F <: Field with Singleton](a: F#Value, b: F#Value, c: F#Value) {
-  *   assert(a + b == b + a)
-  *   assert((a + b) + c == a + (b + c))
-  *   assert(a * b == b * a)
-  *   assert((a * b) * c == a * (b * c))
-  *   assert(a * (b + c) == a * b + a * c)
+  *   assert(a + b == b + a, "commutativity of addition")
+  *   assert((a + b) + c == a + (b + c), "associativity of addition")
+  *   assert(a * b == b * a, "commutativity of multiplication")
+  *   assert((a * b) * c == a * (b * c), "associativity of multiplication")
+  *   assert(a * (b + c) == a * b + a * c, "distributivity of multiplication over addition")
   * }
   * 
   * // Alternatively, functions can use path-dependent types of a Field parameter.
   * def testFieldIdentities(F: Field)(a: F.Value) {
   *   import F._
-  *   assert(zero + a == a)
-  *   assert(a + (-a) == zero)
-  *   assert(unit != zero && unit * a == a)
-  *   assert(a * a.inverse == unit)
+  *   assert(zero + a == a, "existence of additive identity")
+  *   assert(a + (-a) == zero, "existence of additive inverse")
+  *   assert(unit != zero && unit * a == a, "existence of multiplicative identity")
+  *   assert(a * a.inverse == unit, "existence of multiplicative inverse")
   * }
   * }}}
   * 
-  * @define Value   `Field`
-  * @define value   element
+  * @define Structure   `Field`
+  * @define element     element
   */
 trait Field extends Ring {
-  /** An element of this `Field`. */
+  /** An element of this $Structure. */
   trait Element extends Any with super.Element {
     override def + (that: Value): Value
     
@@ -71,10 +69,10 @@ trait Field extends Ring {
     
     override def * (that: Value): Value
     
-    /** Returns the multiplicative inverse of this $value. */
+    /** Returns the multiplicative inverse of this $element. */
     def inverse: Value
     
-    /** Returns the quotient of this $value divided by another $value. */
+    /** Returns the quotient of this $element divided by another $element. */
     def / (that: Value): Value
   }
   

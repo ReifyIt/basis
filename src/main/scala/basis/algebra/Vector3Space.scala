@@ -51,10 +51,9 @@ trait Vector3Space[S <: Ring with Singleton] extends VectorSpace[S] {
   
   override def N: Int = 3
   
-  override def apply(coords: TraversableOnce[Scalar]): Vector = {
-    val xs = coords.toSeq
-    if (xs.length != 3) throw new DimensionException
-    apply(xs(0), xs(1), xs(2))
+  override def apply(coords: Scalar*): Vector = {
+    if (coords.length != 3) throw new DimensionException
+    apply(coords(0), coords(1), coords(2))
   }
   
   def apply(x: Scalar, y: Scalar, z: Scalar): Vector

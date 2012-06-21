@@ -21,14 +21,7 @@ class RN(val N: Int) extends RealVectorSpace {
   
   override lazy val zero: Vector = super.zero
   
-  override def apply(coords: TraversableOnce[Real]): Vector =
-    new Vector(coords.map(_.toDouble).toArray[Double])
-  
-  override def apply(coords: Array[Double]): Vector =
-    new Vector(coords)
-  
-  def apply(coords: Double*): Vector =
-    new Vector(coords.toArray[Double])
+  override def apply(coords: Array[Double]): Vector = new Vector(coords)
   
   override def toString: String = "RN"+"("+ N + ")"
 }

@@ -123,7 +123,7 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
   
   override def N: Int
   
-  override def apply(coords: TraversableOnce[Real]): Vector
+  override def apply(coords: Real*): Vector = apply(coords.map(_.toDouble).toArray[Double])
   
   def apply(coords: Array[Double]): Vector
   

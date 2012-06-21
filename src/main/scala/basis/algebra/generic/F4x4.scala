@@ -25,6 +25,8 @@ class F4x4[V <: Vector4Space[S] with Singleton, W <: Vector4Space[S] with Single
   
   override lazy val zero: Matrix = super.zero
   
+  override lazy val unit: Matrix = super.unit
+  
   override def apply(
       _1_1: Scalar, _1_2: Scalar, _1_3: Scalar, _1_4: Scalar,
       _2_1: Scalar, _2_2: Scalar, _2_3: Scalar, _2_4: Scalar,

@@ -44,10 +44,9 @@ trait Vector2Space[S <: Ring with Singleton] extends VectorSpace[S] {
   
   override def N: Int = 2
   
-  override def apply(coords: TraversableOnce[Scalar]): Vector = {
-    val xs = coords.toSeq
-    if (xs.length != 2) throw new DimensionException
-    apply(xs(0), xs(1))
+  override def apply(coords: Scalar*): Vector = {
+    if (coords.length != 2) throw new DimensionException
+    apply(coords(0), coords(1))
   }
   
   def apply(x: Scalar, y: Scalar): Vector

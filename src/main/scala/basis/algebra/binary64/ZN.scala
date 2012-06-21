@@ -21,14 +21,7 @@ class ZN(val N: Int) extends IntegerVectorSpace {
   
   override lazy val zero: Vector = super.zero
   
-  override def apply(coords: TraversableOnce[Integer]): Vector =
-    new Vector(coords.map(_.toLong).toArray[Long])
-  
-  override def apply(coords: Array[Long]): Vector =
-    new Vector(coords)
-  
-  def apply(coords: Long*): Vector =
-    new Vector(coords.toArray[Long])
+  override def apply(coords: Array[Long]): Vector = new Vector(coords)
   
   override def toString: String = "ZN"+"("+ N + ")"
 }
