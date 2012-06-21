@@ -10,20 +10,42 @@ package binary
 
 import language.implicitConversions
 
+/** An arbitrary-size integer.
+  * 
+  * An array of little-endian `Long` values stores the magnitude of each `Integer`.
+  * We call the elements of this array ''words''. Each word contains a 63-bit digit
+  * in its low bits. Since the JVM does not have an add-with-carry instruction,
+  * each word reserves its high bit for overflow detection and carray propagation.
+  * An integer's `sign` is `-1` if negative and `1` if positive or zero.
+  * 
+  * `Integer` has an immutable interface. But internal mutation methods exist
+  * to implement certain algorithms efficiently. The companion object for
+  * `Integer` contains three address code style instructions for mutating
+  * integer values. This simple and flexible approach does require extreme
+  * caution to ensure that aliased values are never visibly mutated.
+  * 
+  * @note Special thanks to the developers of [[http://jscience.org/ JScience]]
+  *       for providing a model arbitrary-precision arithmetic library for the JVM.
+  * 
+  * @author Chris Sachs
+  */
 final class Integer private[algebra]
     (private[this] var _words: Array[Long],
      private[this] var _size: Int,
      private[this] var _sign: Int)
   extends Integer.Element {
   
+  /** Returns the little-endian array of 63-bit digits. */
   private[algebra] def words: Array[Long] = _words
   
   private[algebra] def words_= (words: Array[Long]): Unit = _words = words
   
+  /** Returns the number of words used by this `Integer`. */
   private[algebra] def size: Int = _size
   
   private[algebra] def size_= (size: Int): Unit = _size = size
   
+  /** Returns `-1` if negative and `1` if positive or zero. */
   def sign: Int = _sign
   
   private[algebra] def sign_= (sign: Int): Unit = _sign = sign
@@ -36,24 +58,37 @@ final class Integer private[algebra]
   
   override def * (that: Integer): Integer = Integer.multiply(this, that, Integer.alloc)
   
-  def inverse(p: Int): Integer = Integer.fixedInverse(this, p)
+  /** Returns the inverse of this `Integer` as a fixed-point value with
+    * `precision` bits past the radix point. */
+  def inverse(precision: Int): Integer = Integer.fixedInverse(this, precision)
   
+  /** Returns the truncated quotient and remainder of this `Integer` divided by another `Integer`. */
   def /% (that: Integer): (Integer, Integer) = Integer.divide(this, that, Integer.alloc, Integer.alloc)
   
+  /** Returns the truncated quotient of this `Integer` divided by another `Integer`. */
   def / (that: Integer): Integer = (this /% that)._1
   
+  /** Returns the remainder of this `Integer` divided by another `Integer`. */
   def % (that: Integer): Integer = (this /% that)._2
   
+  /** Returns this `Integer` shifted left by `n` bits. */
   def << (n: Int): Integer = Integer.shiftLeft(this, n, Integer.alloc)
   
+  /** Returns this `Integer` shifted right by `n` bits as if its two's complement
+    * form was sign-extended. */
   def >> (n: Int): Integer = Integer.shiftRight(this, n, Integer.alloc)
   
+  /** Returns this `Integer` shifted right by `n` bits as if its two's complement
+    * form was zero-extended. */
   def >>> (n: Int): Integer = Integer.unsignedShiftRight(this, n, Integer.alloc)
   
+  /** Returns the greatest common divisor of this `Integer` and another `Integer`. */
   def gcd(that: Integer): Integer = Integer.gcd(this, that)
   
+  /** Returns this `Integer` multiplied by `b` to the power `n`. */
   def scale(b: Int, n: Int): Integer = Integer.scale(this, b, n, Integer.alloc)
   
+  /** Returns the integer square root of this positive `Integer`. */
   def sqrt: Integer = Integer.sqrt(this)
   
   override def abs: Integer = if (sign > 0) this else -this
@@ -119,6 +154,7 @@ final class Integer private[algebra]
     }
   }
   
+  /** Returns a `Byte` array containing the two's complement representation of this `Integer`. */
   def toBytes: Array[Byte] = {
     val byteLength = ((length / 8 - 1) + 7) & ~7
     val bytes = new Array[Byte](byteLength)
@@ -171,12 +207,14 @@ final class Integer private[algebra]
     bytes
   }
   
+  /** Returns the bit length of this `Integer`'s magnitude, sign excluded. */
   def length: Int = {
     val n = size - 1
     val length2 = 63 * n + 64 - java.lang.Long.numberOfLeadingZeros(this(n))
     if (sign < 0 && isPowerOf2) length2 - 1 else length2
   }
   
+  /** Returns the digit length of this `Integer`'s magnitude in the given `radix`, sign ecxluded. */
   def length(radix: Int): Int = {
     val length2 = length
     if (radix == 2) length2
@@ -189,6 +227,7 @@ final class Integer private[algebra]
     }
   }
   
+  /** Returns the position of the least significant `1` bit in this `Integer`'s magnitude. */
   def lowestSetBit: Int = {
     if (this(0) == 0L) -1
     else {
@@ -200,6 +239,7 @@ final class Integer private[algebra]
     }
   }
   
+  /** Returns `true` if this `Integer`'s magnitude is a power of 2. */
   def isPowerOf2: Boolean = {
     val n = size - 1
     var i = 0
@@ -207,15 +247,20 @@ final class Integer private[algebra]
     i == n && this(i) == java.lang.Long.highestOneBit(this(i))
   }
   
+  /** Writes the textual form of this `Integer` in the given `radix`. */
   def writeString(s: Appendable, radix: Int = 10) {
     val writer = new NumeralWriter(s, radix)
     writer.writeInteger(this)
   }
   
-  private[algebra] def apply(i: Int): Long = words(i)
+  /** Returns the word at `index`. */
+  private[algebra] def apply(index: Int): Long = words(index)
   
-  private[algebra] def update(i: Int, value: Long): Unit = words(i) = value
+  /** Updates the word at `index`. */
+  private[algebra] def update(index: Int, value: Long): Unit = words(index) = value
   
+  /** Ensures that this `Integer` can store `capacity` words; forces `capacity`
+    * to a power of 2. */
   private[algebra] def ensureCapacity(capacity: Int) {
     if (words == null || words.length < capacity) {
       var n = capacity - 1
@@ -228,6 +273,9 @@ final class Integer private[algebra]
   }
 }
 
+/** Contains identity elements, factory methods, and implicit conversions for
+  * the ring of `Integer` values. Also contains internal arithmetic and other
+  * instructions that may mutate non-aliased `Integer` values. */
 object Integer extends OrderedRing {
   override type Vector = Integer
   
@@ -253,6 +301,7 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Returns an `Integer` representing the two's complement sequence of `bytes`. */
   def apply(bytes: Array[Byte]): Integer = {
     val words = new Array[Long](((bytes.length * 8 + 1) / 63) + 1)
     val sign = 1 | (bytes(0) >> 7)
@@ -278,13 +327,21 @@ object Integer extends OrderedRing {
     if (sign > 0) result else subtract(result, unit, result)
   }
   
+  /** Returns an `Integer` parsed from `string` with the given `radix`. */
   def apply(string: String, radix: Int = 10): Integer = {
     val parser = new NumeralReader(string, radix)
     parser.parseInteger()
   }
   
+  /** Returns a new uninitialized `Integer`. */
   private[algebra] def alloc: Integer = new Integer(null, 0, 1)
   
+  /** Copies the value of one `Integer` to another.
+    * 
+    * @param  u   the `Integer` to copy from.
+    * @param  w   the `Integer` to copy to.
+    * @return the `Integer` `w` with its value replaced.
+    */
   private[algebra] def copy(u: Integer, w: Integer): w.type = {
     w.ensureCapacity(u.size)
     Array.copy(u.words, 0, w.words, 0, u.size)
@@ -293,6 +350,14 @@ object Integer extends OrderedRing {
     w
   }
   
+  /** Adds two `Integer`s and stores their sum in another `Integer`.
+    * You can add an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` augend.
+    * @param  v   the `Integer` addend.
+    * @param  w   the `Integer` to contain the sum.
+    * @return the `Integer` `w` with its value set to the sum.
+    */
   private[algebra] def add(u: Integer, v: Integer, w: Integer): w.type = {
     if (u.sign != v.sign) subtract(u, -v, w)
     else if (v.size > u.size) add(v, u, w)
@@ -327,6 +392,14 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Adds a `Long` value to an `Integer` and stores their sum in another `Integer`.
+    * You can add to an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` augend.
+    * @param  y   the `Long` addend.
+    * @param  w   the `Integer` to contain the sum.
+    * @return the `Integer` `w` with its value set to the sum.
+    */
   private[algebra] def add(u: Integer, y: Long, w: Integer): w.type = {
     if (u.sign != (1 | (y >> 63))) subtract(u, -y, w)
     else {
@@ -356,11 +429,20 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Switches the sign of an `Integer` in-place. */
   private[algebra] def negate(w: Integer): w.type = {
     w.sign = -w.sign
     w
   }
   
+  /** Subtracts two `Integer`s and stores their difference in another `Integer`.
+    * You can subtract an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` minuend.
+    * @param  v   the `Integer` subtrahend.
+    * @param  w   the `Integer to contain the difference.
+    * @return the `Integer` `w` with its value set to the difference.
+    */
   private[algebra] def subtract(u: Integer, v: Integer, w: Integer): w.type = {
     if (u.sign != v.sign) add(u, -v, w)
     else if (compareAbs(v, u) > 0) negate(subtract(v, u, w))
@@ -392,6 +474,14 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Subtracts a `Long` value from an `Integer` and stores their difference in another `Integer`.
+    * You can subtract from an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` minuend.
+    * @param  v   the `Long` subtrahend.
+    * @param  w   the `Integer` to contain the difference.
+    * @return the `Integer` `w` with its value set to the difference.
+    */
   private[algebra] def subtract(u: Integer, y: Long, w: Integer): w.type = {
     if (u.sign != (1 | (y >> 63))) add(u, -y, w)
     else if (u.size == 1 && math.abs(y) > math.abs(u(0))) {
@@ -425,7 +515,16 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Multiplies two `Integer`s and stores their product in another `Integer`.
+    * You cannot multiply an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` multiplicand.
+    * @param  v   the `Integer` multiplier.
+    * @param  w   the `Integer` to store the product.
+    * @return the `Integer` `w`  with its value set to the product.
+    */
   private[algebra] def multiply(u: Integer, v: Integer, w: Integer): w.type = {
+    assert(u ne w && v ne w)
     if (v.size > u.size) multiply(v, u, w)
     else {
       w.ensureCapacity(u.size + v.size)
@@ -440,12 +539,32 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Multiplies an `Integer` by a `Long` value and stores their product in another `Integer`.
+    * You can multiply an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` multiplicand.
+    * @param  y   the `Long` multiplier.
+    * @param  w   the `Integer` to store the product.
+    * @return the `Integer` `w` with its value set to the product.
+    */
   private[algebra] def multiply(u: Integer, y: Long, w: Integer): w.type = {
     w.ensureCapacity(u.size + 1)
     multiplyAccumulate(u, y, w, 0, false)
     w
   }
   
+  /** Multiplies an `Integer` by a shifted `Long` value and stores their
+    * product in another `Integer`, optionally adding to, rather than
+    * replacing, the existing result. You can multiply and accumulate an
+    * `Integer` in-place.
+    * 
+    * @param  u           the `Integer` multiplicand.
+    * @param  y           the `Long` multiplier.
+    * @param  w           the `Integer` to add-to or replace with the product.
+    * @param  shift       the number of 63-bit digits to shift the multiplier.
+    * @param  accumulate  `true` if `w` should be added-to rather than replaced.
+    * @retrun the `Integer` `w` with its value added-to or set with the product.
+    */
   private[algebra] def multiplyAccumulate(
       u: Integer, y: Long, w: Integer,
       shift: Int, accumulate: Boolean): w.type = {
@@ -488,6 +607,8 @@ object Integer extends OrderedRing {
     w
   }
   
+  /** Returns the inverse of an `Integer` as a fixed-point value with `p` bits
+    * of precision past the radix point. */
   private[algebra] def fixedInverse(u: Integer, p: Int): Integer = {
     if (p <= 30) {
       val dividend = 1L << (p * 2 + 1)
@@ -505,6 +626,15 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Divides two `Integer`s and stores the truncated quotient and remainder in two other `Integer`s.
+    * You cannot divide an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` dividend.
+    * @param  v   the `Integer divisor.
+    * @param  q   the `Integer` to store the quotient.
+    * @param  r   the `Integer` to store the remainder.
+    * @return the pair of `Integer`s `(q, r)` with their values set to the quotient and remainder, respectively.
+    */
   private[algebra] def divide(u: Integer, v: Integer, q: Integer, r: Integer): (q.type, r.type) = {
     if (u.sign < 0 && v.sign < 0) {
       divide(-u, -v, q, r)
@@ -547,6 +677,14 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Divides an `Integer` by an `Int` value storing the quotient in another `Integer`
+    * and returning the remainder. You can divide an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` dividend.
+    * @param  y   the `Int` divisor.
+    * @param  q   the `Integer` to store the quotient.
+    * @return the remainder.
+    */
   private[algebra] def divide(u: Integer, y: Int, q: Integer): Long = {
     q.ensureCapacity(u.size)
     var r = 0L
@@ -569,6 +707,14 @@ object Integer extends OrderedRing {
     r
   }
   
+  /** Shifts an `Integer` left by `n` bits storing the result in another `Integer`.
+    * You can shift an `Integer` in-place.
+    * 
+    * @param  u   the `Integer` to shift.
+    * @param  n   the number of bits to shift by.
+    * @param  w   the `Integer` to store the shifted result.
+    * @return the `Integer` `w` with its value set to the shifted result.
+    */
   private[algebra] def shiftLeft(u: Integer, n: Int, w: Integer): w.type = {
     if (n < 0) shiftRight(u, -n, w)
     else {
@@ -600,6 +746,15 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Shifts an `Integer` right by `n` bits as if its two's complement form were
+    * sign-extended, storing the result in another `Integer`. You can shift an
+    * `Integer` in-place.
+    * 
+    * @param  u   the `Integer` to shift.
+    * @param  n   the number of bits to shift by.
+    * @param  w   the `Integer` to store the shifted result.
+    * @return the `Integer` `w` with its value set to the shifted result.
+    */
   private[algebra] def shiftRight(u: Integer, n: Int, w: Integer): w.type = {
     if (u.sign < 0 && n > 0) {
       val wordShift = n / 63
@@ -626,6 +781,15 @@ object Integer extends OrderedRing {
     else unsignedShiftRight(u, n, w)
   }
   
+  /** Shifts an `Integer` right by `n` bits as if its two's complement form were
+    * zero-extended, storing the result in another `Integer`. You can shift an
+    * `Integer` in-place.
+    * 
+    * @param  u   the `Integer` to shift.
+    * @param  n   the number of bits to shift by.
+    * @param  w   the `Integer` to store the shifted result.
+    * @return the `Integer` `w` with its value set to the shifted result.
+    */
   private[algebra] def unsignedShiftRight(u: Integer, n: Int, w: Integer): w.type = {
     if (n < 0) shiftLeft(u, -n, w)
     else {
@@ -659,6 +823,7 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Returns the greatest common divisor of two `Integer`s. */
   private[algebra] def gcd(a: Integer, b: Integer): Integer = {
     if (a == zero) b
     else if (b == zero) a
@@ -690,6 +855,15 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Multiplies an `Integer` by `b` to the power `n` and stores the scaled result
+    * in another `Integer`. You can scale an `Integer` in-place.
+    * 
+    * @param  a   the `Integer` to scale.
+    * @param  b   the base of the amount to scale by.
+    * @param  n   the number of times to multiply by `base`.
+    * @param  w   the `Integer` to store the scaled result.
+    * @retrun the `Integer` `w` with its value set to the scaled result.
+    */
   private[algebra] def scale(a: Integer, b: Int, n: Int, w: Integer): w.type = {
     if (b == 2) {
       if (n >= 0) shiftLeft(a, n, w)
@@ -723,6 +897,7 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Returns the integer square root of an `Integer`. */
   private[algebra] def sqrt(u: Integer): Integer = {
     if (u.sign < 0) throw new ArithmeticException("square root of negative number")
     else if (u == zero || u == unit) u
@@ -733,6 +908,7 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Returns the integer square root of an `Integer` with a guess. */
   private[algebra] def sqrt(u: Integer, x: Integer): Integer = {
     val xn = {
       val n = x + u / x
@@ -745,6 +921,7 @@ object Integer extends OrderedRing {
     else sqrt(u, xn)
   }
   
+  /** Compares the magnitudes of two `Integer`s. */
   private[algebra] def compareAbs(u: Integer, v: Integer): Int = {
     if (u.size > v.size) 1
     else if (u.size < v.size) -1
@@ -757,6 +934,7 @@ object Integer extends OrderedRing {
     }
   }
   
+  /** Compares the values of two `Integer`s. */
   private[algebra] def compare(u: Integer, v: Integer): Int = {
     if (u.sign != v.sign) u.sign
     else if (u.size > v.size) u.sign
