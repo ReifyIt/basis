@@ -275,7 +275,7 @@ final class Integer private[algebra]
 
 /** Contains identity elements, factory methods, and implicit conversions for
   * the ring of `Integer` values. Also contains internal arithmetic and other
-  * instructions that may mutate non-aliased `Integer` values. */
+  * instructions that mutate non-aliased `Integer` values. */
 object Integer extends OrderedRing {
   override type Vector = Integer
   
@@ -524,7 +524,7 @@ object Integer extends OrderedRing {
     * @return the `Integer` `w`  with its value set to the product.
     */
   private[algebra] def multiply(u: Integer, v: Integer, w: Integer): w.type = {
-    assert(u ne w && v ne w)
+    assert((u ne w) && (v ne w))
     if (v.size > u.size) multiply(v, u, w)
     else {
       w.ensureCapacity(u.size + v.size)
@@ -636,6 +636,7 @@ object Integer extends OrderedRing {
     * @return the pair of `Integer`s `(q, r)` with their values set to the quotient and remainder, respectively.
     */
   private[algebra] def divide(u: Integer, v: Integer, q: Integer, r: Integer): (q.type, r.type) = {
+    assert((u ne q) && (v ne q) && (u ne r) && (v ne r))
     if (u.sign < 0 && v.sign < 0) {
       divide(-u, -v, q, r)
       (q, negate(r))

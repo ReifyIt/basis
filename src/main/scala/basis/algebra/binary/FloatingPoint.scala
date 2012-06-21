@@ -10,13 +10,28 @@ package binary
 
 import language.implicitConversions
 
-abstract class FloatingPoint extends RealField {
-  abstract class Element protected extends super.Element { this: Vector =>
-    def significand: Integer
-    
-    def error: Integer
-    
-    def exponent: Int
+/** A field of arbitrary-precision floating point values. Floating point values
+  * consist of an `Integer` ''significand'' multipled by the field's `radix`
+  * times some ''exponent'', along with a relative error represented as an
+  * `Integer` scaled by the same exponent. Floating point fields define a
+  * standard `precision` indicating the number of digits (in the radix of the
+  * field) to approximate exact values to when performing inexact operations.
+  * 
+  * The `binary` and `decimal` algebra packages each provide a default `Real`
+  * field in base-2 and base-10, respectively, along with vector and matrix
+  * spaces over that field.
+  * 
+  * @note Special thanks to the developers of [[http://jscience.org/ JScience]]
+  *       for providing a model arbitrary-precision arithmetic library for the JVM.
+  * 
+  * @author Chris Sachs
+  */
+class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
+  final class Element private[algebra]
+      (val significand: Integer,
+       val error: Integer,
+       val exponent: Int)
+    extends super.Element {
     
     override def + (that: Vector): Vector = {
       if (this == NaN || that == NaN) NaN
@@ -196,7 +211,7 @@ abstract class FloatingPoint extends RealField {
     }
   }
   
-  override type Vector <: Element
+  override type Vector = Element
   
   override lazy val zero: Vector = apply(Integer.zero, Integer.zero, 0)
   
@@ -204,11 +219,8 @@ abstract class FloatingPoint extends RealField {
   
   lazy val NaN: Vector = apply(Integer.zero, Integer.unit, Int.MaxValue)
   
-  def radix: Int
-  
-  def precision: Int
-  
-  def apply(significand: Integer, error: Integer, exponent: Int): Vector
+  def apply(significand: Integer, error: Integer, exponent: Int): Vector =
+    new Element(significand, error, exponent)
   
   implicit def apply(value: Int): Vector = apply(value.toLong)
   

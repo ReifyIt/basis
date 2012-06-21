@@ -12,6 +12,10 @@ package object decimal {
   
   val Integer: binary.Integer.type = binary.Integer
   
+  type Real = Real.Vector
+  
+  val Real = new binary.FloatingPoint(10)(128)
+  
   type RN = generic.FN[Real.type]
   
   def RN(N: Int): RN = new generic.FN[Real.type](Real)(N)

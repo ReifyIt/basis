@@ -8,6 +8,10 @@
 package basis.algebra
 
 package object binary {
+  type Real = Real.Vector
+  
+  val Real = new FloatingPoint(2)(512)
+  
   type RN = generic.FN[Real.type]
   
   def RN(N: Int): RN = new generic.FN[Real.type](Real)(N)
