@@ -9,18 +9,18 @@ package basis.algebra
 
 trait Ring {
   trait Element extends Any {
-    def + (that: Vector): Vector
+    def + (that: Value): Value
     
-    def unary_- : Vector
+    def unary_- : Value
     
-    def - (that: Vector): Vector
+    def - (that: Value): Value
     
-    def * (that: Vector): Vector
+    def * (that: Value): Value
   }
   
-  type Vector <: Element
+  type Value <: Element
   
-  def zero: Vector
+  def zero: Value
   
-  def unit: Vector
+  def unit: Value
 }

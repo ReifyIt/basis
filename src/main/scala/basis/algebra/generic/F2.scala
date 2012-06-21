@@ -12,15 +12,15 @@ import language.existentials
 
 class F2[S <: Ring with Singleton](val Scalar: S) extends Vector2Space[S] {
   final class Element(val x: Scalar, val y: Scalar) extends super.Element {
-    def / [E <: F#Element forSome { type F <: Field { type Vector = Scalar } }]
+    def / [E <: F#Element forSome { type F <: Field { type Value = Scalar } }]
         (scalar: Scalar)(implicit isField: Scalar <:< E): Vector =
       Vector(x / scalar, y / scalar)
     
-    def norm[E <: F#Element forSome { type F <: CompleteField { type Vector = Scalar } }]
+    def norm[E <: F#Element forSome { type F <: CompleteField { type Value = Scalar } }]
         (implicit isCompleteField: Scalar <:< E): Scalar =
       (this ⋅ this).sqrt
     
-    def normalized[E <: F#Element forSome { type F <: CompleteField { type Vector = Scalar } }]
+    def normalized[E <: F#Element forSome { type F <: CompleteField { type Value = Scalar } }]
         (implicit isCompleteField: Scalar <:< E): Vector =
       this / norm
   }

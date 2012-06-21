@@ -63,7 +63,7 @@ final class Integer(val value: Long) extends AnyVal with Integer.Element {
 }
 
 object Integer extends OrderedRing {
-  override type Vector = Integer
+  override type Value = Integer
   
   @inline override def zero: Integer = new Integer(0L)
   

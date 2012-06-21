@@ -8,9 +8,9 @@
 package basis.algebra
 
 package object binary {
-  type Real = Real.Vector
+  type Real = Real.Value
   
-  val Real = new FloatingPoint(2)(512)
+  lazy val Real = new FloatingPoint(2)(512)
   
   type RN = generic.FN[Real.type]
   

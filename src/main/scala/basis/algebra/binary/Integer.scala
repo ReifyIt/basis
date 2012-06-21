@@ -277,7 +277,7 @@ final class Integer private[algebra]
   * the ring of `Integer` values. Also contains internal arithmetic and other
   * instructions that mutate non-aliased `Integer` values. */
 object Integer extends OrderedRing {
-  override type Vector = Integer
+  override type Value = Integer
   
   override val zero: Integer = apply(0L)
   

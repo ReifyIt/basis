@@ -22,7 +22,7 @@ trait LinearSpace[S <: Ring with Singleton] {
   
   type Vector <: Element
   
-  type Scalar = S#Vector
+  type Scalar = S#Value
   
   def Scalar: S
   

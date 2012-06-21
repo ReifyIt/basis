@@ -18,7 +18,7 @@ class FN[S <: Ring with Singleton](val Scalar: S)(val N: Int) extends VectorSpac
     
     override def apply(i: Int): Scalar = coords(i).asInstanceOf[Scalar]
     
-    def / [E <: F#Element forSome { type F <: Field { type Vector = Scalar } }]
+    def / [E <: F#Element forSome { type F <: Field { type Value = Scalar } }]
         (scalar: Scalar)(implicit isField: Scalar <:< E): Vector = {
       val coords = new Array[AnyRef](N)
       var i = 0
@@ -29,11 +29,11 @@ class FN[S <: Ring with Singleton](val Scalar: S)(val N: Int) extends VectorSpac
       Vector(wrapRefArray(coords).asInstanceOf[Seq[Scalar]])
     }
     
-    def norm[E <: F#Element forSome { type F <: CompleteField { type Vector = Scalar } }]
+    def norm[E <: F#Element forSome { type F <: CompleteField { type Value = Scalar } }]
         (implicit isCompleteField: Scalar <:< E): Scalar =
       (this ⋅ this).sqrt
     
-    def normalized[E <: F#Element forSome { type F <: CompleteField { type Vector = Scalar } }]
+    def normalized[E <: F#Element forSome { type F <: CompleteField { type Value = Scalar } }]
         (implicit isCompleteField: Scalar <:< E): Vector =
       this / norm
   }

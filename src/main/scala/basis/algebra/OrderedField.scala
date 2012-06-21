@@ -9,36 +9,36 @@ package basis.algebra
 
 trait OrderedField extends OrderedRing with Field {
   trait Element extends Any with super[OrderedRing].Element with super[Field].Element {
-    override def + (that: Vector): Vector
+    override def + (that: Value): Value
     
-    override def unary_- : Vector
+    override def unary_- : Value
     
-    override def - (that: Vector): Vector
+    override def - (that: Value): Value
     
-    override def * (that: Vector): Vector
+    override def * (that: Value): Value
     
-    override def inverse: Vector
+    override def inverse: Value
     
-    override def / (that: Vector): Vector
+    override def / (that: Value): Value
     
-    override def abs: Vector
+    override def abs: Value
     
-    override def min(that: Vector): Vector
+    override def min(that: Value): Value
     
-    override def max(that: Vector): Vector
+    override def max(that: Value): Value
     
-    override def < (that: Vector): Boolean
+    override def < (that: Value): Boolean
     
-    override def <= (that: Vector): Boolean
+    override def <= (that: Value): Boolean
     
-    override def > (that: Vector): Boolean
+    override def > (that: Value): Boolean
     
-    override def >= (that: Vector): Boolean
+    override def >= (that: Value): Boolean
   }
   
-  override type Vector <: Element
+  override type Value <: Element
   
-  override def zero: Vector
+  override def zero: Value
   
-  override def unit: Vector
+  override def unit: Value
 }

@@ -12,9 +12,9 @@ package object decimal {
   
   val Integer: binary.Integer.type = binary.Integer
   
-  type Real = Real.Vector
+  type Real = Real.Value
   
-  val Real = new binary.FloatingPoint(10)(128)
+  lazy val Real = new binary.FloatingPoint(10)(128)
   
   type RN = generic.FN[Real.type]
   

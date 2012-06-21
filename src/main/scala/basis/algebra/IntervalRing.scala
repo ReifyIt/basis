@@ -73,11 +73,11 @@ trait IntervalRing[S <: OrderedRing with Singleton] extends Ring {
     }
   }
   
-  override type Vector = Interval
+  override type Value = Interval
   
   type Interval <: Element
   
-  type Member = S#Vector
+  type Member = S#Value
   
   def Member: S
   

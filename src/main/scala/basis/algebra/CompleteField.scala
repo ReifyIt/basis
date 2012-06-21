@@ -9,26 +9,26 @@ package basis.algebra
 
 trait CompleteField extends Field {
   trait Element extends Any with super.Element {
-    override def + (that: Vector): Vector
+    override def + (that: Value): Value
     
-    override def unary_- : Vector
+    override def unary_- : Value
     
-    override def - (that: Vector): Vector
+    override def - (that: Value): Value
     
-    override def * (that: Vector): Vector
+    override def * (that: Value): Value
     
-    override def inverse: Vector
+    override def inverse: Value
     
-    override def / (that: Vector): Vector
+    override def / (that: Value): Value
     
-    def pow(that: Vector): Vector
+    def pow(that: Value): Value
     
-    def sqrt: Vector
+    def sqrt: Value
   }
   
-  override type Vector <: Element
+  override type Value <: Element
   
-  override def zero: Vector
+  override def zero: Value
   
-  override def unit: Vector
+  override def unit: Value
 }

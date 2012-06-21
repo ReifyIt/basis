@@ -60,7 +60,7 @@ final class Real(val value: Double) extends AnyVal with Real.Element {
 }
 
 object Real extends RealField {
-  override type Vector = Real
+  override type Value = Real
   
   @inline override def zero: Real = new Real(0.0)
   

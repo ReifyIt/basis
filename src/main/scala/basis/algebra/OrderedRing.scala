@@ -9,32 +9,32 @@ package basis.algebra
 
 trait OrderedRing extends Ring {
   trait Element extends Any with super.Element {
-    override def + (that: Vector): Vector
+    override def + (that: Value): Value
     
-    override def unary_- : Vector
+    override def unary_- : Value
     
-    override def - (that: Vector): Vector
+    override def - (that: Value): Value
     
-    override def * (that: Vector): Vector
+    override def * (that: Value): Value
     
-    def abs: Vector
+    def abs: Value
     
-    def min(that: Vector): Vector
+    def min(that: Value): Value
     
-    def max(that: Vector): Vector
+    def max(that: Value): Value
     
-    def < (that: Vector): Boolean
+    def < (that: Value): Boolean
     
-    def <= (that: Vector): Boolean
+    def <= (that: Value): Boolean
     
-    def > (that: Vector): Boolean
+    def > (that: Value): Boolean
     
-    def >= (that: Vector): Boolean
+    def >= (that: Value): Boolean
   }
   
-  override type Vector <: Element
+  override type Value <: Element
   
-  override def zero: Vector
+  override def zero: Value
   
-  override def unit: Vector
+  override def unit: Value
 }

@@ -23,6 +23,8 @@ trait MatrixRing
     def trace: Scalar
   }
   
+  override type Value = Matrix
+  
   override type Matrix <: Element
   
   override val Transpose: MatrixRing[W, V, S]
