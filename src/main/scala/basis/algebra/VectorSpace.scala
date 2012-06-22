@@ -7,14 +7,14 @@
 
 package basis.algebra
 
-/** An ''N''-dimensional coordinate space over a commutative ring of scalars.
+/** An abstract ''N''-dimensional coordinate space over a commutative ring.
   * Vector addition associates and commutes, and scalar multiplication
   * associates, commutes, and distributes over vector addition and scalar
   * addition. Vector addition and scalar multiplication both have an identity
   * element, and every vector has an additive inverse. Every `VectorSpace` is
   * a `LinearSpace`. Also, every `VectorSpace` is an `AffineSpace` with points
-  * equivalent to vectors. To the extent practicable, the vector space axioms
-  * should hold.
+  * equivalent to vectors. To the extent practicable, the following vector
+  * space axioms should hold.
   * 
   * '''Axioms for vector addition''':
   *   - if 𝐮 and 𝐯 are vectors in `this`, then their sum 𝐮 + 𝐯 is also a vector in `this`.
@@ -30,8 +30,8 @@ package basis.algebra
   *   - `Scalar` has an element `unit` such that `unit` *: 𝐯 == 𝐯 for every vector 𝐯 in `this`.
   * 
   * '''Distributive laws''':
-  *   - 𝑎 *: (𝐮 + 𝐯) == 𝑎 *: 𝐮 + 𝑎 *: 𝐯 for every scalar 𝑎 and all vectors 𝐮, 𝐯 in `this`.
-  *   - (𝑎 + 𝑏) *: 𝐯 == 𝑎 *: 𝐯 + 𝑏 *: 𝐯 for every scalar 𝑎 and all vectors 𝐮, 𝐯 in `this`.
+  *   - 𝑎 *: (𝐮 + 𝐯) == (𝑎 *: 𝐮) + (𝑎 *: 𝐯) for every scalar 𝑎 and all vectors 𝐮, 𝐯 in `this`.
+  *   - (𝑎 + 𝑏) *: 𝐯 == (𝑎 *: 𝐯) + (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in `this`.
   * 
   * @author Chris Sachs
   * 
@@ -46,8 +46,8 @@ package basis.algebra
   *   assert((u + v) + w == u + (v + w), "associativity of vector addition")
   *   assert(a *: v == v :* a, "commutativity of scalar multiplication")
   *   assert((a * b) *: v == a *: (b *: v), "associativity of scalar multiplication with ring multiplication")
-  *   assert(a *: (u + v) == a *: u + a *: v, "distributivity of scalar multiplication over vector addition")
-  *   assert((a + b) *: v == a *: v + b *: v, "distributivity of scalar multiplication over ring addition")
+  *   assert(a *: (u + v) == (a *: u) + (a *: v), "distributivity of scalar multiplication over vector addition")
+  *   assert((a + b) *: v == (a *: v) + (b *: v), "distributivity of scalar multiplication over ring addition")
   * }
   * 
   * // Alternatively, functions can use path-dependent types of a VectorSpace parameter.
@@ -71,10 +71,10 @@ trait VectorSpace[S <: Ring with Singleton] extends AffineSpace[S] with LinearSp
   trait Element extends Any with super[AffineSpace].Element with super[LinearSpace].Element {
     protected def Vector: VectorSpace.this.type = VectorSpace.this
     
-    /** Returns the dimension of this $vector. */
+    /** Returns the number of coordinates in this $vector. */
     def N: Int = Vector.N
     
-    /** Returns a coordinate of this $vector. */
+    /** Returns the coordinate of this $vector at the given index. */
     def apply(i: Int): Scalar
     
     override def + (that: Vector): Vector = {

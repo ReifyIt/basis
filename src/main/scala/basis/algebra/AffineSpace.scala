@@ -7,10 +7,10 @@
 
 package basis.algebra
 
-/** A principal homogeneous space over the additive group of a linear space.
-  * Vector addition acts freely and transitively over the set of points.
-  * Every `AffineSpace` is a subtype of the `LinearSpace` it acts over.
-  * To the extent practicable, the affine space axioms should hold.
+/** An abstract principal homogeneous space over the additive group of a linear
+  * space. Vector addition acts freely and transitively over the point set.
+  * Every `AffineSpace` is a subtype of the `LinearSpace` it acts over. to the
+  * extent practicable, the following affine space axioms should hold.
   * 
   * '''Axioms''':
   *   - 𝓅 + `zero` == 𝓅 for every point 𝓅 in `this`.

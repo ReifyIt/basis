@@ -7,12 +7,11 @@
 
 package basis.algebra
 
-/** A linear mathematical space over a ring of scalars. Vector addition
-  * associates and commutes, and scalar multiplication associates and
-  * distributes over vector addition and scalar addition. Vector addition
-  * and scalar multiplication both have an identity element, and every
-  * vector has an additive inverse. To the extent practicable, the
-  * linear space axioms should hold.
+/** An abstract linear space over a ring. Vector addition associates and
+  * commutes, and scalar multiplication associates and distributes over vector
+  * addition and scalar addition. Vector addition and scalar multiplication
+  * both have an identity element, and every vector has an additive inverse.
+  * To the extent practicable, the following linear space axioms should hold.
   * 
   * '''Axioms for vector addition''':
   *   - if 𝐮 and 𝐯 are vectors in `this`, then their sum 𝐮 + 𝐯 is also a vector in `this`.
@@ -27,8 +26,8 @@ package basis.algebra
   *   - `Scalar` has an element `unit` such that `unit` *: 𝐯 == 𝐯 for every vector 𝐯 in `this`.
   * 
   * '''Distributive laws''':
-  *   - 𝑎 *: (𝐮 + 𝐯) == 𝑎 *: 𝐮 + 𝑎 *: 𝐯 for every scalar 𝑎 and all vectors 𝐮, 𝐯 in `this`.
-  *   - (𝑎 + 𝑏) *: 𝐯 == 𝑎 *: 𝐯 + 𝑏 *: 𝐯 for every scalar 𝑎 and all vectors 𝐮, 𝐯 in `this`.
+  *   - 𝑎 *: (𝐮 + 𝐯) == (𝑎 *: 𝐮) + (𝑎 *: 𝐯) for every scalar 𝑎 and all vectors 𝐮, 𝐯 in `this`.
+  *   - (𝑎 + 𝑏) *: 𝐯 == (𝑎 *: 𝐯) + (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in `this`.
   * 
   * @author Chris Sachs
   * 
@@ -42,8 +41,8 @@ package basis.algebra
   *   assert(u + v == v + u, "commutativity of vector addition")
   *   assert((u + v) + w == u + (v + w), "associativity of vector addition")
   *   assert((a * b) *: v == a *: (b *: v), "associativity of scalar multiplication with ring multiplication")
-  *   assert(a *: (u + v) == a *: u + a *: v, "distributivity of scalar multiplication over vector addition")
-  *   assert((a + b) *: v == a *: v + b *: v, "distributivity of scalar multiplication over ring addition")
+  *   assert(a *: (u + v) == (a *: u) + (a *: v), "distributivity of scalar multiplication over vector addition")
+  *   assert((a + b) *: v == (a *: v) + (b *: v), "distributivity of scalar multiplication over ring addition")
   * }
   * 
   * // Alternatively, functions can use path-dependent types of a LinearSpace parameter.

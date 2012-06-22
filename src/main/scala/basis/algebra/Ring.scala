@@ -7,10 +7,11 @@
 
 package basis.algebra
 
-/** A mathematical ring structure. Addition associates and commutes, and
+/** An abstract ring structure. Addition associates and commutes, and
   * multiplication associates and distributes over addition. Addition and
   * multiplication both have an identity element, and every element has an
-  * additive inverse. To the extent practicable, the ring axioms should hold.
+  * additive inverse. To the extent practicable, the following ring axioms
+  * should hold.
   * 
   * '''Axioms for addition''':
   *   - if 𝑎 and 𝑏 are elements in `this`, then their sum 𝑎 + 𝑏 is also an element in `this`.
@@ -25,7 +26,7 @@ package basis.algebra
   *   - `this` has an element `unit` != `zero` such that `unit` * 𝑎 == 𝑎 for every element 𝑎 in `this`.
   * 
   * '''The distributive law''':
-  *   - 𝑎 * (𝑏 + 𝑐) == 𝑎 * 𝑏 + 𝑎 * 𝑐 for all elements 𝑎, 𝑏, 𝑐 in `this`.
+  *   - 𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in `this`.
   * 
   * @author Chris Sachs
   * 
@@ -37,7 +38,7 @@ package basis.algebra
   *   assert(a + b == b + a, "commutativity of addition")
   *   assert((a + b) + c == a + (b + c), "associativity of addition")
   *   assert((a * b) * c == a * (b * c), "associativity of multiplication")
-  *   assert(a * (b + c) == a * b + a * c, "distributivity of multiplication over addition")
+  *   assert(a * (b + c) == (a * b) + (a * c), "distributivity of multiplication over addition")
   * }
   * 
   * // Alternatively, functions can use path-dependent types of a Ring parameter.

@@ -7,12 +7,12 @@
 
 package basis.algebra
 
-/** A totally ordered mathematical field structure. Addition associates and
+/** A totally ordered abstract field structure. Addition associates and
   * commutes, and multiplication associates, commutes, and distributes over
   * addition. Addition and multiplication both have an identity element, every
   * element has an additive inverse, and every element except zero has a
   * multiplicative inverse. Every `OrderedField` is also an `OrderedRing`. To
-  * the extent practicable, the field axioms and the order axioms should hold.
+  * the extent practicable, the following ordered field axioms should hold.
   * 
   * '''Axioms for addition''':
   *   - if 𝑎 and 𝑏 are elements in `this`, then their sum 𝑎 + 𝑏 is also an element in `this`.
@@ -29,7 +29,7 @@ package basis.algebra
   *   - if 𝑎 is in `this` and 𝑎 != `zero` then there exists an element 𝑎.`inverse` such that 𝑎 * 𝑎.`inverse` == `unit`.
   * 
   * '''The distributive law''':
-  *   - 𝑎 * (𝑏 + 𝑐) == 𝑎 * 𝑏 + 𝑎 * 𝑐 for all elements 𝑎, 𝑏, 𝑐 in `this`.
+  *   - 𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in `this`.
   * 
   * '''Order axioms''':
   *   - if 𝑎 <= 𝑏 and 𝑏 <= 𝑎 then 𝑎 == 𝑏 for all elements 𝑎, 𝑏 in `this`.
@@ -47,7 +47,7 @@ package basis.algebra
   *   assert((a + b) + c == a + (b + c), "associativity of addition")
   *   assert(a * b == b * a, "commutativity of multiplication")
   *   assert((a * b) * c == a * (b * c), "associativity of multiplication")
-  *   assert(a * (b + c) == a * b + a * c, "distributivity of multiplication over addition")
+  *   assert(a * (b + c) == (a * b) + (a * c), "distributivity of multiplication over addition")
   *   if (a <= b) assert((a min b) == a, "existence of minima")
   *   if (a <= b) assert((a max b) == b, "existence of maxima")
   * }
