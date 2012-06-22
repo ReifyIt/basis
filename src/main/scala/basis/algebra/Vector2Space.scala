@@ -7,11 +7,25 @@
 
 package basis.algebra
 
+/** An abstract 2-dimensional coordinate space over a commutative ring.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam S   The singleton type of the scalar structure of this $Structure.
+  * 
+  * @define Structure   `Vector2Space`
+  * @define vector      vector
+  * @define scalar      scalar
+  */
 trait Vector2Space[S <: Ring with Singleton] extends VectorSpace[S] {
+  /** A vector element of this $Structure. */
   trait Element extends Any with super.Element {
     override protected def Vector: Vector2Space.this.type = Vector2Space.this
     
+    /** Returns the 𝑥-coordinate of this $vector. */
     def x: Scalar
+    
+    /** Returns the 𝑦-coordinate of this $vector. */
     def y: Scalar
     
     override def N: Int = 2
@@ -49,8 +63,10 @@ trait Vector2Space[S <: Ring with Singleton] extends VectorSpace[S] {
     apply(coords(0), coords(1))
   }
   
+  /** Returns a new $vector with the given 𝑥 and 𝑦 coordinates. */
   def apply(x: Scalar, y: Scalar): Vector
   
+  /** Extracts the 𝑥 and 𝑦 coordinates from the given $vector. */
   def unapply(vector: Vector): Option[(Scalar, Scalar)] =
     Some(vector.x, vector.y)
   

@@ -8,7 +8,14 @@
 package basis.algebra
 package binary64
 
+/** A concrete 2-dimensional coordinate space over the binary64 `Integer` field.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define Structure   `Z2` space
+  */
 object Z2 extends Vector2Space[Integer.type] with IntegerVectorSpace {
+  /** A vector element of this $Structure. */
   final class Element(val x: Integer, val y: Integer)
     extends super[Vector2Space].Element
       with super[IntegerVectorSpace].Element {

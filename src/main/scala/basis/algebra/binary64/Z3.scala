@@ -8,7 +8,14 @@
 package basis.algebra
 package binary64
 
+/** A concrete 3-dimensional coordinate space over the binary64 `Integer` field.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define Structure   `Z3` space
+  */
 object Z3 extends Vector3Space[Integer.type] with IntegerVectorSpace {
+  /** A vector element of this $Structure. */
   final class Element(val x: Integer, val y: Integer, val z: Integer)
     extends super[Vector3Space].Element
       with super[IntegerVectorSpace].Element {

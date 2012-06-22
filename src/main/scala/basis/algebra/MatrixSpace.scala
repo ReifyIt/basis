@@ -180,7 +180,7 @@ trait MatrixSpace
     
     /** Returns a vector in the column space obtained from the product of
       * this $matrix multiplied by a vector in the row space on the right.
-      * The name of this method uses the unicode dot operator U+22C5. */
+      * The name of this method contains the unicode dot operator (U+22C5). */
     def :⋅ (vector: Row): Col = {
       if (N != vector.N) throw new DimensionException
       val coords = new Array[AnyRef](M)
@@ -204,7 +204,7 @@ trait MatrixSpace
     
     /** Returns a vector in the row space obtained from the product of
       * this $matrix multiplied by a vector in the column space on the left.
-      * The name of this method uses the unicode dot operator U+22C5. */
+      * The name of this method contains the unicode dot operator (U+22C5). */
     def ⋅: (vector: Col): Row = {
       if (vector.N != M) throw new DimensionException
       val coords = new Array[AnyRef](N)
@@ -229,7 +229,7 @@ trait MatrixSpace
       * matrix product exists in some matrix space whose row space is
       * equivalent to the row space of the multiplied $matrix, and whose
       * column space is equivalent to the column space of this.
-      * The name of this method uses the unicode dot operator U+22C5. */
+      * The name of this method contains the unicode dot operator (U+22C5). */
     def ⋅ [U <: VectorSpace[S] with Singleton]
         (that: B#Matrix forSome { type B <: MatrixSpace[U, V, S] })
       : C#Matrix forSome { type C <: MatrixSpace[U, W, S] } =

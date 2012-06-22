@@ -72,10 +72,10 @@ trait LinearSpace[S <: Ring with Singleton] {
     /** Returns the vector difference between this $vector and another $vector. */
     def - (that: Vector): Vector
     
-    /** Returns the product of this $vector multiplied by some $scalar on the right. */
+    /** Returns the product of this $vector times a $scalar on the right. */
     def :* (scalar: Scalar): Vector
     
-    /** Returns the product of this $vector multiplied by some $scalar on the left. */
+    /** Returns the product of this $vector times a $scalar on the left. */
     def *: (scalar: Scalar): Vector
   }
   

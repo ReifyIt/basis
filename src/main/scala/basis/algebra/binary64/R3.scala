@@ -8,7 +8,14 @@
 package basis.algebra
 package binary64
 
+/** A concrete 3-dimensional coordinate space over the binary64 `Real` field.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define Structure   `R3` space
+  */
 object R3 extends Vector3Space[Real.type] with RealVectorSpace {
+  /** A vector element of this $Structure. */
   final class Element(val x: Real, val y: Real, val z: Real)
     extends super[Vector3Space].Element
       with super[RealVectorSpace].Element {
@@ -58,15 +65,12 @@ object R3 extends Vector3Space[Real.type] with RealVectorSpace {
     new Vector(coords(0), coords(1), coords(2))
   }
   
-  override def apply(x: Real, y: Real, z: Real): Vector =
-    new Vector(x, y, z)
+  override def apply(x: Real, y: Real, z: Real): Vector = new Vector(x, y, z)
   
   override def ⨯ (that: RealVectorSpace): RealMatrixSpace[that.type, this.type] = {
     if (that.isInstanceOf[R3.type]) R3x3.asInstanceOf[RealMatrixSpace[that.type, this.type]]
     else super.⨯(that)
   }
-  
-  def ⨯ (that: R3.type): R3x3.type = R3x3
   
   override def toString: String = "R3"
 }

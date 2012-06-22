@@ -130,7 +130,7 @@ trait VectorSpace[S <: Ring with Singleton] extends AffineSpace[S] with LinearSp
     }
     
     /** Returns the scalar dot product of this $vector and another $vector.
-      * The name of this method uses the unicode dot operator U+22C5. */
+      * The name of this method contains the unicode dot operator (U+22C5). */
     def ⋅ (that: Vector): Scalar = {
       if (N != that.N) throw new DimensionException
       var s = Scalar.zero
@@ -204,7 +204,7 @@ trait VectorSpace[S <: Ring with Singleton] extends AffineSpace[S] with LinearSp
   
   override def origin: Point = zero
   
-  /** Returns a linear transformation space from another `VectorSpace` to this $Structure. */
+  /** Returns a linear transformation space from some other `VectorSpace` to this $Structure. */
   def ⨯ (that: VectorSpace[S]): MatrixSpace[that.type, this.type, S] =
     new generic.FMxN[that.type, this.type, S](Scalar)(that, this)
 }

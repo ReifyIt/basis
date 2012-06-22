@@ -65,7 +65,7 @@ trait Ring {
     /** Returns the difference between this $element and another $element. */
     def - (that: Value): Value
     
-    /** Returns the product of this $element multiplied by another $element. */
+    /** Returns the product of this $element times another $element. */
     def * (that: Value): Value
   }
   

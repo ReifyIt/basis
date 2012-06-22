@@ -8,7 +8,16 @@
 package basis.algebra
 package binary64
 
+/** An abstract ''N''-dimensional coordinate space over the binary64 `Real` field.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define Structure   `RealVectorSpace`
+  * @define vector      real vector
+  * @define scalar      real scalar
+  */
 trait RealVectorSpace extends VectorSpace[Real.type] {
+  /** A vector element of this $Structure. */
   trait Element extends Any with super.Element {
     override protected def Vector: RealVectorSpace.this.type = RealVectorSpace.this
     
@@ -58,6 +67,7 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
     
     override def *: (scalar: Real): Vector = this :* scalar
     
+    /** Returns the quotient of this $vector divided by a $scalar. */
     def / (scalar: Real): Vector = {
       val coords = new Array[Double](N)
       var i = 0
@@ -79,6 +89,7 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
       s
     }
     
+    /** Returns the Euclidean norm of this $vector. */
     def norm: Real = {
       var s = 0.0
       var i = 0
@@ -89,6 +100,7 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
       new Real(s).sqrt
     }
     
+    /** Returns a $vector in the same direction as this $vector but scaled to unit length. */
     def normalized: Vector = this / norm
     
     override def equals(other: Any): Boolean = other match {
@@ -125,6 +137,7 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
   
   override def apply(coords: Real*): Vector = apply(coords.map(_.toDouble).toArray[Double])
   
+  /** Returns a new $vector with the given `Double` coordinates. */
   def apply(coords: Array[Double]): Vector
   
   override def zero: Vector = apply(new Array[Double](N))
@@ -135,6 +148,7 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
     else super.⨯(that)
   }
   
+  /** Returns a linear transformation space from some other `RealVectorSpace` to this $Structure. */
   def ⨯ (that: RealVectorSpace): RealMatrixSpace[that.type, this.type] =
     new RMxN[that.type, this.type](that, this)
 }

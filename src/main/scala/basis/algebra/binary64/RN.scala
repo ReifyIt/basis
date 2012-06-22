@@ -8,7 +8,14 @@
 package basis.algebra
 package binary64
 
-class RN(val N: Int) extends RealVectorSpace {
+/** A concrete ''N''-dimensional coordinate space over the binary64 `Real` field.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define Structure   `RN` space
+  */
+class RN(override val N: Int) extends RealVectorSpace {
+  /** A vector element of this $Structure. */
   final class Element private[RN] (coords: Array[Double]) extends super.Element {
     if (coords.length != Vector.N) throw new DimensionException
     
