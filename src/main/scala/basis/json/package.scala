@@ -23,7 +23,7 @@ package basis
   * scala> json""" [{}, [], "", 0, 0.0, true, false, null] """
   * res0: basis.json.JSArray = [{},[],"",0,0.0,true,false,null]
   * 
-  * scala> def person(name: String, age: Int) = json""" { "name" : $name, "age" : $age } """
+  * scala> def person(name: String, age: Int) = json""" { "name" : \$name, "age" : \$age } """
   * person: (name: String, age: Int)basis.json.JSObject
   * 
   * scala> person("Bart Simpson", 10)
