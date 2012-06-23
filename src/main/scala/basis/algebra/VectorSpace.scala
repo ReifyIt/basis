@@ -55,7 +55,7 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @tparam S   The scalar set of this $space.
+  * @tparam S   The set of scalars.
   * 
   * @define space   vector space
   */
@@ -69,10 +69,10 @@ trait VectorSpace[S <: Ring with Singleton] extends AffineSpace[S] with LinearSp
   trait Element extends Any with super[AffineSpace].Element with super[LinearSpace].Element {
     protected def Vector: VectorSpace.this.type = VectorSpace.this
     
-    /** Returns the number of coordinates in this $vector. */
+    /** Returns the number of coordinates. */
     def N: Int = Vector.N
     
-    /** Returns the coordinate of this $vector at the given index. */
+    /** Returns the coordinate at the given index. */
     def apply(i: Int): Scalar
     
     override def + (that: Vector): Vector = {

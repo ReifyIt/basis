@@ -11,7 +11,7 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
-  * @tparam S   The scalar set of this $space.
+  * @tparam S   The set of scalars.
   */
 trait Vector4Space[S <: Ring with Singleton] extends VectorSpace[S] {
   trait Element extends Any with super.Element {

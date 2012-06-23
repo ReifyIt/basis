@@ -11,8 +11,8 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
-  * @tparam V   The vector space on which this $space operates.
-  * @tparam S   The scalar set of this $space.
+  * @tparam V   The space of rows and columns.
+  * @tparam S   The set of scalars.
   */
 trait Matrix3x3Space[V <: Vector3Space[S] with Singleton, S <: Field with Singleton] extends MatrixRing[V, S] {
   trait Element extends Any with super.Element {
@@ -112,8 +112,8 @@ trait Matrix3x3Space[V <: Vector3Space[S] with Singleton, S <: Field with Single
           vector.x * _1_2 + vector.y * _2_2 + vector.z * _3_2,
           vector.x * _1_3 + vector.y * _2_3 + vector.z * _3_3)
     
-    override def T: Transpose.Matrix =
-      Transpose(
+    override def transpose: Matrix =
+      Matrix(
         _1_1, _2_1, _3_1,
         _1_2, _2_2, _3_2,
         _1_3, _2_3, _3_3)
@@ -160,8 +160,6 @@ trait Matrix3x3Space[V <: Vector3Space[S] with Singleton, S <: Field with Single
   }
   
   override type Matrix <: Element
-  
-  override val Transpose: this.type
   
   override def Row: V
   override def Col: V

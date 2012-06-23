@@ -14,7 +14,7 @@ import language.existentials
   * 
   * @author Chris Sachs
   * 
-  * @tparam S    The scalar set of this $space.
+  * @tparam S    The set of scalars.
   */
 class FN[S <: Ring with Singleton](val Scalar: S)(val N: Int) extends VectorSpace[S] {
   final class Element private[FN] (coords: Array[AnyRef]) extends super.Element {

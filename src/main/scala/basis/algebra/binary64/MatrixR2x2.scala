@@ -84,7 +84,7 @@ final class MatrixR2x2(
       vector.x * _1_1 + vector.y * _2_1,
       vector.x * _1_2 + vector.y * _2_2)
   
-  override def T: MatrixR2x2 =
+  override def transpose: MatrixR2x2 =
     new MatrixR2x2(
       _1_1, _2_1,
       _1_2, _2_2)
@@ -115,8 +115,6 @@ object MatrixR2x2 extends Matrix2x2Space[R2, R] with RealMatrixSpace[R2, R2] {
   trait Element extends super[Matrix2x2Space].Element with super[RealMatrixSpace].Element
   
   override type Matrix = MatrixR2x2
-  
-  override val Transpose: this.type = this
   
   override def Row: R2 = R2
   override def Col: R2 = R2

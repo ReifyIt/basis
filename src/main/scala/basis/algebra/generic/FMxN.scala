@@ -12,9 +12,9 @@ package generic
   * 
   * @author Chris Sachs
   * 
-  * @tparam V   The row space of this $space.
-  * @tparam W   The column space of this $space.
-  * @tparam S   The scalar set of this $space.
+  * @tparam V   The row space.
+  * @tparam W   The column space.
+  * @tparam S   The set of scalars.
   */
 class FMxN[V <: VectorSpace[S] with Singleton, W <: VectorSpace[S] with Singleton, S <: Ring with Singleton]
     (val Scalar: S)(val Row: V, val Col: W)
@@ -28,7 +28,19 @@ class FMxN[V <: VectorSpace[S] with Singleton, W <: VectorSpace[S] with Singleto
   
   override type Matrix = Element
   
-  override lazy val Transpose = new FMxN[W, V, S](Scalar)(Col, Row)
+  override type Transpose <: FMxN[W, V, S] with Singleton {
+    type Transpose = FMxN.this.type
+  }
+  
+  private var _Transpose: FMxN[W, V, S] = null
+  
+  override def Transpose: Transpose = synchronized {
+    if (_Transpose == null) {
+      _Transpose = new FMxN[W, V, S](Scalar)(Col, Row)
+      _Transpose._Transpose = this
+    }
+    _Transpose.asInstanceOf[Transpose]
+  }
   
   override lazy val zero: Matrix = super.zero
   

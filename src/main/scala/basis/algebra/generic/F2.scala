@@ -14,7 +14,7 @@ import language.existentials
   * 
   * @author Chris Sachs
   * 
-  * @tparam S    The scalar set of this $space.
+  * @tparam S    The set of scalars.
   */
 class F2[S <: Ring with Singleton](val Scalar: S) extends Vector2Space[S] {
   final class Element(val x: Scalar, val y: Scalar) extends super.Element {

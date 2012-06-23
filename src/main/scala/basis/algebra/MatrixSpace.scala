@@ -36,16 +36,16 @@ import language.existentials
   *   - If 𝐀 is a matrix in `this` and 𝐯 is a vector in the row space of 𝐀, then their product
   *     𝐀 :⋅ 𝐯 is a vector in the column space of 𝐀.
   *   - (𝐀 ⋅ 𝐁) :⋅ 𝐯 == 𝐀 :⋅ (𝐁 :⋅ 𝐯) for all matrices 𝐀, 𝐁 and every vector 𝐯 in the row space of 𝐁,
-  *     where the row space of 𝐀 is equivalent to the column space of 𝐁.
-  *   - 𝐀 :⋅ 𝐯 == 𝐯 ⋅: 𝐀.`T` for every matrix 𝐀 and every vector 𝐯 in the row space of 𝐀.
+  *     where the row space of 𝐀 equals the column space of 𝐁.
+  *   - 𝐀 :⋅ 𝐯 == 𝐯 ⋅: 𝐀.`transpose` for every matrix 𝐀 and every vector 𝐯 in the row space of 𝐀.
   * 
   * '''Axioms for matrix multiplication''':
-  *   - if 𝐀 and 𝐁 are matrices and the row space of 𝐀 is equivalent to the column space of 𝐁,
+  *   - if 𝐀 and 𝐁 are matrices and the row space of 𝐀 equals the column space of 𝐁,
   *     then the matrix product 𝐀 ⋅ 𝐁 exists.
-  *   - (𝐀 ⋅ 𝐁) ⋅ 𝐂 == 𝐀 ⋅ (𝐁 ⋅ 𝐂) for all matrices 𝐀, 𝐁, 𝐂 where the row space of 𝐀 is equivalent to
-  *     the column space of 𝐁, and the row space of 𝐁 is equivalent to the column space of 𝐂.
-  *   - (𝐀 ⋅ 𝐁).`T` == 𝐁.`T` ⋅ 𝐀.`T` for all matrices 𝐀, 𝐁 where the row space of 𝐀 is equivalent to
-  *     the column space of 𝐁.
+  *   - (𝐀 ⋅ 𝐁) ⋅ 𝐂 == 𝐀 ⋅ (𝐁 ⋅ 𝐂) for all matrices 𝐀, 𝐁, 𝐂 where the row space of 𝐀 equals
+  *     the column space of 𝐁, and the row space of 𝐁 equals the column space of 𝐂.
+  *   - (𝐀 ⋅ 𝐁).`transpose` == 𝐁.`transpose` ⋅ 𝐀.`transpose` for all matrices 𝐀, 𝐁 where
+  *     the row space of 𝐀 equals the column space of 𝐁.
   * 
   * '''Distributive laws''':
   *   - 𝑥 *: (𝐀 + 𝐁) == (𝑥 *: 𝐀) + (𝑥 *: 𝐁) for every scalar 𝑥 and all matrices 𝐀, 𝐁 in `this`.
@@ -55,15 +55,15 @@ import language.existentials
   *   - (𝐀 + 𝐁) :⋅ 𝐯 == (𝐀 :⋅ 𝐯) + (𝐁 :⋅ 𝐯) for all matrices 𝐀, 𝐁 in the same matrix space, and every
   *     vector 𝐯 in the row space of 𝐀 and 𝐁.
   *   - 𝐀 ⋅ (𝐁 + 𝐂) == (𝐀 ⋅ 𝐁) + (𝐀 ⋅ 𝐂) for all matrices 𝐁, 𝐂 in the same matrix space, and every
-  *     matrix 𝐀 whose row space is equivalent to the colum space of 𝐁 and 𝐂.
+  *     matrix 𝐀 whose row space equals the colum space of 𝐁 and 𝐂.
   *   - (𝐀 + 𝐁) ⋅ 𝐂 == (𝐀 ⋅ 𝐂) + (𝐁 ⋅ 𝐂) for all matrices 𝐀, 𝐁 in the same matrix space, and every
-  *     matrix 𝐂 whose column space is equivalent to the row space of 𝐀 and 𝐁.
+  *     matrix 𝐂 whose column space equals the row space of 𝐀 and 𝐁.
   * 
   * @author Chris Sachs
   * 
-  * @tparam V   The row space of this $space.
-  * @tparam W   The column space of this $space.
-  * @tparam S   The scalar set of this $space.
+  * @tparam V   The row space.
+  * @tparam W   The column space.
+  * @tparam S   The set of scalars.
   * 
   * @define space   matrix space
   */
@@ -81,23 +81,23 @@ trait MatrixSpace
   trait Element extends Any with super.Element {
     protected def Matrix: MatrixSpace.this.type = MatrixSpace.this
     
-    /** Returns the number of rows, or equivalently the dimension of the columns, in this $matrix. */
+    /** Returns the number of rows, or equivalently, the dimension of the columns. */
     def M: Int = Matrix.M
     
-    /** Returns the number of columns, or equivalently the dimension of the rows, in this $matrix. */
+    /** Returns the number of columns, or equivalently, the dimension of the rows. */
     def N: Int = Matrix.N
     
-    /** Returns the entry of this $matrix at the given row-major index. */
+    /** Returns the entry at the given row-major index. */
     def apply(k: Int): Scalar
     
-    /** Returns the entry of this $matrix at row `i`, column `j`. */
+    /** Returns the entry in row `i`, column `j`. */
     def apply(i: Int, j: Int): Scalar = {
       if (i < 0 || i >= M || j < 0 || j >= N)
         throw new IndexOutOfBoundsException("row "+ i +", "+"col "+ j)
       apply(N * i + j)
     }
     
-    /** Returns the row of this $matrix at the given index. */
+    /** Returns the row at the given index. */
     def row(i: Int): Row = {
       if (i < 0 || i >= M) throw new IndexOutOfBoundsException("row "+ i)
       val coords = new Array[AnyRef](N)
@@ -111,7 +111,7 @@ trait MatrixSpace
       Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
     }
     
-    /** Returns the column of this $matrix at the given index. */
+    /** Returns the column at the given index. */
     def col(j: Int): Col = {
       if (j < 0 || j >= N) throw new IndexOutOfBoundsException("col "+ j)
       val coords = new Array[AnyRef](M)
@@ -177,9 +177,9 @@ trait MatrixSpace
       Matrix(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
     }
     
-    /** Returns a vector in the column space obtained from the product of
-      * this $matrix multiplied by a vector in the row space on the right.
-      * The name of this method contains the unicode dot operator (U+22C5). */
+    /** Returns a vector in the column space by right-multiplying this $matrix
+      * by a column vector in the row space. The name of this method contains
+      * the unicode dot operator (U+22C5). */
     def :⋅ (vector: Row): Col = {
       if (N != vector.N) throw new DimensionException
       val coords = new Array[AnyRef](M)
@@ -201,9 +201,9 @@ trait MatrixSpace
       Col(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
     }
     
-    /** Returns a vector in the row space obtained from the product of
-      * this $matrix multiplied by a vector in the column space on the left.
-      * The name of this method contains the unicode dot operator (U+22C5). */
+    /** Returns a vector in the row space by left-multiplying a row vector in
+      * the column space by this $matrix. The name of this method contains
+      * the unicode dot operator (U+22C5). */
     def ⋅: (vector: Col): Row = {
       if (vector.N != M) throw new DimensionException
       val coords = new Array[AnyRef](N)
@@ -223,19 +223,18 @@ trait MatrixSpace
       Row(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
     }
     
-    /** Returns the product of this $matrix multiplied by another $matrix
-      * whose column space is equivalent to the row space of this. The
-      * matrix product exists in some matrix space whose row space is
-      * equivalent to the row space of the multiplied $matrix, and whose
-      * column space is equivalent to the column space of this.
-      * The name of this method contains the unicode dot operator (U+22C5). */
+    /** Returns the product of this $matrix times another $matrix whose column
+      * space equals this row space. The product matrix exists in some matrix
+      * space whose row space equals the multiplier's row space, and whose
+      * column space equals this column space. The name of this method
+      * contains the unicode dot operator (U+22C5). */
     def ⋅ [U <: VectorSpace[S] with Singleton]
         (that: B#Element forSome { type B <: MatrixSpace[U, V, S] })
       : C#Matrix forSome { type C <: MatrixSpace[U, W, S] } =
       compose(that.Matrix).product(this, that)
     
     /** Returns the transpose of this $matrix. */
-    def T: Transpose.Matrix = {
+    def transpose: Transpose#Matrix = {
       val entries = new Array[AnyRef](N * M)
       var k = 0
       var j = 0
@@ -307,25 +306,30 @@ trait MatrixSpace
   /** The type of matrices in this $space. */
   type Matrix <: Element
   
-  /** The type of vectors in the row space of this $space. */
+  /** The transpose of this $space. */
+  type Transpose <: MatrixSpace[W, V, S] with Singleton {
+    type Transpose = MatrixSpace.this.type
+  }
+  
+  /** The type of vectors in the row space. */
   type Row = V#Vector
   
-  /** The type of vectors in the column space of this $space. */
+  /** The type of vectors in the column space. */
   type Col = W#Vector
   
   /** Returns the transpose of this $space. */
-  val Transpose: MatrixSpace[W, V, S]
+  def Transpose: Transpose
   
-  /** Returns the row space of this $space. */
+  /** Returns the row space. */
   def Row: V
   
-  /** Returns the column space of this $space. */
+  /** Returns the column space. */
   def Col: W
   
-  /** Returns the dimension of the column space of this $space. */
+  /** Returns the dimension of the column space. */
   def M: Int = Col.N
   
-  /** Returns the dimension of the row space of this $space. */
+  /** Returns the dimension of the row space. */
   def N: Int = Row.N
   
   /** Returns a new matrix with the given row-major entries. */
@@ -382,16 +386,15 @@ trait MatrixSpace
     apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
   }
   
-  /** Returns a `MatrixSpace` that represents linear maps from the row space
-    * of the given `MatrixSpace` to the column space of this $space. */
+  /** Returns a matrix space that maps the row space of another matrix space
+    * to this column space. */
   def compose[U <: VectorSpace[S] with Singleton]
       (that: MatrixSpace[U, V, S]): MatrixSpace[U, W, S] =
     Col ⨯ that.Row
   
-  /** Returns a new matrix obtained from the product of the first matrix,
-    * whose column space is equivalent to the column space of this, and the
-    * second matrix, whose row space is equivalent to the row space of this,
-    * where the row space of the first matrix is equivalent to the column
+  /** Returns the matrix product of the first matrix, whose column space equals
+    * this column space, times the second matrix, whose row space equals this
+    * row space, where the row space of the first matrix equals the column
     * space of the second matrix. */
   def product[U <: VectorSpace[S] with Singleton](
       matrixA: A#Element forSome { type A <: MatrixSpace[U, W, S] },

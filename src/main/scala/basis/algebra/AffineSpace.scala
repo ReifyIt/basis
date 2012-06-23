@@ -38,7 +38,7 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @tparam S   The scalar set of this $space.
+  * @tparam S   The set of scalars.
   * 
   * @define space   affine space
   */

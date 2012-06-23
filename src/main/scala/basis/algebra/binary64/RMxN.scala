@@ -12,8 +12,8 @@ package binary64
   * 
   * @author Chris Sachs
   * 
-  * @tparam V   The row space of this $space.
-  * @tparam W   The column space of this $space.
+  * @tparam V   The row space.
+  * @tparam W   The column space.
   */
 class RMxN[V <: RealVectorSpace with Singleton, W <: RealVectorSpace with Singleton]
     (val Row: V, val Col: W)
@@ -27,7 +27,19 @@ class RMxN[V <: RealVectorSpace with Singleton, W <: RealVectorSpace with Single
   
   override type Matrix = Element
   
-  override lazy val Transpose = new RMxN[W, V](Col, Row)
+  override type Transpose <: RMxN[W, V] with Singleton {
+    type Transpose = RMxN.this.type
+  }
+  
+  private var _Transpose: RMxN[W, V] = null
+  
+  override def Transpose: Transpose = synchronized {
+    if (_Transpose == null) {
+      _Transpose = new RMxN[W, V](Col, Row)
+      _Transpose._Transpose = this
+    }
+    _Transpose.asInstanceOf[Transpose]
+  }
   
   override lazy val zero: Matrix = super.zero
   

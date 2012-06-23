@@ -118,7 +118,7 @@ final class MatrixR4x4(
       vector.x * _1_3 + vector.y * _2_3 + vector.z * _3_3 + vector.w * _4_3,
       vector.x * _1_4 + vector.y * _2_4 + vector.z * _3_4 + vector.w * _4_4)
   
-  override def T: MatrixR4x4 =
+  override def transpose: MatrixR4x4 =
     new MatrixR4x4(
       _1_1, _2_1, _3_1, _4_1,
       _1_2, _2_2, _3_2, _4_2,
@@ -219,8 +219,6 @@ object MatrixR4x4 extends Matrix4x4Space[R4, R] with RealMatrixSpace[R4, R4] {
   trait Element extends super[Matrix4x4Space].Element with super[RealMatrixSpace].Element
   
   override type Matrix = MatrixR4x4
-  
-  override val Transpose: this.type = this
   
   override def Row: R4 = R4
   override def Col: R4 = R4

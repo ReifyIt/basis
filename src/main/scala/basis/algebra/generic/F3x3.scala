@@ -12,8 +12,8 @@ package generic
   * 
   * @author Chris Sachs
   * 
-  * @tparam V   The vector space on which this $space operates.
-  * @tparam S   The scalar set of this $space.
+  * @tparam V   The space of rows and columns.
+  * @tparam S   The set of scalars.
   */
 class F3x3[V <: Vector3Space[S] with Singleton, S <: Field with Singleton]
     (val Scalar: S)(Vector: V)
@@ -27,14 +27,10 @@ class F3x3[V <: Vector3Space[S] with Singleton, S <: Field with Singleton]
   
   override type Matrix = Element
   
-  override lazy val Transpose: this.type = this
-  
   override def Row: V = Vector
-  
   override def Col: V = Vector
   
   override lazy val zero: Matrix = super.zero
-  
   override lazy val unit: Matrix = super.unit
   
   override def apply(

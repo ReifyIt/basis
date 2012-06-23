@@ -14,8 +14,8 @@ import language.existentials
   * 
   * @author Chris Sachs
   * 
-  * @tparam V   The row space of this $space.
-  * @tparam W   The column space of this $space.
+  * @tparam V   The row space.
+  * @tparam W   The column space.
   * 
   * @define space   real matrix space
   */
@@ -150,7 +150,7 @@ trait RealMatrixSpace
       : C#Matrix forSome { type C <: RealMatrixSpace[U, W] } =
       compose(that.Matrix).product(this, that)
     
-    override def T: Transpose.Matrix = {
+    override def transpose: Transpose#Matrix = {
       val entries = new Array[Double](N * M)
       var k = 0
       var j = 0
@@ -198,7 +198,11 @@ trait RealMatrixSpace
   
   override type Scalar = Real
   
-  override val Transpose: RealMatrixSpace[W, V]
+  override type Transpose <: RealMatrixSpace[W, V] with Singleton {
+    type Transpose = RealMatrixSpace.this.type
+  }
+  
+  override def Transpose: Transpose
   
   override def Row: V
   
@@ -257,10 +261,16 @@ trait RealMatrixSpace
     else super.compose[U](that)
   }
   
+  /** Returns a real matrix space that maps the row space of another real
+    * matrix space to this column space. */
   def compose[U <: RealVectorSpace with Singleton]
       (that: RealMatrixSpace[U, V]): RealMatrixSpace[U, W] =
     Col ⨯ that.Row
   
+  /** Returns the real matrix product of the first real matrix, whose column
+    * space equals this column space, times the second real matrix, whose row
+    * space equals this row space, where the row space of the first matrix
+    * equals the column space of the second matrix. */
   override def product[U <: VectorSpace[Real.type] with Singleton](
       matrixA: A#Element forSome { type A <: MatrixSpace[U, W, Real.type] },
       matrixB: B#Element forSome { type B <: MatrixSpace[V, U, Real.type] }): Matrix = {

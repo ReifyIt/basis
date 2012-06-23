@@ -11,8 +11,8 @@ package basis.algebra
   * 
   * @author Chris Sachs
   * 
-  * @tparam V   The vector space on which this $space operates.
-  * @tparam S   The scalar set of this $space.
+  * @tparam V   The space of rows and columns.
+  * @tparam S   The set of scalars.
   */
 trait MatrixRing[V <: VectorSpace[S] with Singleton, S <: Ring with Singleton] extends Ring with MatrixSpace[V, V, S] {
   /** A matrix in this $space.
@@ -36,7 +36,9 @@ trait MatrixRing[V <: VectorSpace[S] with Singleton, S <: Ring with Singleton] e
   
   override type Matrix <: Element
   
-  override val Transpose: this.type
+  override type Transpose = this.type
+  
+  override def Transpose: this.type = this
   
   override def unit: Matrix = {
     val z = Scalar.zero.asInstanceOf[AnyRef]
