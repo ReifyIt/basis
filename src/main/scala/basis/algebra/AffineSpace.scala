@@ -9,8 +9,7 @@ package basis.algebra
 
 /** An abstract principal homogeneous space over the additive group of a linear
   * space. Vector addition acts freely and transitively over the point set.
-  * Every `AffineSpace` is a subtype of the `LinearSpace` it acts over. to the
-  * extent practicable, the following affine space axioms should hold.
+  * To the extent practicable, the following axioms should hold.
   * 
   * '''Axioms''':
   *   - 𝓅 + `zero` == 𝓅 for every point 𝓅 in `this`.
@@ -39,29 +38,31 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @tparam S   The singleton type of the scalar structure of this $Structure.
+  * @tparam S   The scalar set of this $space.
   * 
-  * @define Structure   `AffineSpace`
-  * @define point       point
-  * @define vector      vector
-  * @define scalar      scalar
+  * @define space   affine space
   */
 trait AffineSpace[S <: Ring with Singleton] extends LinearSpace[S] {
-  /** A point element of this $Structure. */
+  /** A point in this $space.
+    * 
+    * @define point   point
+    * @define vector  vector
+    * @define scalar  scalar
+    */
   trait Element extends Any {
-    /** Returns the affine sum of this $point and some $vector. */
+    /** Returns the sum of this $point and a $vector. */
     def + (vector: Vector): Point
     
-    /** Returns the affine difference between this $point and some $vector. */
+    /** Returns the difference between this $point and a $vector. */
     def - (vector: Vector): Point
     
-    /** Returns the affine difference between this $point and another $point. */
+    /** Returns the difference between this $point and another $point. */
     def - (that: Point): Vector
   }
   
-  /** The point element type of this $Structure. */
+  /** The type of points in this $space. */
   type Point <: Element
   
-  /** The origin point of this $Structure. */
+  /** Returns the origin of this $space. */
   def origin: Point
 }

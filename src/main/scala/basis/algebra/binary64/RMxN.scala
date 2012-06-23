@@ -8,6 +8,13 @@
 package basis.algebra
 package binary64
 
+/** A space of ''M''x''N'' real matrices.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam V   The row space of this $space.
+  * @tparam W   The column space of this $space.
+  */
 class RMxN[V <: RealVectorSpace with Singleton, W <: RealVectorSpace with Singleton]
     (val Row: V, val Col: W)
   extends RealMatrixSpace[V, W] {
@@ -24,11 +31,7 @@ class RMxN[V <: RealVectorSpace with Singleton, W <: RealVectorSpace with Single
   
   override lazy val zero: Matrix = super.zero
   
-  override def apply(entries: Real*): Matrix =
-    new Matrix(entries.map(_.toDouble).toArray[Double])
+  override def apply(entries: Array[Double]): Matrix = new Matrix(entries)
   
-  override def apply(entries: Array[Double]): Matrix =
-    new Matrix(entries)
-  
-  override def toString: String = "RMxN"+"("+ Row +", "+ Col +")"
+  override def toString: String = "("+ Col +"⨯"+ Row +")"
 }

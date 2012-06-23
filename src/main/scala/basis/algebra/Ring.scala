@@ -10,7 +10,7 @@ package basis.algebra
 /** An abstract ring structure. Addition associates and commutes, and
   * multiplication associates and distributes over addition. Addition and
   * multiplication both have an identity element, and every element has an
-  * additive inverse. To the extent practicable, the following ring axioms
+  * additive inverse. To the extent practicable, the following axioms
   * should hold.
   * 
   * '''Axioms for addition''':
@@ -50,31 +50,33 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @define Structure   `Ring`
-  * @define element     element
+  * @define space   ring
   */
 trait Ring {
-  /** An element of this $Structure. */
+  /** An element in this $space.
+    * 
+    * @define value   element
+    */
   trait Element extends Any {
-    /** Returns the sum of this $element and another $element. */
+    /** Returns the sum of this $value and another $value. */
     def + (that: Value): Value
     
-    /** Returns the additive inverse of this $element. */
+    /** Returns the additive inverse of this $value. */
     def unary_- : Value
     
-    /** Returns the difference between this $element and another $element. */
+    /** Returns the difference between this $value and another $value. */
     def - (that: Value): Value
     
-    /** Returns the product of this $element times another $element. */
+    /** Returns the product of this $value times another $value. */
     def * (that: Value): Value
   }
   
-  /** The element type of this $Structure. */
+  /** The type of elements in this $space. */
   type Value <: Element
   
-  /** Returns the additive identity element of this $Structure. */
+  /** Returns the additive identity of this $space. */
   def zero: Value
   
-  /** Returns the multiplicative identity element of this $Structure. */
+  /** Returns the multiplicative identity of this $space. */
   def unit: Value
 }

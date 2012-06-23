@@ -7,18 +7,13 @@
 
 package basis.algebra
 
-/** An abstract 3-dimensional coordinate space over a commutative ring.
+/** An abstract space of 3-dimensional vectors over a ring.
   * 
   * @author Chris Sachs
   * 
-  * @tparam S   The singleton type of the scalar structure of this $Structure.
-  * 
-  * @define Structure   `Vector3Space`
-  * @define vector      vector
-  * @define scalar      scalar
+  * @tparam S   The scalar set of this $space.
   */
 trait Vector3Space[S <: Ring with Singleton] extends VectorSpace[S] {
-  /** A vector element of this $Structure. */
   trait Element extends Any with super.Element {
     override protected def Vector: Vector3Space.this.type = Vector3Space.this
     
@@ -57,7 +52,7 @@ trait Vector3Space[S <: Ring with Singleton] extends VectorSpace[S] {
     override def ⋅ (that: Vector): Scalar =
       x * that.x + y * that.y + z * that.z
     
-    /** Returns the vector cross product of this $vector and another $vector.
+    /** Returns the cross product of this $vector and another $vector.
       * The name of this method contains the unicode cross product operator (U+2A2F). */
     def ⨯ (that: Vector): Vector =
       Vector(y * that.z + z * that.y,
@@ -74,10 +69,10 @@ trait Vector3Space[S <: Ring with Singleton] extends VectorSpace[S] {
     apply(coords(0), coords(1), coords(2))
   }
   
-  /** Returns a new $vector with the given 𝑥, 𝑦 and 𝑧 coordinates. */
+  /** Returns a new vector with the given 𝑥, 𝑦 and 𝑧 coordinates. */
   def apply(x: Scalar, y: Scalar, z: Scalar): Vector
   
-  /** Extracts the 𝑥, 𝑦 and 𝑧 coordinates from the given $vector. */
+  /** Extracts the 𝑥, 𝑦 and 𝑧 coordinates from the given vector. */
   def unapply(vector: Vector): Option[(Scalar, Scalar, Scalar)] =
     Some(vector.x, vector.y, vector.z)
   

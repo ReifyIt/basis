@@ -10,12 +10,21 @@ package binary64
 
 import language.existentials
 
+/** An abstract space of ''M''x''N'' real matrices.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam V   The row space of this $space.
+  * @tparam W   The column space of this $space.
+  * 
+  * @define space   real matrix space
+  */
 trait RealMatrixSpace
     [V <: RealVectorSpace with Singleton,
      W <: RealVectorSpace with Singleton]
-  extends MatrixSpace[V, W, Real.type] {
+  extends MatrixSpace[V, W, R] {
   
-  trait Element extends Any with super.Element { this: Matrix =>
+  trait Element extends Any with super.Element {
     override protected def Matrix: RealMatrixSpace.this.type = RealMatrixSpace.this
     
     override def apply(k: Int): Real
@@ -137,7 +146,7 @@ trait RealMatrixSpace
     }
     
     def ⋅ [U <: RealVectorSpace with Singleton]
-        (that: B#Matrix forSome { type B <: RealMatrixSpace[U, V] })
+        (that: B#Element forSome { type B <: RealMatrixSpace[U, V] })
       : C#Matrix forSome { type C <: RealMatrixSpace[U, W] } =
       compose(that.Matrix).product(this, that)
     
@@ -195,11 +204,11 @@ trait RealMatrixSpace
   
   override def Col: W
   
-  override def Scalar = Real
-  
-  override def apply(entries: Real*): Matrix
+  override def Scalar: R = Real
   
   def apply(entries: Array[Double]): Matrix
+  
+  override def apply(entries: Real*): Matrix = apply(entries.map(_.toDouble).toArray[Double])
   
   override def rows(rows: Row*): Matrix = {
     if (rows.length != M) throw new DimensionException
@@ -253,8 +262,8 @@ trait RealMatrixSpace
     Col ⨯ that.Row
   
   override def product[U <: VectorSpace[Real.type] with Singleton](
-      matrixA: A#Matrix forSome { type A <: MatrixSpace[U, W, Real.type] },
-      matrixB: B#Matrix forSome { type B <: MatrixSpace[V, U, Real.type] }): Matrix = {
+      matrixA: A#Element forSome { type A <: MatrixSpace[U, W, Real.type] },
+      matrixB: B#Element forSome { type B <: MatrixSpace[V, U, Real.type] }): Matrix = {
     if (matrixA.isInstanceOf[Element] && matrixB.isInstanceOf[Element]) {
       val realMatrixA = matrixA.asInstanceOf[Element]
       val realMatrixB = matrixB.asInstanceOf[Element]

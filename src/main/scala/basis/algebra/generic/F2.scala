@@ -10,16 +10,13 @@ package generic
 
 import language.existentials
 
-/** A generic 2-dimensional coordinate space over a commutative ring.
+/** A generic space of 2-dimensional vectors over a ring.
   * 
   * @author Chris Sachs
   * 
-  * @tparam S   The singleton type of the scalar structure of this $Structure.
-  * 
-  * @define Structure   `F2` space
+  * @tparam S    The scalar set of this $space.
   */
 class F2[S <: Ring with Singleton](val Scalar: S) extends Vector2Space[S] {
-  /** A vector element of this $Structure. */
   final class Element(val x: Scalar, val y: Scalar) extends super.Element {
     /** Returns the quotient of this $vector divided by a $scalar.
       * 

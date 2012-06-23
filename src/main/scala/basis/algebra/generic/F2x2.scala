@@ -8,9 +8,16 @@
 package basis.algebra
 package generic
 
-class F2x2[V <: Vector2Space[S] with Singleton, W <: Vector2Space[S] with Singleton, S <: Field with Singleton]
-    (val Scalar: S)(val Row: V, val Col: W)
-  extends Matrix2x2Space[V, W, S] {
+/** A generic space of 2x2 matrices over a ring.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam V   The vector space on which this $space operates.
+  * @tparam S   The scalar set of this $space.
+  */
+class F2x2[V <: Vector2Space[S] with Singleton, S <: Field with Singleton]
+    (val Scalar: S)(Vector: V)
+  extends Matrix2x2Space[V, S] {
   
   final class Element(
       val _1_1: Scalar, val _1_2: Scalar,
@@ -19,7 +26,11 @@ class F2x2[V <: Vector2Space[S] with Singleton, W <: Vector2Space[S] with Single
   
   override type Matrix = Element
   
-  override lazy val Transpose = new F2x2[W, V, S](Scalar)(Col, Row)
+  override lazy val Transpose: this.type = this
+  
+  override def Row: V = Vector
+  
+  override def Col: V = Vector
   
   override lazy val zero: Matrix = super.zero
   
@@ -33,5 +44,5 @@ class F2x2[V <: Vector2Space[S] with Singleton, W <: Vector2Space[S] with Single
       _2_1, _2_2)
   
   override def toString: String =
-    "F2x2"+"("+ Scalar +")"+"("+ Row +", "+ Col +")"
+    "F2x2"+"("+ Scalar +")"+"("+ Vector +")"
 }

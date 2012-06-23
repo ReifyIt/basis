@@ -10,16 +10,13 @@ package generic
 
 import language.existentials
 
-/** A generic ''N''-dimensional coordinate space over a commutative ring.
+/** A generic space of ''N''-dimensional vectors over a ring.
   * 
   * @author Chris Sachs
   * 
-  * @tparam S   The singleton type of the scalar structure of this $Structure.
-  * 
-  * @define Structure   `FN` space
+  * @tparam S    The scalar set of this $space.
   */
 class FN[S <: Ring with Singleton](val Scalar: S)(val N: Int) extends VectorSpace[S] {
-  /** A vector element of this $Structure. */
   final class Element private[FN] (coords: Array[AnyRef]) extends super.Element {
     if (coords.length != Vector.N) throw new DimensionException
     

@@ -7,14 +7,22 @@
 
 package basis.algebra
 
-trait MatrixRing
-    [V <: VectorSpace[S] with Singleton,
-     W <: VectorSpace[S] with Singleton,
-     S <: Ring with Singleton]
-  extends Ring with MatrixSpace[V, W, S] {
-  
-  trait Element extends Any with super[Ring].Element with super[MatrixSpace].Element { this: Matrix =>
+/** An abstract space of ''N''x''N'' square matrices over a ring. 
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam V   The vector space on which this $space operates.
+  * @tparam S   The scalar set of this $space.
+  */
+trait MatrixRing[V <: VectorSpace[S] with Singleton, S <: Ring with Singleton] extends Ring with MatrixSpace[V, V, S] {
+  /** A matrix in this $space.
+    * 
+    * @define value   $matrix
+    */
+  trait Element extends Any with super[Ring].Element with super[MatrixSpace].Element {
     override protected def Matrix: MatrixRing.this.type = MatrixRing.this
+    
+    override def * (that: Matrix): Matrix = Matrix.product(this, that)
     
     def inverse: Option[Matrix]
     
@@ -23,11 +31,12 @@ trait MatrixRing
     def trace: Scalar
   }
   
+  /** The type of elements in this $space; equivalent to the type of matrices. */
   override type Value = Matrix
   
   override type Matrix <: Element
   
-  override val Transpose: MatrixRing[W, V, S]
+  override val Transpose: this.type
   
   override def unit: Matrix = {
     val z = Scalar.zero.asInstanceOf[AnyRef]

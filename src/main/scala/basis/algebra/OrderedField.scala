@@ -10,9 +10,9 @@ package basis.algebra
 /** A totally ordered abstract field structure. Addition associates and
   * commutes, and multiplication associates, commutes, and distributes over
   * addition. Addition and multiplication both have an identity element, every
-  * element has an additive inverse, and every element except zero has a
-  * multiplicative inverse. Every `OrderedField` is also an `OrderedRing`. To
-  * the extent practicable, the following ordered field axioms should hold.
+  * every element has an additive inverse, and every element except zero has
+  * a multiplicative inverse. To the extent practicable, the following axioms
+  * should hold.
   * 
   * '''Axioms for addition''':
   *   - if 𝑎 and 𝑏 are elements in `this`, then their sum 𝑎 + 𝑏 is also an element in `this`.
@@ -65,11 +65,9 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @define Structure   `OrderedField`
-  * @define element     element
+  * @define space   ordered field
   */
 trait OrderedField extends OrderedRing with Field {
-  /** An element of this $Structure. */
   trait Element extends Any with super[OrderedRing].Element with super[Field].Element {
     override def + (that: Value): Value
     

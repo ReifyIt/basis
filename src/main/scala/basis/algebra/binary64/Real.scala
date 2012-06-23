@@ -10,6 +10,12 @@ package binary64
 
 import language.implicitConversions
 
+/** A double-precision floating-point value.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define value   real
+  */
 final class Real(val value: Double) extends AnyVal with Real.Element {
   @inline override def + (that: Real): Real = new Real(value + that.value)
   
@@ -59,6 +65,7 @@ final class Real(val value: Double) extends AnyVal with Real.Element {
   @inline override def toString: String = java.lang.Double.toString(value)
 }
 
+/** A real field of double-precision floating-point values. */
 object Real extends RealField {
   override type Value = Real
   

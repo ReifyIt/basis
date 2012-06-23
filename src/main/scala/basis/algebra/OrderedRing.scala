@@ -11,7 +11,7 @@ package basis.algebra
   * commutes, and multiplication associates and distributes over addition.
   * Addition and multiplication both have an identity element, and every
   * element has an additive inverse. To the extent practicable, the following
-  * ordered ring axioms should hold.
+  * axioms should hold.
   * 
   * '''Axioms for addition''':
   *   - if 𝑎 and 𝑏 are elements in `this`, then their sum 𝑎 + 𝑏 is also an element in `this`.
@@ -60,11 +60,9 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @define Structure   `OrderedRing`
-  * @define element     element
+  * @define space   ordered ring
   */
 trait OrderedRing extends Ring {
-  /** An element of this $Structure. */
   trait Element extends Any with super.Element {
     override def + (that: Value): Value
     
@@ -74,25 +72,25 @@ trait OrderedRing extends Ring {
     
     override def * (that: Value): Value
     
-    /** Returns the absolute value of this $element. */
+    /** Returns the absolute value of this $value. */
     def abs: Value
     
-    /** Returns the lesser value of this $element and another $element. */
+    /** Returns the lesser value of this $value and another $value. */
     def min(that: Value): Value
     
-    /** Returns the greater value of this $element and another $element. */
+    /** Returns the greater value of this $value and another $value. */
     def max(that: Value): Value
     
-    /** Returns `true` if this $element is strictly less than another $element. */
+    /** Returns `true` if this $value is strictly less than another $value. */
     def < (that: Value): Boolean
     
-    /** Returns `true` if this $element is less than or equal to another $element. */
+    /** Returns `true` if this $value is less than or equal to another $value. */
     def <= (that: Value): Boolean
     
-    /** Returns `true` if this $element is strictly greater than another $element. */
+    /** Returns `true` if this $value is strictly greater than another $value. */
     def > (that: Value): Boolean
     
-    /** Returns `true` if this $element is greater than or equal to another $element. */
+    /** Returns `true` if this $value is greater than or equal to another $value. */
     def >= (that: Value): Boolean
   }
   

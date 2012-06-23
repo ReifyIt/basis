@@ -12,8 +12,7 @@ package basis.algebra
   * addition. Addition and multiplication both have an identity element, every
   * element has an additive inverse, and every element except zero has a
   * multiplicative inverse. Also, every Cauchy sequence of elements converges.
-  * Every `RealField` is also an `OrderedField` and a `CompleteField`. To the
-  * extent practicable, the following real field axioms should hold.
+  * To the extent practicable, the following axioms should hold.
   * 
   * '''Axioms for addition''':
   *   - if 𝑎 and 𝑏 are elements in `this`, then their sum 𝑎 + 𝑏 is also an element in `this`.
@@ -69,11 +68,9 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @define Structure   `RealField`
-  * @define element     value
+  * @define space   real field
   */
 trait RealField extends OrderedField with CompleteField {
-  /** An element of this $Structure. */
   trait Element extends Any with super[OrderedField].Element with super[CompleteField].Element {
     override def + (that: Value): Value
     

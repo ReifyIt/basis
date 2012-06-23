@@ -7,13 +7,15 @@
 
 package basis.algebra
 
-trait Matrix4x4Space
-    [V <: Vector4Space[S] with Singleton,
-     W <: Vector4Space[S] with Singleton,
-     S <: Field with Singleton]
-  extends MatrixRing[V, W, S] {
-  
-  trait Element extends Any with super.Element { this: Matrix =>
+/** An asbtract space of 4x4 matrices over a ring.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam V   The vector space on which this $space operates.
+  * @tparam S   The scalar set of this $space.
+  */
+trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Singleton] extends MatrixRing[V, S] {
+  trait Element extends Any with super.Element {
     override protected def Matrix: Matrix4x4Space.this.type = Matrix4x4Space.this
     
     def _1_1: Scalar
@@ -235,10 +237,10 @@ trait Matrix4x4Space
   
   override type Matrix <: Element
   
-  override val Transpose: Matrix4x4Space[W, V, S]
+  override val Transpose: this.type
   
   override def Row: V
-  override def Col: W
+  override def Col: V
   override def Scalar: S
   
   override def M: Int = 4

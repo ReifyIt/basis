@@ -8,14 +8,11 @@
 package basis.algebra
 package binary64
 
-/** A concrete ''N''-dimensional coordinate space over the binary64 `Integer` field.
+/** A module of ''N''-dimensional integer vectors.
   * 
   * @author Chris Sachs
-  * 
-  * @define Structure   `ZN` space
   */
-class ZN(override val N: Int) extends IntegerVectorSpace {
-  /** A vector element of this $Structure. */
+class ZN(override val N: Int) extends IntegerModule {
   final class Element private[ZN] (coords: Array[Long]) extends super.Element {
     if (coords.length != Vector.N) throw new DimensionException
     
@@ -30,5 +27,5 @@ class ZN(override val N: Int) extends IntegerVectorSpace {
   
   override def apply(coords: Array[Long]): Vector = new Vector(coords)
   
-  override def toString: String = "ZN"+"("+ N + ")"
+  override def toString: String = "Z"+"("+ N + ")"
 }

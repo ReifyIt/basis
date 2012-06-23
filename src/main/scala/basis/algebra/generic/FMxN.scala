@@ -8,6 +8,14 @@
 package basis.algebra
 package generic
 
+/** A generic space of ''M''x''N'' matrices over a ring.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam V   The row space of this $space.
+  * @tparam W   The column space of this $space.
+  * @tparam S   The scalar set of this $space.
+  */
 class FMxN[V <: VectorSpace[S] with Singleton, W <: VectorSpace[S] with Singleton, S <: Ring with Singleton]
     (val Scalar: S)(val Row: V, val Col: W)
   extends MatrixSpace[V, W, S] {

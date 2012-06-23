@@ -12,8 +12,7 @@ package basis.algebra
   * Addition and multiplication both have an identity element, every element
   * has an additive inverse, and every element except zero has a multiplicative
   * inverse. ''Completeness'' implies that every Cauchy sequence of elements
-  * converges. Every `CompleteField` is also a `Field`. To the extent
-  * practicable, the following complete field axioms should hold.
+  * converges. To the extent practicable, the following axioms should hold.
   * 
   * '''Axioms for addition''':
   *   - if 𝑎 and 𝑏 are elements in `this`, then their sum 𝑎 + 𝑏 is also an element in `this`.
@@ -59,11 +58,9 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @define Structure   `CompleteField`
-  * @define element     element
+  * @define space   complete field
   */
 trait CompleteField extends Field {
-  /** An element of this $Structure. */
   trait Element extends Any with super.Element {
     override def + (that: Value): Value
     
@@ -77,10 +74,10 @@ trait CompleteField extends Field {
     
     override def / (that: Value): Value
     
-    /** Returns the exponentiation of this $element raised to the power of another $element. */
+    /** Returns the exponentiation of this $value raised to the power of another $value. */
     def pow(that: Value): Value
     
-    /** Returns the square root of this positive $element. */
+    /** Returns the square root of this positive $value. */
     def sqrt: Value
   }
   

@@ -10,6 +10,12 @@ package binary64
 
 import language.implicitConversions
 
+/** A 64-bit signed integer value.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define value   integer
+  */
 final class Integer(val value: Long) extends AnyVal with Integer.Element {
   @inline override def + (that: Integer): Integer = new Integer(value + that.value)
   
@@ -18,17 +24,6 @@ final class Integer(val value: Long) extends AnyVal with Integer.Element {
   @inline override def - (that: Integer): Integer = new Integer(value - that.value)
   
   @inline override def * (that: Integer): Integer = new Integer(value * that.value)
-  
-  @inline def gcd(that: Integer): Integer = {
-    var a = java.lang.Math.abs(value)
-    var b = java.lang.Math.abs(that.value)
-    while (b != 0L) {
-      val t = b
-      b = a % b
-      a = t
-    }
-    new Integer(a)
-  }
   
   @inline override def abs: Integer = new Integer(java.lang.Math.abs(value))
   
@@ -43,6 +38,17 @@ final class Integer(val value: Long) extends AnyVal with Integer.Element {
   @inline override def > (that: Integer): Boolean = value > that.value
   
   @inline override def >= (that: Integer): Boolean = value >= that.value
+  
+  @inline def gcd(that: Integer): Integer = {
+    var a = java.lang.Math.abs(value)
+    var b = java.lang.Math.abs(that.value)
+    while (b != 0L) {
+      val t = b
+      b = a % b
+      a = t
+    }
+    new Integer(a)
+  }
   
   @inline def toInt: Int = value.toInt
   
@@ -62,6 +68,7 @@ final class Integer(val value: Long) extends AnyVal with Integer.Element {
   @inline override def toString: String = java.lang.Long.toString(value)
 }
 
+/** A ring of 64-bit signed integer values. */
 object Integer extends OrderedRing {
   override type Value = Integer
   

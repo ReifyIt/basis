@@ -7,18 +7,13 @@
 
 package basis.algebra
 
-/** An abstract 4-dimensional coordinate space over a commutative ring.
+/** An abstract space of 4-dimensional vectors over a ring.
   * 
   * @author Chris Sachs
   * 
-  * @tparam S   The singleton type of the scalar structure of this $Structure.
-  * 
-  * @define Structure   `Vector4Space`
-  * @define vector      vector
-  * @define scalar      scalar
+  * @tparam S   The scalar set of this $space.
   */
 trait Vector4Space[S <: Ring with Singleton] extends VectorSpace[S] {
-  /** A vector element of this $Structure. */
   trait Element extends Any with super.Element {
     override protected def Vector: Vector4Space.this.type = Vector4Space.this
     
@@ -71,10 +66,10 @@ trait Vector4Space[S <: Ring with Singleton] extends VectorSpace[S] {
     apply(coords(0), coords(1), coords(2), coords(3))
   }
   
-  /** Returns a new $vector with the given 𝑥, 𝑦, 𝑧 and 𝑤 coordinates. */
+  /** Returns a new vector with the given 𝑥, 𝑦, 𝑧 and 𝑤 coordinates. */
   def apply(x: Scalar, y: Scalar, z: Scalar, w: Scalar): Vector
   
-  /** Extracts the 𝑥, 𝑦, 𝑧 and 𝑤 coordinates from the given $vector. */
+  /** Extracts the 𝑥, 𝑦, 𝑧 and 𝑤 coordinates from the given vector. */
   def unapply(vector: Vector): Option[(Scalar, Scalar, Scalar, Scalar)] =
     Some(vector.x, vector.y, vector.z, vector.w)
   

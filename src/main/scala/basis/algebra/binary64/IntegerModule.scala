@@ -8,18 +8,15 @@
 package basis.algebra
 package binary64
 
-/** An abstract ''N''-dimensional coordinate space over the binary64 `Integer` field.
+/** An abstract module of ''N''-dimensional integer vectors.
   * 
   * @author Chris Sachs
   * 
-  * @define Structure   `IntegerVectorSpace`
-  * @define vector      integer vector
-  * @define scalar      integer scalar
+  * @define space   integer module
   */
-trait IntegerVectorSpace extends VectorSpace[Integer.type] {
-  /** A vector element of this $Structure. */
+trait IntegerModule extends VectorSpace[Z] {
   trait Element extends Any with super.Element {
-    override protected def Vector: IntegerVectorSpace.this.type = IntegerVectorSpace.this
+    override protected def Vector: IntegerModule.this.type = IntegerModule.this
     
     override def apply(i: Int): Integer
     
@@ -106,14 +103,14 @@ trait IntegerVectorSpace extends VectorSpace[Integer.type] {
   
   override type Scalar = Integer
   
-  override def Scalar = Integer
+  override def Scalar: Z = Integer
   
   override def N: Int
   
-  override def apply(coords: Integer*): Vector = apply(coords.map(_.toLong).toArray[Long])
-  
-  /** Returns a new $vector with the given `Long` coordinates. */
+  /** Returns a new vector with the given `Long` coordinates. */
   def apply(coords: Array[Long]): Vector
+  
+  override def apply(coords: Integer*): Vector = apply(coords.map(_.toLong).toArray[Long])
   
   override def zero: Vector = apply(new Array[Long](N))
 }

@@ -10,16 +10,13 @@ package generic
 
 import language.existentials
 
-/** A generic 3-dimensional coordinate space over a commutative ring.
+/** A generic space of 3-dimensional vectors over a ring.
   * 
   * @author Chris Sachs
   * 
-  * @tparam S   The singleton type of the scalar structure of this $Structure.
-  * 
-  * @define Structure   `F3` space
+  * @tparam S    The scalar set of this $space.
   */
 class F3[S <: Ring with Singleton](val Scalar: S) extends Vector3Space[S] {
-  /** A vector element of this $Structure. */
   final class Element(val x: Scalar, val y: Scalar, val z: Scalar) extends super.Element {
     /** Returns the quotient of this $vector divided by a $scalar.
       * 

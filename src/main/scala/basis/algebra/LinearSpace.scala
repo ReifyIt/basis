@@ -11,7 +11,7 @@ package basis.algebra
   * commutes, and scalar multiplication associates and distributes over vector
   * addition and scalar addition. Vector addition and scalar multiplication
   * both have an identity element, and every vector has an additive inverse.
-  * To the extent practicable, the following linear space axioms should hold.
+  * To the extent practicable, the following axioms should hold.
   * 
   * '''Axioms for vector addition''':
   *   - if 𝐮 and 𝐯 are vectors in `this`, then their sum 𝐮 + 𝐯 is also a vector in `this`.
@@ -54,22 +54,24 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @tparam S   The singleton type of the scalar structure of this $Structure.
+  * @tparam S   The scalar set of this $space.
   * 
-  * @define Structure   `LinearSpace`
-  * @define vector      vector
-  * @define scalar      scalar
+  * @define space   linear space
   */
 trait LinearSpace[S <: Ring with Singleton] {
-  /** A vector element of this $Structure. */
+  /** A vector in this $space.
+    * 
+    * @define vector  vector
+    * @define scalar  scalar
+    */
   trait Element extends Any {
-    /** Returns the vector sum of this $vector and another $vector. */
+    /** Returns sum of this $vector and another $vector. */
     def + (that: Vector): Vector
     
     /** Returns the additive inverse of this $vector. */
     def unary_- : Vector
     
-    /** Returns the vector difference between this $vector and another $vector. */
+    /** Returns the difference between this $vector and another $vector. */
     def - (that: Vector): Vector
     
     /** Returns the product of this $vector times a $scalar on the right. */
@@ -79,15 +81,15 @@ trait LinearSpace[S <: Ring with Singleton] {
     def *: (scalar: Scalar): Vector
   }
   
-  /** The vector element type of this $Structure. */
+  /** The type of vectors in this $space. */
   type Vector <: Element
   
-  /** The scalar element type of this $Structure. */
+  /** The type of scalars in this $space. */
   type Scalar = S#Value
   
-  /** Returns the scalar structure of this $Structure. */
+  /** Returns the scalar set of this $space. */
   def Scalar: S
   
-  /** Returns the additive identity vector of this $Structure. */
+  /** Returns the additive identity of this $space. */
   def zero: Vector
 }

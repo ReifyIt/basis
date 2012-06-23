@@ -8,16 +8,13 @@
 package basis.algebra
 package binary64
 
-/** An abstract ''N''-dimensional coordinate space over the binary64 `Real` field.
+/** An abstract space of ''N''-dimensional real vectors.
   * 
   * @author Chris Sachs
   * 
-  * @define Structure   `RealVectorSpace`
-  * @define vector      real vector
-  * @define scalar      real scalar
+  * @define space   real vector space
   */
-trait RealVectorSpace extends VectorSpace[Real.type] {
-  /** A vector element of this $Structure. */
+trait RealVectorSpace extends VectorSpace[R] {
   trait Element extends Any with super.Element {
     override protected def Vector: RealVectorSpace.this.type = RealVectorSpace.this
     
@@ -131,14 +128,14 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
   
   override type Scalar = Real
   
-  override def Scalar = Real
+  override def Scalar: R = Real
   
   override def N: Int
   
-  override def apply(coords: Real*): Vector = apply(coords.map(_.toDouble).toArray[Double])
-  
-  /** Returns a new $vector with the given `Double` coordinates. */
+  /** Returns a new vector with the given `Double` coordinates. */
   def apply(coords: Array[Double]): Vector
+  
+  override def apply(coords: Real*): Vector = apply(coords.map(_.toDouble).toArray[Double])
   
   override def zero: Vector = apply(new Array[Double](N))
   
@@ -148,7 +145,7 @@ trait RealVectorSpace extends VectorSpace[Real.type] {
     else super.⨯(that)
   }
   
-  /** Returns a linear transformation space from some other `RealVectorSpace` to this $Structure. */
+  /** Returns a real matrix space that maps another real vector space to this $space. */
   def ⨯ (that: RealVectorSpace): RealMatrixSpace[that.type, this.type] =
     new RMxN[that.type, this.type](that, this)
 }

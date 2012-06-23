@@ -9,17 +9,16 @@ package basis.algebra
 
 import language.existentials
 
-/** An abstract linear space of ''M''x''N'' matrices over a commutative ring.
-  * Matrix spaces describe linear maps between vector spaces relative to the
-  * vector spaces' assumed bases. Matrix addition associates and commutes, and
-  * scalar multiplication associates, commutes, and distributes over matrix
-  * addition and scalar addition. Matrix and vector multiplication also both
-  * associate and distribute over matrix addition. Vectors in the row space
-  * multiply as columns on the right, and vectors in the column space multiply
-  * as rows on the left. Addition and scalar multiplication both have an
-  * identity element, and every matrix has an additive inverse. Every
-  * `MatrixSpace` is also a `LinearSpace`. To the extent practicable,
-  * the following matrix space axioms should hold.
+/** An abstract space of ''M''x''N'' matrices over a ring. Matrix spaces
+  * describe linear maps between vector spaces relative to the vector spaces'
+  * assumed bases. Matrix addition associates and commutes, and scalar
+  * multiplication associates, commutes, and distributes over matrix addition
+  * and scalar addition. Matrix and vector multiplication also both associate
+  * and distribute over matrix addition. Vectors in the row space multiply as
+  * columns on the right, and vectors in the column space multiply as rows on
+  * the left. Addition and scalar multiplication both have an identity element,
+  * and every matrix has an additive inverse. To the extent practicable,
+  * the following axioms should hold.
   * 
   * '''Axioms for matrix addition''':
   *   - if 𝐀 and 𝐁 are matrices in `this`, then their sum 𝐀 + 𝐁 is also a matrix in `this`.
@@ -30,7 +29,6 @@ import language.existentials
   * 
   * '''Axioms for scalar multiplication''':
   *   - if 𝑥 is a scalar in `this` and 𝐀 is a matrix in `this`, then their product 𝑥 *: 𝐀 is also a matrix in `this`.
-  *   - 𝑥 *: 𝐀 == 𝐀 :* 𝑥 for every scalar 𝑥 and every matrix 𝐀 in `this`.
   *   - (𝑥 * 𝑦) *: 𝐀 == 𝑥 *: (𝑦 *: 𝐀) for all scalars 𝑥, 𝑦 and every matrix 𝐀 in `this`.
   *   - `Scalar` has an element `unit` such that `unit` *: 𝐀 == 𝐀 for every matrix 𝐀 in `this`.
   * 
@@ -63,14 +61,11 @@ import language.existentials
   * 
   * @author Chris Sachs
   * 
-  * @tparam V   The singleton type of the row space of this $Structure.
-  * @tparam W   The singleton type of the column space of this $Structure.
-  * @tparam S   The singleton type of the scalar structure of this $Structure.
+  * @tparam V   The row space of this $space.
+  * @tparam W   The column space of this $space.
+  * @tparam S   The scalar set of this $space.
   * 
-  * @define Structure   `MatrixSpace`
-  * @define vector      $matrix
-  * @define matrix      matrix
-  * @define scalar      scalar
+  * @define space   matrix space
   */
 trait MatrixSpace
     [V <: VectorSpace[S] with Singleton,
@@ -78,14 +73,18 @@ trait MatrixSpace
      S <: Ring with Singleton]
   extends LinearSpace[S] {
   
-  /** A matrix element of this $Structure. */
-  trait Element extends Any with super.Element { this: Matrix =>
+  /** A matrix in this $space.
+    * 
+    * @define vector  $matrix
+    * @define matrix  matrix
+    */
+  trait Element extends Any with super.Element {
     protected def Matrix: MatrixSpace.this.type = MatrixSpace.this
     
-    /** Returns the number of rows in this $matrix. */
+    /** Returns the number of rows, or equivalently the dimension of the columns, in this $matrix. */
     def M: Int = Matrix.M
     
-    /** Returns the number of columns in this $matrix. */
+    /** Returns the number of columns, or equivalently the dimension of the rows, in this $matrix. */
     def N: Int = Matrix.N
     
     /** Returns the entry of this $matrix at the given row-major index. */
@@ -231,7 +230,7 @@ trait MatrixSpace
       * column space is equivalent to the column space of this.
       * The name of this method contains the unicode dot operator (U+22C5). */
     def ⋅ [U <: VectorSpace[S] with Singleton]
-        (that: B#Matrix forSome { type B <: MatrixSpace[U, V, S] })
+        (that: B#Element forSome { type B <: MatrixSpace[U, V, S] })
       : C#Matrix forSome { type C <: MatrixSpace[U, W, S] } =
       compose(that.Matrix).product(this, that)
     
@@ -302,37 +301,37 @@ trait MatrixSpace
     }
   }
   
-  /** The vector element type of this $Structure; equivalent to `Matrix`. */
+  /** The type of vectors in this $space; equivalent to the type of matrices. */
   override type Vector = Matrix
   
-  /** The matrix element type of this $Structure. */
+  /** The type of matrices in this $space. */
   type Matrix <: Element
   
-  /** The vector element type of the row space of this $Structure. */
+  /** The type of vectors in the row space of this $space. */
   type Row = V#Vector
   
-  /** The vector element type of the column space of this $Structure. */
+  /** The type of vectors in the column space of this $space. */
   type Col = W#Vector
   
-  /** Returns the transpose of this $Structure. */
+  /** Returns the transpose of this $space. */
   val Transpose: MatrixSpace[W, V, S]
   
-  /** Returns the row space of this $Structure. */
+  /** Returns the row space of this $space. */
   def Row: V
   
-  /** Returns the column space of this $Structure. */
+  /** Returns the column space of this $space. */
   def Col: W
   
-  /** Returns the dimension of the column space of this $Structure. */
+  /** Returns the dimension of the column space of this $space. */
   def M: Int = Col.N
   
-  /** Returns the dimension of the row space of this $Structure. */
+  /** Returns the dimension of the row space of this $space. */
   def N: Int = Row.N
   
-  /** Returns a new $matrix with the given row-major entries. */
+  /** Returns a new matrix with the given row-major entries. */
   def apply(entries: Scalar*): Matrix
   
-  /** Returns a new $matrix with the given rows. */
+  /** Returns a new matrix with the given rows. */
   def rows(rows: Row*): Matrix = {
     if (rows.length != M) throw new DimensionException
     val entries = new Array[AnyRef](M * N)
@@ -352,7 +351,7 @@ trait MatrixSpace
     apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
   }
   
-  /** Returns a new $matrix with the given columns. */
+  /** Returns a new matrix with the given columns. */
   def cols(cols: Col*): Matrix = {
     if (cols.length != N) throw new DimensionException
     val entries = new Array[AnyRef](M * N)
@@ -384,22 +383,22 @@ trait MatrixSpace
   }
   
   /** Returns a `MatrixSpace` that represents linear maps from the row space
-    * of the given `MatrixSpace` to the column space of this $Structure. */
+    * of the given `MatrixSpace` to the column space of this $space. */
   def compose[U <: VectorSpace[S] with Singleton]
       (that: MatrixSpace[U, V, S]): MatrixSpace[U, W, S] =
     Col ⨯ that.Row
   
-  /** Returns a new $matrix obtained from the product of the first matrix,
+  /** Returns a new matrix obtained from the product of the first matrix,
     * whose column space is equivalent to the column space of this, and the
     * second matrix, whose row space is equivalent to the row space of this,
     * where the row space of the first matrix is equivalent to the column
     * space of the second matrix. */
   def product[U <: VectorSpace[S] with Singleton](
-      matrixA: A#Matrix forSome { type A <: MatrixSpace[U, W, S] },
-      matrixB: B#Matrix forSome { type B <: MatrixSpace[V, U, S] }): Matrix = {
+      matrixA: A#Element forSome { type A <: MatrixSpace[U, W, S] },
+      matrixB: B#Element forSome { type B <: MatrixSpace[V, U, S] }): Matrix = {
     val M = matrixA.M
     val N = matrixA.N
-    if (N != matrixB.M) throw new DimensionException
+    assume(N == matrixB.M)
     val P = matrixB.N
     val entries = new Array[AnyRef](M * P)
     var k = 0

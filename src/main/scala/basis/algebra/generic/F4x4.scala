@@ -8,9 +8,16 @@
 package basis.algebra
 package generic
 
-class F4x4[V <: Vector4Space[S] with Singleton, W <: Vector4Space[S] with Singleton, S <: Field with Singleton]
-    (val Scalar: S)(val Row: V, val Col: W)
-  extends Matrix4x4Space[V, W, S] {
+/** A generic space of 4x4 matrices over a ring.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam V   The vector space on which this $space operates.
+  * @tparam S   The scalar set of this $space.
+  */
+class F4x4[V <: Vector4Space[S] with Singleton, S <: Field with Singleton]
+    (val Scalar: S)(Vector: V)
+  extends Matrix4x4Space[V, S] {
   
   final class Element(
       val _1_1: Scalar, val _1_2: Scalar, val _1_3: Scalar, val _1_4: Scalar,
@@ -21,7 +28,11 @@ class F4x4[V <: Vector4Space[S] with Singleton, W <: Vector4Space[S] with Single
   
   override type Matrix = Element
   
-  override lazy val Transpose = new F4x4[W, V, S](Scalar)(Col, Row)
+  override lazy val Transpose: this.type = this
+  
+  override def Row: V = Vector
+  
+  override def Col: V = Vector
   
   override lazy val zero: Matrix = super.zero
   
@@ -39,5 +50,5 @@ class F4x4[V <: Vector4Space[S] with Singleton, W <: Vector4Space[S] with Single
       _4_1, _4_2, _4_3, _4_4)
   
   override def toString: String =
-    "F4x4"+"("+ Scalar +")"+"("+ Row +", "+ Col +")"
+    "F4x4"+"("+ Scalar +")"+"("+ Vector +")"
 }

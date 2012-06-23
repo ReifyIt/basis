@@ -8,9 +8,16 @@
 package basis.algebra
 package generic
 
-class F3x3[V <: Vector3Space[S] with Singleton, W <: Vector3Space[S] with Singleton, S <: Field with Singleton]
-    (val Scalar: S)(val Row: V, val Col: W)
-  extends Matrix3x3Space[V, W, S] {
+/** A generic space of 3x3 matrices over a ring.
+  * 
+  * @author Chris Sachs
+  * 
+  * @tparam V   The vector space on which this $space operates.
+  * @tparam S   The scalar set of this $space.
+  */
+class F3x3[V <: Vector3Space[S] with Singleton, S <: Field with Singleton]
+    (val Scalar: S)(Vector: V)
+  extends Matrix3x3Space[V, S] {
   
   final class Element(
       val _1_1: Scalar, val _1_2: Scalar, val _1_3: Scalar,
@@ -20,7 +27,11 @@ class F3x3[V <: Vector3Space[S] with Singleton, W <: Vector3Space[S] with Single
   
   override type Matrix = Element
   
-  override lazy val Transpose = new F3x3[W, V, S](Scalar)(Col, Row)
+  override lazy val Transpose: this.type = this
+  
+  override def Row: V = Vector
+  
+  override def Col: V = Vector
   
   override lazy val zero: Matrix = super.zero
   
@@ -36,5 +47,5 @@ class F3x3[V <: Vector3Space[S] with Singleton, W <: Vector3Space[S] with Single
       _3_1, _3_2, _3_3)
   
   override def toString: String =
-    "F3x3"+"("+ Scalar +")"+"("+ Row +", "+ Col +")"
+    "F3x3"+"("+ Scalar +")"+"("+ Vector +")"
 }

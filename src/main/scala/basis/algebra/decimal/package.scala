@@ -32,9 +32,9 @@ package object decimal {
   def RMxN(V: VectorSpace[Real.type], W: VectorSpace[Real.type]): RMxN[V.type, W.type] =
     new generic.FMxN[V.type, W.type, Real.type](Real)(V, W)
   
-  lazy val R2x2 = new generic.F2x2[R2.type, R2.type, Real.type](Real)(R2, R2)
+  lazy val R2x2 = new generic.F2x2[R2.type, Real.type](Real)(R2)
   
-  lazy val R3x3 = new generic.F3x3[R3.type, R3.type, Real.type](Real)(R3, R3)
+  lazy val R3x3 = new generic.F3x3[R3.type, Real.type](Real)(R3)
   
-  lazy val R4x4 = new generic.F4x4[R4.type, R4.type, Real.type](Real)(R4, R4)
+  lazy val R4x4 = new generic.F4x4[R4.type, Real.type](Real)(R4)
 }

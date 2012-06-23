@@ -8,14 +8,11 @@
 package basis.algebra
 package binary64
 
-/** A concrete ''N''-dimensional coordinate space over the binary64 `Real` field.
+/** A space of ''N''-dimensional real vectors.
   * 
   * @author Chris Sachs
-  * 
-  * @define Structure   `RN` space
   */
 class RN(override val N: Int) extends RealVectorSpace {
-  /** A vector element of this $Structure. */
   final class Element private[RN] (coords: Array[Double]) extends super.Element {
     if (coords.length != Vector.N) throw new DimensionException
     
@@ -30,5 +27,5 @@ class RN(override val N: Int) extends RealVectorSpace {
   
   override def apply(coords: Array[Double]): Vector = new Vector(coords)
   
-  override def toString: String = "RN"+"("+ N + ")"
+  override def toString: String = "R"+"("+ N + ")"
 }

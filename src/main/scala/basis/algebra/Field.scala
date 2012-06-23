@@ -11,8 +11,7 @@ package basis.algebra
   * multiplication associates, commutes, and distributes over addition.
   * Addition and multiplication both have an identity element, every element
   * has an additive inverse, and every element except zero has a multiplicative
-  * inverse. Every `Field` is also a `Ring`. To the extent practicable, the
-  * following field axioms should hold.
+  * inverse. To the extent practicable, the following axioms should hold.
   * 
   * '''Axioms for addition''':
   *   - if 𝑎 and 𝑏 are elements in `this`, then their sum 𝑎 + 𝑏 is also an element in `this`.
@@ -55,11 +54,9 @@ package basis.algebra
   * }
   * }}}
   * 
-  * @define Structure   `Field`
-  * @define element     element
+  * @define space   field
   */
 trait Field extends Ring {
-  /** An element of this $Structure. */
   trait Element extends Any with super.Element {
     override def + (that: Value): Value
     
@@ -69,10 +66,10 @@ trait Field extends Ring {
     
     override def * (that: Value): Value
     
-    /** Returns the multiplicative inverse of this $element. */
+    /** Returns the multiplicative inverse of this $value. */
     def inverse: Value
     
-    /** Returns the quotient of this $element divided by another $element. */
+    /** Returns the quotient of this $value divided by another $value. */
     def / (that: Value): Value
   }
   
