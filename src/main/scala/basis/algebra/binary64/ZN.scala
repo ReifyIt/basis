@@ -8,24 +8,137 @@
 package basis.algebra
 package binary64
 
-/** A module of ''N''-dimensional integer vectors.
+/** An abstract ''N''-dimensional integer module.
   * 
   * @author Chris Sachs
+  * 
+  * @define space   integer module
   */
-class ZN(override val N: Int) extends IntegerModule {
-  final class Element private[ZN] (coords: Array[Long]) extends super.Element {
-    if (coords.length != Vector.N) throw new DimensionException
+trait ZN extends FN[Integer.type] {
+  trait Element extends Any with super.Element {
+    override protected def Vector: ZN.this.type = ZN.this
     
-    override def N: Int = coords.length
+    override def apply(i: Int): Integer
     
-    override def apply(i: Int): Integer = coords(i)
+    override def + (that: Vector): Vector = {
+      if (N != that.N) throw new DimensionException
+      val coords = new Array[Long](N)
+      var i = 0
+      while (i < coords.length) {
+        coords(i) = this(i).value + that(i).value
+        i += 1
+      }
+      Vector(coords)
+    }
+    
+    override def unary_- : Vector = {
+      val coords = new Array[Long](N)
+      var i = 0
+      while (i < coords.length) {
+        coords(i) = -this(i).value
+        i += 1
+      }
+      Vector(coords)
+    }
+    
+    override def - (that: Vector): Vector = {
+      if (N != that.N) throw new DimensionException
+      val coords = new Array[Long](N)
+      var i = 0
+      while (i < coords.length) {
+        coords(i) = this(i).value - that(i).value
+        i += 1
+      }
+      Vector(coords)
+    }
+    
+    override def :* (scalar: Integer): Vector = {
+      val coords = new Array[Long](N)
+      var i = 0
+      while (i < coords.length) {
+        coords(i) = this(i).value * scalar.value
+        i += 1
+      }
+      Vector(coords)
+    }
+    
+    override def *: (scalar: Integer): Vector = this :* scalar
+    
+    override def ⋅ (that: Vector): Integer = {
+      if (N != that.N) throw new DimensionException
+      var s = 0L
+      var i = 0
+      while (i < N) {
+        s += this(i).value * that(i).value
+        i += 1
+      }
+      s
+    }
+    
+    override def equals(other: Any): Boolean = other match {
+      case that: Element =>
+        var equal = N == that.N
+        var i = 0
+        while (i < N && equal) {
+          equal = this(i).value == that(i).value
+          i += 1
+        }
+        equal
+      case _ => false
+    }
+    
+    override def hashCode: Int = {
+      import scala.util.hashing.MurmurHash3._
+      var h = -1736520349
+      var i = 0
+      while (i < N) {
+        h = mix(h, this(i).##)
+        i += 1
+      }
+      finalizeHash(h, N)
+    }
   }
   
-  override type Vector = Element
+  override type Vector <: Element
   
-  override lazy val zero: Vector = super.zero
+  override type Scalar = Integer
   
-  override def apply(coords: Array[Long]): Vector = new Vector(coords)
+  override def Scalar: Integer.type = Integer
   
-  override def toString: String = "Z"+"("+ N + ")"
+  override def N: Int
+  
+  override def zero: Vector = apply(new Array[Long](N))
+  
+  /** Returns a new vector with the given `Long` coordinates. */
+  def apply(coords: Array[Long]): Vector
+  
+  override def apply(coords: Integer*): Vector = apply(coords.map(_.toLong).toArray[Long])
+}
+
+object ZN {
+  /** Returns an ''N''-dimensional integer module. */
+  def apply(N: Int): ZN = N match {
+    case 2 => Z2
+    case 3 => Z3
+    case _ => new Space(N)
+  }
+  
+  /** An ''N''-dimensional integer module. */
+  private final class Space(override val N: Int) extends ZN {
+    final class Element(coords: Array[Long]) extends super.Element {
+      if (coords.length != Vector.N) throw new DimensionException
+      
+      override def N: Int = coords.length
+      
+      override def apply(i: Int): Integer = coords(i)
+    }
+    
+    override type Vector = Element
+    
+    override lazy val zero: Vector = super.zero
+    
+    override def apply(coords: Array[Long]): Vector = new Vector(coords)
+    
+    override def toString: String = "ZN"+"("+ N + ")"
+  }
 }

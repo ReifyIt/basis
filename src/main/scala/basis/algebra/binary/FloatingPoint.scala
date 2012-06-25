@@ -271,4 +271,6 @@ class FloatingPoint(val radix: Int)(val precision: Int) extends RealField {
     val difference = x - y
     if (difference.significand == Integer.zero) 0 else difference.significand.sign
   }
+  
+  override def toString: String = "FloatingPoint"+"("+ radix +")"+"("+ precision +")"
 }

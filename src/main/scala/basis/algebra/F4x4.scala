@@ -7,16 +7,16 @@
 
 package basis.algebra
 
-/** An asbtract space of 4x4 matrices over a ring.
+/** An asbtract 4 by 4 matrix space over a field.
   * 
   * @author Chris Sachs
   * 
   * @tparam V   The space of rows and columns.
   * @tparam S   The set of scalars.
   */
-trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Singleton] extends MatrixRing[V, S] {
-  trait Element extends Any with super.Element {
-    override protected def Matrix: Matrix4x4Space.this.type = Matrix4x4Space.this
+trait F4x4[V <: F4[S] with Singleton, S <: Field with Singleton] extends Ring with FMxN[V, V, S] {
+  trait Element extends Any with super[Ring].Element with super[FMxN].Element {
+    override protected def Matrix: F4x4.this.type = F4x4.this
     
     def _1_1: Scalar
     def _1_2: Scalar
@@ -64,6 +64,11 @@ trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Single
       apply(4 * i + j)
     }
     
+    def row1: Row = Row(_1_1, _1_2, _1_3, _1_4)
+    def row2: Row = Row(_2_1, _2_2, _2_3, _2_4)
+    def row3: Row = Row(_3_1, _3_2, _3_3, _3_4)
+    def row4: Row = Row(_4_1, _4_2, _4_3, _4_4)
+    
     override def row(i: Int): Row = i match {
       case 0 => row1
       case 1 => row2
@@ -72,10 +77,10 @@ trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Single
       case _ => throw new IndexOutOfBoundsException("row "+ i)
     }
     
-    def row1: Row = Row(_1_1, _1_2, _1_3, _1_4)
-    def row2: Row = Row(_2_1, _2_2, _2_3, _2_4)
-    def row3: Row = Row(_3_1, _3_2, _3_3, _3_4)
-    def row4: Row = Row(_4_1, _4_2, _4_3, _4_4)
+    def col1: Col = Col(_1_1, _2_1, _3_1, _4_1)
+    def col2: Col = Col(_1_2, _2_2, _3_2, _4_2)
+    def col3: Col = Col(_1_3, _2_3, _3_3, _4_3)
+    def col4: Col = Col(_1_4, _2_4, _3_4, _4_4)
     
     override def col(j: Int): Col = j match {
       case 0 => col1
@@ -84,11 +89,6 @@ trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Single
       case 3 => col4
       case _ => throw new IndexOutOfBoundsException("col "+ j)
     }
-    
-    def col1: Col = Col(_1_1, _2_1, _3_1, _4_1)
-    def col2: Col = Col(_1_2, _2_2, _3_2, _4_2)
-    def col3: Col = Col(_1_3, _2_3, _3_3, _4_3)
-    def col4: Col = Col(_1_4, _2_4, _3_4, _4_4)
     
     override def + (that: Matrix): Matrix =
       Matrix(
@@ -137,13 +137,6 @@ trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Single
           vector.x * _1_3 + vector.y * _2_3 + vector.z * _3_3 + vector.w * _4_3,
           vector.x * _1_4 + vector.y * _2_4 + vector.z * _3_4 + vector.w * _4_4)
     
-    override def transpose: Matrix =
-      Matrix(
-        _1_1, _2_1, _3_1, _4_1,
-        _1_2, _2_2, _3_2, _4_2,
-        _1_3, _2_3, _3_3, _4_3,
-        _1_4, _2_4, _3_4, _4_4)
-    
     override def * (that: Matrix): Matrix =
       Matrix(
         _1_1 * that._1_1 + _1_2 * that._2_1 + _1_3 * that._3_1 + _1_4 * that._4_1,
@@ -163,7 +156,7 @@ trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Single
         _4_1 * that._1_3 + _4_2 * that._2_3 + _4_3 * that._3_3 + _4_4 * that._4_3,
         _4_1 * that._1_4 + _4_2 * that._2_4 + _4_3 * that._3_4 + _4_4 * that._4_4)
     
-    override def inverse: Option[Matrix] = {
+    override def inverse(implicit isSquare: V =:= V): Option[Matrix] = {
       // all 2x2 determinants minor_i1_i2__j1_j2 with
       // rows i1 and i2, and cols j1 and j2 blocked out
       val minor_1_2__1_2 = _3_3 * _4_4 - _3_4 * _4_3
@@ -212,7 +205,14 @@ trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Single
         -minor_1_4 / det,  minor_2_4 / det, -minor_3_4 / det,  minor_4_4 / det))
     }
     
-    override def det: Scalar = {
+    override def T: Matrix =
+      Matrix(
+        _1_1, _2_1, _3_1, _4_1,
+        _1_2, _2_2, _3_2, _4_2,
+        _1_3, _2_3, _3_3, _4_3,
+        _1_4, _2_4, _3_4, _4_4)
+    
+    override def det(implicit isSquare: V =:= V): Scalar = {
       // 2x2 determinants minor_i1_i2__j1_j2 with
       // rows i1 and i2, and cols j1 and j2 blocked out
       val minor_1_2__1_2 = _3_3 * _4_4 - _3_4 * _4_3
@@ -232,53 +232,25 @@ trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Single
       _1_1 * minor_1_1 - _1_2 * minor_1_2 + _1_3 * minor_1_3 - _1_4 * minor_1_4
     }
     
-    override def trace: Scalar = _1_1 + _2_2 + _3_3 + _4_4
+    override def trace(implicit isSquare: V =:= V): Scalar = _1_1 + _2_2 + _3_3 + _4_4
   }
   
   override type Matrix <: Element
   
+  /** The type of elements in this $space; equivalent to the type of matrices. */
+  override type Value = Matrix
+  
+  override type Transpose = this.type
+  
+  override def Transpose: this.type = this
+  
   override def Row: V
   override def Col: V
+  
   override def Scalar: S
   
   override def M: Int = 4
   override def N: Int = 4
-  
-  override def apply(entries: Scalar*): Matrix = {
-    if (entries.length != 16) throw new DimensionException
-    apply(entries( 0), entries( 1), entries( 2), entries( 3),
-          entries( 4), entries( 5), entries( 6), entries( 7),
-          entries( 8), entries( 9), entries(10), entries(11),
-          entries(12), entries(13), entries(14), entries(15))
-  }
-  
-  def apply(
-      _1_1: Scalar, _1_2: Scalar, _1_3: Scalar, _1_4: Scalar,
-      _2_1: Scalar, _2_2: Scalar, _2_3: Scalar, _2_4: Scalar,
-      _3_1: Scalar, _3_2: Scalar, _3_3: Scalar, _3_4: Scalar,
-      _4_1: Scalar, _4_2: Scalar, _4_3: Scalar, _4_4: Scalar): Matrix
-  
-  override def rows(rows: Row*): Matrix = {
-    if (rows.length != 4) throw new DimensionException
-    this.rows(rows(0), rows(1), rows(2), rows(3))
-  }
-  
-  def rows(row1: Row, row2: Row, row3: Row, row4: Row): Matrix =
-    apply(row1.x, row1.y, row1.z, row1.w,
-          row2.x, row2.y, row2.z, row2.w,
-          row3.x, row3.y, row3.z, row3.w,
-          row4.x, row4.y, row4.z, row4.w)
-  
-  override def cols(cols: Col*): Matrix = {
-    if (cols.length != 4) throw new DimensionException
-    this.cols(cols(0), cols(1), cols(2), cols(3))
-  }
-  
-  def cols(col1: Col, col2: Col, col3: Col, col4: Col): Matrix =
-    apply(col1.x, col2.x, col3.x, col4.x,
-          col1.y, col2.y, col3.y, col4.y,
-          col1.z, col2.z, col3.z, col4.z,
-          col1.w, col2.w, col3.w, col4.w)
   
   override def zero: Matrix = {
     val z = Scalar.zero
@@ -289,5 +261,88 @@ trait Matrix4x4Space[V <: Vector4Space[S] with Singleton, S <: Field with Single
     val z = Scalar.zero
     val u = Scalar.unit
     apply(u, z, z, z,  z, u, z, z,  z, z, u, z,  z, z, z, u)
+  }
+  
+  override def identity(implicit isSquare: V =:= V): Matrix = unit
+  
+  def apply(
+      _1_1: Scalar, _1_2: Scalar, _1_3: Scalar, _1_4: Scalar,
+      _2_1: Scalar, _2_2: Scalar, _2_3: Scalar, _2_4: Scalar,
+      _3_1: Scalar, _3_2: Scalar, _3_3: Scalar, _3_4: Scalar,
+      _4_1: Scalar, _4_2: Scalar, _4_3: Scalar, _4_4: Scalar): Matrix
+  
+  override def apply(entries: Scalar*): Matrix = {
+    if (entries.length != 16) throw new DimensionException
+    apply(entries( 0), entries( 1), entries( 2), entries( 3),
+          entries( 4), entries( 5), entries( 6), entries( 7),
+          entries( 8), entries( 9), entries(10), entries(11),
+          entries(12), entries(13), entries(14), entries(15))
+  }
+  
+  def rows(row1: Row, row2: Row, row3: Row, row4: Row): Matrix =
+    apply(row1.x, row1.y, row1.z, row1.w,
+          row2.x, row2.y, row2.z, row2.w,
+          row3.x, row3.y, row3.z, row3.w,
+          row4.x, row4.y, row4.z, row4.w)
+  
+  override def rows(rows: Row*): Matrix = {
+    if (rows.length != 4) throw new DimensionException
+    this.rows(rows(0), rows(1), rows(2), rows(3))
+  }
+  
+  def cols(col1: Col, col2: Col, col3: Col, col4: Col): Matrix =
+    apply(col1.x, col2.x, col3.x, col4.x,
+          col1.y, col2.y, col3.y, col4.y,
+          col1.z, col2.z, col3.z, col4.z,
+          col1.w, col2.w, col3.w, col4.w)
+  
+  override def cols(cols: Col*): Matrix = {
+    if (cols.length != 4) throw new DimensionException
+    this.cols(cols(0), cols(1), cols(2), cols(3))
+  }
+}
+
+object F4x4 {
+  /** Returns a 4 by 4 matrix space over the given field. */
+  def apply(Scalar: Field)(Vector: F4[Scalar.type]): F4x4[Vector.type, Scalar.type] =
+    new Space[Vector.type, Scalar.type](Scalar)(Vector)
+  
+  /** A generic 4 by 4 matrix space over a field.
+    * 
+    * @tparam V   The space of rows and columns.
+    * @tparam S   The set of scalars.
+    */
+  private final class Space[V <: F4[S] with Singleton, S <: Field with Singleton]
+      (val Scalar: S)(Vector: V)
+    extends F4x4[V, S] {
+    
+    final class Element(
+        val _1_1: Scalar, val _1_2: Scalar, val _1_3: Scalar, val _1_4: Scalar,
+        val _2_1: Scalar, val _2_2: Scalar, val _2_3: Scalar, val _2_4: Scalar,
+        val _3_1: Scalar, val _3_2: Scalar, val _3_3: Scalar, val _3_4: Scalar,
+        val _4_1: Scalar, val _4_2: Scalar, val _4_3: Scalar, val _4_4: Scalar)
+      extends super.Element
+    
+    override type Matrix = Element
+    
+    override def Row: V = Vector
+    override def Col: V = Vector
+    
+    override lazy val zero: Matrix = super.zero
+    override lazy val unit: Matrix = super.unit
+    
+    override def apply(
+        _1_1: Scalar, _1_2: Scalar, _1_3: Scalar, _1_4: Scalar,
+        _2_1: Scalar, _2_2: Scalar, _2_3: Scalar, _2_4: Scalar,
+        _3_1: Scalar, _3_2: Scalar, _3_3: Scalar, _3_4: Scalar,
+        _4_1: Scalar, _4_2: Scalar, _4_3: Scalar, _4_4: Scalar): Matrix =
+      new Matrix(
+        _1_1, _1_2, _1_3, _1_4,
+        _2_1, _2_2, _2_3, _2_4,
+        _3_1, _3_2, _3_3, _3_4,
+        _4_1, _4_2, _4_3, _4_4)
+    
+    override def toString: String =
+      "F4x4"+"("+ Scalar +")"+"("+ Vector +")"
   }
 }

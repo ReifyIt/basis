@@ -12,29 +12,30 @@ package object decimal {
   
   val Integer: binary.Integer.type = binary.Integer
   
+  
   type Real = Real.Value
   
   lazy val Real = new binary.FloatingPoint(10)(128)
   
-  type RN = generic.FN[Real.type]
   
-  def RN(N: Int): RN = new generic.FN[Real.type](Real)(N)
+  lazy val R2 = F2(Real)
   
-  lazy val R2 = new generic.F2[Real.type](Real)
+  lazy val R3 = F3(Real)
   
-  lazy val R3 = new generic.F3[Real.type](Real)
+  lazy val R4 = F4(Real)
   
-  lazy val R4 = new generic.F4[Real.type](Real)
+  type RN = FN[Real.type]
   
-  type RMxN[V <: VectorSpace[Real.type] with Singleton, W <: VectorSpace[Real.type] with Singleton] =
-    generic.FMxN[V, W, Real.type]
+  def RN(N: Int): RN = FN(Real)(N)
   
-  def RMxN(V: VectorSpace[Real.type], W: VectorSpace[Real.type]): RMxN[V.type, W.type] =
-    new generic.FMxN[V.type, W.type, Real.type](Real)(V, W)
   
-  lazy val R2x2 = new generic.F2x2[R2.type, Real.type](Real)(R2)
+  lazy val R2x2 = F2x2(Real)(R2)
   
-  lazy val R3x3 = new generic.F3x3[R3.type, Real.type](Real)(R3)
+  lazy val R3x3 = F3x3(Real)(R3)
   
-  lazy val R4x4 = new generic.F4x4[R4.type, Real.type](Real)(R4)
+  lazy val R4x4 = F4x4(Real)(R4)
+  
+  type RMxN[V <: FN[Real.type] with Singleton, W <: FN[Real.type] with Singleton] = FMxN[V, W, Real.type]
+  
+  def RMxN(V: FN[Real.type], W: FN[Real.type]): RMxN[V.type, W.type] = FMxN(Real)(V, W)
 }

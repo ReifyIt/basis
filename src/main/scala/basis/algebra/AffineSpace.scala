@@ -42,7 +42,7 @@ package basis.algebra
   * 
   * @define space   affine space
   */
-trait AffineSpace[S <: Ring with Singleton] extends LinearSpace[S] {
+trait AffineSpace[S <: Ring with Singleton] extends VectorSpace[S] {
   /** A point in this $space.
     * 
     * @define point   point

@@ -7,11 +7,10 @@
 
 package basis.algebra
 
-/** An abstract space of ''N''-dimensional vectors over a ring. Vector addition
-  * associates and commutes, and scalar multiplication associates, commutes,
-  * and distributes over vector addition and scalar addition. Vector addition
-  * and scalar multiplication both have an identity element, and every vector
-  * has an additive inverse. Every vector space is an affine space over itself.
+/** An abstract vector space over a ring. Vector addition associates and
+  * commutes, and scalar multiplication associates and distributes over vector
+  * addition and scalar addition. Vector addition and scalar multiplication
+  * both have an identity element, and every vector has an additive inverse.
   * To the extent practicable, the following axioms should hold.
   * 
   * '''Axioms for vector addition''':
@@ -59,151 +58,38 @@ package basis.algebra
   * 
   * @define space   vector space
   */
-trait VectorSpace[S <: Ring with Singleton] extends AffineSpace[S] with LinearSpace[S] {
+trait VectorSpace[S <: Ring with Singleton] {
   /** A vector in this $space.
     * 
-    * @define point   $vector
     * @define vector  vector
     * @define scalar  scalar
     */
-  trait Element extends Any with super[AffineSpace].Element with super[LinearSpace].Element {
-    protected def Vector: VectorSpace.this.type = VectorSpace.this
+  trait Element extends Any {
+    /** Returns sum of this $vector and another $vector. */
+    def + (that: Vector): Vector
     
-    /** Returns the number of coordinates. */
-    def N: Int = Vector.N
+    /** Returns the additive inverse of this $vector. */
+    def unary_- : Vector
     
-    /** Returns the coordinate at the given index. */
-    def apply(i: Int): Scalar
+    /** Returns the difference between this $vector and another $vector. */
+    def - (that: Vector): Vector
     
-    override def + (that: Vector): Vector = {
-      if (N != that.N) throw new DimensionException
-      val coords = new Array[AnyRef](N)
-      var i = 0
-      while (i < coords.length) {
-        coords(i) = (this(i) + that(i)).asInstanceOf[AnyRef]
-        i += 1
-      }
-      Vector(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
-    }
+    /** Returns the product of this $vector times a $scalar on the right. */
+    def :* (scalar: Scalar): Vector
     
-    override def unary_- : Vector = {
-      val coords = new Array[AnyRef](N)
-      var i = 0
-      while (i < coords.length) {
-        coords(i) = (-this(i)).asInstanceOf[AnyRef]
-        i += 1
-      }
-      Vector(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
-    }
-    
-    override def - (that: Vector): Vector = {
-      if (N != that.N) throw new DimensionException
-      val coords = new Array[AnyRef](N)
-      var i = 0
-      while (i < coords.length) {
-        coords(i) = (this(i) - that(i)).asInstanceOf[AnyRef]
-        i += 1
-      }
-      Vector(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
-    }
-    
-    override def :* (scalar: Scalar): Vector = {
-      val coords = new Array[AnyRef](N)
-      var i = 0
-      while (i < coords.length) {
-        coords(i) = (this(i) * scalar).asInstanceOf[AnyRef]
-        i += 1
-      }
-      Vector(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
-    }
-    
-    override def *: (scalar: Scalar): Vector = {
-      val coords = new Array[AnyRef](N)
-      var i = 0
-      while (i < coords.length) {
-        coords(i) = (scalar * this(i)).asInstanceOf[AnyRef]
-        i += 1
-      }
-      Vector(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
-    }
-    
-    /** Returns the dot product of this $vector and another $vector.
-      * The name of this method contains the unicode dot operator (U+22C5). */
-    def ⋅ (that: Vector): Scalar = {
-      if (N != that.N) throw new DimensionException
-      var s = Scalar.zero
-      var i = 0
-      while (i < N) {
-        s += this(i) * that(i)
-        i += 1
-      }
-      s
-    }
-    
-    override def equals(other: Any): Boolean = other match {
-      case that: Element =>
-        var equal = N == that.N
-        var i = 0
-        while (i < N && equal) {
-          equal = this(i).equals(that(i))
-          i += 1
-        }
-        equal
-      case _ => false
-    }
-    
-    override def hashCode: Int = {
-      import scala.util.hashing.MurmurHash3._
-      var h = -1736520349
-      var i = 0
-      while (i < N) {
-        h = mix(h, this(i).##)
-        i += 1
-      }
-      finalizeHash(h, N)
-    }
-    
-    override def toString: String = {
-      val s = new StringBuilder(Vector.toString)
-      s.append('(')
-      if (N > 0) {
-        s.append(this(0))
-        var i = 1
-        while (i < N) {
-          s.append(", ").append(this(i))
-          i += 1
-        }
-      }
-      s.append(')')
-      s.toString
-    }
+    /** Returns the product of this $vector times a $scalar on the left. */
+    def *: (scalar: Scalar): Vector
   }
   
-  /** The type of points in this $space; equivalent to the type of vectors. */
-  override type Point = Vector
+  /** The type of vectors in this $space. */
+  type Vector <: Element
   
-  override type Vector <: Element
+  /** The type of scalars in this $space. */
+  type Scalar = S#Value
   
-  /** Returns the dimension of this $space. */
-  def N: Int
+  /** Returns the scalar set of this $space. */
+  def Scalar: S
   
-  /** Returns a new vector with the given coordinates. */
-  def apply(coords: Scalar*): Vector
-  
-  override def zero: Vector = {
-    val z = Scalar.zero.asInstanceOf[AnyRef]
-    val coords = new Array[AnyRef](N)
-    var i = 0
-    while (i < coords.length) {
-      coords(i) = z
-      i += 1
-    }
-    apply(wrapRefArray(coords).asInstanceOf[Seq[Scalar]]: _*)
-  }
-  
-  override def origin: Point = zero
-  
-  /** Returns a matrix space that maps another vector space to this $space. */
-  def ⨯ (that: VectorSpace[S]): MatrixSpace[that.type, this.type, S] =
-    new generic.FMxN[that.type, this.type, S](Scalar)(that, this)
+  /** Returns the additive identity of this $space. */
+  def zero: Vector
 }

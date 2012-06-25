@@ -7,15 +7,15 @@
 
 package basis.algebra
 
-/** An abstract space of 4-dimensional vectors over a ring.
+/** An abstract 4-dimensional vector space over a ring.
   * 
   * @author Chris Sachs
   * 
   * @tparam S   The set of scalars.
   */
-trait Vector4Space[S <: Ring with Singleton] extends VectorSpace[S] {
+trait F4[S <: Ring with Singleton] extends FN[S] {
   trait Element extends Any with super.Element {
-    override protected def Vector: Vector4Space.this.type = Vector4Space.this
+    override protected def Vector: F4.this.type = F4.this
     
     /** Returns the 𝑥-coordinate of this $vector. */
     def x: Scalar
@@ -61,20 +61,41 @@ trait Vector4Space[S <: Ring with Singleton] extends VectorSpace[S] {
   
   override def N: Int = 4
   
-  override def apply(coords: Scalar*): Vector = {
-    if (coords.length != 4) throw new DimensionException
-    apply(coords(0), coords(1), coords(2), coords(3))
+  override def zero: Vector = {
+    val z = Scalar.zero
+    apply(z, z, z, z)
   }
   
   /** Returns a new vector with the given 𝑥, 𝑦, 𝑧 and 𝑤 coordinates. */
   def apply(x: Scalar, y: Scalar, z: Scalar, w: Scalar): Vector
   
+  override def apply(coords: Scalar*): Vector = {
+    if (coords.length != 4) throw new DimensionException
+    apply(coords(0), coords(1), coords(2), coords(3))
+  }
+  
   /** Extracts the 𝑥, 𝑦, 𝑧 and 𝑤 coordinates from the given vector. */
   def unapply(vector: Vector): Option[(Scalar, Scalar, Scalar, Scalar)] =
     Some(vector.x, vector.y, vector.z, vector.w)
+}
+
+object F4 {
+  /** Returns a 4-dimensional vector space over the given ring. */
+  def apply(Scalar: Ring): F4[Scalar.type] = new Space[Scalar.type](Scalar)
   
-  override def zero: Vector = {
-    val z = Scalar.zero
-    apply(z, z, z, z)
+  /** A generic 4-dimensional vector space over a ring.
+    * 
+    * @tparam S    The set of scalars.
+    */
+  final class Space[S <: Ring with Singleton](override val Scalar: S) extends F4[S] {
+    final class Element(val x: Scalar, val y: Scalar, val z: Scalar, val w: Scalar) extends super.Element
+    
+    override type Vector = Element
+    
+    override lazy val zero: Vector = super.zero
+    
+    override def apply(x: Scalar, y: Scalar, z: Scalar, w: Scalar): Vector = new Vector(x, y, z, w)
+    
+    override def toString: String = "F4"+"("+ Scalar +")"
   }
 }

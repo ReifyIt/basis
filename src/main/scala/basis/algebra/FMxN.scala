@@ -9,7 +9,7 @@ package basis.algebra
 
 import language.existentials
 
-/** An abstract space of ''M''x''N'' matrices over a ring. Matrix spaces
+/** An abstract ''M'' by ''N'' matrix space over a ring. Matrix spaces
   * describe linear maps between vector spaces relative to the vector spaces'
   * assumed bases. Matrix addition associates and commutes, and scalar
   * multiplication associates, commutes, and distributes over matrix addition
@@ -17,8 +17,8 @@ import language.existentials
   * and distribute over matrix addition. Vectors in the row space multiply as
   * columns on the right, and vectors in the column space multiply as rows on
   * the left. Addition and scalar multiplication both have an identity element,
-  * and every matrix has an additive inverse. To the extent practicable,
-  * the following axioms should hold.
+  * and every matrix has an additive inverse. To the extent practicable, the
+  * following axioms should hold.
   * 
   * '''Axioms for matrix addition''':
   *   - if 𝐀 and 𝐁 are matrices in `this`, then their sum 𝐀 + 𝐁 is also a matrix in `this`.
@@ -37,15 +37,14 @@ import language.existentials
   *     𝐀 :⋅ 𝐯 is a vector in the column space of 𝐀.
   *   - (𝐀 ⋅ 𝐁) :⋅ 𝐯 == 𝐀 :⋅ (𝐁 :⋅ 𝐯) for all matrices 𝐀, 𝐁 and every vector 𝐯 in the row space of 𝐁,
   *     where the row space of 𝐀 equals the column space of 𝐁.
-  *   - 𝐀 :⋅ 𝐯 == 𝐯 ⋅: 𝐀.`transpose` for every matrix 𝐀 and every vector 𝐯 in the row space of 𝐀.
+  *   - 𝐀 :⋅ 𝐯 == 𝐯 ⋅: 𝐀.`T` for every matrix 𝐀 and every vector 𝐯 in the row space of 𝐀.
   * 
   * '''Axioms for matrix multiplication''':
   *   - if 𝐀 and 𝐁 are matrices and the row space of 𝐀 equals the column space of 𝐁,
   *     then the matrix product 𝐀 ⋅ 𝐁 exists.
   *   - (𝐀 ⋅ 𝐁) ⋅ 𝐂 == 𝐀 ⋅ (𝐁 ⋅ 𝐂) for all matrices 𝐀, 𝐁, 𝐂 where the row space of 𝐀 equals
   *     the column space of 𝐁, and the row space of 𝐁 equals the column space of 𝐂.
-  *   - (𝐀 ⋅ 𝐁).`transpose` == 𝐁.`transpose` ⋅ 𝐀.`transpose` for all matrices 𝐀, 𝐁 where
-  *     the row space of 𝐀 equals the column space of 𝐁.
+  *   - (𝐀 ⋅ 𝐁).`T` == 𝐁.`T` ⋅ 𝐀.`T` for all matrices 𝐀, 𝐁 where the row space of 𝐀 equals the column space of 𝐁.
   * 
   * '''Distributive laws''':
   *   - 𝑥 *: (𝐀 + 𝐁) == (𝑥 *: 𝐀) + (𝑥 *: 𝐁) for every scalar 𝑥 and all matrices 𝐀, 𝐁 in `this`.
@@ -67,19 +66,14 @@ import language.existentials
   * 
   * @define space   matrix space
   */
-trait MatrixSpace
-    [V <: VectorSpace[S] with Singleton,
-     W <: VectorSpace[S] with Singleton,
-     S <: Ring with Singleton]
-  extends LinearSpace[S] {
-  
+trait FMxN[V <: FN[S] with Singleton, W <: FN[S] with Singleton, S <: Ring with Singleton] extends VectorSpace[S] {
   /** A matrix in this $space.
     * 
     * @define vector  $matrix
     * @define matrix  matrix
     */
   trait Element extends Any with super.Element {
-    protected def Matrix: MatrixSpace.this.type = MatrixSpace.this
+    protected def Matrix: FMxN.this.type = FMxN.this
     
     /** Returns the number of rows, or equivalently, the dimension of the columns. */
     def M: Int = Matrix.M
@@ -228,13 +222,20 @@ trait MatrixSpace
       * space whose row space equals the multiplier's row space, and whose
       * column space equals this column space. The name of this method
       * contains the unicode dot operator (U+22C5). */
-    def ⋅ [U <: VectorSpace[S] with Singleton]
-        (that: B#Element forSome { type B <: MatrixSpace[U, V, S] })
-      : C#Matrix forSome { type C <: MatrixSpace[U, W, S] } =
+    def ⋅ [U <: FN[S] with Singleton]
+        (that: B#Element forSome { type B <: FMxN[U, V, S] })
+      : C#Matrix forSome { type C <: FMxN[U, W, S] } =
       compose(that.Matrix).product(this, that)
     
+    /** Returns the inverse of this square matrix, if one exists.
+      * 
+      * @usecase def inverse: Option[Matrix]
+      *   @inheritdoc
+      */
+    def inverse(implicit isSquare: V =:= W): Option[Matrix] = sys.error("not implemented")
+    
     /** Returns the transpose of this $matrix. */
-    def transpose: Transpose#Matrix = {
+    def T: Transpose#Matrix = {
       val entries = new Array[AnyRef](N * M)
       var k = 0
       var j = 0
@@ -252,9 +253,33 @@ trait MatrixSpace
       Transpose(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
     }
     
+    /** Returns the determinant of this square $matrix.
+      * 
+      * @usecase def det: Scalar
+      *   @inheritdoc
+      */
+    def det(implicit isSquare: V =:= W): Scalar = sys.error("not implemented")
+    
+    /** Returns the trace of this square $matrix.
+      * 
+      * @usecase def trace: Scalar
+      *   @inheritdoc
+      */
+    def trace(implicit isSquare: V =:= W): Scalar = {
+      assume(M == N)
+      val dim = M * N
+      var s = Scalar.zero
+      var k = 0
+      while (k < dim) {
+        s += this(k)
+        k += N + 1
+      }
+      s
+    }
+    
     override def equals(other: Any): Boolean = other match {
       case that: Element =>
-        var dim = M * N
+        val dim = M * N
         var equal = M == that.M && N == that.N
         var k = 0
         while (k < dim && equal) {
@@ -307,9 +332,7 @@ trait MatrixSpace
   type Matrix <: Element
   
   /** The transpose of this $space. */
-  type Transpose <: MatrixSpace[W, V, S] with Singleton {
-    type Transpose = MatrixSpace.this.type
-  }
+  type Transpose <: FMxN[W, V, S] with Singleton { type Transpose = FMxN.this.type }
   
   /** The type of vectors in the row space. */
   type Row = V#Vector
@@ -331,6 +354,41 @@ trait MatrixSpace
   
   /** Returns the dimension of the row space. */
   def N: Int = Row.N
+  
+  override def zero: Matrix = {
+    val z = Scalar.zero.asInstanceOf[AnyRef]
+    val entries = new Array[AnyRef](M * N)
+    var i = 0
+    while (i < entries.length) {
+      entries(i) = z
+      i += 1
+    }
+    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
+  }
+  
+  /** Returns the identity matrix of this $space, if one exists.
+    * 
+    * @usecase def identity: Matrix
+    *   @inheritdoc
+    */
+  def identity(implicit isSquare: V =:= W): Matrix = {
+    val z = Scalar.zero.asInstanceOf[AnyRef]
+    val u = Scalar.unit.asInstanceOf[AnyRef]
+    val entries = new Array[AnyRef](M * N)
+    var k = 0
+    var i = 0
+    var j = 0
+    while (i < M) {
+      while (j < N) {
+        entries(k) = if (i != j) z else u
+        k += 1
+        j += 1
+      }
+      j = 0
+      i += 1
+    }
+    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
+  }
   
   /** Returns a new matrix with the given row-major entries. */
   def apply(entries: Scalar*): Matrix
@@ -375,30 +433,17 @@ trait MatrixSpace
     apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
   }
   
-  override def zero: Matrix = {
-    val z = Scalar.zero.asInstanceOf[AnyRef]
-    val entries = new Array[AnyRef](M * N)
-    var i = 0
-    while (i < entries.length) {
-      entries(i) = z
-      i += 1
-    }
-    apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
-  }
-  
   /** Returns a matrix space that maps the row space of another matrix space
     * to this column space. */
-  def compose[U <: VectorSpace[S] with Singleton]
-      (that: MatrixSpace[U, V, S]): MatrixSpace[U, W, S] =
-    Col ⨯ that.Row
+  def compose[U <: FN[S] with Singleton](that: FMxN[U, V, S]): FMxN[U, W, S] = that.Row map Col
   
   /** Returns the matrix product of the first matrix, whose column space equals
     * this column space, times the second matrix, whose row space equals this
     * row space, where the row space of the first matrix equals the column
     * space of the second matrix. */
-  def product[U <: VectorSpace[S] with Singleton](
-      matrixA: A#Element forSome { type A <: MatrixSpace[U, W, S] },
-      matrixB: B#Element forSome { type B <: MatrixSpace[V, U, S] }): Matrix = {
+  def product[U <: FN[S] with Singleton](
+      matrixA: A#Element forSome { type A <: FMxN[U, W, S] },
+      matrixB: B#Element forSome { type B <: FMxN[V, U, S] }): Matrix = {
     val M = matrixA.M
     val N = matrixA.N
     assume(N == matrixB.M)
@@ -428,5 +473,46 @@ trait MatrixSpace
       i0 += N
     }
     apply(wrapRefArray(entries).asInstanceOf[Seq[Scalar]]: _*)
+  }
+}
+
+object FMxN {
+  /** Returns an ''M'' by ''N'' matrix space over the given ring. */
+  def apply(Scalar: Ring)(Row: FN[Scalar.type], Col: FN[Scalar.type]): FMxN[Row.type, Col.type, Scalar.type] =
+    new Space[Row.type, Col.type, Scalar.type](Scalar)(Row, Col)
+  
+  /** A generic ''M'' by ''N'' matrix space over a ring.
+    * 
+    * @tparam V   The row space.
+    * @tparam W   The column space.
+    * @tparam S   The set of scalars.
+    */
+  private final class Space[V <: FN[S] with Singleton, W <: FN[S] with Singleton, S <: Ring with Singleton]
+      (val Scalar: S)(val Row: V, val Col: W)
+    extends FMxN[V, W, S] {
+    
+    final class Element(entries: Array[AnyRef]) extends super.Element {
+      if (entries.length != M * N) throw new DimensionException
+      
+      override def apply(k: Int): Scalar = entries(k).asInstanceOf[Scalar]
+    }
+    
+    override type Matrix = Element
+    
+    private var _Transpose: Space[W, V, S] = null
+    override def Transpose: Transpose = synchronized {
+      if (_Transpose == null) {
+        _Transpose = new Space[W, V, S](Scalar)(Col, Row)
+        _Transpose._Transpose = this
+      }
+      _Transpose.asInstanceOf[Transpose]
+    }
+    
+    override lazy val zero: Matrix = super.zero
+    
+    override def apply(entries: Scalar*): Matrix =
+      new Matrix(entries.asInstanceOf[Seq[AnyRef]].toArray[AnyRef])
+    
+    override def toString: String = "FMxN"+"("+ Scalar +")"+"("+ Row +", "+ Col +")"
   }
 }

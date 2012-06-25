@@ -11,17 +11,17 @@ A set of _independent_ software packages that combine together to fill a space�
 Elegant math does not usually translate into elegant code. But this can change. The Algebra Basis library provides abstract algebraic interfaces with tightly coupled implementations. You can write generic mathematical code that performs well too. Here's a quick taste:
 
 ```scala
-scala> def combine[V <: LinearSpace[_] with Singleton](a: V#Scalar, x: V#Vector, b: V#Scalar, y: V#Vector): V#Vector = a *: x + b *: y
-combine: [V <: basis.algebra.LinearSpace[_] with Singleton](a: V#Scalar, x: V#Vector, b: V#Scalar, y: V#Vector)V#Vector
+scala> def combine[V <: VectorSpace[_] with Singleton](a: V#Scalar, x: V#Vector, b: V#Scalar, y: V#Vector): V#Vector = a *: x + b *: y
+combine: [V <: basis.algebra.VectorSpace[_] with Singleton](a: V#Scalar, x: V#Vector, b: V#Scalar, y: V#Vector)V#Vector
 
-scala> combine[R2.type](3, R2(5, 7), 9, R2(0, 1)) // works with any linear space
+scala> combine[R2.type](3, R2(5, 7), 9, R2(0, 1)) // works with any vector space
 res0: basis.algebra.binary64.R2.Vector = R2(15.0, 30.0)
 
-scala> (R2⨯R3)(1, 0, 0,  0, 1, 0) ⋅ (R3⨯R2)(1, 0,  0, 1,  0, 0) // type safe, generic matrix composition
-res1: basis.algebra.binary64.RealMatrixSpace[basis.algebra.binary64.R2.type,basis.algebra.binary64.R2.type]#Matrix = R2x2(1.0, 0.0,  0.0, 1.0)
+scala> (R3 map R2)(1, 0, 0,  0, 1, 0) ⋅ (R2 map R3)(1, 0,  0, 1,  0, 0) // type safe matrix composition
+res1: basis.algebra.binary64.RMxN[basis.algebra.binary64.R2.type,basis.algebra.binary64.R2.type]#Matrix = R2x2(1.0, 0.0,  0.0, 1.0)
 
-scala> decimal.R2(1, 1).norm // arbitrary precision (not a BigDecimal wrapper)
-res2: basis.algebra.decimal.R2.Scalar = 1.414213562373095048801688724209698078569671875376948073176679738
+scala> decimal.Real(2L).sqrt // arbitrary precision arithmetic (not a BigDecimal wrapper)
+res2: basis.algebra.decimal.Real.Value = 1.414213562373095048801688724209698078569671875376948073176679738
 ```
 
 To use the Algebra Basis library with Scala 2.10.0-M4 or later, add this to your SBT build definition:
