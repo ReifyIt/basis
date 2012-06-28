@@ -163,9 +163,9 @@ object JSValue {
   implicit def apply(value: Boolean): JSBoolean = if (value) JSTrue else JSFalse
   
   def parse(string: String): JSValue = {
-    val parser = new JSONReader[JSON.type](string)
+    val parser = new model.JSONReader(string)
     parser.skipWhitespace()
-    val jsvalue = parser.parseJSValue[JSON.type](JSON)
+    val jsvalue = parser.parseJSONValue(JSON)
     parser.skipWhitespace()
     parser.parseEnd()
     jsvalue

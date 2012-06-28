@@ -6,19 +6,17 @@
 \*                                                                      */
 
 package basis.json
-
-import java.io.Reader
-import java.io.StringReader
+package model
 
 /** A JSON parser that consumes a `java.io.Reader`.
   * 
   * @author Chris Sachs
   */
-class JSONReader[-Target <: JSONContext](reader: Reader) extends JSONParser[Target] {
-  def this(string: String) = this(new StringReader(string))
+class JSONReader(reader: java.io.Reader) extends JSONParser {
+  def this(string: String) = this(new java.io.StringReader(string))
   
-  private[this] final var line: Int = 0
-  private[this] final var column: Int = 0
+  private[this] final var line: Int = 1
+  private[this] final var column: Int = 1
   
   private[this] final var nextChar: Int = reader.read()
   
@@ -26,10 +24,9 @@ class JSONReader[-Target <: JSONContext](reader: Reader) extends JSONParser[Targ
   
   override protected final def readChar(): Char = {
     val c = nextChar
-    if (c < 0) syntaxError("unexpected end of input")
+    if (c < 0) throw new JSONException("unexpected end of input")
     nextChar = reader.read()
-    if (c == '\n' || (c == '\r' && nextChar != '\n')) { line += 1; column = 0 }
-    else column += 1
+    if (c == '\n' || (c == '\r' && nextChar != '\n')) { line += 1; column = 1 } else column += 1
     c.toChar
   }
   

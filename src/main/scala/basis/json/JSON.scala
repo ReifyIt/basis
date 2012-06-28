@@ -6,27 +6,26 @@
 \*                                                                      */
 
 package basis.json
-import basis.json
 
-import scala.collection.mutable.Builder
-
-object JSON extends JSONContext {
-  override type JSValue = json.JSValue
-  override type JSObject = json.JSObject
-  override type JSArray = json.JSArray
-  override type JSString = json.JSString
-  override type JSNumber = json.JSNumber
-  override type JSInteger = json.JSInteger
-  override type JSDecimal = json.JSDecimal
-  override type JSBoolean = json.JSBoolean
-  override type JSNull = json.JSNull
+class JSON extends model.JSONModel {
+  override type Value   = JSValue
+  override type Object  = JSObject
+  override type Array   = JSArray
+  override type String  = JSString
+  override type Number  = JSNumber
+  override type Integer = JSInteger
+  override type Decimal = JSDecimal
+  override type Boolean = JSBoolean
+  override type Null    = JSNull
   
-  override def JSObjectBuilder: json.JSObjectBuilder = new json.JSObjectBuilder
-  override def JSArrayBuilder: json.JSArrayBuilder = new json.JSArrayBuilder
-  override def JSString(string: String): json.JSString = new json.JSString(string)
-  override def JSInteger(string: String): json.JSInteger = new json.JSInteger(string)
-  override def JSDecimal(string: String): json.JSDecimal = new json.JSDecimal(string)
-  override def JSTrue: json.JSTrue.type = json.JSTrue
-  override def JSFalse: json.JSFalse.type = json.JSFalse
-  override def JSNull: json.JSNull.type = json.JSNull
+  override def ObjectBuilder: JSObjectBuilder = new JSObjectBuilder
+  override def ArrayBuilder: JSArrayBuilder = new JSArrayBuilder
+  override def String(value: java.lang.String): JSString = new JSString(value)
+  override def Integer(value: java.lang.String): JSInteger = new JSInteger(value)
+  override def Decimal(value: java.lang.String): JSDecimal = new JSDecimal(value)
+  override def True: JSTrue.type = JSTrue
+  override def False: JSFalse.type = JSFalse
+  override def Null: JSNull.type = JSNull
 }
+
+object JSON extends JSON

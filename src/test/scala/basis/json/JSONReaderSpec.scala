@@ -10,14 +10,16 @@ package basis.json
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
+import basis.json.model._
+
 class JSONReaderSpec extends FunSpec with ShouldMatchers with JSONParserBehaviors {
   override def suiteName = "JSONReader specification"
   
   describe("Strict JSONReader") {
     val parse = (s: String) => {
-      val parser = new JSONReader[JSON.type](s)
+      val parser = new JSONReader(s)
       parser.skipWhitespace()
-      val jsvalue = parser.parseJSValue(JSON)
+      val jsvalue = parser.parseJSONValue(JSON)
       parser.skipWhitespace()
       parser.parseEnd()
       jsvalue

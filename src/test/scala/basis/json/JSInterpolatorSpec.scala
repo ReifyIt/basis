@@ -10,8 +10,8 @@ package basis.json
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class JSONStringContextSpec extends FunSpec with ShouldMatchers {
-  override def suiteName = "JSONStringContext specification"
+class JSInterpolatorSpec extends FunSpec with ShouldMatchers {
+  override def suiteName = "JSInterpolator specification"
   
   describe("json\"\" strings") {
     it("should parse preceding line comments") {

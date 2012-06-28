@@ -68,6 +68,9 @@ wall: basis.json.JSArray = [{"id":0,"content":"Hello"},{"id":1,"content":"First 
 
 scala> for (post <- wall \\ +JSObject if post("id") == json"1") yield message(1, "[$redacted]\n")
 res0: basis.json.JSArray = [{"id":0,"content":"Hello"},{"id":1,"content":"[$redacted]\n"}]
+
+scala> val json""" { "content" : $content } """ = wall(0) // subset pattern matching
+content: basis.json.JSValue = "Hello"
 ```
 
 To use the JSON Basis library with Scala 2.10.0-M4 or later, add this to your SBT build definition:

@@ -63,15 +63,6 @@ object JSString {
   
   def unapply(json: JSString): Some[String] = Some(json.value)
   
-  def parse(string: String): JSString = {
-    val parser = new JSONReader[JSON.type](string)
-    parser.skipWhitespace()
-    val jsstring = parser.parseJSString[JSON.type](JSON)
-    parser.skipWhitespace()
-    parser.parseEnd()
-    jsstring
-  }
-  
   object unary_+ extends PartialFunction[Any, JSString] {
     override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSString]
     override def apply(x: Any): JSString = x.asInstanceOf[JSString]

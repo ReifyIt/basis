@@ -6,11 +6,10 @@
 \*                                                                      */
 
 package basis.json
+package model
 
-class JSONException(message: String, cause: Throwable) extends RuntimeException(message) {
-  def this(message: String) = this(message, null)
+trait JSONArrayBuilder[+T] extends JSONArrayModel {
+  def += (value: Value): this.type
   
-  def this(cause: Throwable) = this(null, cause)
-  
-  def this() = this(null, null)
+  def result: T
 }

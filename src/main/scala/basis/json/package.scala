@@ -40,13 +40,16 @@ package basis
   * }}}
   */
 package object json {
-  implicit class JSONStringContext(stringContext: StringContext) {
+  implicit class JSInterpolator(stringContext: StringContext) {
     import language.experimental.macros
     
     object json {
-      def apply(args: JSValue*): JSValue = macro JSONMacros.buildJSON
+      def apply(args: JSValue*): JSValue = macro JSBuilderMacro.interpolate
       
-      def unapplySeq(jsvalue: JSValue): Option[Seq[JSValue]] = macro JSONMacros.matchJSON
+      def unapplySeq(jsvalue: JSValue): Option[Seq[JSValue]] = JSMatcher.interpolate(jsvalue, stringContext.parts)
+      
+      // disabled until macro extractors work
+      // def unapplySeq(jsvalue: JSValue): Option[Seq[JSValue]] = macro JSMatcherMacro.interpolate
     }
   }
 }

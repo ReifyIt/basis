@@ -10,6 +10,8 @@ package basis.json
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
+import basis.json.model._
+
 trait JSONParserBehaviors { this: FunSpec =>
   import ShouldMatchers._
   

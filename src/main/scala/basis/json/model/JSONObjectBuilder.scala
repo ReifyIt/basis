@@ -6,23 +6,10 @@
 \*                                                                      */
 
 package basis.json
+package model
 
-abstract class JSNumber extends JSValue {
-  override protected type Root >: this.type <: JSNumber
+trait JSONObjectBuilder[+T] extends JSONObjectModel {
+  def += (name: java.lang.String, value: Value): this.type
   
-  def toInt: Int
-  
-  def toLong: Long
-  
-  def toFloat: Float
-  
-  def toDouble: Double
-}
-
-object JSNumber {
-  object unary_+ extends PartialFunction[Any, JSNumber] {
-    override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSNumber]
-    override def apply(x: Any): JSNumber = x.asInstanceOf[JSNumber]
-    override def toString: String = "+JSNumber"
-  }
+  def result: T
 }

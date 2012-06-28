@@ -9,19 +9,31 @@ package basis.json
 
 import scala.collection.mutable.Builder
 
-final class JSArrayBuilder(sizeHint: Int) extends Builder[JSValue, JSArray] {
-  def this() = this(16)
+final class JSArrayBuilder(sizeHint: Int)
+  extends JSON
+    with model.JSONArrayBuilder[JSArray]
+    with Builder[JSValue, JSArray] {
   
-  private[this] var values = new Array[JSValue](sizeHint)
+  def this() = this(0)
   
-  private[this] var length = 0
+  private[this] var values: scala.Array[JSValue] =
+    if (sizeHint > 0) new scala.Array[JSValue](sizeHint) else null
   
-  private[this] def ensureCapacity(capacity: Int): Unit = if (capacity > values.length) {
-    var newLength = 2 * values.length
-    while (capacity > newLength) newLength *= 2
-    val newValues = new Array[JSValue](newLength)
-    System.arraycopy(values, 0, newValues, 0, length)
-    values = newValues
+  private[this] var length: Int = 0
+  
+  private[this] def ensureCapacity(capacity: Int) {
+    if (values == null) {
+      val n = math.max(4, capacity)
+      values = new scala.Array[JSValue](n)
+    }
+    else if (capacity > values.length) {
+      var n = capacity - 1
+      n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+      n += 1
+      val newValues = new scala.Array[JSValue](n)
+      System.arraycopy(values, 0, newValues, 0, length)
+      values = newValues
+    }
   }
   
   override def sizeHint(size: Int): Unit = ensureCapacity(size)
@@ -33,10 +45,13 @@ final class JSArrayBuilder(sizeHint: Int) extends Builder[JSValue, JSArray] {
     this
   }
   
-  override def result: JSArray = if (length != 0) new JSArray(values, length) else JSArray.empty
+  override def result: JSArray = {
+    if (length != 0) new JSArray(values, length)
+    else JSArray.empty
+  }
   
   override def clear() {
-    values = new Array[JSValue](sizeHint)
+    values = null
     length = 0
   }
 }

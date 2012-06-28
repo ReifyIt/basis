@@ -8,7 +8,6 @@
 package basis.json
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable.Builder
 
 final class JSObject private[json] (names: Array[String], values: Array[JSValue], val length: Int) extends JSValue {
   override protected type Root = JSObject
@@ -335,9 +334,9 @@ object JSObject {
   def unapplySeq(json: JSObject): Some[Seq[(String, JSValue)]] = Some(json.iterator.toSeq)
   
   def parse(string: String): JSObject = {
-    val parser = new JSONReader[JSON.type](string)
+    val parser = new model.JSONReader(string)
     parser.skipWhitespace()
-    val jsobject = parser.parseJSObject[JSON.type](JSON)
+    val jsobject = parser.parseJSONObject(JSON)
     parser.skipWhitespace()
     parser.parseEnd()
     jsobject
