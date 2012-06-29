@@ -31,33 +31,33 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
   
   def length: Int = names.length
   
-  def name(index: Int): String = names(index)
+  def getName(index: Int): String = names(index)
   
-  def value(index: Int): JSValue = values(index)
+  def getValue(index: Int): JSValue = values(index)
   
-  def apply(index: Int): (String, JSValue) = (name(index), value(index))
+  def apply(index: Int): (String, JSValue) = (getName(index), getValue(index))
   
-  def apply(key: String): JSValue = {
+  def apply(name: String): JSValue = {
     var i = 0
-    while (i < length && !key.equals(name(i))) i += 1
-    if (i < length) value(i) else JSUndefined
+    while (i < length && !name.equals(getName(i))) i += 1
+    if (i < length) getValue(i) else JSUndefined
   }
   
-  def get(key: String): Option[JSValue] = {
+  def get(name: String): Option[JSValue] = {
     var i = 0
-    while (i < length && !key.equals(name(i))) i += 1
-    if (i < length) Some(value(i)) else None
+    while (i < length && !name.equals(getName(i))) i += 1
+    if (i < length) Some(getValue(i)) else None
   }
   
-  @inline def getOrElse(key: String, default: => JSValue): JSValue = {
+  @inline def getOrElse(name: String, default: => JSValue): JSValue = {
     var i = 0
-    while (i < length && !key.equals(name(i))) i += 1
-    if (i < length) value(i) else default
+    while (i < length && !name.equals(getName(i))) i += 1
+    if (i < length) getValue(i) else default
   }
   
-  def contains(key: String): Boolean = {
+  def contains(name: String): Boolean = {
     var i = 0
-    while (i < length && !key.equals(name(i))) i += 1
+    while (i < length && !name.equals(getName(i))) i += 1
     i < length
   }
   
@@ -84,9 +84,9 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
   }
   
   def + (field: (String, JSValue)): JSObject = {
-    val key = field._1
+    val name = field._1
     var i = 0
-    while (i < length && !key.equals(name(i))) i += 1
+    while (i < length && !name.equals(getName(i))) i += 1
     if (i < length) {
       val newValues = new Array[JSValue](length)
       System.arraycopy(values, 0, newValues, 0, i)
@@ -97,9 +97,9 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     else this :+ field
   }
   
-  def - (key: String): JSObject = {
+  def - (name: String): JSObject = {
     var i = 0
-    while (i < length && !key.equals(name(i))) i += 1
+    while (i < length && !name.equals(getName(i))) i += 1
     if (i < length) {
       val newLength = length - 1
       val newNames = new Array[String](newLength)
@@ -122,7 +122,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
   @inline override def foreach[U](f: JSValue => U) {
     var i = 0
     while (i < length) {
-      f(value(i))
+      f(getValue(i))
       i += 1
     }
   }
@@ -131,7 +131,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     val newValues = new Array[JSValue](length)
     var i = 0
     while (i < length) {
-      newValues(i) = f(value(i))
+      newValues(i) = f(getValue(i))
       i += 1
     }
     new JSObject(names, newValues)
@@ -143,9 +143,9 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     var i = 0
     var k = 0
     while (i < length) {
-      if (p(value(i))) {
-        newNames(k) = name(i)
-        newValues(k) = value(i)
+      if (p(getValue(i))) {
+        newNames(k) = getName(i)
+        newValues(k) = getValue(i)
         k += 1
       }
       i += 1
@@ -164,7 +164,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     var result = z
     var i = 0
     while (i < length) {
-      result = op(result, value(i))
+      result = op(result, getValue(i))
       i += 1
     }
     result
@@ -174,7 +174,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     var result = z
     var i = length - 1
     while (length >= 0) {
-      result = op(value(i), result)
+      result = op(getValue(i), result)
       i -= 1
     }
     result
@@ -214,7 +214,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
       var equal = length == that.length
       var i = 0
       while (i < length && equal) {
-        equal = name(i).equals(that.name(i)) && value(i).equals(that.value(i))
+        equal = getName(i).equals(that.getName(i)) && getValue(i).equals(that.getValue(i))
         i += 1
       }
       equal
@@ -226,7 +226,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     var h = -1172193816
     var i = 0
     while (i < length) {
-      h = mix(mix(h, name(i).hashCode), value(i).hashCode)
+      h = mix(mix(h, getName(i).hashCode), getValue(i).hashCode)
       i += 1
     }
     finalizeHash(h, length)
@@ -238,11 +238,11 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     s.toString
   }
   
-  private class SelectName(key: String) extends Selection[JSValue] {
+  private class SelectName(name: String) extends Selection[JSValue] {
     override def foreach[U](f: JSValue => U) {
       var i = 0
       while (i < jsobject.length) {
-        if (key.equals(jsobject.name(i))) f(jsobject.value(i))
+        if (name.equals(jsobject.getName(i))) f(jsobject.getValue(i))
         i += 1
       }
     }
@@ -251,20 +251,20 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
       val newValues = new Array[JSValue](jsobject.length)
       var i = 0
       while (i < jsobject.length) {
-        newValues(i) = if (key.equals(jsobject.name(i))) f(jsobject.value(i)) else jsobject.value(i)
+        newValues(i) = if (name.equals(jsobject.getName(i))) f(jsobject.getValue(i)) else jsobject.getValue(i)
         i += 1
       }
       new JSObject(jsobject.names, newValues)
     }
     
-    override def toString: String = "("+"_"+" \\ "+ key +")"
+    override def toString: String = "("+"_"+" \\ "+ name +")"
   }
   
   private class \ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Selection[A] {
     override def foreach[U](f: A => U) {
       var i = 0
       while (i < jsobject.length) {
-        val jsvalue = jsobject.value(i)
+        val jsvalue = jsobject.getValue(i)
         if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue))
         i += 1
       }
@@ -274,7 +274,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
       val newValues = new Array[JSValue](jsobject.length)
       var i = 0
       while (i < jsobject.length) {
-        val jsvalue = jsobject.value(i)
+        val jsvalue = jsobject.getValue(i)
         newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue
         i += 1
       }
@@ -288,7 +288,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     override def foreach[U](f: A => U) {
       var i = 0
       while (i < jsobject.length) {
-        val jsvalue = jsobject.value(i)
+        val jsvalue = jsobject.getValue(i)
         if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel foreach f
         i += 1
       }
@@ -298,7 +298,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
       val newValues = new Array[JSValue](jsobject.length)
       var i = 0
       while (i < jsobject.length) {
-        val jsvalue = jsobject.value(i)
+        val jsvalue = jsobject.getValue(i)
         newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel map f
         i += 1
       }
