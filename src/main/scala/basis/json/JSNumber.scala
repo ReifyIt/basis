@@ -20,7 +20,7 @@ abstract class JSNumber extends JSValue {
 }
 
 object JSNumber {
-  object unary_+ extends PartialFunction[Any, JSNumber] {
+  object unary_+ extends runtime.AbstractPartialFunction[Any, JSNumber] {
     override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSNumber]
     override def apply(x: Any): JSNumber = x.asInstanceOf[JSNumber]
     override def toString: String = "+JSNumber"

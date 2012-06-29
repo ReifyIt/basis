@@ -9,40 +9,132 @@ package basis.json
 
 import scala.collection.generic.CanBuildFrom
 
-final class JSObject private[json] (names: Array[String], values: Array[JSValue], val length: Int) extends JSValue {
+import language.higherKinds
+
+final class JSObject(names: Array[String], values: Array[JSValue]) extends JSValue { jsobject =>
   override protected type Root = JSObject
   
-  assert(names.length >= length && values.length >= length && length >= 0)
+  assert(names.length == values.length)
   
   def this(fields: Seq[(String, JSValue)]) = {
-    this(new Array[String](fields.length), new Array[JSValue](fields.length), fields.length)
+    this(new Array[String](fields.length), new Array[JSValue](fields.length))
     var i = 0
     while (i < fields.length) {
-      val (name, value) = fields(i)
-      names(i) = name
-      values(i) = value
+      val field = fields(i)
+      names(i) = field._1
+      values(i) = field._2
       i += 1
     }
   }
   
   def this(fields: Map[String, JSValue]) = this(fields.toSeq)
   
-  override def foreach[U](f: JSValue => U) {
+  def length: Int = names.length
+  
+  def name(index: Int): String = names(index)
+  
+  def value(index: Int): JSValue = values(index)
+  
+  def apply(index: Int): (String, JSValue) = (name(index), value(index))
+  
+  def apply(key: String): JSValue = {
+    var i = 0
+    while (i < length && !key.equals(name(i))) i += 1
+    if (i < length) value(i) else JSUndefined
+  }
+  
+  def get(key: String): Option[JSValue] = {
+    var i = 0
+    while (i < length && !key.equals(name(i))) i += 1
+    if (i < length) Some(value(i)) else None
+  }
+  
+  @inline def getOrElse(key: String, default: => JSValue): JSValue = {
+    var i = 0
+    while (i < length && !key.equals(name(i))) i += 1
+    if (i < length) value(i) else default
+  }
+  
+  def contains(key: String): Boolean = {
+    var i = 0
+    while (i < length && !key.equals(name(i))) i += 1
+    i < length
+  }
+  
+  def :+ (field: (String, JSValue)): JSObject = {
+    val newLength = length + 1
+    val newNames = new Array[String](newLength)
+    System.arraycopy(names, 0, newNames, 0, length)
+    newNames(length) = field._1
+    val newValues = new Array[JSValue](newLength)
+    System.arraycopy(values, 0, newValues, 0, length)
+    newValues(length) = field._2
+    new JSObject(newNames, newValues)
+  }
+  
+  def +: (field: (String, JSValue)): JSObject = {
+    val newLength = length + 1
+    val newNames = new Array[String](newLength)
+    newNames(0) = field._1
+    System.arraycopy(names, 0, newNames, 1, length)
+    val newValues = new Array[JSValue](newLength)
+    newValues(0) = field._2
+    System.arraycopy(values, 0, newValues, 1, length)
+    new JSObject(newNames, newValues)
+  }
+  
+  def + (field: (String, JSValue)): JSObject = {
+    val key = field._1
+    var i = 0
+    while (i < length && !key.equals(name(i))) i += 1
+    if (i < length) {
+      val newValues = new Array[JSValue](length)
+      System.arraycopy(values, 0, newValues, 0, i)
+      newValues(i) = field._2
+      System.arraycopy(values, i + 1, newValues, i + 1, length - (i + 1))
+      new JSObject(names, newValues)
+    }
+    else this :+ field
+  }
+  
+  def - (key: String): JSObject = {
+    var i = 0
+    while (i < length && !key.equals(name(i))) i += 1
+    if (i < length) {
+      val newLength = length - 1
+      val newNames = new Array[String](newLength)
+      System.arraycopy(names, 0, newNames, 0, i)
+      System.arraycopy(names, i + 1, newNames, i, length - i)
+      val newValues = new Array[JSValue](newLength)
+      System.arraycopy(values, 0, newValues, 0, i)
+      System.arraycopy(values, i + 1, newValues, i, length - i)
+      new JSObject(newNames, newValues)
+    }
+    else this
+  }
+  
+  override def \ (name: String): Selection[JSValue] = new SelectName(name)
+  
+  override def \ [A <: JSValue](sel: PartialFunction[JSValue, A]): Selection[A] = new \ [A](sel)
+  
+  override def \\ [A <: JSValue](sel: PartialFunction[JSValue, A]): Selection[A] = new \\ [A](sel)
+  
+  @inline override def foreach[U](f: JSValue => U) {
     var i = 0
     while (i < length) {
-      f(values(i))
+      f(value(i))
       i += 1
     }
   }
   
-  override def map(f: JSValue => JSValue): JSObject = {
+  @inline override def map(f: JSValue => JSValue): JSObject = {
     val newValues = new Array[JSValue](length)
     var i = 0
     while (i < length) {
-      newValues(i) = f(values(i))
+      newValues(i) = f(value(i))
       i += 1
     }
-    new JSObject(names, newValues, length)
+    new JSObject(names, newValues)
   }
   
   override def filter(p: JSValue => Boolean): JSObject = {
@@ -51,186 +143,53 @@ final class JSObject private[json] (names: Array[String], values: Array[JSValue]
     var i = 0
     var k = 0
     while (i < length) {
-      if (p(values(i))) {
-        newNames(k) = names(i)
-        newValues(k) = values(i)
+      if (p(value(i))) {
+        newNames(k) = name(i)
+        newValues(k) = value(i)
         k += 1
       }
       i += 1
     }
-    new JSObject(newNames, newValues, k)
+    if (k < length) {
+      val compactNames = new Array[String](k)
+      System.arraycopy(newNames, 0, compactNames, 0, k)
+      val compactValues = new Array[JSValue](k)
+      System.arraycopy(newValues, 0, compactValues, 0, k)
+      new JSObject(compactNames, compactValues)
+    }
+    else this
   }
   
-  override def foldLeft[A](z: A)(op: (A, JSValue) => A): A = {
+  @inline override def foldLeft[A](z: A)(op: (A, JSValue) => A): A = {
     var result = z
     var i = 0
     while (i < length) {
-      result = op(result, values(i))
+      result = op(result, value(i))
       i += 1
     }
     result
   }
   
-  override def foldRight[A](z: A)(op: (JSValue, A) => A): A = {
+  @inline override def foldRight[A](z: A)(op: (JSValue, A) => A): A = {
     var result = z
     var i = length - 1
     while (length >= 0) {
-      result = op(values(i), result)
+      result = op(value(i), result)
       i -= 1
     }
     result
   }
   
-  override def \ (name: String): Vine[JSValue] = new SelectName(name)
-  
-  def foreachField[U](f: (String, JSValue) => U) {
+  def convertTo[CC[_]](implicit bf: CanBuildFrom[Nothing, (String, JSValue), CC[(String, JSValue)]]): CC[(String, JSValue)] = {
+    val builder = bf()
+    builder.sizeHint(length)
     var i = 0
     while (i < length) {
-      f(names(i), values(i))
+      builder += ((names(i), values(i)))
       i += 1
     }
+    builder.result
   }
-  
-  def mapFields(f: (String, JSValue) => (String, JSValue)): JSObject = {
-    val newNames = new Array[String](length)
-    val newValues = new Array[JSValue](length)
-    var i = 0
-    while (i < length) {
-      val (newName, newValue) = f(names(i), values(i))
-      newNames(i) = newName
-      newValues(i) = newValue
-      i += 1
-    }
-    new JSObject(newNames, newValues, length)
-  }
-  
-  def filterFields(p: (String, JSValue) => Boolean): JSObject = {
-    val newNames = new Array[String](length)
-    val newValues = new Array[JSValue](length)
-    var i = 0
-    var k = 0
-    while (i < length) {
-      if (p(names(i), values(i))) {
-        newNames(k) = names(i)
-        newValues(k) = values(i)
-        k += 1
-      }
-      i += 1
-    }
-    new JSObject(newNames, newValues, k)
-  }
-  
-  def apply(index: Int): (String, JSValue) = {
-    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    (names(index), values(index))
-  }
-  
-  def updated(index: Int, field: (String, JSValue)): JSObject = {
-    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    val (name, value) = field
-    val newNames = new Array[String](length)
-    val newValues = new Array[JSValue](length)
-    System.arraycopy(names, 0, newNames, 0, index)
-    newNames(index) = name
-    System.arraycopy(names, index + 1, newNames, index + 1, length - (index + 1))
-    System.arraycopy(values, 0, newValues, 0, index)
-    newValues(index) = value
-    System.arraycopy(values, index + 1, newValues, index + 1, length - (index + 1))
-    new JSObject(newNames, newValues, length)
-  }
-  
-  def :+ (field: (String, JSValue)): JSObject = {
-    val (name, value) = field
-    val newLength = length + 1
-    val newNames = new Array[String](newLength)
-    val newValues = new Array[JSValue](newLength)
-    System.arraycopy(names, 0, newNames, 0, length)
-    System.arraycopy(values, 0, newValues, 0, length)
-    newNames(length) = name
-    newValues(length) = value
-    new JSObject(newNames, newValues, newLength)
-  }
-  
-  def +: (field: (String, JSValue)): JSObject = {
-    val (name, value) = field
-    val newLength = length + 1
-    val newNames = new Array[String](newLength)
-    val newValues = new Array[JSValue](newLength)
-    newNames(0) = name
-    newValues(0) = value
-    System.arraycopy(names, 0, newNames, 1, length)
-    System.arraycopy(values, 0, newValues, 1, length)
-    new JSObject(newNames, newValues, newLength)
-  }
-  
-  def contains(name: String): Boolean = {
-    var i = 0
-    while (i < length && !name.equals(names(i))) i += 1
-    i < length
-  }
-  
-  def apply(name: String): JSValue = {
-    var i = 0
-    while (i < length && !name.equals(names(i))) i += 1
-    if (i < length) values(i) else JSUndefined
-  }
-  
-  def get(name: String): Option[JSValue] = {
-    var i = 0
-    while (i < length && !name.equals(names(i))) i += 1
-    if (i < length) {
-      val value = values(i)
-      if (value ne JSUndefined) Some(value) else None
-    }
-    else None
-  }
-  
-  def getOrElse(name: String, default: => JSValue): JSValue = {
-    var i = 0
-    while (i < length && !name.equals(names(i))) i += 1
-    if (i < length) values(i) else default
-  }
-  
-  def updated(name: String, value: JSValue): JSObject = this + (name, value)
-  
-  def + (field: (String, JSValue)): JSObject = {
-    val (name, value) = field
-    var i = 0
-    while (i < length && !name.equals(names(i))) i += 1
-    if (i < length) {
-      val newValues = new Array[JSValue](length)
-      System.arraycopy(values, 0, newValues, 0, i)
-      newValues(i) = value
-      System.arraycopy(values, i + 1, newValues, i + 1, length - (i + 1))
-      new JSObject(names, newValues, length)
-    }
-    else this :+ field
-  }
-  
-  def - (name: String): JSObject = {
-    var i = 0
-    while (i < length && !name.equals(names(i))) i += 1
-    if (i < length) {
-      val newLength = length - 1
-      val newNames = new Array[String](newLength)
-      val newValues = new Array[JSValue](newLength)
-      System.arraycopy(names, 0, newNames, 0, i)
-      System.arraycopy(names, i + 1, newNames, i, length - i)
-      System.arraycopy(values, 0, newValues, 0, i)
-      System.arraycopy(values, i + 1, newValues, i, length - i)
-      new JSObject(newNames, newValues, newLength)
-    }
-    else this
-  }
-  
-  /** Returns an iterator over this object's fields. */
-  def iterator: Iterator[(String, JSValue)] = new FieldsIterator
-  
-  /** Returns an iterator over this object's field names. */
-  def namesIterator: Iterator[String] = new NamesIterator
-  
-  /** Returns an iterator over this object's field values. */
-  def valuesIterator: Iterator[JSValue] = new ValuesIterator
   
   override def write(s: Appendable) {
     s.append('{')
@@ -255,7 +214,7 @@ final class JSObject private[json] (names: Array[String], values: Array[JSValue]
       var equal = length == that.length
       var i = 0
       while (i < length && equal) {
-        equal = this(i).equals(that(i))
+        equal = name(i).equals(that.name(i)) && value(i).equals(that.value(i))
         i += 1
       }
       equal
@@ -267,7 +226,7 @@ final class JSObject private[json] (names: Array[String], values: Array[JSValue]
     var h = -1172193816
     var i = 0
     while (i < length) {
-      h = mix(h, this(i).hashCode)
+      h = mix(mix(h, name(i).hashCode), value(i).hashCode)
       i += 1
     }
     finalizeHash(h, length)
@@ -279,59 +238,83 @@ final class JSObject private[json] (names: Array[String], values: Array[JSValue]
     s.toString
   }
   
-  private final class FieldsIterator extends Iterator[(String, JSValue)] {
-    private[this] var index = 0
-    override def hasNext: Boolean = index < JSObject.this.length
-    override def next(): (String, JSValue) = {
-      val field = JSObject.this.apply(index)
-      index += 1
-      field
-    }
-  }
-  
-  protected class SelectName(key: String) extends Vine[JSValue] {
-    override def foreach[U](f: JSValue => U): Unit = JSObject.this.foreachField {
-      case (name, value) if key.equals(name) => f(value)
-      case field => ()
+  private class SelectName(key: String) extends Selection[JSValue] {
+    override def foreach[U](f: JSValue => U) {
+      var i = 0
+      while (i < jsobject.length) {
+        if (key.equals(jsobject.name(i))) f(jsobject.value(i))
+        i += 1
+      }
     }
     
-    override def map(f: JSValue => JSValue): JSObject = JSObject.this.mapFields {
-      case (name, value) if key.equals(name) => (name, f(value))
-      case field => field
+    override def map(f: JSValue => JSValue): JSObject = {
+      val newValues = new Array[JSValue](jsobject.length)
+      var i = 0
+      while (i < jsobject.length) {
+        newValues(i) = if (key.equals(jsobject.name(i))) f(jsobject.value(i)) else jsobject.value(i)
+        i += 1
+      }
+      new JSObject(jsobject.names, newValues)
     }
     
     override def toString: String = "("+"_"+" \\ "+ key +")"
   }
   
-  private final class NamesIterator extends Iterator[String] {
-    private[this] var index = 0
-    override def hasNext: Boolean = index < JSObject.this.length
-    override def next(): String = {
-      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      val name = JSObject.this.names(index)
-      index += 1
-      name
+  private class \ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Selection[A] {
+    override def foreach[U](f: A => U) {
+      var i = 0
+      while (i < jsobject.length) {
+        val jsvalue = jsobject.value(i)
+        if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue))
+        i += 1
+      }
     }
+    
+    override def map(f: A => JSValue): JSObject = {
+      val newValues = new Array[JSValue](jsobject.length)
+      var i = 0
+      while (i < jsobject.length) {
+        val jsvalue = jsobject.value(i)
+        newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue
+        i += 1
+      }
+      new JSObject(jsobject.names, newValues)
+    }
+    
+    override def toString: String = "("+"_"+" \\ "+ sel +")"
   }
   
-  private final class ValuesIterator extends Iterator[JSValue] {
-    private[this] var index = 0
-    override def hasNext: Boolean = index < JSObject.this.length
-    override def next(): JSValue = {
-      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      val value = JSObject.this.values(index)
-      index += 1
-      value
+  private class \\ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Selection[A] {
+    override def foreach[U](f: A => U) {
+      var i = 0
+      while (i < jsobject.length) {
+        val jsvalue = jsobject.value(i)
+        if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel foreach f
+        i += 1
+      }
     }
+    
+    override def map(f: A => JSValue): JSObject = {
+      val newValues = new Array[JSValue](jsobject.length)
+      var i = 0
+      while (i < jsobject.length) {
+        val jsvalue = jsobject.value(i)
+        newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel map f
+        i += 1
+      }
+      new JSObject(jsobject.names, newValues)
+    }
+    
+    override def toString: String = "("+"_"+" \\\\ "+ sel +")"
   }
 }
 
 object JSObject {
-  lazy val empty: JSObject = new JSObject(new Array[String](0), new Array[JSValue](0), 0)
+  lazy val empty: JSObject = new JSObject(new Array[String](0), new Array[JSValue](0))
   
   def apply(fields: (String, JSValue)*): JSObject = new JSObject(fields)
   
-  def unapplySeq(json: JSObject): Some[Seq[(String, JSValue)]] = Some(json.iterator.toSeq)
+  def unapplySeq(jsobject: JSObject): Some[Seq[(String, JSValue)]] = Some(jsobject.convertTo[Seq])
   
   def parse(string: String): JSObject = {
     val parser = new model.JSONReader(string)
@@ -349,7 +332,7 @@ object JSObject {
     def apply(from: Nothing): JSObjectBuilder = new JSObjectBuilder
   }
   
-  object unary_+ extends PartialFunction[Any, JSObject] {
+  object unary_+ extends runtime.AbstractPartialFunction[Any, JSObject] {
     override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSObject]
     override def apply(x: Any): JSObject = x.asInstanceOf[JSObject]
     override def toString: String = "+JSObject"

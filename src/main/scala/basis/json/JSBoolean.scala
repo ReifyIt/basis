@@ -16,7 +16,7 @@ object JSBoolean {
   
   def unapply(json: JSBoolean): Some[Boolean] = Some(json.value)
   
-  object unary_+ extends PartialFunction[Any, JSBoolean] {
+  object unary_+ extends runtime.AbstractPartialFunction[Any, JSBoolean] {
     override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSBoolean]
     override def apply(x: Any): JSBoolean = x.asInstanceOf[JSBoolean]
     override def toString: String = "+JSBoolean"

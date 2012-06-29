@@ -7,12 +7,10 @@
 
 package basis.json
 
-sealed abstract class JSUndefined private[json] extends JSValue {
-  override protected type Root = JSUndefined
+object JSUndefined extends JSValue {
+  override protected type Root = JSUndefined.type
   
   override def write(s: Appendable): Unit = s.append("undefined")
   
   override def toString: String = "undefined"
 }
-
-object JSUndefined extends JSUndefined

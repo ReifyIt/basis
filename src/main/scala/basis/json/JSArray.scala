@@ -9,29 +9,62 @@ package basis.json
 
 import scala.collection.generic.CanBuildFrom
 
-final class JSArray private[json] (values: Array[JSValue], val length: Int) extends JSValue {
+import language.higherKinds
+
+final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
   override protected type Root = JSArray
   
-  assert(values.length >= length && length >= 0)
+  def this(values: Seq[JSValue]) = this(values.toArray)
   
-  def this(values: Seq[JSValue]) = this(values.toArray, values.length)
+  def length: Int = values.length
   
-  override def foreach[U](f: JSValue => U) {
+  def apply(index: Int): JSValue = values(index)
+  
+  def updated(index: Int, value: JSValue): JSArray = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newValues = new Array[JSValue](length)
+    System.arraycopy(values, 0, newValues, 0, index)
+    newValues(index) = value
+    System.arraycopy(values, index + 1, newValues, index + 1, length - (index + 1))
+    new JSArray(newValues)
+  }
+  
+  def :+ (value: JSValue): JSArray = {
+    val newLength = length + 1
+    val newValues = new Array[JSValue](newLength)
+    System.arraycopy(values, 0, newValues, 0, length)
+    newValues(length) = value
+    new JSArray(newValues)
+  }
+  
+  def +: (value: JSValue): JSArray = {
+    val newLength = length + 1
+    val newValues = new Array[JSValue](newLength)
+    newValues(0) = value
+    System.arraycopy(values, 0, newValues, 1, length)
+    new JSArray(newValues)
+  }
+  
+  override def \ [A <: JSValue](sel: PartialFunction[JSValue, A]): Selection[A] = new \ [A](sel)
+  
+  override def \\ [A <: JSValue](sel: PartialFunction[JSValue, A]): Selection[A] = new \\ [A](sel)
+  
+  @inline override def foreach[U](f: JSValue => U) {
     var i = 0
     while (i < length) {
-      f(values(i))
+      f(apply(i))
       i += 1
     }
   }
   
-  override def map(f: JSValue => JSValue): JSArray = {
+  @inline override def map(f: JSValue => JSValue): JSArray = {
     val newValues = new Array[JSValue](length)
     var i = 0
     while (i < length) {
-      newValues(i) = f(values(i))
+      newValues(i) = f(apply(i))
       i += 1
     }
-    new JSArray(newValues, length)
+    new JSArray(newValues)
   }
   
   override def filter(p: JSValue => Boolean): JSArray = {
@@ -40,65 +73,49 @@ final class JSArray private[json] (values: Array[JSValue], val length: Int) exte
     var k = 0
     while (i < length) {
       if (p(values(i))) {
-        newValues(k) = values(i)
+        newValues(k) = apply(i)
         k += 1
       }
       i += 1
     }
-    new JSArray(newValues, k)
+    if (k < length) {
+      val compactValues = new Array[JSValue](k)
+      System.arraycopy(newValues, 0, compactValues, 0, k)
+      new JSArray(compactValues)
+    }
+    else this
   }
   
-  override def foldLeft[A](z: A)(op: (A, JSValue) => A): A = {
+  @inline override def foldLeft[A](z: A)(op: (A, JSValue) => A): A = {
     var result = z
     var i = 0
     while (i < length) {
-      result = op(result, values(i))
+      result = op(result, apply(i))
       i += 1
     }
     result
   }
   
-  override def foldRight[A](z: A)(op: (JSValue, A) => A): A = {
+  @inline override def foldRight[A](z: A)(op: (JSValue, A) => A): A = {
     var result = z
     var i = length - 1
     while (length >= 0) {
-      result = op(values(i), result)
+      result = op(apply(i), result)
       i -= 1
     }
     result
   }
   
-  def apply(index: Int): JSValue = {
-    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    values(index)
+  def convertTo[CC[_]](implicit bf: CanBuildFrom[Nothing, JSValue, CC[JSValue]]): CC[JSValue] = {
+    val builder = bf()
+    builder.sizeHint(length)
+    var i = 0
+    while (i < length) {
+      builder += values(i)
+      i += 1
+    }
+    builder.result
   }
-  
-  def updated(index: Int, value: JSValue): JSArray = {
-    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    val newValues = new Array[JSValue](length)
-    System.arraycopy(values, 0, newValues, 0, index)
-    newValues(index) = value
-    System.arraycopy(values, index + 1, newValues, index + 1, length - (index + 1))
-    new JSArray(newValues, length)
-  }
-  
-  def :+ (value: JSValue): JSArray = {
-    val newLength = length + 1
-    val newValues = new Array[JSValue](newLength)
-    System.arraycopy(values, 0, newValues, 0, length)
-    newValues(length) = value
-    new JSArray(newValues, newLength)
-  }
-  
-  def +: (value: JSValue): JSArray = {
-    val newLength = length + 1
-    val newValues = new Array[JSValue](newLength)
-    newValues(0) = value
-    System.arraycopy(values, 0, newValues, 1, length)
-    new JSArray(newValues, newLength)
-  }
-  
-  def iterator: Iterator[JSValue] = new ValuesIterator
   
   override def write(s: Appendable) {
     s.append('[')
@@ -117,7 +134,7 @@ final class JSArray private[json] (values: Array[JSValue], val length: Int) exte
       var equal = length == that.length
       var i = 0
       while (i < length && equal) {
-        equal = this(i).equals(that(i))
+        equal = apply(i).equals(that.apply(i))
         i += 1
       }
       equal
@@ -129,7 +146,7 @@ final class JSArray private[json] (values: Array[JSValue], val length: Int) exte
     var h = -604447088
     var i = 0
     while (i < length) {
-      h = mix(h, this(i).hashCode)
+      h = mix(h, apply(i).hashCode)
       i += 1
     }
     finalizeHash(h, length)
@@ -141,23 +158,61 @@ final class JSArray private[json] (values: Array[JSValue], val length: Int) exte
     s.toString
   }
   
-  private final class ValuesIterator extends Iterator[JSValue] {
-    private[this] var index = 0
-    override def hasNext: Boolean = index < JSArray.this.length
-    override def next(): JSValue = {
-      val value = JSArray.this.apply(index)
-      index += 1
-      value
+  private class \ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Selection[A] {
+    override def foreach[U](f: A => U) {
+      var i = 0
+      while (i < jsarray.length) {
+        val jsvalue = jsarray.apply(i)
+        if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue))
+        i += 1
+      }
     }
+    
+    override def map(f: A => JSValue): JSArray = {
+      val newValues = new Array[JSValue](jsarray.length)
+      var i = 0
+      while (i < jsarray.length) {
+        val jsvalue = jsarray.apply(i)
+        newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue
+        i += 1
+      }
+      new JSArray(newValues)
+    }
+    
+    override def toString: String = "("+"_"+" \\ "+ sel +")"
+  }
+  
+  private class \\ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Selection[A] {
+    override def foreach[U](f: A => U) {
+      var i = 0
+      while (i < jsarray.length) {
+        val jsvalue = jsarray.apply(i)
+        if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel foreach f
+        i += 1
+      }
+    }
+    
+    override def map(f: A => JSValue): JSArray = {
+      val newValues = new Array[JSValue](jsarray.length)
+      var i = 0
+      while (i < jsarray.length) {
+        val jsvalue = jsarray.apply(i)
+        newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel map f
+        i += 1
+      }
+      new JSArray(newValues)
+    }
+    
+    override def toString: String = "("+"_"+" \\\\ "+ sel +")"
   }
 }
 
 object JSArray {
-  lazy val empty: JSArray = new JSArray(new Array[JSValue](0), 0)
+  lazy val empty: JSArray = new JSArray(new Array[JSValue](0))
   
   def apply(values: JSValue*): JSArray = new JSArray(values)
   
-  def unapplySeq(json: JSArray): Some[Seq[JSValue]] = Some(json.iterator.toSeq)
+  def unapplySeq(jsarray: JSArray): Some[Seq[JSValue]] = Some(jsarray.convertTo[Seq])
   
   def parse(string: String): JSArray = {
     val parser = new model.JSONReader(string)
@@ -175,7 +230,7 @@ object JSArray {
     def apply(from: Nothing): JSArrayBuilder = new JSArrayBuilder
   }
   
-  object unary_+ extends PartialFunction[Any, JSArray] {
+  object unary_+ extends runtime.AbstractPartialFunction[Any, JSArray] {
     override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSArray]
     override def apply(x: Any): JSArray = x.asInstanceOf[JSArray]
     override def toString: String = "+JSArray"

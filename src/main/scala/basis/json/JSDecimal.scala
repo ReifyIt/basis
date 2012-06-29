@@ -43,7 +43,7 @@ object JSDecimal {
   
   def unapply(json: JSDecimal): Some[Double] = Some(json.toDouble)
   
-  object unary_+ extends PartialFunction[Any, JSDecimal] {
+  object unary_+ extends runtime.AbstractPartialFunction[Any, JSDecimal] {
     override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSDecimal]
     override def apply(x: Any): JSDecimal = x.asInstanceOf[JSDecimal]
     override def toString: String = "+JSDecimal"

@@ -7,6 +7,8 @@
 
 package basis
 
+import language.implicitConversions
+
 /** Contains data types, parsers, and string interpolation macros for
   * '''J'''avascript '''O'''bject '''NO'''tation.
   * 
@@ -30,7 +32,7 @@ package basis
   * res1: basis.json.JSObject = {"name":"Bart Simpson","age":10}
   * 
   * scala> val places = json"""{"San Francisco":{"areaCode":415},"New York":{"areaCode":212}}"""
-  * places: basis.json.JSONTree.JSObject = {"San Francisco":{"areaCode":415},"New York":{"areaCode":212}}
+  * places: basis.json.JSObject = {"San Francisco":{"areaCode":415},"New York":{"areaCode":212}}
   * 
   * scala> for (JSInteger(areaCode) <- places \ "San Francisco" \ "areaCode") yield areaCode + 235
   * res2: basis.json.JSObject = {"San Francisco":{"areaCode":650},"New York":{"areaCode":212}}
@@ -40,16 +42,6 @@ package basis
   * }}}
   */
 package object json {
-  implicit class JSInterpolator(stringContext: StringContext) {
-    import language.experimental.macros
-    
-    object json {
-      def apply(args: JSValue*): JSValue = macro JSBuilderMacro.interpolate
-      
-      def unapplySeq(jsvalue: JSValue): Option[Seq[JSValue]] = JSMatcher.interpolate(jsvalue, stringContext.parts)
-      
-      // disabled until macro extractors work
-      // def unapplySeq(jsvalue: JSValue): Option[Seq[JSValue]] = macro JSMatcherMacro.interpolate
-    }
-  }
+  implicit def jsinterpolator(stringContext: StringContext): JSInterpolator =
+    new JSInterpolator(stringContext)
 }

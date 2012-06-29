@@ -41,7 +41,7 @@ object JSInteger {
   
   def unapply(json: JSInteger): Some[Long] = Some(json.toLong)
   
-  object unary_+ extends PartialFunction[Any, JSInteger] {
+  object unary_+ extends runtime.AbstractPartialFunction[Any, JSInteger] {
     override def isDefinedAt(x: Any): Boolean = x.isInstanceOf[JSInteger]
     override def apply(x: Any): JSInteger = x.asInstanceOf[JSInteger]
     override def toString: String = "+JSInteger"

@@ -16,12 +16,39 @@ final class JSArrayBuilder(sizeHint: Int)
   
   def this() = this(0)
   
-  private[this] var values: scala.Array[JSValue] =
+  protected var length: Int = 0
+  
+  protected var values: scala.Array[JSValue] =
     if (sizeHint > 0) new scala.Array[JSValue](sizeHint) else null
   
-  private[this] var length: Int = 0
+  override def += (value: JSValue): this.type = {
+    ensureCapacity(length + 1)
+    values(length) = value
+    length += 1
+    this
+  }
   
-  private[this] def ensureCapacity(capacity: Int) {
+  override def result: JSArray = {
+    val newLength = length
+    val newValues = values
+    clear()
+    if (newLength == 0) JSArray.empty
+    else if (newLength == newValues.length) new JSArray(newValues)
+    else {
+      val compactValues = new scala.Array[JSValue](newLength)
+      System.arraycopy(newValues, 0, compactValues, 0, newLength)
+      new JSArray(compactValues)
+    }
+  }
+  
+  override def clear() {
+    length = 0
+    values = null
+  }
+  
+  override def sizeHint(size: Int): Unit = ensureCapacity(size)
+  
+  protected def ensureCapacity(capacity: Int) {
     if (values == null) {
       val n = math.max(4, capacity)
       values = new scala.Array[JSValue](n)
@@ -34,24 +61,5 @@ final class JSArrayBuilder(sizeHint: Int)
       System.arraycopy(values, 0, newValues, 0, length)
       values = newValues
     }
-  }
-  
-  override def sizeHint(size: Int): Unit = ensureCapacity(size)
-  
-  override def += (value: JSValue): this.type = {
-    ensureCapacity(length + 1)
-    values(length) = value
-    length += 1
-    this
-  }
-  
-  override def result: JSArray = {
-    if (length != 0) new JSArray(values, length)
-    else JSArray.empty
-  }
-  
-  override def clear() {
-    values = null
-    length = 0
   }
 }

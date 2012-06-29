@@ -16,7 +16,7 @@ class JSON extends model.JSONModel {
   override type Integer = JSInteger
   override type Decimal = JSDecimal
   override type Boolean = JSBoolean
-  override type Null    = JSNull
+  override type Null    = JSNull.type
   
   override def ObjectBuilder: JSObjectBuilder = new JSObjectBuilder
   override def ArrayBuilder: JSArrayBuilder = new JSArrayBuilder

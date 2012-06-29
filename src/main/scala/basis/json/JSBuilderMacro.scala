@@ -51,7 +51,7 @@ private[json] class JSBuilderMacro[C <: Context](val context: C) {
     override type Integer = Expr[JSInteger]
     override type Decimal = Expr[JSDecimal]
     override type Boolean = Expr[JSBoolean]
-    override type Null    = Expr[JSNull]
+    override type Null    = Expr[JSNull.type]
     
     override def ObjectBuilder: ObjectBuilder = new ObjectBuilder
     
