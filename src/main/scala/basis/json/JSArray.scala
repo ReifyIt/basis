@@ -30,16 +30,14 @@ final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
   }
   
   def :+ (value: JSValue): JSArray = {
-    val newLength = length + 1
-    val newValues = new Array[JSValue](newLength)
+    val newValues = new Array[JSValue](length + 1)
     System.arraycopy(values, 0, newValues, 0, length)
     newValues(length) = value
     new JSArray(newValues)
   }
   
   def +: (value: JSValue): JSArray = {
-    val newLength = length + 1
-    val newValues = new Array[JSValue](newLength)
+    val newValues = new Array[JSValue](length + 1)
     newValues(0) = value
     System.arraycopy(values, 0, newValues, 1, length)
     new JSArray(newValues)
@@ -72,8 +70,9 @@ final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
     var i = 0
     var k = 0
     while (i < length) {
-      if (p(values(i))) {
-        newValues(k) = apply(i)
+      val value = apply(i)
+      if (p(value)) {
+        newValues(k) = value
         k += 1
       }
       i += 1
@@ -111,7 +110,7 @@ final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
     builder.sizeHint(length)
     var i = 0
     while (i < length) {
-      builder += values(i)
+      builder += apply(i)
       i += 1
     }
     builder.result
@@ -119,11 +118,11 @@ final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
   
   override def write(s: Appendable) {
     s.append('[')
-    if (0 < length) values(0).write(s)
+    if (0 < length) apply(0).write(s)
     var i = 1
     while (i < length) {
       s.append(',')
-      values(i).write(s)
+      apply(i).write(s)
       i += 1
     }
     s.append(']')
@@ -162,48 +161,54 @@ final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
     override def foreach[U](f: A => U) {
       var i = 0
       while (i < jsarray.length) {
-        val jsvalue = jsarray.apply(i)
-        if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue))
+        val value = jsarray.apply(i)
+        if (sel.isDefinedAt(value)) f(sel(value))
         i += 1
       }
     }
     
     override def map(f: A => JSValue): JSArray = {
       val newValues = new Array[JSValue](jsarray.length)
+      var modified = false
       var i = 0
       while (i < jsarray.length) {
-        val jsvalue = jsarray.apply(i)
-        newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue
+        val value = jsarray.apply(i)
+        val newValue = if (sel.isDefinedAt(value)) f(sel(value)) else value
+        newValues(i) = newValue
+        modified ||= value eq newValue
         i += 1
       }
-      new JSArray(newValues)
+      if (modified) new JSArray(newValues) else jsarray
     }
     
-    override def toString: String = "("+"_"+" \\ "+ sel +")"
+    override def toString: String = "("+"JSArray"+" \\ "+ sel +")"
   }
   
   private class \\ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Selection[A] {
     override def foreach[U](f: A => U) {
       var i = 0
       while (i < jsarray.length) {
-        val jsvalue = jsarray.apply(i)
-        if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel foreach f
+        val value = jsarray.apply(i)
+        if (sel.isDefinedAt(value)) f(sel(value)) else value \\ sel foreach f
         i += 1
       }
     }
     
     override def map(f: A => JSValue): JSArray = {
       val newValues = new Array[JSValue](jsarray.length)
+      var modified = false
       var i = 0
       while (i < jsarray.length) {
-        val jsvalue = jsarray.apply(i)
-        newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel map f
+        val value = jsarray.apply(i)
+        val newValue = if (sel.isDefinedAt(value)) f(sel(value)) else value \\ sel map f
+        newValues(i) = newValue
+        modified ||= value eq newValue
         i += 1
       }
-      new JSArray(newValues)
+      if (modified) new JSArray(newValues) else jsarray
     }
     
-    override def toString: String = "("+"_"+" \\\\ "+ sel +")"
+    override def toString: String = "("+"JSArray"+" \\\\ "+ sel +")"
   }
 }
 

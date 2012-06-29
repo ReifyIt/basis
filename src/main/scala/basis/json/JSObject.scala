@@ -62,22 +62,20 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
   }
   
   def :+ (field: (String, JSValue)): JSObject = {
-    val newLength = length + 1
-    val newNames = new Array[String](newLength)
+    val newNames = new Array[String](length + 1)
     System.arraycopy(names, 0, newNames, 0, length)
     newNames(length) = field._1
-    val newValues = new Array[JSValue](newLength)
+    val newValues = new Array[JSValue](length + 1)
     System.arraycopy(values, 0, newValues, 0, length)
     newValues(length) = field._2
     new JSObject(newNames, newValues)
   }
   
   def +: (field: (String, JSValue)): JSObject = {
-    val newLength = length + 1
-    val newNames = new Array[String](newLength)
+    val newNames = new Array[String](length + 1)
     newNames(0) = field._1
     System.arraycopy(names, 0, newNames, 1, length)
-    val newValues = new Array[JSValue](newLength)
+    val newValues = new Array[JSValue](length + 1)
     newValues(0) = field._2
     System.arraycopy(values, 0, newValues, 1, length)
     new JSObject(newNames, newValues)
@@ -101,11 +99,10 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     var i = 0
     while (i < length && !name.equals(getName(i))) i += 1
     if (i < length) {
-      val newLength = length - 1
-      val newNames = new Array[String](newLength)
+      val newNames = new Array[String](length + 1)
       System.arraycopy(names, 0, newNames, 0, i)
       System.arraycopy(names, i + 1, newNames, i, length - i)
-      val newValues = new Array[JSValue](newLength)
+      val newValues = new Array[JSValue](length + 1)
       System.arraycopy(values, 0, newValues, 0, i)
       System.arraycopy(values, i + 1, newValues, i, length - i)
       new JSObject(newNames, newValues)
@@ -134,7 +131,7 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
       newValues(i) = f(getValue(i))
       i += 1
     }
-    new JSObject(names, newValues)
+    copy(values = newValues)
   }
   
   override def filter(p: JSValue => Boolean): JSObject = {
@@ -143,9 +140,10 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     var i = 0
     var k = 0
     while (i < length) {
-      if (p(getValue(i))) {
+      val value = getValue(i)
+      if (p(value)) {
         newNames(k) = getName(i)
-        newValues(k) = getValue(i)
+        newValues(k) = value
         k += 1
       }
       i += 1
@@ -185,25 +183,29 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     builder.sizeHint(length)
     var i = 0
     while (i < length) {
-      builder += ((names(i), values(i)))
+      builder += ((getName(i), getValue(i)))
       i += 1
     }
     builder.result
   }
   
+  def copy(names: Array[String] = this.names,
+           values: Array[JSValue] = this.values): JSObject =
+    new JSObject(names, values)
+  
   override def write(s: Appendable) {
     s.append('{')
     if (0 < length) {
-      new JSString(names(0)).write(s)
+      new JSString(getName(0)).write(s)
       s.append(':')
-      values(0).write(s)
+      getValue(0).write(s)
     }
     var i = 1
     while (i < length) {
       s.append(',')
-      new JSString(names(i)).write(s)
+      new JSString(getName(i)).write(s)
       s.append(':')
-      values(i).write(s)
+      getValue(i).write(s)
       i += 1
     }
     s.append('}')
@@ -249,63 +251,73 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
     
     override def map(f: JSValue => JSValue): JSObject = {
       val newValues = new Array[JSValue](jsobject.length)
+      var modified = false
       var i = 0
       while (i < jsobject.length) {
-        newValues(i) = if (name.equals(jsobject.getName(i))) f(jsobject.getValue(i)) else jsobject.getValue(i)
+        val value = jsobject.getValue(i)
+        val newValue = if (name.equals(jsobject.getName(i))) f(value) else value
+        newValues(i) = newValue
+        modified ||= value eq newValue
         i += 1
       }
-      new JSObject(jsobject.names, newValues)
+      if (modified) new JSObject(jsobject.names, newValues) else jsobject
     }
     
-    override def toString: String = "("+"_"+" \\ "+ name +")"
+    override def toString: String = "("+"JSObject"+" \\ "+"\""+ name +"\""+")"
   }
   
   private class \ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Selection[A] {
     override def foreach[U](f: A => U) {
       var i = 0
       while (i < jsobject.length) {
-        val jsvalue = jsobject.getValue(i)
-        if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue))
+        val value = jsobject.getValue(i)
+        if (sel.isDefinedAt(value)) f(sel(value))
         i += 1
       }
     }
     
     override def map(f: A => JSValue): JSObject = {
       val newValues = new Array[JSValue](jsobject.length)
+      var modified = false
       var i = 0
       while (i < jsobject.length) {
-        val jsvalue = jsobject.getValue(i)
-        newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue
+        val value = jsobject.getValue(i)
+        val newValue = if (sel.isDefinedAt(value)) f(sel(value)) else value
+        newValues(i) = newValue
+        modified ||= value eq newValue
         i += 1
       }
-      new JSObject(jsobject.names, newValues)
+      if (modified) new JSObject(jsobject.names, newValues) else jsobject
     }
     
-    override def toString: String = "("+"_"+" \\ "+ sel +")"
+    override def toString: String = "("+"JSObject"+" \\ "+ sel +")"
   }
   
   private class \\ [+A <: JSValue](sel: PartialFunction[JSValue, A]) extends Selection[A] {
     override def foreach[U](f: A => U) {
       var i = 0
       while (i < jsobject.length) {
-        val jsvalue = jsobject.getValue(i)
-        if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel foreach f
+        val value = jsobject.getValue(i)
+        if (sel.isDefinedAt(value)) f(sel(value)) else value \\ sel foreach f
         i += 1
       }
     }
     
     override def map(f: A => JSValue): JSObject = {
       val newValues = new Array[JSValue](jsobject.length)
+      var modified = false
       var i = 0
       while (i < jsobject.length) {
-        val jsvalue = jsobject.getValue(i)
-        newValues(i) = if (sel.isDefinedAt(jsvalue)) f(sel(jsvalue)) else jsvalue \\ sel map f
+        val value = jsobject.getValue(i)
+        val newValue = if (sel.isDefinedAt(value)) f(sel(value)) else value \\ sel map f
+        newValues(i) = newValue
+        modified ||= value eq newValue
         i += 1
       }
-      new JSObject(jsobject.names, newValues)
+      if (modified) new JSObject(jsobject.names, newValues) else jsobject
     }
     
-    override def toString: String = "("+"_"+" \\\\ "+ sel +")"
+    override def toString: String = "("+"JSObject"+" \\\\ "+ sel +")"
   }
 }
 
