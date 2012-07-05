@@ -19,6 +19,15 @@ object BasisBuild extends Build {
     )
   )
   
+  lazy val basisUnicode = Project(
+    id       = "basis-unicode",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/unicode"
+    ),
+    dependencies = Seq(basisCollection)
+  )
+  
   lazy val basisMemory = Project(
     id       = "basis-memory",
     base     = file("."),
