@@ -20,6 +20,10 @@ trait IterableView[+A] extends Any with TraversableView[A] with Iterable[A] { se
   
   override def slice(lower: Int, upper: Int): IterableView[A] = new Sliced(lower, upper)
   
+  def zip[B](that: Iterable[B]): IterableView[(A, B)] = new Zipped[B](that)
+  
+  override def view: IterableView[A] = this
+  
   private final class Mapped[+B](f: A => B) extends AbstractIterableView[B] {
     override def iterator: Iterated[B] = self.iterator map f
   }
@@ -42,6 +46,10 @@ trait IterableView[+A] extends Any with TraversableView[A] with Iterable[A] { se
   
   private final class Sliced(lower: Int, upper: Int) extends AbstractIterableView[A] {
     override def iterator: Iterated[A] = self.iterator slice (lower, upper)
+  }
+  
+  private final class Zipped[B](that: Iterable[B]) extends AbstractIterableView[(A, B)] {
+    override def iterator: Iterated[(A, B)] = self.iterator zip that.iterator
   }
 }
 

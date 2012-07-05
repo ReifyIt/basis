@@ -14,7 +14,7 @@ trait Indexed[+A] extends Any with Iterable[A] {
   
   def apply(index: Int): A
   
-  override def iterator: Iterated[A] = new Elements(0, length)
+  override def iterator: Iterated[A] = new Iterator(0, length)
   
   override def foreach[U](f: A => U) {
     val until = length
@@ -86,29 +86,23 @@ trait Indexed[+A] extends Any with Iterable[A] {
   
   override def view: IndexedView[A] = new View
   
-  private final class Elements(start: Int, end: Int) extends AbstractIterated[A] {
-    private[this] var index: Int = start
+  private final class Iterator(from: Int, until: Int) extends AbstractIterated[A] {
+    private[this] var lower: Int = math.max(0, math.min(Indexed.this.length, from))
+    private[this] var upper: Int = math.max(lower, math.min(Indexed.this.length, until))
+    private[this] var index: Int = lower
     
-    override def hasNext: Boolean = index < end
+    override def hasNext: Boolean = index < upper
     
     override def next(): A = {
-      if (index >= end) throw new NoSuchElementException("empty iterator")
-      val x = Indexed.this.apply(index)
+      if (index >= upper) throw new NoSuchElementException("empty iterator")
+      val result = Indexed.this.apply(index)
       index += 1
-      x
+      result
     }
     
-    override def drop(count: Int): Iterated[A] =
-      new Elements(math.max(index, math.min(end, index + count)), end)
-    
-    override def take(count: Int): Iterated[A] =
-      new Elements(index, math.max(index, math.min(end, index + count)))
-    
-    override def slice(from: Int, until: Int): Iterated[A] = {
-      val a = math.max(index, math.min(end, index + from))
-      val b = math.max(a, math.min(end, index + until))
-      new Elements(a, b)
-    }
+    override def drop(count: Int): Iterated[A] = new Iterator(index + count, upper)
+    override def take(count: Int): Iterated[A] = new Iterator(index, index + count)
+    override def slice(lower: Int, upper: Int): Iterated[A] = new Iterator(index + lower, index + upper)
   }
   
   private final class View extends AbstractIndexedView[A] {

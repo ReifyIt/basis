@@ -62,24 +62,21 @@ trait Iterated[+A] extends Any with Incremental[A] { self =>
   }
   
   override def find(p: A => Boolean): Option[A] = {
-    var result = None: Option[A]
-    while (result.isEmpty && hasNext) {
+    while (hasNext) {
       val x = next()
-      if (p(x)) result = Some(x)
+      if (p(x)) return Some(x)
     }
-    result
+    None
   }
   
   override def forall(p: A => Boolean): Boolean = {
-    var result = true
-    while (result && hasNext) result = p(next())
-    result
+    while (hasNext) if (!p(next())) return false
+    true
   }
   
   override def exists(p: A => Boolean): Boolean = {
-    var result = false
-    while (!result && hasNext) result = p(next())
-    result
+    while (hasNext) if (p(next())) return true
+    false
   }
   
   override def count(p: A => Boolean): Int = {

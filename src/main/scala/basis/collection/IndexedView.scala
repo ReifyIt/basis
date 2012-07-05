@@ -20,6 +20,8 @@ trait IndexedView[+A] extends Any with IterableView[A] with Indexed[A] { self =>
   
   override def slice(lower: Int, upper: Int): IndexedView[A] = new Sliced(lower, upper)
   
+  override def view: IndexedView[A] = this
+  
   private final class Mapped[+B](f: A => B) extends AbstractIndexedView[B] {
     override def length: Int = self.length
     override def apply(index: Int): B = f(self.apply(index))

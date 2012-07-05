@@ -24,6 +24,8 @@ trait TraversableView[+A] extends Any with Traversable[A] { self =>
   
   def slice(lower: Int, upper: Int): TraversableView[A] = new Sliced(lower, upper)
   
+  override def view: TraversableView[A] = this
+  
   private final class Mapped[+B](g: A => B) extends AbstractTraversableView[B] {
     override def foreach[U](f: B => U): Unit = for (x <- self) f(g(x))
   }
