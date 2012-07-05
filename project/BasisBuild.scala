@@ -11,6 +11,14 @@ object BasisBuild extends Build {
     )
   )
   
+  lazy val basisCollection = Project(
+    id       = "basis-collection",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/collection"
+    )
+  )
+  
   lazy val basisMemory = Project(
     id       = "basis-memory",
     base     = file("."),
