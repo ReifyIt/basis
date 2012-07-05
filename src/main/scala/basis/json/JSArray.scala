@@ -11,10 +11,8 @@ import scala.collection.generic.CanBuildFrom
 
 import language.higherKinds
 
-final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
+final class JSArray(protected val values: Array[JSValue]) extends JSValue { jsarray =>
   override protected type Root = JSArray
-  
-  def this(values: Seq[JSValue]) = this(values.toArray)
   
   def length: Int = values.length
   
@@ -41,6 +39,17 @@ final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
     newValues(0) = value
     System.arraycopy(values, 0, newValues, 1, length)
     new JSArray(newValues)
+  }
+  
+  def ++ (that: JSArray): JSArray = {
+    if (that.length == 0) this
+    else if (length == 0) that
+    else {
+      val newValues = new Array[JSValue](length + that.length)
+      System.arraycopy(values, 0, newValues, 0, length)
+      System.arraycopy(that.values, 0, newValues, length, that.length)
+      new JSArray(newValues)
+    }
   }
   
   override def \ [A <: JSValue](sel: PartialFunction[JSValue, A]): Selection[A] = new \ [A](sel)
@@ -215,7 +224,7 @@ final class JSArray(values: Array[JSValue]) extends JSValue { jsarray =>
 object JSArray {
   lazy val empty: JSArray = new JSArray(new Array[JSValue](0))
   
-  def apply(values: JSValue*): JSArray = new JSArray(values)
+  def apply(values: JSValue*): JSArray = new JSArray(values.toArray[JSValue])
   
   def unapplySeq(jsarray: JSArray): Some[Seq[JSValue]] = Some(jsarray.convertTo[Seq])
   

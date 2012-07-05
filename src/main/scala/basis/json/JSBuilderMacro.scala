@@ -33,7 +33,6 @@ private[json] object JSBuilderMacro {
     }
     catch {
       case e: JSONException => c.abort(c.enclosingPosition, e.getMessage)
-      case e => throw e
     }
   }
 }

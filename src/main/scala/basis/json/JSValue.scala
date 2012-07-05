@@ -193,9 +193,9 @@ abstract class JSValue { jsvalue =>
 
 /** Contains factory methods and implicit conversions for JSON values. */
 object JSValue {
-  implicit def apply(fields: Map[String, JSValue]): JSObject = new JSObject(fields)
+  implicit def apply(fields: Map[String, JSValue]): JSObject = JSObject(fields.toSeq: _*)
   
-  implicit def apply(values: Seq[JSValue]): JSArray = new JSArray(values)
+  implicit def apply(values: Seq[JSValue]): JSArray = JSArray(values: _*)
   
   implicit def apply(string: String): JSString = new JSString(string)
   

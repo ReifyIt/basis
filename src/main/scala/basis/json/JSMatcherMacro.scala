@@ -37,7 +37,6 @@ private[json] object JSMatcherMacro {
     }
     catch {
       case e: JSONException => c.abort(c.enclosingPosition, e.getMessage)
-      case e => throw e
     }
     
     reify {

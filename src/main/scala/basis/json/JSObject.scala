@@ -16,19 +16,6 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
   
   assert(names.length == values.length)
   
-  def this(fields: Seq[(String, JSValue)]) = {
-    this(new Array[String](fields.length), new Array[JSValue](fields.length))
-    var i = 0
-    while (i < fields.length) {
-      val field = fields(i)
-      names(i) = field._1
-      values(i) = field._2
-      i += 1
-    }
-  }
-  
-  def this(fields: Map[String, JSValue]) = this(fields.toSeq)
-  
   def length: Int = names.length
   
   def getName(index: Int): String = names(index)
@@ -324,7 +311,22 @@ final class JSObject(names: Array[String], values: Array[JSValue]) extends JSVal
 object JSObject {
   lazy val empty: JSObject = new JSObject(new Array[String](0), new Array[JSValue](0))
   
-  def apply(fields: (String, JSValue)*): JSObject = new JSObject(fields)
+  def apply(fields: (String, JSValue)*): JSObject = {
+    val length = fields.length
+    if (length > 0) {
+      val names = new Array[String](length)
+      val values = new Array[JSValue](length)
+      var i = 0
+      while (i < length) {
+        val field = fields(i)
+        names(i) = field._1
+        values(i) = field._2
+        i += 1
+      }
+      new JSObject(names, values)
+    }
+    else empty
+  }
   
   def unapplySeq(jsobject: JSObject): Some[Seq[(String, JSValue)]] = Some(jsobject.convertTo[Seq])
   
