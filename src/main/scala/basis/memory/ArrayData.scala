@@ -24,7 +24,7 @@ trait ArrayData[V] extends Any with Data {
 object ArrayDataBE extends Allocator {
   override def MaxSize: Long = Int.MaxValue.toLong << 3
   
-  override def alloc[T](count: Long)(implicit unit: Struct[T]): Data = {
+  override def alloc[T](count: Long)(implicit unit: ValueType[T]): Data = {
     val size = unit.size * count
     if (size <= Int.MaxValue.toLong) unit.alignment match {
       case 1L => ByteDataBE(size)
@@ -53,7 +53,7 @@ object ArrayDataBE extends Allocator {
 object ArrayDataLE extends Allocator {
   override def MaxSize: Long = Int.MaxValue << 3
   
-  override def alloc[T](count: Long)(implicit unit: Struct[T]): Data = {
+  override def alloc[T](count: Long)(implicit unit: ValueType[T]): Data = {
     val size = unit.size * count
     if (size <= Int.MaxValue.toLong) unit.alignment match {
       case 1L => ByteDataLE(size)

@@ -21,7 +21,7 @@ final class BufferData(val buffer: ByteBuffer) extends AnyVal with Data {
     case ByteOrder.LITTLE_ENDIAN => Endianness.LittleEndian
   }
   
-  def copy(size: Long): BufferData = {
+  override def copy(size: Long): BufferData = {
     require(0 <= size && size <= Int.MaxValue.toLong)
     val dst = ByteBuffer.allocateDirect(size.toInt)
     val src = buffer.duplicate
@@ -79,23 +79,38 @@ final class BufferData(val buffer: ByteBuffer) extends AnyVal with Data {
   }
 }
 
-/** An allocator for big-endian data backed by a `ByteBuffer`. */
-object BufferDataBE extends Allocator {
+/** An allocator for native-endian data backed by a `ByteBuffer`. */
+object BufferData extends Allocator {
   override def MaxSize: Long = Int.MaxValue.toLong
   
-  override def alloc[T](count: Long)(implicit unit: Struct[T]): BufferData =
+  override def alloc[T](count: Long)(implicit unit: ValueType[T]): BufferData =
     apply(unit.size * count)
   
   override def apply(size: Long): BufferData = {
     require(0L <= size && size <= MaxSize)
-    val buffer = ByteBuffer.allocateDirect(size.toInt).order(ByteOrder.BIG_ENDIAN)
-    new BufferData(buffer)
+    new BufferData(ByteBuffer.allocateDirect(size.toInt))
   }
   
-  def unapply(data: BufferData): Option[ByteBuffer] = data.endian match {
-    case Endianness.BigEndian => Some(data.buffer)
-    case _ => None
+  def unapply(data: BufferData): Option[ByteBuffer] =
+    if (data.endian eq Endianness.NativeEndian) Some(data.buffer) else None
+  
+  override def toString: String = "BufferData"
+}
+
+/** An allocator for big-endian data backed by a `ByteBuffer`. */
+object BufferDataBE extends Allocator {
+  override def MaxSize: Long = Int.MaxValue.toLong
+  
+  override def alloc[T](count: Long)(implicit unit: ValueType[T]): BufferData =
+    apply(unit.size * count)
+  
+  override def apply(size: Long): BufferData = {
+    require(0L <= size && size <= MaxSize)
+    new BufferData(ByteBuffer.allocateDirect(size.toInt).order(ByteOrder.BIG_ENDIAN))
   }
+  
+  def unapply(data: BufferData): Option[ByteBuffer] =
+    if (data.endian eq Endianness.BigEndian) Some(data.buffer) else None
   
   override def toString: String = "BufferDataBE"
 }
@@ -104,19 +119,16 @@ object BufferDataBE extends Allocator {
 object BufferDataLE extends Allocator {
   override def MaxSize: Long = Int.MaxValue.toLong
   
-  override def alloc[T](count: Long)(implicit unit: Struct[T]): BufferData =
+  override def alloc[T](count: Long)(implicit unit: ValueType[T]): BufferData =
     apply(unit.size * count)
   
   override def apply(size: Long): BufferData = {
     require(0L <= size && size <= MaxSize)
-    val buffer = ByteBuffer.allocateDirect(size.toInt).order(ByteOrder.LITTLE_ENDIAN)
-    new BufferData(buffer)
+    new BufferData(ByteBuffer.allocateDirect(size.toInt).order(ByteOrder.LITTLE_ENDIAN))
   }
   
-  def unapply(data: BufferData): Option[ByteBuffer] = data.endian match {
-    case Endianness.LittleEndian => Some(data.buffer)
-    case _ => None
-  }
+  def unapply(data: BufferData): Option[ByteBuffer] =
+    if (data.endian eq Endianness.LittleEndian) Some(data.buffer) else None
   
   override def toString: String = "BufferDataLE"
 }

@@ -71,7 +71,7 @@ final class IntDataBE(val array: Array[Int]) extends AnyVal with ArrayData[Int] 
 object IntDataBE extends ArrayAllocator[Int] {
   override def MaxSize: Long = Int.MaxValue.toLong << 2
   
-  override def alloc[T](count: Long)(implicit unit: Struct[T]): IntDataBE =
+  override def alloc[T](count: Long)(implicit unit: ValueType[T]): IntDataBE =
     apply(unit.size * count)
   
   override def apply(size: Long): IntDataBE = {

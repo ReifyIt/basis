@@ -9,8 +9,6 @@ package basis.memory
 
 import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
 import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 import scala.reflect.ClassTag
 
@@ -385,36 +383,36 @@ trait Data extends Any {
   
   /** Loads an instance of a data value.
     * 
-    * @tparam T         the struct type.
+    * @tparam T         the instance type to load.
     * @param  address   the aligned address to load.
-    * @param  struct    the implicit struct.
+    * @param  struct    the implicit value type.
     * @return the loaded instance.
     */
-  final def load[@specialized T](address: Long)(implicit struct: Struct[T]): T =
+  final def load[@specialized T](address: Long)(implicit struct: ValueType[T]): T =
     struct.load(this, address)
   
   /** Stores an instance as a data value.
     * 
-    * @tparam T         the struct type.
+    * @tparam T         the instance type to store.
     * @param  address   the aligned storage address.
     * @param  value     the instance to store.
-    * @param  struct    the implicit struct.
+    * @param  struct    the implicit value type to store.
     */
-  final def store[@specialized T](address: Long, value: T)(implicit struct: Struct[T]): Unit =
+  final def store[@specialized T](address: Long, value: T)(implicit struct: ValueType[T]): Unit =
     struct.store(this, address, value)
   
   /** Loads a sequence of data values as a new instance array.
     * 
-    * @tparam T         the struct type.
+    * @tparam T         the instance type to load.
     * @param  address   the aligned address to load.
     * @param  count     the number of values to load.
-    * @param  struct    the implicit struct.
+    * @param  struct    the implicit value type to load.
     * @param  classTag  the reflective type of the array to load.
     * @return the loaded array of Scala values.
     */
   def loadArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, count: Int)
-      (implicit struct: Struct[T], classTag: ClassTag[T]): Array[T] = {
+      (implicit struct: ValueType[T], classTag: ClassTag[T]): Array[T] = {
     val array = classTag.newArray(count)
     copyToArray[T](address, array, 0, count)
     array
@@ -422,16 +420,16 @@ trait Data extends Any {
   
   /** Copies a sequence of data values to an instance array slice.
     * 
-    * @tparam T         the struct type.
+    * @tparam T         the instance type to load.
     * @param  address   the aligned address to load.
     * @param  array     the array to copy to.
     * @param  start     the lower bound of the array slice to copy to.
     * @param  count     the number of values to copy.
-    * @param  struct    the implicit struct.
+    * @param  struct    the implicit value type to load.
     */
   def copyToArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, array: Array[T], start: Int, count: Int)
-      (implicit struct: Struct[T]) {
+      (implicit struct: ValueType[T]) {
     val end = start + count
     var p = address
     var i = start
@@ -444,16 +442,16 @@ trait Data extends Any {
   
   /** Stores an instance array slice as a sequence of data values.
     * 
-    * @tparam T         the struct type.
+    * @tparam T         the instance type to store.
     * @param  address   the aligned storage address.
     * @param  array     the array to store from.
     * @param  start     the lower bound of the array slice to store from.
     * @param  count     the number of values to store.
-    * @param  struct    the implicit struct.
+    * @param  struct    the implicit value type to store.
     */
   def storeArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, array: Array[T], start: Int, count: Int)
-      (implicit struct: Struct[T]) {
+      (implicit struct: ValueType[T]) {
     val end = start + count
     var p = address
     var i = start
@@ -628,7 +626,7 @@ object Data {
     * @param  unit        the implicit unit struct.
     * @return the allocated zero-filled data.
     */
-  @inline def alloc[T](count: Long)(implicit allocator: Allocator, unit: Struct[T]): Data =
+  @inline def alloc[T](count: Long)(implicit allocator: Allocator, unit: ValueType[T]): Data =
     allocator.alloc[T](count)
   
   /** Allocates a number of bytes of data. This convenience function delegates

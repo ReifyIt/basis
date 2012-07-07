@@ -15,7 +15,7 @@ package basis.memory
   * @see  [[basis.memory.Data]]
   */
 trait ArrayAllocator[V] extends Allocator {
-  override def alloc[T](count: Long)(implicit unit: Struct[T]): ArrayData[V]
+  override def alloc[T](count: Long)(implicit unit: ValueType[T]): ArrayData[V]
   
   override def apply(size: Long): ArrayData[V]
   

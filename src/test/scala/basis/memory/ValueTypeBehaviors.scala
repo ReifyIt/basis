@@ -10,10 +10,10 @@ package basis.memory
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait StructBehaviors { this: FunSpec =>
+trait ValueTypeBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def StructType[T](value: T)(implicit allocator: Allocator, struct: Struct[T]) {
+  def ValueType[T](value: T)(implicit allocator: Allocator, struct: ValueType[T]) {
     it("should store values") {
       val data = Data.alloc[T](1L)
       struct.store(data, 0L, value)
@@ -35,10 +35,10 @@ trait StructBehaviors { this: FunSpec =>
     
     it("should store offset projections") {
       val offset = struct.size
-      val field = struct.project(offset)
-      val data = Data.alloc(2L)(implicitly, field)
-      field.store(data, 0L, value)
-      withClue("(base address)") (field.load(data, 0L) should equal (value))
+      val framed = struct.framed(offset)
+      val data = Data.alloc(2L)(implicitly, framed)
+      framed.store(data, 0L, value)
+      withClue("(framed address)") (framed.load(data, 0L)     should equal (value))
       withClue("(offset address)") (struct.load(data, offset) should equal (value))
     }
   }

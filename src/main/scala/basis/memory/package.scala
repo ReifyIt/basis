@@ -11,9 +11,25 @@ package basis
 package object memory {
   import Endianness._
   
-  /** Returns an address advanced to its next power-of-2 alignment.
+  /** Returns an `Int` address advanced to a power-of-two alignment.
     * 
-    * @param  alignment   the required alignment–forced to a power-of-2.
+    * @param  alignment   the required alignment–forced to a power-of-two.
+    * @param  address     the address to align.
+    * @return the aligned address.
+    */
+  def align(alignment: Int)(address: Int): Int = {
+    var n = alignment - 1
+    n |= n >>> 1
+    n |= n >>> 2
+    n |= n >>> 4
+    n |= n >>> 8
+    n |= n >>> 16
+    (address + n) & ~n
+  }
+  
+  /** Returns a `Long` address advanced to a power-of-two alignment.
+    * 
+    * @param  alignment   the required alignment–forced to a power-of-two.
     * @param  address     the address to align.
     * @return the aligned address.
     */
@@ -28,11 +44,24 @@ package object memory {
     (address + n) & ~n
   }
   
-  /** Returns the alignment of a struct type. */
-  @inline def alignOf[T](implicit struct: Struct[T]): Long = struct.alignment
+  /** Returns the alignment of some value type. */
+  @inline def alignOf[T](implicit struct: ValueType[T]): Long = struct.alignment
   
-  /** Returns the size of a struct type. */
-  @inline def sizeOf[T](implicit struct: Struct[T]): Long = struct.size
+  /** Returns the size of some value type. */
+  @inline def sizeOf[T](implicit struct: ValueType[T]): Long = struct.size
+  
+  /** Returns the implicit data type for some instance type.
+    * 
+    * @example {{{
+    * scala> typeOf[(Int, Double)]
+    * res0: basis.memory.DataType[(Int, Double)] = Row2(PaddedInt, PaddedDouble).project(size = 16, alignment = 8)
+    * }}}
+    * 
+    * @tparam T         the instance type of the data type to get.
+    * @param  datatype  the implicit data type itself.
+    * @return the implicitly supplied data type.
+    */
+  @inline def typeOf[T](implicit datatype: DataType[T]): DataType[T] = datatype
   
   /** An allocator for native-endian data backed by some primitive array. */
   lazy val ArrayData: Allocator = NativeEndian match {
@@ -63,11 +92,4 @@ package object memory {
     case BigEndian => LongDataBE
     case LittleEndian => LongDataLE
   }
-  
-  /** An allocator for native-endian data backed by a `ByteBuffer`. */
-  /* This kills the 2.10.0-M3 compiler */
-  //lazy val BufferData: Allocator = NativeEndian match {
-  //  case BigEndian => BufferDataBE
-  //  case LittleEndian => BufferDataLE
-  //}
 }

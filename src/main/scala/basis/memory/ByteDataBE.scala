@@ -87,7 +87,7 @@ final class ByteDataBE(val array: Array[Byte]) extends AnyVal with ArrayData[Byt
 object ByteDataBE extends ArrayAllocator[Byte] {
   override def MaxSize: Long = Int.MaxValue.toLong
   
-  override def alloc[T](count: Long)(implicit unit: Struct[T]): ByteDataBE =
+  override def alloc[T](count: Long)(implicit unit: ValueType[T]): ByteDataBE =
     apply(unit.size * count)
   
   override def apply(size: Long): ByteDataBE = {

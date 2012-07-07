@@ -29,7 +29,7 @@ trait Allocator {
     * @param  unit    the implicit unit struct.
     * @return the allocated zero-filled data.
     */
-  def alloc[T](count: Long)(implicit unit: Struct[T]): Data
+  def alloc[T](count: Long)(implicit unit: ValueType[T]): Data
   
   /** Allocates a number of bytes of data.
     * 

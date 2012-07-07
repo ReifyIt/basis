@@ -9,7 +9,11 @@ package basis.memory
 
 import scala.math.max
 
-/** A template struct for 3-ary product types.
+/** A composite value type with three fields. The value types of the columns of
+  * the structure parameterize the class, along with the modeled instance type.
+  * The class constructor computes the structure's memory layout and makes
+  * available to subclasses the calculated alignment, size, field offsets, and
+  * field projections. Subclasses use this information to load and store values.
   * 
   * @author Chris Sachs
   * 
@@ -17,114 +21,124 @@ import scala.math.max
   * class Vector3(val x: Double, val y: Double, val z: Double)
   * 
   * // a basic struct implementation.
-  * object Vector3 extends Struct3[Double, Double, Double, Vector3] {
-  *   def load(data: Data, address: Long): Vector3 = {
-  *     val x = field1.load(data, address) // specialized load from field1 projection.
-  *     val y = field2.load(data, address) // specialized load from field2 projection.
-  *     val z = field3.load(data, address) // specialized load from field3 projection.
+  * object Vector3 extends Struct3[PaddedDouble, PaddedDouble, PaddedDouble, Vector3] {
+  *   override def load(data: Data, address: Long): Vector3 = {
+  *     // specialized loads from field projections.
+  *     val x = field1.load(data, address)
+  *     val y = field2.load(data, address)
+  *     val z = field3.load(data, address)
   *     new Vector3(x, y, z)
   *   }
   *   
-  *   def store(data: Data, address: Long, vector: Vector3) {
-  *     field1.store(data, address, vector.x) // specialized store to field1 projection.
-  *     field2.store(data, address, vector.y) // specialized store to field2 projection.
-  *     field3.store(data, address, vector.z) // specialized store to field3 projection.
+  *   override def store(data: Data, address: Long, vector: Vector3) {
+  *     // specialized stores to field projections.
+  *     field1.store(data, address, vector.x)
+  *     field2.store(data, address, vector.y)
+  *     field3.store(data, address, vector.z)
   *   }
   * }
   * 
-  * // an alternate struct implementation.
-  * class Vector3Struct(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-  *   extends Struct3[Double, Double, Double, Vector3](frameOffset, frameSize, frameAlignment) {
+  * // a more advanced struct implementation.
+  * class Vector3Struct(frameOffset: Int, frameSize: Int, frameAlignment: Int)
+  *   extends Struct3[PaddedDouble, PaddedDouble, PaddedDouble, Vector3](
+  *                   frameOffset, frameSize, frameAlignment)
+  *     with Framed[Vector3Struct] {
   *   
-  *   def this() = this(0L, 0L, 0L) // constructs a minimal frame.
+  *   def this() = this(0, 0, 0) // initializes a minimal frame.
   *   
-  *   def load(data: Data, address: Long): Vector3 = {
+  *   // name and expose the field projections.
+  *   def x: Field1 = field1
+  *   def y: Field2 = field2
+  *   def z: Field3 = field3
+  *   
+  *   override def load(data: Data, address: Long): Vector3 = {
   *     val x = data.loadDouble(address + offset1)
   *     val y = data.loadDouble(address + offset2)
   *     val z = data.loadDouble(address + offset3)
   *     new Vector3(x, y, z)
   *   }
   *   
-  *   def store(data: Data, address: Long, vector: Vector3) {
+  *   override def store(data: Data, address: Long, vector: Vector3) {
   *     data.storeDouble(address + offset1, vector.x)
   *     data.storeDouble(address + offset2, vector.y)
   *     data.storeDouble(address + offset3, vector.z)
   *   }
   *   
-  *   override def project(offset: Long, size: Long, alignment: Long): Vector3Struct =
-  *     new Vector3Struct(offset1 + offset, size, alignment) // make sure offset accumulates.
+  *   // this type acts as its own frame, making its use as a member
+  *   // of another structure more efficient.
+  *   override def framed(offset: Int, size: Int, alignment: Int): Frame =
+  *     new Vector3Struct(offset, size, alignment)
   * }
   * }}}
   * 
-  * @constructor Constructs a struct with a specified frame.
-  * @tparam T1              the first column type.
-  * @tparam T2              the second column type.
-  * @tparam T3              the third column type.
-  * @tparam T               the type of this struct.
-  * @param  frameOffset     the preferred offset of the first column in this struct's frame.
-  * @param  frameSize       the preferred size of this struct's frame.
-  * @param  frameAlignment  the preferred alignment of this struct's frame.
-  * @param  column1         the first column struct.
-  * @param  column2         the second column struct.
-  * @param  column3         the third column struct.
+  * @tparam F1  the value type of the first column.
+  * @tparam F2  the value type of the second column.
+  * @tparam F3  the value type of the third column.
+  * @tparam T   the modeled instance type.
   */
-abstract class Struct3[T1, T2, T3, T]
-    (frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    (implicit protected val column1: Struct[T1], protected val column2: Struct[T2], protected val column3: Struct[T3])
-  extends Struct[T] { struct =>
+abstract class Struct3[F1 <: Framed[F1], F2 <: Framed[F2], F3 <: Framed[F3], T] private (
+    column1: F1, column2: F2, column3: F3,
+    frameOffset: Int, frameSize: Int, frameAlignment: Int)
+  extends ValueType[T] {
   
-  /** Constructs a struct with a minimal frame.
+  /** Constructs a value type with a specified frame.
     * 
-    * @param  column1   the first column struct.
-    * @param  column2   the second column struct.
-    * @param  column3   the third column struct.
+    * @param  frameOffset     the preferred offset of the first column in the type's frame.
+    * @param  frameSize       the preferred size of the type's frame.
+    * @param  frameAlignment  the preferred alignment of the type's frame.
+    * @param  column1         the implicit first column type.
+    * @param  column2         the implicit second column type.
+    * @param  column3         the implicit third column type.
     */
-  def this()(implicit column1: Struct[T1], column2: Struct[T2], column3: Struct[T3]) = this(0L, 0L, 0L)
+  def this(frameOffset: Int, frameSize: Int, frameAlignment: Int)
+          (implicit column1: F1, column2: F2, column3: F3) =
+    this(column1, column2, column3, frameOffset, frameSize, frameAlignment)
   
-  /** The offset of the first column in this struct's frame. */
-  protected val offset1: Long = align(column1.alignment)(frameOffset)
+  /** Constructs a value type with a minimal frame.
+    * 
+    * @param  column1   the implicit first column type.
+    * @param  column2   the implicit second column type.
+    * @param  column3   the implicit third column type.
+    */
+  def this()(implicit column1: F1, column2: F2, column3: F3) =
+    this(column1, column2, column3, 0, 0, 0)
   
-  /** The offset of the second column in this struct'ss frame. */
-  protected val offset2: Long = align(column2.alignment)(offset1 + column1.size)
+  /** The frame type of the first column. */
+  protected type Field1 = F1
   
-  /** The offset of the third column in this struct's frame. */
-  protected val offset3: Long = align(column3.alignment)(offset2 + column2.size)
+  /** The frame type of the second column. */
+  protected type Field2 = F2
   
-  val alignment: Long = {
+  /** The frame type of the third column. */
+  protected type Field3 = F3
+  
+  /** Returns the offset of the first column in this type's frame. */
+  protected val offset1: Int = align(column1.alignment)(frameOffset)
+  
+  /** Returns the offset of the second column in this type's frame. */
+  protected val offset2: Int = align(column2.alignment)(offset1 + column1.size)
+  
+  /** Returns the offset of the third column in this type's frame. */
+  protected val offset3: Int = align(column3.alignment)(offset2 + column2.size)
+  
+  override def offset: Int = offset1
+  
+  override val alignment: Int = {
     val minimalAlignment = max(max(column1.alignment, column2.alignment), column3.alignment)
     align(minimalAlignment)(max(minimalAlignment, frameAlignment))
   }
   
-  val size: Long = {
+  override val size: Int = {
     val minimalSize = align(alignment)(offset3 + column3.size)
     align(alignment)(max(minimalSize, frameSize))
   }
   
-  /** The projection of the first column into this struct's frame. */
-  protected val field1: Struct[T1] = column1.project(offset1, size, alignment)
+  /** Returns the projection of the first column into this type's frame. */
+  protected val field1: Field1 = column1.framed(offset1, size, alignment)
   
-  /** The projection of the second column into this struct's frame. */
-  protected val field2: Struct[T2] = column2.project(offset2, size, alignment)
+  /** Returns the projection of the second column into this type's frame. */
+  protected val field2: Field2 = column2.framed(offset2, size, alignment)
   
-  /** The projection of the third column into this struct's frame. */
-  protected val field3: Struct[T3] = column3.project(offset3, size, alignment)
-  
-  override def project(offset: Long, size: Long, alignment: Long): Struct3[T1, T2, T3, T] =
-    new Frame(offset1 + offset, size, alignment)
-  
-  protected class Frame(frameOffset: Long, frameSize: Long, frameAlignment: Long)
-    extends Struct3[T1, T2, T3, T](frameOffset, frameSize, frameAlignment) {
-    
-    override def load(data: Data, address: Long): T =
-      struct.load(data, address + offset1)
-    
-    override def store(data: Data, address: Long, value: T): Unit =
-      struct.store(data, address + offset1, value)
-    
-    override def project(offset: Long, size: Long, alignment: Long): Struct3[T1, T2, T3, T] =
-      new struct.Frame(offset1 + offset, size, alignment)
-    
-    override def toString: String =
-      "%s.project(offset = %d, size = %d, alignment = %d)".format(struct, offset1, size, alignment)
-  }
+  /** Returns the projection of the third column into this type's frame. */
+  protected val field3: Field3 = column3.framed(offset3, size, alignment)
 }
