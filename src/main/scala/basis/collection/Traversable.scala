@@ -70,11 +70,7 @@ trait Traversable[+A] extends Any with Incremental[A] {
     total
   }
   
-  def view: TraversableView[A] = new View
-  
-  private final class View extends AbstractTraversableView[A] {
-    override def foreach[U](f: A => U): Unit = Traversable.this.foreach(f)
-  }
+  def view: TraversableView[A] = new TraversableView.Projection[A](this)
 }
 
 private[basis] abstract class AbstractTraversable[+A] extends Traversable[A]

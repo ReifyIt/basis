@@ -7,48 +7,63 @@
 
 package basis.collection
 
-trait IterableView[+A] extends Any with TraversableView[A] with Iterable[A] { self =>
-  override def map[B](f: A => B): IterableView[B] = new Mapped[B](f)
+trait IterableView[+A] extends Any with TraversableView[A] with Iterable[A] {
+  import IterableView._
   
-  override def filter(p: A => Boolean): IterableView[A] = new Filtered(p)
+  override def map[B](f: A => B): IterableView[B] = new Mapped[A, B](this, f)
   
-  override def collect[B](q: PartialFunction[A, B]): IterableView[B] = new Collected[B](q)
+  override def filter(p: A => Boolean): IterableView[A] = new Filtered[A](this, p)
   
-  override def drop(lower: Int): IterableView[A] = new Dropped(lower)
+  override def collect[B](q: PartialFunction[A, B]): IterableView[B] = new Collected[A, B](this, q)
   
-  override def take(upper: Int): IterableView[A] = new Taken(upper)
+  override def drop(lower: Int): IterableView[A] = new Dropped[A](this, lower)
   
-  override def slice(lower: Int, upper: Int): IterableView[A] = new Sliced(lower, upper)
+  override def take(upper: Int): IterableView[A] = new Taken[A](this, upper)
   
-  def zip[B](that: Iterable[B]): IterableView[(A, B)] = new Zipped[B](that)
+  override def slice(lower: Int, upper: Int): IterableView[A] = new Sliced[A](this, lower, upper)
+  
+  def zip[B](that: Iterable[B]): IterableView[(A, B)] = new Zipped[A, B](this, that)
   
   override def view: IterableView[A] = this
+}
+
+private[basis] object IterableView {
+  final class Projection[+A](self: Iterable[A]) extends AbstractIterableView[A] {
+    override def iterator: Iterated[A] = self.iterator
+    override def map[B](f: A => B): IterableView[B] = new Mapped[A, B](self, f)
+    override def filter(p: A => Boolean): IterableView[A] = new Filtered[A](self, p)
+    override def collect[B](q: PartialFunction[A, B]): IterableView[B] = new Collected[A, B](self, q)
+    override def drop(lower: Int): IterableView[A] = new Dropped[A](self, lower)
+    override def take(upper: Int): IterableView[A] = new Taken[A](self, upper)
+    override def slice(lower: Int, upper: Int): IterableView[A] = new Sliced[A](self, lower, upper)
+    override def zip[B](that: Iterable[B]): IterableView[(A, B)] = new Zipped[A, B](self, that)
+  }
   
-  private final class Mapped[+B](f: A => B) extends AbstractIterableView[B] {
+  final class Mapped[-A, +B](self: Iterable[A], f: A => B) extends AbstractIterableView[B] {
     override def iterator: Iterated[B] = self.iterator map f
   }
   
-  private final class Filtered(p: A => Boolean) extends AbstractIterableView[A] {
+  final class Filtered[+A](self: Iterable[A], p: A => Boolean) extends AbstractIterableView[A] {
     override def iterator: Iterated[A] = self.iterator filter p
   }
   
-  private final class Collected[+B](q: PartialFunction[A, B]) extends AbstractIterableView[B] {
+  final class Collected[-A, +B](self: Iterable[A], q: PartialFunction[A, B]) extends AbstractIterableView[B] {
     override def iterator: Iterated[B] = self.iterator collect q
   }
   
-  private final class Dropped(lower: Int) extends AbstractIterableView[A] {
+  final class Dropped[+A](self: Iterable[A], lower: Int) extends AbstractIterableView[A] {
     override def iterator: Iterated[A] = self.iterator drop lower
   }
   
-  private final class Taken(upper: Int) extends AbstractIterableView[A] {
+  final class Taken[+A](self: Iterable[A], upper: Int) extends AbstractIterableView[A] {
     override def iterator: Iterated[A] = self.iterator take upper
   }
   
-  private final class Sliced(lower: Int, upper: Int) extends AbstractIterableView[A] {
+  final class Sliced[+A](self: Iterable[A], lower: Int, upper: Int) extends AbstractIterableView[A] {
     override def iterator: Iterated[A] = self.iterator slice (lower, upper)
   }
   
-  private final class Zipped[B](that: Iterable[B]) extends AbstractIterableView[(A, B)] {
+  final class Zipped[+A, +B](self: Iterable[A], that: Iterable[B]) extends AbstractIterableView[(A, B)] {
     override def iterator: Iterated[(A, B)] = self.iterator zip that.iterator
   }
 }

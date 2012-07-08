@@ -89,7 +89,7 @@ trait Linear[+A] extends Any with Iterable[A] {
     total
   }
   
-  override def view: LinearView[A] = new View
+  override def view: LinearView[A] = new LinearView.Projection[A](this)
   
   private final class Iterator extends AbstractIterated[A] {
     private[this] var left: Linear[A] = Linear.this
@@ -102,12 +102,6 @@ trait Linear[+A] extends Any with Iterable[A] {
       left = left.tail
       result
     }
-  }
-  
-  private final class View extends AbstractLinearView[A] {
-    override def isEmpty: Boolean = Linear.this.isEmpty
-    override def head: A = Linear.this.head
-    override def tail: Linear[A] = Linear.this.tail
   }
 }
 

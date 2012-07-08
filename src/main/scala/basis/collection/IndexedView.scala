@@ -7,29 +7,43 @@
 
 package basis.collection
 
-trait IndexedView[+A] extends Any with IterableView[A] with Indexed[A] { self =>
-  override def map[B](f: A => B): IndexedView[B] = new Mapped[B](f)
+trait IndexedView[+A] extends Any with IterableView[A] with Indexed[A] {
+  import IndexedView._
   
-  override def filter(p: A => Boolean): IndexedView[A] = new Filtered(p)
+  override def map[B](f: A => B): IndexedView[B] = new Mapped[A, B](this, f)
   
-  override def collect[B](q: PartialFunction[A, B]): IndexedView[B] = new Collected[B](q)
+  override def filter(p: A => Boolean): IndexedView[A] = new Filtered[A](this, p)
   
-  override def drop(lower: Int): IndexedView[A] = new Dropped(lower)
+  override def collect[B](q: PartialFunction[A, B]): IndexedView[B] = new Collected[A, B](this, q)
   
-  override def take(upper: Int): IndexedView[A] = new Taken(upper)
+  override def drop(lower: Int): IndexedView[A] = new Dropped[A](this, lower)
   
-  override def slice(lower: Int, upper: Int): IndexedView[A] = new Sliced(lower, upper)
+  override def take(upper: Int): IndexedView[A] = new Taken[A](this, upper)
+  
+  override def slice(lower: Int, upper: Int): IndexedView[A] = new Sliced[A](this, lower, upper)
   
   override def view: IndexedView[A] = this
+}
+
+private[basis] object IndexedView {
+  final class Projection[+A](self: Indexed[A]) extends AbstractIndexedView[A] {
+    override def length: Int = self.length
+    override def apply(index: Int): A = self.apply(index)
+    override def map[B](f: A => B): IndexedView[B] = new Mapped[A, B](self, f)
+    override def filter(p: A => Boolean): IndexedView[A] = new Filtered[A](self, p)
+    override def collect[B](q: PartialFunction[A, B]): IndexedView[B] = new Collected[A, B](self, q)
+    override def drop(lower: Int): IndexedView[A] = new Dropped[A](self, lower)
+    override def take(upper: Int): IndexedView[A] = new Taken[A](self, upper)
+    override def slice(lower: Int, upper: Int): IndexedView[A] = new Sliced[A](self, lower, upper)
+  }
   
-  private final class Mapped[+B](f: A => B) extends AbstractIndexedView[B] {
+  final class Mapped[-A, +B](self: Indexed[A], f: A => B) extends AbstractIndexedView[B] {
     override def length: Int = self.length
     override def apply(index: Int): B = f(self.apply(index))
   }
   
-  private final class Filtered(p: A => Boolean) extends AbstractIndexedView[A] {
+  final class Filtered[+A](self: Indexed[A], p: A => Boolean) extends AbstractIndexedView[A] {
     private[this] var filteredIndexes: Array[Int] = _
-    
     private[this] def lookup: Array[Int] = synchronized {
       if (filteredIndexes == null) {
         val size = self.length
@@ -51,15 +65,12 @@ trait IndexedView[+A] extends Any with IterableView[A] with Indexed[A] { self =>
       }
       filteredIndexes
     }
-    
     override def length: Int = lookup.length
-    
     override def apply(index: Int): A = self.apply(lookup(index))
   }
   
-  private final class Collected[+B](q: PartialFunction[A, B]) extends AbstractIndexedView[B] {
+  final class Collected[-A, +B](self: Indexed[A], q: PartialFunction[A, B]) extends AbstractIndexedView[B] {
     private[this] var collectedIndexes: Array[Int] = _
-    
     private[this] def lookup: Array[Int] = synchronized {
       if (collectedIndexes == null) {
         val size = self.length
@@ -81,13 +92,11 @@ trait IndexedView[+A] extends Any with IterableView[A] with Indexed[A] { self =>
       }
       collectedIndexes
     }
-    
     override def length: Int = lookup.length
-    
     override def apply(index: Int): B = q(self.apply(lookup(index)))
   }
   
-  private final class Dropped(count: Int) extends AbstractIndexedView[A] {
+  final class Dropped[+A](self: Indexed[A], count: Int) extends AbstractIndexedView[A] {
     private[this] val lower: Int = math.max(0, math.min(self.length, count))
     override def length: Int = self.length - lower
     override def apply(index: Int): A = {
@@ -96,7 +105,7 @@ trait IndexedView[+A] extends Any with IterableView[A] with Indexed[A] { self =>
     }
   }
   
-  private final class Taken(count: Int) extends AbstractIndexedView[A] {
+  final class Taken[+A](self: Indexed[A], count: Int) extends AbstractIndexedView[A] {
     private[this] val upper: Int = math.max(0, math.min(self.length, count))
     override def length: Int = upper
     override def apply(index: Int): A = {
@@ -105,7 +114,7 @@ trait IndexedView[+A] extends Any with IterableView[A] with Indexed[A] { self =>
     }
   }
   
-  private final class Sliced(from: Int, until: Int) extends AbstractIndexedView[A] {
+  final class Sliced[+A](self: Indexed[A], from: Int, until: Int) extends AbstractIndexedView[A] {
     private[this] val lower: Int = math.max(0, math.min(self.length, from))
     private[this] val upper: Int = math.max(lower, math.min(self.length, until))
     override def length: Int = upper - lower
