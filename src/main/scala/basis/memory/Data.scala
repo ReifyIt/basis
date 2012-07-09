@@ -388,7 +388,7 @@ trait Data extends Any {
     * @param  struct    the implicit value type.
     * @return the loaded instance.
     */
-  final def load[@specialized T](address: Long)(implicit struct: ValueType[T]): T =
+  final def load[@specialized T](address: Long)(implicit struct: ValType[T]): T =
     struct.load(this, address)
   
   /** Stores an instance as a data value.
@@ -398,7 +398,7 @@ trait Data extends Any {
     * @param  value     the instance to store.
     * @param  struct    the implicit value type to store.
     */
-  final def store[@specialized T](address: Long, value: T)(implicit struct: ValueType[T]): Unit =
+  final def store[@specialized T](address: Long, value: T)(implicit struct: ValType[T]): Unit =
     struct.store(this, address, value)
   
   /** Loads a sequence of data values as a new instance array.
@@ -412,7 +412,7 @@ trait Data extends Any {
     */
   def loadArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, count: Int)
-      (implicit struct: ValueType[T], classTag: ClassTag[T]): Array[T] = {
+      (implicit struct: ValType[T], classTag: ClassTag[T]): Array[T] = {
     val array = classTag.newArray(count)
     copyToArray[T](address, array, 0, count)
     array
@@ -429,7 +429,7 @@ trait Data extends Any {
     */
   def copyToArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, array: Array[T], start: Int, count: Int)
-      (implicit struct: ValueType[T]) {
+      (implicit struct: ValType[T]) {
     val end = start + count
     var p = address
     var i = start
@@ -451,7 +451,7 @@ trait Data extends Any {
     */
   def storeArray[@specialized(Byte, Short, Int, Long, Char, Float, Double, Boolean, AnyRef) T]
       (address: Long, array: Array[T], start: Int, count: Int)
-      (implicit struct: ValueType[T]) {
+      (implicit struct: ValType[T]) {
     val end = start + count
     var p = address
     var i = start
@@ -626,7 +626,7 @@ object Data {
     * @param  unit        the implicit unit struct.
     * @return the allocated zero-filled data.
     */
-  @inline def alloc[T](count: Long)(implicit allocator: Allocator, unit: ValueType[T]): Data =
+  @inline def alloc[T](count: Long)(implicit allocator: Allocator, unit: ValType[T]): Data =
     allocator.alloc[T](count)
   
   /** Allocates a number of bytes of data. This convenience function delegates

@@ -84,7 +84,7 @@ trait Indexed[+A] extends Any with Iterable[A] {
   
   override def count(p: A => Boolean): Int = countBetween(0, length, 0, p)
   
-  override def view: IndexedView[A] = new IndexedView.Projection[A](this)
+  override def view: IndexedView[A] = new IndexedView.Projected[A](this)
   
   private final class Iterator(from: Int, until: Int) extends AbstractIterated[A] {
     private[this] var lower: Int = math.max(0, math.min(Indexed.this.length, from))

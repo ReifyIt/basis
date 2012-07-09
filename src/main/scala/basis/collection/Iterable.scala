@@ -28,7 +28,7 @@ trait Iterable[+A] extends Any with Traversable[A] {
   
   override def count(p: A => Boolean): Int = iterator.count(p)
   
-  override def view: IterableView[A] = new IterableView.Projection[A](this)
+  override def view: IterableView[A] = new IterableView.Projected[A](this)
 }
 
 private[basis] abstract class AbstractIterable[+A] extends AbstractTraversable[A] with Iterable[A]

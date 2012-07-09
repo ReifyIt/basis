@@ -25,11 +25,11 @@ package basis.memory
   * @param  column3   Returns the value type of the third column.
   */
 abstract class Record3[T1, T2, T3, T] private (
-    protected val column1: ValueType[T1],
-    protected val column2: ValueType[T2],
-    protected val column3: ValueType[T3],
+    protected val column1: ValType[T1],
+    protected val column2: ValType[T2],
+    protected val column3: ValType[T3],
     frameOffset: Int, frameSize: Int, frameAlignment: Int)
-  extends Struct3[ValueType[T1], ValueType[T2], ValueType[T3], T](
+  extends Struct3[ValType[T1], ValType[T2], ValType[T3], T](
                   frameOffset, frameSize, frameAlignment)(
                   column1, column2, column3)
     with Framed[Record3[T1, T2, T3, T]] { self =>
@@ -44,7 +44,7 @@ abstract class Record3[T1, T2, T3, T] private (
     * @param  column3         the implicit third column type.
     */
   def this(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-          (implicit column1: ValueType[T1], column2: ValueType[T2], column3: ValueType[T3]) =
+          (implicit column1: ValType[T1], column2: ValType[T2], column3: ValType[T3]) =
     this(column1, column2, column3, frameOffset, frameSize, frameAlignment)
   
   /** Constructs a value type with a minimal frame.
@@ -53,7 +53,7 @@ abstract class Record3[T1, T2, T3, T] private (
     * @param  column2   the implicit second column type.
     * @param  column3   the implicit third column type.
     */
-  def this()(implicit column1: ValueType[T1], column2: ValueType[T2], column3: ValueType[T3]) =
+  def this()(implicit column1: ValType[T1], column2: ValType[T2], column3: ValType[T3]) =
     this(column1, column2, column3, 0, 0, 0)
   
   def apply(arg1: T1, arg2: T2, arg3: T3): T

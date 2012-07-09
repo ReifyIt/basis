@@ -21,9 +21,9 @@ package basis.memory
   * @param  column  Returns the value type of the wrapped column.
   */
 abstract class Record1[T1, T] private (
-    protected val column: ValueType[T1],
+    protected val column: ValType[T1],
     frameOffset: Int, frameSize: Int, frameAlignment: Int)
-  extends Struct1[ValueType[T1], T](frameOffset, frameSize, frameAlignment)(column)
+  extends Struct1[ValType[T1], T](frameOffset, frameSize, frameAlignment)(column)
     with Framed[Record1[T1, T]] { self =>
   
   /** Constructs a value type with a specified frame.
@@ -34,14 +34,14 @@ abstract class Record1[T1, T] private (
     * @param  column          the implicit column type.
     */
   def this(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-          (implicit column: ValueType[T1]) =
+          (implicit column: ValType[T1]) =
     this(column, frameOffset, frameSize, frameAlignment)
   
   /** Constructs a value type with a minimal frame.
     * 
     * @param  column  the implicit column type.
     */
-  def this()(implicit column: ValueType[T1]) = this(column, 0, 0, 0)
+  def this()(implicit column: ValType[T1]) = this(column, 0, 0, 0)
   
   def apply(arg1: T1): T
   

@@ -28,7 +28,7 @@ trait IterableView[+A] extends Any with TraversableView[A] with Iterable[A] {
 }
 
 private[basis] object IterableView {
-  final class Projection[+A](self: Iterable[A]) extends AbstractIterableView[A] {
+  final class Projected[+A](self: Iterable[A]) extends AbstractIterableView[A] {
     override def iterator: Iterated[A] = self.iterator
     override def map[B](f: A => B): IterableView[B] = new Mapped[A, B](self, f)
     override def filter(p: A => Boolean): IterableView[A] = new Filtered[A](self, p)

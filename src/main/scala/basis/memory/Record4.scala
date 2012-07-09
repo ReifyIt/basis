@@ -27,12 +27,12 @@ package basis.memory
   * @param  column4   Returns the value type of the fourth column.
   */
 abstract class Record4[T1, T2, T3, T4, T] private (
-    protected val column1: ValueType[T1],
-    protected val column2: ValueType[T2],
-    protected val column3: ValueType[T3],
-    protected val column4: ValueType[T4],
+    protected val column1: ValType[T1],
+    protected val column2: ValType[T2],
+    protected val column3: ValType[T3],
+    protected val column4: ValType[T4],
     frameOffset: Int, frameSize: Int, frameAlignment: Int)
-  extends Struct4[ValueType[T1], ValueType[T2], ValueType[T3], ValueType[T4], T](
+  extends Struct4[ValType[T1], ValType[T2], ValType[T3], ValType[T4], T](
                   frameOffset, frameSize, frameAlignment)(
                   column1, column2, column3, column4)
     with Framed[Record4[T1, T2, T3, T4, T]] { self =>
@@ -48,7 +48,7 @@ abstract class Record4[T1, T2, T3, T4, T] private (
     * @param  column4         the implicit fourth column type.
     */
   def this(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-          (implicit column1: ValueType[T1], column2: ValueType[T2], column3: ValueType[T3], column4: ValueType[T4]) =
+          (implicit column1: ValType[T1], column2: ValType[T2], column3: ValType[T3], column4: ValType[T4]) =
     this(column1, column2, column3, column4, frameOffset, frameSize, frameAlignment)
   
   /** Constructs a value type with a minimal frame.
@@ -58,7 +58,7 @@ abstract class Record4[T1, T2, T3, T4, T] private (
     * @param  column3   the implicit third column type.
     * @param  column4   the implicit fourth column type.
     */
-  def this()(implicit column1: ValueType[T1], column2: ValueType[T2], column3: ValueType[T3], column4: ValueType[T4]) =
+  def this()(implicit column1: ValType[T1], column2: ValType[T2], column3: ValType[T3], column4: ValType[T4]) =
     this(column1, column2, column3, column4, 0, 0, 0)
   
   def apply(arg1: T1, arg2: T2, arg3: T3, arg4: T4): T

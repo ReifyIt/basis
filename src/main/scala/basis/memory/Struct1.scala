@@ -54,7 +54,7 @@ import scala.math.max
   */
 abstract class Struct1[F <: Framed[F], T] private
     (column: F, frameOffset: Int, frameSize: Int, frameAlignment: Int)
-  extends ValueType[T] {
+  extends ValType[T] {
   
   /** Constructs a value type with a specified frame.
     * 

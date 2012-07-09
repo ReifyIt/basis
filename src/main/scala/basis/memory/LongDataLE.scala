@@ -71,7 +71,7 @@ final class LongDataLE(val array: Array[Long]) extends AnyVal with ArrayData[Lon
 object LongDataLE extends ArrayAllocator[Long] {
   override def MaxSize: Long = Int.MaxValue.toLong << 3
   
-  override def alloc[T](count: Long)(implicit unit: ValueType[T]): LongDataLE =
+  override def alloc[T](count: Long)(implicit unit: ValType[T]): LongDataLE =
     apply(unit.size * count)
   
   override def apply(size: Long): LongDataLE = {

@@ -26,7 +26,7 @@ trait LinearView[+A] extends Any with IterableView[A] with Linear[A] {
 }
 
 private[basis] object LinearView {
-  final class Projection[+A](self: Linear[A]) extends AbstractLinearView[A] {
+  final class Projected[+A](self: Linear[A]) extends AbstractLinearView[A] {
     override def isEmpty: Boolean = self.isEmpty
     override def head: A = self.head
     override def tail: Linear[A] = self.tail

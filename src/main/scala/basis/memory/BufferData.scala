@@ -83,7 +83,7 @@ final class BufferData(val buffer: ByteBuffer) extends AnyVal with Data {
 object BufferData extends Allocator {
   override def MaxSize: Long = Int.MaxValue.toLong
   
-  override def alloc[T](count: Long)(implicit unit: ValueType[T]): BufferData =
+  override def alloc[T](count: Long)(implicit unit: ValType[T]): BufferData =
     apply(unit.size * count)
   
   override def apply(size: Long): BufferData = {
@@ -101,7 +101,7 @@ object BufferData extends Allocator {
 object BufferDataBE extends Allocator {
   override def MaxSize: Long = Int.MaxValue.toLong
   
-  override def alloc[T](count: Long)(implicit unit: ValueType[T]): BufferData =
+  override def alloc[T](count: Long)(implicit unit: ValType[T]): BufferData =
     apply(unit.size * count)
   
   override def apply(size: Long): BufferData = {
@@ -119,7 +119,7 @@ object BufferDataBE extends Allocator {
 object BufferDataLE extends Allocator {
   override def MaxSize: Long = Int.MaxValue.toLong
   
-  override def alloc[T](count: Long)(implicit unit: ValueType[T]): BufferData =
+  override def alloc[T](count: Long)(implicit unit: ValType[T]): BufferData =
     apply(unit.size * count)
   
   override def apply(size: Long): BufferData = {

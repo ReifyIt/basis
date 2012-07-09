@@ -10,7 +10,7 @@ package basis.memory
 import scala.annotation.implicitNotFound
 import scala.math.max
 
-/** Represents either a [[basis.memory.ValueType]] or a [[basis.memory.ReferenceType]].
+/** Represents either a [[basis.memory.ValType]] or a [[basis.memory.ReferenceType]].
   * 
   * @tparam T   the modeled instance type.
   */
@@ -22,7 +22,7 @@ sealed abstract class DataType[T]
   * @tparam T   the modeled instance type.
   */
 @implicitNotFound("no implicit reference type for ${T}.")
-final class ReferenceType[T] extends DataType[T] {
+final class RefType[T] extends DataType[T] {
   override def toString: String = "ReferenceType"
 }
 
@@ -46,7 +46,7 @@ final class ReferenceType[T] extends DataType[T] {
   * @see  [[basis.memory.Data]]
   */
 @implicitNotFound("no implicit value type for ${T}.")
-abstract class ValueType[@specialized T] extends DataType[T] with Framed[ValueType[T]] { self =>
+abstract class ValType[@specialized T] extends DataType[T] with Framed[ValType[T]] { self =>
   /** Returns the power-of-two alignment of this type's frame. The alignment
     * must evenly divide all addresses used to store this type's values. */
   def alignment: Int
@@ -115,7 +115,7 @@ abstract class ValueType[@specialized T] extends DataType[T] with Framed[ValueTy
     * @param frameSize       the preferred size of the projected frame.
     * @param frameAlignment  the preferred alignment of the projected frame.
     */
-  private final class Projection(frameOffset: Int, frameSize: Int, frameAlignment: Int) extends ValueType[T] {
+  private final class Projection(frameOffset: Int, frameSize: Int, frameAlignment: Int) extends ValType[T] {
     /** Returns this projection's offset into the base type's frame.
       * Aligns `frameOffset` to the base type's alignment. */
     override val offset: Int = align(self.alignment)(frameOffset)
@@ -141,10 +141,10 @@ abstract class ValueType[@specialized T] extends DataType[T] with Framed[ValueTy
 
 /** Contains fallback implicit reference types. */
 abstract class LowPriorityDataTypes {
-  private val ReferenceType = new ReferenceType[Null]
+  private val RefType = new RefType[Null]
   
   /** Returns a reference type. */
-  implicit def Reference[T] = ReferenceType.asInstanceOf[ReferenceType[T]]
+  implicit def Reference[T] = RefType.asInstanceOf[RefType[T]]
 }
 
 /** Contains fundamental data types, including implicit value types for
@@ -193,17 +193,17 @@ object DataType extends LowPriorityDataTypes {
   implicit val PaddedDouble = new PaddedDouble(0, 8, 8)
   
   /** Returns a type for some kind of 2-tuple of values. */
-  implicit def Row2[T1 : ValueType, T2 : ValueType] = new Row2[T1, T2]
+  implicit def Row2[T1 : ValType, T2 : ValType] = new Row2[T1, T2]
   
   /** Returns a type for some kind of 3-tuple of values. */
-  implicit def Row3[T1: ValueType, T2 : ValueType, T3 : ValueType] = new Row3[T1, T2, T3]
+  implicit def Row3[T1: ValType, T2 : ValType, T3 : ValType] = new Row3[T1, T2, T3]
   
   /** Returns a type for some kind of 4-tuple of values. */
-  implicit def Row4[T1: ValueType, T2 : ValueType, T3 : ValueType, T4 : ValueType] = new Row4[T1, T2, T3, T4]
+  implicit def Row4[T1: ValType, T2 : ValType, T3 : ValType, T4 : ValType] = new Row4[T1, T2, T3, T4]
   
   /** A type for `Byte` values. */
   final class PackedByte(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Byte] with Framed[PackedByte] {
+      extends ValType[Byte] with Framed[PackedByte] {
     override val alignment: Int = max(1, align(frameAlignment)(frameAlignment))
     override val offset: Int = max(0, frameOffset)
     override val size: Int = align(alignment)(max(offset + 1, frameSize))
@@ -215,7 +215,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An unaligned type for `Short` values. */
   final class PackedShort(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Short] with Framed[PackedShort] {
+      extends ValType[Short] with Framed[PackedShort] {
     override val alignment: Int = max(1, align(frameAlignment)(frameAlignment))
     override val offset: Int = max(0, frameOffset)
     override val size: Int = align(alignment)(max(offset + 2, frameSize))
@@ -227,7 +227,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An unaligned type for `Int` values. */
   final class PackedInt(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Int] with Framed[PackedInt] {
+      extends ValType[Int] with Framed[PackedInt] {
     override val alignment: Int = max(1, align(frameAlignment)(frameAlignment))
     override val offset: Int = max(0, frameOffset)
     override val size: Int = align(alignment)(max(offset + 4, frameSize))
@@ -239,7 +239,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An unaligned type for `Long` values. */
   final class PackedLong(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Long] with Framed[PackedLong] {
+      extends ValType[Long] with Framed[PackedLong] {
     override val alignment: Int = max(1, align(frameAlignment)(frameAlignment)) 
     override val offset: Int = max(0, frameOffset) 
     override val size: Int = align(alignment)(max(offset + 8, frameSize))
@@ -251,7 +251,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An unaligned type for `Char` values. */
   final class PackedChar(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Char] with Framed[PackedChar] {
+      extends ValType[Char] with Framed[PackedChar] {
     override val alignment: Int = max(1, align(frameAlignment)(frameAlignment))
     override val offset: Int = max(0, frameOffset)
     override val size: Int = align(alignment)(max(offset + 2, frameSize))
@@ -263,7 +263,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An unaligned type for `Float` values. */
   final class PackedFloat(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Float] with Framed[PackedFloat] {
+      extends ValType[Float] with Framed[PackedFloat] {
     override val alignment: Int = max(1, align(frameAlignment)(frameAlignment))
     override val offset: Int = max(0, frameOffset)
     override val size: Int = align(alignment)(max(offset + 4, frameSize))
@@ -275,7 +275,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An unaligned type for `Double` values. */
   final class PackedDouble(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Double] with Framed[PackedDouble] {
+      extends ValType[Double] with Framed[PackedDouble] {
     override val alignment: Int = max(1, align(frameAlignment)(frameAlignment))
     override val offset: Int = max(0, frameOffset)
     override val size: Int = align(alignment)(max(offset + 8, frameSize))
@@ -287,7 +287,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** A type for single byte `Boolean` values. Maps non-zero values to `true` and zero to `false`. */
   final class PackedBoolean(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Boolean] with Framed[PackedBoolean] {
+      extends ValType[Boolean] with Framed[PackedBoolean] {
     override val alignment: Int = max(1, align(frameAlignment)(frameAlignment))
     override val offset: Int = max(0, frameOffset)
     override val size: Int = align(alignment)(max(offset + 1, frameSize))
@@ -303,7 +303,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An aligned type for `Short` values. */
   final class PaddedShort(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Short] with Framed[PaddedShort] {
+      extends ValType[Short] with Framed[PaddedShort] {
     override val alignment: Int = align(2)(max(2, frameAlignment))
     override val offset: Int = align(2)(max(0, frameOffset))
     override val size: Int = align(alignment)(max(offset + 2, frameSize))
@@ -315,7 +315,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An aligned type for `Int` values. */
   final class PaddedInt(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Int] with Framed[PaddedInt] {
+      extends ValType[Int] with Framed[PaddedInt] {
     override val alignment: Int = align(4)(max(4, frameAlignment))
     override val offset: Int = align(4)(max(0, frameOffset))
     override val size: Int = align(alignment)(max(offset + 4, frameSize))
@@ -327,7 +327,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An aligned type for `Long` values. */
   final class PaddedLong(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Long] with Framed[PaddedLong] {
+      extends ValType[Long] with Framed[PaddedLong] {
     override val alignment: Int = align(8)(max(8, frameAlignment))
     override val offset: Int = align(8)(max(0, frameOffset))
     override val size: Int = align(alignment)(max(offset + 8, frameSize))
@@ -339,7 +339,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An aligned type for `Char` values. */
   final class PaddedChar(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Char] with Framed[PaddedChar] {
+      extends ValType[Char] with Framed[PaddedChar] {
     override val alignment: Int = align(2)(max(2, frameAlignment))
     override val offset: Int = align(2)(max(0, frameOffset))
     override val size: Int = align(alignment)(max(offset + 2, frameSize))
@@ -351,7 +351,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An aligned type for `Float` values. */
   final class PaddedFloat(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Float] with Framed[PaddedFloat] {
+      extends ValType[Float] with Framed[PaddedFloat] {
     override val alignment: Int = align(4)(max(4, frameAlignment))
     override val offset: Int = align(4)(max(0, frameOffset))
     override val size: Int = align(alignment)(max(offset + 4, frameSize))
@@ -363,7 +363,7 @@ object DataType extends LowPriorityDataTypes {
   
   /** An aligned type for `Double` values. */
   final class PaddedDouble(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-      extends ValueType[Double] with Framed[PaddedDouble] {
+      extends ValType[Double] with Framed[PaddedDouble] {
     override val alignment: Int = align(8)(max(8, frameAlignment))
     override val offset: Int = align(8)(max(0, frameOffset))
     override val size: Int = align(alignment)(max(offset + 8, frameSize))
@@ -375,19 +375,19 @@ object DataType extends LowPriorityDataTypes {
   
   /** A type for some kind of 2-tuple of values. */
   final class Row2[@specialized(Int, Long, Double) T1, @specialized(Int, Long, Double) T2] private (
-      protected val column1: ValueType[T1],
-      protected val column2: ValueType[T2],
+      protected val column1: ValType[T1],
+      protected val column2: ValType[T2],
       frameOffset: Int, frameSize: Int, frameAlignment: Int)
-    extends Struct2[ValueType[T1], ValueType[T2], (T1, T2)](
+    extends Struct2[ValType[T1], ValType[T2], (T1, T2)](
                     frameOffset, frameSize, frameAlignment)(
                     column1, column2)
       with Framed[Row2[T1, T2]] {
     
     def this(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-            (implicit column1: ValueType[T1], column2: ValueType[T2]) =
+            (implicit column1: ValType[T1], column2: ValType[T2]) =
       this(column1, column2, frameOffset, frameSize, frameAlignment)
     
-    def this()(implicit column1: ValueType[T1], column2: ValueType[T2]) =
+    def this()(implicit column1: ValType[T1], column2: ValType[T2]) =
       this(column1, column2, 0, 0, 0)
     
     def _1: Field1 = field1
@@ -416,20 +416,20 @@ object DataType extends LowPriorityDataTypes {
   
   /** A type for some kind of 3-tuple of values. */
   final class Row3[T1, T2, T3] private (
-      protected val column1: ValueType[T1],
-      protected val column2: ValueType[T2],
-      protected val column3: ValueType[T3],
+      protected val column1: ValType[T1],
+      protected val column2: ValType[T2],
+      protected val column3: ValType[T3],
       frameOffset: Int, frameSize: Int, frameAlignment: Int)
-    extends Struct3[ValueType[T1], ValueType[T2], ValueType[T3], (T1, T2, T3)](
+    extends Struct3[ValType[T1], ValType[T2], ValType[T3], (T1, T2, T3)](
                     frameOffset, frameSize, frameAlignment)(
                     column1, column2, column3)
       with Framed[Row3[T1, T2, T3]] {
     
     def this(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-            (implicit column1: ValueType[T1], column2: ValueType[T2], column3: ValueType[T3]) =
+            (implicit column1: ValType[T1], column2: ValType[T2], column3: ValType[T3]) =
       this(column1, column2, column3, frameOffset, frameSize, frameAlignment)
     
-    def this()(implicit column1: ValueType[T1], column2: ValueType[T2], column3: ValueType[T3]) =
+    def this()(implicit column1: ValType[T1], column2: ValType[T2], column3: ValType[T3]) =
       this(column1, column2, column3, 0, 0, 0)
     
     def _1: Field1 = field1
@@ -462,21 +462,21 @@ object DataType extends LowPriorityDataTypes {
   
   /** A type for some kind of 4-tuple of values. */
   final class Row4[T1, T2, T3, T4] private (
-      protected val column1: ValueType[T1],
-      protected val column2: ValueType[T2],
-      protected val column3: ValueType[T3],
-      protected val column4: ValueType[T4],
+      protected val column1: ValType[T1],
+      protected val column2: ValType[T2],
+      protected val column3: ValType[T3],
+      protected val column4: ValType[T4],
       frameOffset: Int, frameSize: Int, frameAlignment: Int)
-    extends Struct4[ValueType[T1], ValueType[T2], ValueType[T3], ValueType[T4], (T1, T2, T3, T4)](
+    extends Struct4[ValType[T1], ValType[T2], ValType[T3], ValType[T4], (T1, T2, T3, T4)](
                     frameOffset, frameSize, frameAlignment)(
                     column1, column2, column3, column4)
       with Framed[Row4[T1, T2, T3, T4]] {
     
     def this(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-            (implicit column1: ValueType[T1], column2: ValueType[T2], column3: ValueType[T3], column4: ValueType[T4]) =
+            (implicit column1: ValType[T1], column2: ValType[T2], column3: ValType[T3], column4: ValType[T4]) =
       this(column1, column2, column3, column4, frameOffset, frameSize, frameAlignment)
     
-    def this()(implicit column1: ValueType[T1], column2: ValueType[T2], column3: ValueType[T3], column4: ValueType[T4]) =
+    def this()(implicit column1: ValType[T1], column2: ValType[T2], column3: ValType[T3], column4: ValType[T4]) =
       this(column1, column2, column3, column4, 0, 0, 0)
     
     def _1: Field1 = field1

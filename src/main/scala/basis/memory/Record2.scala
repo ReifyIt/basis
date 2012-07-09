@@ -23,10 +23,10 @@ package basis.memory
   * @param  column2   Returns the value type of the second column.
   */
 abstract class Record2[T1, T2, T] private (
-    protected val column1: ValueType[T1],
-    protected val column2: ValueType[T2],
+    protected val column1: ValType[T1],
+    protected val column2: ValType[T2],
     frameOffset: Int, frameSize: Int, frameAlignment: Int)
-  extends Struct2[ValueType[T1], ValueType[T2], T](
+  extends Struct2[ValType[T1], ValType[T2], T](
                   frameOffset, frameSize, frameAlignment)(
                   column1, column2)
     with Framed[Record2[T1, T2, T]] { self =>
@@ -40,7 +40,7 @@ abstract class Record2[T1, T2, T] private (
     * @param  column2         the implicit second column type.
     */
   def this(frameOffset: Int, frameSize: Int, frameAlignment: Int)
-          (implicit column1: ValueType[T1], column2: ValueType[T2]) =
+          (implicit column1: ValType[T1], column2: ValType[T2]) =
     this(column1, column2, frameOffset, frameSize, frameAlignment)
   
   /** Constructs a value type with a minimal frame.
@@ -48,7 +48,7 @@ abstract class Record2[T1, T2, T] private (
     * @param  column1   the implicit first column type.
     * @param  column2   the implicit second column type.
     */
-  def this()(implicit column1: ValueType[T1], column2: ValueType[T2]) =
+  def this()(implicit column1: ValType[T1], column2: ValType[T2]) =
     this(column1, column2, 0, 0, 0)
   
   def apply(arg1: T1, arg2: T2): T

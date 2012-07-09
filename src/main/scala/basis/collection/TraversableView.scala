@@ -30,7 +30,7 @@ trait TraversableView[+A] extends Any with Traversable[A] {
 }
 
 private[basis] object TraversableView {
-  final class Projection[+A](self: Traversable[A]) extends AbstractTraversableView[A] {
+  final class Projected[+A](self: Traversable[A]) extends AbstractTraversableView[A] {
     override def foreach[U](f: A => U): Unit = self.foreach(f)
     override def map[B](f: A => B): TraversableView[B] = new Mapped[A, B](self, f)
     override def flatMap[B](f: A => Incremental[B]): TraversableView[B] = new FlatMapped[A, B](self, f)

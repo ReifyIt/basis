@@ -75,7 +75,7 @@ final class ShortDataBE(val array: Array[Short]) extends AnyVal with ArrayData[S
 object ShortDataBE extends ArrayAllocator[Short] {
   override def MaxSize: Long = Int.MaxValue.toLong << 1
   
-  override def alloc[T](count: Long)(implicit unit: ValueType[T]): ShortDataBE =
+  override def alloc[T](count: Long)(implicit unit: ValType[T]): ShortDataBE =
     apply(unit.size * count)
   
   override def apply(size: Long): ShortDataBE = {

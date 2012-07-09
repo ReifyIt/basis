@@ -45,10 +45,10 @@ package object memory {
   }
   
   /** Returns the alignment of some value type. */
-  @inline def alignOf[T](implicit struct: ValueType[T]): Long = struct.alignment
+  @inline def alignOf[T](implicit struct: ValType[T]): Long = struct.alignment
   
   /** Returns the size of some value type. */
-  @inline def sizeOf[T](implicit struct: ValueType[T]): Long = struct.size
+  @inline def sizeOf[T](implicit struct: ValType[T]): Long = struct.size
   
   /** Returns the implicit data type for some instance type.
     * 
