@@ -9,12 +9,12 @@ package basis.collection
 
 import scala.annotation.tailrec
 
-trait Indexed[+A] extends Any with Iterable[A] {
+trait Indexable[+A] extends Any with Iterable[A] {
   def length: Int
   
   def apply(index: Int): A
   
-  override def iterator: Iterated[A] = new Iterator(0, length)
+  override def iterator: Iterator[A] = new Indexable.Elements[A](this, 0, length)
   
   override def foreach[U](f: A => U) {
     val until = length
@@ -28,8 +28,8 @@ trait Indexed[+A] extends Any with Iterable[A] {
   @tailrec private def collectFirstBetween[B](from: Int, until: Int, q: PartialFunction[A, B]): Option[B] = {
     if (from >= until) None
     else {
-      val x = apply(from)
-      if (q.isDefinedAt(x)) Some(q(x)) else collectFirstBetween(from + 1, until, q)
+      val head = apply(from)
+      if (q.isDefinedAt(head)) Some(q(head)) else collectFirstBetween(from + 1, until, q)
     }
   }
   
@@ -62,8 +62,8 @@ trait Indexed[+A] extends Any with Iterable[A] {
   @tailrec private def findBetween(from: Int, until: Int, p: A => Boolean): Option[A] = {
     if (from >= until) None
     else {
-      val x = apply(from)
-      if (p(x)) Some(x) else findBetween(from + 1, until, p)
+      val head = apply(from)
+      if (p(head)) Some(head) else findBetween(from + 1, until, p)
     }
   }
   
@@ -84,26 +84,26 @@ trait Indexed[+A] extends Any with Iterable[A] {
   
   override def count(p: A => Boolean): Int = countBetween(0, length, 0, p)
   
-  override def view: IndexedView[A] = new IndexedView.Projected[A](this)
+  override def eagerly: Indexing[Any, A] = new Indexing.Projecting[Any, A](this)
   
-  private final class Iterator(from: Int, until: Int) extends AbstractIterated[A] {
-    private[this] var lower: Int = math.max(0, math.min(Indexed.this.length, from))
-    private[this] var upper: Int = math.max(lower, math.min(Indexed.this.length, until))
-    private[this] var index: Int = lower
-    
-    override def hasNext: Boolean = index < upper
-    
+  override def lazily: Indexes[A] = new Indexes.Projects[A](this)
+}
+
+object Indexable {
+  abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Indexable[A]
+  
+  final class Elements[+A](self: Indexable[A], lower: Int, upper: Int) extends Iterator.Abstract[A] {
+    private[this] var index: Int = math.max(0, math.min(lower, self.length))
+    private[this] var limit: Int = math.max(index, math.min(upper, self.length))
+    override def hasNext: Boolean = index < limit
     override def next(): A = {
-      if (index >= upper) throw new NoSuchElementException("empty iterator")
-      val result = Indexed.this.apply(index)
+      if (index >= limit) Iterator.Empty.next()
+      val result = self.apply(index)
       index += 1
       result
     }
-    
-    override def drop(count: Int): Iterated[A] = new Iterator(index + count, upper)
-    override def take(count: Int): Iterated[A] = new Iterator(index, index + count)
-    override def slice(lower: Int, upper: Int): Iterated[A] = new Iterator(index + lower, index + upper)
+    override def drop(lower: Int): Iterator[A] = new Elements[A](self, index + lower, limit)
+    override def take(upper: Int): Iterator[A] = new Elements[A](self, index, index + upper)
+    override def slice(lower: Int, upper: Int): Iterator[A] = new Elements[A](self, index + lower, index + upper)
   }
 }
-
-private[basis] abstract class AbstractIndexed[+A] extends AbstractIterable[A] with Indexed[A]

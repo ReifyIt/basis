@@ -5,12 +5,20 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.unicode
+package basis.collection
 
-import basis.collection._
-
-/** A pointer to a location in a Unicode® string.
-  * 
-  * @author Chris Sachs
-  */
-trait UStringCursor extends Any with Iterator[Int]
+trait Collector[-Scope, -A] {
+  type Product
+  
+  def expect(count: Int): Unit
+  
+  def += (element: A): Unit
+  
+  def ++= (elements: Incremental[A]) {
+    for (element <- elements) this += element
+  }
+  
+  def result(): Product
+  
+  def clear(): Unit
+}

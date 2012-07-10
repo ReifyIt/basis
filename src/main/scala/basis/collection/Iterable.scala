@@ -8,7 +8,7 @@
 package basis.collection
 
 trait Iterable[+A] extends Any with Traversable[A] {
-  def iterator: Iterated[A]
+  def iterator: Iterator[A]
   
   override def foreach[U](f: A => U): Unit = iterator.foreach(f)
   
@@ -28,7 +28,11 @@ trait Iterable[+A] extends Any with Traversable[A] {
   
   override def count(p: A => Boolean): Int = iterator.count(p)
   
-  override def view: IterableView[A] = new IterableView.Projected[A](this)
+  override def eagerly: Iterating[Any, A] = new Iterating.Projecting[Any, A](this)
+  
+  override def lazily: Iterates[A] = new Iterates.Projects[A](this)
 }
 
-private[basis] abstract class AbstractIterable[+A] extends AbstractTraversable[A] with Iterable[A]
+object Iterable {
+  abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Iterable[A]
+}

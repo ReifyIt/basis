@@ -70,7 +70,11 @@ trait Traversable[+A] extends Any with Incremental[A] {
     total
   }
   
-  def view: TraversableView[A] = new TraversableView.Projected[A](this)
+  def eagerly: Traversing[Any, A] = new Traversing.Projecting[Any, A](this)
+  
+  def lazily: Traverses[A] = new Traverses.Projects[A](this)
 }
 
-private[basis] abstract class AbstractTraversable[+A] extends Traversable[A]
+object Traversable {
+  abstract class Abstractly[+A] extends Traversable[A]
+}

@@ -7,14 +7,14 @@
 
 package basis.collection
 
-trait Linear[+A] extends Any with Iterable[A] {
+trait Listable[+A] extends Any with Iterable[A] {
   def isEmpty: Boolean
   
   def head: A
   
-  def tail: Linear[A]
+  def tail: Listable[A]
   
-  override def iterator: Iterated[A] = new Iterator
+  override def iterator: Iterator[A] = new Listable.Elements[A](this)
   
   override def foreach[U](f: A => U) {
     var rest = this
@@ -27,8 +27,7 @@ trait Linear[+A] extends Any with Iterable[A] {
   override def collectFirst[B](q: PartialFunction[A, B]): Option[B] = {
     var rest = this
     while (!rest.isEmpty) {
-      val x = rest.head
-      if (q.isDefinedAt(x)) return Some(q(x))
+      if (q.isDefinedAt(rest.head)) return Some(q(rest.head))
       rest = rest.tail
     }
     None
@@ -89,20 +88,22 @@ trait Linear[+A] extends Any with Iterable[A] {
     total
   }
   
-  override def view: LinearView[A] = new LinearView.Projected[A](this)
+  override def eagerly: Listing[Any, A] = new Listing.Projecting[Any, A](this)
   
-  private final class Iterator extends AbstractIterated[A] {
-    private[this] var left: Linear[A] = Linear.this
-    
-    override def hasNext: Boolean = !left.isEmpty
-    
+  override def lazily: Lists[A] = new Lists.Projects[A](this)
+}
+
+object Listable {
+  abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Listable[A]
+  
+  final class Elements[+A](self: Listable[A]) extends Iterator.Abstract[A] {
+    private[this] var rest: Listable[A] = self
+    override def hasNext: Boolean = !rest.isEmpty
     override def next(): A = {
-      if (left.isEmpty) throw new NoSuchElementException("empty iterator")
-      val result = left.head
-      left = left.tail
+      if (rest.isEmpty) Iterator.Empty.next()
+      val result = rest.head
+      rest = rest.tail
       result
     }
   }
 }
-
-private[basis] abstract class AbstractLinear[+A] extends AbstractIterable[A] with Linear[A]
