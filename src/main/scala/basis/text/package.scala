@@ -7,4 +7,4 @@
 
 package basis
 
-package object unicode
+package object text

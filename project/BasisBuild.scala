@@ -28,11 +28,11 @@ object BasisBuild extends Build {
     dependencies = Seq(basisCollection, basisMemory)
   )
   
-  lazy val basisUnicode = Project(
-    id       = "basis-unicode",
+  lazy val basisText = Project(
+    id       = "basis-text",
     base     = file("."),
     settings = commonSettings ++ Seq(
-      modulePath := "basis/unicode"
+      modulePath := "basis/text"
     ),
     dependencies = Seq(basisCollection)
   )
