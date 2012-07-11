@@ -52,8 +52,8 @@ object UTF8 extends Encoding {
       * Applies the replacement character U+FFFD in lieu of the maximal subpart of
       * any ill-formed subsequences. */
     override def foreach[@specialized(Unit) U](f: Int => U) {
-      val n = length
       var i = 0
+      val n = length
       while (i < n) f({
         val c1 = apply(i)
         if (c1 <= 0x7F) {
@@ -244,9 +244,10 @@ object UTF8 extends Encoding {
   class TextIterator(string: Text, private[this] var index: Int) extends super.TextIterator {
     def offset: Int = index
     
-    override def hasNext: Boolean = {
-      val n = string.length
+    /** Returns `true` if the current offset begins a valid character. */
+    def isValid: Boolean = {
       val i = index
+      val n = string.length
       if (0 <= i && i < n) {
         val c1 = string(index)
         if (c1 <= 0x7F) true // U+0000..U+007F
@@ -311,8 +312,8 @@ object UTF8 extends Encoding {
     /** Decodes the character at the current offset, substituting the
       * replacement character U+FFFD if the offset is unconvertible. */
     def head: Int = {
-      val n = string.length
       val i = index
+      val n = string.length
       if (i < 0 || i >= n) throw new IndexOutOfBoundsException(i.toString)
       val c1 = string(i)
       if (c1 <= 0x7F) c1 // U+0000..U+007F
@@ -385,6 +386,8 @@ object UTF8 extends Encoding {
       }
       else 0xFFFD // unconvertible offset
     }
+    
+    override def hasNext: Boolean = 0 <= index && index < string.length
     
     override def next(): Int = {
       val n = string.length
@@ -589,40 +592,40 @@ object UTF8 extends Encoding {
       if (codePoint >= 0x0000 && codePoint <= 0x007F) {
         // U+0000..U+007F; encode a single byte
         prepare(n + 1)
-        string(n) = codePoint.toByte
+        string(n) = codePoint
         length = n + 1
       }
       else if (codePoint >= 0x0080 && codePoint <= 0x07FF) {
         // U+0080..U+07FF; encode 2 bytes
         prepare(n + 2)
-        string(n)     = (0xC0 | (codePoint >>> 6)).toByte
-        string(n + 1) = (0x80 | (codePoint & 0x3F)).toByte
+        string(n)     = 0xC0 | (codePoint >>> 6)
+        string(n + 1) = 0x80 | (codePoint & 0x3F)
         length = n + 2
       }
       else if ((codePoint >= 0x0800 && codePoint <= 0xD7FF) ||
                (codePoint >= 0xE000 && codePoint <= 0xFFFF)) {
         // U+0800..U+D7FF | U+E000..U+FFFF; exclude surrogates, encode 3 bytes
         prepare(n + 3)
-        string(n)     = (0xE0 | (codePoint >>> 12)).toByte
-        string(n + 1) = (0x80 | ((codePoint >>> 6) & 0x3F)).toByte
-        string(n + 2) = (0x80 | (codePoint & 0x3F)).toByte
+        string(n)     = 0xE0 | (codePoint >>> 12)
+        string(n + 1) = 0x80 | ((codePoint >>> 6) & 0x3F)
+        string(n + 2) = 0x80 | (codePoint & 0x3F)
         length = n + 3
       }
       else if (codePoint >= 0x10000 && codePoint <= 0x10FFFF) {
         // U+10000..U+10FFFF; encode 4 bytes
         prepare(n + 4)
-        string(n)     = (0xF0 | (codePoint >>> 18)).toByte
-        string(n + 1) = (0x80 | ((codePoint >>> 12) & 0x3F)).toByte
-        string(n + 2) = (0x80 | ((codePoint >>> 6) & 0x3F)).toByte
-        string(n + 3) = (0x80 | (codePoint & 0x3F)).toByte
+        string(n)     = 0xF0 | (codePoint >>> 18)
+        string(n + 1) = 0x80 | ((codePoint >>> 12) & 0x3F)
+        string(n + 2) = 0x80 | ((codePoint >>> 6) & 0x3F)
+        string(n + 3) = 0x80 | (codePoint & 0x3F)
         length = n + 4
       }
       else {
         // surrogate, encode the replacement character U+FFFD
         prepare(n + 3)
-        string(n)     = 0xEF.toByte
-        string(n + 1) = 0xBF.toByte
-        string(n + 2) = 0xBD.toByte
+        string(n)     = 0xEF
+        string(n + 1) = 0xBF
+        string(n + 2) = 0xBD
         length = n + 3
       }
     }
