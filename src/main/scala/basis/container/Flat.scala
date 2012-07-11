@@ -107,11 +107,7 @@ object Flat extends FlatBuilders.ArrayBuilders {
     override def length: Int = (data.size / typeA.size.toLong).toInt
     override def apply(index: Int): A = typeA.load(data, typeA.size.toLong * index.toLong)
     override def update(index: Int, value: A): Unit = typeA.store(data, typeA.size.toLong * index.toLong, value)
-    override def copy(length: Int): ValArray[A] = {
-      val newData = Data.alloc[A](length)
-      newData.transfer(0L, data, 0L, typeA.size.toLong * math.min(this.length, length).toLong)
-      new ValArray[A](data)
-    }
+    override def copy(length: Int): ValArray[A] = new ValArray[A](data.copy(typeA.size.toLong * length.toLong))
   }
   
   final class RefArray[A](val array: Array[AnyRef]) extends AnyVal with Flat[A] {
@@ -523,15 +519,15 @@ object Flat extends FlatBuilders.ArrayBuilders {
   }
 }
 
-object FlatBuilders {
+private[container] object FlatBuilders {
   import Flat._
-  trait RefArrayBuilders {
+  class RefArrayBuilders {
     implicit def RefArrayBuilder[A]: RefArrayBuilder[A] = new RefArrayBuilder[A]
   }
-  trait ValArrayBuilders extends RefArrayBuilders {
+  class ValArrayBuilders extends RefArrayBuilders {
     implicit def ValArrayBuilder[A](implicit typeA: ValType[A]): ValArrayBuilder[A] = new ValArrayBuilder[A]
   }
-  trait ArrayBuilders extends ValArrayBuilders {
+  class ArrayBuilders extends ValArrayBuilders {
     implicit def ByteArrayBuilder: ByteArrayBuilder = new ByteArrayBuilder
     implicit def ShortArrayBuilder: ShortArrayBuilder = new ShortArrayBuilder
     implicit def IntArrayBuilder: IntArrayBuilder = new IntArrayBuilder
