@@ -58,7 +58,7 @@ import Endianness._
   * 
   * @example {{{
   * scala> val data = Data.alloc[Int](1L) // allocate data for a single Int value.
-  * data: basis.memory.Data = Block4LE(4) // Data class will vary by architecture.
+  * data: basis.memory.Data = Base4LE(4) // Data class will vary by architecture.
   * 
   * scala> data.storeInt(0L, 0xCAFEBABE) // store an Int value to address 0.
   * 
@@ -79,13 +79,13 @@ import Endianness._
   * }}}
   */
 trait Data extends Any {
-  /** The number of addressable bytes in the address space. */
+  /** Returns the number of addressable bytes in the address space. */
   def size: Long
   
-  /** The internal word size. */
+  /** Returns the internal word size. */
   def unit: Int
   
-  /** The data's byte order. */
+  /** Returns the data's byte order. */
   def endian: Endianness
   
   /** Returns a resized copy of this data.
@@ -637,4 +637,701 @@ object Data {
     * @return the allocated zero-filled data.
     */
   @inline def apply(size: Long)(implicit allocator: Allocator): Data = allocator(size)
+  
+  /** An allocator for native-endian data backed by a primitive array. */
+  val Base: Allocator = NativeEndian match {
+    case BigEndian    => BaseBE
+    case LittleEndian => BaseLE
+  }
+  
+  /** An allocator for native-endian data backed by a `Byte` array. */
+  val Base1: BaseAllocator[Byte] = NativeEndian match {
+    case BigEndian    => Base1BE
+    case LittleEndian => Base1LE
+  }
+  
+  /** An allocator for native-endian data backed by a `Short` array. */
+  val Base2: BaseAllocator[Short] = NativeEndian match {
+    case BigEndian    => Base2BE
+    case LittleEndian => Base2LE
+  }
+  
+  /** An allocator for native-endian data backed by an `Int` array. */
+  val Base4: BaseAllocator[Int] = NativeEndian match {
+    case BigEndian    => Base4BE
+    case LittleEndian => Base4LE
+  }
+  
+  /** An allocator for native-endian data backed by a `Long` array. */
+  val Base8: BaseAllocator[Long] = NativeEndian match {
+    case BigEndian    => Base8BE
+    case LittleEndian => Base8LE
+  }
+  
+  /** Data backed by an array.
+    * 
+    * @tparam V   the element type of the backing array.
+    */
+  trait Base[V] extends Any with Data {
+    /** The backing array. */
+    def array: Array[V]
+    override def copy(size: Long): Base[V]
+  }
+  
+  /** An allocator for `Data` backed by an array.
+    * 
+    * @tparam V   the element type of allocated array data.
+    */
+  trait BaseAllocator[V] extends Allocator {
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base[V]
+    override def apply(size: Long): Base[V]
+    /** Returns a data object backed by the given array. */
+    def wrap(array: Array[V]): Base[V]
+  }
+  
+  /** An allocator for big-endian data backed by a primitive array. */
+  object BaseBE extends Allocator {
+    override def MaxSize: Long = Int.MaxValue.toLong << 3
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Data = {
+      val size = unit.size * count
+      if (size <= Int.MaxValue.toLong) unit.alignment match {
+        case 1L => Base1BE(size)
+        case 2L => Base2BE(size)
+        case 4L => Base4BE(size)
+        case _  => Base8BE(size)
+      }
+      else if (size <= (Int.MaxValue.toLong << 1)) unit.alignment match {
+        case 1L | 2L => Base2BE(size)
+        case 4L      => Base4BE(size)
+        case _       => Base8BE(size)
+      }
+      else if (size <= (Int.MaxValue.toLong << 2)) unit.alignment match {
+        case 1L | 2L | 4L => Base4BE(size)
+        case _            => Base8BE(size)
+      }
+      else Base8BE(size)
+    }
+    override def apply(size: Long): Data = alloc[Byte](size)
+    override def toString: String = "BaseBE"
+  }
+  
+  /** An allocator for little-endian data backed by a primitive array. */
+  object BaseLE extends Allocator {
+    override def MaxSize: Long = Int.MaxValue << 3
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Data = {
+      val size = unit.size * count
+      if (size <= Int.MaxValue.toLong) unit.alignment match {
+        case 1L => Base1LE(size)
+        case 2L => Base2LE(size)
+        case 4L => Base4LE(size)
+        case _  => Base8LE(size)
+      }
+      else if (size <= (Int.MaxValue.toLong << 1)) unit.alignment match {
+        case 1L | 2L => Base2LE(size)
+        case 4L      => Base4LE(size)
+        case _       => Base8LE(size)
+      }
+      else if (size <= (Int.MaxValue.toLong << 2)) unit.alignment match {
+        case 1L | 2L | 4L => Base4LE(size)
+        case _            => Base8LE(size)
+      }
+      else Base8LE(size)
+    }
+    override def apply(size: Long): Data = alloc[Byte](size)
+    override def toString: String = "BaseLE"
+  }
+  
+  /** Big-endian `Byte` array backed data. */
+  final class Base1BE(val array: Array[Byte]) extends AnyVal with Base[Byte] {
+    @inline override def size: Long = array.length.toLong
+    @inline override def unit: Int = 1
+    @inline override def endian = Endianness.BigEndian
+    override def copy(size: Long): Base1BE = {
+      require(0L <= size && size <= Int.MaxValue.toLong)
+      val array = new Array[Byte](size.toInt)
+      Array.copy(this.array, 0, array, 0, math.min(this.array.length, array.length))
+      new Base1BE(array)
+    }
+    @inline override def loadByte(address: Long): Byte = array(address.toInt)
+    @inline override def storeByte(address: Long, value: Byte): Unit = array(address.toInt) = value
+    override def loadUnalignedShort(address: Long): Short = {
+      val i = address.toInt
+      ((array(i)             << 8) |
+       (array(i + 1) & 0xFF)).toShort
+    }
+    override def storeUnalignedShort(address: Long, value: Short) {
+      val i = address.toInt
+      array(i)     = (value >> 8).toByte
+      array(i + 1) =  value.toByte
+    }
+    override def loadUnalignedInt(address: Long): Int = {
+      val i = address.toInt
+       (array(i)             << 24) |
+      ((array(i + 1) & 0xFF) << 16) |
+      ((array(i + 2) & 0xFF) <<  8) |
+       (array(i + 3) & 0xFF)
+    }
+    override def storeUnalignedInt(address: Long, value: Int) {
+      val i = address.toInt
+      array(i)     = (value >> 24).toByte
+      array(i + 1) = (value >> 16).toByte
+      array(i + 2) = (value >>  8).toByte
+      array(i + 3) =  value.toByte
+    }
+    override def loadUnalignedLong(address: Long): Long = {
+      val i = address.toInt
+       (array(i).toLong             << 56) |
+      ((array(i + 1) & 0xFF).toLong << 48) |
+      ((array(i + 2) & 0xFF).toLong << 40) |
+      ((array(i + 3) & 0xFF).toLong << 32) |
+      ((array(i + 4) & 0xFF).toLong << 24) |
+      ((array(i + 5) & 0xFF).toLong << 16) |
+      ((array(i + 6) & 0xFF).toLong <<  8) |
+       (array(i + 7) & 0xFF).toLong
+    }
+    override def storeUnalignedLong(address: Long, value: Long) {
+      val i = address.toInt
+      array(i)     = (value >> 56).toByte
+      array(i + 1) = (value >> 48).toByte
+      array(i + 2) = (value >> 40).toByte
+      array(i + 3) = (value >> 32).toByte
+      array(i + 4) = (value >> 24).toByte
+      array(i + 5) = (value >> 16).toByte
+      array(i + 6) = (value >>  8).toByte
+      array(i + 7) =  value.toByte
+    }
+    override def toString: String = "Base1BE"+"("+ size +")"
+  }
+  
+  /** An allocator for big-endian data backed by a `Byte` array. */
+  object Base1BE extends BaseAllocator[Byte] {
+    override def MaxSize: Long = Int.MaxValue.toLong
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base1BE = apply(unit.size * count)
+    override def apply(size: Long): Base1BE = {
+      require(0L <= size && size <= MaxSize)
+      val array = new Array[Byte](size.toInt)
+      new Base1BE(array)
+    }
+    def unapply(data: Base1BE): Some[Array[Byte]] = Some(data.array)
+    override def wrap(array: Array[Byte]): Base1BE = new Base1BE(array)
+    override def toString: String = "Base1BE"
+  }
+  
+  /** Little-endian `Byte` array backed data. */
+  final class Base1LE(val array: Array[Byte]) extends AnyVal with Base[Byte] {
+    @inline override def size: Long = array.length.toLong
+    @inline override def unit: Int = 1
+    @inline override def endian = Endianness.LittleEndian
+    override def copy(size: Long): Base1LE = {
+      require(0L <= size && size <= Int.MaxValue.toLong)
+      val array = new Array[Byte](size.toInt)
+      Array.copy(this.array, 0, array, 0, math.min(this.array.length, array.length))
+      new Base1LE(array)
+    }
+    @inline override def loadByte(address: Long): Byte = array(address.toInt)
+    @inline override def storeByte(address: Long, value: Byte): Unit = array(address.toInt) = value
+    override def loadUnalignedShort(address: Long): Short = {
+      val i = address.toInt
+      ((array(i)     & 0xFF)       |
+       (array(i + 1)         << 8)).toShort
+    }
+    override def storeUnalignedShort(address: Long, value: Short) {
+      val i = address.toInt
+      array(i)     =  value.toByte
+      array(i + 1) = (value >> 8).toByte
+    }
+    override def loadUnalignedInt(address: Long): Int = {
+      val i = address.toInt
+       (array(i)     & 0xFF)        |
+      ((array(i + 1) & 0xFF) <<  8) |
+      ((array(i + 2) & 0xFF) << 16) |
+       (array(i + 3)         << 24)
+    }
+    override def storeUnalignedInt(address: Long, value: Int) {
+      val i = address.toInt
+      array(i)     =  value.toByte
+      array(i + 1) = (value >>  8).toByte
+      array(i + 2) = (value >> 16).toByte
+      array(i + 3) = (value >> 24).toByte
+    }
+    override def loadUnalignedLong(address: Long): Long = {
+      val i = address.toInt
+       (array(i)     & 0xFF).toLong        |
+      ((array(i + 1) & 0xFF).toLong <<  8) |
+      ((array(i + 2) & 0xFF).toLong << 16) |
+      ((array(i + 3) & 0xFF).toLong << 24) |
+      ((array(i + 4) & 0xFF).toLong << 32) |
+      ((array(i + 5) & 0xFF).toLong << 40) |
+      ((array(i + 6) & 0xFF).toLong << 48) |
+       (array(i + 7).toLong         << 56)
+    }
+    override def storeUnalignedLong(address: Long, value: Long) {
+      val i = address.toInt
+      array(i)     =  value.toByte
+      array(i + 1) = (value >>  8).toByte
+      array(i + 2) = (value >> 16).toByte
+      array(i + 3) = (value >> 24).toByte
+      array(i + 4) = (value >> 32).toByte
+      array(i + 5) = (value >> 40).toByte
+      array(i + 6) = (value >> 48).toByte
+      array(i + 7) = (value >> 56).toByte
+    }
+    override def toString: String = "Base1LE"+"("+ size +")"
+  }
+  
+  /** An allocator for little-endian data backed by a `Byte` array. */
+  object Base1LE extends BaseAllocator[Byte] {
+    override def MaxSize: Long = Int.MaxValue.toLong
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base1LE = apply(unit.size * count)
+    override def apply(size: Long): Base1LE = {
+      require(0L <= size && size <= MaxSize)
+      val array = new Array[Byte](size.toInt)
+      new Base1LE(array)
+    }
+    def unapply(data: Base1LE): Some[Array[Byte]] = Some(data.array)
+    override def wrap(array: Array[Byte]): Base1LE = new Base1LE(array)
+    override def toString: String = "Base1LE"
+  }
+  
+  /** Big-endian `Short` array backed data. Base-2 subaddresses identify bytes within words. */
+  final class Base2BE(val array: Array[Short]) extends AnyVal with Base[Short] {
+    @inline override def size: Long = array.length.toLong << 1
+    @inline override def unit: Int = 2
+    @inline override def endian = Endianness.BigEndian
+    override def copy(size: Long): Base2BE = {
+      require(0L <= size && size <= (Int.MaxValue.toLong << 1))
+      val array = new Array[Short]((align(2L)(size) >> 1).toInt)
+      Array.copy(this.array, 0, array, 0, math.min(this.array.length, array.length))
+      new Base2BE(array)
+    }
+    override def loadByte(address: Long): Byte = {
+      val i = (address >> 1).toInt
+      val j = ((address.toInt & 1) ^ 1) << 3
+      (array(i) >>> j).toByte
+    }
+    override def storeByte(address: Long, value: Byte) {
+      val i = (address >> 1).toInt
+      val j = ((address.toInt & 1) ^ 1) << 3
+      array(i) = ((array(i) & ~(0xFF << j)) | ((value & 0xFF) << j)).toShort
+    }
+    @inline override def loadShort(address: Long): Short = array((address >> 1).toInt)
+    @inline override def storeShort(address: Long, value: Short): Unit = array((address >> 1).toInt) = value
+    override def loadInt(address: Long): Int = {
+      val i = (address >> 1).toInt & ~1
+      (array(i)               << 16) |
+      (array(i + 1) & 0xFFFF)
+    }
+    override def storeInt(address: Long, value: Int) {
+      val i = (address >> 1).toInt & ~1
+      array(i) =     (value >>> 16).toShort
+      array(i + 1) = value.toShort
+    }
+    override def loadLong(address: Long): Long = {
+      val i = (address >> 1).toInt & ~3
+       (array(i).toLong               << 48) |
+      ((array(i + 1) & 0xFFFF).toLong << 32) |
+      ((array(i + 2) & 0xFFFF).toLong << 16) |
+       (array(i + 3) & 0xFFFF).toLong
+    }
+    override def storeLong(address: Long, value: Long) {
+      val i = (address >> 1).toInt & ~3
+      array(i) =     (value >>> 48).toShort
+      array(i + 1) = (value >>> 32).toShort
+      array(i + 2) = (value >>> 16).toShort
+      array(i + 3) = value.toShort
+    }
+    override def toString: String = "Base2BE"+"("+ size +")"
+  }
+  
+  /** An allocator for big-endian data backed by a `Short` array. */
+  object Base2BE extends BaseAllocator[Short] {
+    override def MaxSize: Long = Int.MaxValue.toLong << 1
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base2BE = apply(unit.size * count)
+    override def apply(size: Long): Base2BE = {
+      require(0L <= size && size <= MaxSize)
+      val array = new Array[Short]((align(2L)(size) >> 1).toInt)
+      new Base2BE(array)
+    }
+    def unapply(data: Base2BE): Some[Array[Short]] = Some(data.array)
+    override def wrap(array: Array[Short]): Base2BE = new Base2BE(array)
+    override def toString: String = "Base2BE"
+  }
+  
+  /** Little-endian `Short` array backed data. Base-2 subaddresses identify bytes within words. */
+  final class Base2LE(val array: Array[Short]) extends AnyVal with Base[Short] {
+    @inline override def size: Long = array.length.toLong << 1
+    @inline override def unit: Int = 2
+    @inline override def endian = Endianness.LittleEndian
+    override def copy(size: Long): Base2LE = {
+      require(0L <= size && size <= (Int.MaxValue.toLong << 1))
+      val array = new Array[Short]((align(2L)(size) >> 1).toInt)
+      Array.copy(this.array, 0, array, 0, math.min(this.array.length, array.length))
+      new Base2LE(array)
+    }
+    override def loadByte(address: Long): Byte = {
+      val i = (address >> 1).toInt
+      val j = (address.toInt & 1) << 3
+      (array(i) >>> j).toByte
+    }
+    override def storeByte(address: Long, value: Byte) {
+      val i = (address >> 1).toInt
+      val j = (address.toInt & 1) << 3
+      array(i) = ((array(i) & ~(0xFF << j)) | ((value & 0xFF) << j)).toShort
+    }
+    @inline override def loadShort(address: Long): Short = array((address >> 1).toInt)
+    @inline override def storeShort(address: Long, value: Short): Unit = array((address >> 1).toInt) = value
+    override def loadInt(address: Long): Int = {
+      val i = (address >> 1).toInt & ~1
+      (array(i)     & 0xFFFF)        |
+      (array(i + 1)           << 16)
+    }
+    override def storeInt(address: Long, value: Int) {
+      val i = (address >> 1).toInt & ~1
+      array(i)     = value.toShort
+      array(i + 1) = (value >>> 16).toShort
+    }
+    override def loadLong(address: Long): Long = {
+      val i = (address >> 1).toInt & ~3
+       (array(i)     & 0xFFFF).toLong        |
+      ((array(i + 1) & 0xFFFF).toLong << 16) |
+      ((array(i + 2) & 0xFFFF).toLong << 32) |
+       (array(i + 3).toLong           << 48)
+    }
+    override def storeLong(address: Long, value: Long) {
+      val i = (address >> 1).toInt & ~3
+      array(i) =     value.toShort
+      array(i + 1) = (value >>> 16).toShort
+      array(i + 2) = (value >>> 32).toShort
+      array(i + 3) = (value >>> 48).toShort
+    }
+    override def toString: String = "Base2LE"+"("+ size +")"
+  }
+  
+  /** An allocator for little-endian data backed by a `Short` array. */
+  object Base2LE extends BaseAllocator[Short] {
+    override def MaxSize: Long = Int.MaxValue.toLong << 1
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base2LE = apply(unit.size * count)
+    override def apply(size: Long): Base2LE = {
+      require(0L <= size && size <= MaxSize)
+      val array = new Array[Short]((align(2L)(size) >> 1).toInt)
+      new Base2LE(array)
+    }
+    def unapply(data: Base2LE): Some[Array[Short]] = Some(data.array)
+    override def wrap(array: Array[Short]): Base2LE = new Base2LE(array)
+    override def toString: String = "Base2LE"
+  }
+  
+  /** Big-endian `Int` array backed data. Base-4 subaddresses identify bytes within words. */
+  final class Base4BE(val array: Array[Int]) extends AnyVal with Base[Int] {
+    @inline override def size: Long = array.length.toLong << 2
+    @inline override def unit: Int = 4
+    @inline override def endian = Endianness.BigEndian
+    override def copy(size: Long): Base4BE = {
+      require(0L <= size && size <= (Int.MaxValue.toLong << 2))
+      val array = new Array[Int]((align(4L)(size) >> 2).toInt)
+      Array.copy(this.array, 0, array, 0, math.min(this.array.length, array.length))
+      new Base4BE(array)
+    }
+    override def loadByte(address: Long): Byte = {
+      val i = (address >> 2).toInt
+      val j = ((address.toInt & 3) ^ 3) << 3
+      (array(i) >>> j).toByte
+    }
+    override def storeByte(address: Long, value: Byte) {
+      val i = (address >> 2).toInt
+      val j = ((address.toInt & 3) ^ 3) << 3
+      array(i) = (array(i) & ~(0xFF << j)) | ((value & 0xFF) << j)
+    }
+    override def loadShort(address: Long): Short = {
+      val i = (address >> 2).toInt
+      val j = ((address.toInt & 2) ^ 2) << 3
+      (array(i) >>> j).toShort
+    }
+    override def storeShort(address: Long, value: Short) {
+      val i = (address >> 2).toInt
+      val j = ((address.toInt & 2) ^ 2) << 3
+      array(i) = (array(i) & ~(0xFFFF << j)) | ((value & 0xFFFF) << j)
+    }
+    @inline override def loadInt(address: Long): Int = array((address >> 2).toInt)
+    @inline override def storeInt(address: Long, value: Int): Unit = array((address >> 2).toInt) = value
+    override def loadLong(address: Long): Long = {
+      val i = (address >> 2).toInt & ~1
+      (array(i).toLong                    << 32) |
+      (array(i + 1).toLong & 0xFFFFFFFFL)
+    }
+    override def storeLong(address: Long, value: Long) {
+      val i = (address >> 2).toInt & ~1
+      array(i)     = (value >>> 32).toInt
+      array(i + 1) = value.toInt
+    }
+    override def toString: String = "Base4BE"+"("+ size +")"
+  }
+  
+  /** An allocator for big-endian data backed by an `Int` array. */
+  object Base4BE extends BaseAllocator[Int] {
+    override def MaxSize: Long = Int.MaxValue.toLong << 2
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base4BE = apply(unit.size * count)
+    override def apply(size: Long): Base4BE = {
+      require(0L <= size && size <= MaxSize)
+      val array = new Array[Int]((align(4L)(size) >> 2).toInt)
+      new Base4BE(array)
+    }
+    def unapply(data: Base4BE): Some[Array[Int]] = Some(data.array)
+    override def wrap(array: Array[Int]): Base4BE = new Base4BE(array)
+    override def toString: String = "Base4BE"
+  }
+  
+  /** Little-endian `Int` array backed data. Base-4 subaddresses identify bytes within words. */
+  final class Base4LE(val array: Array[Int]) extends AnyVal with Base[Int] {
+    @inline override def size: Long = array.length.toLong << 2
+    @inline override def unit: Int = 4
+    @inline override def endian = Endianness.LittleEndian
+    override def copy(size: Long): Base4LE = {
+      require(0L <= size && size <= (Int.MaxValue.toLong << 2))
+      val array = new Array[Int]((align(4L)(size) >> 2).toInt)
+      Array.copy(this.array, 0, array, 0, math.min(this.array.length, array.length))
+      new Base4LE(array)
+    }
+    override def loadByte(address: Long): Byte = {
+      val i = (address >> 2).toInt
+      val j = (address.toInt & 3) << 3
+      (array(i) >>> j).toByte
+    }
+    override def storeByte(address: Long, value: Byte) {
+      val i = (address >> 2).toInt
+      val j = (address.toInt & 3) << 3
+      array(i) = (array(i) & ~(0xFF << j)) | ((value & 0xFF) << j)
+    }
+    override def loadShort(address: Long): Short = {
+      val i = (address >> 2).toInt
+      val j = (address.toInt & 2) << 3
+      (array(i) >>> j).toShort
+    }
+    override def storeShort(address: Long, value: Short) {
+      val i = (address >> 2).toInt
+      val j = (address.toInt & 2) << 3
+      array(i) = (array(i) & ~(0xFFFF << j)) | ((value & 0xFFFF) << j)
+    }
+    @inline override def loadInt(address: Long): Int = array((address >> 2).toInt)
+    @inline override def storeInt(address: Long, value: Int): Unit = array((address >> 2).toInt) = value
+    override def loadLong(address: Long): Long = {
+      val i = (address >> 2).toInt & ~1
+      (array(i).toLong     & 0xFFFFFFFFL)        |
+      (array(i + 1).toLong                << 32)
+    }
+    override def storeLong(address: Long, value: Long) {
+      val i = (address >> 2).toInt & ~1
+      array(i) = value.toInt
+      array(i + 1) = (value >>> 32).toInt
+    }
+    override def toString: String = "Base4LE"+"("+ size +")"
+  }
+  
+  /** An allocator for little-endian data backed by an `Int` array. */
+  object Base4LE extends BaseAllocator[Int] {
+    override def MaxSize: Long = Int.MaxValue.toLong << 2
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base4LE = apply(unit.size * count)
+    override def apply(size: Long): Base4LE = {
+      require(0L <= size && size <= MaxSize)
+      val array = new Array[Int]((align(4L)(size) >> 2).toInt)
+      new Base4LE(array)
+    }
+    def unapply(data: Base4LE): Some[Array[Int]] = Some(data.array)
+    override def wrap(array: Array[Int]): Base4LE = new Base4LE(array)
+    override def toString: String = "Base4LE"
+  }
+  
+  /** Big-endian `Long` array backed data. Base-8 subaddresses identify bytes within words. */
+  final class Base8BE(val array: Array[Long]) extends AnyVal with Base[Long] {
+    @inline override def size: Long = array.length.toLong << 3
+    @inline override def unit: Int = 8
+    @inline override def endian = Endianness.BigEndian
+    override def copy(size: Long): Base8BE = {
+      require(0L <= size && size <= (Int.MaxValue.toLong << 3))
+      val array = new Array[Long]((align(8L)(size) >> 3).toInt)
+      Array.copy(this.array, 0, array, 0, math.min(this.array.length, array.length))
+      new Base8BE(array)
+    }
+    override def loadByte(address: Long): Byte = {
+      val i = (address >> 3).toInt
+      val j = ((address.toInt & 7) ^ 7) << 3
+      (array(i) >>> j).toByte
+    }
+    override def storeByte(address: Long, value: Byte) {
+      val i = (address >> 3).toInt
+      val j = ((address.toInt & 7) ^ 7) << 3
+      array(i) = (array(i) & ~(0xFFL << j)) | ((value & 0xFF).toLong << j)
+    }
+    override def loadShort(address: Long): Short = {
+      val i = (address >> 3).toInt
+      val j = ((address.toInt & 6) ^ 6) << 3
+      (array(i) >>> j).toShort
+    }
+    override def storeShort(address: Long, value: Short) {
+      val i = (address >> 3).toInt
+      val j = ((address.toInt & 6) ^ 6) << 3
+      array(i) = (array(i) & ~(0xFFFFL << j)) | ((value & 0xFFFF).toLong << j)
+    }
+    override def loadInt(address: Long): Int = {
+      val i = (address >> 3).toInt
+      val j = ((address.toInt & 4) ^ 4) << 3
+      (array(i) >> j).toInt
+    }
+    override def storeInt(address: Long, value: Int) {
+      val i = (address >> 3).toInt
+      val j = ((address.toInt & 4) ^ 4) << 3
+      array(i) = (array(i) & ~(0xFFFFFFFFL << j)) | ((value & 0xFFFFFFFFL) << j)
+    }
+    @inline override def loadLong(address: Long): Long = array((address >> 3).toInt)
+    @inline override def storeLong(address: Long, value: Long): Unit = array((address >> 3).toInt) = value
+    override def toString: String = "Base8BE"+"("+ size +")"
+  }
+  
+  /** An allocator for big-endian data backed by a `Long` array. */
+  object Base8BE extends BaseAllocator[Long] {
+    override def MaxSize: Long = Int.MaxValue.toLong << 3
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base8BE = apply(unit.size * count)
+    override def apply(size: Long): Base8BE = {
+      require(0L <= size && size <= MaxSize)
+      val array = new Array[Long]((align(8L)(size) >> 3).toInt)
+      new Base8BE(array)
+    }
+    def unapply(data: Base8BE): Some[Array[Long]] = Some(data.array)
+    override def wrap(array: Array[Long]): Base8BE = new Base8BE(array)
+    override def toString: String = "Base8BE"
+  }
+  
+  /** Little-endian `Long` array backed data. Base-8 subaddresses identify bytes within words. */
+  final class Base8LE(val array: Array[Long]) extends AnyVal with Base[Long] {
+    @inline override def size: Long = array.length.toLong << 3
+    @inline override def unit: Int = 8
+    @inline override def endian = Endianness.LittleEndian
+    override def copy(size: Long): Base8LE = {
+      require(0L <= size && size <= (Int.MaxValue.toLong << 3))
+      val array = new Array[Long]((align(8L)(size) >> 3).toInt)
+      Array.copy(this.array, 0, array, 0, math.min(this.array.length, array.length))
+      new Base8LE(array)
+    }
+    override def loadByte(address: Long): Byte = {
+      val i = (address >> 3).toInt
+      val j = (address.toInt & 7) << 3
+      (array(i) >>> j).toByte
+    }
+    override def storeByte(address: Long, value: Byte) {
+      val i = (address >> 3).toInt
+      val j = (address.toInt & 7) << 3
+      array(i) = (array(i) & ~(0xFFL << j)) | ((value & 0xFF).toLong << j)
+    }
+    override def loadShort(address: Long): Short = {
+      val i = (address >> 3).toInt
+      val j = (address.toInt & 6) << 3
+      (array(i) >>> j).toShort
+    }
+    override def storeShort(address: Long, value: Short) {
+      val i = (address >> 3).toInt
+      val j = (address.toInt & 6) << 3
+      array(i) = (array(i) & ~(0xFFFFL << j)) | ((value & 0xFFFF).toLong << j)
+    }
+    override def loadInt(address: Long): Int = {
+      val i = (address >> 3).toInt
+      val j = (address.toInt & 4) << 3
+      (array(i) >>> j).toInt
+    }
+    override def storeInt(address: Long, value: Int) {
+      val i = (address >> 3).toInt
+      val j = (address.toInt & 4) << 3
+      array(i) = (array(i) & ~(0xFFFFFFFFL << j)) | ((value & 0xFFFFFFFFL) << j)
+    }
+    @inline override def loadLong(address: Long): Long = array((address >> 3).toInt)
+    @inline override def storeLong(address: Long, value: Long): Unit = array((address >> 3).toInt) = value
+    override def toString: String = "Base8LE"+"("+ size +")"
+  }
+  
+  /** An allocator for little-endian data backed by a `Long` array. */
+  object Base8LE extends BaseAllocator[Long] {
+    override def MaxSize: Long = Int.MaxValue.toLong << 3
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Base8LE = apply(unit.size * count)
+    override def apply(size: Long): Base8LE = {
+      require(0L <= size && size <= MaxSize)
+      val array = new Array[Long]((align(8L)(size) >> 3).toInt)
+      new Base8LE(array)
+    }
+    override def wrap(array: Array[Long]): Base8LE = new Base8LE(array)
+    def unapply(data: Base8LE): Some[Array[Long]] = Some(data.array)
+    override def toString: String = "Base8LE"
+  }
+  
+  /** `ByteBuffer` backed Data. */
+  final class Buffer(val buffer: java.nio.ByteBuffer) extends AnyVal with Data {
+    @inline override def size: Long = buffer.capacity.toLong
+    @inline override def unit: Int = 1
+    override def endian: Endianness = buffer.order match {
+      case java.nio.ByteOrder.BIG_ENDIAN    => BigEndian
+      case java.nio.ByteOrder.LITTLE_ENDIAN => LittleEndian
+    }
+    override def copy(size: Long): Buffer = {
+      require(0 <= size && size <= Int.MaxValue.toLong)
+      val dst = java.nio.ByteBuffer.allocateDirect(size.toInt)
+      val src = buffer.duplicate
+      src.position(0).limit(math.min(src.capacity, dst.capacity))
+      dst.put(src)
+      dst.clear()
+      new Buffer(dst)
+    }
+    @inline override def loadByte(address: Long): Byte = buffer.get(address.toInt)
+    @inline override def storeByte(address: Long, value: Byte): Unit = buffer.put(address.toInt, value)
+    @inline override def loadUnalignedShort(address: Long): Short = buffer.getShort(address.toInt)
+    @inline override def storeUnalignedShort(address: Long, value: Short): Unit = buffer.putShort(address.toInt, value)
+    @inline override def loadUnalignedInt(address: Long): Int = buffer.getInt(address.toInt)
+    @inline override def storeUnalignedInt(address: Long, value: Int): Unit = buffer.putInt(address.toInt, value)
+    @inline override def loadUnalignedLong(address: Long): Long = buffer.getLong(address.toInt)
+    @inline override def storeUnalignedLong(address: Long, value: Long): Unit = buffer.putLong(address.toInt, value)
+    @inline override def loadUnalignedChar(address: Long): Char = buffer.getChar(address.toInt)
+    @inline override def storeUnalignedChar(address: Long, value: Char): Unit = buffer.putChar(address.toInt, value)
+    @inline override def loadUnalignedFloat(address: Long): Float = buffer.getFloat(address.toInt)
+    @inline override def storeUnalignedFloat(address: Long, value: Float): Unit = buffer.putFloat(address.toInt, value)
+    @inline override def loadUnalignedDouble(address: Long): Double = buffer.getDouble(address.toInt)
+    @inline override def storeUnalignedDouble(address: Long, value: Double): Unit = buffer.putDouble(address.toInt, value)
+    override def toString: String = endian match {
+      case BigEndian    => "BufferBE"+"("+ size +")"
+      case LittleEndian => "BufferLE"+"("+ size +")"
+    }
+  }
+  
+  /** An allocator for native-endian data backed by a `ByteBuffer`. */
+  object Buffer extends Allocator {
+    override def MaxSize: Long = Int.MaxValue.toLong
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Buffer = apply(unit.size * count)
+    override def apply(size: Long): Buffer = {
+      require(0L <= size && size <= MaxSize)
+      new Buffer(java.nio.ByteBuffer.allocateDirect(size.toInt))
+    }
+    def unapply(data: Buffer): Option[java.nio.ByteBuffer] = if (data.endian eq NativeEndian) Some(data.buffer) else None
+    def wrap(buffer: java.nio.ByteBuffer): Buffer = new Buffer(buffer)
+    override def toString: String = "Buffer"
+  }
+  
+  /** An allocator for big-endian data backed by a `ByteBuffer`. */
+  object BufferBE extends Allocator {
+    override def MaxSize: Long = Int.MaxValue.toLong
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Buffer = apply(unit.size * count)
+    override def apply(size: Long): Buffer = {
+      require(0L <= size && size <= MaxSize)
+      new Buffer(java.nio.ByteBuffer.allocateDirect(size.toInt).order(java.nio.ByteOrder.BIG_ENDIAN))
+    }
+    def unapply(data: Buffer): Option[java.nio.ByteBuffer] = if (data.endian eq BigEndian) Some(data.buffer) else None
+    override def toString: String = "BufferBE"
+  }
+  
+  /** An allocator for little-endian data backed by a `ByteBuffer`. */
+  object BufferLE extends Allocator {
+    override def MaxSize: Long = Int.MaxValue.toLong
+    override def alloc[T](count: Long)(implicit unit: ValType[T]): Buffer = apply(unit.size * count)
+    override def apply(size: Long): Buffer = {
+      require(0L <= size && size <= MaxSize)
+      new Buffer(java.nio.ByteBuffer.allocateDirect(size.toInt).order(java.nio.ByteOrder.LITTLE_ENDIAN))
+    }
+    def unapply(data: Buffer): Option[java.nio.ByteBuffer] = if (data.endian eq LittleEndian) Some(data.buffer) else None
+    override def toString: String = "BufferLE"
+  }
 }

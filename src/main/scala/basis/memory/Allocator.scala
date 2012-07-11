@@ -9,19 +9,17 @@ package basis.memory
 
 import scala.annotation.implicitNotFound
 
-/** A `Data` allocator.
+/** A [[basis.memory.Data]] allocator.
   * 
   * @author Chris Sachs
-  * 
-  * @see  [[basis.memory.Data]]
   */
-@implicitNotFound("Cannot find implicit allocator.")
+@implicitNotFound("No implicit data allocator.")
 trait Allocator {
-  /** The maximum number of bytes this allocator can allocate. */
+  /** Returns the maximum number of bytes this allocator can allocate. */
   def MaxSize: Long
   
   /** Allocates data for a number of unit sized values.
-    * Allocates `struct.size * count` bytes of data. May return a `Data` class
+    * Allocates `unit.size * count` bytes of data. May return a `Data` class
     * optimized for the given unit struct.
     * 
     * @tparam T       the unit struct type.
@@ -41,6 +39,6 @@ trait Allocator {
 
 /** Contains the implicit default allocator. */
 object Allocator {
-  /** The implicit default allocator. */
-  implicit val default: Allocator = ArrayData
+  /** Returns the implicit default allocator. */
+  implicit val default: Allocator = Data.Base
 }

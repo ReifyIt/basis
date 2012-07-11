@@ -139,68 +139,9 @@ abstract class ValType[@specialized T] extends DataType[T] with Framed[ValType[T
   }
 }
 
-/** Contains fallback implicit reference types. */
-abstract class LowPriorityDataTypes {
-  private val RefType = new RefType[Null]
-  
-  /** Returns a reference type. */
-  implicit def Reference[T] = RefType.asInstanceOf[RefType[T]]
-}
-
 /** Contains fundamental data types, including implicit value types for
   * primitive Scala types and tuples of value types. */
-object DataType extends LowPriorityDataTypes {
-  /** Returns the default type of `Byte` values. */
-  implicit val PackedByte = new PackedByte(0, 1, 1)
-  
-  /** Returns the default unaligned type of `Short` values. */
-  val PackedShort = new PackedShort(0, 2, 1)
-  
-  /** Returns the default unaligned type of `Int` values. */
-  val PackedInt = new PackedInt(0, 4, 1)
-  
-  /** Returns the default unaligned type of `Long` values. */
-  val PackedLong = new PackedLong(0, 8, 1)
-  
-  /** Returns the default unaligned type of `Char` values. */
-  val PackedChar = new PackedChar(0, 2, 1)
-  
-  /** Returns the default unaligned type of `Float` values. */
-  val PackedFloat = new PackedFloat(0, 4, 1)
-  
-  /** Returns the default unaligned type of `Double` values. */
-  val PackedDouble = new PackedDouble(0, 8, 1)
-  
-  /** Returns the default type of `Boolean` values. */
-  implicit val PackedBoolean = new PackedBoolean(0, 1, 1)
-  
-  /** Returns the default aligned type of `Short` values. */
-  implicit val PaddedShort = new PaddedShort(0, 2, 2)
-  
-  /** Returns the default aligned type of `Int` values. */
-  implicit val PaddedInt = new PaddedInt(0, 4, 4)
-  
-  /** Returns the default aligned type of `Long` values. */
-  implicit val PaddedLong = new PaddedLong(0, 8, 8)
-  
-  /** Returns the default aligned type of `Char` values. */
-  implicit val PaddedChar = new PaddedChar(0, 2, 2)
-  
-  /** Returns the default aligned type of `Float` values. */
-  implicit val PaddedFloat = new PaddedFloat(0, 4, 4)
-  
-  /** Returns the default aligned type of `Double` values. */
-  implicit val PaddedDouble = new PaddedDouble(0, 8, 8)
-  
-  /** Returns a type for some kind of 2-tuple of values. */
-  implicit def Row2[T1 : ValType, T2 : ValType] = new Row2[T1, T2]
-  
-  /** Returns a type for some kind of 3-tuple of values. */
-  implicit def Row3[T1: ValType, T2 : ValType, T3 : ValType] = new Row3[T1, T2, T3]
-  
-  /** Returns a type for some kind of 4-tuple of values. */
-  implicit def Row4[T1: ValType, T2 : ValType, T3 : ValType, T4 : ValType] = new Row4[T1, T2, T3, T4]
-  
+object DataType extends DataTypes.ValTypes {
   /** A type for `Byte` values. */
   final class PackedByte(frameOffset: Int, frameSize: Int, frameAlignment: Int)
       extends ValType[Byte] with Framed[PackedByte] {
@@ -509,5 +450,50 @@ object DataType extends LowPriorityDataTypes {
       val prefix = "Row4"+"("+ column1 +", "+ column2 +", "+ column3 +", "+ column4 +")"
       toString(prefix, 0, 0, 0)
     }
+  }
+}
+
+private[memory] object DataTypes {
+  import DataType._
+  class RefTypes {
+    private val RefType = new RefType[Null]
+    /** Returns a reference type. */
+    implicit def Reference[T] = RefType.asInstanceOf[RefType[T]]
+  }
+  class ValTypes extends RefTypes {
+    /** Returns the default type of `Byte` values. */
+    implicit val PackedByte = new PackedByte(0, 1, 1)
+    /** Returns the default unaligned type of `Short` values. */
+    val PackedShort = new PackedShort(0, 2, 1)
+    /** Returns the default unaligned type of `Int` values. */
+    val PackedInt = new PackedInt(0, 4, 1)
+    /** Returns the default unaligned type of `Long` values. */
+    val PackedLong = new PackedLong(0, 8, 1)
+    /** Returns the default unaligned type of `Char` values. */
+    val PackedChar = new PackedChar(0, 2, 1)
+    /** Returns the default unaligned type of `Float` values. */
+    val PackedFloat = new PackedFloat(0, 4, 1)
+    /** Returns the default unaligned type of `Double` values. */
+    val PackedDouble = new PackedDouble(0, 8, 1)
+    /** Returns the default type of `Boolean` values. */
+    implicit val PackedBoolean = new PackedBoolean(0, 1, 1)
+    /** Returns the default aligned type of `Short` values. */
+    implicit val PaddedShort = new PaddedShort(0, 2, 2)
+    /** Returns the default aligned type of `Int` values. */
+    implicit val PaddedInt = new PaddedInt(0, 4, 4)
+    /** Returns the default aligned type of `Long` values. */
+    implicit val PaddedLong = new PaddedLong(0, 8, 8)
+    /** Returns the default aligned type of `Char` values. */
+    implicit val PaddedChar = new PaddedChar(0, 2, 2)
+    /** Returns the default aligned type of `Float` values. */
+    implicit val PaddedFloat = new PaddedFloat(0, 4, 4)
+    /** Returns the default aligned type of `Double` values. */
+    implicit val PaddedDouble = new PaddedDouble(0, 8, 8)
+    /** Returns a type for some kind of 2-tuple of values. */
+    implicit def Row2[T1 : ValType, T2 : ValType] = new Row2[T1, T2]
+    /** Returns a type for some kind of 3-tuple of values. */
+    implicit def Row3[T1 : ValType, T2 : ValType, T3 : ValType] = new Row3[T1, T2, T3]
+    /** Returns a type for some kind of 4-tuple of values. */
+    implicit def Row4[T1 : ValType, T2 : ValType, T3 : ValType, T4 : ValType] = new Row4[T1, T2, T3, T4]
   }
 }

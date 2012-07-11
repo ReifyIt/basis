@@ -13,11 +13,10 @@ import java.lang.Double.longBitsToDouble
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-import Endianness._
-
 trait DataBehaviors extends ValueTypeBehaviors { this: FunSpec =>
   import ShouldMatchers._
   import HexMatchers._
+  import Endianness._
   
   def PrimitiveData(implicit allocator: Allocator) {
     it("should store Byte values") {

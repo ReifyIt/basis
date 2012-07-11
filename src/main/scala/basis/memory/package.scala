@@ -9,8 +9,6 @@ package basis
 
 /** Contains an abstract memory model with struct typeclasses. */
 package object memory {
-  import Endianness._
-  
   /** Returns an `Int` address advanced to a power-of-two alignment.
     * 
     * @param  alignment   the required alignment–forced to a power-of-two.
@@ -62,34 +60,4 @@ package object memory {
     * @return the implicitly supplied data type.
     */
   @inline def typeOf[T](implicit datatype: DataType[T]): DataType[T] = datatype
-  
-  /** An allocator for native-endian data backed by some primitive array. */
-  lazy val ArrayData: Allocator = NativeEndian match {
-    case BigEndian => ArrayDataBE
-    case LittleEndian => ArrayDataLE
-  }
-  
-  /** An allocator for native-endian data backed by a `Byte` array. */
-  lazy val ByteData: ArrayAllocator[Byte] = NativeEndian match {
-    case BigEndian => ByteDataBE
-    case LittleEndian => ByteDataLE
-  }
-  
-  /** An allocator for native-endian data backed by a `Short` array. */
-  lazy val ShortData: ArrayAllocator[Short] = NativeEndian match {
-    case BigEndian => ShortDataBE
-    case LittleEndian => ShortDataLE
-  }
-  
-  /** An allocator for native-endian data backed by an `Int` array. */
-  lazy val IntData: ArrayAllocator[Int] = NativeEndian match {
-    case BigEndian => IntDataBE
-    case LittleEndian => IntDataLE
-  }
-  
-  /** An allocator for native-endian data backed by a `Long` array. */
-  lazy val LongData: ArrayAllocator[Long] = NativeEndian match {
-    case BigEndian => LongDataBE
-    case LittleEndian => LongDataLE
-  }
 }
