@@ -18,7 +18,15 @@ trait Collector[-Scope, -A] {
     for (element <- elements) this += element
   }
   
-  def result(): Product
+  def result: Product
   
   def clear(): Unit
+}
+
+object Collector {
+  def nextSize(base: Int, size: Int): Int = {
+    var n = math.max(base, size) - 1
+    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+    n + 1
+  }
 }
