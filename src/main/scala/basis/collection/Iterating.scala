@@ -63,6 +63,27 @@ trait Iterating[+Scope, +A] extends Any with Traversing[Scope, A] with Iterable[
     builder.result
   }
   
+  def zip[B](that: Iterable[B])(implicit builder: Collector[Scope, (A, B)]): builder.Product = {
+    val these = this.iterator
+    val those = that.iterator
+    while (these.hasNext && those.hasNext) builder += ((these.next(), those.next()))
+    builder.result
+  }
+  
+  override def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    val iter = iterator
+    while (iter.hasNext) builder += iter.next()
+    builder ++= elements
+    builder.result
+  }
+  
+  override def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    builder ++= elements
+    val iter = iterator
+    while (iter.hasNext) builder += iter.next()
+    builder.result
+  }
+  
   override def eagerly: Iterating[Scope, A] = this
 }
 

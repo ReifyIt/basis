@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait Traversable[+A] extends Any with Incremental[A] {
+trait Traversable[+A] extends Any with Equals with Incremental[A] {
   override def foreach[U](f: A => U): Unit
   
   override def collectFirst[B](q: PartialFunction[A, B]): Option[B] = {
@@ -72,7 +72,24 @@ trait Traversable[+A] extends Any with Incremental[A] {
   
   def eagerly: Traversing[Any, A] = new Traversing.Projecting[Any, A](this)
   
-  def lazily: Traverses[A] = new Traverses.Projects[A](this)
+  def lazily: Traversed[A] = new Traversed.Projected[A](this)
+  
+  override def canEqual(other: Any): Boolean = true
+  
+  protected def stringPrefix: String = {
+    var name = getClass.getName
+    val dot = name.lastIndexOf('.')
+    (if (dot < 0) name else name.substring(dot + 1)).replace('$', '.')
+  }
+  
+  override def toString: String = {
+    val s = new java.lang.StringBuilder(stringPrefix)
+    s.append('(')
+    var first = true
+    for (x <- this) (if (first) { first = false; s } else s.append(", ")).append(x)
+    s.append(')')
+    s.toString
+  }
 }
 
 object Traversable {

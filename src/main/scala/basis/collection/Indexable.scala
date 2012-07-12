@@ -9,7 +9,7 @@ package basis.collection
 
 import scala.annotation.tailrec
 
-trait Indexable[+A] extends Any with Iterable[A] {
+trait Indexable[+A] extends Any with Sequential[A] {
   def length: Int
   
   def apply(index: Int): A
@@ -84,13 +84,47 @@ trait Indexable[+A] extends Any with Iterable[A] {
   
   override def count(p: A => Boolean): Int = countBetween(0, length, 0, p)
   
+  override def corresponds[B](that: Sequential[B])(p: (A, B) => Boolean): Boolean = that match {
+    case that: Indexable[B] =>
+      val limit = length
+      limit == that.length && {
+        var i = 0
+        while (i < limit && p(apply(i), that.apply(i))) i += 1
+        i == limit
+      }
+    case _ => super.corresponds[B](that)(p)
+  }
+  
+  override def sameAs[B >: A](that: Iterable[B]): Boolean = that match {
+    case that: Indexable[B] =>
+      val limit = length
+      limit == that.length && {
+        var i = 0
+        while (i < limit && apply(i) == that.apply(i)) i += 1
+        i == limit
+      }
+    case _ => super.sameAs[B](that)
+  }
+  
   override def eagerly: Indexing[Any, A] = new Indexing.Projecting[Any, A](this)
   
-  override def lazily: Indexes[A] = new Indexes.Projects[A](this)
+  override def lazily: Indexed[A] = new Indexed.Projected[A](this)
+  
+  override def hashCode: Int = {
+    import scala.util.hashing.MurmurHash3._
+    var i = 0
+    var h = 1829453087
+    val limit = length
+    while (i < limit) {
+      h = mix(h, apply(i).##)
+      i += 1
+    }
+    finalizeHash(h, i)
+  }
 }
 
 object Indexable {
-  abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Indexable[A]
+  abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Indexable[A]
   
   final class Elements[+A](self: Indexable[A], lower: Int, upper: Int) extends Iterator.Abstract[A] {
     private[this] var index: Int = math.max(0, math.min(lower, self.length))

@@ -25,7 +25,7 @@ trait Traversing[+Scope, +A] extends Any with Traversable[A] {
     builder.result
   }
   
-  def withFilter(p: A => Boolean): Traverses[A] = new Traverses.Filters[A](this, p)
+  def withFilter(p: A => Boolean): Traversed[A] = new Traversed.Filtered[A](this, p)
   
   def collect[B](q: PartialFunction[A, B])(implicit builder: Collector[Scope, B]): builder.Product = {
     for (x <- this) if (q.isDefinedAt(x)) builder += q(x)
@@ -62,6 +62,20 @@ trait Traversing[+Scope, +A] extends Any with Traversable[A] {
       i += 1
     }
     catch { case e: Break => () }
+    builder.result
+  }
+  
+  def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    val append = (x: B) => builder += x
+    this foreach append
+    elements foreach append
+    builder.result
+  }
+  
+  def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    val append = (x: B) => builder += x
+    elements foreach append
+    this foreach append
     builder.result
   }
   

@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait Listing[+Scope, +A] extends Any with Iterating[Scope, A] with Listable[A] {
+trait Listing[+Scope, +A] extends Any with Sequencing[Scope, A] with Listable[A] {
   override def isEmpty: Boolean
   
   override def head: A
@@ -45,6 +45,46 @@ trait Listing[+Scope, +A] extends Any with Iterating[Scope, A] with Listable[A] 
     var rest = this: Listable[A]
     while (!rest.isEmpty) {
       if (q.isDefinedAt(rest.head)) builder += q(rest.head)
+      rest = rest.tail
+    }
+    builder.result
+  }
+  
+  override def :+ [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
+    var rest = this: Listable[A]
+    while (!rest.isEmpty) {
+      builder += rest.head
+      rest = rest.tail
+    }
+    builder += element
+    builder.result
+  }
+  
+  override def +: [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
+    builder += element
+    var rest = this: Listable[A]
+    while (!rest.isEmpty) {
+      builder += rest.head
+      rest = rest.tail
+    }
+    builder.result
+  }
+  
+  override def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    var rest = this: Listable[A]
+    while (!rest.isEmpty) {
+      builder += rest.head
+      rest = rest.tail
+    }
+    builder ++= elements
+    builder.result
+  }
+  
+  override def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    builder ++= elements
+    var rest = this: Listable[A]
+    while (!rest.isEmpty) {
+      builder += rest.head
       rest = rest.tail
     }
     builder.result

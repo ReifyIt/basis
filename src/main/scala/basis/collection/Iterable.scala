@@ -10,6 +10,13 @@ package basis.collection
 trait Iterable[+A] extends Any with Traversable[A] {
   def iterator: Iterator[A]
   
+  def sameAs[B >: A](that: Iterable[B]): Boolean = {
+    val these = this.iterator
+    val those = that.iterator
+    while (these.hasNext && those.hasNext) if (these.next() != those.next()) return false
+    !these.hasNext && !those.hasNext
+  }
+  
   override def foreach[U](f: A => U): Unit = iterator.foreach(f)
   
   override def collectFirst[B](q: PartialFunction[A, B]): Option[B] = iterator.collectFirst(q)
@@ -30,7 +37,7 @@ trait Iterable[+A] extends Any with Traversable[A] {
   
   override def eagerly: Iterating[Any, A] = new Iterating.Projecting[Any, A](this)
   
-  override def lazily: Iterates[A] = new Iterates.Projects[A](this)
+  override def lazily: Iterated[A] = new Iterated.Projected[A](this)
 }
 
 object Iterable {

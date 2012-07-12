@@ -7,12 +7,12 @@
 
 package basis.collection
 
-trait Indexing[+Scope, +A] extends Any with Iterating[Scope, A] with Indexable[A] {
+trait Indexing[+Scope, +A] extends Any with Sequencing[Scope, A] with Indexable[A] {
   override def length: Int
   
   override def apply(index: Int): A
   
-  def reversed(implicit builder: Collector[Scope, A]): builder.Product = {
+  def reverse(implicit builder: Collector[Scope, A]): builder.Product = {
     var i = length - 1
     while (i >= 0) {
       builder += apply(i)
@@ -86,6 +86,54 @@ trait Indexing[+Scope, +A] extends Any with Iterating[Scope, A] with Indexable[A
   override def slice(lower: Int, upper: Int)(implicit builder: Collector[Scope, A]): builder.Product = {
     var i = math.max(0, lower)
     val limit = math.min(upper, length)
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder.result
+  }
+  
+  override def :+ [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    builder.expect(limit + 1)
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder += element
+    builder.result
+  }
+  
+  override def +: [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    builder.expect(limit + 1)
+    builder += element
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder.result
+  }
+  
+  override def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    builder.expect(limit)
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder ++= elements
+    builder.result
+  }
+  
+  override def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    builder ++= elements
+    builder.expect(limit)
     while (i < limit) {
       builder += apply(i)
       i += 1

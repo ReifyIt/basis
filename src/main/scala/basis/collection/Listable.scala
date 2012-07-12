@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait Listable[+A] extends Any with Iterable[A] {
+trait Listable[+A] extends Any with Sequential[A] {
   def isEmpty: Boolean
   
   def head: A
@@ -88,13 +88,50 @@ trait Listable[+A] extends Any with Iterable[A] {
     total
   }
   
+  override def corresponds[B](that: Sequential[B])(p: (A, B) => Boolean): Boolean = that match {
+    case that: Listable[B] =>
+      var these = this
+      var those = that
+      while (!these.isEmpty && !those.isEmpty && these.head == those.head) {
+        these = these.tail
+        those = those.tail
+      }
+      these.isEmpty && those.isEmpty
+    case _ => super.sameAs(that)
+  }
+  
+  override def sameAs[B >: A](that: Iterable[B]): Boolean = that match {
+    case that: Listable[B] =>
+      var these = this
+      var those = that
+      while (!these.isEmpty && !those.isEmpty && these.head == those.head) {
+        these = these.tail
+        those = those.tail
+      }
+      these.isEmpty && those.isEmpty
+    case _ => super.sameAs(that)
+  }
+  
   override def eagerly: Listing[Any, A] = new Listing.Projecting[Any, A](this)
   
-  override def lazily: Lists[A] = new Lists.Projects[A](this)
+  override def lazily: Listed[A] = new Listed.Projected[A](this)
+  
+  override def hashCode: Int = {
+    import scala.util.hashing.MurmurHash3._
+    var rest = this
+    var h = 1829453087
+    var i = 0
+    while (!rest.isEmpty) {
+      h = mix(h, rest.head.##)
+      rest = rest.tail
+      i += 1
+    }
+    finalizeHash(h, i)
+  }
 }
 
 object Listable {
-  abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Listable[A]
+  abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Listable[A]
   
   final class Elements[+A](self: Listable[A]) extends Iterator.Abstract[A] {
     private[this] var rest: Listable[A] = self
