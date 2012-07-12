@@ -9,26 +9,26 @@ package basis.text
 
 import basis.collection._
 
-/** The Unicode® UTF-16 endocing form.
+/** The Unicode® UTF-32 endocing form.
   * 
   * @author Chris Sachs
   */
-object UTF16 extends Encoding {
-  /** A 16-bit Unicode string comprised of a sequence of UTF-16 code units. */
-  final class String(val codeUnits: Array[Char]) extends AnyVal with Text {
+object UTF32 extends Encoding {
+  /** A 32-bit Unicode string comprised of a sequence of UTF-32 code units. */
+  final class String(val codeUnits: Array[Int]) extends AnyVal with Text {
     @inline override def length: Int = codeUnits.length
     @inline override def apply(index: Int): Int = codeUnits(index)
-    @inline private[UTF16] def update(index: Int, codeUnit: Int): Unit = codeUnits(index) = codeUnit.toChar
+    @inline private[UTF32] def update(index: Int, codeUnit: Int): Unit = codeUnits(index) = codeUnit
     def copy(length: Int): String = {
-      val newCodeUnits = new Array[Char](length)
+      val newCodeUnits = new Array[Int](length)
       Array.copy(codeUnits, 0, newCodeUnits, 0, math.min(codeUnits.length, length))
       new String(newCodeUnits)
     }
   }
   
-  /** Contains factory methods for 16-bit Unicode strings. */
+  /** Contains factory methods for 32-bit Unicode strings. */
   object String extends StringFactory {
-    override val Empty = new String(new Array[Char](0))
+    override val Empty = new String(new Array[Int](0))
     override def apply(chars: CharSequence): String = {
       val s = new StringBuilder
       s.append(chars)
@@ -36,46 +36,33 @@ object UTF16 extends Encoding {
     }
   }
   
-  /** Returns a new 16-bit Unicode string builder. */
+  /** Returns a new 32-bit Unicode string builder. */
   implicit def StringBuilder: StringBuilder = new StringBuilder
   
-  /** A UTF-16 code unit sequence. */
-  trait Text extends Any with super.Text {
-    /** Returns the number of unsigned 16-bit code units in this Unicode string. */
+  /** A UTF-32 code unit sequence. */
+  trait Text extends Any with Indexing[UTF32.type, Int] with super.Text {
+    /** Returns the number of 32-bit code units in this Unicode string. */
     override def length: Int
     
-    /** Returns the unsigned 16-bit code unit at the specified index;
-      * '''DOES NOT''' decode surrogate pairs at that index. */
+    /** Returns the 32-bit code unit at the specified index. */
     override def apply(index: Int): Int
     
     /** Sequentially applies a function to each code point of this Unicode string.
-      * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
+      * Applies the replacement character U+FFFD in lieu of invalid characters. */
     override def foreach[@specialized(Unit) U](f: Int => U) {
       var i = 0
       val n = length
       while (i < n) f({
-        val c1 = apply(i)
-        if (c1 <= 0xD7FF || c1 >= 0xE000) { // c1 >= 0 && c1 <= 0x10000
-          // U+0000..U+D7FF | U+E000..U+FFFF
+        val c = apply(i)
+        if ((c >= 0x000000 && c <= 0x00D7FF) ||
+            (c >= 0x00E000 && c <= 0x10FFFF)) {
+          // U+0000..U+D7FF | U+E000..U+10FFFF
           i += 1 // valid code point
-          c1
+          c
         }
-        else if (c1 <= 0xDBFF) { // c1 >= 0xD800
-          // U+10000..U+10FFFF
-          i += 1 // valid low surrogate
-          if (i < n) {
-            val c2 = apply(i)
-            if (c2 >= 0xDC00 && c2 <= 0xDFFF) {
-              i += 1 // valid high surrogate
-              (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
-            }
-            else 0xFFFD // unpaired low surrogate
-          }
-          else 0xFFFD // missing high surrogate
-        }
-        else { // c1 >= 0xDC00 && c1 <= 0xDFFF
+        else { // (c >= 0xD800 && c <= 0xDFFF) || c >= 0x110000
           i += 1
-          0xFFFD // unpaird high surrogate
+          0xFFFD // invalid code point
         }
       }: Int) // ascribe Int to defer boxing for unspecialized functions
     }
@@ -89,26 +76,18 @@ object UTF16 extends Encoding {
     }
   }
   
-  /** A pointer to a location in some UTF-16 text. */
+  /** A pointer to a location in some UTF-32 text. */
   class TextIterator(string: Text, private[this] var index: Int) extends super.TextIterator {
     def offset: Int = index
     
-    /** Returns `true` if the current offset begins a valid character. */
+    /** Returns `true` if the current offset represents a valid character. */
     def isValid: Boolean = {
       val i = index
       val n = string.length
       if (0 <= i && i < n) {
-        val c1 = string(i)
-        if (c1 <= 0xD7FF || c1 >= 0xE000) { // c1 >= 0 && c1 <= 0x10000
-          // U+0000..U+D7FF | U+E000..U+FFFF
-          true
-        }
-        else if (i + 1 < n && c1 <= 0xDBFF) { // c1 >= 0xD800
-          // U+10000..U+10FFFF
-          val c2 = string(i + 1)
-          c2 >= 0xDC00 && c2 <= 0xDFFF
-        }
-        else false // unconvertible offset
+        val c = string(i)
+        (c >= 0x000000 && c <= 0x00D7FF) ||
+        (c >= 0x00E000 && c <= 0x10FFFF)
       }
       else false // out of bounds
     }
@@ -119,17 +98,11 @@ object UTF16 extends Encoding {
       val i = index
       val n = string.length
       if (i < 0 || i >= n) throw new NoSuchElementException("head of empty string iterator")
-      val c1 = string(i)
-      if (c1 <= 0xD7FF || c1 >= 0xE000) { // c1 >= 0 && c1 <= 0x10000
-        // U+0000..U+D7FF | U+E000..U+FFFF
-        c1
-      }
-      else if (i + 1 < n && c1 <= 0xDBFF) { // c1 >= 0xD800
-        // U+10000..U+10FFFF
-        val c2 = string(i + 1)
-        if (c2 >= 0xDC00 && c2 <= 0xDFFF)
-          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
-        else 0xFFFD // unpaired low surrogate
+      val c = string(i)
+      if ((c >= 0x000000 && c <= 0x00D7FF) ||
+          (c >= 0x00E000 && c <= 0x10FFFF)) {
+        // U+0000..U+D7FF | U+E000..U+10FFFF
+        c
       }
       else 0xFFFD // unconvertible offset
     }
@@ -139,35 +112,23 @@ object UTF16 extends Encoding {
     override def next(): Int = {
       val n = string.length
       if (0 <= index && index < n) {
-        val c1 = string(index)
-        if (c1 <= 0xD7FF || c1 >= 0xE000) { // c1 >= 0 && c1 <= 0x10000
-          // U+0000..U+D7FF | U+E000..U+FFFF
+        val c = string(index)
+        if ((c >= 0x000000 && c <= 0x00D7FF) ||
+            (c >= 0x00E000 && c <= 0x10FFFF)) {
+          // U+0000..U+D7FF | U+E000..U+10FFFF
           index += 1 // valid code point
-          c1
+          c
         }
-        else if (c1 <= 0xDBFF) { // c1 >= 0xD800
-          // U+10000..U+10FFFF
-          index += 1 // valid low surrogate
-          if (index < n) {
-            val c2 = string(index)
-            if (c2 >= 0xDC00 && c2 <= 0xDFFF) {
-              index += 1 // valid high surrogate
-              (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
-            }
-            else 0xFFFD // unpaired low surrogate
-          }
-          else 0xFFFD // missing high surrogate
-        }
-        else { // c1 >= 0xDC00 && c1 <= 0xDFFF
+        else { // (c >= 0xD800 && c <= 0xDFFF) || c >= 0x110000
           index += 1
-          0xFFFD // unpaird high surrogate
+          0xFFFD // invalid code point
         }
       }
       else throw new NoSuchElementException("empty string iterator")
     }
   }
   
-  /** A builder for 16-bit Unicode strings in the UTF-16 encoding form.
+  /** A builder for 32-bit Unicode strings in the UTF-32 encoding form.
     * Produces only well-formed code unit sequences. */
   final class StringBuilder extends super.StringBuilder {
     private[this] var string: String = String.Empty
@@ -186,20 +147,12 @@ object UTF16 extends Encoding {
     
     override def += (codePoint: Int) {
       val n = length
-      if ((codePoint >= 0x0000 && codePoint <= 0xD7FF) ||
-          (codePoint >= 0xE000 && codePoint <= 0xFFFF)) {
+      if ((codePoint >= 0x000000 && codePoint <= 0x00D7FF) ||
+          (codePoint >= 0x00E000 && codePoint <= 0x10FFFF)) {
         // U+0000..U+D7FF | U+E000..U+FFFF
         prepare(n + 1)
         string(n) = codePoint
         length = n + 1
-      }
-      else if (codePoint >= 0x10000 && codePoint <= 0x10FFFF) {
-        // U+10000..U+10FFFF; encode a surrogate pair
-        prepare(n + 2)
-        val u = codePoint - 0x10000
-        string(n)     = 0xD800 | (u >>> 10)
-        string(n + 1) = 0xDC00 | (u & 0x3FF)
-        length = n + 2
       }
       else { // invalid code point; encode the replacement character U+FFFD
         prepare(n + 1)

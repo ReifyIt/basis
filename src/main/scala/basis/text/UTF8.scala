@@ -14,7 +14,7 @@ import basis.collection._
   * @author Chris Sachs
   */
 object UTF8 extends Encoding {
-  /** A Unicode 8-bit string comprised of a sequence of UTF-8 code units. */
+  /** An 8-bit Unicode string comprised of a sequence of UTF-8 code units. */
   final class String(val codeUnits: Array[Byte]) extends AnyVal with Text {
     @inline override def length: Int = codeUnits.length
     @inline override def apply(index: Int): Int = codeUnits(index) & 0xFF
@@ -26,7 +26,7 @@ object UTF8 extends Encoding {
     }
   }
   
-  /** Contains factory methods for Unicode 8-bit strings. */
+  /** Contains factory methods for 8-bit Unicode strings. */
   object String extends StringFactory {
     override val Empty = new String(new Array[Byte](0))
     override def apply(chars: CharSequence): String = {
@@ -36,7 +36,7 @@ object UTF8 extends Encoding {
     }
   }
   
-  /** Returns a new Unicode 8-bit string builder. */
+  /** Returns a new 8-bit Unicode string builder. */
   implicit def StringBuilder: StringBuilder = new StringBuilder
   
   /** A UTF-8 code unit sequence. */
@@ -314,7 +314,7 @@ object UTF8 extends Encoding {
     def head: Int = {
       val i = index
       val n = string.length
-      if (i < 0 || i >= n) throw new IndexOutOfBoundsException(i.toString)
+      if (i < 0 || i >= n) throw new NoSuchElementException("head of empty string iterator")
       val c1 = string(i)
       if (c1 <= 0x7F) c1 // U+0000..U+007F
       else if (i + 1 < n && c1 >= 0xC2 && c1 <= 0xDF) {
@@ -566,11 +566,11 @@ object UTF8 extends Encoding {
           0xFFFD // invalid 1st code unit
         }
       }
-      else Iterator.Empty.next() // end of sequence
+      else throw new NoSuchElementException("empty string iterator")
     }
   }
   
-  /** A builder for Unicode 8-bit strings in the UTF-8 encoding form.
+  /** A builder for 8-bit Unicode strings in the UTF-8 encoding form.
     * Produces only well-formed code unit sequences. */
   final class StringBuilder extends super.StringBuilder {
     private[this] var string: String = String.Empty
