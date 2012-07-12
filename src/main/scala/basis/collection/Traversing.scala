@@ -7,85 +7,93 @@
 
 package basis.collection
 
-trait Traversing[+Scope, +A] extends Any with Traversable[A] {
+trait Traversing[+A] extends Any with Traversable[A] {
+  import Traversing._
+  
   override def foreach[U](f: A => U): Unit
   
-  def map[B](f: A => B)(implicit builder: Collector[Scope, B]): builder.Product = {
-    for (x <- this) builder += f(x)
-    builder.result
-  }
+  def map[B](f: A => B): Traversing[B] = new Mapping[A, B](this, f)
   
-  def flatMap[B](f: A => Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    for (x <- this) builder ++= f(x)
-    builder.result
-  }
+  def flatMap[B](f: A => Incremental[B]): Traversing[B] = new FlatMapping[A, B](this, f)
   
-  def filter(p: A => Boolean)(implicit builder: Collector[Scope, A]): builder.Product = {
-    for (x <- this) if (p(x)) builder += x
-    builder.result
-  }
+  def filter(p: A => Boolean): Traversing[A] = new Filtering[A](this, p)
   
-  def withFilter(p: A => Boolean): Traversed[A] = new Traversed.Filtered[A](this, p)
+  def withFilter(p: A => Boolean): Traversing[A] = filter(p)
   
-  def collect[B](q: PartialFunction[A, B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    for (x <- this) if (q.isDefinedAt(x)) builder += q(x)
-    builder.result
-  }
+  def collect[B](q: PartialFunction[A, B]): Traversing[B] = new Collecting[A, B](this, q)
   
-  def drop(lower: Int)(implicit builder: Collector[Scope, A]): builder.Product = {
-    var i = 0
-    for (x <- this) {
-      if (i >= lower) builder += x
-      i += 1
-    }
-    builder.result
-  }
+  def drop(lower: Int): Traversing[A] = new Dropping[A](this, lower)
   
-  def take(upper: Int)(implicit builder: Collector[Scope, A]): builder.Product = {
-    var i = 0
-    try for (x <- this) {
-      if (i >= upper) throw Break
-      builder += x
-      i += 1
-    }
-    catch { case e: Break => () }
-    builder.result
-  }
+  def take(upper: Int): Traversing[A] = new Taking[A](this, upper)
   
-  def slice(lower: Int, upper: Int)(implicit builder: Collector[Scope, A]): builder.Product = {
-    var i = 0
-    try for (x <- this) {
-      if (i >= lower) {
-        if (i >= upper) throw Break
-        builder += x
-      }
-      i += 1
-    }
-    catch { case e: Break => () }
-    builder.result
-  }
+  def slice(lower: Int, upper: Int): Traversing[A] = new Slicing[A](this, lower, upper)
   
-  def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    val append = (x: B) => builder += x
-    this foreach append
-    elements foreach append
-    builder.result
-  }
-  
-  def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    val append = (x: B) => builder += x
-    elements foreach append
-    this foreach append
-    builder.result
-  }
-  
-  override def eagerly: Traversing[Scope, A] = this
+  override def lazily: Traversing[A] = this
 }
 
 object Traversing {
-  abstract class Abstractly[+Scope, +A] extends Traversable.Abstractly[A] with Traversing[Scope, A]
+  abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Traversing[A]
   
-  final class Projecting[+Scope, +A](self: Traversable[A]) extends Abstractly[Scope, A] {
-    override def foreach[U](f: A => U): Unit = self.foreach[U](f)
+  final class Projecting[+A](self: Traversable[A]) extends Abstractly[A] {
+    override def foreach[U](f: A => U): Unit = self.foreach(f)
+    override def map[B](f: A => B): Traversing[B] = new Mapping[A, B](self, f)
+    override def flatMap[B](f: A => Incremental[B]): Traversing[B] = new FlatMapping[A, B](self, f)
+    override def filter(p: A => Boolean): Traversing[A] = new Filtering[A](self, p)
+    override def collect[B](q: PartialFunction[A, B]): Traversing[B] = new Collecting[A, B](self, q)
+    override def drop(lower: Int): Traversing[A] = new Dropping[A](self, lower)
+    override def take(upper: Int): Traversing[A] = new Taking[A](self, upper)
+    override def slice(lower: Int, upper: Int): Traversing[A] = new Slicing[A](self, lower, upper)
+  }
+  
+  final class Mapping[-A, +B](self: Traversable[A], g: A => B) extends Abstractly[B] {
+    override def foreach[U](f: B => U): Unit = for (x <- self) f(g(x))
+  }
+  
+  final class FlatMapping[-A, +B](self: Traversable[A], g: A => Incremental[B]) extends Abstractly[B] {
+    override def foreach[U](f: B => U): Unit = for (x <- self) for (y <- g(x)) f(y)
+  }
+  
+  final class Filtering[+A](self: Traversable[A], p: A => Boolean) extends Abstractly[A] {
+    override def foreach[U](f: A => U): Unit = for (x <- self) if (p(x)) f(x)
+  }
+  
+  final class Collecting[-A, +B](self: Traversable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
+    override def foreach[U](f: B => U): Unit = for (x <- self) if (q.isDefinedAt(x)) f(q(x))
+  }
+  
+  final class Dropping[+A](self: Traversable[A], lower: Int) extends Abstractly[A] {
+    override def foreach[U](f: A => U) {
+      var i = 0
+      for (x <- self) {
+        if (i >= lower) f(x)
+        i += 1
+      }
+    }
+  }
+  
+  final class Taking[+A](self: Traversable[A], upper: Int) extends Abstractly[A] {
+    override def foreach[U](f: A => U) {
+      var i = 0
+      try for (x <- self) {
+        if (i >= upper) throw Break
+        f(x)
+        i += 1
+      }
+      catch { case e: Break => () }
+    }
+  }
+  
+  final class Slicing[+A](self: Traversable[A], lower: Int, upper: Int) extends Abstractly[A] {
+    override def foreach[U](f: A => U) {
+      var i = 0
+      try for (x <- self) {
+        if (i >= lower) {
+          if (i >= upper) throw Break
+          f(x)
+        }
+        i += 1
+      }
+      catch { case e: Break => () }
+    }
   }
 }

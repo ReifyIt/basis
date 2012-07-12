@@ -70,9 +70,9 @@ trait Traversable[+A] extends Any with Equals with Incremental[A] {
     total
   }
   
-  def eagerly: Traversing[Any, A] = new Traversing.Projecting[Any, A](this)
+  def eagerly: Traversed[Any, A] = new Traversed.Projected[Any, A](this)
   
-  def lazily: Traversed[A] = new Traversed.Projected[A](this)
+  def lazily: Traversing[A] = new Traversing.Projecting[A](this)
   
   override def canEqual(other: Any): Boolean = true
   

@@ -7,98 +7,79 @@
 
 package basis.collection
 
-trait Listing[+Scope, +A] extends Any with Sequencing[Scope, A] with Listable[A] {
+trait Listing[+A] extends Any with Sequencing[A] with Listable[A] {
+  import Listing._
+  
   override def isEmpty: Boolean
   
   override def head: A
   
   override def tail: Listable[A]
   
-  override def map[B](f: A => B)(implicit builder: Collector[Scope, B]): builder.Product = {
-    var rest = this: Listable[A]
-    while (!rest.isEmpty) {
-      builder += f(rest.head)
-      rest = rest.tail
-    }
-    builder.result
-  }
+  override def map[B](f: A => B): Listing[B] = new Mapping[A, B](this, f)
   
-  override def flatMap[B](f: A => Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    var rest = this: Listable[A]
-    while (!rest.isEmpty) {
-      builder ++= f(rest.head)
-      rest = rest.tail
-    }
-    builder.result
-  }
+  override def filter(p: A => Boolean): Listing[A] = new Filtering[A](this, p)
   
-  override def filter(p: A => Boolean)(implicit builder: Collector[Scope, A]): builder.Product = {
-    var rest = this: Listable[A]
-    while (!rest.isEmpty) {
-      if (p(rest.head)) builder += rest.head
-      rest = rest.tail
-    }
-    builder.result
-  }
+  override def collect[B](q: PartialFunction[A, B]): Listing[B] = new Collecting[A, B](this, q)
   
-  override def collect[B](q: PartialFunction[A, B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    var rest = this: Listable[A]
-    while (!rest.isEmpty) {
-      if (q.isDefinedAt(rest.head)) builder += q(rest.head)
-      rest = rest.tail
-    }
-    builder.result
-  }
+  override def drop(lower: Int): Listing[A] = new Dropping[A](this, lower)
   
-  override def :+ [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
-    var rest = this: Listable[A]
-    while (!rest.isEmpty) {
-      builder += rest.head
-      rest = rest.tail
-    }
-    builder += element
-    builder.result
-  }
+  override def take(upper: Int): Listing[A] = new Taking[A](this, upper)
   
-  override def +: [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
-    builder += element
-    var rest = this: Listable[A]
-    while (!rest.isEmpty) {
-      builder += rest.head
-      rest = rest.tail
-    }
-    builder.result
-  }
+  override def slice(lower: Int, upper: Int): Listing[A] = drop(lower).take(upper)
   
-  override def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    var rest = this: Listable[A]
-    while (!rest.isEmpty) {
-      builder += rest.head
-      rest = rest.tail
-    }
-    builder ++= elements
-    builder.result
-  }
-  
-  override def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    builder ++= elements
-    var rest = this: Listable[A]
-    while (!rest.isEmpty) {
-      builder += rest.head
-      rest = rest.tail
-    }
-    builder.result
-  }
-  
-  override def eagerly: Listing[Scope, A] = this
+  override def lazily: Listing[A] = this
 }
 
 object Listing {
-  abstract class Abstractly[+Scope, +A] extends Listable.Abstractly[A] with Listing[Scope, A]
+  abstract class Abstractly[+A] extends Listable.Abstractly[A] with Listing[A]
   
-  final class Projecting[+Scope, +A](self: Listable[A]) extends Abstractly[Scope, A] {
+  final class Projecting[+A](self: Listable[A]) extends Abstractly[A] {
     override def isEmpty: Boolean = self.isEmpty
     override def head: A = self.head
     override def tail: Listable[A] = self.tail
+    override def map[B](f: A => B): Listing[B] = new Mapping[A, B](self, f)
+    override def filter(p: A => Boolean): Listing[A] = new Filtering[A](self, p)
+    override def collect[B](q: PartialFunction[A, B]): Listing[B] = new Collecting[A, B](self, q)
+    override def drop(lower: Int): Listing[A] = new Dropping[A](self, lower)
+    override def take(upper: Int): Listing[A] = new Taking[A](self, upper)
+  }
+  
+  final class Mapping[-A, +B](self: Listable[A], f: A => B) extends Abstractly[B] {
+    override def isEmpty: Boolean = self.isEmpty
+    override def head: B = f(self.head)
+    override lazy val tail: Listable[B] = new Mapping[A, B](self.tail, f)
+  }
+  
+  final class Filtering[+A](private[this] var self: Listable[A], p: A => Boolean) extends Abstractly[A] {
+    while (!self.isEmpty && !p(self.head)) self = self.tail
+    override def isEmpty: Boolean = self.isEmpty
+    override def head: A = self.head
+    override lazy val tail: Listable[A] = new Filtering[A](self.tail, p)
+  }
+  
+  final class Collecting[-A, +B](private[this] var self: Listable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
+    while (!self.isEmpty && !q.isDefinedAt(self.head)) self = self.tail
+    override def isEmpty: Boolean = self.isEmpty
+    override def head: B = q(self.head)
+    override lazy val tail: Listable[B] = new Collecting[A, B](self.tail, q)
+  }
+  
+  final class Dropping[+A](private[this] var self: Listable[A], lower: Int) extends Abstractly[A] {
+    { var i = 0; while (i < lower && !self.isEmpty) { self = self.tail; i += 1 } }
+    override def isEmpty: Boolean = self.isEmpty
+    override def head: A = self.head
+    override def tail: Listable[A] = self.tail
+    override def take(upper: Int): Listing[A] = new Taking[A](self, upper)
+  }
+  
+  final class Taking[+A](self: Listable[A], upper: Int) extends Abstractly[A] {
+    override def isEmpty: Boolean = upper > 0 && self.isEmpty
+    override def head: A =
+      if (upper > 0) self.head
+      else throw new UnsupportedOperationException("empty head")
+    override def tail: Listable[A] =
+      if (upper > 0) new Taking[A](self.tail, upper - 1)
+      else throw new UnsupportedOperationException("empty tail")
   }
 }

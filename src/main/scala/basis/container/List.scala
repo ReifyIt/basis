@@ -9,7 +9,7 @@ package basis.container
 
 import basis.collection._
 
-sealed abstract class List[+A] extends Listing[List[_], A] {
+sealed abstract class List[+A] extends Listed[List[_], A] {
   override def isEmpty: Boolean
   
   override def head: A

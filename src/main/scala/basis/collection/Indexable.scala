@@ -106,9 +106,9 @@ trait Indexable[+A] extends Any with Sequential[A] {
     case _ => super.sameAs[B](that)
   }
   
-  override def eagerly: Indexing[Any, A] = new Indexing.Projecting[Any, A](this)
+  override def eagerly: Indexed[Any, A] = new Indexed.Projected[Any, A](this)
   
-  override def lazily: Indexed[A] = new Indexed.Projected[A](this)
+  override def lazily: Indexing[A] = new Indexing.Projecting[A](this)
   
   override def hashCode: Int = {
     import scala.util.hashing.MurmurHash3._

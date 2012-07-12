@@ -7,135 +7,148 @@
 
 package basis.collection
 
-trait Indexed[+A] extends Any with Sequenced[A] with Indexable[A] {
-  import Indexed._
-  
+trait Indexed[+Scope, +A] extends Any with Sequenced[Scope, A] with Indexable[A] {
   override def length: Int
   
   override def apply(index: Int): A
   
-  def reverse: Indexed[A] = new Reversed[A](this)
+  def reverse(implicit builder: Collector[Scope, A]): builder.Product = {
+    var i = length - 1
+    while (i >= 0) {
+      builder += apply(i)
+      i -= 1
+    }
+    builder.result
+  }
   
-  override def map[B](f: A => B): Indexed[B] = new Mapped[A, B](this, f)
+  override def map[B](f: A => B)(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    while (i < limit) {
+      builder += f(apply(i))
+      i += 1
+    }
+    builder.result
+  }
   
-  override def filter(p: A => Boolean): Indexed[A] = new Filtered[A](this, p)
+  override def flatMap[B](f: A => Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    while (i < limit) {
+      builder ++= f(apply(i))
+      i += 1
+    }
+    builder.result
+  }
   
-  override def collect[B](q: PartialFunction[A, B]): Indexed[B] = new Collected[A, B](this, q)
+  override def filter(p: A => Boolean)(implicit builder: Collector[Scope, A]): builder.Product = {
+    var i = 0
+    val limit = length
+    while (i < limit) {
+      val item = apply(i)
+      if (p(item)) builder += item
+      i += 1
+    }
+    builder.result
+  }
   
-  override def drop(lower: Int): Indexed[A] = new Dropped[A](this, lower)
+  override def collect[B](q: PartialFunction[A, B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    while (i < limit) {
+      val item = apply(i)
+      if (q.isDefinedAt(item)) builder += q(item)
+      i += 1
+    }
+    builder.result
+  }
   
-  override def take(upper: Int): Indexed[A] = new Taken[A](this, upper)
+  override def drop(lower: Int)(implicit builder: Collector[Scope, A]): builder.Product = {
+    var i = math.max(0, lower)
+    val limit = length
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder.result
+  }
   
-  override def slice(lower: Int, upper: Int): Indexed[A] = new Sliced[A](this, lower, upper)
+  override def take(upper: Int)(implicit builder: Collector[Scope, A]): builder.Product = {
+    var i = 0
+    val limit = math.min(upper, length)
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder.result
+  }
   
-  override def lazily: Indexed[A] = this
+  override def slice(lower: Int, upper: Int)(implicit builder: Collector[Scope, A]): builder.Product = {
+    var i = math.max(0, lower)
+    val limit = math.min(upper, length)
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder.result
+  }
+  
+  override def :+ [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    builder.expect(limit + 1)
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder += element
+    builder.result
+  }
+  
+  override def +: [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    builder.expect(limit + 1)
+    builder += element
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder.result
+  }
+  
+  override def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    builder.expect(limit)
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder ++= elements
+    builder.result
+  }
+  
+  override def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    var i = 0
+    val limit = length
+    builder ++= elements
+    builder.expect(limit)
+    while (i < limit) {
+      builder += apply(i)
+      i += 1
+    }
+    builder.result
+  }
+  
+  override def eagerly: Indexed[Scope, A] = this
 }
 
 object Indexed {
-  abstract class Abstractly[+A] extends Indexable.Abstractly[A] with Indexed[A]
+  abstract class Abstractly[+Scope, +A] extends Indexable.Abstractly[A] with Indexed[Scope, A]
   
-  final class Projected[+A](self: Indexable[A]) extends Abstractly[A] {
+  final class Projected[+Scope, +A](self: Indexable[A]) extends Abstractly[Scope, A] {
     override def length: Int = self.length
     override def apply(index: Int): A = self.apply(index)
-    override def reverse: Indexed[A] = new Reversed[A](self)
-    override def map[B](f: A => B): Indexed[B] = new Mapped[A, B](self, f)
-    override def filter(p: A => Boolean): Indexed[A] = new Filtered[A](self, p)
-    override def collect[B](q: PartialFunction[A, B]): Indexed[B] = new Collected[A, B](self, q)
-    override def drop(lower: Int): Indexed[A] = new Dropped[A](self, lower)
-    override def take(upper: Int): Indexed[A] = new Taken[A](self, upper)
-    override def slice(lower: Int, upper: Int): Indexed[A] = new Sliced[A](self, lower, upper)
-  }
-  
-  final class Reversed[+A](self: Indexable[A]) extends Abstractly[A] {
-    override def length: Int = self.length
-    override def apply(index: Int): A = self.apply(length - index - 1)
-    override def reverse: Indexed[A] = self.lazily
-  }
-  
-  final class Mapped[-A, +B](self: Indexable[A], f: A => B) extends Abstractly[B] {
-    override def length: Int = self.length
-    override def apply(index: Int): B = f(self.apply(index))
-  }
-  
-  final class Filtered[+A](self: Indexable[A], p: A => Boolean) extends Abstractly[A] {
-    private[this] var filteredIndexed: Array[Int] = _
-    private[this] def lookup: Array[Int] = synchronized {
-      if (filteredIndexed == null) {
-        val size = self.length
-        val indexes = new Array[Int](size)
-        var i = 0
-        var k = 0
-        while (i < size) {
-          if (p(self.apply(i))) {
-            indexes(k) = i
-            k += 1
-          }
-          i += 1
-        }
-        if (k == size) filteredIndexed = indexes
-        else {
-          filteredIndexed = new Array[Int](k)
-          Array.copy(indexes, 0, filteredIndexed, 0, k)
-        }
-      }
-      filteredIndexed
-    }
-    override def length: Int = lookup.length
-    override def apply(index: Int): A = self.apply(lookup(index))
-  }
-  
-  final class Collected[-A, +B](self: Indexable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
-    private[this] var collectedIndexed: Array[Int] = _
-    private[this] def lookup: Array[Int] = synchronized {
-      if (collectedIndexed == null) {
-        val size = self.length
-        val indexes = new Array[Int](size)
-        var i = 0
-        var k = 0
-        while (i < size) {
-          if (q.isDefinedAt(self.apply(i))) {
-            indexes(k) = i
-            k += 1
-          }
-          i += 1
-        }
-        if (k == size) collectedIndexed = indexes
-        else {
-          collectedIndexed = new Array[Int](k)
-          Array.copy(indexes, 0, collectedIndexed, 0, k)
-        }
-      }
-      collectedIndexed
-    }
-    override def length: Int = lookup.length
-    override def apply(index: Int): B = q(self.apply(lookup(index)))
-  }
-  
-  final class Dropped[+A](self: Indexable[A], lower: Int) extends Abstractly[A] {
-    private[this] val from: Int = math.max(0, math.min(lower, self.length))
-    override def length: Int = self.length - from
-    override def apply(index: Int): A = {
-      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      self.apply(from + index)
-    }
-  }
-  
-  final class Taken[+A](self: Indexable[A], upper: Int) extends Abstractly[A] {
-    private[this] val limit: Int = math.max(0, math.min(upper, self.length))
-    override def length: Int = limit
-    override def apply(index: Int): A = {
-      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      self.apply(index)
-    }
-  }
-  
-  final class Sliced[+A](self: Indexable[A], lower: Int, upper: Int) extends Abstractly[A] {
-    private[this] val from: Int = math.max(0, math.min(lower, self.length))
-    private[this] val until: Int = math.max(from, math.min(upper, self.length))
-    override def length: Int = until - from
-    override def apply(index: Int): A = {
-      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      self.apply(from + index)
-    }
   }
 }
