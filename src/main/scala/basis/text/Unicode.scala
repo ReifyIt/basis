@@ -13,7 +13,7 @@ import basis.collection._
   * 
   * @author Chris Sachs
   */
-trait Encoding { encoding =>
+trait Unicode {
   /** A Unicode string in this enocoding form. */
   type String <: Text
   
@@ -24,7 +24,7 @@ trait Encoding { encoding =>
   implicit def StringBuilder: StringBuilder
   
   /** A Unicode code unit sequence in this encoding form. */
-  trait Text extends Any with Iterating[encoding.type, Int] {
+  trait Text extends Any with Iterating[Unicode.this.type, Int] {
     /** Returns the number of code units in the Unicode text. */
     def length: Int
     
@@ -55,7 +55,7 @@ trait Encoding { encoding =>
   }
   
   /** A builder for well-formed Unicode strings. */
-  trait StringBuilder extends Collector[encoding.type, Int] {
+  trait StringBuilder extends Collector[Unicode.this.type, Int] {
     override type Product = String
     
     /** Tells the builder to expect `count` code units. */
