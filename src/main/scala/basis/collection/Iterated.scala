@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait Iterated[+Scope, +A] extends Any with Traversed[Scope, A] with Iterable[A] {
+trait Iterated[+A] extends Any with Traversed[A] with Iterable[A] {
   override def iterator: Iterator[A]
   
   override def map[B](f: A => B)(implicit builder: Collector[Scope, B]): builder.Product = {
@@ -84,13 +84,13 @@ trait Iterated[+Scope, +A] extends Any with Traversed[Scope, A] with Iterable[A]
     builder.result
   }
   
-  override def eagerly: Iterated[Scope, A] = this
+  override def eagerly: Iterated[A] = this
 }
 
 object Iterated {
-  abstract class Abstractly[+Scope, +A] extends Iterable.Abstractly[A] with Iterated[Scope, A]
+  abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Iterated[A]
   
-  final class Projected[+Scope, +A](self: Iterable[A]) extends Abstractly[Scope, A] {
+  final class Projected[+A](self: Iterable[A]) extends Abstractly[A] {
     override def iterator: Iterator[A] = self.iterator
   }
 }

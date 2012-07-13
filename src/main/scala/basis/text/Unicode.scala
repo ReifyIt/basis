@@ -24,7 +24,9 @@ trait Unicode {
   implicit def StringBuilder: StringBuilder
   
   /** A Unicode code unit sequence in this encoding form. */
-  trait Text extends Any with Iterated[Unicode.this.type, Int] {
+  trait Text extends Any with Iterated[Int] {
+    override type Scope <: Unicode.this.type
+    
     /** Returns the number of code units in the Unicode text. */
     def length: Int
     

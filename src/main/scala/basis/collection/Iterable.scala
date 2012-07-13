@@ -35,7 +35,7 @@ trait Iterable[+A] extends Any with Traversable[A] {
   
   override def count(p: A => Boolean): Int = iterator.count(p)
   
-  override def eagerly: Iterated[Any, A] = new Iterated.Projected[Any, A](this)
+  override def eagerly: Iterated[A] = new Iterated.Projected[A](this)
   
   override def lazily: Iterating[A] = new Iterating.Projecting[A](this)
 }

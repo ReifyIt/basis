@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait Sequenced[+Scope, +A] extends Any with Iterated[Scope, A] with Sequential[A] {
+trait Sequenced[+A] extends Any with Iterated[A] with Sequential[A] {
   override def iterator: Iterator[A]
   
   def :+ [B >: A](element: B)(implicit builder: Collector[Scope, B]): builder.Product = {
@@ -24,13 +24,13 @@ trait Sequenced[+Scope, +A] extends Any with Iterated[Scope, A] with Sequential[
     builder.result
   }
   
-  override def eagerly: Sequenced[Scope, A] = this
+  override def eagerly: Sequenced[A] = this
 }
 
 object Sequenced {
-  abstract class Abstractly[+Scope, +A] extends Sequential.Abstractly[A] with Sequenced[Scope, A]
+  abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Sequenced[A]
   
-  final class Projected[+Scope, +A](self: Sequential[A]) extends Abstractly[Scope, A] {
+  final class Projected[+A](self: Sequential[A]) extends Abstractly[A] {
     override def iterator: Iterator[A] = self.iterator
   }
 }

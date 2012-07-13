@@ -112,7 +112,7 @@ trait Listable[+A] extends Any with Sequential[A] {
     case _ => super.sameAs(that)
   }
   
-  override def eagerly: Listed[Any, A] = new Listed.Projected[Any, A](this)
+  override def eagerly: Listed[A] = new Listed.Projected[A](this)
   
   override def lazily: Listing[A] = new Listing.Projecting[A](this)
   

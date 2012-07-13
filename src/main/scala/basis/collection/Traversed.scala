@@ -7,7 +7,9 @@
 
 package basis.collection
 
-trait Traversed[+Scope, +A] extends Any with Traversable[A] {
+trait Traversed[+A] extends Any with Traversable[A] {
+  type Scope
+  
   override def foreach[U](f: A => U): Unit
   
   def map[B](f: A => B)(implicit builder: Collector[Scope, B]): builder.Product = {
@@ -79,13 +81,13 @@ trait Traversed[+Scope, +A] extends Any with Traversable[A] {
     builder.result
   }
   
-  override def eagerly: Traversed[Scope, A] = this
+  override def eagerly: Traversed[A] = this
 }
 
 object Traversed {
-  abstract class Abstractly[+Scope, +A] extends Traversable.Abstractly[A] with Traversed[Scope, A]
+  abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Traversed[A]
   
-  final class Projected[+Scope, +A](self: Traversable[A]) extends Abstractly[Scope, A] {
+  final class Projected[+A](self: Traversable[A]) extends Abstractly[A] {
     override def foreach[U](f: A => U): Unit = self.foreach[U](f)
   }
 }

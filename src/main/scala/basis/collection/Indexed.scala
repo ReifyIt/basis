@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait Indexed[+Scope, +A] extends Any with Sequenced[Scope, A] with Indexable[A] {
+trait Indexed[+A] extends Any with Sequenced[A] with Indexable[A] {
   override def length: Int
   
   override def apply(index: Int): A
@@ -141,13 +141,13 @@ trait Indexed[+Scope, +A] extends Any with Sequenced[Scope, A] with Indexable[A]
     builder.result
   }
   
-  override def eagerly: Indexed[Scope, A] = this
+  override def eagerly: Indexed[A] = this
 }
 
 object Indexed {
-  abstract class Abstractly[+Scope, +A] extends Indexable.Abstractly[A] with Indexed[Scope, A]
+  abstract class Abstractly[+A] extends Indexable.Abstractly[A] with Indexed[A]
   
-  final class Projected[+Scope, +A](self: Indexable[A]) extends Abstractly[Scope, A] {
+  final class Projected[+A](self: Indexable[A]) extends Abstractly[A] {
     override def length: Int = self.length
     override def apply(index: Int): A = self.apply(index)
   }

@@ -17,7 +17,7 @@ trait Sequential[+A] extends Any with Iterable[A] {
     !these.hasNext && !those.hasNext
   }
   
-  override def eagerly: Sequenced[Any, A] = new Sequenced.Projected[Any, A](this)
+  override def eagerly: Sequenced[A] = new Sequenced.Projected[A](this)
   
   override def lazily: Sequencing[A] = new Sequencing.Projecting[A](this)
   

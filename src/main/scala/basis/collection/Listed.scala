@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait Listed[+Scope, +A] extends Any with Sequenced[Scope, A] with Listable[A] {
+trait Listed[+A] extends Any with Sequenced[A] with Listable[A] {
   override def isEmpty: Boolean
   
   override def head: A
@@ -90,13 +90,13 @@ trait Listed[+Scope, +A] extends Any with Sequenced[Scope, A] with Listable[A] {
     builder.result
   }
   
-  override def eagerly: Listed[Scope, A] = this
+  override def eagerly: Listed[A] = this
 }
 
 object Listed {
-  abstract class Abstractly[+Scope, +A] extends Listable.Abstractly[A] with Listed[Scope, A]
+  abstract class Abstractly[+A] extends Listable.Abstractly[A] with Listed[A]
   
-  final class Projected[+Scope, +A](self: Listable[A]) extends Abstractly[Scope, A] {
+  final class Projected[+A](self: Listable[A]) extends Abstractly[A] {
     override def isEmpty: Boolean = self.isEmpty
     override def head: A = self.head
     override def tail: Listable[A] = self.tail

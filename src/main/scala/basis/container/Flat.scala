@@ -10,7 +10,9 @@ package basis.container
 import basis.collection._
 import basis.memory._
 
-trait Flat[A] extends Any with Indexed[Flat[_], A] {
+trait Flat[A] extends Any with Indexed[A] {
+  override type Scope <: Flat[_]
+  
   override def length: Int
   
   override def apply(index: Int): A
