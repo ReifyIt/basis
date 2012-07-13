@@ -31,10 +31,10 @@ trait Listing[+A] extends Any with Sequencing[A] with Listable[A] {
   override def lazily: Listing[A] = this
 }
 
-object Listing {
-  abstract class Abstractly[+A] extends Listable.Abstractly[A] with Listing[A]
+private[basis] object Listing {
+  private[basis] abstract class Abstractly[+A] extends Listable.Abstractly[A] with Listing[A]
   
-  final class Projecting[+A](self: Listable[A]) extends Abstractly[A] {
+  private[basis] final class Projecting[+A](self: Listable[A]) extends Abstractly[A] {
     override def isEmpty: Boolean = self.isEmpty
     override def head: A = self.head
     override def tail: Listable[A] = self.tail
@@ -45,27 +45,27 @@ object Listing {
     override def take(upper: Int): Listing[A] = new Taking[A](self, upper)
   }
   
-  final class Mapping[-A, +B](self: Listable[A], f: A => B) extends Abstractly[B] {
+  private[basis] final class Mapping[-A, +B](self: Listable[A], f: A => B) extends Abstractly[B] {
     override def isEmpty: Boolean = self.isEmpty
     override def head: B = f(self.head)
     override lazy val tail: Listable[B] = new Mapping[A, B](self.tail, f)
   }
   
-  final class Filtering[+A](private[this] var self: Listable[A], p: A => Boolean) extends Abstractly[A] {
+  private[basis] final class Filtering[+A](private[this] var self: Listable[A], p: A => Boolean) extends Abstractly[A] {
     while (!self.isEmpty && !p(self.head)) self = self.tail
     override def isEmpty: Boolean = self.isEmpty
     override def head: A = self.head
     override lazy val tail: Listable[A] = new Filtering[A](self.tail, p)
   }
   
-  final class Collecting[-A, +B](private[this] var self: Listable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
+  private[basis] final class Collecting[-A, +B](private[this] var self: Listable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
     while (!self.isEmpty && !q.isDefinedAt(self.head)) self = self.tail
     override def isEmpty: Boolean = self.isEmpty
     override def head: B = q(self.head)
     override lazy val tail: Listable[B] = new Collecting[A, B](self.tail, q)
   }
   
-  final class Dropping[+A](private[this] var self: Listable[A], lower: Int) extends Abstractly[A] {
+  private[basis] final class Dropping[+A](private[this] var self: Listable[A], lower: Int) extends Abstractly[A] {
     { var i = 0; while (i < lower && !self.isEmpty) { self = self.tail; i += 1 } }
     override def isEmpty: Boolean = self.isEmpty
     override def head: A = self.head
@@ -73,7 +73,7 @@ object Listing {
     override def take(upper: Int): Listing[A] = new Taking[A](self, upper)
   }
   
-  final class Taking[+A](self: Listable[A], upper: Int) extends Abstractly[A] {
+  private[basis] final class Taking[+A](self: Listable[A], upper: Int) extends Abstractly[A] {
     override def isEmpty: Boolean = upper > 0 && self.isEmpty
     override def head: A =
       if (upper > 0) self.head

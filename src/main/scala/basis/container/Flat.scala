@@ -11,7 +11,7 @@ import basis.collection._
 import basis.memory._
 
 trait Flat[A] extends Any with Indexed[A] {
-  override type Scope <: Flat[_]
+  override type Scope <: Flat[A]
   
   override def length: Int
   

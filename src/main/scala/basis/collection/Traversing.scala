@@ -31,10 +31,10 @@ trait Traversing[+A] extends Any with Traversable[A] {
   override def lazily: Traversing[A] = this
 }
 
-object Traversing {
-  abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Traversing[A]
+private[basis] object Traversing {
+  private[basis] abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Traversing[A]
   
-  final class Projecting[+A](self: Traversable[A]) extends Abstractly[A] {
+  private[basis] final class Projecting[+A](self: Traversable[A]) extends Abstractly[A] {
     override def foreach[U](f: A => U): Unit = self.foreach(f)
     override def map[B](f: A => B): Traversing[B] = new Mapping[A, B](self, f)
     override def flatMap[B](f: A => Incremental[B]): Traversing[B] = new FlatMapping[A, B](self, f)
@@ -45,23 +45,23 @@ object Traversing {
     override def slice(lower: Int, upper: Int): Traversing[A] = new Slicing[A](self, lower, upper)
   }
   
-  final class Mapping[-A, +B](self: Traversable[A], g: A => B) extends Abstractly[B] {
+  private[basis] final class Mapping[-A, +B](self: Traversable[A], g: A => B) extends Abstractly[B] {
     override def foreach[U](f: B => U): Unit = for (x <- self) f(g(x))
   }
   
-  final class FlatMapping[-A, +B](self: Traversable[A], g: A => Incremental[B]) extends Abstractly[B] {
+  private[basis] final class FlatMapping[-A, +B](self: Traversable[A], g: A => Incremental[B]) extends Abstractly[B] {
     override def foreach[U](f: B => U): Unit = for (x <- self) for (y <- g(x)) f(y)
   }
   
-  final class Filtering[+A](self: Traversable[A], p: A => Boolean) extends Abstractly[A] {
+  private[basis] final class Filtering[+A](self: Traversable[A], p: A => Boolean) extends Abstractly[A] {
     override def foreach[U](f: A => U): Unit = for (x <- self) if (p(x)) f(x)
   }
   
-  final class Collecting[-A, +B](self: Traversable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
+  private[basis] final class Collecting[-A, +B](self: Traversable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
     override def foreach[U](f: B => U): Unit = for (x <- self) if (q.isDefinedAt(x)) f(q(x))
   }
   
-  final class Dropping[+A](self: Traversable[A], lower: Int) extends Abstractly[A] {
+  private[basis] final class Dropping[+A](self: Traversable[A], lower: Int) extends Abstractly[A] {
     override def foreach[U](f: A => U) {
       var i = 0
       for (x <- self) {
@@ -71,7 +71,7 @@ object Traversing {
     }
   }
   
-  final class Taking[+A](self: Traversable[A], upper: Int) extends Abstractly[A] {
+  private[basis] final class Taking[+A](self: Traversable[A], upper: Int) extends Abstractly[A] {
     override def foreach[U](f: A => U) {
       var i = 0
       try for (x <- self) {
@@ -83,7 +83,7 @@ object Traversing {
     }
   }
   
-  final class Slicing[+A](self: Traversable[A], lower: Int, upper: Int) extends Abstractly[A] {
+  private[basis] final class Slicing[+A](self: Traversable[A], lower: Int, upper: Int) extends Abstractly[A] {
     override def foreach[U](f: A => U) {
       var i = 0
       try for (x <- self) {

@@ -144,10 +144,10 @@ trait Indexed[+A] extends Any with Sequenced[A] with Indexable[A] {
   override def eagerly: Indexed[A] = this
 }
 
-object Indexed {
-  abstract class Abstractly[+A] extends Indexable.Abstractly[A] with Indexed[A]
+private[basis] object Indexed {
+  private[basis] abstract class Abstractly[+A] extends Indexable.Abstractly[A] with Indexed[A]
   
-  final class Projected[+A](self: Indexable[A]) extends Abstractly[A] {
+  private[basis] final class Projected[+A](self: Indexable[A]) extends Abstractly[A] {
     override def length: Int = self.length
     override def apply(index: Int): A = self.apply(index)
   }

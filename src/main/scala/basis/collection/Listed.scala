@@ -93,10 +93,10 @@ trait Listed[+A] extends Any with Sequenced[A] with Listable[A] {
   override def eagerly: Listed[A] = this
 }
 
-object Listed {
-  abstract class Abstractly[+A] extends Listable.Abstractly[A] with Listed[A]
+private[basis] object Listed {
+  private[basis] abstract class Abstractly[+A] extends Listable.Abstractly[A] with Listed[A]
   
-  final class Projected[+A](self: Listable[A]) extends Abstractly[A] {
+  private[basis] final class Projected[+A](self: Listable[A]) extends Abstractly[A] {
     override def isEmpty: Boolean = self.isEmpty
     override def head: A = self.head
     override def tail: Listable[A] = self.tail

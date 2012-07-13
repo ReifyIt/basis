@@ -10,7 +10,7 @@ package basis.container
 import basis.collection._
 
 sealed abstract class List[+A] extends Listed[A] {
-  override type Scope <: List[_]
+  override type Scope <: List[A]
   
   override def isEmpty: Boolean
   

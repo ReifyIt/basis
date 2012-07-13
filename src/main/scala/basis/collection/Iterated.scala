@@ -70,27 +70,13 @@ trait Iterated[+A] extends Any with Traversed[A] with Iterable[A] {
     builder.result
   }
   
-  override def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    val iter = iterator
-    while (iter.hasNext) builder += iter.next()
-    builder ++= elements
-    builder.result
-  }
-  
-  override def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    builder ++= elements
-    val iter = iterator
-    while (iter.hasNext) builder += iter.next()
-    builder.result
-  }
-  
   override def eagerly: Iterated[A] = this
 }
 
-object Iterated {
-  abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Iterated[A]
+private[basis] object Iterated {
+  private[basis] abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Iterated[A]
   
-  final class Projected[+A](self: Iterable[A]) extends Abstractly[A] {
+  private[basis] final class Projected[+A](self: Iterable[A]) extends Abstractly[A] {
     override def iterator: Iterator[A] = self.iterator
   }
 }

@@ -31,10 +31,10 @@ trait Indexing[+A] extends Any with Sequencing[A] with Indexable[A] {
   override def lazily: Indexing[A] = this
 }
 
-object Indexing {
-  abstract class Abstractly[+A] extends Indexable.Abstractly[A] with Indexing[A]
+private[basis] object Indexing {
+  private[basis] abstract class Abstractly[+A] extends Indexable.Abstractly[A] with Indexing[A]
   
-  final class Projecting[+A](self: Indexable[A]) extends Abstractly[A] {
+  private[basis] final class Projecting[+A](self: Indexable[A]) extends Abstractly[A] {
     override def length: Int = self.length
     override def apply(index: Int): A = self.apply(index)
     override def reverse: Indexing[A] = new Reversing[A](self)
@@ -46,18 +46,18 @@ object Indexing {
     override def slice(lower: Int, upper: Int): Indexing[A] = new Slicing[A](self, lower, upper)
   }
   
-  final class Reversing[+A](self: Indexable[A]) extends Abstractly[A] {
+  private[basis] final class Reversing[+A](self: Indexable[A]) extends Abstractly[A] {
     override def length: Int = self.length
     override def apply(index: Int): A = self.apply(length - index - 1)
     override def reverse: Indexing[A] = self.lazily
   }
   
-  final class Mapping[-A, +B](self: Indexable[A], f: A => B) extends Abstractly[B] {
+  private[basis] final class Mapping[-A, +B](self: Indexable[A], f: A => B) extends Abstractly[B] {
     override def length: Int = self.length
     override def apply(index: Int): B = f(self.apply(index))
   }
   
-  final class Filtering[+A](self: Indexable[A], p: A => Boolean) extends Abstractly[A] {
+  private[basis] final class Filtering[+A](self: Indexable[A], p: A => Boolean) extends Abstractly[A] {
     private[this] var filteredIndexed: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
       if (filteredIndexed == null) {
@@ -84,7 +84,7 @@ object Indexing {
     override def apply(index: Int): A = self.apply(lookup(index))
   }
   
-  final class Collecting[-A, +B](self: Indexable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
+  private[basis] final class Collecting[-A, +B](self: Indexable[A], q: PartialFunction[A, B]) extends Abstractly[B] {
     private[this] var collectedIndexed: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
       if (collectedIndexed == null) {
@@ -111,7 +111,7 @@ object Indexing {
     override def apply(index: Int): B = q(self.apply(lookup(index)))
   }
   
-  final class Dropping[+A](self: Indexable[A], lower: Int) extends Abstractly[A] {
+  private[basis] final class Dropping[+A](self: Indexable[A], lower: Int) extends Abstractly[A] {
     private[this] val from: Int = math.max(0, math.min(lower, self.length))
     override def length: Int = self.length - from
     override def apply(index: Int): A = {
@@ -120,7 +120,7 @@ object Indexing {
     }
   }
   
-  final class Taking[+A](self: Indexable[A], upper: Int) extends Abstractly[A] {
+  private[basis] final class Taking[+A](self: Indexable[A], upper: Int) extends Abstractly[A] {
     private[this] val limit: Int = math.max(0, math.min(upper, self.length))
     override def length: Int = limit
     override def apply(index: Int): A = {
@@ -129,7 +129,7 @@ object Indexing {
     }
   }
   
-  final class Slicing[+A](self: Indexable[A], lower: Int, upper: Int) extends Abstractly[A] {
+  private[basis] final class Slicing[+A](self: Indexable[A], lower: Int, upper: Int) extends Abstractly[A] {
     private[this] val from: Int = math.max(0, math.min(lower, self.length))
     private[this] val until: Int = math.max(from, math.min(upper, self.length))
     override def length: Int = until - from

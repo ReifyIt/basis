@@ -123,10 +123,10 @@ trait Indexable[+A] extends Any with Sequential[A] {
   }
 }
 
-object Indexable {
-  abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Indexable[A]
+private[basis] object Indexable {
+  private[basis] abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Indexable[A]
   
-  final class Elements[+A](self: Indexable[A], lower: Int, upper: Int) extends Iterator.Abstract[A] {
+  private[basis] final class Elements[+A](self: Indexable[A], lower: Int, upper: Int) extends Iterator.Abstract[A] {
     private[this] var index: Int = math.max(0, math.min(lower, self.length))
     private[this] var limit: Int = math.max(index, math.min(upper, self.length))
     override def hasNext: Boolean = index < limit

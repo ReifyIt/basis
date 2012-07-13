@@ -92,6 +92,6 @@ trait Traversable[+A] extends Any with Equals with Incremental[A] {
   }
 }
 
-object Traversable {
-  abstract class Abstractly[+A] extends Traversable[A]
+private[basis] object Traversable {
+  private[basis] abstract class Abstractly[+A] extends Traversable[A]
 }

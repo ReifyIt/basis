@@ -40,6 +40,6 @@ trait Iterable[+A] extends Any with Traversable[A] {
   override def lazily: Iterating[A] = new Iterating.Projecting[A](this)
 }
 
-object Iterable {
-  abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Iterable[A]
+private[basis] object Iterable {
+  private[basis] abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Iterable[A]
 }

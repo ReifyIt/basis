@@ -67,27 +67,13 @@ trait Traversed[+A] extends Any with Traversable[A] {
     builder.result
   }
   
-  def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    val append = (x: B) => builder += x
-    this foreach append
-    elements foreach append
-    builder.result
-  }
-  
-  def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
-    val append = (x: B) => builder += x
-    elements foreach append
-    this foreach append
-    builder.result
-  }
-  
   override def eagerly: Traversed[A] = this
 }
 
-object Traversed {
-  abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Traversed[A]
+private[basis] object Traversed {
+  private[basis] abstract class Abstractly[+A] extends Traversable.Abstractly[A] with Traversed[A]
   
-  final class Projected[+A](self: Traversable[A]) extends Abstractly[A] {
+  private[basis] final class Projected[+A](self: Traversable[A]) extends Abstractly[A] {
     override def foreach[U](f: A => U): Unit = self.foreach[U](f)
   }
 }

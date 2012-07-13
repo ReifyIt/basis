@@ -130,10 +130,10 @@ trait Listable[+A] extends Any with Sequential[A] {
   }
 }
 
-object Listable {
-  abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Listable[A]
+private[basis] object Listable {
+  private[basis] abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Listable[A]
   
-  final class Elements[+A](self: Listable[A]) extends Iterator.Abstract[A] {
+  private[basis] final class Elements[+A](self: Listable[A]) extends Iterator.Abstract[A] {
     private[this] var rest: Listable[A] = self
     override def hasNext: Boolean = !rest.isEmpty
     override def next(): A = {

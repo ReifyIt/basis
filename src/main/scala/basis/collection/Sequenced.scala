@@ -24,13 +24,27 @@ trait Sequenced[+A] extends Any with Iterated[A] with Sequential[A] {
     builder.result
   }
   
+  def :++ [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    val iter = iterator
+    while (iter.hasNext) builder += iter.next()
+    builder ++= elements
+    builder.result
+  }
+  
+  def ++: [B >: A](elements: Incremental[B])(implicit builder: Collector[Scope, B]): builder.Product = {
+    builder ++= elements
+    val iter = iterator
+    while (iter.hasNext) builder += iter.next()
+    builder.result
+  }
+  
   override def eagerly: Sequenced[A] = this
 }
 
-object Sequenced {
-  abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Sequenced[A]
+private[basis] object Sequenced {
+  private[basis] abstract class Abstractly[+A] extends Sequential.Abstractly[A] with Sequenced[A]
   
-  final class Projected[+A](self: Sequential[A]) extends Abstractly[A] {
+  private[basis] final class Projected[+A](self: Sequential[A]) extends Abstractly[A] {
     override def iterator: Iterator[A] = self.iterator
   }
 }

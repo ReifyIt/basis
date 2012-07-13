@@ -41,6 +41,6 @@ trait Sequential[+A] extends Any with Iterable[A] {
   }
 }
 
-object Sequential {
-  abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Sequential[A]
+private[basis] object Sequential {
+  private[basis] abstract class Abstractly[+A] extends Iterable.Abstractly[A] with Sequential[A]
 }

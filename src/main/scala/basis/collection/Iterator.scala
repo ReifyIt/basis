@@ -102,19 +102,19 @@ trait Iterator[+A] extends Any with Incremental[A] {
 }
 
 object Iterator {
-  abstract class Abstract[+A] extends Iterator[A]
+  private[basis] abstract class Abstract[+A] extends Iterator[A]
   
   object Empty extends Iterator[Nothing] {
     override def hasNext: Boolean = false
     override def next(): Nothing = throw new NoSuchElementException("empty iterator")
   }
   
-  final class Mapped[-A, +B](self: Iterator[A], f: A => B) extends Abstract[B] {
+  private[basis] final class Mapped[-A, +B](self: Iterator[A], f: A => B) extends Abstract[B] {
     override def hasNext: Boolean = self.hasNext
     override def next(): B = f(self.next())
   }
   
-  final class FlatMapped[-A, +B](self: Iterator[A], f: A => Iterator[B]) extends Abstract[B] {
+  private[basis] final class FlatMapped[-A, +B](self: Iterator[A], f: A => Iterator[B]) extends Abstract[B] {
     private[this] var current: Iterator[B] = Empty
     override def hasNext: Boolean = {
       while (!current.hasNext && self.hasNext) current = f(self.next())
@@ -126,7 +126,7 @@ object Iterator {
     }
   }
   
-  final class Filtered[+A](self: Iterator[A], p: A => Boolean) extends Abstract[A] {
+  private[basis] final class Filtered[+A](self: Iterator[A], p: A => Boolean) extends Abstract[A] {
     private[this] var head: A = _
     private[this] var isDefined: Boolean = false
     override def hasNext: Boolean = {
@@ -147,7 +147,7 @@ object Iterator {
     }
   }
   
-  final class Collected[-A, +B](self: Iterator[A], q: PartialFunction[A, B]) extends Abstract[B] {
+  private[basis] final class Collected[-A, +B](self: Iterator[A], q: PartialFunction[A, B]) extends Abstract[B] {
     private[this] var head: A = _
     private[this] var isDefined: Boolean = false
     override def hasNext: Boolean = {
@@ -168,7 +168,7 @@ object Iterator {
     }
   }
   
-  final class Dropped[+A](self: Iterator[A], lower: Int) extends Abstract[A] {
+  private[basis] final class Dropped[+A](self: Iterator[A], lower: Int) extends Abstract[A] {
     private[this] var index: Int = 0
     override def hasNext: Boolean = {
       while (index < lower && self.hasNext) { index += 1; self.next() }
@@ -177,13 +177,13 @@ object Iterator {
     override def next(): A = (if (hasNext) self else Empty).next()
   }
   
-  final class Taken[+A](self: Iterator[A], upper: Int) extends Abstract[A] {
+  private[basis] final class Taken[+A](self: Iterator[A], upper: Int) extends Abstract[A] {
     private[this] var index: Int = 0
     override def hasNext: Boolean = index < upper && self.hasNext
     override def next(): A = (if (hasNext) { index += 1; self } else Empty).next()
   }
   
-  final class Sliced[+A](self: Iterator[A], lower: Int, upper: Int) extends Abstract[A] {
+  private[basis] final class Sliced[+A](self: Iterator[A], lower: Int, upper: Int) extends Abstract[A] {
     private[this] val start: Int = math.max(0, lower)
     private[this] val until: Int = math.max(start, upper)
     private[this] var index: Int = 0
@@ -194,12 +194,12 @@ object Iterator {
     override def next(): A = (if (hasNext) { index += 1; self } else Empty).next()
   }
   
-  final class Zipped[+A, +B](self: Iterator[A], that: Iterator[B]) extends Abstract[(A, B)] {
+  private[basis] final class Zipped[+A, +B](self: Iterator[A], that: Iterator[B]) extends Abstract[(A, B)] {
     override def hasNext: Boolean = self.hasNext && that.hasNext
     override def next(): (A, B) = (self.next(), that.next())
   }
   
-  final class Appended[+A](private[this] var self: Iterator[A], private[this] var more: Iterator[A]) extends Abstract[A] {
+  private[basis] final class Appended[+A](private[this] var self: Iterator[A], private[this] var more: Iterator[A]) extends Abstract[A] {
     if (self == null || more == null) throw new NullPointerException // don't treat null iterators as empty
     override def hasNext: Boolean =
       self != null && self.hasNext || more != null && { self = more; more = null; self.hasNext } || { self = null; false }
@@ -210,7 +210,7 @@ object Iterator {
     }
   }
   
-  final class Suffixed[+A](private[this] var self: Iterator[A], private[this] var item: A) extends Abstract[A] {
+  private[basis] final class Suffixed[+A](private[this] var self: Iterator[A], private[this] var item: A) extends Abstract[A] {
     if (self == null) throw new NullPointerException // don't treat null iterator as empty
     private[this] var hasItem: Boolean = true // can't use null item as marker
     override def hasNext: Boolean = self != null && self.hasNext || hasItem || { self = null; false }
@@ -226,7 +226,7 @@ object Iterator {
     }
   }
   
-  final class Prefixed[+A](private[this] var self: Iterator[A], private[this] var item: A) extends Abstract[A] {
+  private[basis] final class Prefixed[+A](private[this] var self: Iterator[A], private[this] var item: A) extends Abstract[A] {
     if (self == null) throw new NullPointerException // don't treat null iterator as empty
     private[this] var hasItem: Boolean = true // can't use null item as marker
     override def hasNext: Boolean = self != null && self.hasNext || hasItem || { self = null; false }
