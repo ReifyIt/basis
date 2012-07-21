@@ -14,13 +14,27 @@ trait Many[+A] extends Any with Each[A] {
     val iter = iterator
     while (iter.hasNext) f(iter.next())
   }
+  
+  protected def stringPrefix: String = {
+    var name = getClass.getName
+    val dot = name.lastIndexOf('.')
+    (if (dot < 0) name else name.substring(dot + 1)).replace('$', '.')
+  }
+  
+  override def toString: String = {
+    val s = new java.lang.StringBuilder(stringPrefix).append('(')
+    val iter = iterator
+    if (iter.hasNext) s.append(iter.next())
+    while (iter.hasNext) s.append(", ").append(iter.next())
+    s.append(')').toString
+  }
 }
 
 object Many {
   import scala.language.implicitConversions
   
-  @inline def ForMany[A](self: Many[A]): ForMany[self.From, A] =
-    new ForMany[self.From, A](self)
+  @inline implicit def ForMany[A](self: Many[A]): ForMany[self.Self, A] =
+    new ForMany[self.Self, A](self)
   
   final class ForMany[From, A](val __ : Many[A]) extends AnyVal {
     import __.iterator
@@ -111,15 +125,16 @@ object Many {
       make.result
     }
     
-    def zip[B](that: Many[B]): Many[(A, B)] = new Zip(__, that)
+    def zip[B](that: Many[B])(implicit make: Make[From, (A, B)]): make.What = {
+      val these = iterator
+      val those = that.iterator
+      while (these.hasNext && those.hasNext) make += ((these.next(), those.next()))
+      make.result
+    }
   }
   
   private[basis] final class WithFilter[+A](self: Many[A], p: A => Boolean) extends Many[A] {
     override def iterator: Next[A] = self.iterator filter p
-    override def foreach[U](f: A => U): Unit = self.foreach(new Analysis.Filter(f, p))
-  }
-  
-  private[basis] final class Zip[+A, +B](these: Many[A], those: Many[B]) extends Many[(A, B)] {
-    override def iterator: Next[(A, B)] = these.iterator zip those.iterator
+    override def foreach[U](f: A => U): Unit = self.foreach(new Each.Filter(f, p))
   }
 }

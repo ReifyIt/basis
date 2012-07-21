@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait Next[+A] extends Any with Once[A] {
+trait Next[+A] extends Any with Each[A] {
   def hasNext: Boolean
   
   def next(): A
@@ -24,8 +24,8 @@ object Next {
     override def next(): Nothing = throw new NoSuchElementException("next to nada")
   }
   
-  @inline implicit def ForNext[A](self: Next[A]): ForNext[self.From, A] =
-    new ForNext[self.From, A](self)
+  @inline implicit def ForNext[A](self: Next[A]): ForNext[self.Self, A] =
+    new ForNext[self.Self, A](self)
   
   final class ForNext[From, A](val __ : Next[A]) extends AnyVal {
     import __.{hasNext, next}

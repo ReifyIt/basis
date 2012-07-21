@@ -14,7 +14,7 @@ trait Make[-From, -A] extends Any {
   
   def += (that: A): Unit
   
-  def ++= (those: Once[A]): Unit = those.foreach(new Analysis.Maker(this))
+  def ++= (those: Each[A]): Unit = those.foreach(new Each.Append(this))
   
   def result: What
   

@@ -7,7 +7,7 @@
 
 package basis.collection
 
-trait More[+A] extends Any with Such[A] {
+trait More[+A] extends Any with Given[A] {
   def isEmpty: Boolean
   
   def head: A
@@ -38,8 +38,8 @@ object More {
     }
   }
   
-  @inline implicit def ForMore[A](self: More[A]): ForMore[self.From, A] =
-    new ForMore[self.From, A](self)
+  @inline implicit def ForMore[A](self: More[A]): ForMore[self.Self, A] =
+    new ForMore[self.Self, A](self)
   
   final class ForMore[From, A](val __ : More[A]) extends AnyVal {
     @inline def select[B](q: PartialFunction[A, B]): Option[B] = {

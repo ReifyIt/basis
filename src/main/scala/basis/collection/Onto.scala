@@ -16,8 +16,8 @@ trait Onto[A, +Z] extends Any with Many[(A, Z)] {
 object Onto {
   import scala.language.implicitConversions
   
-  @inline implicit def ForOnto[A, Z](self: Onto[A, Z]): ForOnto[self.From, A, Z] =
-    new ForOnto[self.From, A, Z](self)
+  @inline implicit def ForOnto[A, Z](self: Onto[A, Z]): ForOnto[self.Self, A, Z] =
+    new ForOnto[self.Self, A, Z](self)
   
   final class ForOnto[From, A, Z](val __ : Onto[A, Z]) extends AnyVal {
     

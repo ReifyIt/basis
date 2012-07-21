@@ -10,8 +10,8 @@ package basis.container
 import basis.collection._
 import basis.memory._
 
-trait Flat[A] extends Any with Near[A] {
-  override type From <: Flat[A]
+trait Flat[A] extends Any with These[A] {
+  override type Self <: Flat[A]
   
   override def length: Int
   

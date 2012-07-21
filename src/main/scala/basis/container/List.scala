@@ -12,7 +12,7 @@ import basis.collection._
 sealed abstract class List[+A] private[container] extends More[A] {
   import scala.annotation.tailrec
   
-  override type From <: List[A]
+  override type Self <: List[A]
   
   override def isEmpty: Boolean
   
@@ -184,7 +184,7 @@ object List {
       }
     }
     
-    override def ++= (those: Once[A]): Unit = those match {
+    override def ++= (those: Each[A]): Unit = those match {
       case those: ::[A] =>
         prepare()
         last.tail = those

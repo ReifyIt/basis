@@ -15,7 +15,7 @@ import basis.collection._
   */
 object UTF32 extends Unicode {
   /** A 32-bit Unicode string comprised of a sequence of UTF-32 code units. */
-  final class String(val codeUnits: Array[Int]) extends AnyVal with Near[Int] with Text {
+  final class String(val codeUnits: Array[Int]) extends AnyVal with These[Int] with Text {
     /** Returns the number of 32-bit code units in this Unicode string. */
     @inline override def length: Int = codeUnits.length
     

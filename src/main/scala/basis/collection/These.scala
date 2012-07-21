@@ -7,12 +7,12 @@
 
 package basis.collection
 
-trait Near[+A] extends Any with Such[A] {
+trait These[+A] extends Any with Given[A] {
   def length: Int
   
   def apply(index: Int): A
   
-  override def iterator: Next[A] = new Near.Iterator(this, 0, length)
+  override def iterator: Next[A] = new These.Iterator(this, 0, length)
   
   override def foreach[U](f: A => U) {
     var i = 0
@@ -24,10 +24,10 @@ trait Near[+A] extends Any with Such[A] {
   }
 }
 
-object Near {
+object These {
   import scala.language.implicitConversions
   
-  private[basis] final class Iterator[+A](self: Near[A], lower: Int, upper: Int) extends Next[A] {
+  private[basis] final class Iterator[+A](self: These[A], lower: Int, upper: Int) extends Next[A] {
     private[this] var index: Int = lower
     override def hasNext: Boolean = index < upper
     override def next(): A = {
@@ -38,7 +38,7 @@ object Near {
     }
   }
   
-  private[basis] final class ReverseIterator[+A](self: Near[A], upper: Int, lower: Int) extends Next[A] {
+  private[basis] final class ReverseIterator[+A](self: These[A], upper: Int, lower: Int) extends Next[A] {
     private[this] var index: Int = upper - 1
     override def hasNext: Boolean = index >= lower
     override def next(): A = {
@@ -49,10 +49,10 @@ object Near {
     }
   }
   
-  @inline implicit def ForNear[A](self: Near[A]): ForNear[self.From, A] =
-    new ForNear[self.From, A](self)
+  @inline implicit def ForThese[A](self: These[A]): ForThese[self.Self, A] =
+    new ForThese[self.Self, A](self)
   
-  final class ForNear[From, A](val __ : Near[A]) extends AnyVal {
+  final class ForThese[From, A](val __ : These[A]) extends AnyVal {
     import __.{length, apply}
     
     @inline def select[B](q: PartialFunction[A, B]): Option[B] = {
@@ -223,7 +223,7 @@ object Near {
       make.result
     }
     
-    @inline def flatMap[B](f: A => Near[B])(implicit make: Make[From, B]): make.What = {
+    @inline def flatMap[B](f: A => These[B])(implicit make: Make[From, B]): make.What = {
       var i = 0
       val until = length
       while (i < until) {

@@ -7,13 +7,13 @@
 
 package basis.collection
 
-trait Such[+A] extends Any with Equals with Many[A] {
+trait Given[+A] extends Any with Equals with Many[A] {
   override def iterator: Next[A]
   
-  override def canEqual(other: Any): Boolean = other.isInstanceOf[Such[_]]
+  override def canEqual(other: Any): Boolean = other.isInstanceOf[Given[_]]
   
   override def equals(other: Any): Boolean = other match {
-    case that: Such[_] =>
+    case that: Given[_] =>
       val these = this.iterator
       val those = that.iterator
       while (these.hasNext && those.hasNext) if (these.next() != those.next()) return false
@@ -34,13 +34,13 @@ trait Such[+A] extends Any with Equals with Many[A] {
   }
 }
 
-object Such {
+object Given {
   import scala.language.implicitConversions
   
-  @inline implicit def ForSuch[A](self: Such[A]): ForSuch[self.From, A] =
-    new ForSuch[self.From, A](self)
+  @inline implicit def ForGiven[A](self: Given[A]): ForGiven[self.Self, A] =
+    new ForGiven[self.Self, A](self)
   
-  final class ForSuch[From, A](val __ : Such[A]) extends AnyVal {
+  final class ForGiven[From, A](val __ : Given[A]) extends AnyVal {
     import __.iterator
     
     @inline def foldLeft[B](z: B)(op: (B, A) => B): B = {
@@ -66,9 +66,7 @@ object Such {
       Some(result)
     }
     
-    def withFilter(p: A => Boolean): Such[A] = new WithFilter(__, p)
-    
-    def zip[B](that: Such[B]): Such[(A, B)] = new Zip(__, that)
+    def withFilter(p: A => Boolean): Given[A] = new WithFilter(__, p)
     
     @inline def dropWhile(p: A => Boolean)(implicit make: Make[From, A]): make.What = {
       val iter = iterator
@@ -133,12 +131,8 @@ object Such {
     }
   }
   
-  private[basis] final class WithFilter[+A](self: Such[A], p: A => Boolean) extends Such[A] {
+  private[basis] final class WithFilter[+A](self: Given[A], p: A => Boolean) extends Given[A] {
     override def iterator: Next[A] = self.iterator filter p
-    override def foreach[U](f: A => U): Unit = self.foreach(new Analysis.Filter(f, p))
-  }
-  
-  private[basis] final class Zip[+A, +B](these: Such[A], those: Such[B]) extends Such[(A, B)] {
-    override def iterator: Next[(A, B)] = these.iterator zip those.iterator
+    override def foreach[U](f: A => U): Unit = self.foreach(new Each.Filter(f, p))
   }
 }

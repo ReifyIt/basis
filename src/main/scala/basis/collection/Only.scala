@@ -16,8 +16,8 @@ trait Only[A] extends Any with Many[A] {
 object Only {
   import scala.language.implicitConversions
   
-  @inline implicit def ForOnly[A](self: Only[A]): ForOnly[self.From, A] =
-    new ForOnly[self.From, A](self)
+  @inline implicit def ForOnly[A](self: Only[A]): ForOnly[self.Self, A] =
+    new ForOnly[self.Self, A](self)
   
   final class ForOnly[From, A](val __ : Only[A]) extends AnyVal {
     
