@@ -7,16 +7,19 @@
 
 package basis.collection
 
-trait Countable[A] extends Any with Iterable[A] {
-  override def iterator: Iterator[A]
+trait Only[A] extends Any with Many[A] {
+  override def iterator: Next[A]
   
-  def contains(element: A): Boolean
-  
-  override def eagerly: Counted[A] = new Counted.Projected[A](this)
-  
-  override def lazily: Counting[A] = new Counting.Projecting[A](this)
+  def contains(key: A): Boolean
 }
 
-private[basis] object Countable {
-  private[basis] abstract class Abstractly[A] extends Iterable.Abstractly[A] with Countable[A]
+object Only {
+  import scala.language.implicitConversions
+  
+  @inline implicit def ForOnly[A](self: Only[A]): ForOnly[self.From, A] =
+    new ForOnly[self.From, A](self)
+  
+  final class ForOnly[From, A](val __ : Only[A]) extends AnyVal {
+    
+  }
 }

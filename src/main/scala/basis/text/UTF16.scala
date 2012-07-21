@@ -177,7 +177,7 @@ object UTF16 extends Unicode {
     private[this] var length: Int = 0
     
     private[this] def prepare(size: Int): Unit = if (aliased || size > string.length) {
-      string = string.copy(Collector.nextSize(16, size))
+      string = string.copy(Make.nextSize(16, size))
       aliased = false
     }
     

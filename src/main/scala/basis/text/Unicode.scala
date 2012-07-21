@@ -24,8 +24,8 @@ trait Unicode {
   implicit def StringBuilder: StringBuilder
   
   /** A Unicode code unit sequence in this encoding form. */
-  trait Text extends Any with Iterated[Int] {
-    override type Scope <: Unicode.this.type
+  trait Text extends Any with Such[Int] {
+    override type From <: Unicode.this.type
     
     /** Returns the number of code units in the Unicode text. */
     def length: Int
@@ -43,7 +43,7 @@ trait Unicode {
   }
   
   /** A pointer to a location in some Unicode text. */
-  trait TextIterator extends Any with Iterator[Int]
+  trait TextIterator extends Any with Next[Int]
   
   /** A factory for Unicode strings. */
   trait StringFactory {
@@ -57,8 +57,8 @@ trait Unicode {
   }
   
   /** A builder for well-formed Unicode strings. */
-  trait StringBuilder extends Collector[Unicode.this.type, Int] {
-    override type Product = String
+  trait StringBuilder extends Make[Unicode.this.type, Int] {
+    override type What = String
     
     /** Tells the builder to expect `count` code units. */
     override def expect(count: Int): Unit

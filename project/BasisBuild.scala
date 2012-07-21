@@ -73,15 +73,15 @@ object BasisBuild extends Build {
   )
   
   lazy val compileSettings = Seq(
-    scalaVersion := "2.10.0-M4",
+    scalaVersion := "2.10.0-M5",
     scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
     scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
-    scalacOptions ++= Seq("-optimise", "-Xno-forwarders"),
+    scalacOptions ++= Seq("-target:jvm-1.6", "-optimise", "-Xno-forwarders", "-Yinline-warnings"),
     scalacOptions in (Compile, doc) <++= (version, baseDirectory in LocalProject("basis")) map {
       (version, baseDirectory) =>
         val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
         val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-        Seq("-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
+        Seq("-implicits", "-diagrams", "-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
     },
     target <<= (target, name)(_ / _),
     resolvers += Resolver.sonatypeRepo("snapshots"),

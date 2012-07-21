@@ -5,6 +5,21 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collection
 
-package object container
+trait Onto[A, +Z] extends Any with Many[(A, Z)] {
+  override def iterator: Next[(A, Z)]
+  
+  def get(key: A): Option[Z]
+}
+
+object Onto {
+  import scala.language.implicitConversions
+  
+  @inline implicit def ForOnto[A, Z](self: Onto[A, Z]): ForOnto[self.From, A, Z] =
+    new ForOnto[self.From, A, Z](self)
+  
+  final class ForOnto[From, A, Z](val __ : Onto[A, Z]) extends AnyVal {
+    
+  }
+}

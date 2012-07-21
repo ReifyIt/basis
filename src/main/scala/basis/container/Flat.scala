@@ -10,8 +10,8 @@ package basis.container
 import basis.collection._
 import basis.memory._
 
-trait Flat[A] extends Any with Indexed[A] {
-  override type Scope <: Flat[A]
+trait Flat[A] extends Any with Near[A] {
+  override type From <: Flat[A]
   
   override def length: Int
   
@@ -38,16 +38,16 @@ object Flat extends FlatBuilders.ArrayBuilders {
     case typeA: ValType[A]           => ValArray[A](length)(typeA)
   }
   
-  def Builder[A](implicit typeA: DataType[A]): Collector[Any, A] = typeA match {
+  def Builder[A](implicit typeA: DataType[A]): Make[Any, A] = typeA match {
     case typeA: RefType[A]           => RefArrayBuilder[A]
-    case PackedByte                  => ByteArrayBuilder.asInstanceOf[Collector[Any, A]]
-    case PackedShort  | PaddedShort  => ShortArrayBuilder.asInstanceOf[Collector[Any, A]]
-    case PackedInt    | PaddedInt    => IntArrayBuilder.asInstanceOf[Collector[Any, A]]
-    case PackedLong   | PaddedLong   => LongArrayBuilder.asInstanceOf[Collector[Any, A]]
-    case PackedFloat  | PaddedFloat  => FloatArrayBuilder.asInstanceOf[Collector[Any, A]]
-    case PackedDouble | PaddedDouble => DoubleArrayBuilder.asInstanceOf[Collector[Any, A]]
-    case PackedChar   | PaddedChar   => CharArrayBuilder.asInstanceOf[Collector[Any, A]]
-    case PackedBoolean               => BitArrayBuilder.asInstanceOf[Collector[Any, A]]
+    case PackedByte                  => ByteArrayBuilder.asInstanceOf[Make[Any, A]]
+    case PackedShort  | PaddedShort  => ShortArrayBuilder.asInstanceOf[Make[Any, A]]
+    case PackedInt    | PaddedInt    => IntArrayBuilder.asInstanceOf[Make[Any, A]]
+    case PackedLong   | PaddedLong   => LongArrayBuilder.asInstanceOf[Make[Any, A]]
+    case PackedFloat  | PaddedFloat  => FloatArrayBuilder.asInstanceOf[Make[Any, A]]
+    case PackedDouble | PaddedDouble => DoubleArrayBuilder.asInstanceOf[Make[Any, A]]
+    case PackedChar   | PaddedChar   => CharArrayBuilder.asInstanceOf[Make[Any, A]]
+    case PackedBoolean               => BitArrayBuilder.asInstanceOf[Make[Any, A]]
     case typeA: ValType[A]           => ValArrayBuilder[A](typeA)
   }
   
@@ -220,13 +220,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class ValArrayBuilder[A](implicit typeA: ValType[A]) extends Collector[Any, A] {
-    override type Product = ValArray[A]
+  final class ValArrayBuilder[A](implicit typeA: ValType[A]) extends Make[Any, A] {
+    override type What = ValArray[A]
     private[this] var array: ValArray[A] = ValArray[A](16)
     private[this] var aliased: Boolean = false
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -250,13 +250,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class RefArrayBuilder[A] extends Collector[Any, A] {
-    override type Product = RefArray[A]
+  final class RefArrayBuilder[A] extends Make[Any, A] {
+    override type What = RefArray[A]
     private[this] var array: RefArray[A] = RefArray.Empty[A]
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -280,13 +280,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class ByteArrayBuilder extends Collector[Any, Byte] {
-    override type Product = ByteArray
+  final class ByteArrayBuilder extends Make[Any, Byte] {
+    override type What = ByteArray
     private[this] var array: ByteArray = ByteArray.Empty
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -310,13 +310,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class ShortArrayBuilder extends Collector[Any, Short] {
-    override type Product = ShortArray
+  final class ShortArrayBuilder extends Make[Any, Short] {
+    override type What = ShortArray
     private[this] var array: ShortArray = ShortArray.Empty
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -340,13 +340,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class IntArrayBuilder extends Collector[Any, Int] {
-    override type Product = IntArray
+  final class IntArrayBuilder extends Make[Any, Int] {
+    override type What = IntArray
     private[this] var array: IntArray = IntArray.Empty
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -370,13 +370,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class LongArrayBuilder extends Collector[Any, Long] {
-    override type Product = LongArray
+  final class LongArrayBuilder extends Make[Any, Long] {
+    override type What = LongArray
     private[this] var array: LongArray = LongArray.Empty
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -400,13 +400,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class FloatArrayBuilder extends Collector[Any, Float] {
-    override type Product = FloatArray
+  final class FloatArrayBuilder extends Make[Any, Float] {
+    override type What = FloatArray
     private[this] var array: FloatArray = FloatArray.Empty
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -430,13 +430,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class DoubleArrayBuilder extends Collector[Any, Double] {
-    override type Product = DoubleArray
+  final class DoubleArrayBuilder extends Make[Any, Double] {
+    override type What = DoubleArray
     private[this] var array: DoubleArray = DoubleArray.Empty
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -460,13 +460,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class CharArrayBuilder extends Collector[Any, Char] {
-    override type Product = CharArray
+  final class CharArrayBuilder extends Make[Any, Char] {
+    override type What = CharArray
     private[this] var array: CharArray = CharArray.Empty
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {
@@ -490,13 +490,13 @@ object Flat extends FlatBuilders.ArrayBuilders {
     }
   }
   
-  final class BitArrayBuilder extends Collector[Any, Boolean] {
-    override type Product = BitArray
+  final class BitArrayBuilder extends Make[Any, Boolean] {
+    override type What = BitArray
     private[this] var array: BitArray = BitArray.Empty
     private[this] var aliased: Boolean = true
     private[this] var length: Int = 0
     private[this] def prepare(size: Int): Unit = if (aliased || size > array.length) {
-      array = array.copy(Collector.nextSize(16, size))
+      array = array.copy(Make.nextSize(16, size))
       aliased = false
     }
     override def expect(count: Int): Unit = if (length + count > array.length) {

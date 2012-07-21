@@ -7,23 +7,21 @@
 
 package basis.collection
 
-trait Collector[-Scope, -A] {
-  type Product
+trait Make[-From, -A] extends Any {
+  type What
   
   def expect(count: Int): Unit
   
-  def += (element: A): Unit
+  def += (that: A): Unit
   
-  def ++= (elements: Incremental[A]) {
-    for (element <- elements) this += element
-  }
+  def ++= (those: Once[A]): Unit = those.foreach(new Analysis.Maker(this))
   
-  def result: Product
+  def result: What
   
   def clear(): Unit
 }
 
-object Collector {
+object Make {
   def nextSize(base: Int, size: Int): Int = {
     var n = math.max(base, size) - 1
     n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
