@@ -11,12 +11,29 @@ object BasisBuild extends Build {
     )
   )
   
+  lazy val basisAlgebra = Project(
+    id       = "basis-algebra",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/algebra"
+    )
+  )
+  
   lazy val basisCollection = Project(
     id       = "basis-collection",
     base     = file("."),
     settings = commonSettings ++ Seq(
       modulePath := "basis/collection"
     )
+  )
+  
+  lazy val basisCompute = Project(
+    id       = "basis-compute",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/compute"
+    ),
+    dependencies = Seq(basisAlgebra, basisNumber)
   )
   
   lazy val basisContainer = Project(
@@ -28,13 +45,13 @@ object BasisBuild extends Build {
     dependencies = Seq(basisCollection, basisMemory)
   )
   
-  lazy val basisText = Project(
-    id       = "basis-text",
+  lazy val basisJSON = Project(
+    id       = "basis-json",
     base     = file("."),
     settings = commonSettings ++ Seq(
-      modulePath := "basis/text"
-    ),
-    dependencies = Seq(basisCollection)
+      modulePath := "basis/json",
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4" % "provided"
+    )
   )
   
   lazy val basisMemory = Project(
@@ -45,21 +62,22 @@ object BasisBuild extends Build {
     )
   )
   
-  lazy val basisJSON = Project(
-    id       = "basis-json",
+  lazy val basisNumber = Project(
+    id       = "basis-number",
     base     = file("."),
     settings = commonSettings ++ Seq(
-      modulePath := "basis/json",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4" % "provided"
-    )
+      modulePath := "basis/number"
+    ),
+    dependencies = Seq(basisAlgebra)
   )
   
-  lazy val basisAlgebra = Project(
-    id       = "basis-algebra",
+  lazy val basisText = Project(
+    id       = "basis-text",
     base     = file("."),
     settings = commonSettings ++ Seq(
-      modulePath := "basis/algebra"
-    )
+      modulePath := "basis/text"
+    ),
+    dependencies = Seq(basisCollection)
   )
   
   lazy val commonSettings = Defaults.defaultSettings ++ projectSettings ++ compileSettings ++ publishSettings
