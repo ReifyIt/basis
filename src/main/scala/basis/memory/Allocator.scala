@@ -7,14 +7,12 @@
 
 package basis.memory
 
-import scala.annotation.implicitNotFound
-
-/** A [[basis.memory.Data]] allocator.
+/** A `Data` allocator.
   * 
   * @author Chris Sachs
   */
-@implicitNotFound("No implicit data allocator.")
-trait Allocator {
+@scala.annotation.implicitNotFound("no implicit data allocator")
+abstract class Allocator extends scala.runtime.AbstractFunction1[Long, Data] {
   /** Returns the maximum number of bytes this allocator can allocate. */
   def MaxSize: Long
   
@@ -39,6 +37,6 @@ trait Allocator {
 
 /** Contains the implicit default allocator. */
 object Allocator {
-  /** Returns the implicit default allocator. */
-  implicit val default: Allocator = Data.Base
+  /** Returns the default allocator. */
+  implicit def default: Allocator = Data
 }

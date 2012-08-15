@@ -9,38 +9,14 @@ package basis
 
 /** Contains an abstract memory model with struct typeclasses. */
 package object memory {
-  /** Returns an `Int` address advanced to a power-of-two alignment.
-    * 
-    * @param  alignment   the required alignment–forced to a power-of-two.
-    * @param  address     the address to align.
-    * @return the aligned address.
-    */
-  def align(alignment: Int)(address: Int): Int = {
-    var n = alignment - 1
-    n |= n >>> 1
-    n |= n >>> 2
-    n |= n >>> 4
-    n |= n >>> 8
-    n |= n >>> 16
-    (address + n) & ~n
-  }
-  
   /** Returns a `Long` address advanced to a power-of-two alignment.
     * 
-    * @param  alignment   the required alignment–forced to a power-of-two.
+    * @param  alignment   the required alignment.
     * @param  address     the address to align.
     * @return the aligned address.
     */
-  def align(alignment: Long)(address: Long): Long = {
-    var n = alignment - 1L
-    n |= n >>> 1
-    n |= n >>> 2
-    n |= n >>> 4
-    n |= n >>> 8
-    n |= n >>> 16
-    n |= n >>> 32
-    (address + n) & ~n
-  }
+  def align(base: Long, alignment: Long): Long =
+    (base + (alignment - 1L)) & ~(alignment - 1L)
   
   /** Returns the alignment of some value type. */
   @inline def alignOf[T](implicit struct: ValType[T]): Long = struct.alignment
@@ -48,16 +24,10 @@ package object memory {
   /** Returns the size of some value type. */
   @inline def sizeOf[T](implicit struct: ValType[T]): Long = struct.size
   
-  /** Returns the implicit data type for some instance type.
-    * 
-    * @example {{{
-    * scala> typeOf[(Int, Double)]
-    * res0: basis.memory.DataType[(Int, Double)] = Row2(PaddedInt, PaddedDouble).project(size = 16, alignment = 8)
-    * }}}
-    * 
-    * @tparam T         the instance type of the data type to get.
-    * @param  datatype  the implicit data type itself.
-    * @return the implicitly supplied data type.
-    */
-  @inline def typeOf[T](implicit datatype: DataType[T]): DataType[T] = datatype
+  /** The ordering of the virtual machine. */
+  implicit final val NativeEndian: ByteOrder = {
+    if (java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.BIG_ENDIAN) BigEndian
+    else if (java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.LITTLE_ENDIAN) LittleEndian
+    else throw new MatchError(java.nio.ByteOrder.nativeOrder)
+  }
 }

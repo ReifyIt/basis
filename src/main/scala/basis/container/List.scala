@@ -9,10 +9,10 @@ package basis.container
 
 import basis.collection._
 
-sealed abstract class List[+A] private[container] extends More[A] {
+sealed abstract class List[+A] private[container] extends LinearSeq[A] {
   import scala.annotation.tailrec
   
-  override type Self <: List[A]
+  override type Kind <: List[_]
   
   override def isEmpty: Boolean
   
@@ -63,60 +63,60 @@ sealed abstract class List[+A] private[container] extends More[A] {
     total
   }
   
-  //@inline @tailrec final def map[B](f: A => B)(implicit make: Make[List[A], B]): make.What =
-  //  if (isEmpty) make.result else { make += f(head); tail.map[B](f)(make) }
+  //@inline @tailrec final def map[B](f: A => B)(implicit builder: Builder[List[A], B]): builder.Result =
+  //  if (isEmpty) builder.result else { builder += f(head); tail.map[B](f)(builder) }
   
-  @inline final def map[B](f: A => B)(implicit make: Make[List[A], B]): make.What = {
+  @inline final def map[B](f: A => B)(implicit builder: Builder[List[A], B]): builder.Result = {
     var these = this
     while (!these.isEmpty) {
-      make += f(these.head)
+      builder += f(these.head)
       these = these.tail
     }
-    make.result
+    builder.result
   }
   
-  @inline final def flatMap[B](f: A => List[B])(implicit make: Make[List[A], B]): make.What = {
+  @inline final def flatMap[B](f: A => List[B])(implicit builder: Builder[List[A], B]): builder.Result = {
     var these = this
     while (!these.isEmpty) {
       var those = f(these.head)
       while (!those.isEmpty) {
-        make += those.head
+        builder += those.head
         those = those.tail
       }
       these = these.tail
     }
-    make.result
+    builder.result
   }
   
-  @inline @tailrec final def filter(p: A => Boolean)(implicit make: Make[List[A], A]): make.What =
-    if (isEmpty) make.result else { if (p(head)) make += head; tail.filter(p) }
+  @inline @tailrec final def filter(p: A => Boolean)(implicit builder: Builder[List[A], A]): builder.Result =
+    if (isEmpty) builder.result else { if (p(head)) builder += head; tail.filter(p) }
   
-  //@tailrec final def collect[B](q: PartialFunction[A, B])(implicit make: Make[List[A], B]): make.What =
-  //  if (isEmpty) make.result else { if (q.isDefinedAt(head)) make += q(head); tail.collect[B](q)(make) }
+  //@tailrec final def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[List[A], B]): builder.Result =
+  //  if (isEmpty) builder.result else { if (q.isDefinedAt(head)) builder += q(head); tail.collect[B](q)(builder) }
   
-  final def collect[B](q: PartialFunction[A, B])(implicit make: Make[List[A], B]): make.What = {
+  final def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[List[A], B]): builder.Result = {
     var these = this
     while (!these.isEmpty) {
       val x = these.head
-      if (q.isDefinedAt(x)) make += q(x)
+      if (q.isDefinedAt(x)) builder += q(x)
       these = these.tail
     }
-    make.result
+    builder.result
   }
   
   @inline @tailrec final def dropWhile(p: A => Boolean): List[A] =
     if (isEmpty || !p(head)) this else tail.dropWhile(p)
   
-  @inline @tailrec final def takeWhile(p: A => Boolean)(implicit make: Make[List[A], A]): make.What =
-    if (isEmpty || !p(head)) make.result else { make += head; tail.takeWhile(p) }
+  @inline @tailrec final def takeWhile(p: A => Boolean)(implicit builder: Builder[List[A], A]): builder.Result =
+    if (isEmpty || !p(head)) builder.result else { builder += head; tail.takeWhile(p) }
   
-  @inline @tailrec final def span(p: A => Boolean)(implicit make: Make[List[A], A]): (make.What, List[A]) =
-    if (isEmpty || !p(head)) (make.result, this) else { make += head; tail.span(p) }
+  @inline @tailrec final def span(p: A => Boolean)(implicit builderA: Builder[List[A], A]): (builderA.Result, List[A]) =
+    if (isEmpty || !p(head)) (builderA.result, this) else { builderA += head; tail.span(p) }
   
   @tailrec final def drop(lower: Int): List[A] = if (isEmpty || lower <= 0) this else tail.drop(lower - 1)
   
-  @tailrec final def take(upper: Int)(implicit make: Make[List[A], A]): make.What =
-    if (isEmpty || upper <= 0) make.result else { make += head; tail.take(upper - 1) }
+  @tailrec final def take(upper: Int)(implicit builder: Builder[List[A], A]): builder.Result =
+    if (isEmpty || upper <= 0) builder.result else { builder += head; tail.take(upper - 1) }
   
   final def slice(lower: Int, upper: Int): List[A] = drop(lower).take(upper)
   
@@ -146,13 +146,15 @@ object Nil extends List[Nothing] {
 }
 
 object List {
-  implicit def Maker[A]: Maker[A] = new Maker[A]
+  implicit def Builder[A]: List.Builder[A] = new List.Builder[A]
   
-  final class Maker[A] extends Make[Any, A] {
-    override type What = List[A]
+  final class Builder[A] extends basis.collection.Builder[Any, A] {
+    override type Result = List[A]
     
     private[this] var last: ::[A] = _
+    
     private[this] var first: List[A] = Nil
+    
     private[this] var aliased: Boolean = false
     
     private[this] def prepare(): Unit = if (aliased) {
@@ -184,7 +186,7 @@ object List {
       }
     }
     
-    override def ++= (those: Each[A]): Unit = those match {
+    override def ++= (those: Traversable[A]): Unit = those match {
       case those: ::[A] =>
         prepare()
         last.tail = those
@@ -199,8 +201,8 @@ object List {
     }
     
     override def clear() {
-      first = Nil
       last = null
+      first = Nil
       aliased = false
     }
   }

@@ -7,7 +7,7 @@ object BasisBuild extends Build {
     base     = file("."),
     settings = commonSettings ++ Seq(
       modulePath := ".",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4" % "provided"
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M6" % "provided"
     )
   )
   
@@ -19,21 +19,21 @@ object BasisBuild extends Build {
     )
   )
   
+  lazy val basisArithmetic = Project(
+    id       = "basis-arithmetic",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/arithmetic"
+    ),
+    dependencies = Seq(basisAlgebra)
+  )
+  
   lazy val basisCollection = Project(
     id       = "basis-collection",
     base     = file("."),
     settings = commonSettings ++ Seq(
       modulePath := "basis/collection"
     )
-  )
-  
-  lazy val basisCompute = Project(
-    id       = "basis-compute",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/compute"
-    ),
-    dependencies = Seq(basisAlgebra, basisNumber)
   )
   
   lazy val basisContainer = Project(
@@ -45,12 +45,21 @@ object BasisBuild extends Build {
     dependencies = Seq(basisCollection, basisMemory)
   )
   
+  lazy val basisEncoding = Project(
+    id       = "basis-encoding",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/encoding"
+    ),
+    dependencies = Seq(basisCollection)
+  )
+  
   lazy val basisJSON = Project(
     id       = "basis-json",
     base     = file("."),
     settings = commonSettings ++ Seq(
       modulePath := "basis/json",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M4" % "provided"
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M6" % "provided"
     )
   )
   
@@ -60,24 +69,6 @@ object BasisBuild extends Build {
     settings = commonSettings ++ Seq(
       modulePath := "basis/memory"
     )
-  )
-  
-  lazy val basisNumber = Project(
-    id       = "basis-number",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/number"
-    ),
-    dependencies = Seq(basisAlgebra)
-  )
-  
-  lazy val basisText = Project(
-    id       = "basis-text",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/text"
-    ),
-    dependencies = Seq(basisCollection)
   )
   
   lazy val commonSettings = Defaults.defaultSettings ++ projectSettings ++ compileSettings ++ publishSettings
@@ -91,10 +82,10 @@ object BasisBuild extends Build {
   )
   
   lazy val compileSettings = Seq(
-    scalaVersion := "2.10.0-M5",
+    scalaVersion := "2.10.0-M6",
     scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
     scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
-    scalacOptions ++= Seq("-target:jvm-1.6", "-optimise", "-Xno-forwarders", "-Yinline-warnings"),
+    scalacOptions ++= Seq("-optimise", "-Xno-forwarders", "-Yinline-warnings"),
     scalacOptions in (Compile, doc) <++= (version, baseDirectory in LocalProject("basis")) map {
       (version, baseDirectory) =>
         val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
@@ -102,8 +93,8 @@ object BasisBuild extends Build {
         Seq("-implicits", "-diagrams", "-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
     },
     target <<= (target, name)(_ / _),
-    resolvers += Resolver.sonatypeRepo("snapshots"),
-    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-M4" % "1.8-SNAPSHOT" % "test"
+    resolvers += Resolver.sonatypeRepo("snapshots")
+    //libraryDependencies += "org.scalatest" % "scalatest_2.10.0-M6" % "1.8-SNAPSHOT" % "test"
   )
   
   lazy val publishSettings = Seq(
