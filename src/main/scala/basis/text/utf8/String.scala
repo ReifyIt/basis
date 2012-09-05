@@ -5,11 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.encoding
+package basis.text
 package utf8
 
 /** An 8-bit Unicode string comprised of a sequence of UTF-8 code units. */
-final class String(val codeUnits: Array[Byte]) extends AnyVal with Rope {
+final class String(val codeUnits: Array[Byte]) extends AnyVal with CodeSeq with Rope {
   override type Kind = String
   
   /** Returns the number of unsigned 8-bit code units in this Unicode string. */
@@ -37,43 +37,45 @@ final class String(val codeUnits: Array[Byte]) extends AnyVal with Rope {
     k
   }
   
-  override def apply(index: Int): Int = {
+  override def apply(index: Int): Char = {
     val n = codeUnits.length
     if (index < 0 || index >= n) throw new IndexOutOfBoundsException(index.toString)
-    val c1 = codeUnits(index) & 0xFF
-    if (c1 <= 0x7F) c1 // U+0000..U+007F
-    else if (c1 >= 0xC2 && c1 <= 0xF4 && index + 1 < n) {
-      val c2 = codeUnits(index + 1) & 0xFF
-      if (c1 <= 0xDF && c2 >= 0x80 && c2 <= 0xBF)
-        ((c1 & 0x1F) << 6) | (c2 & 0x3F) // U+0080..U+07FF
-      else if (index + 2 < n) {
-        val c3 = codeUnits(index + 2) & 0xFF
-        if ((c1 == 0xE0 &&
-             c2 >= 0xA0 && c2 <= 0xBF
-          || c1 == 0xED &&
-             c2 >= 0x80 && c2 <= 0x9F
-          || c1 >= 0xE1 && c1 <= 0xEF &&
-             c2 >= 0x80 && c2 <= 0xBF)
-          && c3 >= 0x80 && c3 <= 0xBF)
-          ((c1 & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F) // U+0800..U+FFFF
-        else if (index + 3 < n) {
-          val c4 = codeUnits(index + 3) & 0xFF
-          if ((c1 == 0xF0 &&
-               c2 >= 0x90 && c2 <= 0xBF
-            || c1 >= 0xF1 && c1 <= 0xF3 &&
-               c2 >= 0x80 && c2 <= 0xBF
-            || c1 == 0xF4 &&
-               c2 >= 0x80 && c2 <= 0x8F)
-            && c3 >= 0x80 && c3 <= 0xBF
-            && c4 >= 0x80 && c4 <= 0xBF)
-            ((c1 & 0x07) << 18) | ((c2 & 0x3F) << 12) | ((c3 & 0x3F) << 6) | (c4 & 0x3F) // U+10000..U+10FFFF
+    new Char {
+      val c1 = codeUnits(index) & 0xFF
+      if (c1 <= 0x7F) c1 // U+0000..U+007F
+      else if (c1 >= 0xC2 && c1 <= 0xF4 && index + 1 < n) {
+        val c2 = codeUnits(index + 1) & 0xFF
+        if (c1 <= 0xDF && c2 >= 0x80 && c2 <= 0xBF)
+          ((c1 & 0x1F) << 6) | (c2 & 0x3F) // U+0080..U+07FF
+        else if (index + 2 < n) {
+          val c3 = codeUnits(index + 2) & 0xFF
+          if ((c1 == 0xE0 &&
+               c2 >= 0xA0 && c2 <= 0xBF
+            || c1 == 0xED &&
+               c2 >= 0x80 && c2 <= 0x9F
+            || c1 >= 0xE1 && c1 <= 0xEF &&
+               c2 >= 0x80 && c2 <= 0xBF)
+            && c3 >= 0x80 && c3 <= 0xBF)
+            ((c1 & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F) // U+0800..U+FFFF
+          else if (index + 3 < n) {
+            val c4 = codeUnits(index + 3) & 0xFF
+            if ((c1 == 0xF0 &&
+                 c2 >= 0x90 && c2 <= 0xBF
+              || c1 >= 0xF1 && c1 <= 0xF3 &&
+                 c2 >= 0x80 && c2 <= 0xBF
+              || c1 == 0xF4 &&
+                 c2 >= 0x80 && c2 <= 0x8F)
+              && c3 >= 0x80 && c3 <= 0xBF
+              && c4 >= 0x80 && c4 <= 0xBF)
+              ((c1 & 0x07) << 18) | ((c2 & 0x3F) << 12) | ((c3 & 0x3F) << 6) | (c4 & 0x3F) // U+10000..U+10FFFF
+            else 0xFFFD
+          }
           else 0xFFFD
         }
         else 0xFFFD
       }
       else 0xFFFD
     }
-    else 0xFFFD
   }
   
   override def advance(index: Int): Int = {
@@ -119,7 +121,7 @@ final class String(val codeUnits: Array[Byte]) extends AnyVal with Rope {
   /** Sequentially applies a function to each code point in this Unicode string.
     * Applies the replacement character U+FFFD in lieu of the maximal subpart of
     * any ill-formed subsequences. */
-  @inline override def foreach[U](f: Int => U) {
+  @inline override def foreach[U](f: Char => U) {
     var i = 0
     val n = size
     while (i < n) {
@@ -162,11 +164,11 @@ object String {
     
     /** Decodes the character at the current offset, substituting the
       * replacement character U+FFFD if the offset is unconvertible. */
-    def head: Int = string(index)
+    def head: Char = string(index)
     
     override def hasNext: Boolean = 0 <= index && index < string.size
     
-    override def next(): Int = {
+    override def next(): Char = {
       val c = string(index)
       index = string.advance(index)
       c
@@ -198,7 +200,7 @@ object String {
       }
     }
     
-    override def += (codePoint: Int) {
+    override def += (codePoint: Char) {
       val n = size
       if (codePoint >= 0x0000 && codePoint <= 0x007F) { // U+0000..U+007F
         prepare(n + 1)

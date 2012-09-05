@@ -79,6 +79,13 @@ final class TraversableOps[Kind, A](val __ : Traversable[A]) extends AnyVal {
     foreach(new TraversableOps.AppendCollect(q, builder))
     builder.result
   }
+  
+  def ++ [B >: A](that: Traversable[B])(implicit builder: Builder[Kind, B]): builder.Result = {
+    val f = new TraversableOps.Append(builder)
+    foreach(f)
+    that.foreach(f)
+    builder.result
+  }
 }
 
 private[collection] object TraversableOps {

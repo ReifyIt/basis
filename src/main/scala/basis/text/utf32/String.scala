@@ -5,11 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.encoding
+package basis.text
 package utf32
 
 /** A 32-bit Unicode string comprised of a sequence of UTF-32 code units. */
-final class String(val codeUnits: Array[Int]) extends AnyVal with Rope {
+final class String(val codeUnits: Array[Int]) extends AnyVal with CodeSeq with Rope {
   override type Kind = String
   
   /** Returns the number of 32-bit code units in this Unicode string. */
@@ -27,13 +27,15 @@ final class String(val codeUnits: Array[Int]) extends AnyVal with Rope {
   
   @inline override def length: Int = codeUnits.length
   
-  override def apply(index: Int): Int = {
+  override def apply(index: Int): Char = {
     val n = codeUnits.length
     if (index < 0 || index >= n) throw new IndexOutOfBoundsException(index.toString)
-    val c = codeUnits(index)
-    if (c >= 0x0000 && c <= 0xD7FF ||
-        c >= 0xE000 && c <= 0x10FFFF) c // U+0000..U+D7FF | U+E000..U+10FFFF
-    else 0x4010FFFF
+    new Char {
+      val c = codeUnits(index)
+      if (c >= 0x0000 && c <= 0xD7FF ||
+          c >= 0xE000 && c <= 0x10FFFF) c // U+0000..U+D7FF | U+E000..U+10FFFF
+      else 0x4010FFFF
+    }
   }
   
   override def advance(index: Int): Int = {
@@ -43,7 +45,7 @@ final class String(val codeUnits: Array[Int]) extends AnyVal with Rope {
   
   /** Sequentially applies a function to each code point in this Unicode string.
     * Applies the replacement character U+FFFD in lieu of invalid characters. */
-  @inline override def foreach[U](f: Int => U) {
+  @inline override def foreach[U](f: Char => U) {
     var i = 0
     val n = size
     while (i < n) {
@@ -86,11 +88,11 @@ object String {
     
     /** Decodes the character at the current offset, substituting the
       * replacement character U+FFFD if the offset is unconvertible. */
-    def head: Int = string(index)
+    def head: Char = string(index)
     
     override def hasNext: Boolean = 0 <= index && index < string.size
     
-    override def next(): Int = {
+    override def next(): Char = {
       val c = string(index)
       index += 1
       c
@@ -118,7 +120,7 @@ object String {
       aliased = false
     }
     
-    override def += (codePoint: Int) {
+    override def += (codePoint: Char) {
       val n = size
       if ((codePoint >= 0x0000 && codePoint <= 0xD7FF) ||
           (codePoint >= 0xE000 && codePoint <= 0x10FFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF

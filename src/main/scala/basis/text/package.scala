@@ -5,8 +5,12 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.encoding
+package basis
 
-final class Character(val codePoint: Int) extends AnyVal {
+package object text {
+  import scala.language.implicitConversions
   
+  @inline implicit def wrapString(string: java.lang.String): String = new String(string)
+  
+  @inline implicit def unwrapString(string: String): java.lang.String = string.toString
 }

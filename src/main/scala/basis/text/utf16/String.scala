@@ -5,11 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.encoding
+package basis.text
 package utf16
 
 /** A 16-bit Unicode string comprised of a sequence of UTF-16 code units. */
-final class String(val codeUnits: Array[Char]) extends AnyVal with Rope {
+final class String(val codeUnits: Array[scala.Char]) extends AnyVal with CodeSeq with Rope {
   override type Kind = String
   
   /** Returns the number of unsigned 16-bit code units in this Unicode string. */
@@ -21,7 +21,7 @@ final class String(val codeUnits: Array[Char]) extends AnyVal with Rope {
   
   /** Returns a copy of this Unicode string. */
   private[utf16] def copy(size: Int): String = {
-    val newCodeUnits = new Array[Char](size)
+    val newCodeUnits = new Array[scala.Char](size)
     Array.copy(codeUnits, 0, newCodeUnits, 0, math.min(codeUnits.length, size))
     new String(newCodeUnits)
   }
@@ -37,18 +37,20 @@ final class String(val codeUnits: Array[Char]) extends AnyVal with Rope {
     k
   }
   
-  override def apply(index: Int): Int = {
+  override def apply(index: Int): Char = {
     val n = codeUnits.length
     if (index < 0 || index >= n) throw new IndexOutOfBoundsException(index.toString)
-    val c1 = codeUnits(index)
-    if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
-    else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
-      val c2 = codeUnits(index + 1)
-      if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
-        (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
+    new Char {
+      val c1 = codeUnits(index)
+      if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
+      else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
+        val c2 = codeUnits(index + 1)
+        if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
+          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
+        else 0xFFFD
+      }
       else 0xFFFD
     }
-    else 0xFFFD
   }
   
   override def advance(index: Int): Int = {
@@ -68,7 +70,7 @@ final class String(val codeUnits: Array[Char]) extends AnyVal with Rope {
   
   /** Sequentially applies a function to each code point in this Unicode string.
     * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
-  @inline override def foreach[U](f: Int => U) {
+  @inline override def foreach[U](f: Char => U) {
     var i = 0
     val n = size
     while (i < n) {
@@ -111,11 +113,11 @@ object String {
     
     /** Decodes the character at the current offset, substituting the
       * replacement character U+FFFD if the offset is unconvertible. */
-    def head: Int = string(index)
+    def head: Char = string(index)
     
     override def hasNext: Boolean = 0 <= index && index < string.size
     
-    override def next(): Int = {
+    override def next(): Char = {
       val c = string(index)
       index = string.advance(index)
       c

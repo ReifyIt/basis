@@ -102,6 +102,14 @@ final class IterableOps[Kind, A](val __ : Iterable[A]) extends AnyVal {
     while (these.hasNext && those.hasNext) builder += ((these.next(), those.next()))
     builder.result
   }
+  
+  def ++ [B >: A](that: Iterable[B])(implicit builder: Builder[Kind, B]): builder.Result = {
+     var iter = iterator
+     while (iter.hasNext) builder += iter.next()
+     iter = that.iterator
+     while (iter.hasNext) builder += iter.next()
+     builder.result
+  }
 }
 
 private[collection] object IterableOps {

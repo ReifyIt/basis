@@ -284,4 +284,20 @@ final class IndexedSeqOps[Kind, A](val __ : IndexedSeq[A]) extends AnyVal {
     }
     builder.result
   }
+  
+  def ++ [B >: A](that: IndexedSeq[B])(implicit builder: Builder[Kind, B]): builder.Result = {
+    var i = 0
+    var n = length
+    while (i < n) {
+      builder += apply(i)
+      i += 1
+    }
+    i = 0
+    n = that.length
+    while (i < n) {
+      builder += that.apply(i)
+      i += 1
+    }
+    builder.result
+  }
 }

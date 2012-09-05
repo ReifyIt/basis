@@ -5,14 +5,16 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.encoding
+package basis.text
 
-trait Text extends Any with basis.collection.Seq[Int] {
-  override type Kind <: Text
+import basis.collection._
+
+trait CharSeq extends Any with Seq[Char] {
+  override type Kind <: CharSeq
   
   def size: Int
   
-  def apply(index: Int): Int
+  def apply(index: Int): Char
   
   def advance(index: Int): Int
   
@@ -27,7 +29,7 @@ trait Text extends Any with basis.collection.Seq[Int] {
     k
   }
   
-  override def foreach[U](f: Int => U) {
+  override def foreach[U](f: Char => U) {
     var i = 0
     val n = size
     while (i < n) {
@@ -35,20 +37,41 @@ trait Text extends Any with basis.collection.Seq[Int] {
       i = advance(i)
     }
   }
+  
+  final override def iterator: Iterator[Char] =
+    new CharSeq.Iterator(this, 0)
 }
 
-object Text {
+object CharSeq {
   import scala.language.implicitConversions
   
-  @inline implicit def TextOps(self: Text): TextOps[self.Kind] =
-    new TextOps[self.Kind](self)
+  @inline implicit def CharSeqOps(self: CharSeq): CharSeqOps[self.Kind] =
+    new CharSeqOps[self.Kind](self)
   
-  trait Iterator extends Any with basis.collection.Iterator[Int] {
-    override def hasNext: Boolean
-    override def next(): Int
+  private final class Iterator(text: CharSeq, private[this] var index: Int)
+    extends basis.collection.Iterator[Char] {
+    
+    /** Returns `true` if the current offset begins a valid character. */
+    def isValid: Boolean = {
+      val c = text(index)
+      c >= 0 && c <= 0x10FFFF
+    }
+    
+    /** Decodes the character at the current offset, substituting the
+      * replacement character U+FFFD if the offset is unconvertible. */
+    def head: Char = text(index)
+    
+    override def hasNext: Boolean =
+      0 <= index && index < text.size
+    
+    override def next(): Char = {
+      val c = text(index)
+      index = text.advance(index)
+      c
+    }
   }
   
-  trait Builder extends Any with basis.collection.Builder[Any, Int] {
+  trait Builder extends Any with basis.collection.Builder[Any, Char] {
     /** Tells the builder to expect `count` code points. */
     override def expect(count: Int): Unit
     
@@ -57,7 +80,7 @@ object Text {
       * and U+DC00..U+DFFF, respectively. If `codePoint` does not lie in either
       * the range U+0000..U+D7FF or U+E000..U+10FFFF, inclusive, then the
       * replacement character U+FFFD is appended in its place. */
-    override def += (codePoint: Int): Unit
+    override def += (codePoint: Char): Unit
     
     /** Appends a UTF-16 character sequence to this builder. */
     def append(chars: CharSequence) {

@@ -7,7 +7,7 @@ object BasisBuild extends Build {
     base     = file("."),
     settings = commonSettings ++ Seq(
       modulePath := ".",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M6" % "provided"
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M7" % "provided"
     )
   )
   
@@ -45,21 +45,12 @@ object BasisBuild extends Build {
     dependencies = Seq(basisCollection, basisMemory)
   )
   
-  lazy val basisEncoding = Project(
-    id       = "basis-encoding",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/encoding"
-    ),
-    dependencies = Seq(basisCollection)
-  )
-  
   lazy val basisJSON = Project(
     id       = "basis-json",
     base     = file("."),
     settings = commonSettings ++ Seq(
       modulePath := "basis/json",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M6" % "provided"
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M7" % "provided"
     )
   )
   
@@ -69,6 +60,15 @@ object BasisBuild extends Build {
     settings = commonSettings ++ Seq(
       modulePath := "basis/memory"
     )
+  )
+  
+  lazy val basisText = Project(
+    id       = "basis-text",
+    base     = file("."),
+    settings = commonSettings ++ Seq(
+      modulePath := "basis/text"
+    ),
+    dependencies = Seq(basisCollection)
   )
   
   lazy val commonSettings = Defaults.defaultSettings ++ projectSettings ++ compileSettings ++ publishSettings
@@ -82,7 +82,7 @@ object BasisBuild extends Build {
   )
   
   lazy val compileSettings = Seq(
-    scalaVersion := "2.10.0-M6",
+    scalaVersion := "2.10.0-M7",
     scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
     scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
     scalacOptions ++= Seq("-optimise", "-Xno-forwarders", "-Yinline-warnings"),
@@ -94,7 +94,7 @@ object BasisBuild extends Build {
     },
     target <<= (target, name)(_ / _),
     resolvers += Resolver.sonatypeRepo("snapshots")
-    //libraryDependencies += "org.scalatest" % "scalatest_2.10.0-M6" % "1.8-SNAPSHOT" % "test"
+    //libraryDependencies += "org.scalatest" % "scalatest_2.10.0-M7" % "1.8-SNAPSHOT" % "test"
   )
   
   lazy val publishSettings = Seq(

@@ -215,4 +215,18 @@ final class LinearSeqOps[Kind, A](val __ : LinearSeq[A]) extends AnyVal {
     while (!these.isEmpty && i < upper) { builder += these.head; these = these.tail; i += 1 }
     builder.result
   }
+  
+  def ++ [B >: A](that: LinearSeq[B])(implicit builder: Builder[Kind, B]): builder.Result = {
+    var these = __
+    while (!these.isEmpty) {
+      builder += these.head
+      these = these.tail
+    }
+    these = that
+    while (!these.isEmpty) {
+      builder += these.head
+      these = these.tail
+    }
+    builder.result
+  }
 }

@@ -14,7 +14,8 @@ trait Builder[-Kind, -A] extends Any {
   
   def += (that: A): Unit
   
-  def ++= (those: Traversable[A]): Unit = those.foreach(new TraversableOps.Append(this))
+  def ++= (those: Traversable[A]): Unit =
+    those.foreach(new TraversableOps.Append(this))
   
   def result: Result
   
