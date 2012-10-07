@@ -10,7 +10,7 @@ package basis
 import basis.data._
 
 package object container extends PrimitiveBuffers {
-  def ArrayBuffer[A](implicit typeA: MemType[A]): Buffer[Array[A], A] { type State <: Array[A] } = {
+  def ArrayBuffer[A](implicit typeA: MemType[A]): Buffer[Array[A], A] { type State = Array[A] } = {
     import ValType._
     (typeA match {
       case typeA: RefType[A]           => RefBuffer[A]
@@ -22,12 +22,17 @@ package object container extends PrimitiveBuffers {
       case PackedDouble | PaddedDouble => DoubleBuffer
       case PackedBoolean               => BitBuffer
       case typeA: ValType[A]           => ValBuffer[A](typeA)
-    }).asInstanceOf[Buffer[Any, A] { type State <: Array[A] }]
+    }).asInstanceOf[Buffer[Array[A], A] { type State = Array[A] }]
   }
 }
 
 package container {
-  private[container] class RefBuffers {
+  private[container] class DefaultBuffers {
+    implicit def DefaultBuffer[A]: Buffer[Any, A] { type State = List[A] } =
+      ListBuffer[A].asInstanceOf[Buffer[Any, A] { type State = List[A] }]
+  }
+  
+  private[container] class RefBuffers extends DefaultBuffers {
     implicit def ListBuffer[A]: ListBuffer[A] = new ListBuffer[A]
     
     implicit def RefBuffer[A]: RefBuffer[A] = new RefBuffer[A]
