@@ -9,15 +9,22 @@ package basis.text
 
 import basis._
 
-private[text] final class UTF32Iterator(string: UTF32String) extends StringIterator {
-  private[this] var index: Int = 0
+private[text] final class UTF32Iterator
+    (string: UTF32String, private[this] var index: Int)
+  extends StringIterator {
   
-  override def hasNext: Boolean = index < string.length
+  override def hasNext: Boolean = index < string.codeUnits.length
   
   override def next(): Char = {
-    if (index >= string.length) throw new scala.NoSuchElementException("empty iterator")
-    val c = string(index)
-    index += 1
-    c
+    val cs = string.codeUnits
+    val n = cs.length
+    if (index >= n) throw new scala.NoSuchElementException("empty string iterator")
+    new Char({
+      val c = cs(index)
+      index += 1
+      if (c >= 0x0000 && c <= 0xD7FF ||
+          c >= 0xE000 && c <= 0x10FFFF) c // U+0000..U+D7FF | U+E000..U+10FFFF
+      else 0xFFFD
+    })
   }
 }

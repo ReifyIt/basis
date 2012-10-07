@@ -12,7 +12,12 @@ package object text extends StringBuffers {
 }
 
 package text {
-  private[text] class StringBuffers {
+  private[text] class DefaultStringBuffers {
+    implicit def StringBuffer: StringBuffer { type State = UTF8String } =
+      (new UTF8Buffer).asInstanceOf[StringBuffer { type State = UTF8String }]
+  }
+  
+  private[text] class StringBuffers extends DefaultStringBuffers {
     implicit def UTF8Buffer: UTF8Buffer = new UTF8Buffer
     
     implicit def UTF16Buffer: UTF16Buffer = new UTF16Buffer

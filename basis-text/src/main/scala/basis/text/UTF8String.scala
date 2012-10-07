@@ -118,7 +118,7 @@ final class UTF8String(val codeUnits: scala.Array[Byte]) extends AnyVal with Str
     new UTF8String(newCodeUnits)
   }
   
-  override def iterator: StringIterator = new UTF8Iterator(this)
+  override def iterator: StringIterator = new UTF8Iterator(this, 0)
   
   /** Sequentially applies a function to each code point in this Unicode string.
     * Applies the replacement character U+FFFD in lieu of the maximal subpart of

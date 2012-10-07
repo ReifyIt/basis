@@ -24,7 +24,7 @@ final class UTF32String(val codeUnits: scala.Array[Int]) extends AnyVal with Arr
       val c = codeUnits(index)
       if (c >= 0x0000 && c <= 0xD7FF ||
           c >= 0xE000 && c <= 0x10FFFF) c // U+0000..U+D7FF | U+E000..U+10FFFF
-      else 0x4010FFFF
+      else 0xFFFD
     })
   }
   
@@ -35,7 +35,7 @@ final class UTF32String(val codeUnits: scala.Array[Int]) extends AnyVal with Arr
     new UTF32String(newCodeUnits)
   }
   
-  override def iterator: StringIterator = new UTF32Iterator(this)
+  override def iterator: StringIterator = new UTF32Iterator(this, 0)
   
   /** Sequentially applies a function to each code point in this Unicode string.
     * Applies the replacement character U+FFFD in lieu of invalid characters. */

@@ -37,8 +37,8 @@ final class UTF16String(val codeUnits: scala.Array[scala.Char]) extends AnyVal w
       if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
       else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
         val c2 = codeUnits(index + 1)
-        if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
-          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
+        if (c2 >= 0xDC00 && c2 <= 0xDFFF)
+          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000 // U+10000..U+10FFFF
         else 0xFFFD
       }
       else 0xFFFD
@@ -68,7 +68,7 @@ final class UTF16String(val codeUnits: scala.Array[scala.Char]) extends AnyVal w
     new UTF16String(newCodeUnits)
   }
   
-  override def iterator: StringIterator = new UTF16Iterator(this)
+  override def iterator: StringIterator = new UTF16Iterator(this, 0)
   
   /** Sequentially applies a function to each code point in this Unicode string.
     * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
