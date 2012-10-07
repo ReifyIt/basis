@@ -1,98 +1,102 @@
+/*      ____              ___                                           *\
+**     / __ | ___  ____  /__/___      A library of building blocks      **
+**    / __  / __ |/ ___|/  / ___|                                       **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
+\*                                                                      */
+
+package basis
+
 import sbt._
-import Keys._
+import sbt.Keys._
 
 object BasisBuild extends Build {
-  lazy val basis = Project(
-    id       = "basis",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := ".",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M7" % "provided"
-    )
+  lazy val all = Project(
+    id           = "all",
+    base         = file("."),
+    settings     = commonSettings,
+    aggregate    = Seq(
+      Basis,
+      BasisCollection,
+      BasisContainer,
+      BasisData,
+      BasisText,
+      BasisUtil)
   )
   
-  lazy val basisAlgebra = Project(
-    id       = "basis-algebra",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/algebra"
-    )
+  lazy val Basis = Project(
+    id           = "basis",
+    base         = file("basis"),
+    settings     = commonSettings
   )
   
-  lazy val basisArithmetic = Project(
-    id       = "basis-arithmetic",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/arithmetic"
+  lazy val BasisCollection = Project(
+    id           = "basis-collection",
+    base         = file("basis-collection"),
+    settings     = commonSettings ++ Seq(
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.0-SNAPSHOT" % "provided"
     ),
-    dependencies = Seq(basisAlgebra)
+    dependencies = Seq(Basis)
   )
   
-  lazy val basisCollection = Project(
-    id       = "basis-collection",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/collection"
+  lazy val BasisContainer = Project(
+    id           = "basis-container",
+    base         = file("basis-container"),
+    settings     = commonSettings,
+    dependencies = Seq(Basis, BasisCollection, BasisData)
+  )
+  
+  lazy val BasisData = Project(
+    id           = "basis-data",
+    base         = file("basis-data"),
+    settings     = commonSettings ++ Seq(
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.0-SNAPSHOT" % "provided"
     )
   )
   
-  lazy val basisContainer = Project(
-    id       = "basis-container",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/container"
+  lazy val BasisText = Project(
+    id           = "basis-text",
+    base         = file("basis-text"),
+    settings     = commonSettings ++ Seq(
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.0-SNAPSHOT" % "provided"
     ),
-    dependencies = Seq(basisCollection, basisMemory)
+    dependencies = Seq(Basis, BasisUtil)
   )
   
-  lazy val basisJSON = Project(
-    id       = "basis-json",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/json",
-      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-M7" % "provided"
-    )
-  )
-  
-  lazy val basisMemory = Project(
-    id       = "basis-memory",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/memory"
-    )
-  )
-  
-  lazy val basisText = Project(
-    id       = "basis-text",
-    base     = file("."),
-    settings = commonSettings ++ Seq(
-      modulePath := "basis/text"
+  lazy val BasisUtil = Project(
+    id           = "basis-util",
+    base         = file("basis-util"),
+    settings     = commonSettings ++ Seq(
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.0-SNAPSHOT" % "provided"
     ),
-    dependencies = Seq(basisCollection)
+    dependencies = Seq(Basis)
   )
   
-  lazy val commonSettings = Defaults.defaultSettings ++ projectSettings ++ compileSettings ++ publishSettings
+  lazy val commonSettings =
+    Defaults.defaultSettings ++
+    Unidoc.settings          ++
+    projectSettings          ++
+    compileSettings          ++
+    publishSettings
   
   lazy val projectSettings = Seq(
     version      := "0.0-SNAPSHOT",
     organization := "com.scalabasis",
-    description  := "A library of scalable building blocks",
+    description  := "A library of building blocks",
     homepage     := Some(url("http://www.scalabasis.com/")),
     licenses     := Seq("MIT" -> url("http://www.opensource.org/licenses/mit-license.php"))
   )
   
   lazy val compileSettings = Seq(
-    scalaVersion := "2.10.0-M7",
-    scalaSource in Compile <<= (scalaSource in Compile, modulePath)(_ / _),
-    scalaSource in Test <<= (scalaSource in Test, modulePath)(_ / _),
-    scalacOptions ++= Seq("-optimise", "-Xno-forwarders", "-Yinline-warnings"),
-    scalacOptions in (Compile, doc) <++= (version, baseDirectory in LocalProject("basis")) map {
+    scalaVersion := "2.11.0-SNAPSHOT",
+    scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Yno-imports", "-Yinline-warnings", "-Ywarn-all"),
+    scalacOptions in doc <++= (version, baseDirectory in LocalProject("basis")) map {
       (version, baseDirectory) =>
         val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
         val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-        Seq("-implicits", "-diagrams", "-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
+        Seq("-Yno-imports", "-implicits", "-diagrams", "-sourcepath",
+            baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
     },
-    target <<= (target, name)(_ / _),
     resolvers += Resolver.sonatypeRepo("snapshots")
     //libraryDependencies += "org.scalatest" % "scalatest_2.10.0-M7" % "1.8-SNAPSHOT" % "test"
   )
@@ -119,6 +123,4 @@ object BasisBuild extends Build {
       </developers>
     }
   )
-  
-  val modulePath = SettingKey[String]("module-path", "the relative path of the module's root package")
 }
