@@ -9,28 +9,30 @@ package basis.text
 
 import basis._
 
-trait StringBuffer[-Source] extends Buffer[Source, Char] {
-  override def += (char: Char): this.type
+private[text] final class JavaStringIterator
+    (string: java.lang.String, private[this] var index: Int)
+  extends StringIterator {
   
-  def append(chars: java.lang.CharSequence): this.type = {
-    val n = chars.length
-    var i = 0
-    while (i < n) this += new Char({
-      val c1 = chars.charAt(i)
+  override def hasNext: Boolean = index < string.length
+  
+  override def next(): Char = {
+    val n = string.length
+    if (index >= n) throw new scala.NoSuchElementException("empty string iterator")
+    new Char({
+      val c1 = string.charAt(index)
       if (c1 <= 0xD7FF || c1 >= 0xE000) {
-        i += 1
+        index += 1
         c1 // U+0000..U+D7FF | U+E000..U+FFFF
       }
-      else if (c1 <= 0xDBFF && i + 1 < n) { // c1 >= 0xD800
-        val c2 = chars.charAt(i + 1)
+      else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
+        val c2 = string.charAt(index + 1)
         if (c2 >= 0xDC00 && c2 <= 0xDFFF) {
-          i += 2
+          index += 2
           (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000 // U+10000..U+10FFFF
         }
-        else { i += 1; 0xFFFD }
+        else { index += 1; 0xFFFD }
       }
-      else { i += 1; 0xFFFD }
+      else { index += 1; 0xFFFD }
     })
-    this
   }
 }

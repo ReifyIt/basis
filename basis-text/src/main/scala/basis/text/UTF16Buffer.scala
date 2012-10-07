@@ -8,10 +8,11 @@
 package basis.text
 
 import basis._
+import basis.util._
 
 /** A buffer for 16-bit Unicode strings in the UTF-16 encoding form.
   * Produces only well-formed code unit sequences. */
-final class UTF16Buffer extends Buffer[UTF16String, Char] with StringBuffer {
+final class UTF16Buffer extends StringBuffer[UTF16String] {
   override type State = UTF16String
   
   private[this] var string: UTF16String = UTF16String.empty
@@ -20,9 +21,15 @@ final class UTF16Buffer extends Buffer[UTF16String, Char] with StringBuffer {
   
   private[this] var size: Int = 0
   
+  private[this] def expand(base: Int, size: Int): Int = {
+    var n = (base max size) - 1
+    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+    n + 1
+  }
+  
   private[this] def prepare(size: Int) {
     if (aliased || size > string.size) {
-      string = string.copy(String.expand(16, size))
+      string = string.copy(expand(16, size))
       aliased = false
     }
   }

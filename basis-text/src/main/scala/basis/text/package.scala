@@ -8,13 +8,17 @@
 package basis
 
 package object text extends StringBuffers {
+  import scala.language.implicitConversions
+  
+  implicit def String(string: java.lang.String): String = new JavaString(string)
+  
   implicit override def UTF8Buffer: UTF8Buffer = new UTF8Buffer
 }
 
 package text {
   private[text] class DefaultStringBuffers {
-    implicit def StringBuffer: StringBuffer { type State = UTF8String } =
-      (new UTF8Buffer).asInstanceOf[StringBuffer { type State = UTF8String }]
+    implicit def StringBuffer: StringBuffer[String] { type State = String } =
+      (new UTF8Buffer).asInstanceOf[StringBuffer[String] { type State = String }]
   }
   
   private[text] class StringBuffers extends DefaultStringBuffers {
