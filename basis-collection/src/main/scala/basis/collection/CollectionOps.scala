@@ -5,8 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package collection
+package basis.collection
+
+import basis._
 
 final class CollectionOps[+A, +Self](self: Collection[A]) {
   def withFilter(p: A => Boolean): Collection[A] =

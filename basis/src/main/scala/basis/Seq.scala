@@ -7,6 +7,13 @@
 
 package basis
 
+/** An iterable sequence of elements. Import [[basis.collection.SeqOps]] to
+  * extend this interface with a rich suite of optimized collection operations.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  sequence
+  */
 trait Seq[+A] extends Any with Container[A] {
   override type Self <: Seq[A]
   

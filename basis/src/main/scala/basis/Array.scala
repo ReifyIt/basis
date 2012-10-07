@@ -7,11 +7,20 @@
 
 package basis
 
+/** An indexed sequence of elements. Import [[basis.collection.ArrayOps]] to
+  * extend this interface with a rich suite of optimized collection operations.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection array
+  */
 trait Array[+A] extends Any with Seq[A] {
   override type Self <: Array[A]
   
+  /** Returns the number of elements in this $collection. */
   def length: Int
   
+  /** Returns an indexed element of this $collection. */
   def apply(index: Int): A
   
   override def iterator: Iterator[A] = new ArrayIterator(this, 0, length)

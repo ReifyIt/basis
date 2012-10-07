@@ -7,13 +7,23 @@
 
 package basis
 
+/** A linear sequence of elements. Import [[basis.collection.ListOps]] to
+  * extend this interface with a rich suite of optimized collection operations.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  list
+  */
 trait List[+A] extends Any with Seq[A] {
   override type Self <: List[A]
   
+  /** Returns `true` if this $collection has no `head`. */
   def isEmpty: Boolean
   
+  /** Returns the first element of this $collection. */
   def head: A
   
+  /** Returns all but the first element of this $collection. */
   def tail: List[A]
   
   override def iterator: Iterator[A] = new ListIterator[A](this)

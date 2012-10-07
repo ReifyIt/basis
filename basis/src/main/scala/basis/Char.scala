@@ -7,6 +7,7 @@
 
 package basis
 
+/** A Unicode® code point. */
 final class Char(val codePoint: Int) extends AnyVal {
   def isValid: Boolean = codePoint >= 0 && codePoint <= 0x10FFFF
 }

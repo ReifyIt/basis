@@ -7,6 +7,12 @@
 
 package basis
 
+/** An iterable sequence of characters.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  string
+  */
 trait String extends Any with Seq[Char] {
   override type Self <: String
   

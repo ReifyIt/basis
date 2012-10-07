@@ -7,6 +7,12 @@
 
 package basis
 
+/** A unique set of iterable values.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  set
+  */
 trait Set[A] extends Any with Container[A] {
   override type Self <: Set[A]
   

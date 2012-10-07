@@ -7,6 +7,15 @@
 
 package basis
 
+/** A traversable collection of elements. Collection declares only a protected
+  * `foreach` method; it has no public methods. Import
+  * [[basis.collection.CollectionOps]] to extend this interface with a rich
+  * suite of collection operations.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  collection
+  */
 trait Collection[+A] extends Any with Enumerator[A] {
   override type Self <: Collection[A]
   

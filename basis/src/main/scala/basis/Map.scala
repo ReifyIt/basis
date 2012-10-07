@@ -7,6 +7,12 @@
 
 package basis
 
+/** A unique set of iterable keys with associated values.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  map
+  */
 trait Map[A, +Z] extends Any with Container[(A, Z)] {
   override type Self <: Map[A, Z]
   
