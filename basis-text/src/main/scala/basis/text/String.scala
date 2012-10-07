@@ -11,8 +11,7 @@ import basis._
 import basis.util._
 
 object String {
-  def apply(chars: java.lang.CharSequence): UTF8String =
-    UTF8String(chars)
+  def apply(chars: java.lang.CharSequence): UTF8String = UTF8String(chars)
   
   private[text] def expand(base: Int, size: Int): Int = {
     var n = (base max size) - 1
