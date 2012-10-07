@@ -32,7 +32,7 @@ final class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Bool
 }
 
 object BitArray {
-  val Empty: BitArray = BitArray(0)
+  val empty: BitArray = BitArray(0)
   
   def apply(length: Int): BitArray = {
     val words = new scala.Array[Int](1 + (((length + 31) & ~31) >> 5))

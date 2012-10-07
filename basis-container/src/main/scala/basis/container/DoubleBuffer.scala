@@ -11,7 +11,7 @@ package container
 final class DoubleBuffer extends Buffer[Array[_], Double] {
   override type State = DoubleArray
   
-  private[this] var array: DoubleArray = DoubleArray.Empty
+  private[this] var array: DoubleArray = DoubleArray.empty
   
   private[this] var aliased: Boolean = true
   
@@ -46,7 +46,7 @@ final class DoubleBuffer extends Buffer[Array[_], Double] {
   }
   
   override def clear() {
-    array = DoubleArray.Empty
+    array = DoubleArray.empty
     aliased = true
     length = 0
   }

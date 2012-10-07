@@ -23,9 +23,9 @@ final class RefArray[A](val array: scala.Array[AnyRef]) extends AnyVal with Arra
 }
 
 object RefArray {
-  private[this] val empty = RefArray[Nothing](0)
+  private[this] val Empty = RefArray[Nothing](0)
   
-  def Empty[T]: RefArray[T] = empty.asInstanceOf[RefArray[T]]
+  def empty[T]: RefArray[T] = Empty.asInstanceOf[RefArray[T]]
   
   def apply[A](length: Int): RefArray[A] =
     new RefArray[A](new scala.Array[AnyRef](length))

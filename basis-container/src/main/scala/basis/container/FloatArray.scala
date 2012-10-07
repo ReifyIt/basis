@@ -23,7 +23,7 @@ final class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[
 }
 
 object FloatArray {
-  val Empty: FloatArray = FloatArray(0)
+  val empty: FloatArray = FloatArray(0)
   
   def apply(length: Int): FloatArray =
     new FloatArray(new scala.Array[Float](length))

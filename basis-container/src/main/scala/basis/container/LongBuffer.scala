@@ -11,7 +11,7 @@ package container
 final class LongBuffer extends Buffer[Array[_], Long] {
   override type State = LongArray
   
-  private[this] var array: LongArray = LongArray.Empty
+  private[this] var array: LongArray = LongArray.empty
   
   private[this] var aliased: Boolean = true
   
@@ -46,7 +46,7 @@ final class LongBuffer extends Buffer[Array[_], Long] {
   }
   
   override def clear() {
-    array = LongArray.Empty
+    array = LongArray.empty
     aliased = true
     length = 0
   }

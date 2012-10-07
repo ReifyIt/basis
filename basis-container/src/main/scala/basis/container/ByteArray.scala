@@ -23,7 +23,7 @@ final class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[By
 }
 
 object ByteArray {
-  val Empty: ByteArray = ByteArray(0)
+  val empty: ByteArray = ByteArray(0)
   
   def apply(length: Int): ByteArray =
     new ByteArray(new scala.Array[Byte](length))

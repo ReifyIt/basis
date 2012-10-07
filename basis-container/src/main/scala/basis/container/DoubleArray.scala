@@ -23,7 +23,7 @@ final class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Arra
 }
 
 object DoubleArray {
-  val Empty: DoubleArray = DoubleArray(0)
+  val empty: DoubleArray = DoubleArray(0)
   
   def apply(length: Int): DoubleArray =
     new DoubleArray(new scala.Array[Double](length))

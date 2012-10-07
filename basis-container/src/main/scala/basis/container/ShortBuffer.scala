@@ -11,7 +11,7 @@ package container
 final class ShortBuffer extends Buffer[Array[_], Short] {
   override type State = ShortArray
   
-  private[this] var array: ShortArray = ShortArray.Empty
+  private[this] var array: ShortArray = ShortArray.empty
   
   private[this] var aliased: Boolean = true
   
@@ -46,7 +46,7 @@ final class ShortBuffer extends Buffer[Array[_], Short] {
   }
   
   override def clear() {
-    array = ShortArray.Empty
+    array = ShortArray.empty
     aliased = true
     length = 0
   }

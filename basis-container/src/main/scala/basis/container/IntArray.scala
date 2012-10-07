@@ -23,7 +23,7 @@ final class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int]
 }
 
 object IntArray {
-  val Empty: IntArray = IntArray(0)
+  val empty: IntArray = IntArray(0)
   
   def apply(length: Int): IntArray =
     new IntArray(new scala.Array[Int](length))

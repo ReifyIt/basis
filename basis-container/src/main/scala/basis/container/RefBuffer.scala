@@ -11,7 +11,7 @@ package container
 final class RefBuffer[A] extends Buffer[Array[_], A] {
   override type State = RefArray[A]
   
-  private[this] var array: RefArray[A] = RefArray.Empty[A]
+  private[this] var array: RefArray[A] = RefArray.empty[A]
   
   private[this] var aliased: Boolean = true
   
@@ -46,7 +46,7 @@ final class RefBuffer[A] extends Buffer[Array[_], A] {
   }
   
   override def clear() {
-    array = RefArray.Empty[A]
+    array = RefArray.empty[A]
     aliased = true
     length = 0
   }

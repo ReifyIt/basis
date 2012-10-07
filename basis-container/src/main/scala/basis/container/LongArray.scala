@@ -23,7 +23,7 @@ final class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Lo
 }
 
 object LongArray {
-  val Empty: LongArray = LongArray(0)
+  val empty: LongArray = LongArray(0)
   
   def apply(length: Int): LongArray =
     new LongArray(new scala.Array[Long](length))

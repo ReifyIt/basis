@@ -11,7 +11,7 @@ package container
 final class BitBuffer extends Buffer[Array[Boolean], Boolean] {
   override type State = BitArray
   
-  private[this] var array: BitArray = BitArray.Empty
+  private[this] var array: BitArray = BitArray.empty
   
   private[this] var aliased: Boolean = true
   
@@ -46,7 +46,7 @@ final class BitBuffer extends Buffer[Array[Boolean], Boolean] {
   }
   
   override def clear() {
-    array = BitArray.Empty
+    array = BitArray.empty
     aliased = true
     length = 0
   }

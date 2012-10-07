@@ -23,7 +23,7 @@ final class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[
 }
 
 object ShortArray {
-  val Empty: ShortArray = ShortArray(0)
+  val empty: ShortArray = ShortArray(0)
   
   def apply(length: Int): ShortArray =
     new ShortArray(new scala.Array[Short](length))

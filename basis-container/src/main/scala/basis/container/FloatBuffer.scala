@@ -11,7 +11,7 @@ package container
 final class FloatBuffer extends Buffer[Array[_], Float] {
   override type State = FloatArray
   
-  private[this] var array: FloatArray = FloatArray.Empty
+  private[this] var array: FloatArray = FloatArray.empty
   
   private[this] var aliased: Boolean = true
   
@@ -46,7 +46,7 @@ final class FloatBuffer extends Buffer[Array[_], Float] {
   }
   
   override def clear() {
-    array = FloatArray.Empty
+    array = FloatArray.empty
     aliased = true
     length = 0
   }
