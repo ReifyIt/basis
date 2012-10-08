@@ -37,6 +37,14 @@ private[basis] object IntMacros {
     } (WeakTypeTag.Int)
   }
   
+  def bitCount(c: Context): c.Expr[Int] = {
+    import c.universe._
+    val Apply(_, self :: Nil) = c.prefix.tree
+    c.Expr {
+      Apply(Select(JavaLangInteger(c.universe), newTermName("bitCount")), self :: Nil)
+    } (WeakTypeTag.Int)
+  }
+  
   def to(c: Context)(end: c.Expr[Int]): c.Expr[Range] = {
     import c.universe._
     val Apply(_, start :: Nil) = c.prefix.tree
@@ -63,5 +71,10 @@ private[basis] object IntMacros {
   private def JavaLangMath(u: Universe): u.Tree = {
     import u._
     Select(Select(Select(Ident(nme.ROOTPKG), newTermName("java")), newTermName("lang")), newTermName("Math"))
+  }
+  
+  private def JavaLangInteger(u: Universe): u.Tree = {
+    import u._
+    Select(Select(Select(Ident(nme.ROOTPKG), newTermName("java")), newTermName("lang")), newTermName("Integer"))
   }
 }

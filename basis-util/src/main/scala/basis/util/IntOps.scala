@@ -17,6 +17,8 @@ trait IntOps {
   
   def min(that: Int): Int = macro IntMacros.min
   
+  def bitCount: Int = macro IntMacros.bitCount
+  
   def to(end: Int): Range = macro IntMacros.to
   
   def until(end: Int): Range = macro IntMacros.until

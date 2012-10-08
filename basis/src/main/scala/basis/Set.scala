@@ -19,4 +19,8 @@ trait Set[A] extends Any with Container[A] {
   override def iterator: Iterator[A]
   
   def contains(key: A): Boolean
+  
+  def + (element: A): Self
+  
+  def - (element: A): Self
 }

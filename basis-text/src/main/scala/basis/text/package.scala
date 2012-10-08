@@ -11,8 +11,6 @@ package object text extends StringBuffers {
   import scala.language.implicitConversions
   
   implicit def String(string: java.lang.String): String = new JavaString(string)
-  
-  implicit override def UTF8Buffer: UTF8Buffer = new UTF8Buffer
 }
 
 package text {
