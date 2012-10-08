@@ -33,6 +33,7 @@ package object basis {
   val  None       = scala.None
   
   type inline = scala.inline
+  type tailrec = scala.annotation.tailrec
   
   val ??? : Nothing = scala.Predef.???
   

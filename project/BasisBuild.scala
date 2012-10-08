@@ -43,7 +43,7 @@ object BasisBuild extends Build {
     id           = "basis-container",
     base         = file("basis-container"),
     settings     = commonSettings,
-    dependencies = Seq(Basis, BasisCollection, BasisData, BasisUtil)
+    dependencies = Seq(Basis, BasisCollection, BasisData)
   )
   
   lazy val BasisData = Project(
