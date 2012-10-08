@@ -9,20 +9,26 @@ package basis.container
 
 import basis._
 
-final class HashSet[A] private (nodeMap: Int, itemMap: Int, slots: scala.Array[AnyRef]) extends Set[A] {
+final class HashSet[A] private
+    (nodeMap: Int, itemMap: Int, slots: scala.Array[AnyRef])
+    (implicit hasher: Hashable[A])
+  extends Set[A] {
+  
+  import hasher._
+  
   override type Self = HashSet[A]
   
   override def iterator: Iterator[A] =
     new HashSetIterator[A](this)
   
   override def contains(element: A): Boolean =
-    contains(element, element.hashCode)
+    contains(element, hash(element))
   
   override def + (element: A): HashSet[A] =
-    update(element, element.hashCode, 0)
+    update(element, hash(element), 0)
   
   override def - (element: A): HashSet[A] =
-    remove(element, element.hashCode)
+    remove(element, hash(element))
   
   /** Returns `true` if this set contains no elements. */
   def isEmpty: Boolean = slots.length == 0
@@ -40,13 +46,13 @@ final class HashSet[A] private (nodeMap: Int, itemMap: Int, slots: scala.Array[A
   
   /** Returns 2 to the power of the low 5 bits of the right-shifted hash.
     * Yields an `Int` with a single set bit. */
-  private[container] def trieSlot(hash: Int, shift: Int): Int =
-    1 << ((hash >>> shift) & 0x1F)
+  private[container] def trieSlot(h: Int, k: Int): Int =
+    1 << ((h >>> k) & 0x1F)
   
   /** Returns 2 to the power of the low 5 bits of the hash.
     * Yields an `Int` with a single set bit. */
-  private[container] def trieSlot(hash: Int): Int =
-    1 << (hash & 0x1F)
+  private[container] def trieSlot(h: Int): Int =
+    1 << (h & 0x1F)
   
   /** Returns the hamming weight of the low n bits of the node map. This counts
     * the number of set bits in the node map lower than the nth bit. */
@@ -57,31 +63,36 @@ final class HashSet[A] private (nodeMap: Int, itemMap: Int, slots: scala.Array[A
   
   private[container] def arity: Int = slots.length
   
-  private def contains(item: A, hash: Int): Boolean = {
-    if (isTrie) trieContains(item, hash)
-    else bucketContains(item)
+  private def contains(item: A, h: Int): Boolean = {
+    if (isEmpty) false
+    else if (isTrie) trieContains(item, h)
+    else bucketContains(item, h)
   }
   
-  private[this] def trieContains(item: A, hash: Int): Boolean = {
-    val n = trieSlot(hash)
+  private[this] def trieContains(item: A, h: Int): Boolean = {
+    val n = trieSlot(h)
     val i = slotIndex(n)
-    if (hasItemAt(n)) slots(i).equals(item)
-    else if (hasNodeAt(n)) slots(i).asInstanceOf[HashSet[A]].contains(item, hash >>> 5)
+    val node = slots(i)
+    if (hasItemAt(n)) equal(node.asInstanceOf[A], item)
+    else if (hasNodeAt(n)) node.asInstanceOf[HashSet[A]].contains(item, h >>> 5)
     else false
   }
   
-  private[this] def bucketContains(item: A): Boolean = {
-    var i = 0
-    val n = slots.length
-    while (i < n) { if (slots(i).equals(item)) return true; i += 1 }
+  private[this] def bucketContains(item: A, h: Int): Boolean = {
+    // assume(!isEmpty)
+    if (h == hash(slots(0).asInstanceOf[A])) {
+      var i = 0
+      val n = slots.length
+      while (i < n) { if (equal(slots(i).asInstanceOf[A], item)) return true; i += 1 }
+    }
     false
   }
   
-  private def update(item: A, hash: Int, shift: Int): HashSet[A] = {
-    val n = trieSlot(hash, shift)
+  private def update(item: A, h: Int, k: Int): HashSet[A] = {
+    val n = trieSlot(h, k)
     if (isEmpty) updateEmptySet(item, n)
-    else if (isTrie) updateTrie(item, hash, shift, n)
-    else updateBucket(item, hash, shift)
+    else if (isTrie) updateTrie(item, h, k, n)
+    else updateBucket(item, h, k)
   }
   
   private[this] def updateEmptySet(item: A, n: Int): HashSet[A] = {
@@ -90,27 +101,27 @@ final class HashSet[A] private (nodeMap: Int, itemMap: Int, slots: scala.Array[A
     new HashSet[A](n, n, newSlots)
   }
   
-  private[this] def updateTrie(item: A, hash: Int, shift: Int, n: Int): HashSet[A] = {
+  private[this] def updateTrie(item: A, h: Int, k: Int, n: Int): HashSet[A] = {
     val i = slotIndex(n)
-    if (hasItemAt(n)) updateItem(item, hash, shift, n, i)
-    else if (hasNodeAt(n)) updateNode(item, hash, shift, i)
+    if (hasItemAt(n)) updateItem(item, h, k, n, i)
+    else if (hasNodeAt(n)) updateNode(item, h, k, i)
     else insertItem(item, n, i)
   }
   
-  private[this] def updateItem(item: A, hash: Int, shift: Int, n: Int, i: Int): HashSet[A] = {
-    val node = slots(i)
-    if (node.equals(item)) this
+  private[this] def updateItem(item: A, h: Int, k: Int, n: Int, i: Int): HashSet[A] = {
+    val node = slots(i).asInstanceOf[A]
+    if (equal(node, item)) this
     else {
-      val newNode = resolve(item.asInstanceOf[AnyRef], hash >>> (shift + 5), node, node.hashCode >>> (shift + 5))
+      val newNode = merge(item, h >>> (k + 5), node, hash(node) >>> (k + 5))
       val newSlots = slots.clone
       newSlots(i) = newNode
-      new HashSet[A](nodeMap, itemMap ^ n, newSlots)
+      new HashSet(nodeMap, itemMap ^ n, newSlots)
     }
   }
   
-  private[this] def updateNode(item: A, hash: Int, shift: Int, i: Int): HashSet[A] = {
+  private[this] def updateNode(item: A, h: Int, k: Int, i: Int): HashSet[A] = {
     val node = slots(i).asInstanceOf[HashSet[A]]
-    val newNode = node.update(item, hash, shift + 5)
+    val newNode = node.update(item, h, k + 5)
     if (node eq newNode) this
     else {
       val newSlots = slots.clone
@@ -127,67 +138,90 @@ final class HashSet[A] private (nodeMap: Int, itemMap: Int, slots: scala.Array[A
     new HashSet[A](nodeMap | n, itemMap | n, newSlots)
   }
   
-  private[this] def updateBucket(item: A, hash: Int, shift: Int): HashSet[A] = {
-    val node = slots(0)
-    val nodeHash = node.hashCode
-    if (hash != nodeHash) resolve(item.asInstanceOf[AnyRef], hash >>> shift, this, nodeHash >>> shift)
-    else {
+  private[this] def updateBucket(item: A, h: Int, k: Int): HashSet[A] = {
+    val bucketHash = hash(slots(0).asInstanceOf[A])
+    if (h == bucketHash) {
       val newSlots = new scala.Array[AnyRef](slots.length + 1)
       java.lang.System.arraycopy(slots, 0, newSlots, 0, slots.length)
       newSlots(slots.length) = item.asInstanceOf[AnyRef]
       new HashSet(0, 0, newSlots)
     }
+    else resolve(this, bucketHash >>> k, item, h >>> k)
   }
   
-  private[this] def resolve(itemA: AnyRef, hashA: Int, itemB: AnyRef, hashB: Int): HashSet[A] = {
+  private[this] def merge(itemA: A, hashA: Int, itemB: A, hashB: Int): HashSet[A] = {
     if (hashA == hashB) {
       val newSlots = new scala.Array[AnyRef](2)
-      newSlots(0) = itemA
-      newSlots(1) = itemB
+      newSlots(0) = itemA.asInstanceOf[AnyRef]
+      newSlots(1) = itemB.asInstanceOf[AnyRef]
       new HashSet[A](0, 0, newSlots)
     }
     else {
-      val bitA = 1 << (hashA & 0x1F)
-      val bitB = 1 << (hashB & 0x1F)
-      val nodeMap = bitA | bitB
-      if (bitA == bitB) {
-        val newNode = resolve(itemA, hashA >>> 5, itemB, hashB >>> 5)
+      val slotA = trieSlot(hashA)
+      val slotB = trieSlot(hashB)
+      val newMap = slotA | slotB
+      if (slotA == slotB) {
+        val newNode = merge(itemA, hashA >>> 5, itemB, hashB >>> 5)
         val newSlots = new scala.Array[AnyRef](1)
         newSlots(0) = newNode
-        new HashSet[A](nodeMap, nodeMap, newSlots)
+        new HashSet[A](newMap, 0, newSlots)
       }
       else {
         val newSlots = new scala.Array[AnyRef](2)
-        if (((bitA - 1) & bitB) == 0) {
-          newSlots(0) = itemA
-          newSlots(1) = itemB
+        if (((slotA - 1) & slotB) == 0) {
+          newSlots(0) = itemA.asInstanceOf[AnyRef]
+          newSlots(1) = itemB.asInstanceOf[AnyRef]
         }
         else {
-          newSlots(0) = itemB
-          newSlots(1) = itemA
+          newSlots(0) = itemB.asInstanceOf[AnyRef]
+          newSlots(1) = itemA.asInstanceOf[AnyRef]
         }
-        new HashSet[A](nodeMap, nodeMap, newSlots)
+        new HashSet[A](newMap, newMap, newSlots)
       }
     }
   }
   
-  private def remove(item: A, hash: Int): HashSet[A] = {
-    if (isEmpty) this
-    else if (isTrie) removeFromTrie(item, hash)
-    else removeFromBucket(item, hash)
+  private[this] def resolve(bucket: HashSet[A], bucketHash: Int, item: A, itemHash: Int): HashSet[A] = {
+    // assume(bucketHash != itemHash)
+    val bucketSlot = trieSlot(bucketHash)
+    val itemSlot = trieSlot(itemHash)
+    if (bucketSlot == itemSlot) {
+      val newNode = resolve(bucket, bucketHash >>> 5, item, itemHash >>> 5)
+      val newSlots = new scala.Array[AnyRef](1)
+      newSlots(0) = newNode
+      new HashSet[A](bucketSlot, 0, newSlots)
+    }
+    else {
+      val newSlots = new scala.Array[AnyRef](2)
+      if (((bucketSlot - 1) & itemSlot) == 0) {
+        newSlots(0) = bucket
+        newSlots(1) = item.asInstanceOf[AnyRef]
+      }
+      else {
+        newSlots(0) = item.asInstanceOf[AnyRef]
+        newSlots(1) = bucket
+      }
+      new HashSet[A](bucketSlot | itemSlot, itemSlot, newSlots)
+    }
   }
   
-  private[this] def removeFromTrie(item: A, hash: Int): HashSet[A] = {
-    val n = trieSlot(hash)
+  private def remove(item: A, h: Int): HashSet[A] = {
+    if (isEmpty) this
+    else if (isTrie) removeFromTrie(item, h)
+    else removeFromBucket(item, h)
+  }
+  
+  private[this] def removeFromTrie(item: A, h: Int): HashSet[A] = {
+    val n = trieSlot(h)
     val i = slotIndex(n)
     if (hasItemAt(n)) removeItem(item, n, i)
-    else if (hasNodeAt(n)) removeNode(item, hash, n, i)
+    else if (hasNodeAt(n)) removeNode(item, h, n, i)
     else this
   }
   
   private[this] def removeItem(item: A, n: Int, i: Int): HashSet[A] = {
     val node = slots(i)
-    if (node.equals(item)) {
+    if (equal(node.asInstanceOf[A], item)) {
       val newSlots = new scala.Array[AnyRef](slots.length - 1)
       java.lang.System.arraycopy(slots, 0, newSlots, 0, i)
       java.lang.System.arraycopy(slots, i + 1, newSlots, i, newSlots.length - i)
@@ -196,9 +230,9 @@ final class HashSet[A] private (nodeMap: Int, itemMap: Int, slots: scala.Array[A
     else this
   }
   
-  private[this] def removeNode(item: A, hash: Int, n: Int, i: Int): HashSet[A] = {
+  private[this] def removeNode(item: A, h: Int, n: Int, i: Int): HashSet[A] = {
     val node = slots(i).asInstanceOf[HashSet[A]]
-    val newNode = node.remove(item, hash >>> 5)
+    val newNode = node.remove(item, h >>> 5)
     if (node eq newNode) this
     else newNode.arity match {
       case 0 =>
@@ -217,12 +251,12 @@ final class HashSet[A] private (nodeMap: Int, itemMap: Int, slots: scala.Array[A
     }
   }
   
-  private[this] def removeFromBucket(item: A, hash: Int): HashSet[A] = {
+  private[this] def removeFromBucket(item: A, h: Int): HashSet[A] = {
     // assume(!isEmpty)
-    if (slots(0).hashCode == hash) {
+    if (h == hash(slots(0).asInstanceOf[A])) {
       var i = 0
       val n = slots.length
-      while (i < n) if (slots(i).equals(item)) {
+      while (i < n) if (equal(slots(i).asInstanceOf[A], item)) {
         val newSlots = new scala.Array[AnyRef](slots.length - 1)
         java.lang.System.arraycopy(slots, 0, newSlots, 0, i)
         java.lang.System.arraycopy(slots, i + 1, newSlots, i, newSlots.length - i)
