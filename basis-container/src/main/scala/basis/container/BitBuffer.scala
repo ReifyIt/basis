@@ -5,8 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package container
+package basis.container
+
+import basis._
 
 final class BitBuffer extends Buffer[Array[Boolean], Boolean] {
   override type State = BitArray

@@ -5,8 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package container
+package basis.container
+
+import basis._
 
 final class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short] {
   override def length: Int = array.length

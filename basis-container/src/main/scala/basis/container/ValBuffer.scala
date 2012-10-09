@@ -5,9 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package container
+package basis.container
 
+import basis._
 import basis.data._
 
 final class ValBuffer[A](implicit typeA: ValType[A]) extends Buffer[Array[_], A] {

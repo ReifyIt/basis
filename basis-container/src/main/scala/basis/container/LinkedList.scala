@@ -5,8 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package container
+package basis.container
+
+import basis._
 
 sealed abstract class LinkedList[+A] extends List[A] {
   import scala.annotation.tailrec

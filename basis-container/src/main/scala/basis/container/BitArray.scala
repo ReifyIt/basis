@@ -5,8 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package container
+package basis.container
+
+import basis._
 
 final class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
   override def length: Int = words(0)

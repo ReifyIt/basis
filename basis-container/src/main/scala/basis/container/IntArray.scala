@@ -5,8 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package container
+package basis.container
+
+import basis._
 
 final class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
   override def length: Int = array.length

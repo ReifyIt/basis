@@ -5,9 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package container
+package basis.container
 
+import basis._
 import basis.data._
 
 final class ValArray[A](val data: Mem)(implicit typeA: ValType[A]) extends Array[A] {
