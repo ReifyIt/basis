@@ -8,7 +8,6 @@
 package basis.text
 
 import basis._
-import basis.util._
 
 /** A buffer for 8-bit Unicode strings in the UTF-8 encoding form.
   * Produces only well-formed code unit sequences. */
@@ -22,7 +21,7 @@ final class UTF8Buffer extends StringBuffer[UTF8String] {
   private[this] var size: Int = 0
   
   private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
+    var n = scala.math.max(base, size) - 1
     n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
     n + 1
   }

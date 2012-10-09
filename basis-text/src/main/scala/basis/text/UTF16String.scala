@@ -8,7 +8,6 @@
 package basis.text
 
 import basis._
-import basis.util._
 
 /** A 16-bit Unicode string comprised of a sequence of UTF-16 code units. */
 final class UTF16String(val codeUnits: scala.Array[scala.Char]) extends AnyVal with String {
@@ -64,7 +63,7 @@ final class UTF16String(val codeUnits: scala.Array[scala.Char]) extends AnyVal w
   /** Returns a copy of this Unicode string. */
   private[text] def copy(size: Int): UTF16String = {
     val newCodeUnits = new scala.Array[scala.Char](size)
-    java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
+    java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, scala.math.min(codeUnits.length, size))
     new UTF16String(newCodeUnits)
   }
   

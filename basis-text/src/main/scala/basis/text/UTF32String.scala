@@ -8,7 +8,6 @@
 package basis.text
 
 import basis._
-import basis.util._
 
 /** A 32-bit Unicode string comprised of a sequence of UTF-32 code units. */
 final class UTF32String(val codeUnits: scala.Array[Int]) extends AnyVal with Array[Char] with String {
@@ -31,7 +30,7 @@ final class UTF32String(val codeUnits: scala.Array[Int]) extends AnyVal with Arr
   /** Returns a copy of this Unicode string. */
   private[text] def copy(size: Int): UTF32String = {
     val newCodeUnits = new scala.Array[Int](size)
-    java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
+    java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, scala.math.min(codeUnits.length, size))
     new UTF32String(newCodeUnits)
   }
   
