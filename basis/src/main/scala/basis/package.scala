@@ -31,8 +31,6 @@ package object basis {
   type inline = scala.inline
   type tailrec = scala.annotation.tailrec
   
-  val ??? : Nothing = scala.Predef.???
-  
   /** Applies a function to each element of a collection by invoking the
     * collection's protected `foreach` method. */
   def traverse[A, U](xs: Enumerator[A])(f: A => U): scala.Unit =
