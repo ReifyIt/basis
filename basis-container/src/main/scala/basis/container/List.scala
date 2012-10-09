@@ -9,15 +9,15 @@ package basis.container
 
 import basis._
 
-object Array {
+object List {
   import scala.language.experimental.macros
   
-  def apply[A](xs: A*)(implicit buffer: Buffer[Array[A], A]): buffer.State =
+  def apply[A](xs: A*)(implicit buffer: Buffer[List[A], A]): buffer.State =
     macro FactoryMacros.apply[A]
   
-  def fill[A](n: Int)(element: => A)(implicit buffer: Buffer[Array[A], A]): buffer.State =
+  def fill[A](n: Int)(element: => A)(implicit buffer: Buffer[List[A], A]): buffer.State =
     macro FactoryMacros.fill[A]
   
-  def tabulate[A](n: Int)(f: Int => A)(implicit buffer: Buffer[Array[A], A]): buffer.State =
+  def tabulate[A](n: Int)(f: Int => A)(implicit buffer: Buffer[List[A], A]): buffer.State =
     macro FactoryMacros.tabulate[A]
 }

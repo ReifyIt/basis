@@ -18,9 +18,15 @@ final class BitBuffer extends Buffer[Array[Boolean], Boolean] {
   
   private[this] var length: Int = 0
   
+  private[this] def expand(base: Int, size: Int): Int = {
+    var n = scala.math.max(base, size) - 1
+    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+    n + 1
+  }
+  
   private[this] def prepare(size: Int) {
     if (aliased || size > array.length) {
-      array = array.copy(basis.container.Array.expand(16, size))
+      array = array.copy(expand(16, size))
       aliased = false
     }
   }

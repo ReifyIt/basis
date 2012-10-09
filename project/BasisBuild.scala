@@ -42,7 +42,9 @@ object BasisBuild extends Build {
   lazy val BasisContainer = Project(
     id           = "basis-container",
     base         = file("basis-container"),
-    settings     = commonSettings,
+    settings     = commonSettings ++ Seq(
+      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.0-SNAPSHOT" % "provided"
+    ),
     dependencies = Seq(Basis, BasisData)
   )
   
