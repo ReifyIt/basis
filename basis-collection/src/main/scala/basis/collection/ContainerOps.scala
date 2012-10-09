@@ -45,10 +45,10 @@ final class ContainerOps[+A, +Self](self: Container[A]) {
   def count(p: A => Boolean): Int =
     macro ContainerMacros.count[A]
   
-  def select[B](q: PartialFunction[A, B]): Option[B] =
+  def select[B](q: scala.PartialFunction[A, B]): Option[B] =
     macro ContainerMacros.select[A, B]
   
-  def collect[B](q: PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State =
+  def collect[B](q: scala.PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State =
     macro ContainerMacros.collect[A, B]
   
   def map[B](f: A => B)(implicit buffer: Buffer[Self, B]): buffer.State =

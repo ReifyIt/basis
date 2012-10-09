@@ -50,13 +50,13 @@ private[basis] object Traversers {
     def check: Int = t
   }
 
-  final class Select[-A, +B](q: PartialFunction[A, B]) extends AbstractFunction1[A, Unit] {
+  final class Select[-A, +B](q: scala.PartialFunction[A, B]) extends AbstractFunction1[A, Unit] {
     private[this] var r: Option[B] = None
     override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Some(q(x)); throw Break }
     def check: Option[B] = r
   }
 
-  final class Collect[-A, +B, +U](q: PartialFunction[A, B], f: B => U) extends AbstractFunction1[A, Unit] {
+  final class Collect[-A, +B, +U](q: scala.PartialFunction[A, B], f: B => U) extends AbstractFunction1[A, Unit] {
     override def apply(x: A): Unit = if (q.isDefinedAt(x)) f(q(x))
   }
 
@@ -99,7 +99,7 @@ private[basis] object Traversers {
     override def apply(x: A): Unit = if (i < u) { if (i >= l) f(x); i += 1 } else throw Break
   }
 
-  final class CollectInto[-A, B](q: PartialFunction[A, B], buffer: Buffer[Nothing, B]) extends AbstractFunction1[A, Unit] {
+  final class CollectInto[-A, B](q: scala.PartialFunction[A, B], buffer: Buffer[Nothing, B]) extends AbstractFunction1[A, Unit] {
     override def apply(x: A): Unit = if (q.isDefinedAt(x)) buffer += q(x)
   }
 

@@ -45,10 +45,10 @@ final class IteratorOps[A](self: Iterator[A]) {
   def count(p: A => Boolean): Int =
     macro IteratorMacros.count[A]
   
-  def select[B](q: PartialFunction[A, B]): Option[B] =
+  def select[B](q: scala.PartialFunction[A, B]): Option[B] =
     macro IteratorMacros.select[A, B]
   
-  def collect[B](q: PartialFunction[A, B]): Iterator[B] =
+  def collect[B](q: scala.PartialFunction[A, B]): Iterator[B] =
     new Iterators.Collect(self, q)
   
   def map[B](f: A => B): Iterator[B] =

@@ -18,7 +18,7 @@ private[basis] object Iterators {
     override def next: Nothing = throw new scala.NoSuchElementException("empty iterator")
   }
   
-  final class Collect[-A, +B](self: Iterator[A], q: PartialFunction[A, B]) extends Iterator[B] {
+  final class Collect[-A, +B](self: Iterator[A], q: scala.PartialFunction[A, B]) extends Iterator[B] {
     private[this] var head: A = _
     private[this] var isDefined: Boolean = false
     

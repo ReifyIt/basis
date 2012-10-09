@@ -21,10 +21,6 @@ package object basis {
   type Double  = scala.Double
   type Boolean = scala.Boolean
   
-  type Function1[-T1, +R] = scala.Function1[T1, R]
-  
-  type PartialFunction[-T1, +R] = scala.PartialFunction[T1, R]
-  
   type Option[+A] = scala.Option[A]
   val  Option     = scala.Option
   

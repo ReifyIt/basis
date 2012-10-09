@@ -72,13 +72,13 @@ final class EnumeratorOps[+A, +Self](self: Enumerator[A]) {
     f.check
   }
   
-  def select[B](q: PartialFunction[A, B]): Option[B] = {
+  def select[B](q: scala.PartialFunction[A, B]): Option[B] = {
     val f = new Traversers.Select(q)
     try traverse(self)(f) catch { case e: Break => () }
     f.check
   }
   
-  def collect[B](q: PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State = {
+  def collect[B](q: scala.PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State = {
     traverse(self)(new Traversers.CollectInto(q, buffer))
     buffer.check
   }

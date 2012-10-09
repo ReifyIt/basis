@@ -54,10 +54,10 @@ final class ArrayOps[+A, +Self](self: Array[A]) {
   def count(p: A => Boolean): Int =
     macro ArrayMacros.count[A]
   
-  def select[B](q: PartialFunction[A, B]): Option[B] =
+  def select[B](q: scala.PartialFunction[A, B]): Option[B] =
     macro ArrayMacros.select[A, B]
   
-  def collect[B](q: PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State =
+  def collect[B](q: scala.PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State =
     macro ArrayMacros.collect[A, B]
   
   def map[B](f: A => B)(implicit buffer: Buffer[Self, B]): buffer.State =

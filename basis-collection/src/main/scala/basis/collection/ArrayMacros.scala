@@ -227,7 +227,7 @@ private[basis] object ArrayMacros {
   
   def select[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
-      (q: c.Expr[PartialFunction[A, B]])
+      (q: c.Expr[scala.PartialFunction[A, B]])
     : c.Expr[Option[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
@@ -246,7 +246,7 @@ private[basis] object ArrayMacros {
   
   def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
-      (q: c.Expr[PartialFunction[A, B]])
+      (q: c.Expr[scala.PartialFunction[A, B]])
       (buffer: c.Expr[Buffer[Nothing, B]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)

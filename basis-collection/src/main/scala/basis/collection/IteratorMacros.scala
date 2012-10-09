@@ -131,7 +131,7 @@ private[basis] object IteratorMacros {
   
   def select[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
-      (q: c.Expr[PartialFunction[A, B]])
+      (q: c.Expr[scala.PartialFunction[A, B]])
     : c.Expr[Option[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
