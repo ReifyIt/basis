@@ -26,10 +26,10 @@ private[basis] object RangeMacros {
           case Apply(_, start :: end :: _ :: isInclusive :: Nil) =>
             start :: end :: step.tree :: isInclusive :: Nil
           case range =>
-            Select(range, newTermName("start"))       ::
-            Select(range, newTermName("end"))         ::
+            Select(range, "start")       ::
+            Select(range, "end")         ::
             step.tree                                 ::
-            Select(range, newTermName("isInclusive")) ::
+            Select(range, "isInclusive") ::
             Nil
         })
     } (WeakTypeTag.Nothing)
@@ -69,15 +69,18 @@ private[basis] object RangeMacros {
         Block(
           ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), start) ::
           ValDef(Modifiers(),             n, TypeTree(), end)   ::
-          Nil, {
-            val cond = Apply(Select(Ident(i), if (inclusive) "$less$eq" else "$less"), Ident(n) :: Nil)
-            val body = Block(
+          Nil,
+          LabelDef(loop, Nil, If(
+            Apply(Select(Ident(i), if (inclusive) "$less$eq" else "$less"), Ident(n) :: Nil),
+            Block(
               Apply(f, Ident(i) :: Nil)                                       ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), step :: Nil)) ::
               Nil,
-              Apply(Ident(loop), Nil))
-            LabelDef(loop, Nil, If(cond, body, EmptyTree))
-          })
+              Apply(Ident(loop), Nil)
+            ),
+            EmptyTree)
+          )
+        )
       case _ => foreachVirtual(c)(f)
     }
   }
@@ -96,15 +99,18 @@ private[basis] object RangeMacros {
         Block(
           ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), start) ::
           ValDef(Modifiers(),             n, TypeTree(), end)   ::
-          Nil, {
-            val cond = Apply(Select(Ident(i), if (inclusive) "$greater$eq" else "$greater"), Ident(n) :: Nil)
-            val body = Block(
+          Nil,
+          LabelDef(loop, Nil, If(
+            Apply(Select(Ident(i), if (inclusive) "$greater$eq" else "$greater"), Ident(n) :: Nil),
+            Block(
               Apply(f, Ident(i) :: Nil)                                        ::
               Assign(Ident(i), Apply(Select(Ident(i), "$minus"), step :: Nil)) ::
               Nil,
-              Apply(Ident(loop), Nil))
-            LabelDef(loop, Nil, If(cond, body, EmptyTree))
-          })
+              Apply(Ident(loop), Nil)
+            ),
+            EmptyTree)
+          )
+        )
       case _ => foreachVirtual(c)(f)
     }
   }
