@@ -17,20 +17,18 @@ trait StringBuffer[-Source] extends Buffer[Source, Char] {
     val n = chars.length
     var i = 0
     while (i < n) this += new Char({
-      val c1 = chars.charAt(i)
-      if (c1 <= 0xD7FF || c1 >= 0xE000) {
-        i += 1
-        c1 // U+0000..U+D7FF | U+E000..U+FFFF
-      }
-      else if (c1 <= 0xDBFF && i + 1 < n) { // c1 >= 0xD800
-        val c2 = chars.charAt(i + 1)
-        if (c2 >= 0xDC00 && c2 <= 0xDFFF) {
-          i += 2
-          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000 // U+10000..U+10FFFF
+      val c1 = chars.charAt(i).toInt
+      i += 1
+      if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
+      else if (c1 <= 0xDBFF && i < n) { // c1 >= 0xD800
+        val c2 = chars.charAt(i).toInt
+        if (c2 >= 0xDC00 && c2 <= 0xDFFF) { // U+10000..U+10FFFF
+          i += 1
+          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
         }
-        else { i += 1; 0xFFFD }
+        else 0xFFFD
       }
-      else { i += 1; 0xFFFD }
+      else 0xFFFD
     })
     this
   }

@@ -11,10 +11,10 @@ import basis._
 
 /** A buffer for 32-bit Unicode strings in the UTF-32 encoding form.
   * Produces only well-formed code unit sequences. */
-final class UTF32Buffer extends StringBuffer[UTF32String] {
-  override type State = UTF32String
+final class String4Buffer extends StringBuffer[String4] {
+  override type State = String4
   
-  private[this] var string: UTF32String = UTF32String.empty
+  private[this] var string: String4 = String4.empty
   
   private[this] var aliased: Boolean = true
   
@@ -58,14 +58,14 @@ final class UTF32Buffer extends StringBuffer[UTF32String] {
     this
   }
   
-  override def check: UTF32String = {
+  override def check: String4 = {
     if (size != string.length) string = string.copy(size)
     aliased = true
     string
   }
   
   override def clear() {
-    string = UTF32String.empty
+    string = String4.empty
     aliased = true
     size = 0
   }

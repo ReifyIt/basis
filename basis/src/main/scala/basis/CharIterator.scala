@@ -7,7 +7,10 @@
 
 package basis
 
-/** A Unicode® code point. */
-class Char(val codePoint: Int) extends AnyVal {
-  def isValid: Boolean = codePoint >= 0 && codePoint <= 0x10FFFF
+/** A specialized iterator for character strings.
+  * 
+  * @define collection  character iterator
+  */
+trait CharIterator extends Any with Iterator[Char] {
+  override def next(): Char
 }

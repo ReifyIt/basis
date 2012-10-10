@@ -16,13 +16,5 @@ package basis
 trait String extends Any with Seq[Char] {
   override type Self <: String
   
-  override def iterator: StringIterator
-}
-
-/** A specialized iterator for character strings.
-  * 
-  * @define collection  string iterator
-  */
-trait StringIterator extends Any with Iterator[Char] {
-  override def next(): Char
+  override def iterator: CharIterator
 }

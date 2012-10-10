@@ -9,12 +9,12 @@ package basis.text
 
 import basis._
 
-/** A buffer for 16-bit Unicode strings in the UTF-16 encoding form.
+/** A buffer for 8-bit Unicode strings in the UTF-8 encoding form.
   * Produces only well-formed code unit sequences. */
-final class UTF16Buffer extends StringBuffer[UTF16String] {
-  override type State = UTF16String
+final class String1Buffer extends StringBuffer[String1] {
+  override type State = String1
   
-  private[this] var string: UTF16String = UTF16String.empty
+  private[this] var string: String1 = String1.empty
   
   private[this] var aliased: Boolean = true
   
@@ -36,23 +36,39 @@ final class UTF16Buffer extends StringBuffer[UTF16String] {
   override def += (char: Char): this.type = {
     val c = char.codePoint
     val n = size
-    if ((c >= 0x0000 && c <= 0xD7FF) ||
-        (c >= 0xE000 && c <= 0xFFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF
+    if (c >= 0x0000 && c <= 0x007F) { // U+0000..U+007F
       prepare(n + 1)
-      string.codeUnits(n) = c.toChar
+      string.codeUnits(n) = c.toByte
       size = n + 1
     }
-    else if (c >= 0x10000 && c <= 0x10FFFF) { // U+10000..U+10FFFF
+    else if (c >= 0x0080 && c <= 0x07FF) { // U+0080..U+07FF
       prepare(n + 2)
-      val u = c - 0x10000
-      string.codeUnits(n)     = (0xD800 | (u >>> 10)).toChar
-      string.codeUnits(n + 1) = (0xDC00 | (u & 0x3FF)).toChar
+      string.codeUnits(n)     = (0xC0 | (c >>> 6)).toByte
+      string.codeUnits(n + 1) = (0x80 | (c & 0x3F)).toByte
       size = n + 2
     }
-    else { // invalid code point
-      prepare(n + 1)
-      string.codeUnits(n) = 0xFFFD.toChar
-      size = n + 1
+    else if (c >= 0x0800 && c <= 0xFFFF || // U+0800..U+D7FF
+             c >= 0xE000 && c <= 0xFFFF) { // U+E000..U+FFFF
+      prepare(n + 3)
+      string.codeUnits(n)     = (0xE0 | (c  >>> 12)).toByte
+      string.codeUnits(n + 1) = (0x80 | ((c >>>  6) & 0x3F)).toByte
+      string.codeUnits(n + 2) = (0x80 | (c & 0x3F)).toByte
+      size = n + 3
+    }
+    else if (c >= 0x10000 && c <= 0x10FFFF) { // U+10000..U+10FFFF
+      prepare(n + 4)
+      string.codeUnits(n)     = (0xF0 | (c  >>> 18)).toByte
+      string.codeUnits(n + 1) = (0x80 | ((c >>> 12) & 0x3F)).toByte
+      string.codeUnits(n + 2) = (0x80 | ((c >>>  6) & 0x3F)).toByte
+      string.codeUnits(n + 3) = (0x80 | (c & 0x3F)).toByte
+      size = n + 4
+    }
+    else { // surrogate or invalid code point
+      prepare(n + 3)
+      string.codeUnits(n)     = 0xEF.toByte
+      string.codeUnits(n + 1) = 0xBF.toByte
+      string.codeUnits(n + 2) = 0xBD.toByte
+      size = n + 3
     }
     this
   }
@@ -65,14 +81,14 @@ final class UTF16Buffer extends StringBuffer[UTF16String] {
     this
   }
   
-  override def check: UTF16String = {
+  override def check: String1 = {
     if (size != string.size) string = string.copy(size)
     aliased = true
     string
   }
   
   override def clear() {
-    string = UTF16String.empty
+    string = String1.empty
     aliased = true
     size = 0
   }

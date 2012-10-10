@@ -7,12 +7,10 @@
 
 package basis
 
-final class StaticString(override val toString: java.lang.String)
-  extends AnyVal with String {
-  
+class StaticString(override val toString: java.lang.String) extends AnyVal with String {
   override type Self = StaticString
   
-  override def iterator: StringIterator =
+  override def iterator: CharIterator =
     new StaticStringIterator(toString, 0)
   
   override protected def foreach[U](f: Char => U) {
@@ -37,7 +35,7 @@ final class StaticString(override val toString: java.lang.String)
 
 private[basis] final class StaticStringIterator
     (string: java.lang.String, private[this] var index: Int)
-  extends StringIterator {
+  extends CharIterator {
   
   override def hasNext: Boolean = index < string.length
   

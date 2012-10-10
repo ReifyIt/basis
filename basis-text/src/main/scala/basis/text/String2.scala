@@ -9,24 +9,27 @@ package basis.text
 
 import basis._
 
-/** A 16-bit Unicode string comprised of a sequence of UTF-16 code units. */
-final class UTF16String(val codeUnits: scala.Array[scala.Char]) extends AnyVal with String {
-  override type Self = UTF16String
+/** A 16-bit Unicode string comprised of a UTF-16 code unit sequence. */
+class String2(val codeUnits: scala.Array[scala.Char]) extends AnyVal with String {
+  override type Self = String2
   
-  /** Returns the number of unsigned 16-bit code units in this Unicode string. */
+  /** Returns the number of unsigned 16-bit code units in this string. */
   def size: Int = codeUnits.length
   
+  /** Counts the number of code points in this string. */
   def length: Int = {
     var i = 0
-    var k = 0
-    val n = codeUnits.length
+    var l = 0
+    val n = size
     while (i < n) {
       i = nextIndex(i)
-      k += 1
+      l += 1
     }
-    k
+    l
   }
   
+  /** Returns a decoded character beginning at `index`. Substitutes the
+    * replacement character U+FFFD at invalid indexes. */
   def apply(index: Int): Char = {
     val n = codeUnits.length
     if (index < 0 || index >= n)
@@ -36,8 +39,8 @@ final class UTF16String(val codeUnits: scala.Array[scala.Char]) extends AnyVal w
       if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
       else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
         val c2 = codeUnits(index + 1)
-        if (c2 >= 0xDC00 && c2 <= 0xDFFF)
-          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000 // U+10000..U+10FFFF
+        if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
+          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
         else 0xFFFD
       }
       else 0xFFFD
@@ -49,55 +52,61 @@ final class UTF16String(val codeUnits: scala.Array[scala.Char]) extends AnyVal w
     if (index < 0 || index >= n)
       throw new java.lang.IndexOutOfBoundsException(index.toString)
     val c1 = codeUnits(index)
-    if (c1 <= 0xD7FF || c1 >= 0xE000)
-      index + 1 // U+0000..U+D7FF | U+E000..U+FFFF
+    if (c1 <= 0xD7FF || c1 >= 0xE000) // U+0000..U+D7FF | U+E000..U+FFFF
+      index + 1
     else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
       val c2 = codeUnits(index + 1)
-      if (c2 >= 0xDC00 && c2 <= 0xDFFF)
-        index + 2 // U+10000..U+10FFFF
+      if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
+        index + 2
       else index + 1
     }
     else index + 1
   }
   
-  /** Returns a copy of this Unicode string. */
-  private[text] def copy(size: Int): UTF16String = {
+  /** Returns a resized copy of this string. */
+  private[text] def copy(size: Int): String2 = {
     val newCodeUnits = new scala.Array[scala.Char](size)
     java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, scala.math.min(codeUnits.length, size))
-    new UTF16String(newCodeUnits)
+    new String2(newCodeUnits)
   }
   
-  override def iterator: StringIterator = new UTF16Iterator(this, 0)
+  override def iterator: CharIterator = new String2Iterator(this, 0)
   
-  /** Sequentially applies a function to each code point in this Unicode string.
+  /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
   override protected def foreach[U](f: Char => U) {
     var i = 0
-    val n = size
-    while (i < n) {
-      f(this(i))
-      i = nextIndex(i)
-    }
+    val n = codeUnits.length
+    while (i < n) f(new Char({
+      val c1 = codeUnits(i).toInt
+      i += 1
+      if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
+      else if (c1 <= 0xDBFF && i < n) { // c1 >= 0xD800
+        val c2 = codeUnits(i).toInt
+        if (c2 >= 0xDC00 && c2 <= 0xDFFF) { // U+10000..U+10FFFF
+          i += 1
+          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
+        }
+        else 0xFFFD
+      }
+      else 0xFFFD
+    }))
   }
   
   override def toString: java.lang.String = {
     val s = new java.lang.StringBuilder
-    var i = 0
-    val n = size
-    while (i < n) {
-      s.appendCodePoint(apply(i).codePoint)
-      i = nextIndex(i)
-    }
+    val iter = iterator
+    while (iter.hasNext) s.appendCodePoint(iter.next().codePoint)
     s.toString
   }
 }
 
 /** A factory for 16-bit Unicode strings. */
-object UTF16String {
-  val empty: UTF16String = new UTF16String(new scala.Array[scala.Char](0))
+object String2 {
+  val empty: String2 = new String2(new scala.Array[scala.Char](0))
   
-  def apply(chars: java.lang.CharSequence): UTF16String = {
-    val s = new UTF16Buffer
+  def apply(chars: java.lang.CharSequence): String2 = {
+    val s = new String2Buffer
     s.append(chars)
     s.check
   }

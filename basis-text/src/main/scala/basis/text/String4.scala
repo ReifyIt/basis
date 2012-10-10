@@ -9,12 +9,15 @@ package basis.text
 
 import basis._
 
-/** A 32-bit Unicode string comprised of a sequence of UTF-32 code units. */
-final class UTF32String(val codeUnits: scala.Array[Int]) extends AnyVal with Array[Char] with String {
-  override type Self = UTF32String
+/** A 32-bit Unicode string comprised of a UTF-32 code unit sequence. */
+class String4(val codeUnits: scala.Array[Int]) extends AnyVal with Array[Char] with String {
+  override type Self = String4
   
+  /** Returns the number of code points in this string. */
   override def length: Int = codeUnits.length
   
+  /** Returns the character at `index`. Substitutes the replacement character
+    * U+FFFD in lieu of invalid characters. */
   override def apply(index: Int): Char = {
     val n = codeUnits.length
     if (index < 0 || index >= n)
@@ -27,16 +30,16 @@ final class UTF32String(val codeUnits: scala.Array[Int]) extends AnyVal with Arr
     })
   }
   
-  /** Returns a copy of this Unicode string. */
-  private[text] def copy(size: Int): UTF32String = {
+  /** Returns a resized copy of this string. */
+  private[text] def copy(size: Int): String4 = {
     val newCodeUnits = new scala.Array[Int](size)
     java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, scala.math.min(codeUnits.length, size))
-    new UTF32String(newCodeUnits)
+    new String4(newCodeUnits)
   }
   
-  override def iterator: StringIterator = new UTF32Iterator(this, 0)
+  override def iterator: CharIterator = new String4Iterator(this, 0)
   
-  /** Sequentially applies a function to each code point in this Unicode string.
+  /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of invalid characters. */
   override protected def foreach[U](f: Char => U) {
     var i = 0
@@ -60,11 +63,11 @@ final class UTF32String(val codeUnits: scala.Array[Int]) extends AnyVal with Arr
 }
 
 /** A factory for 32-bit Unicode strings. */
-object UTF32String {
-  val empty: UTF32String = new UTF32String(new scala.Array[Int](0))
+object String4 {
+  val empty: String4 = new String4(new scala.Array[Int](0))
   
-  def apply(chars: java.lang.CharSequence): UTF32String = {
-    val s = new UTF32Buffer
+  def apply(chars: java.lang.CharSequence): String4 = {
+    val s = new String4Buffer
     s.append(chars)
     s.check
   }
