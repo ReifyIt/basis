@@ -18,3 +18,11 @@ trait String extends Any with Seq[Char] {
   
   override def iterator: StringIterator
 }
+
+/** A specialized iterator for character strings.
+  * 
+  * @define collection  string iterator
+  */
+trait StringIterator extends Any with Iterator[Char] {
+  override def next(): Char
+}

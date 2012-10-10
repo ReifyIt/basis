@@ -7,11 +7,7 @@
 
 package basis
 
-package object text extends StringBuffers {
-  import scala.language.implicitConversions
-  
-  implicit def String(string: java.lang.String): String = new JavaString(string)
-}
+package object text extends StringBuffers
 
 package text {
   private[text] class DefaultStringBuffers {

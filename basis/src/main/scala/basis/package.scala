@@ -6,6 +6,8 @@
 \*                                                                      */
 
 package object basis {
+  import scala.language.implicitConversions
+  
   type Any       = scala.Any
   type AnyRef    = scala.AnyRef
   type AnyVal    = scala.AnyVal
@@ -30,6 +32,9 @@ package object basis {
   
   type inline = scala.inline
   type tailrec = scala.annotation.tailrec
+  
+  implicit def String(string: java.lang.String): StaticString =
+    new StaticString(string)
   
   /** Applies a function to each element of a collection by invoking the
     * collection's protected `foreach` method. */
