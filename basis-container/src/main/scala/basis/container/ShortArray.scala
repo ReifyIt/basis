@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short] {
+class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short] {
   override def length: Int = array.length
   
   override def apply(index: Int): Short = array(index)

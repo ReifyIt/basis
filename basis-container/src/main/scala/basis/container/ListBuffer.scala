@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class ListBuffer[A] extends Buffer[List[_], A] {
+final class ListBuffer[-Source, A] extends Buffer[Source, A] {
   override type State = LinkedList[A]
   
   private[this] var last: ::[A] = _

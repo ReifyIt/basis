@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class RefArray[A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] {
+class RefArray[A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] {
   override def length: Int = array.length
   
   override def apply(index: Int): A = array(index).asInstanceOf[A]

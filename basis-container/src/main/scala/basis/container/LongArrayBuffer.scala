@@ -9,10 +9,10 @@ package basis.container
 
 import basis._
 
-final class RefBuffer[A] extends Buffer[Array[_], A] {
-  override type State = RefArray[A]
+final class LongArrayBuffer[-Source] extends Buffer[Source, Long] {
+  override type State = LongArray
   
-  private[this] var array: RefArray[A] = RefArray.empty[A]
+  private[this] var array: LongArray = LongArray.empty
   
   private[this] var aliased: Boolean = true
   
@@ -31,7 +31,7 @@ final class RefBuffer[A] extends Buffer[Array[_], A] {
     }
   }
   
-  override def += (value: A): this.type = {
+  override def += (value: Long): this.type = {
     prepare(length + 1)
     array(length) = value
     length += 1
@@ -46,14 +46,14 @@ final class RefBuffer[A] extends Buffer[Array[_], A] {
     this
   }
   
-  override def check: RefArray[A] = {
+  override def check: LongArray = {
     if (length != array.length) array = array.copy(length)
     aliased = true
     array
   }
   
   override def clear() {
-    array = RefArray.empty[A]
+    array = LongArray.empty
     aliased = true
     length = 0
   }

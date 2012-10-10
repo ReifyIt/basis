@@ -9,10 +9,10 @@ package basis.container
 
 import basis._
 
-final class ByteBuffer extends Buffer[Array[_], Byte] {
-  override type State = ByteArray
+final class ShortArrayBuffer[-Source] extends Buffer[Source, Short] {
+  override type State = ShortArray
   
-  private[this] var array: ByteArray = ByteArray.empty
+  private[this] var array: ShortArray = ShortArray.empty
   
   private[this] var aliased: Boolean = true
   
@@ -31,7 +31,7 @@ final class ByteBuffer extends Buffer[Array[_], Byte] {
     }
   }
   
-  override def += (value: Byte): this.type = {
+  override def += (value: Short): this.type = {
     prepare(length + 1)
     array(length) = value
     length += 1
@@ -46,14 +46,14 @@ final class ByteBuffer extends Buffer[Array[_], Byte] {
     this
   }
   
-  override def check: ByteArray = {
+  override def check: ShortArray = {
     if (length != array.length) array = array.copy(length)
     aliased = true
     array
   }
   
   override def clear() {
-    array = ByteArray.empty
+    array = ShortArray.empty
     aliased = true
     length = 0
   }

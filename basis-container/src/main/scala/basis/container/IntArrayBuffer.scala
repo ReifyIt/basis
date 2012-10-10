@@ -9,10 +9,10 @@ package basis.container
 
 import basis._
 
-final class FloatBuffer extends Buffer[Array[_], Float] {
-  override type State = FloatArray
+final class IntArrayBuffer[-Source] extends Buffer[Source, Int] {
+  override type State = IntArray
   
-  private[this] var array: FloatArray = FloatArray.empty
+  private[this] var array: IntArray = IntArray.empty
   
   private[this] var aliased: Boolean = true
   
@@ -31,7 +31,7 @@ final class FloatBuffer extends Buffer[Array[_], Float] {
     }
   }
   
-  override def += (value: Float): this.type = {
+  override def += (value: Int): this.type = {
     prepare(length + 1)
     array(length) = value
     length += 1
@@ -46,14 +46,14 @@ final class FloatBuffer extends Buffer[Array[_], Float] {
     this
   }
   
-  override def check: FloatArray = {
+  override def check: IntArray = {
     if (length != array.length) array = array.copy(length)
     aliased = true
     array
   }
   
   override def clear() {
-    array = FloatArray.empty
+    array = IntArray.empty
     aliased = true
     length = 0
   }

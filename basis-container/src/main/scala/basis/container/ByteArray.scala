@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
+class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
   override def length: Int = array.length
   
   override def apply(index: Int): Byte = array(index)

@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Double] {
+class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Double] {
   override def length: Int = array.length
   
   override def apply(index: Int): Double = array(index)

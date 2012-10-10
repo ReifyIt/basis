@@ -8,14 +8,13 @@
 package basis.container
 
 import basis._
-import basis.data._
 
-final class ValBuffer[A](implicit typeA: ValType[A]) extends Buffer[Array[_], A] {
-  override type State = ValArray[A]
+final class FloatArrayBuffer[-Source] extends Buffer[Source, Float] {
+  override type State = FloatArray
   
-  private[this] var array: ValArray[A] = ValArray[A](16)
+  private[this] var array: FloatArray = FloatArray.empty
   
-  private[this] var aliased: Boolean = false
+  private[this] var aliased: Boolean = true
   
   private[this] var length: Int = 0
   
@@ -32,7 +31,7 @@ final class ValBuffer[A](implicit typeA: ValType[A]) extends Buffer[Array[_], A]
     }
   }
   
-  override def += (value: A): this.type = {
+  override def += (value: Float): this.type = {
     prepare(length + 1)
     array(length) = value
     length += 1
@@ -47,15 +46,15 @@ final class ValBuffer[A](implicit typeA: ValType[A]) extends Buffer[Array[_], A]
     this
   }
   
-  override def check: ValArray[A] = {
+  override def check: FloatArray = {
     if (length != array.length) array = array.copy(length)
     aliased = true
     array
   }
   
   override def clear() {
-    array = ValArray[A](16)
-    aliased = false
+    array = FloatArray.empty
+    aliased = true
     length = 0
   }
 }

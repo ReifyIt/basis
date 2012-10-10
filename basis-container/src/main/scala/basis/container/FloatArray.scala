@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float] {
+class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float] {
   override def length: Int = array.length
   
   override def apply(index: Int): Float = array(index)

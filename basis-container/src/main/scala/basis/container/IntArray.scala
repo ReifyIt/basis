@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
+class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
   override def length: Int = array.length
   
   override def apply(index: Int): Int = array(index)

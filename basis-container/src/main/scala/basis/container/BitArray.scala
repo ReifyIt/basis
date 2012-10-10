@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
+class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
   override def length: Int = words(0)
   
   override def apply(index: Int): Boolean = {
