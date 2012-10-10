@@ -10,7 +10,7 @@ package basis.data
 import scala._
 
 /** Native-endian memory backed by an `Int` array. */
-final class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
+class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   

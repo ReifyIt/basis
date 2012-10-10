@@ -10,7 +10,7 @@ package basis.data
 import scala._
 
 /** `ByteBuffer` backed memory. */
-final class MemBuf(val buffer: java.nio.ByteBuffer) extends AnyVal with Mem {
+class MemBuf(val buffer: java.nio.ByteBuffer) extends AnyVal with Mem {
   @inline override def size: Long = buffer.capacity.toLong
   
   override def unit: Int = 1

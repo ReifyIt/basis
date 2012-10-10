@@ -10,7 +10,7 @@ package basis.data
 import scala._
 
 /** Big-endian memory backed by a `Long` array. */
-final class Mem8BE(val words: scala.Array[Long]) extends AnyVal with MemBE {
+class Mem8BE(val words: scala.Array[Long]) extends AnyVal with MemBE {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
