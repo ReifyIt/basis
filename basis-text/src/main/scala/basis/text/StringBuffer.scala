@@ -10,7 +10,8 @@ package basis.text
 import basis._
 
 trait StringBuffer[-Source] extends Buffer[Source, Char] {
-  override def += (char: Char): this.type
+  // disabled to avoid SI-6500
+  // override def += (char: Char): this.type
   
   def append(chars: java.lang.CharSequence): this.type = {
     val n = chars.length
