@@ -25,8 +25,8 @@ private[basis] object IteratorMacros {
     : c.Expr[Unit] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
-      while (gen.hasNext) f.splice(gen.next())
+      val iter = self.splice
+      while (iter.hasNext) f.splice(iter.next())
     }
   }
   
@@ -37,9 +37,9 @@ private[basis] object IteratorMacros {
     : c.Expr[B] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
+      val iter = self.splice
       var r = z.splice
-      while (gen.hasNext) r = op.splice(r, gen.next())
+      while (iter.hasNext) r = op.splice(r, iter.next())
       r
     }
   }
@@ -50,10 +50,10 @@ private[basis] object IteratorMacros {
     : c.Expr[B] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
-      if (!gen.hasNext) throw new java.lang.UnsupportedOperationException
-      var r = gen.next(): B
-      while (gen.hasNext) r = op.splice(r, gen.next())
+      val iter = self.splice
+      if (!iter.hasNext) throw new java.lang.UnsupportedOperationException
+      var r = iter.next(): B
+      while (iter.hasNext) r = op.splice(r, iter.next())
       r
     }
   }
@@ -64,10 +64,10 @@ private[basis] object IteratorMacros {
     : c.Expr[Option[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
-      if (gen.hasNext) {
-        var r = gen.next(): B
-        while (gen.hasNext) r = op.splice(r, gen.next())
+      val iter = self.splice
+      if (iter.hasNext) {
+        var r = iter.next(): B
+        while (iter.hasNext) r = op.splice(r, iter.next())
         Some(r)
       }
       else None
@@ -80,10 +80,10 @@ private[basis] object IteratorMacros {
     : c.Expr[Option[A]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
+      val iter = self.splice
       var r = None: Option[A]
-      while (gen.hasNext && r.isEmpty) {
-        val x = gen.next()
+      while (iter.hasNext && r.isEmpty) {
+        val x = iter.next()
         if (p.splice(x)) r = Some(x)
       }
       r
@@ -96,9 +96,9 @@ private[basis] object IteratorMacros {
     : c.Expr[Boolean] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
+      val iter = self.splice
       var r = true
-      while (gen.hasNext && r) if (!p.splice(gen.next())) r = false
+      while (iter.hasNext && r) if (!p.splice(iter.next())) r = false
       r
     }
   }
@@ -109,9 +109,9 @@ private[basis] object IteratorMacros {
     : c.Expr[Boolean] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
+      val iter = self.splice
       var r = false
-      while (gen.hasNext && !r) if (p.splice(gen.next())) r = true
+      while (iter.hasNext && !r) if (p.splice(iter.next())) r = true
       r
     }
   }
@@ -122,9 +122,9 @@ private[basis] object IteratorMacros {
     : c.Expr[Int] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
+      val iter = self.splice
       var t = 0
-      while (gen.hasNext) if (p.splice(gen.next())) t += 1
+      while (iter.hasNext) if (p.splice(iter.next())) t += 1
       t
     }
   }
@@ -135,10 +135,10 @@ private[basis] object IteratorMacros {
     : c.Expr[Option[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice
+      val iter = self.splice
       var r = None: Option[B]
-      while (gen.hasNext && r.isEmpty) {
-        val x = gen.next()
+      while (iter.hasNext && r.isEmpty) {
+        val x = iter.next()
         if (q.splice.isDefinedAt(x)) r = Some(q.splice(x))
       }
       r

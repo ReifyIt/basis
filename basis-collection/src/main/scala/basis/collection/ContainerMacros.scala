@@ -25,8 +25,8 @@ private[basis] object ContainerMacros {
     : c.Expr[Unit] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
-      while (gen.hasNext) f.splice(gen.next())
+      val iter = self.splice.iterator
+      while (iter.hasNext) f.splice(iter.next())
     }
   }
   
@@ -37,9 +37,9 @@ private[basis] object ContainerMacros {
     : c.Expr[B] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var r = z.splice
-      while (gen.hasNext) r = op.splice(r, gen.next())
+      while (iter.hasNext) r = op.splice(r, iter.next())
       r
     }
   }
@@ -50,10 +50,10 @@ private[basis] object ContainerMacros {
     : c.Expr[B] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
-      if (!gen.hasNext) throw new java.lang.UnsupportedOperationException
-      var r = gen.next(): B
-      while (gen.hasNext) r = op.splice(r, gen.next())
+      val iter = self.splice.iterator
+      if (!iter.hasNext) throw new java.lang.UnsupportedOperationException
+      var r = iter.next(): B
+      while (iter.hasNext) r = op.splice(r, iter.next())
       r
     }
   }
@@ -64,10 +64,10 @@ private[basis] object ContainerMacros {
     : c.Expr[Option[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
-      if (gen.hasNext) {
-        var r = gen.next(): B
-        while (gen.hasNext) r = op.splice(r, gen.next())
+      val iter = self.splice.iterator
+      if (iter.hasNext) {
+        var r = iter.next(): B
+        while (iter.hasNext) r = op.splice(r, iter.next())
         Some(r)
       }
       else None
@@ -80,10 +80,10 @@ private[basis] object ContainerMacros {
     : c.Expr[Option[A]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var r = None: Option[A]
-      while (gen.hasNext && r.isEmpty) {
-        val x = gen.next()
+      while (iter.hasNext && r.isEmpty) {
+        val x = iter.next()
         if (p.splice(x)) r = Some(x)
       }
       r
@@ -96,9 +96,9 @@ private[basis] object ContainerMacros {
     : c.Expr[Boolean] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var r = true
-      while (gen.hasNext && r) if (!p.splice(gen.next())) r = false
+      while (iter.hasNext && r) if (!p.splice(iter.next())) r = false
       r
     }
   }
@@ -109,9 +109,9 @@ private[basis] object ContainerMacros {
     : c.Expr[Boolean] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var r = false
-      while (gen.hasNext && !r) if (p.splice(gen.next())) r = true
+      while (iter.hasNext && !r) if (p.splice(iter.next())) r = true
       r
     }
   }
@@ -122,9 +122,9 @@ private[basis] object ContainerMacros {
     : c.Expr[Int] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var t = 0
-      while (gen.hasNext) if (p.splice(gen.next())) t += 1
+      while (iter.hasNext) if (p.splice(iter.next())) t += 1
       t
     }
   }
@@ -135,10 +135,10 @@ private[basis] object ContainerMacros {
     : c.Expr[Option[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var r = None: Option[B]
-      while (gen.hasNext && r.isEmpty) {
-        val x = gen.next()
+      while (iter.hasNext && r.isEmpty) {
+        val x = iter.next()
         if (q.splice.isDefinedAt(x)) r = Some(q.splice(x))
       }
       r
@@ -153,9 +153,9 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {
       val b = buffer.splice
-      val gen = self.splice.iterator
-      while (gen.hasNext) {
-        val x = gen.next()
+      val iter = self.splice.iterator
+      while (iter.hasNext) {
+        val x = iter.next()
         if (q.splice.isDefinedAt(x)) b += q.splice(x)
       }
       b.check
@@ -170,8 +170,8 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {
       val b = buffer.splice
-      val gen = self.splice.iterator
-      while (gen.hasNext) b += f.splice(gen.next())
+      val iter = self.splice.iterator
+      while (iter.hasNext) b += f.splice(iter.next())
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -201,9 +201,9 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
-      val gen = self.splice.iterator
-      while (gen.hasNext) {
-        val x = gen.next()
+      val iter = self.splice.iterator
+      while (iter.hasNext) {
+        val x = iter.next()
         if (p.splice(x)) b += x
       }
       b.check
@@ -218,9 +218,9 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
-      val gen = self.splice.iterator
-      while (gen.hasNext && { val x = gen.next(); p.splice(x) || { b += x; false } }) ()
-      while (gen.hasNext) b += gen.next()
+      val iter = self.splice.iterator
+      while (iter.hasNext && { val x = iter.next(); p.splice(x) || { b += x; false } }) ()
+      while (iter.hasNext) b += iter.next()
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -233,8 +233,8 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
-      val gen = self.splice.iterator
-      while (gen.hasNext && { val x = gen.next(); p.splice(x) && { b += x; true } }) ()
+      val iter = self.splice.iterator
+      while (iter.hasNext && { val x = iter.next(); p.splice(x) && { b += x; true } }) ()
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -248,9 +248,9 @@ private[basis] object ContainerMacros {
     c.universe.reify[(Buffer[Nothing, A]#State, Buffer[Nothing, A]#State)] {
       val a = builderA.splice
       val b = builderB.splice
-      val gen = self.splice.iterator
-      while (gen.hasNext && { val x = gen.next(); (p.splice(x) && { a += x; true }) || { b += x; false } }) ()
-      while (gen.hasNext) b += gen.next()
+      val iter = self.splice.iterator
+      while (iter.hasNext && { val x = iter.next(); (p.splice(x) && { a += x; true }) || { b += x; false } }) ()
+      while (iter.hasNext) b += iter.next()
       (a.check, b.check)
     }.asInstanceOf[c.Expr[(builderA.value.State, builderB.value.State)]]
   }
@@ -263,11 +263,11 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var i = 0
       val n = lower.splice
-      while (i < n && gen.hasNext) { gen.next(); i += 1 }
-      while (gen.hasNext) b += gen.next()
+      while (i < n && iter.hasNext) { iter.next(); i += 1 }
+      while (iter.hasNext) b += iter.next()
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -280,10 +280,10 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var i = 0
       val n = upper.splice
-      while (i < n && gen.hasNext) { b += gen.next(); i += 1 }
+      while (i < n && iter.hasNext) { b += iter.next(); i += 1 }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -296,12 +296,12 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
-      val gen = self.splice.iterator
+      val iter = self.splice.iterator
       var i = 0
       var n = lower.splice
-      while (i < n && gen.hasNext) { gen.next(); i += 1 }
+      while (i < n && iter.hasNext) { iter.next(); i += 1 }
       n = upper.splice
-      while (i < n && gen.hasNext) { b += gen.next(); i += 1 }
+      while (i < n && iter.hasNext) { b += iter.next(); i += 1 }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
