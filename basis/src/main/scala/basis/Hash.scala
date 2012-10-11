@@ -7,6 +7,6 @@
 
 package basis
 
-trait Hashable[-A] extends Equal[A] {
+trait Hash[-A] extends Equal[A] {
   def hash(x: A): Int
 }

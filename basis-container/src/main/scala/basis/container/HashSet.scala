@@ -11,7 +11,7 @@ import basis._
 
 final class HashSet[A] private
     (nodeMap: Int, itemMap: Int, slots: scala.Array[AnyRef])
-    (implicit hasher: Hashable[A])
+    (implicit hasher: Hash[A])
   extends Set[A] {
   
   import hasher._
