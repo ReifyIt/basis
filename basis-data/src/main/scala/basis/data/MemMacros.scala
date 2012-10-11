@@ -15,14 +15,18 @@ private[data] object MemMacros {
       (field: c.Expr[ValType[_]]): c.Expr[T] = {
     import c.universe._
     val Apply(_, mem :: Nil) = c.prefix.tree
-    c.Expr(new MemMacros[c.type](c).loadField(field, mem, address.tree))
+    c.Expr {
+      new MemMacros[c.type](c).loadField(field, mem, address.tree)
+    } (WeakTypeTag.Nothing)
   }
   
   def store[T](c: Context)(address: c.Expr[Long], value: c.Expr[T])
       (field: c.Expr[ValType[_]]): c.Expr[Unit] = {
     import c.universe._
     val Apply(_, mem :: Nil) = c.prefix.tree
-    c.Expr(new MemMacros[c.type](c).storeField(field, mem, address.tree, value.tree))
+    c.Expr {
+      new MemMacros[c.type](c).storeField(field, mem, address.tree, value.tree)
+    } (WeakTypeTag.Unit)
   }
   
   def load2[T1, T2, R](c: Context)(address: c.Expr[Long])
@@ -30,9 +34,11 @@ private[data] object MemMacros {
       (field1: c.Expr[ValType[_]], field2: c.Expr[ValType[_]]): c.Expr[R] = {
     import c.universe._
     val Apply(_, mem :: Nil) = c.prefix.tree
-    c.Expr(new MemMacros[c.type](c).load(
-      field1 :: field2 :: Nil,
-      mem, address.tree, f.tree))
+    c.Expr {
+      new MemMacros[c.type](c).load(
+        field1 :: field2 :: Nil,
+        mem, address.tree, f.tree)
+    } (WeakTypeTag.Nothing)
   }
   
   def store2[T1, T2](c: Context)(address: c.Expr[Long])
@@ -40,10 +46,12 @@ private[data] object MemMacros {
       (field1: c.Expr[ValType[_]], field2: c.Expr[ValType[_]]): c.Expr[Unit] = {
     import c.universe._
     val Apply(_, mem :: Nil) = c.prefix.tree
-    c.Expr(new MemMacros[c.type](c).store(
-      field1 :: field2 :: Nil,
-      value1 :: value2 :: Nil,
-      mem, address.tree))
+    c.Expr {
+      new MemMacros[c.type](c).store(
+        field1 :: field2 :: Nil,
+        value1 :: value2 :: Nil,
+        mem, address.tree)
+    } (WeakTypeTag.Unit)
   }
   
   def load3[T1, T2, T3, R](c: Context)(address: c.Expr[Long])
@@ -52,9 +60,11 @@ private[data] object MemMacros {
        field3: c.Expr[ValType[_]]): c.Expr[R] = {
     import c.universe._
     val Apply(_, mem :: Nil) = c.prefix.tree
-    c.Expr(new MemMacros[c.type](c).load(
+    c.Expr {
+      new MemMacros[c.type](c).load(
       field1 :: field2 :: field3 :: Nil,
-      mem, address.tree, f.tree))
+      mem, address.tree, f.tree)
+    } (WeakTypeTag.Nothing)
   }
   
   def store3[T1, T2, T3](c: Context)(address: c.Expr[Long])
@@ -64,10 +74,12 @@ private[data] object MemMacros {
        field3: c.Expr[ValType[_]]): c.Expr[Unit] = {
     import c.universe._
     val Apply(_, mem :: Nil) = c.prefix.tree
-    c.Expr(new MemMacros[c.type](c).store(
-      field1 :: field2 :: field3 :: Nil,
-      value1 :: value2 :: value3 :: Nil,
-      mem, address.tree))
+    c.Expr {
+      new MemMacros[c.type](c).store(
+        field1 :: field2 :: field3 :: Nil,
+        value1 :: value2 :: value3 :: Nil,
+        mem, address.tree)
+    } (WeakTypeTag.Unit)
   }
   
   def load4[T1, T2, T3, T4, R](c: Context)(address: c.Expr[Long])
@@ -76,9 +88,11 @@ private[data] object MemMacros {
        field3: c.Expr[ValType[_]], field4: c.Expr[ValType[_]]): c.Expr[R] = {
     import c.universe._
     val Apply(_, mem :: Nil) = c.prefix.tree
-    c.Expr(new MemMacros[c.type](c).load(
-      field1 :: field2 :: field3 :: field4 :: Nil,
-      mem, address.tree, f.tree))
+    c.Expr {
+      new MemMacros[c.type](c).load(
+        field1 :: field2 :: field3 :: field4 :: Nil,
+        mem, address.tree, f.tree)
+    } (WeakTypeTag.Nothing)
   }
   
   def store4[T1, T2, T3, T4](c: Context)(address: c.Expr[Long])
@@ -88,10 +102,12 @@ private[data] object MemMacros {
        field3: c.Expr[ValType[_]], field4: c.Expr[ValType[_]]): c.Expr[Unit] = {
     import c.universe._
     val Apply(_, mem :: Nil) = c.prefix.tree
-    c.Expr(new MemMacros[c.type](c).store(
-      field1 :: field2 :: field3 :: field4 :: Nil,
-      value1 :: value2 :: value3 :: value4 :: Nil,
-      mem, address.tree))
+    c.Expr {
+      new MemMacros[c.type](c).store(
+        field1 :: field2 :: field3 :: field4 :: Nil,
+        value1 :: value2 :: value3 :: value4 :: Nil,
+        mem, address.tree)
+    } (WeakTypeTag.Unit)
   }
 }
 
