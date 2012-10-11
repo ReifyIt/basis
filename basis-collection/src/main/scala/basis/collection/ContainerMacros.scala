@@ -26,7 +26,10 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify {
       val iter = self.splice.iterator
-      while (iter.hasNext) f.splice(iter.next())
+      while (!iter.isEmpty) {
+        f.splice(iter.head)
+        iter.step()
+      }
     }
   }
   
@@ -39,7 +42,10 @@ private[basis] object ContainerMacros {
     c.universe.reify {
       val iter = self.splice.iterator
       var r = z.splice
-      while (iter.hasNext) r = op.splice(r, iter.next())
+      while (!iter.isEmpty) {
+        r = op.splice(r, iter.head)
+        iter.step()
+      }
       r
     }
   }
@@ -51,9 +57,13 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify {
       val iter = self.splice.iterator
-      if (!iter.hasNext) throw new java.lang.UnsupportedOperationException
-      var r = iter.next(): B
-      while (iter.hasNext) r = op.splice(r, iter.next())
+      if (iter.isEmpty) throw new java.lang.UnsupportedOperationException
+      var r = iter.head: B
+      iter.step()
+      while (!iter.isEmpty) {
+        r = op.splice(r, iter.head)
+        iter.step()
+      }
       r
     }
   }
@@ -65,12 +75,16 @@ private[basis] object ContainerMacros {
     val self = deconstruct[A](c)
     c.universe.reify {
       val iter = self.splice.iterator
-      if (iter.hasNext) {
-        var r = iter.next(): B
-        while (iter.hasNext) r = op.splice(r, iter.next())
+      if (iter.isEmpty) None
+      else {
+        var r = iter.head: B
+        iter.step()
+        while (!iter.isEmpty) {
+          r = op.splice(r, iter.head)
+          iter.step()
+        }
         Some(r)
       }
-      else None
     }
   }
   
@@ -82,9 +96,10 @@ private[basis] object ContainerMacros {
     c.universe.reify {
       val iter = self.splice.iterator
       var r = None: Option[A]
-      while (iter.hasNext && r.isEmpty) {
-        val x = iter.next()
+      while (r.isEmpty && !iter.isEmpty) {
+        val x = iter.head
         if (p.splice(x)) r = Some(x)
+        else iter.step()
       }
       r
     }
@@ -98,7 +113,10 @@ private[basis] object ContainerMacros {
     c.universe.reify {
       val iter = self.splice.iterator
       var r = true
-      while (iter.hasNext && r) if (!p.splice(iter.next())) r = false
+      while (r && !iter.isEmpty) {
+        if (!p.splice(iter.head)) r = false
+        else iter.step()
+      }
       r
     }
   }
@@ -111,7 +129,10 @@ private[basis] object ContainerMacros {
     c.universe.reify {
       val iter = self.splice.iterator
       var r = false
-      while (iter.hasNext && !r) if (p.splice(iter.next())) r = true
+      while (!r && !iter.isEmpty) {
+        if (p.splice(iter.head)) r = true
+        else iter.step()
+      }
       r
     }
   }
@@ -124,7 +145,10 @@ private[basis] object ContainerMacros {
     c.universe.reify {
       val iter = self.splice.iterator
       var t = 0
-      while (iter.hasNext) if (p.splice(iter.next())) t += 1
+      while (!iter.isEmpty) {
+        if (p.splice(iter.head)) t += 1
+        iter.step()
+      }
       t
     }
   }
@@ -137,9 +161,10 @@ private[basis] object ContainerMacros {
     c.universe.reify {
       val iter = self.splice.iterator
       var r = None: Option[B]
-      while (iter.hasNext && r.isEmpty) {
-        val x = iter.next()
+      while (r.isEmpty && !iter.isEmpty) {
+        val x = iter.head
         if (q.splice.isDefinedAt(x)) r = Some(q.splice(x))
+        else iter.step()
       }
       r
     }
@@ -154,9 +179,10 @@ private[basis] object ContainerMacros {
     c.universe.reify[Buffer[Nothing, B]#State] {
       val b = buffer.splice
       val iter = self.splice.iterator
-      while (iter.hasNext) {
-        val x = iter.next()
+      while (!iter.isEmpty) {
+        val x = iter.head
         if (q.splice.isDefinedAt(x)) b += q.splice(x)
+        iter.step()
       }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
@@ -171,7 +197,10 @@ private[basis] object ContainerMacros {
     c.universe.reify[Buffer[Nothing, B]#State] {
       val b = buffer.splice
       val iter = self.splice.iterator
-      while (iter.hasNext) b += f.splice(iter.next())
+      while (!iter.isEmpty) {
+        b += f.splice(iter.head)
+        iter.step()
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -185,9 +214,13 @@ private[basis] object ContainerMacros {
     c.universe.reify[Buffer[Nothing, B]#State] {
       val b = buffer.splice
       val outer = self.splice.iterator
-      while (outer.hasNext) {
-        val inner = f.splice(outer.next()).iterator
-        while (inner.hasNext) b += inner.next()
+      while (!outer.isEmpty) {
+        val inner = f.splice(outer.head).iterator
+        while (!inner.isEmpty) {
+          b += inner.head
+          inner.step()
+        }
+        outer.step()
       }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
@@ -202,9 +235,10 @@ private[basis] object ContainerMacros {
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
       val iter = self.splice.iterator
-      while (iter.hasNext) {
-        val x = iter.next()
+      while (!iter.isEmpty) {
+        val x = iter.head
         if (p.splice(x)) b += x
+        iter.step()
       }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
@@ -219,8 +253,15 @@ private[basis] object ContainerMacros {
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
       val iter = self.splice.iterator
-      while (iter.hasNext && { val x = iter.next(); p.splice(x) || { b += x; false } }) ()
-      while (iter.hasNext) b += iter.next()
+      while (!iter.isEmpty && {
+        val x = iter.head
+        iter.step()
+        p.splice(x) || { b += x; false }
+      }) ()
+      while (!iter.isEmpty) {
+        b += iter.head
+        iter.step()
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -234,7 +275,11 @@ private[basis] object ContainerMacros {
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
       val iter = self.splice.iterator
-      while (iter.hasNext && { val x = iter.next(); p.splice(x) && { b += x; true } }) ()
+      while (!iter.isEmpty && {
+        val x = iter.head
+        iter.step()
+        p.splice(x) && { b += x; true }
+      }) ()
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -249,8 +294,15 @@ private[basis] object ContainerMacros {
       val a = builderA.splice
       val b = builderB.splice
       val iter = self.splice.iterator
-      while (iter.hasNext && { val x = iter.next(); (p.splice(x) && { a += x; true }) || { b += x; false } }) ()
-      while (iter.hasNext) b += iter.next()
+      while (!iter.isEmpty && {
+        val x = iter.head
+        iter.step()
+        p.splice(x) && { a += x; true } || { b += x; false }
+      }) ()
+      while (!iter.isEmpty) {
+        b += iter.head
+        iter.step()
+      }
       (a.check, b.check)
     }.asInstanceOf[c.Expr[(builderA.value.State, builderB.value.State)]]
   }
@@ -266,8 +318,14 @@ private[basis] object ContainerMacros {
       val iter = self.splice.iterator
       var i = 0
       val n = lower.splice
-      while (i < n && iter.hasNext) { iter.next(); i += 1 }
-      while (iter.hasNext) b += iter.next()
+      while (i < n && !iter.isEmpty) {
+        i += 1
+        iter.step()
+      }
+      while (!iter.isEmpty) {
+        b += iter.head
+        iter.step()
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -283,7 +341,11 @@ private[basis] object ContainerMacros {
       val iter = self.splice.iterator
       var i = 0
       val n = upper.splice
-      while (i < n && iter.hasNext) { b += iter.next(); i += 1 }
+      while (i < n && !iter.isEmpty) {
+        i += 1
+        b += iter.head
+        iter.step()
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -299,9 +361,16 @@ private[basis] object ContainerMacros {
       val iter = self.splice.iterator
       var i = 0
       var n = lower.splice
-      while (i < n && iter.hasNext) { iter.next(); i += 1 }
+      while (i < n && !iter.isEmpty) {
+        i += 1
+        iter.step()
+      }
       n = upper.splice
-      while (i < n && iter.hasNext) { b += iter.next(); i += 1 }
+      while (i < n && !iter.isEmpty) {
+        i += 1
+        b += iter.head
+        iter.step()
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -316,7 +385,11 @@ private[basis] object ContainerMacros {
       val b = buffer.splice
       val xs = self.splice.iterator
       val ys = that.splice.iterator
-      while (xs.hasNext && ys.hasNext) b += ((xs.next(), ys.next()))
+      while (!xs.isEmpty && !ys.isEmpty) {
+        b += ((xs.head, ys.head))
+        xs.step()
+        ys.step()
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -330,9 +403,15 @@ private[basis] object ContainerMacros {
     c.universe.reify[Buffer[Nothing, B]#State] {
       val b = buffer.splice
       val xs = self.splice.iterator
-      while (xs.hasNext) b += xs.next()
+      while (!xs.isEmpty) {
+        b += xs.head
+        xs.step()
+      }
       val ys = that.splice.iterator
-      while (ys.hasNext) b += ys.next()
+      while (!ys.isEmpty) {
+        b += ys.head
+        ys.step()
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }

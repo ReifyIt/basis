@@ -96,10 +96,10 @@ private[basis] object ListMacros {
     c.universe.reify {
       var xs = self.splice
       var r = None: Option[A]
-      while (!xs.isEmpty && r.isEmpty) {
+      while (r.isEmpty && !xs.isEmpty) {
         val x = xs.head
         if (p.splice(x)) r = Some(x)
-        xs = xs.tail
+        else xs = xs.tail
       }
       r
     }
@@ -113,9 +113,9 @@ private[basis] object ListMacros {
     c.universe.reify {
       var xs = self.splice
       var r = true
-      while (!xs.isEmpty && r) {
+      while (r && !xs.isEmpty) {
         if (!p.splice(xs.head)) r = false
-        xs = xs.tail
+        else xs = xs.tail
       }
       r
     }
@@ -129,9 +129,9 @@ private[basis] object ListMacros {
     c.universe.reify {
       var xs = self.splice
       var r = false
-      while (!xs.isEmpty && !r) {
+      while (!r && !xs.isEmpty) {
         if (p.splice(xs.head)) r = true
-        xs = xs.tail
+        else xs = xs.tail
       }
       r
     }
@@ -161,10 +161,10 @@ private[basis] object ListMacros {
     c.universe.reify {
       var xs = self.splice
       var r = None: Option[B]
-      while (!xs.isEmpty && r.isEmpty) {
+      while (r.isEmpty && !xs.isEmpty) {
         val x = xs.head
         if (q.splice.isDefinedAt(x)) r = Some(q.splice(x))
-        xs = xs.tail
+        else xs = xs.tail
       }
       r
     }
@@ -253,8 +253,15 @@ private[basis] object ListMacros {
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
       var xs = self.splice
-      while (!xs.isEmpty && { val x = xs.head; xs = xs.tail; p.splice(x) || { b += x; false } }) ()
-      while (!xs.isEmpty) { b += xs.head; xs = xs.tail }
+      while (!xs.isEmpty && {
+        val x = xs.head
+        xs = xs.tail
+        p.splice(x) || { b += x; false }
+      }) ()
+      while (!xs.isEmpty) {
+        b += xs.head
+        xs = xs.tail
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -268,7 +275,11 @@ private[basis] object ListMacros {
     c.universe.reify[Buffer[Nothing, A]#State] {
       val b = buffer.splice
       var xs = self.splice
-      while (!xs.isEmpty && { val x = xs.head; xs = xs.tail; p.splice(x) && { b += x; true } }) ()
+      while (!xs.isEmpty && {
+        val x = xs.head
+        xs = xs.tail
+        p.splice(x) && { b += x; true }
+      }) ()
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -283,8 +294,15 @@ private[basis] object ListMacros {
       val a = builderA.splice
       val b = builderB.splice
       var xs = self.splice
-      while (!xs.isEmpty && { val x = xs.head; xs = xs.tail; (p.splice(x) && { a += x; true }) || { b += x; false } }) ()
-      while (!xs.isEmpty) { b += xs.head; xs = xs.tail }
+      while (!xs.isEmpty && {
+        val x = xs.head
+        xs = xs.tail
+        p.splice(x) && { a += x; true } || { b += x; false }
+      }) ()
+      while (!xs.isEmpty) {
+        b += xs.head
+        xs = xs.tail
+      }
       (a.check, b.check)
     }.asInstanceOf[c.Expr[(builderA.value.State, builderB.value.State)]]
   }
@@ -300,8 +318,14 @@ private[basis] object ListMacros {
       var xs = self.splice
       var i = 0
       val n = lower.splice
-      while (i < n && !xs.isEmpty) { xs = xs.tail; i += 1 }
-      while (!xs.isEmpty) { b += xs.head; xs = xs.tail }
+      while (i < n && !xs.isEmpty) {
+        i += 1
+        xs = xs.tail
+      }
+      while (!xs.isEmpty) {
+        b += xs.head
+        xs = xs.tail
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -317,7 +341,11 @@ private[basis] object ListMacros {
       var xs = self.splice
       var i = 0
       val n = upper.splice
-      while (i < n && !xs.isEmpty) { b += xs.head; xs = xs.tail; i += 1 }
+      while (i < n && !xs.isEmpty) {
+        i += 1
+        b += xs.head
+        xs = xs.tail
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -333,9 +361,16 @@ private[basis] object ListMacros {
       var xs = self.splice
       var i = 0
       var n = lower.splice
-      while (i < n && !xs.isEmpty) { xs = xs.tail; i += 1 }
+      while (i < n && !xs.isEmpty) {
+        i += 1
+        xs = xs.tail
+      }
       n = upper.splice
-      while (i < n && !xs.isEmpty) { b += xs.head; xs = xs.tail; i += 1 }
+      while (i < n && !xs.isEmpty) {
+        i += 1
+        b += xs.head
+        xs = xs.tail
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -349,9 +384,15 @@ private[basis] object ListMacros {
     c.universe.reify[Buffer[Nothing, B]#State] {
       val b = buffer.splice
       var xs = self.splice
-      while (!xs.isEmpty) { b += xs.head; xs = xs.tail }
+      while (!xs.isEmpty) {
+        b += xs.head
+        xs = xs.tail
+      }
       var ys = that.splice
-      while (!ys.isEmpty) { b += ys.head; ys = ys.tail }
+      while (!ys.isEmpty) {
+        b += ys.head
+        ys = ys.tail
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }

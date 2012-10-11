@@ -49,37 +49,40 @@ final class IteratorOps[A](self: Iterator[A]) {
     macro IteratorMacros.select[A, B]
   
   def collect[B](q: scala.PartialFunction[A, B]): Iterator[B] =
-    new Iterators.Collect(self, q)
+    new Iterators.Collect(self.dup, q)
   
   def map[B](f: A => B): Iterator[B] =
-    new Iterators.Map(self, f)
+    new Iterators.Map(self.dup, f)
   
   def flatMap[B](f: A => Iterator[B]): Iterator[B] =
-    new Iterators.FlatMap(self, f)
+    new Iterators.FlatMap(self.dup, f)
   
   def filter(p: A => Boolean): Iterator[A] =
-    new Iterators.Filter(self, p)
+    new Iterators.Filter(self.dup, p)
   
   def withFilter(p: A => Boolean): Iterator[A] = filter(p)
   
   def dropWhile(p: A => Boolean): Iterator[A] =
-    new Iterators.DropWhile(self, p)
+    new Iterators.DropWhile(self.dup, p)
   
   def takeWhile(p: A => Boolean): Iterator[A] =
-    new Iterators.TakeWhile(self, p)
+    new Iterators.TakeWhile(self.dup, p)
+  
+  def span(p: A => Boolean): (Iterator[A], Iterator[A]) =
+    (takeWhile(p), dropWhile(p))
   
   def drop(lower: Int): Iterator[A] =
-    new Iterators.Drop(self, lower)
+    new Iterators.Drop(self.dup, lower)
   
   def take(upper: Int): Iterator[A] =
-    new Iterators.Take(self, upper)
+    new Iterators.Take(self.dup, upper)
   
   def slice(lower: Int, upper: Int): Iterator[A] =
-    new Iterators.Slice(self, lower, upper)
+    new Iterators.Slice(self.dup, lower, upper)
   
   def zip[B](that: Iterator[B]): Iterator[(A, B)] =
-    new Iterators.Zip(self, that)
+    new Iterators.Zip(self.dup, that.dup)
   
   def ++ [B >: A](that: Iterator[B]): Iterator[B] =
-    new Iterators.++(self, that)
+    new Iterators.++(self.dup, that.dup)
 }

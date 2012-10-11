@@ -22,6 +22,6 @@ trait Container[+A] extends Any with Collection[A] {
   
   override protected def foreach[U](f: A => U) {
     val xs = iterator
-    while (xs.hasNext) f(xs.next())
+    while (!xs.isEmpty) { f(xs.head); xs.step() }
   }
 }

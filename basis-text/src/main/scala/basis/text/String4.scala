@@ -72,3 +72,22 @@ object String4 {
     s.check
   }
 }
+
+private[text] final class String4Iterator
+    (string: String4, private[this] var index: Int)
+  extends CharIterator {
+  
+  override def isEmpty: Boolean = index >= string.length
+  
+  override def head: Char = {
+    if (isEmpty) throw new scala.NoSuchElementException("head of empty iterator")
+    else string(index)
+  }
+  
+  override def step() {
+    if (isEmpty) throw new java.lang.UnsupportedOperationException("empty iterator step")
+    else index += 1
+  }
+  
+  override def dup: String4Iterator = new String4Iterator(string, index)
+}

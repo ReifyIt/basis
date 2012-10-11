@@ -10,165 +10,265 @@ package basis.collection
 import basis._
 
 private[basis] object Iterators {
-  import scala.annotation.tailrec
-  
   object Empty extends Iterator[Nothing] {
-    override def hasNext: Boolean = false
+    override def isEmpty: Boolean = true
     
-    override def next: Nothing = throw new scala.NoSuchElementException("empty iterator")
+    override def head: Nothing =
+      throw new scala.NoSuchElementException("head of empty iterator")
+    
+    override def step(): Unit =
+      throw new java.lang.UnsupportedOperationException("empty iterator step")
+    
+    override def dup: Empty.type = this
   }
   
   final class Collect[-A, +B](self: Iterator[A], q: scala.PartialFunction[A, B]) extends Iterator[B] {
-    private[this] var head: A = _
-    private[this] var isDefined: Boolean = false
+    @tailrec override def isEmpty: Boolean =
+      self.isEmpty || !q.isDefinedAt(self.head) || { self.step(); isEmpty }
     
-    @tailrec override def hasNext: Boolean =
-      isDefined || (self.hasNext && { head = self.next(); isDefined = q.isDefinedAt(head); hasNext })
-    
-    @tailrec override def next(): B = {
-      if (isDefined) { val x = head; head = null.asInstanceOf[A]; isDefined = false; q(x) }
-      else if (self.hasNext) { head = self.next(); isDefined = q.isDefinedAt(head); next() }
-      else Empty.next()
+    @tailrec override def head: B = {
+      val x = self.head
+      if (q.isDefinedAt(x)) q(x)
+      else { self.step(); head }
     }
+    
+    override def step(): Unit = self.step()
+    
+    override def dup: Iterator[B] = new Collect[A, B](self.dup, q)
   }
   
   final class Map[-A, +B](self: Iterator[A], f: A => B) extends Iterator[B] {
-    override def hasNext: Boolean = self.hasNext
-    override def next(): B = f(self.next())
+    override def isEmpty: Boolean = self.isEmpty
+    
+    override def head: B = f(self.head)
+    
+    override def step(): Unit = self.step()
+    
+    override def dup: Iterator[B] = new Map[A, B](self.dup, f)
   }
   
-  final class FlatMap[-A, +B](self: Iterator[A], f: A => Iterator[B]) extends Iterator[B] {
-    private[this] var these: Iterator[B] = Empty
+  final class FlatMap[-A, +B] private
+      (outer: Iterator[A], f: A => Iterator[B], private[this] var inner: Iterator[B])
+    extends Iterator[B] {
     
-    @tailrec override def hasNext: Boolean =
-      these.hasNext || (self.hasNext && { these = f(self.next()); hasNext })
+    def this(outer: Iterator[A], f: A => Iterator[B]) = this(outer, f, Empty)
     
-    @tailrec override def next(): B = {
-      if (these.hasNext) these.next()
-      else if (self.hasNext) { these = f(self.next()); next() }
-      else Empty.next()
+    @tailrec override def isEmpty: Boolean =
+      inner.isEmpty && (outer.isEmpty || { inner = f(outer.head); outer.step(); isEmpty })
+    
+    @tailrec override def head: B = {
+      if (!inner.isEmpty) inner.head
+      else if (!outer.isEmpty) { inner = f(outer.head); outer.step(); head }
+      else Empty.head
     }
+    
+    @tailrec override def step() {
+      if (!inner.isEmpty) inner.step()
+      else if (!outer.isEmpty) { inner = f(outer.head); outer.step(); step() }
+      else Empty.step()
+    }
+    
+    override def dup: Iterator[B] = new FlatMap[A, B](outer.dup, f, inner.dup)
   }
   
-  final class FlatMapContainer[-A, +B](self: Iterator[A], f: A => basis.Container[B]) extends Iterator[B] {
-    private[this] var these: Iterator[B] = Empty
+  final class FlatMapContainer[-A, +B]
+      (outer: Iterator[A], f: A => Container[B], private[this] var inner: Iterator[B])
+    extends Iterator[B] {
     
-    @tailrec override def hasNext: Boolean =
-      these.hasNext || (self.hasNext && { these = f(self.next()).iterator; hasNext })
+    def this(outer: Iterator[A], f: A => Container[B]) = this(outer, f, Empty)
     
-    @tailrec override def next(): B = {
-      if (these.hasNext) these.next()
-      else if (self.hasNext) { these = f(self.next()).iterator; next() }
-      else Empty.next()
+    @tailrec override def isEmpty: Boolean =
+      inner.isEmpty && (outer.isEmpty || { inner = f(outer.head).iterator; outer.step(); isEmpty })
+    
+    @tailrec override def head: B = {
+      if (!inner.isEmpty) inner.head
+      else if (!outer.isEmpty) { inner = f(outer.head).iterator; outer.step(); head }
+      else Empty.head
     }
+    
+    @tailrec override def step() {
+      if (!inner.isEmpty) inner.step()
+      else if (!outer.isEmpty) { inner = f(outer.head).iterator; outer.step(); step() }
+      else Empty.step()
+    }
+    
+    override def dup: Iterator[B] = new FlatMapContainer[A, B](outer.dup, f, inner.dup)
   }
   
   final class Filter[+A](self: Iterator[A], p: A => Boolean) extends Iterator[A] {
-    private[this] var head: A = _
-    private[this] var isDefined: Boolean = false
+    @tailrec override def isEmpty: Boolean =
+      self.isEmpty || !p(self.head) || { self.step(); isEmpty }
     
-    @tailrec override def hasNext: Boolean =
-      isDefined || (self.hasNext && { head = self.next(); isDefined = p(head); hasNext })
-    
-    @tailrec override def next(): A = {
-      if (isDefined) { val x = head; head = null.asInstanceOf[A]; isDefined = false; x }
-      else if (self.hasNext) { head = self.next(); isDefined = p(head); next() }
-      else Empty.next()
+    @tailrec override def head: A = {
+      val x = self.head
+      if (p(x)) x
+      else { self.step(); head }
     }
+    
+    override def step(): Unit = self.step()
+    
+    override def dup: Iterator[A] = new Filter[A](self.dup, p)
   }
   
-  final class DropWhile[+A](self: Iterator[A], p: A => Boolean) extends Iterator[A] {
-    private[this] var head: A = _
-    private[this] var state: Int = 0 // 0 = drop; 1 = buffer; 2 = pass
+  final class DropWhile[+A] private
+      (self: Iterator[A], p: A => Boolean, private[this] var iterating: Boolean)
+    extends Iterator[A] {
     
-    @tailrec override def hasNext: Boolean = state match {
-      case 0 => if (self.hasNext) { val x = self.next(); if (p(x)) hasNext else { head = x; state = 1; true } }
-                else { state = 2; false }
-      case 1 => true
-      case 2 => self.hasNext
+    def this(self: Iterator[A], p: A => Boolean) = this(self, p, false)
+    
+    @tailrec override def isEmpty: Boolean =
+      self.isEmpty || (!iterating && (if (p(self.head)) { self.step(); isEmpty } else { iterating = true; false }))
+    
+    @tailrec override def head: A = {
+      if (iterating) self.head
+      else {
+        val x = self.head
+        if (p(x)) { self.step(); head }
+        else { iterating = true; x }
+      }
     }
     
-    @tailrec override def next(): A = state match {
-      case 0 => if (self.hasNext) { val x = self.next(); if (p(x)) next() else { state = 2; x } }
-                else { state = 2; next() }
-      case 1 => val x = head; head = null.asInstanceOf[A]; state = 2; x
-      case 2 => self.next()
+    @tailrec override def step() {
+      if (iterating) self.step()
+      else if (p(self.head)) { self.step(); step() }
+      else { iterating = true; self.step() }
     }
+    
+    override def dup: Iterator[A] = new DropWhile[A](self.dup, p, iterating)
   }
   
-  final class TakeWhile[+A](self: Iterator[A], p: A => Boolean) extends Iterator[A] {
-    private[this] var head: A = _
-    private[this] var state: Int = 0 // 0 = take; 1 = buffer; 2 = done
+  final class TakeWhile[+A] private
+      (self: Iterator[A], p: A => Boolean, private[this] var iterating: Boolean)
+    extends Iterator[A] {
     
-    override def hasNext: Boolean = state match {
-      case 0 => (self.hasNext && { val x = self.next(); p(x) && { head = x; state = 1; true } }) || { state = 2; false }
-      case 1 => true
-      case 2 => false
+    def this(self: Iterator[A], p: A => Boolean) = this(self, p, true)
+    
+    override def isEmpty: Boolean =
+      !iterating || self.isEmpty || !p(self.head) || { iterating = false; true }
+    
+    @tailrec override def head: A = {
+      if (iterating) {
+        val x = self.head
+        if (p(x)) x
+        else { iterating = false; head }
+      }
+      else Empty.head
     }
     
-    @tailrec override def next(): A = state match {
-      case 0 => if (self.hasNext) { val x = self.next(); if (p(x)) x else { state = 2; next() } }
-                else { state = 2; next() }
-      case 1 => val x = head; head = null.asInstanceOf[A]; state = 0; x
-      case 2 => Empty.next()
+    @tailrec override def step() {
+      if (iterating) {
+        if (p(self.head)) self.step()
+        else { iterating = false; step() }
+      }
+      else Empty.step()
     }
+    
+    override def dup: Iterator[A] = new TakeWhile[A](self.dup, p, iterating)
   }
   
-  final class Drop[+A](self: Iterator[A], lower: Int) extends Iterator[A] {
-    private[this] var index: Int = 0
+  final class Drop[+A] private
+      (self: Iterator[A], lower: Int, private[this] var index: Int)
+    extends Iterator[A] {
     
-    @tailrec override def hasNext: Boolean =
-      self.hasNext && (index >= lower || { self.next(); index += 1; hasNext })
+    def this(self: Iterator[A], lower: Int) = this(self, lower, 0)
     
-    @tailrec override def next(): A = {
-      if (index < lower) { self.next(); index += 1; next() }
-      else self.next()
+    @tailrec override def isEmpty: Boolean =
+      self.isEmpty || (index < lower && { self.step(); index += 1; isEmpty })
+    
+    @tailrec override def head: A = {
+      if (index < lower) { self.step(); index += 1; head }
+      else self.head
     }
+    
+    @tailrec override def step() {
+      if (index < lower) { self.step(); index += 1; step() }
+      else self.step()
+    }
+    
+    override def dup: Iterator[A] = new Drop[A](self.dup, lower, index)
   }
   
-  final class Take[+A](self: Iterator[A], upper: Int) extends Iterator[A] {
-    private[this] var index: Int = 0
+  final class Take[+A] private
+      (self: Iterator[A], upper: Int, private[this] var index: Int)
+    extends Iterator[A] {
     
-    override def hasNext: Boolean =
-      index < upper && self.hasNext
+    def this(self: Iterator[A], upper: Int) = this(self, upper, 0)
     
-    override def next(): A = {
-      if (index < upper) { val x = self.next(); index += 1; x }
-      else Empty.next()
+    override def isEmpty: Boolean =
+      index >= upper || self.isEmpty
+    
+    override def head: A = {
+      if (index < upper) self.head
+      else Empty.head
     }
+    
+    override def step() {
+      if (index < upper) { self.step(); index += 1 }
+      else Empty.step()
+    }
+    
+    override def dup: Iterator[A] = new Take[A](self.dup, upper, index)
   }
   
-  final class Slice[+A](self: Iterator[A], lower: Int, upper: Int) extends Iterator[A] {
-    private[this] val start: Int = scala.math.max(0, lower)
-    private[this] val until: Int = scala.math.max(start, upper)
-    private[this] var index: Int = 0
+  final class Slice[+A] private
+      (self: Iterator[A], lower: Int, upper: Int, private[this] var index: Int)
+    extends Iterator[A] {
     
-    @tailrec override def hasNext: Boolean =
-      (self.hasNext && index >= start && index < until) || { self.next(); index += 1; hasNext }
+    def this(self: Iterator[A], lower: Int, upper: Int) =
+      this(self, scala.math.max(0, lower), scala.math.max(scala.math.max(0, lower), upper), 0)
     
-    @tailrec override def next(): A = {
-      if (index < start) { self.next(); index += 1; next() }
-      else if (index < until) { val x = self.next(); index += 1; x }
-      else Empty.next()
+    @tailrec override def isEmpty: Boolean =
+      index >= upper || self.isEmpty || (index < lower && { self.step(); index += 1; isEmpty })
+    
+    @tailrec override def head: A = {
+      if (index < lower) { self.step(); index += 1; head }
+      else if (index < upper) self.head
+      else Empty.head
     }
+    
+    @tailrec override def step() {
+      if (index < lower) { self.step(); index += 1; step() }
+      else if (index < upper) self.step()
+      else Empty.step()
+    }
+    
+    override def dup: Iterator[A] = new Slice[A](self.dup, lower, upper, index)
   }
   
-  final class Zip[+A, +B](these: Iterator[A], those: Iterator[B]) extends Iterator[(A, B)] {
-    override def hasNext: Boolean = these.hasNext && those.hasNext
-    override def next(): (A, B) = (these.next(), those.next())
+  final class Zip[+A, +B](xs: Iterator[A], ys: Iterator[B]) extends Iterator[(A, B)] {
+    override def isEmpty: Boolean = xs.isEmpty || ys.isEmpty
+    
+    override def head: (A, B) = (xs.head, ys.head)
+    
+    override def step() {
+      xs.step()
+      ys.step()
+    }
+    
+    override def dup: Iterator[(A, B)] = new Zip[A, B](xs.dup, ys.dup)
   }
   
-  final class ++ [+A](these: Iterator[A], those: Iterator[A]) extends Iterator[A] {
-    private[this] var segment: Int = 0
+  final class ++ [+A] private
+      (xs: Iterator[A], ys: Iterator[A], private[this] var segment: Int)
+    extends Iterator[A] {
     
-    @tailrec override def hasNext: Boolean = segment match {
-      case 0 => these.hasNext || { segment = 1; hasNext }
-      case 1 => those.hasNext
+    def this(xs: Iterator[A], ys: Iterator[A]) = this(xs, ys, 0)
+    
+    @tailrec override def isEmpty: Boolean = segment match {
+      case 0 => xs.isEmpty && { segment = 1; isEmpty }
+      case 1 => ys.isEmpty
     }
     
-    @tailrec override def next(): A = segment match {
-      case 0 => if (these.hasNext) these.next() else { segment = 1; next() }
-      case 1 => those.next()
+    @tailrec override def head: A = segment match {
+      case 0 => if (!xs.isEmpty) xs.head else { segment = 1; head }
+      case 1 => ys.head
     }
+    
+    @tailrec override def step(): Unit = segment match {
+      case 0 => if (!xs.isEmpty) xs.step else { segment = 1; step() }
+      case 1 => ys.step()
+    }
+    
+    override def dup: Iterator[A] = new ++ [A](xs.dup, ys.dup, segment)
   }
 }

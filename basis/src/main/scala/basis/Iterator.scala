@@ -17,13 +17,18 @@ package basis
 trait Iterator[+A] extends Any with Enumerator[A] {
   override type Self <: Iterator[A]
   
-  /** Returns `true` if a subsequent call to `next()` will yield an element. */
-  def hasNext: Boolean
+  /** Returns `true` if this $collection has no more elements. */
+  def isEmpty: Boolean
   
-  /** Returns the next element and advances the iterator's state. `next()`
-    * calls should only succeed `true` tests of `hasNext`. */
-  def next(): A
+  /** Returns the current element of this $collection. */
+  def head: A
+  
+  /** Advances this $collection to the next element. */
+  def step(): Unit
+  
+  /** Returns a duplicate $collection with identical but independent state. */
+  def dup: Iterator[A]
   
   protected override def foreach[U](f: A => U): Unit =
-    while (hasNext) f(next())
+    while (!isEmpty) { f(head); step() }
 }

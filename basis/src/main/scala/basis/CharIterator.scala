@@ -7,10 +7,10 @@
 
 package basis
 
-/** A specialized iterator for character strings.
+/** A specialized iterator over characters.
   * 
   * @define collection  character iterator
   */
 trait CharIterator extends Any with Iterator[Char] {
-  override def next(): Char
+  override def head: Char
 }

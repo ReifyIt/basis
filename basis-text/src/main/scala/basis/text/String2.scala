@@ -95,8 +95,12 @@ class String2(val codeUnits: scala.Array[scala.Char]) extends AnyVal with String
   
   override def toString: java.lang.String = {
     val s = new java.lang.StringBuilder
-    val iter = iterator
-    while (iter.hasNext) s.appendCodePoint(iter.next().codePoint)
+    var i = 0
+    val n = size
+    while (i < n) {
+      s.appendCodePoint(apply(i).codePoint)
+      i = nextIndex(i)
+    }
     s.toString
   }
 }
@@ -110,4 +114,23 @@ object String2 {
     s.append(chars)
     s.check
   }
+}
+
+private[text] final class String2Iterator
+    (string: String2, private[this] var index: Int)
+  extends CharIterator {
+  
+  override def isEmpty: Boolean = index >= string.size
+  
+  override def head: Char = {
+    if (isEmpty) throw new scala.NoSuchElementException("head of empty iterator")
+    else string(index)
+  }
+  
+  override def step() {
+    if (isEmpty) throw new java.lang.UnsupportedOperationException("empty iterator step")
+    else index = string.nextIndex(index)
+  }
+  
+  override def dup: String2Iterator = new String2Iterator(string, index)
 }

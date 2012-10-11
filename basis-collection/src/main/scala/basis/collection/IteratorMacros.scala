@@ -26,7 +26,10 @@ private[basis] object IteratorMacros {
     val self = deconstruct[A](c)
     c.universe.reify {
       val iter = self.splice
-      while (iter.hasNext) f.splice(iter.next())
+      while (!iter.isEmpty) {
+        f.splice(iter.head)
+        iter.step()
+      }
     }
   }
   
@@ -39,7 +42,10 @@ private[basis] object IteratorMacros {
     c.universe.reify {
       val iter = self.splice
       var r = z.splice
-      while (iter.hasNext) r = op.splice(r, iter.next())
+      while (!iter.isEmpty) {
+        r = op.splice(r, iter.head)
+        iter.step()
+      }
       r
     }
   }
@@ -51,9 +57,13 @@ private[basis] object IteratorMacros {
     val self = deconstruct[A](c)
     c.universe.reify {
       val iter = self.splice
-      if (!iter.hasNext) throw new java.lang.UnsupportedOperationException
-      var r = iter.next(): B
-      while (iter.hasNext) r = op.splice(r, iter.next())
+      if (iter.isEmpty) throw new java.lang.UnsupportedOperationException
+      var r = iter.head: B
+      iter.step()
+      while (!iter.isEmpty) {
+        r = op.splice(r, iter.head)
+        iter.step()
+      }
       r
     }
   }
@@ -65,12 +75,16 @@ private[basis] object IteratorMacros {
     val self = deconstruct[A](c)
     c.universe.reify {
       val iter = self.splice
-      if (iter.hasNext) {
-        var r = iter.next(): B
-        while (iter.hasNext) r = op.splice(r, iter.next())
+      if (iter.isEmpty) None
+      else {
+        var r = iter.head: B
+        iter.step()
+        while (!iter.isEmpty) {
+          r = op.splice(r, iter.head)
+          iter.step()
+        }
         Some(r)
       }
-      else None
     }
   }
   
@@ -82,9 +96,10 @@ private[basis] object IteratorMacros {
     c.universe.reify {
       val iter = self.splice
       var r = None: Option[A]
-      while (iter.hasNext && r.isEmpty) {
-        val x = iter.next()
+      while (r.isEmpty && !iter.isEmpty) {
+        val x = iter.head
         if (p.splice(x)) r = Some(x)
+        else iter.step()
       }
       r
     }
@@ -98,7 +113,10 @@ private[basis] object IteratorMacros {
     c.universe.reify {
       val iter = self.splice
       var r = true
-      while (iter.hasNext && r) if (!p.splice(iter.next())) r = false
+      while (r && !iter.isEmpty) {
+        if (!p.splice(iter.head)) r = false
+        else iter.step()
+      }
       r
     }
   }
@@ -111,7 +129,10 @@ private[basis] object IteratorMacros {
     c.universe.reify {
       val iter = self.splice
       var r = false
-      while (iter.hasNext && !r) if (p.splice(iter.next())) r = true
+      while (!r && !iter.isEmpty) {
+        if (p.splice(iter.head)) r = true
+        else iter.step()
+      }
       r
     }
   }
@@ -124,7 +145,10 @@ private[basis] object IteratorMacros {
     c.universe.reify {
       val iter = self.splice
       var t = 0
-      while (iter.hasNext) if (p.splice(iter.next())) t += 1
+      while (!iter.isEmpty) {
+        if (p.splice(iter.head)) t += 1
+        iter.step()
+      }
       t
     }
   }
@@ -137,9 +161,10 @@ private[basis] object IteratorMacros {
     c.universe.reify {
       val iter = self.splice
       var r = None: Option[B]
-      while (iter.hasNext && r.isEmpty) {
-        val x = iter.next()
+      while (r.isEmpty && !iter.isEmpty) {
+        val x = iter.head
         if (q.splice.isDefinedAt(x)) r = Some(q.splice(x))
+        else iter.step()
       }
       r
     }

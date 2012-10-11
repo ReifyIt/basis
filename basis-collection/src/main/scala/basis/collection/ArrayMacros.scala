@@ -162,10 +162,10 @@ private[basis] object ArrayMacros {
       var r = None: Option[A]
       var i = 0
       val n = xs.length
-      while (i < n && r.isEmpty) {
+      while (r.isEmpty && i < n) {
         val x = xs(i)
         if (p.splice(x)) r = Some(x)
-        i += 1
+        else i += 1
       }
       r
     }
@@ -181,9 +181,9 @@ private[basis] object ArrayMacros {
       var r = true
       var i = 0
       val n = xs.length
-      while (i < n && r) {
+      while (r && i < n) {
         if (!p.splice(xs(i))) r = false
-        i += 1
+        else i += 1
       }
       r
     }
@@ -199,9 +199,9 @@ private[basis] object ArrayMacros {
       var r = false
       var i = 0
       val n = xs.length
-      while (i < n && !r) {
+      while (!r && i < n) {
         if (p.splice(xs(i))) r = true
-        i += 1
+        else i += 1
       }
       r
     }
@@ -235,10 +235,10 @@ private[basis] object ArrayMacros {
       var r = None: Option[B]
       var i = 0
       val n = xs.length
-      while (i < n && r.isEmpty) {
+      while (r.isEmpty && i < n) {
         val x = xs(i)
         if (q.splice.isDefinedAt(x)) r = Some(q.splice(x))
-        i += 1
+        else i += 1
       }
       r
     }
@@ -340,8 +340,15 @@ private[basis] object ArrayMacros {
       val xs = self.splice
       var i = 0
       val n = xs.length
-      while (i < n && { val x = xs(i); i += 1; p.splice(x) || { b += x; false } }) ()
-      while (i < n) { b += xs(i); i += 1 }
+      while (i < n && {
+        val x = xs(i)
+        i += 1
+        p.splice(x) || { b += x; false }
+      }) ()
+      while (i < n) {
+        b += xs(i)
+        i += 1
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -357,7 +364,11 @@ private[basis] object ArrayMacros {
       val xs = self.splice
       var i = 0
       val n = xs.length
-      while (i < n && { val x = xs(i); i += 1; p.splice(x) && { b += x; true } }) ()
+      while (i < n && {
+        val x = xs(i)
+        i += 1
+        p.splice(x) && { b += x; true }
+      }) ()
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -374,8 +385,15 @@ private[basis] object ArrayMacros {
       val xs = self.splice
       var i = 0
       val n = xs.length
-      while (i < n && { val x = xs(i); i += 1; (p.splice(x) && { a += x; true }) || { b += x; false } }) ()
-      while (i < n) { b += xs(i); i += 1 }
+      while (i < n && {
+        val x = xs(i)
+        i += 1
+        p.splice(x) && { a += x; true } || { b += x; false }
+      }) ()
+      while (i < n) {
+        b += xs(i)
+        i += 1
+      }
       (a.check, b.check)
     }.asInstanceOf[c.Expr[(builderA.value.State, builderB.value.State)]]
   }
@@ -391,7 +409,10 @@ private[basis] object ArrayMacros {
       val xs = self.splice
       var i = scala.math.max(0, lower.splice)
       val n = xs.length
-      while (i < n) { b += xs(i); i += 1 }
+      while (i < n) {
+        b += xs(i)
+        i += 1
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -407,7 +428,10 @@ private[basis] object ArrayMacros {
       val xs = self.splice
       var i = 0
       val n = scala.math.min(upper.splice, xs.length)
-      while (i < n) { b += xs(i); i += 1 }
+      while (i < n) {
+        b += xs(i)
+        i += 1
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -423,7 +447,10 @@ private[basis] object ArrayMacros {
       val xs = self.splice
       var i = scala.math.max(0, lower.splice)
       val n = scala.math.min(upper.splice, xs.length)
-      while (i < n) { b += xs(i); i += 1 }
+      while (i < n) {
+        b += xs(i)
+        i += 1
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -437,7 +464,10 @@ private[basis] object ArrayMacros {
       val b = buffer.splice
       val xs = self.splice
       var i = xs.length - 1
-      while (i >= 0) { b += xs(i); i -= 1 }
+      while (i >= 0) {
+        b += xs(i)
+        i -= 1
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
@@ -453,11 +483,17 @@ private[basis] object ArrayMacros {
       val xs = self.splice
       var i = 0
       var n = xs.length
-      while (i < n) { b += xs(i); i += 1 }
+      while (i < n) {
+        b += xs(i)
+        i += 1
+      }
       val ys = that.splice
       i = 0
       n = ys.length
-      while (i < n) { b += ys(i); i += 1 }
+      while (i < n) {
+        b += ys(i)
+        i += 1
+      }
       b.check
     }.asInstanceOf[c.Expr[buffer.value.State]]
   }
