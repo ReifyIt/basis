@@ -7,6 +7,6 @@
 
 package basis
 
-trait Hash[-T] extends Any with Equal[T] {
-  def hash(x: T): Int
+trait Show[-T] extends Any {
+  def show(x: T)(implicit buffer: CharBuffer): buffer.State
 }

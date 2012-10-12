@@ -7,6 +7,15 @@
 
 package basis
 
-trait Hash[-T] extends Any with Equal[T] {
-  def hash(x: T): Int
+abstract class Platform extends Primitives {
+  import scala.language.experimental.macros
+  
+  final def equal[T](x: T, y: T)(implicit T: Equal[T]): Boolean =
+    macro PlatformMacros.equal[T]
+  
+  final def hash[T](x: T)(implicit T: Hash[T]): Int =
+    macro PlatformMacros.hash[T]
+  
+  final def show[T](x: T)(implicit T: Show[T], buffer: CharBuffer): buffer.State =
+    macro PlatformMacros.show[T]
 }

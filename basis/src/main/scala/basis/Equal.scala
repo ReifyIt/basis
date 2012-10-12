@@ -7,6 +7,6 @@
 
 package basis
 
-trait Equal[-A] {
-  def equal(x: A, y: A): Boolean
+trait Equal[-T] extends Any {
+  def equal(x: T, y: T): Boolean
 }

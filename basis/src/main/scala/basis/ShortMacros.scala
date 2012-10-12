@@ -7,6 +7,10 @@
 
 package basis
 
-trait Hash[-T] extends Any with Equal[T] {
-  def hash(x: T): Int
+private[basis] object ShortMacros {
+  import scala.reflect.macros.Context
+  
+  def MinValue(c: Context): c.Expr[Short] = c.literal(scala.Short.MinValue)
+  
+  def MaxValue(c: Context): c.Expr[Short] = c.literal(scala.Short.MaxValue)
 }
