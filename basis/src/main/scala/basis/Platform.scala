@@ -7,7 +7,7 @@
 
 package basis
 
-abstract class Platform extends Primitives {
+abstract class Platform extends Aliases with Primitives {
   import scala.language.experimental.macros
   
   final def equal[T](x: T, y: T)(implicit T: Equal[T]): Boolean =

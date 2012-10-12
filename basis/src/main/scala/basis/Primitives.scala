@@ -7,12 +7,10 @@
 
 package basis
 
-trait Primitives {
+trait Primitives { this: Aliases =>
   import scala.language.experimental.macros
   import scala.language.implicitConversions
   
-  
-  final type Byte = scala.Byte
   
   class ByteType extends Hash[Byte] with Show[Byte] {
     final def MinValue: Byte = macro ByteMacros.MinValue
@@ -29,8 +27,6 @@ trait Primitives {
   implicit val Byte: ByteType
   
   
-  final type Short = scala.Short
-  
   class ShortType extends Hash[Short] with Show[Short] {
     final def MinValue: Short = macro ShortMacros.MinValue
     
@@ -46,9 +42,7 @@ trait Primitives {
   implicit val Short: ShortType
   
   
-  final type Int = scala.Int
-  
-  class IntOps {
+  abstract class IntOps {
     def abs: Int = macro IntMacros.abs
     
     def min(that: Int): Int = macro IntMacros.min
@@ -102,9 +96,7 @@ trait Primitives {
   implicit val Int: IntType
   
   
-  final type Long = scala.Long
-  
-  class LongOps {
+  abstract class LongOps {
     def abs: Long = macro LongMacros.abs
     
     def min(that: Long): Long = macro LongMacros.min
@@ -159,9 +151,7 @@ trait Primitives {
   implicit val Long: LongType
   
   
-  final type Float = scala.Float
-  
-  class FloatOps {
+  abstract class FloatOps {
     def abs: Float = macro FloatMacros.abs
     
     def min(that: Float): Float = macro FloatMacros.min
@@ -196,9 +186,7 @@ trait Primitives {
   implicit val Float: FloatType
   
   
-  final type Double = scala.Double
-  
-  class DoubleOps {
+  abstract class DoubleOps {
     def abs: Double = macro DoubleMacros.abs
     
     def min(that: Double): Double = macro DoubleMacros.min
@@ -234,8 +222,6 @@ trait Primitives {
   
   implicit val Double: DoubleType
   
-  
-  final type Boolean = scala.Boolean
   
   class BooleanType extends Hash[Boolean] with Show[Boolean] {
     override def equal(x: Boolean, y: Boolean): Boolean = x == y
