@@ -9,4 +9,4 @@ package basis.collection
 
 import basis._
 
-final class SetOps[+A, +Self](self: Set[A])
+final class SetOps[+Self, +A](self: Set[A])

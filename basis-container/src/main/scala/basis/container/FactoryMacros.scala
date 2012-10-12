@@ -16,7 +16,7 @@ private[basis] object FactoryMacros {
   def apply[A]
       (c: Context)
       (xs: c.Expr[A]*)
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     import c.universe._
     c.Expr(Select(
@@ -31,7 +31,7 @@ private[basis] object FactoryMacros {
       (c: Context)
       (n: c.Expr[Int])
       (element: c.Expr[A])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     import c.universe._
     val b    = c.fresh(newTermName("buffer$"))
@@ -58,7 +58,7 @@ private[basis] object FactoryMacros {
       (c: Context)
       (n: c.Expr[Int])
       (f: c.Expr[Int => A])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     import c.universe._
     val b    = c.fresh(newTermName("buffer$"))

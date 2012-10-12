@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class RefArrayBuffer[-Source, A] extends Buffer[Source, A] {
+final class RefArrayBuffer[A] extends Buffer[Array[_], A] {
   override type State = RefArray[A]
   
   private[this] var array: RefArray[A] = RefArray.empty[A]

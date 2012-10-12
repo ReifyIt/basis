@@ -9,7 +9,7 @@ package basis.collection
 
 import basis._
 
-final class SeqOps[+A, +Self](self: Seq[A]) {
+final class SeqOps[+Self, +A](self: Seq[A]) {
   def withFilter(p: A => Boolean): Seq[A] =
     new SeqWithFilter(self, p)
 }

@@ -10,32 +10,32 @@ package basis
 package object collection {
   import scala.language.implicitConversions
   
-  implicit def EnumeratorOps[A](self: Enumerator[A]): EnumeratorOps[A, self.Self] =
-    new EnumeratorOps[A, self.Self](self)
+  implicit def EnumeratorOps[A](self: Enumerator[A]): EnumeratorOps[self.Self, A] =
+    new EnumeratorOps[self.Self, A](self)
   
   implicit def IteratorOps[A](self: Iterator[A]): IteratorOps[A] =
     new IteratorOps[A](self)
   
-  implicit def CollectionOps[A](self: Collection[A]): CollectionOps[A, self.Self] =
-    new CollectionOps[A, self.Self](self)
+  implicit def CollectionOps[A](self: Collection[A]): CollectionOps[self.Self, A] =
+    new CollectionOps[self.Self, A](self)
   
-  implicit def ContainerOps[A](self: Container[A]): ContainerOps[A, self.Self] =
-    new ContainerOps[A, self.Self](self)
+  implicit def ContainerOps[A](self: Container[A]): ContainerOps[self.Self, A] =
+    new ContainerOps[self.Self, A](self)
   
-  implicit def SeqOps[A](self: Seq[A]): SeqOps[A, self.Self] =
-    new SeqOps[A, self.Self](self)
+  implicit def SeqOps[A](self: Seq[A]): SeqOps[self.Self, A] =
+    new SeqOps[self.Self, A](self)
   
-  implicit def ListOps[A](self: List[A]): ListOps[A, self.Self] =
-    new ListOps[A, self.Self](self)
+  implicit def ListOps[A](self: List[A]): ListOps[self.Self, A] =
+    new ListOps[self.Self, A](self)
   
-  implicit def ArrayOps[A](self: Array[A]): ArrayOps[A, self.Self] =
-    new ArrayOps[A, self.Self](self)
+  implicit def ArrayOps[A](self: Array[A]): ArrayOps[self.Self, A] =
+    new ArrayOps[self.Self, A](self)
   
-  implicit def SetOps[A](self: Set[A]): SetOps[A, self.Self] =
-    new SetOps[A, self.Self](self)
+  implicit def SetOps[A](self: Set[A]): SetOps[self.Self, A] =
+    new SetOps[self.Self, A](self)
   
-  implicit def MapOps[A, Z](self: Map[A, Z]): MapOps[A, Z, self.Self] =
-    new MapOps[A, Z, self.Self](self)
+  implicit def MapOps[A, Z](self: Map[A, Z]): MapOps[self.Self, A, Z] =
+    new MapOps[self.Self, A, Z](self)
   
   private[basis] final class Break extends java.lang.Throwable
   private[basis] val Break = new Break

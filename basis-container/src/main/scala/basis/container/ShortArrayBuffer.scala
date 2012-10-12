@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class ShortArrayBuffer[-Source] extends Buffer[Source, Short] {
+final class ShortArrayBuffer extends Buffer[Array[_], Short] {
   override type State = ShortArray
   
   private[this] var array: ShortArray = ShortArray.empty

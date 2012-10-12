@@ -9,7 +9,7 @@ package basis.collection
 
 import basis._
 
-final class ContainerOps[+A, +Self](self: Container[A]) {
+final class ContainerOps[+Self, +A](self: Container[A]) {
   import scala.language.experimental.macros
   
   def foreach[U](f: A => U): Unit =

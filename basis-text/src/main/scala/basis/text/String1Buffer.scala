@@ -11,7 +11,7 @@ import basis._
 
 /** A buffer for 8-bit Unicode strings in the UTF-8 encoding form.
   * Produces only well-formed code unit sequences. */
-final class String1Buffer extends StringBuffer[String1] {
+final class String1Buffer extends Buffer[String1, Char] with CharBuffer {
   override type State = String1
   
   private[this] var string: String1 = String1.empty

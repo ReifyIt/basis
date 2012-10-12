@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class FloatArrayBuffer[-Source] extends Buffer[Source, Float] {
+final class FloatArrayBuffer extends Buffer[Array[_], Float] {
   override type State = FloatArray
   
   private[this] var array: FloatArray = FloatArray.empty

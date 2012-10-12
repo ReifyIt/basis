@@ -11,7 +11,7 @@ import basis._
 
 /** A buffer for 16-bit Unicode strings in the UTF-16 encoding form.
   * Produces only well-formed code unit sequences. */
-final class String2Buffer extends StringBuffer[String2] {
+final class String2Buffer extends Buffer[String2, Char] with CharBuffer {
   override type State = String2
   
   private[this] var string: String2 = String2.empty

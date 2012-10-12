@@ -5,8 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package util
+package basis.util
+
+import basis._
 
 /** A bounded enumeration of monotonic `Int` values. The sequence begins at
   * the `start` value and repeatedly adds the non-zero `step` value until it

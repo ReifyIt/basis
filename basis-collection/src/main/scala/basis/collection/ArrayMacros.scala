@@ -247,7 +247,7 @@ private[basis] object ArrayMacros {
   def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (q: c.Expr[scala.PartialFunction[A, B]])
-      (buffer: c.Expr[Buffer[Nothing, B]])
+      (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {
@@ -267,7 +267,7 @@ private[basis] object ArrayMacros {
   def map[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => B])
-      (buffer: c.Expr[Buffer[Nothing, B]])
+      (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {
@@ -287,7 +287,7 @@ private[basis] object ArrayMacros {
   def flatMap[A : c.WeakTypeTag, B: c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => Array[B]])
-      (buffer: c.Expr[Buffer[Nothing, B]])
+      (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {
@@ -312,7 +312,7 @@ private[basis] object ArrayMacros {
   def filter[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -332,7 +332,7 @@ private[basis] object ArrayMacros {
   def dropWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -356,7 +356,7 @@ private[basis] object ArrayMacros {
   def takeWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -376,7 +376,7 @@ private[basis] object ArrayMacros {
   def span[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (builderA: c.Expr[Buffer[Nothing, A]], builderB: c.Expr[Buffer[Nothing, A]])
+      (builderA: c.Expr[Buffer[_, A]], builderB: c.Expr[Buffer[_, A]])
     : c.Expr[(builderA.value.State, builderB.value.State)] = {
     val self = deconstruct[A](c)
     c.universe.reify[(Buffer[Nothing, A]#State, Buffer[Nothing, A]#State)] {
@@ -401,7 +401,7 @@ private[basis] object ArrayMacros {
   def drop[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -420,7 +420,7 @@ private[basis] object ArrayMacros {
   def take[A : c.WeakTypeTag]
       (c: Context)
       (upper: c.Expr[Int])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -439,7 +439,7 @@ private[basis] object ArrayMacros {
   def slice[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int], upper: c.Expr[Int])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -457,7 +457,7 @@ private[basis] object ArrayMacros {
   
   def reverse[A : c.WeakTypeTag]
       (c: Context)
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -475,7 +475,7 @@ private[basis] object ArrayMacros {
   def ++ [A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (that: c.Expr[Array[B]])
-      (buffer: c.Expr[Buffer[Nothing, B]])
+      (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {

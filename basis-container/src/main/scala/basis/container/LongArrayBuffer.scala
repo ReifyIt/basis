@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class LongArrayBuffer[-Source] extends Buffer[Source, Long] {
+final class LongArrayBuffer extends Buffer[Array[_], Long] {
   override type State = LongArray
   
   private[this] var array: LongArray = LongArray.empty

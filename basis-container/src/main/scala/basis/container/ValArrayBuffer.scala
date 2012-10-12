@@ -10,7 +10,7 @@ package basis.container
 import basis._
 import basis.data._
 
-final class ValArrayBuffer[-Source, A](implicit typeA: ValType[A]) extends Buffer[Source, A] {
+final class ValArrayBuffer[A](implicit typeA: ValType[A]) extends Buffer[Array[_], A] {
   override type State = ValArray[A]
   
   private[this] var array: ValArray[A] = ValArray[A](16)

@@ -7,19 +7,16 @@
 
 package basis
 
-package object text extends StringBuffers
+package object text extends ImplicitStringBuffers
 
 package text {
-  private[text] class DefaultStringBuffers {
-    implicit def StringBuffer: StringBuffer[String] { type State = String } =
-      (new String1Buffer).asInstanceOf[StringBuffer[String] { type State = String }]
-  }
-  
-  private[text] class StringBuffers extends DefaultStringBuffers {
-    implicit def String1Buffer: String1Buffer = new String1Buffer
-    
+  private[text] class LowPriorityImplicitStringBuffers {
     implicit def String2Buffer: String2Buffer = new String2Buffer
     
     implicit def String4Buffer: String4Buffer = new String4Buffer
+  }
+  
+  private[text] class ImplicitStringBuffers extends LowPriorityImplicitStringBuffers {
+    implicit def String1Buffer: String1Buffer = new String1Buffer
   }
 }

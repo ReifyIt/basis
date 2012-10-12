@@ -9,7 +9,7 @@ package basis.collection
 
 import basis._
 
-final class EnumeratorOps[+A, +Self](self: Enumerator[A]) {
+final class EnumeratorOps[+Self, +A](self: Enumerator[A]) {
   def foreach[U](f: A => U): Unit = traverse(self)(f)
   
   def fold[B >: A](z: B)(op: (B, B) => B): B = {

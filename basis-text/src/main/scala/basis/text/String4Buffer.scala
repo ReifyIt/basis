@@ -11,7 +11,7 @@ import basis._
 
 /** A buffer for 32-bit Unicode strings in the UTF-32 encoding form.
   * Produces only well-formed code unit sequences. */
-final class String4Buffer extends StringBuffer[String4] {
+final class String4Buffer extends Buffer[String4, Char] with CharBuffer {
   override type State = String4
   
   private[this] var string: String4 = String4.empty

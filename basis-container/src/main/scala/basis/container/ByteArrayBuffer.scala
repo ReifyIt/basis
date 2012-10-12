@@ -9,7 +9,7 @@ package basis.container
 
 import basis._
 
-final class ByteArrayBuffer[-Source] extends Buffer[Source, Byte] {
+final class ByteArrayBuffer extends Buffer[Array[_], Byte] {
   override type State = ByteArray
   
   private[this] var array: ByteArray = ByteArray.empty

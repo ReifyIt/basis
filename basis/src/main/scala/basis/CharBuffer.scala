@@ -5,11 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis
 
-import basis._
-
-trait StringBuffer[-Source] extends Buffer[Source, Char] {
+trait CharBuffer extends Buffer[Nothing, Char] {
   // disabled to avoid SI-6500
   // override def += (char: Char): this.type
   

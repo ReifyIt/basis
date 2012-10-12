@@ -5,8 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
-package util
+package basis.util
+
+import basis._
 
 trait RangeOps {
   import scala.language.experimental.macros

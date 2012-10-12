@@ -191,7 +191,7 @@ private[basis] object ListMacros {
   def map[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => B])
-      (buffer: c.Expr[Buffer[Nothing, B]])
+      (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {
@@ -208,7 +208,7 @@ private[basis] object ListMacros {
   def flatMap[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => List[B]])
-      (buffer: c.Expr[Buffer[Nothing, B]])
+      (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {
@@ -229,7 +229,7 @@ private[basis] object ListMacros {
   def filter[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -247,7 +247,7 @@ private[basis] object ListMacros {
   def dropWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -269,7 +269,7 @@ private[basis] object ListMacros {
   def takeWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -287,7 +287,7 @@ private[basis] object ListMacros {
   def span[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (builderA: c.Expr[Buffer[Nothing, A]], builderB: c.Expr[Buffer[Nothing, A]])
+      (builderA: c.Expr[Buffer[_, A]], builderB: c.Expr[Buffer[_, A]])
     : c.Expr[(builderA.value.State, builderB.value.State)] = {
     val self = deconstruct[A](c)
     c.universe.reify[(Buffer[Nothing, A]#State, Buffer[Nothing, A]#State)] {
@@ -310,7 +310,7 @@ private[basis] object ListMacros {
   def drop[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -333,7 +333,7 @@ private[basis] object ListMacros {
   def take[A : c.WeakTypeTag]
       (c: Context)
       (upper: c.Expr[Int])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -353,7 +353,7 @@ private[basis] object ListMacros {
   def slice[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int], upper: c.Expr[Int])
-      (buffer: c.Expr[Buffer[Nothing, A]])
+      (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, A]#State] {
@@ -378,7 +378,7 @@ private[basis] object ListMacros {
   def ++ [A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (that: c.Expr[List[B]])
-      (buffer: c.Expr[Buffer[Nothing, B]])
+      (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] = {
     val self = deconstruct[A](c)
     c.universe.reify[Buffer[Nothing, B]#State] {

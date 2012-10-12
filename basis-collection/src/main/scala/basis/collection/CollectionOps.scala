@@ -9,7 +9,7 @@ package basis.collection
 
 import basis._
 
-final class CollectionOps[+A, +Self](self: Collection[A]) {
+final class CollectionOps[+Self, +A](self: Collection[A]) {
   def withFilter(p: A => Boolean): Collection[A] =
     new CollectionWithFilter(self, p)
   

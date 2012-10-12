@@ -99,7 +99,7 @@ private[basis] object Traversers {
     override def apply(x: A): Unit = if (i < u) { if (i >= l) f(x); i += 1 } else throw Break
   }
 
-  final class CollectInto[-A, B](q: scala.PartialFunction[A, B], buffer: Buffer[Nothing, B]) extends AbstractFunction1[A, Unit] {
+  final class CollectInto[-A, B](q: scala.PartialFunction[A, B], buffer: Buffer[_, B]) extends AbstractFunction1[A, Unit] {
     override def apply(x: A): Unit = if (q.isDefinedAt(x)) buffer += q(x)
   }
 
