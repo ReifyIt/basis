@@ -8,8 +8,8 @@
 package basis
 
 trait CharBuffer extends Buffer[Nothing, Char] {
-  // disabled to avoid SI-6500
-  // override def += (char: Char): this.type
+  /* FIXME: SI-6500 */
+  //override def += (char: Char): this.type
   
   def append(chars: java.lang.CharSequence): this.type = {
     val n = chars.length

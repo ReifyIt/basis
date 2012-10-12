@@ -83,7 +83,7 @@ object BasisBuild extends Build {
     docSettings
   
   lazy val projectSettings = Seq(
-    scalaVersion := "2.11.0-SNAPSHOT",
+    scalaVersion := "2.10.0-RC1",
     version      := "0.0-SNAPSHOT",
     organization := "com.scalabasis",
     description  := "A library of building blocks",
@@ -94,8 +94,8 @@ object BasisBuild extends Build {
   
   lazy val compileSettings = Seq(
     scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Yno-imports", "-Yinline-warnings", "-Ywarn-all"),
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.0-SNAPSHOT" % "provided"
-    //libraryDependencies += "org.scalatest" % "scalatest_2.10.0-SNAPSHOT" % "1.8-SNAPSHOT" % "test"
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC1" % "provided"
+    //libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC1" % "1.8" % "test"
   )
   
   lazy val docSettings = Seq(

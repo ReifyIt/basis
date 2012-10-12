@@ -66,11 +66,12 @@ final class ListOps[+Self, +A](self: List[A]) {
   def takeWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro ListMacros.takeWhile[A]
   
-  def span(p: A => Boolean)(
-      implicit builderA: Buffer[Self, A],
-               builderB: Buffer[Self, A])
-    : (builderA.State, builderB.State) =
-    macro ListMacros.span[A]
+  /* FIXME: SI-6447 */
+  //def span(p: A => Boolean)(
+  //    implicit builderA: Buffer[Self, A],
+  //             builderB: Buffer[Self, A])
+  //  : (builderA.State, builderB.State) =
+  //  macro ListMacros.span[A]
   
   def drop(lower: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro ListMacros.drop[A]

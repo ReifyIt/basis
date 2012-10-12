@@ -75,11 +75,12 @@ final class ArrayOps[+Self, +A](self: Array[A]) {
   def takeWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro ArrayMacros.takeWhile[A]
   
-  def span(p: A => Boolean)(
-      implicit builderA: Buffer[Self, A],
-               builderB: Buffer[Self, A])
-    : (builderA.State, builderB.State) =
-    macro ArrayMacros.span[A]
+  /* FIXME: SI-6447 */
+  //def span(p: A => Boolean)(
+  //    implicit builderA: Buffer[Self, A],
+  //             builderB: Buffer[Self, A])
+  //  : (builderA.State, builderB.State) =
+  //  macro ArrayMacros.span[A]
   
   def drop(lower: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro ArrayMacros.drop[A]
