@@ -17,17 +17,12 @@ class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
     ((words(1 + (index >> 5)) >>> (index & 0x1F)) & 1) == 1
   }
   
-  private[basis] def update(index: Int, value: Boolean) {
-    if (index < 0 || index >= length) throw new java.lang.IndexOutOfBoundsException(index.toString)
+  /** Returns a copy of this array with a new `value` at `index`. */
+  def update(index: Int, value: Boolean): BitArray = {
+    val newWords = words.clone
     val mask = 1 << (index & 0x1F)
     if (value) words(1 + (index >> 5)) |=  mask
     else       words(1 + (index >> 5)) &= ~mask
-  }
-  
-  private[basis] def copy(length: Int): BitArray = {
-    val newWords = new scala.Array[Int](1 + (((length + 31) & ~31) >> 5))
-    java.lang.System.arraycopy(words, 1, newWords, 1, (words.length min newWords.length) - 1)
-    newWords(0) = length
     new BitArray(newWords)
   }
 }
@@ -45,11 +40,15 @@ private[basis] object BitArray {
 final class BitArrayBuffer extends Buffer[Any, Boolean] {
   override type State = BitArray
   
-  private[this] var array: BitArray = BitArray.empty
+  private[this] var words: scala.Array[Int] = BitArray.empty.words
   
   private[this] var aliased: Boolean = true
   
-  private[this] var length: Int = 0
+  private[this] def length: Int = words(0)
+  
+  private[this] def length_= (length: Int): Unit = words(0) = length
+  
+  private[this] def capacity: Int = 32 * (words.length - 1)
   
   private[this] def expand(base: Int, size: Int): Int = {
     var n = (base max size) - 1
@@ -57,36 +56,47 @@ final class BitArrayBuffer extends Buffer[Any, Boolean] {
     n + 1
   }
   
+  private[this] def resize(size: Int) {
+    val newLength = 1 + (((size + 31) & ~31) >> 5)
+    if (words.length != newLength) {
+      val newWords = new scala.Array[Int](newLength)
+      java.lang.System.arraycopy(words, 0, newWords, 0, words.length min newLength)
+      words = newWords
+    }
+  }
+  
   private[this] def prepare(size: Int) {
-    if (aliased || size > array.length) {
-      array = array.copy(expand(16, size))
+    if (aliased || size > capacity) {
+      resize(expand(16, size))
       aliased = false
     }
   }
   
   override def += (value: Boolean): this.type = {
     prepare(length + 1)
-    array(length) = value
+    val mask = 1 << (length & 0x1F)
+    if (value) words(1 + (length >> 5)) |=  mask
+    //else     words(1 + (length >> 5)) &= ~mask
     length += 1
     this
   }
   
   override def expect(count: Int): this.type = {
-    if (length + count > array.length) {
-      array = array.copy(length + count)
+    if (length + count > capacity) {
+      resize(length + count)
       aliased = false
     }
     this
   }
   
   override def state: BitArray = {
-    if (length != array.length) array = array.copy(length)
+    if (length != capacity) resize(length)
     aliased = true
-    array
+    new BitArray(words)
   }
   
   override def clear() {
-    array = BitArray.empty
+    words = BitArray.empty.words
     aliased = true
     length = 0
   }

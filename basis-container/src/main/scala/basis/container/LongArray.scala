@@ -14,11 +14,43 @@ class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
   
   override def apply(index: Int): Long = array(index)
   
-  private[basis] def update(index: Int, value: Long): Unit = array(index) = value
+  /** Returns a copy of this array with a new `value` at `index`. */
+  def update(index: Int, value: Long): LongArray = {
+    val newArray = array.clone
+    newArray(index) = value
+    new LongArray(newArray)
+  }
   
-  private[basis] def copy(length: Int): LongArray = {
-    val newArray = new scala.Array[Long](length)
-    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min length)
+  /** Returns a copy of this array with a new `value` inserted at `index`. */
+  def insert(index: Int, value: Long): LongArray = {
+    val newArray = new scala.Array[Long](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    newArray(index) = value
+    java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
+    new LongArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `index` removed. */
+  def remove(index: Int): LongArray = {
+    val newArray = new scala.Array[Long](array.length - 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
+    new LongArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` appended. */
+  def :+ (value: Long): LongArray = {
+    val newArray = new scala.Array[Long](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
+    newArray(newArray.length) = value
+    new LongArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` prepended. */
+  def +: (value: Long): LongArray = {
+    val newArray = new scala.Array[Long](array.length + 1)
+    newArray(0) = value
+    java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new LongArray(newArray)
   }
 }
@@ -33,7 +65,7 @@ private[basis] object LongArray {
 final class LongArrayBuffer extends Buffer[Any, Long] {
   override type State = LongArray
   
-  private[this] var array: LongArray = LongArray.empty
+  private[this] var array: scala.Array[Long] = LongArray.empty.array
   
   private[this] var aliased: Boolean = true
   
@@ -45,9 +77,15 @@ final class LongArrayBuffer extends Buffer[Any, Long] {
     n + 1
   }
   
+  private[this] def resize(size: Int) {
+    val newArray = new scala.Array[Long](size)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
+    array = newArray
+  }
+  
   private[this] def prepare(size: Int) {
     if (aliased || size > array.length) {
-      array = array.copy(expand(16, size))
+      resize(expand(16, size))
       aliased = false
     }
   }
@@ -61,20 +99,20 @@ final class LongArrayBuffer extends Buffer[Any, Long] {
   
   override def expect(count: Int): this.type = {
     if (length + count > array.length) {
-      array = array.copy(length + count)
+      resize(length + count)
       aliased = false
     }
     this
   }
   
   override def state: LongArray = {
-    if (length != array.length) array = array.copy(length)
+    if (length != array.length) resize(length)
     aliased = true
-    array
+    new LongArray(array)
   }
   
   override def clear() {
-    array = LongArray.empty
+    array = LongArray.empty.array
     aliased = true
     length = 0
   }

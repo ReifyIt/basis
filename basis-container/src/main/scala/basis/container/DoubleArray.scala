@@ -14,11 +14,43 @@ class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Doub
   
   override def apply(index: Int): Double = array(index)
   
-  private[basis] def update(index: Int, value: Double): Unit = array(index) = value
+  /** Returns a copy of this array with a new `value` at `index`. */
+  def update(index: Int, value: Double): DoubleArray = {
+    val newArray = array.clone
+    newArray(index) = value
+    new DoubleArray(newArray)
+  }
   
-  private[basis] def copy(length: Int): DoubleArray = {
-    val newArray = new scala.Array[Double](length)
-    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min length)
+  /** Returns a copy of this array with a new `value` inserted at `index`. */
+  def insert(index: Int, value: Double): DoubleArray = {
+    val newArray = new scala.Array[Double](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    newArray(index) = value
+    java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
+    new DoubleArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `index` removed. */
+  def remove(index: Int): DoubleArray = {
+    val newArray = new scala.Array[Double](array.length - 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
+    new DoubleArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` appended. */
+  def :+ (value: Double): DoubleArray = {
+    val newArray = new scala.Array[Double](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
+    newArray(newArray.length) = value
+    new DoubleArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` prepended. */
+  def +: (value: Double): DoubleArray = {
+    val newArray = new scala.Array[Double](array.length + 1)
+    newArray(0) = value
+    java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new DoubleArray(newArray)
   }
 }
@@ -33,7 +65,7 @@ private[basis] object DoubleArray {
 final class DoubleArrayBuffer extends Buffer[Any, Double] {
   override type State = DoubleArray
   
-  private[this] var array: DoubleArray = DoubleArray.empty
+  private[this] var array: scala.Array[Double] = DoubleArray.empty.array
   
   private[this] var aliased: Boolean = true
   
@@ -45,9 +77,15 @@ final class DoubleArrayBuffer extends Buffer[Any, Double] {
     n + 1
   }
   
+  private[this] def resize(size: Int) {
+    val newArray = new scala.Array[Double](size)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
+    array = newArray
+  }
+  
   private[this] def prepare(size: Int) {
     if (aliased || size > array.length) {
-      array = array.copy(expand(16, size))
+      resize(expand(16, size))
       aliased = false
     }
   }
@@ -61,20 +99,20 @@ final class DoubleArrayBuffer extends Buffer[Any, Double] {
   
   override def expect(count: Int): this.type = {
     if (length + count > array.length) {
-      array = array.copy(length + count)
+      resize(length + count)
       aliased = false
     }
     this
   }
   
   override def state: DoubleArray = {
-    if (length != array.length) array = array.copy(length)
+    if (length != array.length) resize(length)
     aliased = true
-    array
+    new DoubleArray(array)
   }
   
   override def clear() {
-    array = DoubleArray.empty
+    array = DoubleArray.empty.array
     aliased = true
     length = 0
   }

@@ -23,7 +23,7 @@ trait Array[+A] extends Any with Seq[A] {
   /** Returns the number of elements in this $collection. */
   def length: Int
   
-  /** Returns an indexed element of this $collection. */
+  /** Returns the element at `index`. */
   def apply(index: Int): A
   
   override def iterator: Iterator[A] =

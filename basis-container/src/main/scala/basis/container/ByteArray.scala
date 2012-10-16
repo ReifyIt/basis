@@ -14,12 +14,43 @@ class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
   
   override def apply(index: Int): Byte = array(index)
   
-  private[basis] def update(index: Int, value: Byte): Unit =
-    array(index) = value
+  /** Returns a copy of this array with a new `value` at `index`. */
+  def update(index: Int, value: Byte): ByteArray = {
+    val newArray = array.clone
+    newArray(index) = value
+    new ByteArray(newArray)
+  }
   
-  private[basis] def copy(length: Int): ByteArray = {
-    val newArray = new scala.Array[Byte](length)
-    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min length)
+  /** Returns a copy of this array with a new `value` inserted at `index`. */
+  def insert(index: Int, value: Byte): ByteArray = {
+    val newArray = new scala.Array[Byte](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    newArray(index) = value
+    java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
+    new ByteArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `index` removed. */
+  def remove(index: Int): ByteArray = {
+    val newArray = new scala.Array[Byte](array.length - 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
+    new ByteArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` appended. */
+  def :+ (value: Byte): ByteArray = {
+    val newArray = new scala.Array[Byte](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
+    newArray(newArray.length) = value
+    new ByteArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` prepended. */
+  def +: (value: Byte): ByteArray = {
+    val newArray = new scala.Array[Byte](array.length + 1)
+    newArray(0) = value
+    java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new ByteArray(newArray)
   }
 }
@@ -34,7 +65,7 @@ private[basis] object ByteArray {
 final class ByteArrayBuffer extends Buffer[Any, Byte] {
   override type State = ByteArray
   
-  private[this] var array: ByteArray = ByteArray.empty
+  private[this] var array: scala.Array[Byte] = ByteArray.empty.array
   
   private[this] var aliased: Boolean = true
   
@@ -46,9 +77,15 @@ final class ByteArrayBuffer extends Buffer[Any, Byte] {
     n + 1
   }
   
+  private[this] def resize(size: Int) {
+    val newArray = new scala.Array[Byte](size)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
+    array = newArray
+  }
+  
   private[this] def prepare(size: Int) {
     if (aliased || size > array.length) {
-      array = array.copy(expand(16, size))
+      resize(expand(16, size))
       aliased = false
     }
   }
@@ -62,20 +99,20 @@ final class ByteArrayBuffer extends Buffer[Any, Byte] {
   
   override def expect(count: Int): this.type = {
     if (length + count > array.length) {
-      array = array.copy(length + count)
+      resize(length + count)
       aliased = false
     }
     this
   }
   
   override def state: ByteArray = {
-    if (length != array.length) array = array.copy(length)
+    if (length != array.length) resize(length)
     aliased = true
-    array
+    new ByteArray(array)
   }
   
   override def clear() {
-    array = ByteArray.empty
+    array = ByteArray.empty.array
     aliased = true
     length = 0
   }

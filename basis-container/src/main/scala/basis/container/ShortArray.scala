@@ -14,12 +14,43 @@ class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short]
   
   override def apply(index: Int): Short = array(index)
   
-  private[basis] def update(index: Int, value: Short): Unit =
-    array(index) = value
+  /** Returns a copy of this array with a new `value` at `index`. */
+  def update(index: Int, value: Short): ShortArray = {
+    val newArray = array.clone
+    newArray(index) = value
+    new ShortArray(newArray)
+  }
   
-  private[basis] def copy(length: Int): ShortArray = {
-    val newArray = new scala.Array[Short](length)
-    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min length)
+  /** Returns a copy of this array with a new `value` inserted at `index`. */
+  def insert(index: Int, value: Short): ShortArray = {
+    val newArray = new scala.Array[Short](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    newArray(index) = value
+    java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
+    new ShortArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `index` removed. */
+  def remove(index: Int): ShortArray = {
+    val newArray = new scala.Array[Short](array.length - 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
+    new ShortArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` appended. */
+  def :+ (value: Short): ShortArray = {
+    val newArray = new scala.Array[Short](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
+    newArray(newArray.length) = value
+    new ShortArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` prepended. */
+  def +: (value: Short): ShortArray = {
+    val newArray = new scala.Array[Short](array.length + 1)
+    newArray(0) = value
+    java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new ShortArray(newArray)
   }
 }
@@ -34,7 +65,7 @@ private[basis] object ShortArray {
 final class ShortArrayBuffer extends Buffer[Any, Short] {
   override type State = ShortArray
   
-  private[this] var array: ShortArray = ShortArray.empty
+  private[this] var array: scala.Array[Short] = ShortArray.empty.array
   
   private[this] var aliased: Boolean = true
   
@@ -46,9 +77,15 @@ final class ShortArrayBuffer extends Buffer[Any, Short] {
     n + 1
   }
   
+  private[this] def resize(size: Int) {
+    val newArray = new scala.Array[Short](size)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
+    array = newArray
+  }
+  
   private[this] def prepare(size: Int) {
     if (aliased || size > array.length) {
-      array = array.copy(expand(16, size))
+      resize(expand(16, size))
       aliased = false
     }
   }
@@ -62,20 +99,20 @@ final class ShortArrayBuffer extends Buffer[Any, Short] {
   
   override def expect(count: Int): this.type = {
     if (length + count > array.length) {
-      array = array.copy(length + count)
+      resize(length + count)
       aliased = false
     }
     this
   }
   
   override def state: ShortArray = {
-    if (length != array.length) array = array.copy(length)
+    if (length != array.length) resize(length)
     aliased = true
-    array
+    new ShortArray(array)
   }
   
   override def clear() {
-    array = ShortArray.empty
+    array = ShortArray.empty.array
     aliased = true
     length = 0
   }

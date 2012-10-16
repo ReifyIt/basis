@@ -14,11 +14,43 @@ class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float]
   
   override def apply(index: Int): Float = array(index)
   
-  private[basis] def update(index: Int, value: Float): Unit = array(index) = value
+  /** Returns a copy of this array with a new `value` at `index`. */
+  def update(index: Int, value: Float): FloatArray = {
+    val newArray = array.clone
+    newArray(index) = value
+    new FloatArray(newArray)
+  }
   
-  private[basis] def copy(length: Int): FloatArray = {
-    val newArray = new scala.Array[Float](length)
-    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min length)
+  /** Returns a copy of this array with a new `value` inserted at `index`. */
+  def insert(index: Int, value: Float): FloatArray = {
+    val newArray = new scala.Array[Float](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    newArray(index) = value
+    java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
+    new FloatArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `index` removed. */
+  def remove(index: Int): FloatArray = {
+    val newArray = new scala.Array[Float](array.length - 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
+    new FloatArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` appended. */
+  def :+ (value: Float): FloatArray = {
+    val newArray = new scala.Array[Float](array.length + 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
+    newArray(newArray.length) = value
+    new FloatArray(newArray)
+  }
+  
+  /** Returns a copy of this array with `value` prepended. */
+  def +: (value: Float): FloatArray = {
+    val newArray = new scala.Array[Float](array.length + 1)
+    newArray(0) = value
+    java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new FloatArray(newArray)
   }
 }
@@ -33,7 +65,7 @@ private[basis] object FloatArray {
 final class FloatArrayBuffer extends Buffer[Any, Float] {
   override type State = FloatArray
   
-  private[this] var array: FloatArray = FloatArray.empty
+  private[this] var array: scala.Array[Float] = FloatArray.empty.array
   
   private[this] var aliased: Boolean = true
   
@@ -45,9 +77,15 @@ final class FloatArrayBuffer extends Buffer[Any, Float] {
     n + 1
   }
   
+  private[this] def resize(size: Int) {
+    val newArray = new scala.Array[Float](size)
+    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
+    array = newArray
+  }
+  
   private[this] def prepare(size: Int) {
     if (aliased || size > array.length) {
-      array = array.copy(expand(16, size))
+      resize(expand(16, size))
       aliased = false
     }
   }
@@ -61,20 +99,20 @@ final class FloatArrayBuffer extends Buffer[Any, Float] {
   
   override def expect(count: Int): this.type = {
     if (length + count > array.length) {
-      array = array.copy(length + count)
+      resize(length + count)
       aliased = false
     }
     this
   }
   
   override def state: FloatArray = {
-    if (length != array.length) array = array.copy(length)
+    if (length != array.length) resize(length)
     aliased = true
-    array
+    new FloatArray(array)
   }
   
   override def clear() {
-    array = FloatArray.empty
+    array = FloatArray.empty.array
     aliased = true
     length = 0
   }
