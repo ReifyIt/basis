@@ -31,6 +31,16 @@ final class HashSet[A] private
   override def - (element: A): HashSet[A] =
     remove(element, hash(element))
   
+  def size: Int = {
+    var t: Int = 0
+    val iter = iterator
+    while (!iter.isEmpty) {
+      t += 1
+      iter.step()
+    }
+    t
+  }
+  
   /** Returns `true` if this set contains no elements. */
   def isEmpty: Boolean = slots.length == 0
   
