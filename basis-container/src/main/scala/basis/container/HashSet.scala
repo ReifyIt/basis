@@ -287,50 +287,64 @@ private[basis] final class HashSetIterator[A](
   
   @tailrec override def isEmpty: Boolean = {
     if (child != null) child.asInstanceOf[Iterator[A]].isEmpty && { child = null; isEmpty }
-    else if (self.isTrie && index < 32) !self.hasNodeAt(1 << index) && { index += 1; isEmpty }
-    else self.isTrie || index >= self.arity
+    else if (self.isTrie) index >= 32 || (!self.hasNodeAt(1 << index) && { index += 1; isEmpty })
+    else index >= self.arity
   }
   
   @tailrec override def head: A = {
     if (child != null) {
       if (!child.isEmpty) child.head
-      else { child = null; head }
+      else {
+        child = null
+        head
+      }
     }
-    else if (self.isTrie && index < 32) {
-      val n = 1 << index
-      if (self.hasNodeAt(n)) {
-        val i = self.slotIndex(n)
-        if (self.hasItemAt(n)) self.slot(i).asInstanceOf[A]
+    else if (self.isTrie) {
+      if (index < 32) {
+        val n = 1 << index
+        if (self.hasItemAt(n)) self.slot(self.slotIndex(n)).asInstanceOf[A]
+        else if (self.hasNodeAt(n)) {
+          child = new HashSetIterator[A](self.slot(self.slotIndex(n)).asInstanceOf[HashSet[A]])
+          index += 1
+          head
+        }
         else {
-          child = new HashSetIterator[A](self.slot(i).asInstanceOf[HashSet[A]])
+          index += 1
           head
         }
       }
-      else { index += 1; head }
+      else Iterator.empty.head
     }
-    else if (!self.isTrie && index < self.arity) self.slot(index).asInstanceOf[A]
-    else throw new scala.NoSuchElementException("head of empty iterator")
+    else if (index < self.arity) self.slot(index).asInstanceOf[A]
+    else Iterator.empty.head
   }
   
   @tailrec override def step() {
     if (child != null) {
       if (!child.isEmpty) child.step()
-      else { child = null; step() }
+      else {
+        child = null
+        step()
+      }
     }
-    else if (self.isTrie && index < 32) {
-      val n = 1 << index
-      if (self.hasNodeAt(n)) {
-        val i = self.slotIndex(n)
+    else if (self.isTrie) {
+      if (index < 32) {
+        val n = 1 << index
         if (self.hasItemAt(n)) index += 1
+        else if (self.hasNodeAt(n)) {
+          child = new HashSetIterator[A](self.slot(self.slotIndex(n)).asInstanceOf[HashSet[A]])
+          index += 1
+          step()
+        }
         else {
-          val child = new HashSetIterator[A](self.slot(i).asInstanceOf[HashSet[A]])
+          index += 1
           step()
         }
       }
-      else { index += 1; step() }
+      else Iterator.empty.step()
     }
-    else if (!self.isTrie && index < self.arity) index += 1
-    else throw new java.lang.UnsupportedOperationException("empty iterator step")
+    else if (index < self.arity) index += 1
+    else Iterator.empty.step()
   }
   
   override def dup: HashSetIterator[A] = new HashSetIterator[A](self, child, index)

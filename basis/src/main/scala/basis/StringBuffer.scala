@@ -22,17 +22,17 @@ private[basis] final class StringBuffer extends CharBuffer {
   
   private[this] def resize(size: Int) {
     val newCodeUnits = new scala.Array[scala.Char](size)
-    if (codeUnits != null)
+    if (codeUnits != null) {
       java.lang.System.arraycopy(
         codeUnits, 0,
         newCodeUnits, 0,
         java.lang.Math.min(codeUnits.length, size))
+    }
     codeUnits = newCodeUnits
   }
   
   private[this] def prepare(size: Int) {
-    if (codeUnits == null || size > codeUnits.length)
-      resize(expand(16, size))
+    if (codeUnits == null || size > codeUnits.length) resize(expand(16, size))
   }
   
   override def += (char: Char): this.type = {
@@ -60,8 +60,7 @@ private[basis] final class StringBuffer extends CharBuffer {
   }
   
   override def expect(count: Int): this.type = {
-    if (codeUnits == null || size + count > codeUnits.length)
-      resize(size + count)
+    if (codeUnits == null || size + count > codeUnits.length) resize(size + count)
     this
   }
   
