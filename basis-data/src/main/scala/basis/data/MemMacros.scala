@@ -138,14 +138,14 @@ private[data] class MemMacros[C <: Context](val context: C) {
         case (Literal(Constant(offset: Long)), Literal(Constant(alignment: Long))) if base >= 0L =>
           val delta = align(base + offset, alignment) - base
           base += delta
-          Apply(Select(Ident(pointer), newTermName("$plus")),
+          Apply(Select(Ident(pointer), "$plus"),
                 Literal(Constant(delta)) :: Nil)
         case (offset, alignment) =>
           base = -1L
-          Apply(Select(Ident(pointer), newTermName("$plus")),
-                Apply(Select(Select(Select(Ident("basis"), newTermName("data")), nme.PACKAGE), newTermName("align")),
-                      Apply(Select(Apply(Select(Ident(pointer), newTermName("$minus")), address :: Nil),
-                                   newTermName("$plus")), offset :: Nil) :: alignment :: Nil) :: Nil)
+          Apply(Select(Ident(pointer), "$plus"),
+                Apply(Select(Select(Select(Ident("basis"), "data"), nme.PACKAGE), "align"),
+                      Apply(Select(Apply(Select(Ident(pointer), "$minus"), address :: Nil),
+                                   "$plus"), offset :: Nil) :: alignment :: Nil) :: Nil)
       }
       loads += Block(Assign(Ident(pointer), increment) :: Nil,
                      loadField(fields.tail.head, mem, Ident(pointer)))
@@ -167,14 +167,14 @@ private[data] class MemMacros[C <: Context](val context: C) {
         case (Literal(Constant(offset: Long)), Literal(Constant(alignment: Long))) if base >= 0L =>
           val delta = align(base + offset, alignment) - base
           base += delta
-          Apply(Select(Ident(pointer), newTermName("$plus")),
+          Apply(Select(Ident(pointer), "$plus"),
                 Literal(Constant(delta)) :: Nil)
         case (offset, alignment) =>
           base = -1L
-          Apply(Select(Ident(pointer), newTermName("$plus")),
-                Apply(Select(Select(Select(Ident("basis"), newTermName("data")), nme.PACKAGE), newTermName("align")),
-                      Apply(Select(Apply(Select(Ident(pointer), newTermName("$minus")), address :: Nil),
-                                   newTermName("$plus")), offset :: Nil) :: alignment :: Nil) :: Nil)
+          Apply(Select(Ident(pointer), "$plus"),
+                Apply(Select(Select(Select(Ident("basis"), "data"), nme.PACKAGE), "align"),
+                      Apply(Select(Apply(Select(Ident(pointer), "$minus"), address :: Nil),
+                                   "$plus"), offset :: Nil) :: alignment :: Nil) :: Nil)
       }
       stores += Block(Assign(Ident(pointer), increment) :: Nil,
                       storeField(fields.tail.head, mem, Ident(pointer), values.tail.head.tree))
@@ -188,64 +188,63 @@ private[data] class MemMacros[C <: Context](val context: C) {
   def loadField(field: Expr[ValType[_]], mem: Tree, address: Tree): Tree = {
     val fieldTpe = field.actualType
     if (fieldTpe =:= PackedByteTpe)
-      Apply(Select(mem, newTermName("loadByte")), address :: Nil)
+      Apply(Select(mem, "loadByte"), address :: Nil)
     else if (fieldTpe =:= PackedShortTpe)
-      Apply(Select(mem, newTermName("loadUnalignedShort")), address :: Nil)
+      Apply(Select(mem, "loadUnalignedShort"), address :: Nil)
     else if (fieldTpe =:= PackedIntTpe)
-      Apply(Select(mem, newTermName("loadUnalignedInt")), address :: Nil)
+      Apply(Select(mem, "loadUnalignedInt"), address :: Nil)
     else if (fieldTpe =:= PackedLongTpe)
-      Apply(Select(mem, newTermName("loadUnalignedLong")), address :: Nil)
+      Apply(Select(mem, "loadUnalignedLong"), address :: Nil)
     else if (fieldTpe =:= PackedFloatTpe)
-      Apply(Select(mem, newTermName("loadUnalignedFloat")), address :: Nil)
+      Apply(Select(mem, "loadUnalignedFloat"), address :: Nil)
     else if (fieldTpe =:= PackedDoubleTpe)
-      Apply(Select(mem, newTermName("loadUnalignedDouble")), address :: Nil)
+      Apply(Select(mem, "loadUnalignedDouble"), address :: Nil)
     else if (fieldTpe =:= PackedBooleanTpe)
-      Apply(Select(Apply(Select(mem, newTermName("loadByte")), address :: Nil),
-                   newTermName("$eq$eq")),
+      Apply(Select(Apply(Select(mem, "loadByte"), address :: Nil), "$eq$eq"),
             Literal(Constant(0)) :: Nil)
     else if (fieldTpe =:= PaddedShortTpe)
-      Apply(Select(mem, newTermName("loadShort")), address :: Nil)
+      Apply(Select(mem, "loadShort"), address :: Nil)
     else if (fieldTpe =:= PaddedIntTpe)
-      Apply(Select(mem, newTermName("loadInt")), address :: Nil)
+      Apply(Select(mem, "loadInt"), address :: Nil)
     else if (fieldTpe =:= PaddedLongTpe)
-      Apply(Select(mem, newTermName("loadLong")), address :: Nil)
+      Apply(Select(mem, "loadLong"), address :: Nil)
     else if (fieldTpe =:= PaddedFloatTpe)
-      Apply(Select(mem, newTermName("loadFloat")), address :: Nil)
+      Apply(Select(mem, "loadFloat"), address :: Nil)
     else if (fieldTpe =:= PaddedDoubleTpe)
-      Apply(Select(mem, newTermName("loadDouble")), address :: Nil)
+      Apply(Select(mem, "loadDouble"), address :: Nil)
     else
-      Apply(Select(field.tree, newTermName("load")), mem :: address :: Nil)
+      Apply(Select(field.tree, "load"), mem :: address :: Nil)
   }
   
   def storeField(field: Expr[ValType[_]], mem: Tree, address: Tree, value: Tree): Tree = {
     val fieldTpe = field.actualType
     if (fieldTpe =:= PackedByteTpe)
-      Apply(Select(mem, newTermName("storeByte")), address :: value :: Nil)
+      Apply(Select(mem, "storeByte"), address :: value :: Nil)
     else if (fieldTpe =:= PackedShortTpe)
-      Apply(Select(mem, newTermName("storeUnalignedShort")), address :: value :: Nil)
+      Apply(Select(mem, "storeUnalignedShort"), address :: value :: Nil)
     else if (fieldTpe =:= PackedIntTpe)
-      Apply(Select(mem, newTermName("storeUnalignedInt")), address :: value :: Nil)
+      Apply(Select(mem, "storeUnalignedInt"), address :: value :: Nil)
     else if (fieldTpe =:= PackedLongTpe)
-      Apply(Select(mem, newTermName("storeUnalignedLong")), address :: value :: Nil)
+      Apply(Select(mem, "storeUnalignedLong"), address :: value :: Nil)
     else if (fieldTpe =:= PackedFloatTpe)
-      Apply(Select(mem, newTermName("storeUnalignedFloat")), address :: value :: Nil)
+      Apply(Select(mem, "storeUnalignedFloat"), address :: value :: Nil)
     else if (fieldTpe =:= PackedDoubleTpe)
-      Apply(Select(mem, newTermName("storeUnalignedDouble")), address :: value :: Nil)
+      Apply(Select(mem, "storeUnalignedDouble"), address :: value :: Nil)
     else if (fieldTpe =:= PackedBooleanTpe)
-      Apply(Select(mem, newTermName("storeByte")),
+      Apply(Select(mem, "storeByte"),
             address :: If(value, Literal(Constant(0.toByte)), Literal(Constant(-1.toByte))) :: Nil)
     else if (fieldTpe =:= PaddedShortTpe)
-      Apply(Select(mem, newTermName("storeShort")), address :: value :: Nil)
+      Apply(Select(mem, "storeShort"), address :: value :: Nil)
     else if (fieldTpe =:= PaddedIntTpe)
-      Apply(Select(mem, newTermName("storeInt")), address :: value :: Nil)
+      Apply(Select(mem, "storeInt"), address :: value :: Nil)
     else if (fieldTpe =:= PaddedLongTpe)
-      Apply(Select(mem, newTermName("storeLong")), address :: value :: Nil)
+      Apply(Select(mem, "storeLong"), address :: value :: Nil)
     else if (fieldTpe =:= PaddedFloatTpe)
-      Apply(Select(mem, newTermName("storeFloat")), address :: value :: Nil)
+      Apply(Select(mem, "storeFloat"), address :: value :: Nil)
     else if (fieldTpe =:= PaddedDoubleTpe)
-      Apply(Select(mem, newTermName("storeDouble")), address :: value :: Nil)
+      Apply(Select(mem, "storeDouble"), address :: value :: Nil)
     else
-      Apply(Select(field.tree, newTermName("store")), mem :: address :: value :: Nil)
+      Apply(Select(field.tree, "store"), mem :: address :: value :: Nil)
   }
   
   def alignOf(field: Expr[ValType[_]]): Tree = {
@@ -267,7 +266,7 @@ private[data] class MemMacros[C <: Context](val context: C) {
              fieldTpe =:= PaddedDoubleTpe)
       Literal(Constant(8L))
     else
-      Select(field.tree, newTermName("alignment"))
+      Select(field.tree, "alignment")
   }
   
   def sizeOf(field: Expr[ValType[_]]): Tree = {
@@ -289,6 +288,6 @@ private[data] class MemMacros[C <: Context](val context: C) {
              fieldTpe =:= PaddedDoubleTpe)
       Literal(Constant(8L))
     else
-      Select(field.tree, newTermName("size"))
+      Select(field.tree, "size")
   }
 }

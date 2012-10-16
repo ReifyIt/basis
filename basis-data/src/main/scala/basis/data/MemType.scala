@@ -35,7 +35,7 @@ final class RefType[T] extends MemType[T] {
 /** A factory for reference types.  */
 object RefType {
   private[this] val Reference = new RefType[Nothing]
-  /** Returns a reference type. */
+  
   implicit def apply[T]: RefType[T] = Reference.asInstanceOf[RefType[T]]
 }
 
