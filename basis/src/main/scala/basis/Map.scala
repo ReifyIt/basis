@@ -13,10 +13,22 @@ package basis
   * 
   * @define collection  map
   */
-trait Map[A, +Z] extends Any with Container[(A, Z)] {
-  override type Self <: Map[A, Z]
+trait Map[A, +T] extends Any with Container[(A, T)] {
+  override type Self <: Map[A, T]
   
-  override def iterator: Iterator[(A, Z)]
+  override def iterator: Iterator[(A, T)]
   
-  def get(key: A): Option[Z]
+  def size: Int
+  
+  def isEmpty: Boolean
+  
+  def contains(key: A): Boolean
+  
+  def apply(key: A): T
+  
+  def get(key: A): Option[T]
+  
+  def + [U >: T](key: A, value: U): Map[A, U]
+  
+  def - (key: A): Map[A, T]
 }
