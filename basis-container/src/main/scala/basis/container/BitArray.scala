@@ -13,18 +13,74 @@ class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
   override def length: Int = words(0)
   
   override def apply(index: Int): Boolean = {
-    if (index < 0 || index >= length) throw new java.lang.IndexOutOfBoundsException(index.toString)
-    ((words(1 + (index >> 5)) >>> (index & 0x1F)) & 1) == 1
+    if (index < 0 || index >= length)
+      throw new java.lang.IndexOutOfBoundsException(index.toString)
+    ((words(1 + (index >> 5)) >>> (31 - (index & 0x1F))) & 1) == 1
   }
   
-  /** Returns a copy of this array with a new `value` at `index`. */
-  def update(index: Int, value: Boolean): BitArray = {
+  /** Returns a copy of this array with a new `bit` at `index`. */
+  def update(index: Int, bit: Boolean): BitArray = {
     val newWords = words.clone
-    val mask = 1 << (index & 0x1F)
-    if (value) words(1 + (index >> 5)) |=  mask
-    else       words(1 + (index >> 5)) &= ~mask
+    val i = 1 + (index >> 5)
+    val mask = 1 << (31 - (index & 0x1F))
+    if (bit) newWords(i) |=  mask
+    else     newWords(i) &= ~mask
     new BitArray(newWords)
   }
+  
+  /** Returns a copy of this array with a new `bit` inserted at `index`. */
+  def insert(index: Int, bit: Boolean): BitArray = {
+    if (index < 0 || index > length)
+      throw new java.lang.IllegalArgumentException(index.toString)
+    val newWords = new scala.Array[Int](1 + (((length + 1 + 31) & ~31) >> 5))
+    newWords(0) = length + 1
+    java.lang.System.arraycopy(words, 1, newWords, 1, index >> 5)
+    var i = 1 + (index >> 5)
+    val l = 0xFFFFFFFF >>> (index & 0x1F)
+    val h = ~l
+    val b = (if (bit) 1 else 0) << (31 - (index & 0x1F))
+    var w = if (i < words.length) words(i) else 0
+    newWords(i) = (w & h) | b | ((w & l) >>> 1)
+    var t = w & 1
+    i += 1
+    while (i < words.length) {
+      w = words(i)
+      newWords(i) = (t << 31) | (w >>> 1)
+      t = w & 1
+      i += 1
+    }
+    if (i < newWords.length) newWords(i) = t << 31
+    new BitArray(newWords)
+  }
+  
+  /** Returns a copy of this array with the bit at `index` removed. */
+  def remove(index: Int): BitArray = {
+    if (index < 0 || index >= length)
+      throw new java.lang.IndexOutOfBoundsException(index.toString)
+    val newWords = new scala.Array[Int](1 + (((length - 1 + 31) & ~31) >> 5))
+    newWords(0) = length - 1
+    java.lang.System.arraycopy(words, 1, newWords, 1, index >> 5)
+    var i = 1 + (index >> 5)
+    val l = 0xFFFFFFFF >>> (index & 0x1F)
+    val h = ~l
+    var w = words(i)
+    if (i < newWords.length) newWords(i) = (w & h) | ((w & (l >>> 1)) << 1)
+    i += 1
+    while (i < newWords.length) {
+      w = words(i)
+      newWords(i - 1) |= w >>> 31
+      newWords(i) = w << 1
+      i += 1
+    }
+    if (i < words.length) newWords(i - 1) |= words(i) >>> 31
+    new BitArray(newWords)
+  }
+  
+  /** Returns a copy of this array with `bit` appended. */
+  def :+ (bit: Boolean): BitArray = insert(length, bit)
+  
+  /** Returns a copy of this array with `bit` prepended. */
+  def +: (bit: Boolean): BitArray = insert(0, bit)
 }
 
 private[basis] object BitArray {
@@ -74,7 +130,7 @@ final class BitArrayBuffer extends Buffer[Any, Boolean] {
   
   override def += (value: Boolean): this.type = {
     prepare(length + 1)
-    val mask = 1 << (length & 0x1F)
+    val mask = 1 << (31 - (length & 0x1F))
     if (value) words(1 + (length >> 5)) |=  mask
     //else     words(1 + (length >> 5)) &= ~mask
     length += 1
