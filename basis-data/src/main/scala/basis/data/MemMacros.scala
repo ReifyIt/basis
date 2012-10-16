@@ -7,7 +7,6 @@
 
 package basis.data
 
-import scala._
 import scala.reflect.macros.Context
 
 private[data] object MemMacros {

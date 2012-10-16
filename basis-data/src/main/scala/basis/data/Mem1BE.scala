@@ -7,14 +7,12 @@
 
 package basis.data
 
-import scala._
-
 /** Big-endian memory backed by a `Byte` array. */
 class Mem1BE(val words: scala.Array[Byte]) extends AnyVal with MemBE {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
-  @inline override def size: Long = words.length.toLong
+  override def size: Long = words.length.toLong
   
   override def unit: Int = 1
   
@@ -27,10 +25,10 @@ class Mem1BE(val words: scala.Array[Byte]) extends AnyVal with MemBE {
     new Mem1BE(words)
   }
   
-  @inline override def loadByte(address: Long): Byte =
+  override def loadByte(address: Long): Byte =
     words(address.toInt)
   
-  @inline override def storeByte(address: Long, value: Byte): Unit =
+  override def storeByte(address: Long, value: Byte): Unit =
     words(address.toInt) = value
   
   override def loadShort(address: Long): Short =
@@ -133,7 +131,7 @@ class Mem1BE(val words: scala.Array[Byte]) extends AnyVal with MemBE {
   override def clear(fromAddress: Long, untilAddress: Long): Unit =
     java.util.Arrays.fill(words, fromAddress.toInt, untilAddress.toInt, 0.toByte)
   
-  @inline def toLE: Mem1LE = new Mem1LE(words)
+  def toLE: Mem1LE = new Mem1LE(words)
   
   override def toString: java.lang.String = "Mem1BE"+"("+ size +")"
 }

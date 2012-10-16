@@ -7,14 +7,12 @@
 
 package basis.data
 
-import scala._
-
 /** Little-endian memory backed by a `Short` array. */
 class Mem2LE(val words: scala.Array[Short]) extends AnyVal with MemLE {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
-  @inline override def size: Long = words.length.toLong << 1
+  override def size: Long = words.length.toLong << 1
   
   override def unit: Int = 2
   
@@ -185,7 +183,7 @@ class Mem2LE(val words: scala.Array[Short]) extends AnyVal with MemLE {
     }
   }
   
-  @inline def toBE: Mem2BE = new Mem2BE(words)
+  def toBE: Mem2BE = new Mem2BE(words)
   
   override def toString: java.lang.String = "Mem2LE"+"("+ size +")"
 }

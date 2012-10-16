@@ -43,7 +43,7 @@ private[basis] object LongMacros {
     c.Expr(Apply(Select(Long, "signum"), self :: Nil))(WeakTypeTag.Int)
   }
   
-  def bitCount(c: Context): c.Expr[Int] = {
+  def countSetBits(c: Context): c.Expr[Int] = {
     import c.universe._
     val Apply(_, self :: Nil) = c.prefix.tree
     val Long = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long")

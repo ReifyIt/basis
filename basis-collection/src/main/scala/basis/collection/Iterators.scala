@@ -10,17 +10,7 @@ package basis.collection
 import basis._
 
 private[basis] object Iterators {
-  object Empty extends Iterator[Nothing] {
-    override def isEmpty: Boolean = true
-    
-    override def head: Nothing =
-      throw new scala.NoSuchElementException("head of empty iterator")
-    
-    override def step(): Unit =
-      throw new java.lang.UnsupportedOperationException("empty iterator step")
-    
-    override def dup: Empty.type = this
-  }
+  import scala.annotation.tailrec
   
   final class Collect[-A, +B](self: Iterator[A], q: scala.PartialFunction[A, B]) extends Iterator[B] {
     @tailrec override def isEmpty: Boolean =
@@ -51,7 +41,7 @@ private[basis] object Iterators {
       (outer: Iterator[A], f: A => Iterator[B], private[this] var inner: Iterator[B])
     extends Iterator[B] {
     
-    def this(outer: Iterator[A], f: A => Iterator[B]) = this(outer, f, Empty)
+    def this(outer: Iterator[A], f: A => Iterator[B]) = this(outer, f, Iterator.empty)
     
     @tailrec override def isEmpty: Boolean =
       inner.isEmpty && (outer.isEmpty || { inner = f(outer.head); outer.step(); isEmpty })
@@ -59,13 +49,13 @@ private[basis] object Iterators {
     @tailrec override def head: B = {
       if (!inner.isEmpty) inner.head
       else if (!outer.isEmpty) { inner = f(outer.head); outer.step(); head }
-      else Empty.head
+      else Iterator.empty.head
     }
     
     @tailrec override def step() {
       if (!inner.isEmpty) inner.step()
       else if (!outer.isEmpty) { inner = f(outer.head); outer.step(); step() }
-      else Empty.step()
+      else Iterator.empty.step()
     }
     
     override def dup: Iterator[B] = new FlatMap[A, B](outer.dup, f, inner.dup)
@@ -75,7 +65,7 @@ private[basis] object Iterators {
       (outer: Iterator[A], f: A => Container[B], private[this] var inner: Iterator[B])
     extends Iterator[B] {
     
-    def this(outer: Iterator[A], f: A => Container[B]) = this(outer, f, Empty)
+    def this(outer: Iterator[A], f: A => Container[B]) = this(outer, f, Iterator.empty)
     
     @tailrec override def isEmpty: Boolean =
       inner.isEmpty && (outer.isEmpty || { inner = f(outer.head).iterator; outer.step(); isEmpty })
@@ -83,13 +73,13 @@ private[basis] object Iterators {
     @tailrec override def head: B = {
       if (!inner.isEmpty) inner.head
       else if (!outer.isEmpty) { inner = f(outer.head).iterator; outer.step(); head }
-      else Empty.head
+      else Iterator.empty.head
     }
     
     @tailrec override def step() {
       if (!inner.isEmpty) inner.step()
       else if (!outer.isEmpty) { inner = f(outer.head).iterator; outer.step(); step() }
-      else Empty.step()
+      else Iterator.empty.step()
     }
     
     override def dup: Iterator[B] = new FlatMapContainer[A, B](outer.dup, f, inner.dup)
@@ -152,7 +142,7 @@ private[basis] object Iterators {
         if (p(x)) x
         else { iterating = false; head }
       }
-      else Empty.head
+      else Iterator.empty.head
     }
     
     @tailrec override def step() {
@@ -160,7 +150,7 @@ private[basis] object Iterators {
         if (p(self.head)) self.step()
         else { iterating = false; step() }
       }
-      else Empty.step()
+      else Iterator.empty.step()
     }
     
     override def dup: Iterator[A] = new TakeWhile[A](self.dup, p, iterating)
@@ -199,12 +189,12 @@ private[basis] object Iterators {
     
     override def head: A = {
       if (index < upper) self.head
-      else Empty.head
+      else Iterator.empty.head
     }
     
     override def step() {
       if (index < upper) { self.step(); index += 1 }
-      else Empty.step()
+      else Iterator.empty.step()
     }
     
     override def dup: Iterator[A] = new Take[A](self.dup, upper, index)
@@ -223,13 +213,13 @@ private[basis] object Iterators {
     @tailrec override def head: A = {
       if (index < lower) { self.step(); index += 1; head }
       else if (index < upper) self.head
-      else Empty.head
+      else Iterator.empty.head
     }
     
     @tailrec override def step() {
       if (index < lower) { self.step(); index += 1; step() }
       else if (index < upper) self.step()
-      else Empty.step()
+      else Iterator.empty.step()
     }
     
     override def dup: Iterator[A] = new Slice[A](self.dup, lower, upper, index)

@@ -20,13 +20,15 @@ trait Enumerator[+A] extends Any {
   type Self <: Enumerator[A]
   
   /** Applies a function to each element of this $collection. The protected
-    * status of `foreach` allows optimized static implementations to override
-    * this virtual method. To force a virtual `foreach` call, invoke the
-    * [[traverse]] function.
+    * status of `foreach` allows optimized static implementations to shadow
+    * this virtual method. To force a virtual `foreach` call, invoke
+    * [[Enumerator.traverse]].
     */
   protected def foreach[U](f: A => U): Unit
 }
 
-private[basis] object Enumerator {
+object Enumerator {
+  /** Applies a function to each of an enumerator's elements by invoking the
+    * enumerator's protected `foreach` method. */
   def traverse[A, U](self: Enumerator[A])(f: A => U): Unit = self.foreach[U](f)
 }

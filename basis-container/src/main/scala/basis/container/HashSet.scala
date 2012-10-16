@@ -8,13 +8,14 @@
 package basis.container
 
 import basis._
+import basis.collection._
 
 final class HashSet[A] private
     (nodeMap: Int, itemMap: Int, slots: scala.Array[AnyRef])
-    (implicit hasher: Hash[A])
+    (implicit A: Hash[A])
   extends Set[A] {
   
-  import hasher._
+  import A._
   
   override type Self = HashSet[A]
   
@@ -34,34 +35,34 @@ final class HashSet[A] private
   def isEmpty: Boolean = slots.length == 0
   
   /** Returns `true` if this node represents a trie (not a collision bucket). */
-  private[container] def isTrie: Boolean = nodeMap != 0
+  private[basis] def isTrie: Boolean = nodeMap != 0
   
   /** Returns `true` if the nth trie slot contains an item or a subset. */
-  private[container] def hasNodeAt(n: Int): Boolean =
+  private[basis] def hasNodeAt(n: Int): Boolean =
     (nodeMap & n) != 0
   
   /** Returns `true` if the nth trie slot contains an item. */
-  private[container] def hasItemAt(n: Int): Boolean =
+  private[basis] def hasItemAt(n: Int): Boolean =
     (itemMap & n) != 0
   
   /** Returns 2 to the power of the low 5 bits of the right-shifted hash.
     * Yields an `Int` with a single set bit. */
-  private[container] def trieSlot(h: Int, k: Int): Int =
+  private[basis] def trieSlot(h: Int, k: Int): Int =
     1 << ((h >>> k) & 0x1F)
   
   /** Returns 2 to the power of the low 5 bits of the hash.
     * Yields an `Int` with a single set bit. */
-  private[container] def trieSlot(h: Int): Int =
+  private[basis] def trieSlot(h: Int): Int =
     1 << (h & 0x1F)
   
   /** Returns the hamming weight of the low n bits of the node map. This counts
     * the number of set bits in the node map lower than the nth bit. */
-  private[container] def slotIndex(n: Int): Int =
+  private[basis] def slotIndex(n: Int): Int =
     java.lang.Integer.bitCount(nodeMap & (n - 1))
   
-  private[container] def slot(i: Int): AnyRef = slots(i)
+  private[basis] def slot(i: Int): AnyRef = slots(i)
   
-  private[container] def arity: Int = slots.length
+  private[basis] def arity: Int = slots.length
   
   private def contains(item: A, h: Int): Boolean = {
     if (isEmpty) false
@@ -72,9 +73,8 @@ final class HashSet[A] private
   private[this] def trieContains(item: A, h: Int): Boolean = {
     val n = trieSlot(h)
     val i = slotIndex(n)
-    val node = slots(i)
-    if (hasItemAt(n)) equal(node.asInstanceOf[A], item)
-    else if (hasNodeAt(n)) node.asInstanceOf[HashSet[A]].contains(item, h >>> 5)
+    if (hasItemAt(n)) equal(slots(i).asInstanceOf[A], item)
+    else if (hasNodeAt(n)) slots(i).asInstanceOf[HashSet[A]].contains(item, h >>> 5)
     else false
   }
   
@@ -267,9 +267,21 @@ final class HashSet[A] private
   }
 }
 
-private[container] final class HashSetIterator[A]
-    (self: HashSet[A], private[this] var child: HashSetIterator[A], private[this] var index: Int)
+object HashSet extends ContainerFactory[HashSet] {
+  def empty[A : Hash]: HashSet[A] = new HashSet[A](0, 0, new scala.Array[AnyRef](0))
+  
+  implicit def Buffer[A : Hash]: HashSetBuffer[A] = new HashSetBuffer[A]
+  
+  override protected def stringPrefix: String = "HashSet"
+}
+
+private[basis] final class HashSetIterator[A](
+    self: HashSet[A],
+    private[this] var child: HashSetIterator[A],
+    private[this] var index: Int)
   extends Iterator[A] {
+  
+  import scala.annotation.tailrec
   
   def this(self: HashSet[A]) = this(self, null, 0)
   
@@ -322,4 +334,21 @@ private[container] final class HashSetIterator[A]
   }
   
   override def dup: HashSetIterator[A] = new HashSetIterator[A](self, child, index)
+}
+
+final class HashSetBuffer[A](implicit A: Hash[A]) extends Buffer[Any, A] {
+  override type State = HashSet[A]
+  
+  private[this] var set: HashSet[A] = HashSet.empty[A]
+  
+  override def += (element: A): this.type = {
+    set += element
+    this
+  }
+  
+  override def expect(count: Int): this.type = this
+  
+  override def state: HashSet[A] = set
+  
+  override def clear(): Unit = set = HashSet.empty[A]
 }

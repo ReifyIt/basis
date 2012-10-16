@@ -9,4 +9,4 @@ package basis.collection
 
 import basis._
 
-final class MapOps[+Self, A, +Z](self: Map[A, Z])
+class MapOps[+Self, A, +Z](self: Map[A, Z])

@@ -7,6 +7,10 @@
 
 package basis
 
-trait Equal[-T] extends Any {
+trait Equal[-T] {
   def equal(x: T, y: T): Boolean
+}
+
+object Equal {
+  def apply[T](implicit T: Equal[T]): T.type = T
 }

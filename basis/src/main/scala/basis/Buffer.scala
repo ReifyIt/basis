@@ -12,18 +12,18 @@ package basis
   * @author Chris Sachs
   */
 trait Buffer[-Source, -A] {
-  /** The type of state maintained by the buffer. */
+  /** The type of state maintained by this buffer. */
   type State
   
-  /** Adds an element to the buffer. */
+  /** Adds an element to this buffer. */
   def += (x: A): this.type
   
-  /** Prepares the buffer to receive a certain number of elements. */
-  def expect(n: Int): this.type
+  /** Prepares this buffer to receive a certain number of elements. */
+  def expect(count: Int): this.type
   
-  /** Returns the current state of the buffer. */
-  def check: State
+  /** Returns the current state of this buffer. */
+  def state: State
   
-  /** Resets the buffer to its initial state. */
-  def clear(): scala.Unit
+  /** Resets this buffer to its initial state. */
+  def clear(): Unit
 }

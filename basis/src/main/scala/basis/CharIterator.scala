@@ -7,7 +7,7 @@
 
 package basis
 
-/** A specialized iterator over characters.
+/** A specialized iterator over Unicode® characters.
   * 
   * @define collection  character iterator
   */

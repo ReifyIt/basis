@@ -25,3 +25,29 @@ trait Container[+A] extends Any with Collection[A] {
     while (!xs.isEmpty) { f(xs.head); xs.step() }
   }
 }
+
+object Container {
+  /* implicit */ def Show[A](implicit A: Show[A]): Show[Container[A]] =
+    new ContainerShow[A]("Container")
+}
+
+private[basis] class ContainerShow[-A]
+    (name: String)(implicit A : Show[A])
+  extends Show[Container[A]] {
+  
+  override def show(xs: Container[A])(implicit buffer: CharBuffer) {
+    buffer.append(name)
+    buffer += '('
+    val iter = xs.iterator
+    if (!iter.isEmpty) {
+      A.show(iter.head)(buffer)
+      iter.step()
+      while (!iter.isEmpty) {
+        buffer += ',' += ' '
+        A.show(iter.head)(buffer)
+        iter.step()
+      }
+    }
+    buffer += ')'
+  }
+}

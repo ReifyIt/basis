@@ -25,12 +25,6 @@ package object collection {
   implicit def SeqOps[A](self: Seq[A]): SeqOps[self.Self, A] =
     new SeqOps[self.Self, A](self)
   
-  implicit def ListOps[A](self: List[A]): ListOps[self.Self, A] =
-    new ListOps[self.Self, A](self)
-  
-  implicit def ArrayOps[A](self: Array[A]): ArrayOps[self.Self, A] =
-    new ArrayOps[self.Self, A](self)
-  
   implicit def SetOps[A](self: Set[A]): SetOps[self.Self, A] =
     new SetOps[self.Self, A](self)
   

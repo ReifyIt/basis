@@ -32,3 +32,42 @@ trait Iterator[+A] extends Any with Enumerator[A] {
   protected override def foreach[U](f: A => U): Unit =
     while (!isEmpty) { f(head); step() }
 }
+
+object Iterator {
+  object empty extends Iterator[Nothing] {
+    override def isEmpty: Boolean = true
+    
+    override def head: Nothing =
+      throw new scala.NoSuchElementException("head of empty iterator")
+    
+    override def step(): Unit =
+      throw new java.lang.UnsupportedOperationException("empty iterator step")
+    
+    override def dup: Iterator.empty.type = this
+    
+    protected override def foreach[U](f: Nothing => U): Unit = ()
+  }
+  
+  implicit def Show[A : Show]: Show[Iterator[A]] = new IteratorShow[A]("Iterator")
+}
+
+private[basis] class IteratorShow[-A]
+    (name: String)(implicit A : Show[A])
+  extends Show[Iterator[A]] {
+  
+  override def show(xs: Iterator[A])(implicit buffer: CharBuffer) {
+    buffer.append(name)
+    buffer += '('
+    val iter = xs.dup
+    if (!iter.isEmpty) {
+      A.show(iter.head)(buffer)
+      iter.step()
+      while (!iter.isEmpty) {
+        buffer += ',' += ' '
+        A.show(iter.head)(buffer)
+        iter.step()
+      }
+    }
+    buffer += ')'
+  }
+}

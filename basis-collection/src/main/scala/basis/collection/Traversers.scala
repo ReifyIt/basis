@@ -10,12 +10,13 @@ package basis.collection
 import basis._
 
 private[basis] object Traversers {
+  import basis.Enumerator.traverse
   import scala.runtime.AbstractFunction1
   
   final class FoldLeft[-A, +B](z: B)(op: (B, A) => B) extends AbstractFunction1[A, Unit] {
     private[this] var r: B = z
     override def apply(x: A): Unit = r = op(r, x)
-    def check: B = r
+    def state: B = r
   }
 
   final class ReduceLeft[-A, +B >: A](op: (B, A) => B) extends AbstractFunction1[A, Unit] {
@@ -23,37 +24,37 @@ private[basis] object Traversers {
     private[this] var r: B = _
     override def apply(x: A): Unit = if (!e) { r = x; e = true } else r = op(r, x)
     def isDefined: Boolean = e
-    def check: B = r
+    def state: B = r
   }
 
   final class Find[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
     private[this] var r: Option[A] = None
     override def apply(x: A): Unit = if (p(x)) { r = Some(x); throw Break }
-    def check: Option[A] = r
+    def state: Option[A] = r
   }
 
   final class Forall[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
     private[this] var r: Boolean = true
     override def apply(x: A): Unit = if (!p(x)) { r = false; throw Break }
-    def check: Boolean = r
+    def state: Boolean = r
   }
 
   final class Exists[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
     private[this] var r: Boolean = false
     override def apply(x: A): Unit = if (p(x)) { r = true; throw Break }
-    def check: Boolean = r
+    def state: Boolean = r
   }
 
   final class Count[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
     private[this] var t: Int = 0
     override def apply(x: A): Unit = if (p(x)) t += 1
-    def check: Int = t
+    def state: Int = t
   }
 
   final class Select[-A, +B](q: scala.PartialFunction[A, B]) extends AbstractFunction1[A, Unit] {
     private[this] var r: Option[B] = None
     override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Some(q(x)); throw Break }
-    def check: Option[B] = r
+    def state: Option[B] = r
   }
 
   final class Collect[-A, +B, +U](q: scala.PartialFunction[A, B], f: B => U) extends AbstractFunction1[A, Unit] {
@@ -149,10 +150,5 @@ private[basis] object Traversers {
 
   final class AddInto[-A](buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {
     override def apply(x: A): Unit = buffer += x
-  }
-
-  final class AddString[-A](s: java.lang.StringBuilder, sep: String) extends AbstractFunction1[A, Unit] {
-    private[this] var e = true
-    override def apply(x: A): Unit = (if (e) { e = false; s } else s.append(sep)).append(x)
   }
 }

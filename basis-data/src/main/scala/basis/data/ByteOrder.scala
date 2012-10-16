@@ -7,8 +7,6 @@
 
 package basis.data
 
-import scala._
-
 /** The ordering of bytes in multi-byte words.
   * 
   * @author Chris Sachs

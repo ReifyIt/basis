@@ -7,11 +7,9 @@
 
 package basis.data
 
-import scala._
-
 /** `ByteBuffer` backed memory. */
 class MemBuf(val buffer: java.nio.ByteBuffer) extends AnyVal with Mem {
-  @inline override def size: Long = buffer.capacity.toLong
+  override def size: Long = buffer.capacity.toLong
   
   override def unit: Int = 1
   
@@ -31,70 +29,70 @@ class MemBuf(val buffer: java.nio.ByteBuffer) extends AnyVal with Mem {
     new MemBuf(dst)
   }
   
-  @inline override def loadByte(address: Long): Byte =
+  override def loadByte(address: Long): Byte =
     buffer.get(address.toInt)
   
-  @inline override def storeByte(address: Long, value: Byte): Unit =
+  override def storeByte(address: Long, value: Byte): Unit =
     buffer.put(address.toInt, value)
   
-  @inline override def loadShort(address: Long): Short =
+  override def loadShort(address: Long): Short =
     buffer.getShort(address.toInt & -2)
   
-  @inline override def storeShort(address: Long, value: Short): Unit =
+  override def storeShort(address: Long, value: Short): Unit =
     buffer.putShort(address.toInt & -2, value)
   
-  @inline override def loadInt(address: Long): Int =
+  override def loadInt(address: Long): Int =
     buffer.getInt(address.toInt & -4)
   
-  @inline override def storeInt(address: Long, value: Int): Unit =
+  override def storeInt(address: Long, value: Int): Unit =
     buffer.putInt(address.toInt & -4, value)
   
-  @inline override def loadLong(address: Long): Long =
+  override def loadLong(address: Long): Long =
     buffer.getLong(address.toInt & -8)
   
-  @inline override def storeLong(address: Long, value: Long): Unit =
+  override def storeLong(address: Long, value: Long): Unit =
     buffer.putLong(address.toInt & -8, value)
   
-  @inline override def loadFloat(address: Long): Float =
+  override def loadFloat(address: Long): Float =
     buffer.getFloat(address.toInt & -4)
   
-  @inline override def storeFloat(address: Long, value: Float): Unit =
+  override def storeFloat(address: Long, value: Float): Unit =
     buffer.putFloat(address.toInt & -4, value)
   
-  @inline override def loadDouble(address: Long): Double =
+  override def loadDouble(address: Long): Double =
     buffer.getDouble(address.toInt & -8)
   
-  @inline override def storeDouble(address: Long, value: Double): Unit =
+  override def storeDouble(address: Long, value: Double): Unit =
     buffer.putDouble(address.toInt & -8, value)
   
-  @inline override def loadUnalignedShort(address: Long): Short =
+  override def loadUnalignedShort(address: Long): Short =
     buffer.getShort(address.toInt)
   
-  @inline override def storeUnalignedShort(address: Long, value: Short): Unit =
+  override def storeUnalignedShort(address: Long, value: Short): Unit =
     buffer.putShort(address.toInt, value)
   
-  @inline override def loadUnalignedInt(address: Long): Int =
+  override def loadUnalignedInt(address: Long): Int =
     buffer.getInt(address.toInt)
   
-  @inline override def storeUnalignedInt(address: Long, value: Int): Unit =
+  override def storeUnalignedInt(address: Long, value: Int): Unit =
     buffer.putInt(address.toInt, value)
   
-  @inline override def loadUnalignedLong(address: Long): Long =
+  override def loadUnalignedLong(address: Long): Long =
     buffer.getLong(address.toInt)
   
-  @inline override def storeUnalignedLong(address: Long, value: Long): Unit =
+  override def storeUnalignedLong(address: Long, value: Long): Unit =
     buffer.putLong(address.toInt, value)
   
-  @inline override def loadUnalignedFloat(address: Long): Float =
+  override def loadUnalignedFloat(address: Long): Float =
     buffer.getFloat(address.toInt)
   
-  @inline override def storeUnalignedFloat(address: Long, value: Float): Unit =
+  override def storeUnalignedFloat(address: Long, value: Float): Unit =
     buffer.putFloat(address.toInt, value)
   
-  @inline override def loadUnalignedDouble(address: Long): Double =
+  override def loadUnalignedDouble(address: Long): Double =
     buffer.getDouble(address.toInt)
   
-  @inline override def storeUnalignedDouble(address: Long, value: Double): Unit =
+  override def storeUnalignedDouble(address: Long, value: Double): Unit =
     buffer.putDouble(address.toInt, value)
   
   override def move(fromAddress: Long, toAddress: Long, size: Long) {
@@ -130,12 +128,12 @@ class MemBuf(val buffer: java.nio.ByteBuffer) extends AnyVal with Mem {
     }
   }
   
-  @inline def toBE: MemBuf = {
+  def toBE: MemBuf = {
     if (buffer.order eq java.nio.ByteOrder.BIG_ENDIAN) this
     else new MemBuf(buffer.duplicate.order(java.nio.ByteOrder.BIG_ENDIAN))
   }
   
-  @inline def toLE: MemBuf = {
+  def toLE: MemBuf = {
     if (buffer.order eq java.nio.ByteOrder.LITTLE_ENDIAN) this
     else new MemBuf(buffer.duplicate.order(java.nio.ByteOrder.LITTLE_ENDIAN))
   }
@@ -152,7 +150,10 @@ object MemBuf extends Allocator with (Long => MemBuf) {
   
   override def apply(size: Long): MemBuf = {
     scala.Predef.require(0L <= size && size <= MaxSize)
-    new MemBuf(java.nio.ByteBuffer.allocateDirect(size.toInt))
+    new MemBuf(java.nio.ByteBuffer.allocateDirect(size.toInt).order(
+      if (NativeEndian eq BigEndian) java.nio.ByteOrder.BIG_ENDIAN
+      else java.nio.ByteOrder.LITTLE_ENDIAN
+    ))
   }
   
   def unapply(mem: MemBuf): Some[java.nio.ByteBuffer] = Some(mem.buffer)

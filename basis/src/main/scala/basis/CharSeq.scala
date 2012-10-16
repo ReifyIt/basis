@@ -5,22 +5,16 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.util
+package basis
 
-import basis._
-
-trait IntOps {
-  import scala.language.experimental.macros
+/** An iterable sequence of Unicode® characters.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  char sequence
+  */
+trait CharSeq extends Any with Seq[Char] {
+  override type Self <: CharSeq
   
-  def abs: Int = macro IntMacros.abs
-  
-  def max(that: Int): Int = macro IntMacros.max
-  
-  def min(that: Int): Int = macro IntMacros.min
-  
-  def bitCount: Int = macro IntMacros.bitCount
-  
-  def to(end: Int): Range = macro IntMacros.to
-  
-  def until(end: Int): Range = macro IntMacros.until
+  override def iterator: CharIterator
 }

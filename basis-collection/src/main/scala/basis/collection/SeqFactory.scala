@@ -5,14 +5,16 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collection
 
-package object util {
-  import scala.language.implicitConversions
+import basis._
+
+import scala.language.higherKinds
+
+trait SeqFactory[CC[X] <: Seq[X]] extends ContainerFactory[CC] {
+  import scala.language.experimental.macros
   
-  implicit def IntOps(value: Int): IntOps =
-    throw new java.lang.UnsupportedOperationException
+  implicit def Equal[A : Equal]: Equal[CC[A]] = new SeqEqual[A]
   
-  implicit def RangeOps(range: Range): RangeOps =
-    throw new java.lang.UnsupportedOperationException
+  implicit def Hash[A : Hash]: Hash[CC[A]] = new SeqHash[A]
 }

@@ -7,14 +7,14 @@
 
 package basis
 
-/** An iterable sequence of characters.
-  * 
-  * @author Chris Sachs
-  * 
-  * @define collection  string
-  */
-trait String extends Any with Seq[Char] {
-  override type Self <: String
+trait FloatOps extends Any {
+  import scala.language.experimental.macros
   
-  override def iterator: CharIterator
+  def abs: Float = macro FloatMacros.abs
+  
+  def min(that: Float): Float = macro FloatMacros.min
+  
+  def max(that: Float): Float = macro FloatMacros.max
+  
+  def toIntBits: Int = macro FloatMacros.toIntBits
 }

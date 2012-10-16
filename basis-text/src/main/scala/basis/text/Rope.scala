@@ -5,18 +5,16 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.text
 
-package object text extends ImplicitStringBuffers
+import basis._
 
-package text {
-  private[text] class LowPriorityImplicitStringBuffers {
-    implicit def String2Buffer: String2Buffer = new String2Buffer
-    
-    implicit def String4Buffer: String4Buffer = new String4Buffer
-  }
-  
-  private[text] class ImplicitStringBuffers extends LowPriorityImplicitStringBuffers {
-    implicit def String1Buffer: String1Buffer = new String1Buffer
-  }
+/** A sequence of Unicode® characters.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  rope
+  */
+trait Rope extends Any with CharSeq {
+  override type Self <: Rope
 }

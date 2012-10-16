@@ -5,32 +5,34 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis
 
-import basis._
-
-/** A buffer for 16-bit Unicode strings in the UTF-16 encoding form.
-  * Produces only well-formed code unit sequences. */
-final class String2Buffer extends Buffer[String2, Char] with CharBuffer {
-  override type State = String2
+private[basis] final class StringBuffer extends CharBuffer {
+  override type State = String
   
-  private[this] var string: String2 = String2.empty
-  
-  private[this] var aliased: Boolean = true
+  private[this] var codeUnits: scala.Array[scala.Char] = null
   
   private[this] var size: Int = 0
   
   private[this] def expand(base: Int, size: Int): Int = {
-    var n = scala.math.max(base, size) - 1
+    var n = java.lang.Math.max(base, size) - 1
     n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
     n + 1
   }
   
+  private[this] def resize(size: Int) {
+    val newCodeUnits = new scala.Array[scala.Char](size)
+    if (codeUnits != null)
+      java.lang.System.arraycopy(
+        codeUnits, 0,
+        newCodeUnits, 0,
+        java.lang.Math.min(codeUnits.length, size))
+    codeUnits = newCodeUnits
+  }
+  
   private[this] def prepare(size: Int) {
-    if (aliased || size > string.size) {
-      string = string.copy(expand(16, size))
-      aliased = false
-    }
+    if (codeUnits == null || size > codeUnits.length)
+      resize(expand(16, size))
   }
   
   override def += (char: Char): this.type = {
@@ -39,41 +41,37 @@ final class String2Buffer extends Buffer[String2, Char] with CharBuffer {
     if ((c >= 0x0000 && c <= 0xD7FF) ||
         (c >= 0xE000 && c <= 0xFFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF
       prepare(n + 1)
-      string.codeUnits(n) = c.toChar
+      codeUnits(n) = c.toChar
       size = n + 1
     }
     else if (c >= 0x10000 && c <= 0x10FFFF) { // U+10000..U+10FFFF
       prepare(n + 2)
       val u = c - 0x10000
-      string.codeUnits(n)     = (0xD800 | (u >>> 10)).toChar
-      string.codeUnits(n + 1) = (0xDC00 | (u & 0x3FF)).toChar
+      codeUnits(n)     = (0xD800 | (u >>> 10)).toChar
+      codeUnits(n + 1) = (0xDC00 | (u & 0x3FF)).toChar
       size = n + 2
     }
     else { // invalid code point
       prepare(n + 1)
-      string.codeUnits(n) = 0xFFFD.toChar
+      codeUnits(n) = 0xFFFD.toChar
       size = n + 1
     }
     this
   }
   
   override def expect(count: Int): this.type = {
-    if (size + count > string.size) {
-      string = string.copy(size + count)
-      aliased = false
-    }
+    if (codeUnits == null || size + count > codeUnits.length)
+      resize(size + count)
     this
   }
   
-  override def check: String2 = {
-    if (size != string.size) string = string.copy(size)
-    aliased = true
-    string
+  override def state: String = {
+    if (codeUnits == null || codeUnits.length == 0) ""
+    else new String(codeUnits, 0, size)
   }
   
   override def clear() {
-    string = String2.empty
-    aliased = true
+    codeUnits = null
     size = 0
   }
 }

@@ -43,7 +43,7 @@ private[basis] object IntMacros {
     c.Expr(Apply(Select(Integer, "signum"), self :: Nil))(WeakTypeTag.Int)
   }
   
-  def bitCount(c: Context): c.Expr[Int] = {
+  def countSetBits(c: Context): c.Expr[Int] = {
     import c.universe._
     val Apply(_, self :: Nil) = c.prefix.tree
     val Integer = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Integer")

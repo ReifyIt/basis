@@ -7,8 +7,6 @@
 
 package basis.data
 
-import scala._
-
 /** Big-endian memory. */
 trait MemBE extends Any with Mem {
   override def endian: BigEndian.type = BigEndian

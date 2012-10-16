@@ -15,25 +15,29 @@ object BasisBuild extends Build {
     id           = "all",
     base         = file("."),
     settings     = basicSettings,
-    dependencies = Seq(
-      Basis,
-      BasisCollection,
-      BasisContainer,
-      BasisData,
-      BasisText,
-      BasisUtil),
-    aggregate    = Seq(
-      Basis,
-      BasisCollection,
-      BasisContainer,
-      BasisData,
-      BasisText,
-      BasisUtil)
+    dependencies =
+      Seq(Basis,
+          BasisData,
+          BasisCollection,
+          BasisContainer,
+          BasisText),
+    aggregate    =
+      Seq(Basis,
+          BasisData,
+          BasisCollection,
+          BasisContainer,
+          BasisText)
   )
   
   lazy val Basis = Project(
     id           = "basis",
     base         = file("basis"),
+    settings     = commonSettings
+  )
+  
+  lazy val BasisData = Project(
+    id           = "basis-data",
+    base         = file("basis-data"),
     settings     = commonSettings
   )
   
@@ -48,25 +52,12 @@ object BasisBuild extends Build {
     id           = "basis-container",
     base         = file("basis-container"),
     settings     = commonSettings,
-    dependencies = Seq(Basis, BasisData)
-  )
-  
-  lazy val BasisData = Project(
-    id           = "basis-data",
-    base         = file("basis-data"),
-    settings     = commonSettings
+    dependencies = Seq(Basis, BasisData, BasisCollection)
   )
   
   lazy val BasisText = Project(
     id           = "basis-text",
     base         = file("basis-text"),
-    settings     = commonSettings,
-    dependencies = Seq(Basis)
-  )
-  
-  lazy val BasisUtil = Project(
-    id           = "basis-util",
-    base         = file("basis-util"),
     settings     = commonSettings,
     dependencies = Seq(Basis)
   )
@@ -93,16 +84,16 @@ object BasisBuild extends Build {
   )
   
   lazy val compileSettings = Seq(
-    scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Yno-imports", "-Yinline-warnings", "-Ywarn-all"),
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC1" % "provided"
-    //libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC1" % "1.8" % "test"
+    scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Yno-predef", "-Yinline-warnings", "-Ywarn-all"),
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC1" % "provided",
+    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC1" % "1.8" % "test"
   )
   
   lazy val docSettings = Seq(
     scalacOptions in doc <++= (version, baseDirectory in LocalProject("basis")) map { (version, baseDirectory) =>
       val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
       val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-      Seq("-Yno-imports", "-implicits", "-diagrams", "-sourcepath",
+      Seq("-Yno-predef", "-implicits", "-diagrams", "-sourcepath",
           baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
     }
   )

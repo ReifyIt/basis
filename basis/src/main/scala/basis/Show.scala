@@ -7,6 +7,10 @@
 
 package basis
 
-trait Show[-T] extends Any {
-  def show(x: T)(implicit buffer: CharBuffer): buffer.State
+trait Show[-T] {
+  def show(x: T)(implicit buffer: CharBuffer): Unit
+}
+
+object Show {
+  def apply[T](implicit T: Show[T]): T.type = T
 }

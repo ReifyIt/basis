@@ -7,8 +7,6 @@
 
 package basis.data
 
-import scala._
-
 /** A mutable sequence of 8-bit memory cells.
   * 
   * ==Address space==

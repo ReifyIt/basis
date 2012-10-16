@@ -7,14 +7,14 @@
 
 package basis.data
 
-import scala._
+import scala.annotation.implicitNotFound
 
 /** A memory storage strategy. Each memory type is either
   * a [[basis.data.RefType]] or a [[basis.data.ValType]].
   * 
   * @tparam T   the modeled instance type.
   */
-@scala.annotation.implicitNotFound("no memory type for ${T}")
+@implicitNotFound("no memory type for ${T}")
 sealed abstract class MemType[T]
 
 /** A factory for fundamental memory types. Includes implicit value types
@@ -27,7 +27,7 @@ object MemType extends ValTypes {
   * 
   * @tparam T   the modeled instance type.
   */
-@scala.annotation.implicitNotFound("no reference type for ${T}")
+@implicitNotFound("no reference type for ${T}")
 final class RefType[T] extends MemType[T] {
   override def toString: java.lang.String = "ReferenceType"
 }
@@ -52,7 +52,7 @@ object RefType {
   * 
   * @tparam T   the modeled instance type.
   */
-@scala.annotation.implicitNotFound("no value type for ${T}")
+@implicitNotFound("no value type for ${T}")
 abstract class ValType[T] extends MemType[T] {
   /** Returns the power-of-two alignment of this type's frame. The alignment
     * must evenly divide all addresses used to store this type's values. */

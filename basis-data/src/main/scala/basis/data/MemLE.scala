@@ -7,8 +7,6 @@
 
 package basis.data
 
-import scala._
-
 /** Little-endian memory. */
 trait MemLE extends Any with Mem {
   override def endian: LittleEndian.type = LittleEndian

@@ -7,8 +7,9 @@
 
 package basis
 
+/** A Unicode® character buffer. */
 trait CharBuffer extends Buffer[Nothing, Char] {
-  /* FIXME: SI-6500 */
+  /* FIXME: waiting on SI-6500 */
   //override def += (char: Char): this.type
   
   def append(chars: java.lang.CharSequence): this.type = {

@@ -7,8 +7,6 @@
 
 package basis.data
 
-import scala._
-
 /** A memory allocator.
   * 
   * @author Chris Sachs

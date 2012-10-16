@@ -19,10 +19,10 @@ package object data {
     (base + (alignment - 1L)) & ~(alignment - 1L)
   
   /** Returns the alignment of a value type. */
-  @scala.inline def alignOf[T](implicit struct: ValType[T]): scala.Long = struct.alignment
+  @inline def alignOf[T](implicit struct: ValType[T]): scala.Long = struct.alignment
   
   /** Returns the size of a value type. */
-  @scala.inline def sizeOf[T](implicit struct: ValType[T]): scala.Long = struct.size
+  @inline def sizeOf[T](implicit struct: ValType[T]): scala.Long = struct.size
   
   /** Returns the native byte order of the virtual machine. */
   implicit val NativeEndian: ByteOrder = {

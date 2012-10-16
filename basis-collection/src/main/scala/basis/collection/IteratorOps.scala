@@ -9,7 +9,7 @@ package basis.collection
 
 import basis._
 
-final class IteratorOps[A](self: Iterator[A]) {
+class IteratorOps[A](self: Iterator[A]) {
   import scala.language.experimental.macros
   
   def foreach[U](f: A => U): Unit =

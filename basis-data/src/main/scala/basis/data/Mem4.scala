@@ -7,14 +7,12 @@
 
 package basis.data
 
-import scala._
-
 /** Native-endian memory backed by an `Int` array. */
 class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
-  @inline override def size: Long = words.length.toLong << 2
+  override def size: Long = words.length.toLong << 2
   
   override def unit: Int = 4
   
@@ -171,9 +169,9 @@ class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
     }
   }
   
-  @inline def toBE: Mem4BE = new Mem4BE(words)
+  def toBE: Mem4BE = new Mem4BE(words)
   
-  @inline def toLE: Mem4LE = new Mem4LE(words)
+  def toLE: Mem4LE = new Mem4LE(words)
   
   override def toString: java.lang.String = "Mem4"+"("+ size +")"
 }

@@ -7,7 +7,7 @@
 
 package basis
 
-private[basis] object PlatformMacros {
+private[basis] object Macros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
@@ -35,6 +35,14 @@ private[basis] object PlatformMacros {
       (T: c.Expr[Show[T]], buffer: c.Expr[CharBuffer])
     : c.Expr[buffer.value.State] = {
     import c.universe._
-    c.Expr(Apply(Apply(Select(T.tree, "show"), x.tree :: Nil), buffer.tree :: Nil))(WeakTypeTag.Nothing)
+    val b = c.fresh(newTermName("buffer$"))
+    c.Expr(
+      Block(
+        ValDef(Modifiers(), b, TypeTree(), buffer.tree) ::
+        Apply(Apply(Select(T.tree, "show"), x.tree :: Nil), Ident(b) :: Nil) ::
+        Nil,
+        Select(Ident(b), "state")
+      )
+    )(WeakTypeTag.Nothing)
   }
 }

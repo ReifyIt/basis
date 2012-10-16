@@ -7,8 +7,6 @@
 
 package basis.data
 
-import scala._
-
 /** Extension methods to efficiently access compound values in memory objects. */
 final class MemOps(self: Mem) {
   import scala.language.experimental.macros

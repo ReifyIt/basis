@@ -9,7 +9,7 @@ package basis.collection
 
 import basis._
 
-final class ContainerOps[+Self, +A](self: Container[A]) {
+class ContainerOps[+Self, +A](self: Container[A]) {
   import scala.language.experimental.macros
   
   def foreach[U](f: A => U): Unit =
@@ -93,8 +93,9 @@ final class ContainerOps[+Self, +A](self: Container[A]) {
 }
 
 private[basis] final class IterableWithFilter[+A](self: Container[A], p: A => Boolean) extends Container[A] {
-  override def iterator: basis.Iterator[A] = self.iterator filter p
+  override def iterator: basis.Iterator[A] =
+    new Iterators.Filter(self.iterator, p)
   
   protected override def foreach[U](f: A => U): Unit =
-    traverse(self)(new Traversers.Filter(p, f))
+    Enumerator.traverse(self)(new Traversers.Filter(p, f))
 }

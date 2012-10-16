@@ -7,15 +7,16 @@
 
 package basis
 
-abstract class Platform extends Aliases with Primitives {
+trait DoubleOps extends Any {
   import scala.language.experimental.macros
   
-  final def equal[T](x: T, y: T)(implicit T: Equal[T]): Boolean =
-    macro PlatformMacros.equal[T]
+  def abs: Double = macro DoubleMacros.abs
   
-  final def hash[T](x: T)(implicit T: Hash[T]): Int =
-    macro PlatformMacros.hash[T]
+  def min(that: Double): Double = macro DoubleMacros.min
   
-  final def show[T](x: T)(implicit T: Show[T], buffer: CharBuffer): buffer.State =
-    macro PlatformMacros.show[T]
+  def max(that: Double): Double = macro DoubleMacros.max
+  
+  def sqrt: Double = macro DoubleMacros.sqrt
+  
+  def toLongBits: Long = macro DoubleMacros.toLongBits
 }
