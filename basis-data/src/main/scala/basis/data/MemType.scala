@@ -14,7 +14,7 @@ import scala.annotation.implicitNotFound
   * 
   * @tparam T   the modeled instance type.
   */
-@implicitNotFound("no memory type for ${T}")
+@implicitNotFound("no implicit memory type for ${T}")
 sealed abstract class MemType[T]
 
 /** A factory for fundamental memory types. Includes implicit value types
@@ -27,9 +27,9 @@ object MemType extends ValTypes {
   * 
   * @tparam T   the modeled instance type.
   */
-@implicitNotFound("no reference type for ${T}")
+@implicitNotFound("no implicit reference type for ${T}")
 final class RefType[T] extends MemType[T] {
-  override def toString: java.lang.String = "ReferenceType"
+  override def toString: String = "ReferenceType"
 }
 
 /** A factory for reference types.  */
@@ -52,7 +52,7 @@ object RefType {
   * 
   * @tparam T   the modeled instance type.
   */
-@implicitNotFound("no value type for ${T}")
+@implicitNotFound("no implicit value type for ${T}")
 abstract class ValType[T] extends MemType[T] {
   /** Returns the power-of-two alignment of this type's frame. The alignment
     * must evenly divide all addresses used to store this type's values. */
@@ -86,123 +86,123 @@ object ValType {
   def apply[T](implicit valtype: ValType[T]): valtype.type = valtype
   
   object PackedByte extends ValType[Byte] {
-    @inline override def alignment: Long = 1L
-    @inline override def size: Long = 1L
-    @inline override def load(mem: Mem, address: Long): Byte =
+    override def alignment: Long = 1L
+    override def size: Long = 1L
+    override def load(mem: Mem, address: Long): Byte =
       mem.loadByte(address)
-    @inline override def store(mem: Mem, address: Long, value: Byte): Unit =
+    override def store(mem: Mem, address: Long, value: Byte): Unit =
       mem.storeByte(address, value)
-    override def toString: java.lang.String = "PackedByte"
+    override def toString: String = "PackedByte"
   }
   
   object PackedShort extends ValType[Short] {
-    @inline override def alignment: Long = 1L
-    @inline override def size: Long = 2L
-    @inline override def load(mem: Mem, address: Long): Short =
+    override def alignment: Long = 1L
+    override def size: Long = 2L
+    override def load(mem: Mem, address: Long): Short =
       mem.loadUnalignedShort(address)
-    @inline override def store(mem: Mem, address: Long, value: Short): Unit =
+    override def store(mem: Mem, address: Long, value: Short): Unit =
       mem.storeUnalignedShort(address, value)
-    override def toString: java.lang.String = "PackedShort"
+    override def toString: String = "PackedShort"
   }
   
   object PackedInt extends ValType[Int] {
-    @inline override def alignment: Long = 1L
-    @inline override def size: Long = 4L
-    @inline override def load(mem: Mem, address: Long): Int =
+    override def alignment: Long = 1L
+    override def size: Long = 4L
+    override def load(mem: Mem, address: Long): Int =
       mem.loadUnalignedInt(address)
-    @inline override def store(mem: Mem, address: Long, value: Int): Unit =
+    override def store(mem: Mem, address: Long, value: Int): Unit =
       mem.storeUnalignedInt(address, value)
-    override def toString: java.lang.String = "PackedInt"
+    override def toString: String = "PackedInt"
   }
   
   object PackedLong extends ValType[Long] {
-    @inline override def alignment: Long = 1L
-    @inline override def size: Long = 8L
-    @inline override def load(mem: Mem, address: Long): Long =
+    override def alignment: Long = 1L
+    override def size: Long = 8L
+    override def load(mem: Mem, address: Long): Long =
       mem.loadUnalignedLong(address)
-    @inline override def store(mem: Mem, address: Long, value: Long): Unit =
+    override def store(mem: Mem, address: Long, value: Long): Unit =
       mem.storeUnalignedLong(address, value)
-    override def toString: java.lang.String = "PackedLong"
+    override def toString: String = "PackedLong"
   }
   
   object PackedFloat extends ValType[Float] {
-    @inline override def alignment: Long = 1L
-    @inline override def size: Long = 4L
-    @inline override def load(mem: Mem, address: Long): Float =
+    override def alignment: Long = 1L
+    override def size: Long = 4L
+    override def load(mem: Mem, address: Long): Float =
       mem.loadUnalignedFloat(address)
-    @inline override def store(mem: Mem, address: Long, value: Float): Unit =
+    override def store(mem: Mem, address: Long, value: Float): Unit =
       mem.storeUnalignedFloat(address, value)
-    override def toString: java.lang.String = "PackedFloat"
+    override def toString: String = "PackedFloat"
   }
   
   object PackedDouble extends ValType[Double] {
-    @inline override def alignment: Long = 1L
-    @inline override def size: Long = 8L
-    @inline override def load(mem: Mem, address: Long): Double =
+    override def alignment: Long = 1L
+    override def size: Long = 8L
+    override def load(mem: Mem, address: Long): Double =
       mem.loadUnalignedDouble(address)
-    @inline override def store(mem: Mem, address: Long, value: Double): Unit =
+    override def store(mem: Mem, address: Long, value: Double): Unit =
       mem.storeUnalignedDouble(address, value)
-    override def toString: java.lang.String = "PackedDouble"
+    override def toString: String = "PackedDouble"
   }
   
   object PackedBoolean extends ValType[Boolean] {
-    @inline override def alignment: Long = 1L
-    @inline override def size: Long = 1L
-    @inline override def load(mem: Mem, address: Long): Boolean =
+    override def alignment: Long = 1L
+    override def size: Long = 1L
+    override def load(mem: Mem, address: Long): Boolean =
       mem.loadByte(address) == 0
-    @inline override def store(mem: Mem, address: Long, value: Boolean): Unit =
+    override def store(mem: Mem, address: Long, value: Boolean): Unit =
       mem.storeByte(address, if (value) 0.toByte else -1.toByte)
-    override def toString: java.lang.String = "PackedBoolean"
+    override def toString: String = "PackedBoolean"
   }
   
   object PaddedShort extends ValType[Short] {
-    @inline override def alignment: Long = 2L
-    @inline override def size: Long = 2L
-    @inline override def load(mem: Mem, address: Long): Short =
+    override def alignment: Long = 2L
+    override def size: Long = 2L
+    override def load(mem: Mem, address: Long): Short =
       mem.loadShort(address)
-    @inline override def store(mem: Mem, address: Long, value: Short): Unit =
+    override def store(mem: Mem, address: Long, value: Short): Unit =
       mem.storeShort(address, value)
-    override def toString: java.lang.String = "PaddedShort"
+    override def toString: String = "PaddedShort"
   }
   
   object PaddedInt extends ValType[Int] {
-    @inline override def alignment: Long = 4L
-    @inline override def size: Long = 4L
-    @inline override def load(mem: Mem, address: Long): Int =
+    override def alignment: Long = 4L
+    override def size: Long = 4L
+    override def load(mem: Mem, address: Long): Int =
       mem.loadInt(address)
-    @inline override def store(mem: Mem, address: Long, value: Int): Unit =
+    override def store(mem: Mem, address: Long, value: Int): Unit =
       mem.storeInt(address, value)
-    override def toString: java.lang.String = "PaddedInt"
+    override def toString: String = "PaddedInt"
   }
   
   object PaddedLong extends ValType[Long] {
-    @inline override def alignment: Long = 8L
-    @inline override def size: Long = 8L
-    @inline override def load(mem: Mem, address: Long): Long =
+    override def alignment: Long = 8L
+    override def size: Long = 8L
+    override def load(mem: Mem, address: Long): Long =
       mem.loadLong(address)
-    @inline override def store(mem: Mem, address: Long, value: Long): Unit =
+    override def store(mem: Mem, address: Long, value: Long): Unit =
       mem.storeLong(address, value)
-    override def toString: java.lang.String = "PaddedLong"
+    override def toString: String = "PaddedLong"
   }
   
   object PaddedFloat extends ValType[Float] {
-    @inline override def alignment: Long = 4L
-    @inline override def size: Long = 4L
-    @inline override def load(mem: Mem, address: Long): Float =
+    override def alignment: Long = 4L
+    override def size: Long = 4L
+    override def load(mem: Mem, address: Long): Float =
       mem.loadFloat(address)
-    @inline override def store(mem: Mem, address: Long, value: Float): Unit =
+    override def store(mem: Mem, address: Long, value: Float): Unit =
       mem.storeFloat(address, value)
-    override def toString: java.lang.String = "PaddedFloat"
+    override def toString: String = "PaddedFloat"
   }
   
   object PaddedDouble extends ValType[Double] {
-    @inline override def alignment: Long = 8L
-    @inline override def size: Long = 8L
-    @inline override def load(mem: Mem, address: Long): Double =
+    override def alignment: Long = 8L
+    override def size: Long = 8L
+    override def load(mem: Mem, address: Long): Double =
       mem.loadDouble(address)
-    @inline override def store(mem: Mem, address: Long, value: Double): Unit =
+    override def store(mem: Mem, address: Long, value: Double): Unit =
       mem.storeDouble(address, value)
-    override def toString: java.lang.String = "PaddedDouble"
+    override def toString: String = "PaddedDouble"
   }
   
   final class Record2[T1, T2](
@@ -221,7 +221,7 @@ object ValType {
       field1.store(mem, address,           tuple._1)
       field2.store(mem, address + offset2, tuple._2)
     }
-    override def toString: java.lang.String =
+    override def toString: String =
       "Record2"+"("+ field1 +", "+ field2 +")"
   }
   
@@ -246,7 +246,7 @@ object ValType {
       field2.store(mem, address + offset2, tuple._2)
       field3.store(mem, address + offset3, tuple._3)
     }
-    override def toString: java.lang.String =
+    override def toString: String =
       "Record3"+"("+ field1 +", "+ field2 +", "+ field3 +")"
   }
   
@@ -277,7 +277,7 @@ object ValType {
       field3.store(mem, address + offset3, tuple._3)
       field4.store(mem, address + offset4, tuple._4)
     }
-    override def toString: java.lang.String =
+    override def toString: String =
       "Record4"+"("+ field1 +", "+ field2 +", "+ field3 +", "+ field4 +")"
   }
 }
