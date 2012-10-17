@@ -81,7 +81,7 @@ class String2(val codeUnits: scala.Array[scala.Char]) extends AnyVal with Rope {
   
   /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
-  override protected def foreach[U](f: Char => U) {
+  protected override def foreach[U](f: Char => U) {
     var i = 0
     val n = codeUnits.length
     while (i < n) f(new Char({

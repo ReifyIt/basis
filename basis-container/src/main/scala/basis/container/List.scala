@@ -10,7 +10,7 @@ package basis.container
 import basis._
 import basis.collection._
 
-/** A linear sequence of elements.
+/** A singly linked list of elements.
   * 
   * @author Chris Sachs
   * 
@@ -64,7 +64,7 @@ object List extends SeqFactory[List] {
   
   implicit def Buffer[A]: ListBuffer[A] = new ListBuffer[A]
   
-  override protected def stringPrefix: String = "List"
+  protected override def stringPrefix: String = "List"
 }
 
 final class ::[A](override val head: A, private[this] var next: List[A]) extends List[A] {

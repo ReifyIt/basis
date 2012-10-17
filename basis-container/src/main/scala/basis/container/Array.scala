@@ -25,7 +25,7 @@ trait Array[+A] extends Any with Seq[A] {
   
   override def iterator: Iterator[A] = new ArrayIterator(this, 0, length)
   
-  override protected def foreach[U](f: A => U) {
+  protected override def foreach[U](f: A => U) {
     var i = 0
     val n = length
     while (i < n) {
@@ -54,7 +54,7 @@ object Array extends AllArrayBuffers with SeqFactory[Array] {
     }).asInstanceOf[Buffer[Any, A] { type State = Array[A] }]
   }
   
-  override protected def stringPrefix: String = "Array"
+  protected override def stringPrefix: String = "Array"
 }
 
 private[basis] class AllArrayBuffers extends ValArrayBuffers {

@@ -50,7 +50,7 @@ private[basis] class SeqEqual[-A]
 }
 
 private[basis] class SeqHash[-A]
-    (implicit override protected val A: Hash[A])
+    (implicit protected override val A: Hash[A])
   extends SeqEqual[A] with Hash[Seq[A]] {
   
   override def hash(xs: Seq[A]): Int = {

@@ -48,7 +48,7 @@ class String4(val codeUnits: scala.Array[Int]) extends AnyVal with Rope {
   
   /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of invalid characters. */
-  override protected def foreach[U](f: Char => U) {
+  protected override def foreach[U](f: Char => U) {
     var i = 0
     val n = length
     while (i < n) {

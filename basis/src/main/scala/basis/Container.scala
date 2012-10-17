@@ -17,7 +17,7 @@ package basis
 trait Container[+A] extends Any with Collection[A] {
   override type Self <: Container[A]
   
-  override protected def foreach[U](f: A => U) {
+  protected override def foreach[U](f: A => U) {
     val xs = iterator
     while (!xs.isEmpty) { f(xs.head); xs.step() }
   }
