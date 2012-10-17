@@ -8,8 +8,6 @@
 package basis
 
 trait DoubleOps extends Any {
-  import scala.language.experimental.macros
-  
   def abs: Double = macro DoubleMacros.abs
   
   def min(that: Double): Double = macro DoubleMacros.min

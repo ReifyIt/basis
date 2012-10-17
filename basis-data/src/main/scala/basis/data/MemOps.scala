@@ -9,8 +9,6 @@ package basis.data
 
 /** Extension methods to efficiently access compound values in memory objects. */
 final class MemOps(self: Mem) {
-  import scala.language.experimental.macros
-  
   /** Loads an instance of a memory value.
     * 
     * @tparam T         the instance type to load.

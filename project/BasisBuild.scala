@@ -9,6 +9,7 @@ package basis
 
 import sbt._
 import sbt.Keys._
+import Defaults.defaultSettings
 
 object BasisBuild extends Build {
   lazy val all = Project(
@@ -62,19 +63,19 @@ object BasisBuild extends Build {
     dependencies = Seq(Basis)
   )
   
+  lazy val basicSettings =
+    defaultSettings ++
+    Unidoc.settings ++
+    projectSettings ++
+    scalaSettings   ++
+    docSettings
+  
   lazy val commonSettings =
     basicSettings   ++
     compileSettings ++
     publishSettings
   
-  lazy val basicSettings =
-    Defaults.defaultSettings ++
-    Unidoc.settings          ++
-    projectSettings          ++
-    docSettings
-  
   lazy val projectSettings = Seq(
-    scalaVersion := "2.10.0-RC1",
     version      := "0.0-SNAPSHOT",
     organization := "com.scalabasis",
     description  := "A library of building blocks",
@@ -83,19 +84,23 @@ object BasisBuild extends Build {
     resolvers    += Resolver.sonatypeRepo("snapshots")
   )
   
-  lazy val compileSettings = Seq(
-    scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Yno-predef", "-Yinline-warnings", "-Ywarn-all"),
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC1" % "provided",
-    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC1" % "1.8" % "test"
+  lazy val scalaSettings = Seq(
+    scalaVersion   := "2.10.0-RC1",
+    scalacOptions ++= Seq("-language:_", "-Yno-predef")
   )
   
   lazy val docSettings = Seq(
     scalacOptions in doc <++= (version, baseDirectory in LocalProject("basis")) map { (version, baseDirectory) =>
       val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
       val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-      Seq("-Yno-predef", "-implicits", "-diagrams", "-sourcepath",
-          baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
+      Seq("-implicits", "-diagrams", "-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
     }
+  )
+  
+  lazy val compileSettings = Seq(
+    scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC1" % "provided",
+    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC1" % "1.8" % "test"
   )
   
   lazy val publishSettings = Seq(

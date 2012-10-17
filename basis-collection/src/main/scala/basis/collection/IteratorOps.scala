@@ -10,8 +10,6 @@ package basis.collection
 import basis._
 
 class IteratorOps[A](self: Iterator[A]) {
-  import scala.language.experimental.macros
-  
   def foreach[U](f: A => U): Unit =
     macro IteratorMacros.foreach[A, U]
   

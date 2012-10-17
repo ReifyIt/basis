@@ -10,8 +10,6 @@ package basis.container
 import basis._
 
 class ListOps[+A](self: List[A]) {
-  import scala.language.experimental.macros
-  
   def foreach[U](f: A => U): Unit =
     macro ListMacros.foreach[A, U]
   

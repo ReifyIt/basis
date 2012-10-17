@@ -8,8 +8,6 @@
 package basis
 
 trait IntOps extends Any {
-  import scala.language.experimental.macros
-  
   def abs: Int = macro IntMacros.abs
   
   def min(that: Int): Int = macro IntMacros.min

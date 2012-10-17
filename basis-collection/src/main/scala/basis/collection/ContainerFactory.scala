@@ -9,11 +9,7 @@ package basis.collection
 
 import basis._
 
-import scala.language.higherKinds
-
 trait ContainerFactory[CC[X] <: Container[X]] {
-  import scala.language.experimental.macros
-  
   def apply[A](xs: A*)(implicit buffer: Buffer[CC[_], A]): buffer.State =
     macro ContainerMacros.apply[A]
   

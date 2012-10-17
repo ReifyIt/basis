@@ -10,8 +10,6 @@ package basis.container
 import basis._
 
 class ArrayOps[+Self, +A](self: Array[A]) {
-  import scala.language.experimental.macros
-  
   def foreach[U](f: A => U): Unit =
     macro ArrayMacros.foreach[A, U]
   

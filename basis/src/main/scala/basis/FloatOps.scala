@@ -8,8 +8,6 @@
 package basis
 
 trait FloatOps extends Any {
-  import scala.language.experimental.macros
-  
   def abs: Float = macro FloatMacros.abs
   
   def min(that: Float): Float = macro FloatMacros.min

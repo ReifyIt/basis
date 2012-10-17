@@ -9,11 +9,7 @@ package basis.collection
 
 import basis._
 
-import scala.language.higherKinds
-
 trait SeqFactory[CC[X] <: Seq[X]] extends ContainerFactory[CC] {
-  import scala.language.experimental.macros
-  
   implicit def Equal[A : Equal]: Equal[CC[A]] = new SeqEqual[A]
   
   implicit def Hash[A : Hash]: Hash[CC[A]] = new SeqHash[A]

@@ -6,9 +6,6 @@
 \*                                                                      */
 
 package object basis {
-  import scala.language.experimental.macros
-  import scala.language.implicitConversions
-  
   def equal[T](x: T, y: T)(implicit T: Equal[T]): Boolean =
     macro Macros.equal[T]
   

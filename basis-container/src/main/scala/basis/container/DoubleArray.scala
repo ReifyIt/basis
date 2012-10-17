@@ -56,8 +56,6 @@ class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Doub
 }
 
 object DoubleArray {
-  import scala.language.experimental.macros
-  
   val empty: DoubleArray = new DoubleArray(new scala.Array[Double](0))
   
   def apply(xs: Double*): DoubleArray = macro ArrayMacros.literalDoubleArray

@@ -8,8 +8,6 @@
 package basis
 
 package object collection {
-  import scala.language.implicitConversions
-  
   implicit def EnumeratorOps[A](self: Enumerator[A]): EnumeratorOps[self.Self, A] =
     new EnumeratorOps[self.Self, A](self)
   

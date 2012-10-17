@@ -58,8 +58,6 @@ class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] 
 }
 
 object RefArray {
-  import scala.language.experimental.macros
-  
   val empty: RefArray[Nothing] = new RefArray[Nothing](new scala.Array[AnyRef](0))
   
   def apply[A](xs: A*): RefArray[A] = macro ArrayMacros.literalRefArray[A]

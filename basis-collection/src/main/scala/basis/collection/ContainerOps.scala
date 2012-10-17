@@ -10,8 +10,6 @@ package basis.collection
 import basis._
 
 class ContainerOps[+Self, +A](self: Container[A]) {
-  import scala.language.experimental.macros
-  
   def foreach[U](f: A => U): Unit =
     macro ContainerMacros.foreach[A, U]
   

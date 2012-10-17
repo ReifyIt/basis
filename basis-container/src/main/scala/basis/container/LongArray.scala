@@ -56,8 +56,6 @@ class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
 }
 
 object LongArray {
-  import scala.language.experimental.macros
-  
   val empty: LongArray = new LongArray(new scala.Array[Long](0))
   
   def apply(xs: Long*): LongArray = macro ArrayMacros.literalLongArray

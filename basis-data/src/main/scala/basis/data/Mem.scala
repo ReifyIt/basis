@@ -473,8 +473,6 @@ trait Mem extends Any {
 
 /** An allocator for native-endian memory backed by a primitive array. */
 object Mem extends Allocator {
-  import scala.language.implicitConversions
-  
   implicit def MemOps(self: Mem): MemOps = new MemOps(self)
   
   override def MaxSize: Long = scala.Int.MaxValue.toLong << 3

@@ -26,8 +26,7 @@ trait Array[+A] extends Any with Seq[A] {
   /** Returns the element at `index`. */
   def apply(index: Int): A
   
-  override def iterator: Iterator[A] =
-    new ArrayIterator(this, 0, length)
+  override def iterator: Iterator[A] = new ArrayIterator(this, 0, length)
   
   override protected def foreach[U](f: A => U) {
     var i = 0
@@ -40,9 +39,6 @@ trait Array[+A] extends Any with Seq[A] {
 }
 
 object Array extends AllArrayBuffers with SeqFactory[Array] {
-  import scala.language.experimental.macros
-  import scala.language.implicitConversions
-  
   implicit def Ops[A](self: Array[A]): ArrayOps[self.Self, A] =
     new ArrayOps[self.Self, A](self)
   
@@ -104,6 +100,5 @@ private[basis] final class ArrayIterator[+A]
     else index += 1
   }
   
-  override def dup: ArrayIterator[A] =
-    new ArrayIterator[A](xs, index, upper)
+  override def dup: ArrayIterator[A] = new ArrayIterator[A](xs, index, upper)
 }

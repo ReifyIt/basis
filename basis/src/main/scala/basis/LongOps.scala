@@ -8,8 +8,6 @@
 package basis
 
 trait LongOps extends Any {
-  import scala.language.experimental.macros
-  
   def abs: Long = macro LongMacros.abs
   
   def min(that: Long): Long = macro LongMacros.min

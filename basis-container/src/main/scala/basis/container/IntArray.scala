@@ -56,8 +56,6 @@ class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
 }
 
 object IntArray {
-  import scala.language.experimental.macros
-  
   val empty: IntArray = new IntArray(new scala.Array[Int](0))
   
   def apply(xs: Int*): IntArray = macro ArrayMacros.literalIntArray

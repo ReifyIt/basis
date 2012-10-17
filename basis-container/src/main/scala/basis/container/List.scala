@@ -57,9 +57,6 @@ sealed abstract class List[+A] extends Seq[A] {
 }
 
 object List extends SeqFactory[List] {
-  import scala.language.experimental.macros
-  import scala.language.implicitConversions
-  
   def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   
   implicit def Ops[A](self: List[A]): ListOps[A] = new ListOps[A](self)

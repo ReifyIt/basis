@@ -13,8 +13,6 @@ class Char(val codePoint: Int) extends AnyVal {
 }
 
 object Char extends Hash[Char] with Show[Char] {
-  import scala.language.implicitConversions
-  
   implicit def apply(codePoint: Int): Char = new Char(codePoint)
   
   override def equal(x: Char, y: Char): Boolean = x.codePoint == y.codePoint

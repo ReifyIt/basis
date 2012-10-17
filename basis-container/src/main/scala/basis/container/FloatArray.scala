@@ -56,8 +56,6 @@ class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float]
 }
 
 object FloatArray {
-  import scala.language.experimental.macros
-  
   val empty: FloatArray = new FloatArray(new scala.Array[Float](0))
   
   def apply(xs: Float*): FloatArray = macro ArrayMacros.literalFloatArray

@@ -56,8 +56,6 @@ class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short]
 }
 
 object ShortArray {
-  import scala.language.experimental.macros
-  
   val empty: ShortArray = new ShortArray(new scala.Array[Short](0))
   
   def apply(xs: Short*): ShortArray = macro ArrayMacros.literalShortArray
