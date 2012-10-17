@@ -8,7 +8,7 @@
 package basis.data
 
 /** Native-endian memory backed by a `Byte` array. */
-class Mem1(val words: scala.Array[Byte]) extends AnyVal with Mem {
+class Mem1(val words: Array[Byte]) extends AnyVal with Mem {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
@@ -19,9 +19,9 @@ class Mem1(val words: scala.Array[Byte]) extends AnyVal with Mem {
   override def endian: NativeEndian.type = NativeEndian
   
   override def copy(size: Long = this.size): Mem1 = {
-    scala.Predef.require(0L <= size && size <= scala.Int.MaxValue.toLong)
-    val words = new scala.Array[Byte](size.toInt)
-    java.lang.System.arraycopy(this.words, 0, words, 0, scala.math.min(this.words.length, words.length))
+    Predef.require(0L <= size && size <= Int.MaxValue.toLong)
+    val words = new Array[Byte](size.toInt)
+    java.lang.System.arraycopy(this.words, 0, words, 0, java.lang.Math.min(this.words.length, words.length))
     new Mem1(words)
   }
   
@@ -64,37 +64,37 @@ class Mem1(val words: scala.Array[Byte]) extends AnyVal with Mem {
   override def loadUnalignedShort(address: Long): Short = {
     if (BigEndian.isNative)    return toBE.loadUnalignedShort(address)
     if (LittleEndian.isNative) return toLE.loadUnalignedShort(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeUnalignedShort(address: Long, value: Short) {
     if (BigEndian.isNative)    return toBE.storeUnalignedShort(address, value)
     if (LittleEndian.isNative) return toLE.storeUnalignedShort(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadUnalignedInt(address: Long): Int = {
     if (BigEndian.isNative)    return toBE.loadUnalignedInt(address)
     if (LittleEndian.isNative) return toLE.loadUnalignedInt(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeUnalignedInt(address: Long, value: Int) {
     if (BigEndian.isNative)    return toBE.storeUnalignedInt(address, value)
     if (LittleEndian.isNative) return toLE.storeUnalignedInt(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadUnalignedLong(address: Long): Long = {
     if (BigEndian.isNative)    return toBE.loadUnalignedLong(address)
     if (LittleEndian.isNative) return toLE.loadUnalignedLong(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeUnalignedLong(address: Long, value: Long) {
     if (BigEndian.isNative)    return toBE.storeUnalignedLong(address, value)
     if (LittleEndian.isNative) return toLE.storeUnalignedLong(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadUnalignedFloat(address: Long): Float =
@@ -119,23 +119,23 @@ class Mem1(val words: scala.Array[Byte]) extends AnyVal with Mem {
   
   def toLE: Mem1LE = new Mem1LE(words)
   
-  override def toString: java.lang.String = "Mem1"+"("+ size +")"
+  override def toString: String = "Mem1"+"("+ size +")"
 }
 
 /** An allocator for native-endian memory backed by a `Byte` array. */
 object Mem1 extends Allocator with (Long => Mem1) {
-  override def MaxSize: Long = scala.Int.MaxValue.toLong
+  override def MaxSize: Long = Int.MaxValue.toLong
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): Mem1 =
     apply(unit.size * count)
   
   override def apply(size: Long): Mem1 = {
-    scala.Predef.require(0L <= size && size <= MaxSize)
-    val words = new scala.Array[Byte](size.toInt)
+    Predef.require(0L <= size && size <= MaxSize)
+    val words = new Array[Byte](size.toInt)
     new Mem1(words)
   }
   
-  def unapply(mem: Mem1): Some[scala.Array[Byte]] = Some(mem.words)
+  def unapply(mem: Mem1): Some[Array[Byte]] = Some(mem.words)
   
-  override def toString: java.lang.String = "Mem1"
+  override def toString: String = "Mem1"
 }

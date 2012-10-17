@@ -75,7 +75,7 @@ final class MemOps(self: Mem) {
   def loadArray[T]
       (address: Long, count: Int)
       (implicit field: ValType[T], tag: scala.reflect.ClassTag[T])
-    : scala.Array[T] = {
+    : Array[T] = {
     val array = tag.newArray(count)
     copyToArray[T](address, array, 0, count)
     array
@@ -91,7 +91,7 @@ final class MemOps(self: Mem) {
     * @param  field     the implicit value type to load.
     */
   def copyToArray[T]
-      (address: Long, array: scala.Array[T], start: Int, count: Int)
+      (address: Long, array: Array[T], start: Int, count: Int)
       (implicit field: ValType[T]) {
     val end = start + count
     var p = address
@@ -113,7 +113,7 @@ final class MemOps(self: Mem) {
     * @param  field     the implicit value type to store.
     */
   def storeArray[T]
-      (address: Long, array: scala.Array[T], start: Int, count: Int)
+      (address: Long, array: Array[T], start: Int, count: Int)
       (implicit field: ValType[T]) {
     val end = start + count
     var p = address

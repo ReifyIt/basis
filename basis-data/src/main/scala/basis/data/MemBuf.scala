@@ -16,14 +16,14 @@ class MemBuf(val buffer: java.nio.ByteBuffer) extends AnyVal with Mem {
   override def endian: ByteOrder = {
     if (buffer.order eq java.nio.ByteOrder.BIG_ENDIAN) BigEndian
     else if (buffer.order eq java.nio.ByteOrder.LITTLE_ENDIAN) LittleEndian
-    else throw new scala.MatchError(buffer.order)
+    else throw new MatchError(buffer.order)
   }
   
   override def copy(size: Long = this.size): MemBuf = {
-    scala.Predef.require(0 <= size && size <= scala.Int.MaxValue.toLong)
+    Predef.require(0 <= size && size <= Int.MaxValue.toLong)
     val dst = java.nio.ByteBuffer.allocateDirect(size.toInt)
     val src = buffer.duplicate
-    src.position(0).limit(scala.math.min(src.capacity, dst.capacity))
+    src.position(0).limit(java.lang.Math.min(src.capacity, dst.capacity))
     dst.put(src)
     dst.clear()
     new MemBuf(dst)
@@ -138,18 +138,18 @@ class MemBuf(val buffer: java.nio.ByteBuffer) extends AnyVal with Mem {
     else new MemBuf(buffer.duplicate.order(java.nio.ByteOrder.LITTLE_ENDIAN))
   }
   
-  override def toString: java.lang.String = "MemBuf"+"("+ size +")"
+  override def toString: String = "MemBuf"+"("+ size +")"
 }
 
 /** An allocator for native-endian memory backed by a `ByteBuffer`. */
 object MemBuf extends Allocator with (Long => MemBuf) {
-  override def MaxSize: Long = scala.Int.MaxValue.toLong
+  override def MaxSize: Long = Int.MaxValue.toLong
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): MemBuf =
     apply(unit.size * count)
   
   override def apply(size: Long): MemBuf = {
-    scala.Predef.require(0L <= size && size <= MaxSize)
+    Predef.require(0L <= size && size <= MaxSize)
     new MemBuf(java.nio.ByteBuffer.allocateDirect(size.toInt).order(
       if (NativeEndian eq BigEndian) java.nio.ByteOrder.BIG_ENDIAN
       else java.nio.ByteOrder.LITTLE_ENDIAN
@@ -158,5 +158,5 @@ object MemBuf extends Allocator with (Long => MemBuf) {
   
   def unapply(mem: MemBuf): Some[java.nio.ByteBuffer] = Some(mem.buffer)
   
-  override def toString: java.lang.String = "MemBuf"
+  override def toString: String = "MemBuf"
 }

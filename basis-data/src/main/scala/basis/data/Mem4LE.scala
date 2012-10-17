@@ -8,7 +8,7 @@
 package basis.data
 
 /** Little-endian memory backed by an `Int` array. */
-class Mem4LE(val words: scala.Array[Int]) extends AnyVal with MemLE {
+class Mem4LE(val words: Array[Int]) extends AnyVal with MemLE {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
@@ -19,9 +19,9 @@ class Mem4LE(val words: scala.Array[Int]) extends AnyVal with MemLE {
   override def endian: LittleEndian.type = LittleEndian
   
   override def copy(size: Long = this.size): Mem4LE = {
-    scala.Predef.require(0L <= size && size <= (scala.Int.MaxValue.toLong << 2))
-    val words = new scala.Array[Int]((align(size, 4L) >> 2).toInt)
-    java.lang.System.arraycopy(this.words, 0, words, 0, scala.math.min(this.words.length, words.length))
+    Predef.require(0L <= size && size <= (Int.MaxValue.toLong << 2))
+    val words = new Array[Int]((align(size, 4L) >> 2).toInt)
+    java.lang.System.arraycopy(this.words, 0, words, 0, java.lang.Math.min(this.words.length, words.length))
     new Mem4LE(words)
   }
   
@@ -181,23 +181,23 @@ class Mem4LE(val words: scala.Array[Int]) extends AnyVal with MemLE {
   
   def toBE: Mem4BE = new Mem4BE(words)
   
-  override def toString: java.lang.String = "Mem4LE"+"("+ size +")"
+  override def toString: String = "Mem4LE"+"("+ size +")"
 }
 
 /** An allocator for little-endian memory backed by an `Int` array. */
 object Mem4LE extends Allocator with (Long => Mem4LE) {
-  override def MaxSize: Long = scala.Int.MaxValue.toLong << 2
+  override def MaxSize: Long = Int.MaxValue.toLong << 2
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): Mem4LE =
     apply(unit.size * count)
   
   override def apply(size: Long): Mem4LE = {
-    scala.Predef.require(0L <= size && size <= MaxSize)
-    val words = new scala.Array[Int]((align(size, 4L) >> 2).toInt)
+    Predef.require(0L <= size && size <= MaxSize)
+    val words = new Array[Int]((align(size, 4L) >> 2).toInt)
     new Mem4LE(words)
   }
   
-  def unapply(mem: Mem4LE): Some[scala.Array[Int]] = Some(mem.words)
+  def unapply(mem: Mem4LE): Some[Array[Int]] = Some(mem.words)
   
-  override def toString: java.lang.String = "Mem4LE"
+  override def toString: String = "Mem4LE"
 }

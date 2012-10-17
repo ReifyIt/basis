@@ -8,7 +8,7 @@
 package basis.data
 
 /** Native-endian memory backed by an `Int` array. */
-class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
+class Mem4(val words: Array[Int]) extends AnyVal with Mem {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
@@ -19,34 +19,34 @@ class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
   override def endian: NativeEndian.type = NativeEndian
   
   override def copy(size: Long = this.size): Mem4 = {
-    scala.Predef.require(0L <= size && size <= (scala.Int.MaxValue.toLong << 2))
-    val words = new scala.Array[Int]((align(size, 4L) >> 2).toInt)
-    java.lang.System.arraycopy(this.words, 0, words, 0, scala.math.min(this.words.length, words.length))
+    Predef.require(0L <= size && size <= (Int.MaxValue.toLong << 2))
+    val words = new Array[Int]((align(size, 4L) >> 2).toInt)
+    java.lang.System.arraycopy(this.words, 0, words, 0, java.lang.Math.min(this.words.length, words.length))
     new Mem4(words)
   }
   
   override def loadByte(address: Long): Byte = {
     if (BigEndian.isNative)    return toBE.loadByte(address)
     if (LittleEndian.isNative) return toLE.loadByte(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeByte(address: Long, value: Byte) {
     if (BigEndian.isNative)    return toBE.storeByte(address, value)
     if (LittleEndian.isNative) return toLE.storeByte(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadShort(address: Long): Short = {
     if (BigEndian.isNative)    return toBE.loadShort(address)
     if (LittleEndian.isNative) return toLE.loadShort(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeShort(address: Long, value: Short) {
     if (BigEndian.isNative)    return toBE.storeShort(address, value)
     if (LittleEndian.isNative) return toLE.storeShort(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadInt(address: Long): Int =
@@ -58,13 +58,13 @@ class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
   override def loadLong(address: Long): Long = {
     if (BigEndian.isNative)    return toBE.loadLong(address)
     if (LittleEndian.isNative) return toLE.loadLong(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeLong(address: Long, value: Long) {
     if (BigEndian.isNative)    return toBE.storeLong(address, value)
     if (LittleEndian.isNative) return toLE.storeLong(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadFloat(address: Long): Float =
@@ -82,37 +82,37 @@ class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
   override def loadUnalignedShort(address: Long): Short = {
     if (BigEndian.isNative)    return toBE.loadUnalignedShort(address)
     if (LittleEndian.isNative) return toLE.loadUnalignedShort(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeUnalignedShort(address: Long, value: Short) {
     if (BigEndian.isNative)    return toBE.storeUnalignedShort(address, value)
     if (LittleEndian.isNative) return toLE.storeUnalignedShort(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadUnalignedInt(address: Long): Int = {
     if (BigEndian.isNative)    return toBE.loadUnalignedInt(address)
     if (LittleEndian.isNative) return toLE.loadUnalignedInt(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeUnalignedInt(address: Long, value: Int) {
     if (BigEndian.isNative)    return toBE.storeUnalignedInt(address, value)
     if (LittleEndian.isNative) return toLE.storeUnalignedInt(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadUnalignedLong(address: Long): Long = {
     if (BigEndian.isNative)    return toBE.loadUnalignedLong(address)
     if (LittleEndian.isNative) return toLE.loadUnalignedLong(address)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def storeUnalignedLong(address: Long, value: Long) {
     if (BigEndian.isNative)    return toBE.storeUnalignedLong(address, value)
     if (LittleEndian.isNative) return toLE.storeUnalignedLong(address, value)
-    throw new scala.MatchError(NativeEndian)
+    throw new MatchError(NativeEndian)
   }
   
   override def loadUnalignedFloat(address: Long): Float =
@@ -173,23 +173,23 @@ class Mem4(val words: scala.Array[Int]) extends AnyVal with Mem {
   
   def toLE: Mem4LE = new Mem4LE(words)
   
-  override def toString: java.lang.String = "Mem4"+"("+ size +")"
+  override def toString: String = "Mem4"+"("+ size +")"
 }
 
 /** An allocator for native-endian memory backed by an `Int` array. */
 object Mem4 extends Allocator with (Long => Mem4) {
-  override def MaxSize: Long = scala.Int.MaxValue.toLong << 2
+  override def MaxSize: Long = Int.MaxValue.toLong << 2
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): Mem4 =
     apply(unit.size * count)
   
   override def apply(size: Long): Mem4 = {
-    scala.Predef.require(0L <= size && size <= MaxSize)
-    val words = new scala.Array[Int]((align(size, 4L) >> 2).toInt)
+    Predef.require(0L <= size && size <= MaxSize)
+    val words = new Array[Int]((align(size, 4L) >> 2).toInt)
     new Mem4(words)
   }
   
-  def unapply(mem: Mem4): Some[scala.Array[Int]] = Some(mem.words)
+  def unapply(mem: Mem4): Some[Array[Int]] = Some(mem.words)
   
-  override def toString: java.lang.String = "Mem4"
+  override def toString: String = "Mem4"
 }

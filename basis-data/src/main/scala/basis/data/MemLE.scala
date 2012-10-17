@@ -62,22 +62,22 @@ trait MemLE extends Any with Mem {
 
 /** An allocator for little-endian memory backed by a primitive array. */
 object MemLE extends Allocator with (Long => MemLE) {
-  override def MaxSize: Long = scala.Int.MaxValue << 3
+  override def MaxSize: Long = Int.MaxValue << 3
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): MemLE = {
     val size = unit.size * count
-    if (size <= scala.Int.MaxValue.toLong) unit.alignment match {
+    if (size <= Int.MaxValue.toLong) unit.alignment match {
       case 1L => Mem1LE(size)
       case 2L => Mem2LE(size)
       case 4L => Mem4LE(size)
       case _  => Mem8LE(size)
     }
-    else if (size <= (scala.Int.MaxValue.toLong << 1)) unit.alignment match {
+    else if (size <= (Int.MaxValue.toLong << 1)) unit.alignment match {
       case 1L | 2L => Mem2LE(size)
       case 4L      => Mem4LE(size)
       case _       => Mem8LE(size)
     }
-    else if (size <= (scala.Int.MaxValue.toLong << 2)) unit.alignment match {
+    else if (size <= (Int.MaxValue.toLong << 2)) unit.alignment match {
       case 1L | 2L | 4L => Mem4LE(size)
       case _            => Mem8LE(size)
     }
@@ -86,5 +86,5 @@ object MemLE extends Allocator with (Long => MemLE) {
   
   override def apply(size: Long): MemLE = alloc[Byte](size)
   
-  override def toString: java.lang.String = "MemLE"
+  override def toString: String = "MemLE"
 }

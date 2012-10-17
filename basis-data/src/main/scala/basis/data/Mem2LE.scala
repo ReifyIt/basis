@@ -8,7 +8,7 @@
 package basis.data
 
 /** Little-endian memory backed by a `Short` array. */
-class Mem2LE(val words: scala.Array[Short]) extends AnyVal with MemLE {
+class Mem2LE(val words: Array[Short]) extends AnyVal with MemLE {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
@@ -19,9 +19,9 @@ class Mem2LE(val words: scala.Array[Short]) extends AnyVal with MemLE {
   override def endian: LittleEndian.type = LittleEndian
   
   override def copy(size: Long = this.size): Mem2LE = {
-    scala.Predef.require(0L <= size && size <= (scala.Int.MaxValue.toLong << 1))
-    val words = new scala.Array[Short]((align(size, 2L) >> 1).toInt)
-    java.lang.System.arraycopy(this.words, 0, words, 0, scala.math.min(this.words.length, words.length))
+    Predef.require(0L <= size && size <= (Int.MaxValue.toLong << 1))
+    val words = new Array[Short]((align(size, 2L) >> 1).toInt)
+    java.lang.System.arraycopy(this.words, 0, words, 0, java.lang.Math.min(this.words.length, words.length))
     new Mem2LE(words)
   }
   
@@ -185,23 +185,23 @@ class Mem2LE(val words: scala.Array[Short]) extends AnyVal with MemLE {
   
   def toBE: Mem2BE = new Mem2BE(words)
   
-  override def toString: java.lang.String = "Mem2LE"+"("+ size +")"
+  override def toString: String = "Mem2LE"+"("+ size +")"
 }
 
 /** An allocator for little-endian memory backed by a `Short` array. */
 object Mem2LE extends Allocator with (Long => Mem2LE) {
-  override def MaxSize: Long = scala.Int.MaxValue.toLong << 1
+  override def MaxSize: Long = Int.MaxValue.toLong << 1
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): Mem2LE =
     apply(unit.size * count)
   
   override def apply(size: Long): Mem2LE = {
-    scala.Predef.require(0L <= size && size <= MaxSize)
-    val words = new scala.Array[Short]((align(size, 2L) >> 1).toInt)
+    Predef.require(0L <= size && size <= MaxSize)
+    val words = new Array[Short]((align(size, 2L) >> 1).toInt)
     new Mem2LE(words)
   }
   
-  def unapply(mem: Mem2LE): Some[scala.Array[Short]] = Some(mem.words)
+  def unapply(mem: Mem2LE): Some[Array[Short]] = Some(mem.words)
   
-  override def toString: java.lang.String = "Mem2LE"
+  override def toString: String = "Mem2LE"
 }

@@ -8,7 +8,7 @@
 package basis.data
 
 /** Big-endian memory backed by a `Byte` array. */
-class Mem1BE(val words: scala.Array[Byte]) extends AnyVal with MemBE {
+class Mem1BE(val words: Array[Byte]) extends AnyVal with MemBE {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
@@ -19,9 +19,9 @@ class Mem1BE(val words: scala.Array[Byte]) extends AnyVal with MemBE {
   override def endian: BigEndian.type = BigEndian
   
   override def copy(size: Long = this.size): Mem1BE = {
-    scala.Predef.require(0L <= size && size <= scala.Int.MaxValue.toLong)
-    val words = new scala.Array[Byte](size.toInt)
-    java.lang.System.arraycopy(this.words, 0, words, 0, scala.math.min(this.words.length, words.length))
+    Predef.require(0L <= size && size <= Int.MaxValue.toLong)
+    val words = new Array[Byte](size.toInt)
+    java.lang.System.arraycopy(this.words, 0, words, 0, java.lang.Math.min(this.words.length, words.length))
     new Mem1BE(words)
   }
   
@@ -133,23 +133,23 @@ class Mem1BE(val words: scala.Array[Byte]) extends AnyVal with MemBE {
   
   def toLE: Mem1LE = new Mem1LE(words)
   
-  override def toString: java.lang.String = "Mem1BE"+"("+ size +")"
+  override def toString: String = "Mem1BE"+"("+ size +")"
 }
 
 /** An allocator for big-endian memory backed by a `Byte` array. */
 object Mem1BE extends Allocator with (Long => Mem1BE) {
-  override def MaxSize: Long = scala.Int.MaxValue.toLong
+  override def MaxSize: Long = Int.MaxValue.toLong
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): Mem1BE =
     apply(unit.size * count)
   
   override def apply(size: Long): Mem1BE = {
-    scala.Predef.require(0L <= size && size <= MaxSize)
-    val words = new scala.Array[Byte](size.toInt)
+    Predef.require(0L <= size && size <= MaxSize)
+    val words = new Array[Byte](size.toInt)
     new Mem1BE(words)
   }
   
-  def unapply(mem: Mem1BE): Some[scala.Array[Byte]] = Some(mem.words)
+  def unapply(mem: Mem1BE): Some[Array[Byte]] = Some(mem.words)
   
-  override def toString: java.lang.String = "Mem1BE"
+  override def toString: String = "Mem1BE"
 }

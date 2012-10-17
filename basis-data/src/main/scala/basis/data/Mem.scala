@@ -55,19 +55,19 @@ package basis.data
   * scala> mem.storeInt(0L, 0xCAFEBABE) // store an Int value to address 0.
   * 
   * scala> mem.loadInt(0L).toHexString // load an Int value from address 0.
-  * res1: java.lang.String = cafebabe
+  * res1: String = cafebabe
   * 
   * scala> mem.loadByte(0L).toHexString // load the low byte of the Int value.
-  * res2: java.lang.String = ffffffbe // the least significant byte comes first in this case.
+  * res2: String = ffffffbe // the least significant byte comes first in this case.
   * 
   * scala> mem.loadShort(2L).toHexString // load the high bytes of the Int value.
-  * res3: java.lang.String = ffffcafe // toHexString sign extends the result to an Int.
+  * res3: String = ffffcafe // toHexString sign extends the result to an Int.
   * 
   * scala> mem.loadShort(1L).toHexString // load an unaligned address.
-  * res4: java.lang.String = ffffbabe // the address was truncated, oops.
+  * res4: String = ffffbabe // the address was truncated, oops.
   * 
   * scala> mem.loadUnalignedShort(1L).toHexString // load the unaligned middle bytes of the Int value.
-  * res5: java.lang.String = fffffeba
+  * res5: String = fffffeba
   * }}}
   */
 trait Mem extends Any {
@@ -208,7 +208,7 @@ trait Mem extends Any {
       ((loadByte(address)      & 0xFF)       |
        (loadByte(address + 1L)         << 8)).toShort
     }
-    else throw new scala.MatchError(endian)
+    else throw new MatchError(endian)
   }
   
   /** Stores a native-endian `Short` value as a 2-byte `endian` ordered word.
@@ -225,7 +225,7 @@ trait Mem extends Any {
       storeByte(address,       value.toByte)
       storeByte(address + 1L, (value >> 8).toByte)
     }
-    else throw new scala.MatchError(endian)
+    else throw new MatchError(endian)
   }
   
   /** Loads a 4-byte `endian` ordered word as a native-endian `Int` value.
@@ -246,7 +246,7 @@ trait Mem extends Any {
       ((loadByte(address + 2L) & 0xFF) << 16) |
        (loadByte(address + 3L)         << 24)
     }
-    else throw new scala.MatchError(endian)
+    else throw new MatchError(endian)
   }
   
   /** Stores a native-endian `Int` value as a 4-byte `endian` ordered word.
@@ -267,7 +267,7 @@ trait Mem extends Any {
       storeByte(address + 2L, (value >> 16).toByte)
       storeByte(address + 3L, (value >> 24).toByte)
     }
-    else throw new scala.MatchError(endian)
+    else throw new MatchError(endian)
   }
   
   /** Loads an 8-byte `endian` ordered word as a native-endian `Long` value.
@@ -296,7 +296,7 @@ trait Mem extends Any {
       ((loadByte(address + 6L) & 0xFF).toLong << 48) |
        (loadByte(address + 7L).toLong         << 56)
     }
-    else throw new scala.MatchError(endian)
+    else throw new MatchError(endian)
   }
   
   /** Stores a native-endian `Long` value as an 8-byte `endian` ordered word.
@@ -325,7 +325,7 @@ trait Mem extends Any {
       storeByte(address + 6L, (value >> 48).toByte)
       storeByte(address + 7L, (value >> 56).toByte)
     }
-    else throw new scala.MatchError(endian)
+    else throw new MatchError(endian)
   }
   
   /** Loads a 4-byte `endian` ordered word as a native-endian `Float` value.
@@ -474,22 +474,22 @@ trait Mem extends Any {
 object Mem extends Allocator {
   implicit def MemOps(self: Mem): MemOps = new MemOps(self)
   
-  override def MaxSize: Long = scala.Int.MaxValue.toLong << 3
+  override def MaxSize: Long = Int.MaxValue.toLong << 3
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): Mem = {
     val size = unit.size * count
-    if (size <= scala.Int.MaxValue.toLong) unit.alignment match {
+    if (size <= Int.MaxValue.toLong) unit.alignment match {
       case 1L => Mem1(size)
       case 2L => Mem2(size)
       case 4L => Mem4(size)
       case _  => Mem8(size)
     }
-    else if (size <= (scala.Int.MaxValue.toLong << 1)) unit.alignment match {
+    else if (size <= (Int.MaxValue.toLong << 1)) unit.alignment match {
       case 1L | 2L => Mem2(size)
       case 4L      => Mem4(size)
       case _       => Mem8(size)
     }
-    else if (size <= (scala.Int.MaxValue.toLong << 2)) unit.alignment match {
+    else if (size <= (Int.MaxValue.toLong << 2)) unit.alignment match {
       case 1L | 2L | 4L => Mem4(size)
       case _            => Mem8(size)
     }
@@ -498,7 +498,7 @@ object Mem extends Allocator {
   
   override def apply(size: Long): Mem = alloc[Byte](size)
   
-  override def toString: java.lang.String = "Mem"
+  override def toString: String = "Mem"
   
   /** Copies a byte sequence from one memory object to another.
     * 
