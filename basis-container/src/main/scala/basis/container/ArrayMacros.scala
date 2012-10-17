@@ -14,22 +14,18 @@ private[basis] object ArrayMacros {
   import scala.collection.immutable.{List, ::, Nil}
   import scala.reflect.macros.Context
   
-  private def initArray(c: Context)(tpt: c.Tree, length: c.Tree, xs: List[c.Tree]): c.Tree = {
+  private def initArray(c: Context)(tpt: c.Tree, xs: List[c.Tree], length: Int): c.Tree = {
     import c.universe._
-    val i = c.fresh(newTermName("i$"))
-    val n = c.fresh(newTermName("n$"))
     val array = c.fresh(newTermName("array$"))
     Block(
-      ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-      ValDef(Modifiers(), n, TypeTree(), length) ::
       ValDef(Modifiers(), array, TypeTree(),
         Apply(
           Select(
             New(AppliedTypeTree(Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Array")), tpt :: Nil)),
             nme.CONSTRUCTOR),
-          Ident(n) :: Nil)) ::
+          Literal(Constant(length)) :: Nil)) ::
       xs.zipWithIndex.map {
-        case (x, k) => Apply(Select(Ident(array), "update"), Literal(Constant(k)) :: x :: Nil)
+        case (x, i) => Apply(Select(Ident(array), "update"), Literal(Constant(i)) :: x :: Nil)
       },
       Ident(array)
     )
@@ -104,8 +100,8 @@ private[basis] object ArrayMacros {
       newByteArray(c)(
         initArray(c)(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Byte")),
-          Literal(Constant(xs.length)),
-          exprsToTrees(c)(xs: _*)))
+          exprsToTrees(c)(xs: _*),
+          xs.length))
     )(WeakTypeTag.Nothing)
   }
   
@@ -115,8 +111,8 @@ private[basis] object ArrayMacros {
       newShortArray(c)(
         initArray(c)(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Short")),
-          Literal(Constant(xs.length)),
-          exprsToTrees(c)(xs: _*)))
+          exprsToTrees(c)(xs: _*),
+          xs.length))
     )(WeakTypeTag.Nothing)
   }
   
@@ -126,8 +122,8 @@ private[basis] object ArrayMacros {
       newIntArray(c)(
         initArray(c)(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Int")),
-          Literal(Constant(xs.length)),
-          exprsToTrees(c)(xs: _*)))
+          exprsToTrees(c)(xs: _*),
+          xs.length))
     )(WeakTypeTag.Nothing)
   }
   
@@ -137,8 +133,8 @@ private[basis] object ArrayMacros {
       newLongArray(c)(
         initArray(c)(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Long")),
-          Literal(Constant(xs.length)),
-          exprsToTrees(c)(xs: _*)))
+          exprsToTrees(c)(xs: _*),
+          xs.length))
     )(WeakTypeTag.Nothing)
   }
   
@@ -148,8 +144,8 @@ private[basis] object ArrayMacros {
       newFloatArray(c)(
         initArray(c)(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Float")),
-          Literal(Constant(xs.length)),
-          exprsToTrees(c)(xs: _*)))
+          exprsToTrees(c)(xs: _*),
+          xs.length))
     )(WeakTypeTag.Nothing)
   }
   
@@ -159,8 +155,8 @@ private[basis] object ArrayMacros {
       newDoubleArray(c)(
         initArray(c)(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Double")),
-          Literal(Constant(xs.length)),
-          exprsToTrees(c)(xs: _*)))
+          exprsToTrees(c)(xs: _*),
+          xs.length))
     )(WeakTypeTag.Nothing)
   }
   
@@ -170,8 +166,8 @@ private[basis] object ArrayMacros {
       newRefArray(c)(
         initArray(c)(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("AnyRef")),
-          Literal(Constant(xs.length)),
-          exprsToAnyRefTrees(c)(xs: _*)))
+          exprsToAnyRefTrees(c)(xs: _*),
+          xs.length))
     )
   }
   
