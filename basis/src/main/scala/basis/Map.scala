@@ -7,7 +7,9 @@
 
 package basis
 
-/** A unique set of iterable keys with associated values.
+/** An associated set of (key, value) pairs with unique keys. Import
+  * [[basis.collection.MapOps]] to extend this interface with a full
+  * suite of optimized collection operations.
   * 
   * @author Chris Sachs
   * 
@@ -16,18 +18,27 @@ package basis
 trait Map[A, +T] extends Any with Container[(A, T)] {
   override type Self <: Map[A, T]
   
-  /** Returns `true` if this $collection contains no elements. */
+  /** Returns a new iterator over the (key, value) pairs of this $collection. */
+  override def iterator: Iterator[(A, T)]
+  
+  /** Returns `true` if this $collection has no associations. */
   def isEmpty: Boolean
   
+  /** Returns the number of associations in this $collection. */
   def size: Int
   
+  /** Returns `true` if this $collection has a value associated with the given key. */
   def contains(key: A): Boolean
   
+  /** Returns the value associated with the given key. */
   def apply(key: A): T
   
+  /** Returns some value associated with the given key, or none if no association exists. */
   def get(key: A): Option[T]
   
+  /** Returns a copy of this $collection with the given value associated with the given key. */
   def + [U >: T](key: A, value: U): Map[A, U]
   
+  /** Returns a copy of this $collection without any value associated with the given key. */
   def - (key: A): Map[A, T]
 }

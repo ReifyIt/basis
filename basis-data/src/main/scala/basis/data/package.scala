@@ -7,9 +7,9 @@
 
 package basis
 
-/** An abstract memory model. */
+/** A lowe-level memory model. */
 package object data {
-  /** Returns an address advanced to a power-of-two alignment.
+  /** Returns a given address advanced to a power-of-two alignment.
     * 
     * @param  alignment   the required alignment.
     * @param  address     the address to align.
@@ -18,10 +18,10 @@ package object data {
   def align(base: scala.Long, alignment: scala.Long): scala.Long =
     (base + (alignment - 1L)) & ~(alignment - 1L)
   
-  /** Returns the alignment of a value type. */
+  /** Returns the alignment of type's implicit `ValType`. */
   @inline def alignOf[T](implicit struct: ValType[T]): scala.Long = struct.alignment
   
-  /** Returns the size of a value type. */
+  /** Returns the size of a type's implicit `ValType`. */
   @inline def sizeOf[T](implicit struct: ValType[T]): scala.Long = struct.size
   
   /** Returns the native byte order of the virtual machine. */

@@ -7,10 +7,14 @@
 
 package basis
 
+/** A producer of textual object descriptions. */
+@scala.annotation.implicitNotFound("${T} has no implicit Show implementation.")
 trait Show[-T] {
+  /** Appends a description of the given value to a character buffer. */
   def show(x: T)(implicit buffer: CharBuffer): Unit
 }
 
 object Show {
+  /** Returns the given type's implicit `Show` implementation. */
   def apply[T](implicit T: Show[T]): T.type = T
 }

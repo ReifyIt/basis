@@ -8,7 +8,7 @@
 package basis
 
 /** An iterable sequence of elements. Import [[basis.collection.SeqOps]] to
-  * extend this interface with a rich suite of optimized collection operations.
+  * extend this interface with a full suite of optimized collection operations.
   * 
   * @author Chris Sachs
   * 
@@ -17,7 +17,7 @@ package basis
 trait Seq[+A] extends Any with Container[A] {
   override type Self <: Seq[A]
   
-  /** Returns `true` if this $collection contains no elements. */
+  /** Returns `true` if this $collection has no elements. */
   def isEmpty: Boolean
   
   /** Returns the number of elements in this $collection. */

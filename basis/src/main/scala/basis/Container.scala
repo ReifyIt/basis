@@ -8,7 +8,7 @@
 package basis
 
 /** An iterable container of elements. Import [[basis.collection.ContainerOps]]
-  * to extend this interface with a rich suite of optimized collection operations.
+  * to extend this interface with a full suite of optimized collection operations.
   * 
   * @author Chris Sachs
   * 

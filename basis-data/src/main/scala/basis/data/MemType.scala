@@ -7,19 +7,18 @@
 
 package basis.data
 
-import scala.annotation.implicitNotFound
-
 /** A memory storage strategy. Each memory type is either
-  * a [[basis.data.RefType]] or a [[basis.data.ValType]].
+  * a [[RefType]] or a [[ValType]].
   * 
   * @tparam T   the modeled instance type.
   */
-@implicitNotFound("no implicit memory type for ${T}")
+@scala.annotation.implicitNotFound("${T} has no implicit MemType.")
 sealed abstract class MemType[T]
 
-/** A factory for fundamental memory types. Includes implicit value types
-  * for primitive Scala types and tuples of value types. */
+/** A factory for fundamental memory types. Includes implicit ValTypes for
+  * primitive Scala types and tuples of value types. */
 object MemType extends ValTypes {
+  /** Returns the given type's implicit `MemType`. */
   def apply[T](implicit memtype: MemType[T]): memtype.type = memtype
 }
 
@@ -27,15 +26,16 @@ object MemType extends ValTypes {
   * 
   * @tparam T   the modeled instance type.
   */
-@implicitNotFound("no implicit reference type for ${T}")
+@scala.annotation.implicitNotFound("${T} has no implicit RefType.")
 final class RefType[T] extends MemType[T] {
-  override def toString: String = "ReferenceType"
+  override def toString: String = "RefType"
 }
 
-/** A factory for reference types.  */
+/** A factory for reference types. */
 object RefType {
   private[this] val Reference = new RefType[Nothing]
   
+  /** Returns the given type's implicit `RefType`. */
   implicit def apply[T]: RefType[T] = Reference.asInstanceOf[RefType[T]]
 }
 
@@ -52,7 +52,7 @@ object RefType {
   * 
   * @tparam T   the modeled instance type.
   */
-@implicitNotFound("no implicit value type for ${T}")
+@scala.annotation.implicitNotFound("${T} has no implicit ValType.")
 abstract class ValType[T] extends MemType[T] {
   /** Returns the power-of-two alignment of this type's frame. The alignment
     * must evenly divide all addresses used to store this type's values. */
@@ -83,6 +83,7 @@ abstract class ValType[T] extends MemType[T] {
 object ValType {
   import java.lang.Math.max
   
+  /** Returns the given type's implicit `ValType`. */
   def apply[T](implicit valtype: ValType[T]): valtype.type = valtype
   
   object PackedByte extends ValType[Byte] {

@@ -9,7 +9,7 @@ package basis
 
 /** A traversable collection of elements. Collection declares only a protected
   * `foreach` method; it has no public methods. Import
-  * [[basis.collection.CollectionOps]] to extend this interface with a rich
+  * [[basis.collection.CollectionOps]] to extend this interface with a full
   * suite of collection operations.
   * 
   * @author Chris Sachs

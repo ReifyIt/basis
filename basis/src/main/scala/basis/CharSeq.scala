@@ -7,7 +7,7 @@
 
 package basis
 
-/** An iterable sequence of Unicode® characters.
+/** A specialized iterable sequence of Unicode® characters.
   * 
   * @author Chris Sachs
   * 

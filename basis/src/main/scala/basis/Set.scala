@@ -7,7 +7,8 @@
 
 package basis
 
-/** A unique set of iterable values.
+/** A unique set of elements. Import [[basis.collection.SetOps]] to extend
+  * this interface with a full suite of optimized collection operations.
   * 
   * @author Chris Sachs
   * 
@@ -16,14 +17,18 @@ package basis
 trait Set[A] extends Any with Container[A] {
   override type Self <: Set[A]
   
-  /** Returns `true` if this $collection contains no elements. */
+  /** Returns `true` if this $collection has no elements. */
   def isEmpty: Boolean
   
+  /** Returns the number of elements in this $collection. */
   def size: Int
   
-  def contains(key: A): Boolean
+  /** Returns `true` if this $collection contains the given element. */
+  def contains(element: A): Boolean
   
+  /** Returns a copy of this $collection containing the given element. */
   def + (element: A): Set[A]
   
+  /** Returns a copy of this $collection without the given element. */
   def - (element: A): Set[A]
 }

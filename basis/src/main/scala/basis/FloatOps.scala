@@ -7,6 +7,7 @@
 
 package basis
 
+/** Supplemental operations on `Float` values. */
 trait FloatOps extends Any {
   def abs: Float = macro FloatMacros.abs
   

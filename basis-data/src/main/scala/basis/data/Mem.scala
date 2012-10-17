@@ -7,43 +7,42 @@
 
 package basis.data
 
-/** A mutable sequence of 8-bit memory cells.
+/** A mutable sequence of bytes with supporting low-level memory operations.
   * 
   * ==Address space==
   * 
-  * `Mem` has a 64-bit ''address space'' ranging from `0` until `size`. Each
-  * ''address'' in the space identifies a unique storage location for a single
-  * `Byte` value. Multi-byte values occupy multiple storage locations and thus
-  * have multiple addresses–one address per byte. The lowest address of a
+  * `Mem` objects have a 64-bit ''address space'' ranging from `0` until `size`.
+  * Each ''address'' in the space identifies a unique storage location for a
+  * single `Byte` value. Multi-byte values occupy multiple storage locations and
+  * thus have multiple addresses–one address per byte. The lowest address of a
   * multi-byte sequence canonically refers to the whole byte sequence.
   * 
-  * ==Data values==
+  * ==Value types==
   * 
-  * `Mem` stores structured value types. ''Value type'' in this context stands
-  * for an isomorphism between Scala values and fixed-length byte sequences,
+  * `Mem` objects store structured value types. In this context, ''Value type''
+  * means an isomorphism between Scala values and fixed-length byte sequences,
   * with a possible restriction on address alignment.
   * 
-  * ===Primitive values===
+  * ===Primitive value types===
   * 
   * Primitive value types have dedicated `load` and `store` methods. Multi-byte
   * primitives have ''aligned'' and ''unaligned'' variants. The memory's
   * `endian` property determines the byte order of multi-byte values.
   * 
-  * ===Struct values===
+  * ===Derived value types===
   * 
-  * [[basis.data.ValType]] typeclasses abstract over value types. Generic
-  * `load` and `store` methods delegate to the implicit struct typeclass
-  * associated with each method's type parameter.
+  * [[ValType]] instances abstract over value types. Generic `load` and `store`
+  * methods delegate to implicitly supplied `ValType` instances.
   * 
-  * ==Alignment==
+  * ==Address alignment==
   * 
   * N-byte divisible addresses are said to be N-byte ''aligned''. Using aligned
   * addresses reduces some multi-byte memory accesses to single array operations,
-  * which can noticeably improve performance. Alignment sensitive allocators
-  * such as the default `Block` allocator try to allocate memory backed by a
-  * primitive array whose element size matches the alignment of the unit struct
-  * passed to the allocator. This allocation strategy makes possible the
-  * performance benefit of using aligned addresses.
+  * which can improve performance. Alignment sensitive allocators such as the
+  * default `Mem` allocator try to allocate memory backed by a primitive array
+  * whose element size matches the alignment of an implicitly supplied unit
+  * struct. This allocation strategy combined with proper address alignment
+  * enables optimal code paths.
   * 
   * Aligned memory accesses truncate unaligned addresses to the required alignment.
   * 
@@ -75,13 +74,13 @@ trait Mem extends Any {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
-  /** Returns the number of addressable bytes in the address space. */
+  /** Returns the number of bytes in this memory's address space. */
   def size: Long
   
-  /** Returns the internal word size. */
+  /** Returns this memory's internal word size. */
   def unit: Int
   
-  /** Returns the memory's internal byte order. */
+  /** Returns this memory's internal byte order. */
   def endian: ByteOrder
   
   /** Returns a resized copy of this memory.

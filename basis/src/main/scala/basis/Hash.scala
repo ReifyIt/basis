@@ -7,11 +7,14 @@
 
 package basis
 
+/** An equality relation with an associated hash function. */
+@scala.annotation.implicitNotFound("${T} has no implicit Hash implementation.")
 trait Hash[-T] extends Equal[T] {
+  /** Returns the hash code of the given value. */
   def hash(x: T): Int
 }
 
-/** An implementation of Austin Appleby's MurmurHash 3 algorithm. Implements
+/** Implements Austin Appleby's MurmurHash 3 algorithm, specifically
   * MurmurHash3_x86_32 revision 136.
   * 
   * @example {{{
@@ -24,6 +27,7 @@ trait Hash[-T] extends Equal[T] {
 object Hash {
   import java.lang.Integer.{ rotateLeft => rotl }
   
+  /** Returns the given type's implicit `Hash` implementation. */
   def apply[T](implicit T: Hash[T]): T.type = T
   
   /** Returns the hash code mixed with the new hash value. */

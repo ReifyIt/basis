@@ -7,7 +7,7 @@
 
 package basis
 
-/** A Unicode® character buffer. */
+/** A specialized Unicode® character buffer. */
 trait CharBuffer extends Buffer[Nothing, Char] {
   /* FIXME: waiting on SI-6500 */
   //override def += (char: Char): this.type

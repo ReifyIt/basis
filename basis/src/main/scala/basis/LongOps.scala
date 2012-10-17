@@ -7,6 +7,7 @@
 
 package basis
 
+/** Supplemental operations on `Long` values. */
 trait LongOps extends Any {
   def abs: Long = macro LongMacros.abs
   

@@ -7,6 +7,7 @@
 
 package basis
 
+/** Supplemental operations on `Int` values. */
 trait IntOps extends Any {
   def abs: Int = macro IntMacros.abs
   

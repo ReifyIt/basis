@@ -6,12 +6,18 @@
 \*                                                                      */
 
 package object basis {
+  /** Returns `true` given equal values and `false` given unequal ones,
+    * according to an implicit `Equal` implementation. */
   def equal[T](x: T, y: T)(implicit T: Equal[T]): Boolean =
     macro Macros.equal[T]
   
+  /** Returns the hash code of the given value according to an implicit
+    * `Hash` implementation. */
   def hash[T](x: T)(implicit T: Hash[T]): Int =
     macro Macros.hash[T]
   
+  /** Returns a description of the given value produced by an implicit
+    * `Show` implementation. */
   def show[T](x: T)(implicit T: Show[T], buffer: CharBuffer): buffer.State =
     macro Macros.show[T]
   

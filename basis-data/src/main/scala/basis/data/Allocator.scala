@@ -11,7 +11,6 @@ package basis.data
   * 
   * @author Chris Sachs
   */
-@scala.annotation.implicitNotFound("no implicit memory allocator")
 abstract class Allocator extends scala.runtime.AbstractFunction1[Long, Mem] {
   /** Returns the maximum size in bytes this allocator can allocate. */
   def MaxSize: Long

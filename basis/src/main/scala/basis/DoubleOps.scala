@@ -7,6 +7,7 @@
 
 package basis
 
+/** Supplemental operations on `Double` values. */
 trait DoubleOps extends Any {
   def abs: Double = macro DoubleMacros.abs
   
