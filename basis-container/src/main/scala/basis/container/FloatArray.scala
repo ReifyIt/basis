@@ -55,11 +55,12 @@ class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float]
   }
 }
 
-private[basis] object FloatArray {
-  val empty: FloatArray = FloatArray(0)
+object FloatArray {
+  import scala.language.experimental.macros
   
-  def apply(length: Int): FloatArray =
-    new FloatArray(new scala.Array[Float](length))
+  val empty: FloatArray = new FloatArray(new scala.Array[Float](0))
+  
+  def apply(xs: Float*): FloatArray = macro ArrayMacros.literalFloatArray
 }
 
 final class FloatArrayBuffer extends Buffer[Any, Float] {

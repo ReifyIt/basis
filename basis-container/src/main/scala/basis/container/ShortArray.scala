@@ -55,11 +55,12 @@ class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short]
   }
 }
 
-private[basis] object ShortArray {
-  val empty: ShortArray = ShortArray(0)
+object ShortArray {
+  import scala.language.experimental.macros
   
-  def apply(length: Int): ShortArray =
-    new ShortArray(new scala.Array[Short](length))
+  val empty: ShortArray = new ShortArray(new scala.Array[Short](0))
+  
+  def apply(xs: Short*): ShortArray = macro ArrayMacros.literalShortArray
 }
 
 final class ShortArrayBuffer extends Buffer[Any, Short] {

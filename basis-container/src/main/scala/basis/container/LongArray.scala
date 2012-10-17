@@ -55,11 +55,12 @@ class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
   }
 }
 
-private[basis] object LongArray {
-  val empty: LongArray = LongArray(0)
+object LongArray {
+  import scala.language.experimental.macros
   
-  def apply(length: Int): LongArray =
-    new LongArray(new scala.Array[Long](length))
+  val empty: LongArray = new LongArray(new scala.Array[Long](0))
+  
+  def apply(xs: Long*): LongArray = macro ArrayMacros.literalLongArray
 }
 
 final class LongArrayBuffer extends Buffer[Any, Long] {

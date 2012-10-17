@@ -55,11 +55,12 @@ class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
   }
 }
 
-private[basis] object ByteArray {
-  val empty: ByteArray = ByteArray(0)
+object ByteArray {
+  import scala.language.experimental.macros
   
-  def apply(length: Int): ByteArray =
-    new ByteArray(new scala.Array[Byte](length))
+  val empty: ByteArray = new ByteArray(new scala.Array[Byte](0))
+  
+  def apply(xs: Byte*): ByteArray = macro ArrayMacros.literalByteArray
 }
 
 final class ByteArrayBuffer extends Buffer[Any, Byte] {

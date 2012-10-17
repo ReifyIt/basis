@@ -10,8 +10,181 @@ package basis.container
 import basis._
 
 private[basis] object ArrayMacros {
-  import scala.collection.immutable.{::, Nil}
+  import scala.collection.breakOut
+  import scala.collection.immutable.{List, ::, Nil}
   import scala.reflect.macros.Context
+  
+  private def initArray(c: Context)(tpt: c.Tree, length: c.Tree, xs: List[c.Tree]): c.Tree = {
+    import c.universe._
+    val i = c.fresh(newTermName("i$"))
+    val n = c.fresh(newTermName("n$"))
+    val array = c.fresh(newTermName("array$"))
+    Block(
+      ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
+      ValDef(Modifiers(), n, TypeTree(), length) ::
+      ValDef(Modifiers(), array, TypeTree(),
+        Apply(
+          Select(
+            New(AppliedTypeTree(Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Array")), tpt :: Nil)),
+            nme.CONSTRUCTOR),
+          Ident(n) :: Nil)) ::
+      xs.zipWithIndex.map {
+        case (x, k) => Apply(Select(Ident(array), "update"), Literal(Constant(k)) :: x :: Nil)
+      },
+      Ident(array)
+    )
+  }
+  
+  private def newByteArray(c: Context)(array: c.Tree): c.Tree = {
+    import c.universe._
+    Apply(
+      Select(
+        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("ByteArray"))),
+        nme.CONSTRUCTOR),
+      array :: Nil)
+  }
+  
+  private def newShortArray(c: Context)(array: c.Tree): c.Tree = {
+    import c.universe._
+    Apply(
+      Select(
+        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("ShortArray"))),
+        nme.CONSTRUCTOR),
+      array :: Nil)
+  }
+  
+  private def newIntArray(c: Context)(array: c.Tree): c.Tree = {
+    import c.universe._
+    Apply(
+      Select(
+        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("IntArray"))),
+        nme.CONSTRUCTOR),
+      array :: Nil)
+  }
+  
+  private def newLongArray(c: Context)(array: c.Tree): c.Tree = {
+    import c.universe._
+    Apply(
+      Select(
+        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("LongArray"))),
+        nme.CONSTRUCTOR),
+      array :: Nil)
+  }
+  
+  private def newFloatArray(c: Context)(array: c.Tree): c.Tree = {
+    import c.universe._
+    Apply(
+      Select(
+        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("FloatArray"))),
+        nme.CONSTRUCTOR),
+      array :: Nil)
+  }
+  
+  private def newDoubleArray(c: Context)(array: c.Tree): c.Tree = {
+    import c.universe._
+    Apply(
+      Select(
+        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("DoubleArray"))),
+        nme.CONSTRUCTOR),
+      array :: Nil)
+  }
+  
+  private def newRefArray(c: Context)(array: c.Tree): c.Tree = {
+    import c.universe._
+    Apply(
+      Select(
+        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("RefArray"))),
+        nme.CONSTRUCTOR),
+      array :: Nil)
+  }
+  
+  def literalByteArray(c: Context)(xs: c.Expr[Byte]*): c.Expr[ByteArray] = {
+    import c.universe._
+    c.Expr(
+      newByteArray(c)(
+        initArray(c)(
+          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Byte")),
+          Literal(Constant(xs.length)),
+          exprsToTrees(c)(xs: _*)))
+    )(WeakTypeTag.Nothing)
+  }
+  
+  def literalShortArray(c: Context)(xs: c.Expr[Short]*): c.Expr[ShortArray] = {
+    import c.universe._
+    c.Expr(
+      newShortArray(c)(
+        initArray(c)(
+          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Short")),
+          Literal(Constant(xs.length)),
+          exprsToTrees(c)(xs: _*)))
+    )(WeakTypeTag.Nothing)
+  }
+  
+  def literalIntArray(c: Context)(xs: c.Expr[Int]*): c.Expr[IntArray] = {
+    import c.universe._
+    c.Expr(
+      newIntArray(c)(
+        initArray(c)(
+          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Int")),
+          Literal(Constant(xs.length)),
+          exprsToTrees(c)(xs: _*)))
+    )(WeakTypeTag.Nothing)
+  }
+  
+  def literalLongArray(c: Context)(xs: c.Expr[Long]*): c.Expr[LongArray] = {
+    import c.universe._
+    c.Expr(
+      newLongArray(c)(
+        initArray(c)(
+          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Long")),
+          Literal(Constant(xs.length)),
+          exprsToTrees(c)(xs: _*)))
+    )(WeakTypeTag.Nothing)
+  }
+  
+  def literalFloatArray(c: Context)(xs: c.Expr[Float]*): c.Expr[FloatArray] = {
+    import c.universe._
+    c.Expr(
+      newFloatArray(c)(
+        initArray(c)(
+          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Float")),
+          Literal(Constant(xs.length)),
+          exprsToTrees(c)(xs: _*)))
+    )(WeakTypeTag.Nothing)
+  }
+  
+  def literalDoubleArray(c: Context)(xs: c.Expr[Double]*): c.Expr[DoubleArray] = {
+    import c.universe._
+    c.Expr(
+      newDoubleArray(c)(
+        initArray(c)(
+          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Double")),
+          Literal(Constant(xs.length)),
+          exprsToTrees(c)(xs: _*)))
+    )(WeakTypeTag.Nothing)
+  }
+  
+  def literalRefArray[A : c.WeakTypeTag](c: Context)(xs: c.Expr[A]*): c.Expr[RefArray[A]] = {
+    import c.universe._
+    c.Expr[RefArray[A]](
+      newRefArray(c)(
+        initArray(c)(
+          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("AnyRef")),
+          Literal(Constant(xs.length)),
+          exprsToAnyRefTrees(c)(xs: _*)))
+    )
+  }
+  
+  private def exprsToTrees(c: Context)(xs: c.Expr[_]*): List[c.Tree] = xs.map(_.tree)(breakOut)
+  
+  private def exprsToAnyRefTrees(c: Context)(xs: c.Expr[_]*): List[c.Tree] = {
+    import c.universe._
+    xs.map { x =>
+      TypeApply(
+        Select(x.tree, "asInstanceOf"),
+        Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("AnyRef")) :: Nil)
+    } (breakOut)
+  }
   
   private def deconstruct[A : c.WeakTypeTag](c: Context): c.Expr[Array[A]] = {
     import c.universe._

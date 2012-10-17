@@ -83,14 +83,8 @@ class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
   def +: (bit: Boolean): BitArray = insert(0, bit)
 }
 
-private[basis] object BitArray {
-  val empty: BitArray = BitArray(0)
-  
-  def apply(length: Int): BitArray = {
-    val words = new scala.Array[Int](1 + (((length + 31) & ~31) >> 5))
-    words(0) = length
-    new BitArray(words)
-  }
+object BitArray {
+  val empty: BitArray = new BitArray(new scala.Array[Int](1))
 }
 
 final class BitArrayBuffer extends Buffer[Any, Boolean] {

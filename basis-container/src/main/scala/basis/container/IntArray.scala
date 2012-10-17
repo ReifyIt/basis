@@ -55,11 +55,12 @@ class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
   }
 }
 
-private[basis] object IntArray {
-  val empty: IntArray = IntArray(0)
+object IntArray {
+  import scala.language.experimental.macros
   
-  def apply(length: Int): IntArray =
-    new IntArray(new scala.Array[Int](length))
+  val empty: IntArray = new IntArray(new scala.Array[Int](0))
+  
+  def apply(xs: Int*): IntArray = macro ArrayMacros.literalIntArray
 }
 
 final class IntArrayBuffer extends Buffer[Any, Int] {

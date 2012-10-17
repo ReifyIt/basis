@@ -64,17 +64,14 @@ final class ValArray[A](mem: Mem)(implicit A: ValType[A]) extends Array[A] {
   }
 }
 
-private[basis] object ValArray {
-  def empty[A](implicit A: ValType[A]): ValArray[A] = ValArray[A](0)
-  
-  def apply[A](length: Int)(implicit A: ValType[A]): ValArray[A] =
-    new ValArray[A](Mem.alloc[A](length))
+object ValArray {
+  def empty[A : ValType]: ValArray[A] = new ValArray[A](Mem.alloc[A](0))
 }
 
 final class ValArrayBuffer[A](implicit A: ValType[A]) extends Buffer[Any, A] {
   override type State = ValArray[A]
   
-  private[this] var mem: Mem = Mem(0)
+  private[this] var mem: Mem = Mem.alloc[A](0)
   
   private[this] var aliased: Boolean = false
   
