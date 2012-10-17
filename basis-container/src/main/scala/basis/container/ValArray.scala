@@ -86,7 +86,7 @@ final class ValArrayBuffer[A](implicit A: ValType[A]) extends Buffer[Any, A] {
   }
   
   private[this] def resize(size: Int) {
-    mem.copy(A.size.toLong * size.toLong)
+    mem = mem.copy(A.size.toLong * size.toLong)
   }
   
   private[this] def prepare(size: Int) {
@@ -118,7 +118,7 @@ final class ValArrayBuffer[A](implicit A: ValType[A]) extends Buffer[Any, A] {
   }
   
   override def clear() {
-    mem = Mem(0)
+    mem = Mem.alloc[A](0)
     aliased = false
     length = 0
   }
