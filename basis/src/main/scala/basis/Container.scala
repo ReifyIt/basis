@@ -26,6 +26,7 @@ trait Container[+A] extends Any with Collection[A] {
   def iterator: Iterator[A]
 }
 
+/** `Container` type class implementations. */
 object Container {
   /* implicit */ def Show[A](implicit A: Show[A]): Show[Container[A]] =
     new ContainerShow[A]("Container")

@@ -33,6 +33,7 @@ trait Iterator[+A] extends Any with Enumerator[A] {
     while (!isEmpty) { f(head); step() }
 }
 
+/** Iterator utilities and type class implementations. */
 object Iterator {
   object empty extends Iterator[Nothing] {
     override def isEmpty: Boolean = true

@@ -21,6 +21,7 @@ package object basis {
   def show[T](x: T)(implicit T: Show[T], buffer: CharBuffer): buffer.State =
     macro Macros.show[T]
   
+  /** `Byte` constants and implicit type class implementations. */
   implicit object Byte extends Hash[Byte] with Show[Byte] {
     def MinValue: Byte = macro ByteMacros.MinValue
     
@@ -33,6 +34,7 @@ package object basis {
     override def show(x: Byte)(implicit buffer: CharBuffer): Unit = Int.show(x)
   }
   
+  /** `Short` constants and implicit type class implementations. */
   implicit object Short extends Hash[Short] with Show[Short] {
     def MinValue: Short = macro ShortMacros.MinValue
     
@@ -45,6 +47,7 @@ package object basis {
     override def show(x: Short)(implicit buffer: CharBuffer): Unit = Int.show(x)
   }
   
+  /** `Int` constants and implicit type class implementations. */
   implicit object Int extends Hash[Int] with Show[Int] {
     def MinValue: Int = macro IntMacros.MinValue
     
@@ -74,9 +77,11 @@ package object basis {
     }
   }
   
+  /** Implicitly adds supplemental operations to `Int` values. */
   implicit def IntOps(value: Int): IntOps =
     throw new java.lang.UnsupportedOperationException
   
+  /** `Long` constants and implicit type class implementations. */
   implicit object Long extends Hash[Long] with Show[Long] {
     def MinValue: Long = macro LongMacros.MinValue
     
@@ -107,9 +112,11 @@ package object basis {
     }
   }
   
+  /** Implicitly adds supplemental operations to `Long` values. */
   implicit def LongOps(value: Long): LongOps =
     throw new java.lang.UnsupportedOperationException
   
+  /** `Float` constants and implicit type class implementations. */
   implicit object Float extends Hash[Float] with Show[Float] {
     def MinValue: Float = macro FloatMacros.MinValue
     
@@ -127,9 +134,11 @@ package object basis {
       buffer.append(java.lang.Float.toString(x))
   }
   
+  /** Implicitly adds supplemental operations to `Float` values. */
   implicit def FloatOps(value: Float): FloatOps =
     throw new java.lang.UnsupportedOperationException
   
+  /** `Double` constants and implicit type class implementations. */
   implicit object Double extends Hash[Double] with Show[Double] {
     def MinValue: Double = macro DoubleMacros.MinValue
     
@@ -147,9 +156,11 @@ package object basis {
       buffer.append(java.lang.Double.toString(x))
   }
   
+  /** Implicitly adds supplemental operations to `Double` values. */
   implicit def DoubleOps(value: Double): DoubleOps =
     throw new java.lang.UnsupportedOperationException
   
+  /** `Boolean` constants and implicit type class implementations. */
   implicit object Boolean extends Hash[Boolean] with Show[Boolean] {
     override def equal(x: Boolean, y: Boolean): Boolean = x == y
     
@@ -159,7 +170,8 @@ package object basis {
       buffer.append(if (x) "true" else "false")
   }
   
-  implicit object String extends Hash[java.lang.String] with Show[java.lang.String] {
+  /** Implicit `String` type class implementations. */
+  implicit object String extends Hash[String] with Show[String] {
     override def equal(s: String, t: String): Boolean = s == t
     
     override def hash(s: String): Int = s.##
@@ -185,5 +197,6 @@ package object basis {
     }
   }
   
+  /** Implicitly provides CharBuffers that build Strings. */
   implicit def StringBuffer: CharBuffer { type State = String } = new StringBuffer
 }

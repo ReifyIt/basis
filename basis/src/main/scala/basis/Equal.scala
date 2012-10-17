@@ -14,6 +14,7 @@ trait Equal[-T] {
   def equal(x: T, y: T): Boolean
 }
 
+/** `Equal` type class utilities. */
 object Equal {
   /** Returns the given type's implicit `Equal` implementation. */
   def apply[T](implicit T: Equal[T]): T.type = T

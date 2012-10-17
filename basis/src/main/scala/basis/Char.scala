@@ -12,6 +12,7 @@ class Char(val codePoint: Int) extends AnyVal {
   def isValid: Boolean = codePoint >= 0 && codePoint <= 0x10FFFF
 }
 
+/** `Char` implicit conversions and implicit type class implementations. */
 object Char extends Hash[Char] with Show[Char] {
   implicit def apply(codePoint: Int): Char = new Char(codePoint)
   

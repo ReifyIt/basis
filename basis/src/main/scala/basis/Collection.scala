@@ -22,6 +22,7 @@ trait Collection[+A] extends Any with Enumerator[A] {
   protected override def foreach[U](f: A => U): Unit
 }
 
+/** `Collection` type class implementations. */
 object Collection {
   /* implicit */ def Show[A](implicit A: Show[A]): Show[Collection[A]] =
     new CollectionShow[A]("Collection")

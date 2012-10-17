@@ -27,6 +27,7 @@ trait Enumerator[+A] extends Any {
   protected def foreach[U](f: A => U): Unit
 }
 
+/** `Enumerator` utilities. */
 object Enumerator {
   /** Applies a function to each of an enumerator's elements by invoking the
     * enumerator's protected `foreach` method. */

@@ -14,8 +14,8 @@ trait Hash[-T] extends Equal[T] {
   def hash(x: T): Int
 }
 
-/** Implements Austin Appleby's MurmurHash 3 algorithm, specifically
-  * MurmurHash3_x86_32 revision 136.
+/** Hash function utilities. Implements Austin Appleby's MurmurHash 3 algorithm,
+  * specifically MurmurHash3_x86_32 revision 136.
   * 
   * @example {{{
   * import Hash._

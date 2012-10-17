@@ -14,6 +14,7 @@ trait Show[-T] {
   def show(x: T)(implicit buffer: CharBuffer): Unit
 }
 
+/** `Show` type class utilities. */
 object Show {
   /** Returns the given type's implicit `Show` implementation. */
   def apply[T](implicit T: Show[T]): T.type = T

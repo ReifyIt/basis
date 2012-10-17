@@ -24,6 +24,7 @@ trait Seq[+A] extends Any with Container[A] {
   def length: Int
 }
 
+/** `Seq` type class implementations. */
 object Seq {
   /* implicit */ def Equal[A : Equal]: Equal[Seq[A]] = new SeqEqual[A]
   

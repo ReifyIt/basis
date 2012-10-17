@@ -7,7 +7,7 @@
 
 package basis
 
-/** A lowe-level memory model. */
+/** Low-level memory operations. */
 package object data {
   /** Returns a given address advanced to a power-of-two alignment.
     * 
