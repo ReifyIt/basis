@@ -10,6 +10,8 @@ package basis.container
 import basis._
 
 class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
+  override def isEmpty: Boolean = array.length == 0
+  
   override def length: Int = array.length
   
   override def apply(index: Int): Byte = array(index)

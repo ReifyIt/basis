@@ -21,9 +21,6 @@ sealed abstract class List[+A] extends Seq[A] {
   
   override type Self <: List[A]
   
-  /** Returns `true` if this $collection contains no elements. */
-  def isEmpty: Boolean
-  
   /** Returns the first element of this $collection. */
   def head: A
   
@@ -31,11 +28,6 @@ sealed abstract class List[+A] extends Seq[A] {
   def tail: List[A]
   
   final def ::[B >: A](x: B): List[B] = new ::[B](x, this)
-  
-  override def iterator: Iterator[A] = new ListIterator[A](this)
-  
-  @tailrec override protected final def foreach[U](f: A => U) =
-    if (!isEmpty) { f(head); tail.foreach[U](f) }
   
   @tailrec final def drop(lower: Int): List[A] =
     if (lower <= 0 || isEmpty) this else tail.drop(lower - 1)
@@ -54,6 +46,15 @@ sealed abstract class List[+A] extends Seq[A] {
   
   final def slice(lower: Int, upper: Int): List[A] =
     if (lower >= upper) Nil else drop(lower).take(upper)
+  
+  final override def length: Int = length(0)
+  @tailrec private final def length(count: Int): Int =
+    if (isEmpty) count else tail.length(count + 1)
+  
+  @tailrec protected final override def foreach[U](f: A => U) =
+    if (!isEmpty) { f(head); tail.foreach[U](f) }
+  
+  final override def iterator: Iterator[A] = new ListIterator[A](this)
 }
 
 object List extends SeqFactory[List] {

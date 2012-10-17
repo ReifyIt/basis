@@ -18,8 +18,10 @@ import basis._
 class String4(val codeUnits: scala.Array[Int]) extends AnyVal with Rope {
   override type Self = String4
   
+  override def isEmpty: Boolean = codeUnits.length == 0
+  
   /** Returns the number of code points in this string. */
-  def length: Int = codeUnits.length
+  override def length: Int = codeUnits.length
   
   /** Returns the character at `index`. Substitutes the replacement character
     * U+FFFD in lieu of invalid characters. */

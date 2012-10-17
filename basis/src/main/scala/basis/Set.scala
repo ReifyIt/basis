@@ -16,11 +16,10 @@ package basis
 trait Set[A] extends Any with Container[A] {
   override type Self <: Set[A]
   
-  override def iterator: Iterator[A]
+  /** Returns `true` if this $collection contains no elements. */
+  def isEmpty: Boolean
   
   def size: Int
-  
-  def isEmpty: Boolean
   
   def contains(key: A): Boolean
   

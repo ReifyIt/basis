@@ -11,10 +11,10 @@ import basis._
 import basis.data._
 
 final class ValArray[A](mem: Mem)(implicit A: ValType[A]) extends Array[A] {
-  import scala.annotation.unchecked.uncheckedVariance
-  
   if (mem.size % A.size.toLong != 0L)
     throw new java.lang.IllegalArgumentException("memory size not a multiple of struct size")
+  
+  override def isEmpty: Boolean = length == 0
   
   override val length: Int = (mem.size / A.size.toLong).toInt
   

@@ -10,6 +10,8 @@ package basis.container
 import basis._
 
 class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short] {
+  override def isEmpty: Boolean = array.length == 0
+  
   override def length: Int = array.length
   
   override def apply(index: Int): Short = array(index)

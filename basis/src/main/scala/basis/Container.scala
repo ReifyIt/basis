@@ -17,13 +17,13 @@ package basis
 trait Container[+A] extends Any with Collection[A] {
   override type Self <: Container[A]
   
-  /** Returns a new iterator over the elements of this $collection. */
-  def iterator: Iterator[A]
-  
   override protected def foreach[U](f: A => U) {
     val xs = iterator
     while (!xs.isEmpty) { f(xs.head); xs.step() }
   }
+  
+  /** Returns a new iterator over the elements of this $collection. */
+  def iterator: Iterator[A]
 }
 
 object Container {

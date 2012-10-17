@@ -18,11 +18,10 @@ import basis._
 class String1(val codeUnits: scala.Array[Byte]) extends AnyVal with Rope {
   override type Self = String1
   
-  /** Returns the number of unsigned 8-bit code units in this string. */
-  def size: Int = codeUnits.length
+  override def isEmpty: Boolean = codeUnits.length == 0
   
   /** Counts the number of code points in this string. */
-  def length: Int = {
+  override def length: Int = {
     var i = 0
     var l = 0
     val n = size
@@ -32,6 +31,9 @@ class String1(val codeUnits: scala.Array[Byte]) extends AnyVal with Rope {
     }
     l
   }
+  
+  /** Returns the number of unsigned 8-bit code units in this string. */
+  def size: Int = codeUnits.length
   
   /** Returns a decoded character beginning at `index`. Substitutes the
     * replacement character U+FFFD at invalid indexes. */

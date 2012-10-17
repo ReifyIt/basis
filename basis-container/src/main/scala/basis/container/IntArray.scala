@@ -10,6 +10,8 @@ package basis.container
 import basis._
 
 class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
+  override def isEmpty: Boolean = array.length == 0
+  
   override def length: Int = array.length
   
   override def apply(index: Int): Int = array(index)

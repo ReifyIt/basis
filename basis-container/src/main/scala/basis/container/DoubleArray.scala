@@ -10,6 +10,8 @@ package basis.container
 import basis._
 
 class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Double] {
+  override def isEmpty: Boolean = array.length == 0
+  
   override def length: Int = array.length
   
   override def apply(index: Int): Double = array(index)

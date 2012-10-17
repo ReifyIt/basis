@@ -59,7 +59,7 @@ class ContainerOps[+Self, +A](self: Container[A]) {
     macro ContainerMacros.filter[A]
   
   def withFilter(p: A => Boolean): Container[A] =
-    new IterableWithFilter(self, p)
+    new ContainerWithFilter(self, p)
   
   def dropWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro ContainerMacros.dropWhile[A]
@@ -90,10 +90,10 @@ class ContainerOps[+Self, +A](self: Container[A]) {
     macro ContainerMacros.++[A, B]
 }
 
-private[basis] final class IterableWithFilter[+A](self: Container[A], p: A => Boolean) extends Container[A] {
-  override def iterator: basis.Iterator[A] =
-    new Iterators.Filter(self.iterator, p)
-  
+private[basis] final class ContainerWithFilter[+A](self: Container[A], p: A => Boolean) extends Container[A] {
   protected override def foreach[U](f: A => U): Unit =
     Enumerator.traverse(self)(new Traversers.Filter(p, f))
+  
+  override def iterator: basis.Iterator[A] =
+    new Iterators.Filter(self.iterator, p)
 }

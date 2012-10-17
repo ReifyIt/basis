@@ -16,11 +16,10 @@ package basis
 trait Map[A, +T] extends Any with Container[(A, T)] {
   override type Self <: Map[A, T]
   
-  override def iterator: Iterator[(A, T)]
+  /** Returns `true` if this $collection contains no elements. */
+  def isEmpty: Boolean
   
   def size: Int
-  
-  def isEmpty: Boolean
   
   def contains(key: A): Boolean
   

@@ -58,8 +58,8 @@ class SeqOps[+Self, +A](self: Seq[A]) {
   def filter(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro ContainerMacros.filter[A]
   
-  def withFilter(p: A => Boolean): Seq[A] =
-    new SeqWithFilter(self, p)
+  def withFilter(p: A => Boolean): Container[A] =
+    new ContainerWithFilter(self, p)
   
   def dropWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro ContainerMacros.dropWhile[A]
@@ -88,12 +88,4 @@ class SeqOps[+Self, +A](self: Seq[A]) {
   
   def ++ [B >: A](that: Container[B])(implicit buffer: Buffer[Self, B]): buffer.State =
     macro ContainerMacros.++[A, B]
-}
-
-private[basis] final class SeqWithFilter[+A](self: Seq[A], p: A => Boolean) extends Seq[A] {
-  override def iterator: Iterator[A] =
-    new Iterators.Filter(self.iterator, p)
-  
-  protected override def foreach[U](f: A => U): Unit =
-    Enumerator.traverse(self)(new Traversers.Filter(p, f))
 }

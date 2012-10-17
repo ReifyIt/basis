@@ -17,7 +17,11 @@ package basis
 trait Seq[+A] extends Any with Container[A] {
   override type Self <: Seq[A]
   
-  override def iterator: Iterator[A]
+  /** Returns `true` if this $collection contains no elements. */
+  def isEmpty: Boolean
+  
+  /** Returns the number of elements in this $collection. */
+  def length: Int
 }
 
 object Seq {

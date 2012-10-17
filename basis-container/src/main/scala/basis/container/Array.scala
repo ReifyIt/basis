@@ -20,9 +20,6 @@ import basis.collection._
 trait Array[+A] extends Any with Seq[A] {
   override type Self <: Array[A]
   
-  /** Returns the number of elements in this $collection. */
-  def length: Int
-  
   /** Returns the element at `index`. */
   def apply(index: Int): A
   

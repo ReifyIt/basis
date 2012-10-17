@@ -10,7 +10,7 @@ package basis.container
 import basis._
 
 class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] {
-  import scala.annotation.unchecked.uncheckedVariance
+  override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   

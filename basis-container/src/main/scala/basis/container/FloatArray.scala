@@ -10,6 +10,8 @@ package basis.container
 import basis._
 
 class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float] {
+  override def isEmpty: Boolean = array.length == 0
+  
   override def length: Int = array.length
   
   override def apply(index: Int): Float = array(index)
