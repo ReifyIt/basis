@@ -12,7 +12,10 @@ package long
   * 
   * @author Chris Sachs
   */
-private[math] final class Z(override val dim: Int) extends AffineSpace with ZN {
+private[math] final class Z
+    (override val dim: Int)
+  extends AffineSpace with ZN {
+  
   final class Value(coords: Array[Long])
     extends super[AffineSpace].Value
        with super[ZN].Value {

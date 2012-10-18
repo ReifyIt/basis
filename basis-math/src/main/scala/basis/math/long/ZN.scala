@@ -8,11 +8,11 @@
 package basis.math
 package long
 
-/** An abstract integer module.
+/** An abstract 64-bit two's complement integer module.
   * 
   * @author Chris Sachs
   * 
-  * @define space   integer module
+  * @define space   module
   */
 trait ZN extends FN {
   trait Value extends Any with super.Value {

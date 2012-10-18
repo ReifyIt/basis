@@ -12,10 +12,8 @@ package double
   * 
   * @author Chris Sachs
   */
-private[math] final class R(
-    override val dim: Int,
-    RowSpace: RN, ColSpace: RN,
-    TransposeSpace: RMxN)
+private[math] final class R
+    (override val dim: Int, RowSpace: RN, ColSpace: RN, TransposeSpace: RMxN)
   extends AffineSpace with RN with RMxN {
   
   def this(dim: Int) = this(dim, null, null, null)

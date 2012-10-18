@@ -23,7 +23,7 @@ package basis.math
   * // function with a subtype of AffineSpace with Singleton. Type elements
   * // with the #Point, #Vector and #Scalar type projections of your
   * // AffineSpace type parameter.
-  * def testAffineSpaceOperations[A <: AffineSpace[_] with Singleton](
+  * def testAffineSpaceOperations[A <: AffineSpace with Singleton](
   *     p: A#Point, q: A#Point, u: A#Vector, v: A#Vector) {
   *   assert((p + u) + v == p + (u + v), "associativity of point-vector addition")
   *   assert(p + (-v) == p - v, "existence of point-vector subtraction")
@@ -31,7 +31,7 @@ package basis.math
   * }
   * 
   * // Alternatively, functions can use path-dependent types of an AffineSpace parameter.
-  * def testAffineSpaceIdentities(A: AffineSpace[_])(p: A.Point, q: A.Point, v: A.Vector) {
+  * def testAffineSpaceIdentities(A: AffineSpace)(p: A.Point, q: A.Point, v: A.Vector) {
   *   import A._
   *   assert(p + zero == p, "existence of additive identity vector")
   *   if (p + v == q + v) assert(p == v, "uniqueness of points")

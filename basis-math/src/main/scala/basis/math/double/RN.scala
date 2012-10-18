@@ -8,11 +8,9 @@
 package basis.math
 package double
 
-/** An abstract real vector space.
+/** An abstract double-precision floating-point vector space.
   * 
   * @author Chris Sachs
-  * 
-  * @define space   real vector space
   */
 trait RN extends FN {
   trait Value extends Any with super.Value {

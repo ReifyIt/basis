@@ -8,11 +8,9 @@
 package basis.math
 package double
 
-/** An abstract real matrix space.
+/** An abstract double-precision floating-point matrix space.
   * 
   * @author Chris Sachs
-  * 
-  * @define space   real matrix space
   */
 trait RMxN extends FMxN {
   trait Value extends Any with super.Value {
