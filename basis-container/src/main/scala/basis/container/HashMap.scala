@@ -11,7 +11,6 @@ import basis._
 
 final class HashMap[A, +T] private
     (slotMap: Int, entryMap: Int, slots: RefArray[Any], links: RefArray[T])
-    (implicit A: Hash[A])
   extends Map[A, T] {
   
   import scala.annotation.tailrec
@@ -35,15 +34,15 @@ final class HashMap[A, +T] private
     }
   }
   
-  override def contains(key: A): Boolean = contains(key, A.hash(key), 0)
+  override def contains(key: A): Boolean = contains(key, key.##, 0)
   
-  override def apply(key: A): T = apply(key, A.hash(key), 0)
+  override def apply(key: A): T = apply(key, key.##, 0)
   
-  override def get(key: A): Option[T] = get(key, A.hash(key), 0)
+  override def get(key: A): Option[T] = get(key, key.##, 0)
   
-  override def + [U >: T](key: A, value: U): HashMap[A, U] = update(key, A.hash(key), value, 0)
+  override def + [U >: T](key: A, value: U): HashMap[A, U] = update(key, key.##, value, 0)
   
-  override def - (key: A): HashMap[A, T] = remove(key, A.hash(key), 0)
+  override def - (key: A): HashMap[A, T] = remove(key, key.##, 0)
   
   override def iterator: Iterator[(A, T)] = new HashMap.Iterator(this)
   
@@ -144,7 +143,7 @@ final class HashMap[A, +T] private
   @tailrec private def contains(key: A, h: Int, k: Int): Boolean = {
     if (isTrie) { // search trie
       val n = branch(h, k)
-      if (hasEntryAt(n)) A.equal(key, keyAt(slot(n)))
+      if (hasEntryAt(n)) key == keyAt(slot(n))
       else if (hasSlotAt(n)) nodeAt(slot(n)).contains(key, h, k + 5)
       else false
     }
@@ -153,7 +152,7 @@ final class HashMap[A, +T] private
         var i = 0
         val n = rank
         while (i < n) {
-          if (A.equal(key, keyAt(i))) return true
+          if (key == keyAt(i)) return true
           i += 1
         }
       }
@@ -170,7 +169,7 @@ final class HashMap[A, +T] private
   @tailrec private def apply(key: A, h: Int, k: Int): T = {
     if (isTrie) { // search trie
       val n = branch(h, k)
-      if (hasEntryAt(n) && A.equal(key, keyAt(slot(n)))) valAt(link(n))
+      if (hasEntryAt(n) && key == keyAt(slot(n))) valAt(link(n))
       else if (hasSlotAt(n)) nodeAt(slot(n)).apply(key, h, k + 5)
       else throw new scala.NoSuchElementException(key.toString)
     }
@@ -179,7 +178,7 @@ final class HashMap[A, +T] private
         var i = 0
         val n = rank
         while (i < n) {
-          if (A.equal(key, keyAt(i))) return valAt(i)
+          if (key == keyAt(i)) return valAt(i)
           i += 1
         }
       }
@@ -196,7 +195,7 @@ final class HashMap[A, +T] private
   @tailrec private def get(key: A, h: Int, k: Int): Option[T] = {
     if (isTrie) { // search trie
       val n = branch(h, k)
-      if (hasEntryAt(n) && A.equal(key, keyAt(slot(n)))) Some(valAt(link(n)))
+      if (hasEntryAt(n) && key == keyAt(slot(n))) Some(valAt(link(n)))
       else if (hasSlotAt(n)) nodeAt(slot(n)).get(key, h, k + 5)
       else None
     }
@@ -205,7 +204,7 @@ final class HashMap[A, +T] private
         var i = 0
         val n = rank
         while (i < n) {
-          if (A.equal(key, keyAt(i))) return Some(valAt(i))
+          if (key == keyAt(i)) return Some(valAt(i))
           i += 1
         }
       }
@@ -230,11 +229,11 @@ final class HashMap[A, +T] private
       val j = link(n)
       if (hasEntryAt(n)) { // update entry
         val e = keyAt(i)
-        if (A.equal(key, e)) // replace value
+        if (key == e) // replace value
           new HashMap(slotMap, entryMap, slots, links.update(link(n), value))
         else // merge keys in new submap
           new HashMap(slotMap, entryMap ^ n,
-            slots.update(i, merge(key, h, value, e, A.hash(e), valAt(j), k + 5)),
+            slots.update(i, merge(key, h, value, e, e.##, valAt(j), k + 5)),
             links.remove(j))
       }
       else if (hasSlotAt(n)) { // update submap
@@ -251,7 +250,7 @@ final class HashMap[A, +T] private
         var i = 0
         var n = rank
         while (i < n) {
-          if (A.equal(key, keyAt(i)))
+          if (key == keyAt(i))
             return new HashMap(0, bucketHash, slots, links.update(i, value))
           i += 1
         }
@@ -308,7 +307,7 @@ final class HashMap[A, +T] private
       val i = slot(n)
       val j = link(n)
       if (hasEntryAt(n)) { // remove entry
-        if (A.equal(key, keyAt(i)))
+        if (key == keyAt(i))
           new HashMap(slotMap ^ n, entryMap ^ n, slots.remove(i), links.remove(j))
         else this
       }
@@ -329,7 +328,7 @@ final class HashMap[A, +T] private
         var i = 0
         val n = rank
         while (i < n) {
-          if (A.equal(key, keyAt(i)))
+          if (key == keyAt(i))
             return new HashMap(0, bucketHash, slots.remove(i), links.remove(i))
           i += 1
         }
@@ -352,13 +351,14 @@ final class HashMap[A, +T] private
 }
 
 object HashMap {
-  def empty[A : Hash, T]: HashMap[A, T] = new HashMap[A, T](0, 0, RefArray.empty, RefArray.empty)
+  private[this] val Empty = new HashMap[Any, Nothing](0, 0, RefArray.empty, RefArray.empty)
+  def empty[A, T]: HashMap[A, T] = Empty.asInstanceOf[HashMap[A, T]]
   
   implicit def Show[A : Show, T : Show]: Show[HashMap[A, T]] = new MapShow[A, T]("HashMap")
   
-  implicit def Buffer[A : Hash, T]: HashMap.Buffer[A, T] = new HashMap.Buffer[A, T]
+  implicit def Buffer[A, T]: HashMap.Buffer[A, T] = new HashMap.Buffer[A, T]
   
-  final class Buffer[A, T](implicit A: Hash[A]) extends basis.Buffer[Any, (A, T)] {
+  final class Buffer[A, T] extends basis.Buffer[Any, (A, T)] {
     override type State = HashMap[A, T]
     
     private[this] var map: HashMap[A, T] = HashMap.empty[A, T]

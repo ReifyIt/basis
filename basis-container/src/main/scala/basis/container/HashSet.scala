@@ -12,7 +12,6 @@ import basis.collection._
 
 final class HashSet[A] private
     (slotMap: Int, elemMap: Int, slots: RefArray[Any])
-    (implicit A: Hash[A])
   extends Set[A] {
   
   import scala.annotation.tailrec
@@ -36,11 +35,11 @@ final class HashSet[A] private
     }
   }
   
-  override def contains(element: A): Boolean = contains(element, A.hash(element), 0)
+  override def contains(element: A): Boolean = contains(element, element.##, 0)
   
-  override def + (element: A): HashSet[A] = update(element, A.hash(element), 0)
+  override def + (element: A): HashSet[A] = update(element, element.##, 0)
   
-  override def - (element: A): HashSet[A] = remove(element, A.hash(element), 0)
+  override def - (element: A): HashSet[A] = remove(element, element.##, 0)
   
   override def iterator: Iterator[A] = new HashSet.Iterator(this)
   
@@ -129,7 +128,7 @@ final class HashSet[A] private
   @tailrec private def contains(elem: A, h: Int, k: Int): Boolean = {
     if (isTrie) { // search trie
       val n = branch(h, k)
-      if (hasElemAt(n)) A.equal(elem, elemAt(slot(n)))
+      if (hasElemAt(n)) elem == elemAt(slot(n))
       else if (hasSlotAt(n)) nodeAt(slot(n)).contains(elem, h, k + 5)
       else false
     }
@@ -138,7 +137,7 @@ final class HashSet[A] private
         var i = 0
         val n = rank
         while (i < n) {
-          if (A.equal(elem, elemAt(i))) return true
+          if (elem == elemAt(i)) return true
           i += 1
         }
       }
@@ -161,10 +160,10 @@ final class HashSet[A] private
       val i = slot(n)
       if (hasElemAt(n)) { // update element
         val e = elemAt(i)
-        if (A.equal(elem, e)) this
+        if (elem == e) this
         else // merge elements in new subset
           new HashSet(slotMap, elemMap ^ n,
-            slots.update(i, merge(elem, h, e, A.hash(e), k + 5)))
+            slots.update(i, merge(elem, h, e, e.##, k + 5)))
       }
       else if (hasSlotAt(n)) { // update subset
         val node = nodeAt(i)
@@ -180,7 +179,7 @@ final class HashSet[A] private
         var i = 0
         var n = rank
         while (i < n) {
-          if (A.equal(elem, elemAt(i))) return this
+          if (elem == elemAt(i)) return this
           i += 1
         }
         new HashSet(0, bucketHash, slots :+ elem)
@@ -227,7 +226,7 @@ final class HashSet[A] private
       val n = branch(h, k)
       val i = slot(n)
       if (hasElemAt(n)) { // remove element
-        if (A.equal(elem, elemAt(i)))
+        if (elem == elemAt(i))
           new HashSet(slotMap ^ n, elemMap ^ n, slots.remove(i))
         else this
       }
@@ -248,7 +247,7 @@ final class HashSet[A] private
         var i = 0
         val n = rank
         while (i < n) {
-          if (A.equal(elem, elemAt(i)))
+          if (elem == elemAt(i))
             return new HashSet(0, bucketHash, slots.remove(i))
           i += 1
         }
@@ -265,11 +264,12 @@ final class HashSet[A] private
 }
 
 object HashSet extends ContainerFactory[HashSet] {
-  def empty[A : Hash]: HashSet[A] = new HashSet[A](0, 0, RefArray.empty)
+  private[this] val Empty = new HashSet[Nothing](0, 0, RefArray.empty)
+  def empty[A]: HashSet[A] = Empty.asInstanceOf[HashSet[A]]
   
-  implicit def Buffer[A : Hash]: HashSet.Buffer[A] = new HashSet.Buffer[A]
+  implicit def Buffer[A]: HashSet.Buffer[A] = new HashSet.Buffer[A]
   
-  final class Buffer[A](implicit A: Hash[A]) extends basis.Buffer[Any, A] {
+  final class Buffer[A] extends basis.Buffer[Any, A] {
     override type State = HashSet[A]
     
     private[this] var set: HashSet[A] = HashSet.empty[A]
