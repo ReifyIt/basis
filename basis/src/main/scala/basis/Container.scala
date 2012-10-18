@@ -33,11 +33,11 @@ object Container {
 }
 
 private[basis] class ContainerShow[-A]
-    (name: String)(implicit A: Show[A])
+    (stringPrefix: String)(implicit A: Show[A])
   extends Show[Container[A]] {
   
-  override def show(xs: Container[A])(implicit buffer: CharBuffer) {
-    buffer.append(name)
+  override def show(xs: Container[A])(buffer: CharBuffer) {
+    buffer.append(stringPrefix)
     buffer += '('
     val iter = xs.iterator
     if (!iter.isEmpty) {

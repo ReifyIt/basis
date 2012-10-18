@@ -29,11 +29,11 @@ object Collection {
 }
 
 private[basis] class CollectionShow[-A]
-    (name: String)(implicit A: Show[A])
+    (stringPrefix: String)(implicit A: Show[A])
   extends Show[Collection[A]] {
   
-  override def show(xs: Collection[A])(implicit buffer: CharBuffer) {
-    buffer.append(name)
+  override def show(xs: Collection[A])(buffer: CharBuffer) {
+    buffer.append(stringPrefix)
     buffer += '('
     Enumerator.traverse(xs)(new ShowEach[A](", "))
     buffer += ')'

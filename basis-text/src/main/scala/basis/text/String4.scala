@@ -74,12 +74,74 @@ object String4 {
   val empty: String4 = new String4(new scala.Array[Int](0))
   
   def apply(chars: java.lang.CharSequence): String4 = {
-    val s = new String4Buffer
+    val s = new String4.Buffer
     s.append(chars)
     s.state
   }
   
-  implicit def Buffer: String4Buffer = new String4Buffer
+  implicit def Buffer: String4.Buffer = new String4.Buffer
+  
+  /** A buffer for 32-bit Unicode strings in the UTF-32 encoding form.
+    * Produces only well-formed code unit sequences. */
+  final class Buffer extends basis.Buffer[Any, Char] with CharBuffer {
+    override type State = String4
+    
+    private[this] var string: String4 = String4.empty
+    
+    private[this] var aliased: Boolean = true
+    
+    private[this] var size: Int = 0
+    
+    private[this] def expand(base: Int, size: Int): Int = {
+      var n = scala.math.max(base, size) - 1
+      n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+      n + 1
+    }
+    
+    private[this] def prepare(size: Int) {
+      if (aliased || size > string.length) {
+        string = string.copy(expand(16, size))
+        aliased = false
+      }
+    }
+    
+    override def += (char: Char): this.type = {
+      val c = char.codePoint
+      val n = size
+      if ((c >= 0x0000 && c <= 0xD7FF) ||
+          (c >= 0xE000 && c <= 0x10FFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF
+        prepare(n + 1)
+        string.codeUnits(n) = c
+        size = n + 1
+      }
+      else { // invalid code point
+        prepare(n + 1)
+        string.codeUnits(n) = 0xFFFD
+        size = n + 1
+      }
+      this
+    }
+    
+    override def expect(count: Int): this.type = {
+      if (size + count > string.length) {
+        string = string.copy(size + count)
+        aliased = false
+      }
+      this
+    }
+    
+    override def state: String4 = {
+      if (size != string.length) string = string.copy(size)
+      aliased = true
+      string
+    }
+    
+    override def clear() {
+      string = String4.empty
+      aliased = true
+      size = 0
+    }
+  }
 }
 
 private[text] final class String4Iterator
@@ -99,66 +161,4 @@ private[text] final class String4Iterator
   }
   
   override def dup: String4Iterator = new String4Iterator(string, index)
-}
-
-/** A buffer for 32-bit Unicode strings in the UTF-32 encoding form.
-  * Produces only well-formed code unit sequences. */
-final class String4Buffer extends Buffer[Any, Char] with CharBuffer {
-  override type State = String4
-  
-  private[this] var string: String4 = String4.empty
-  
-  private[this] var aliased: Boolean = true
-  
-  private[this] var size: Int = 0
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = scala.math.max(base, size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > string.length) {
-      string = string.copy(expand(16, size))
-      aliased = false
-    }
-  }
-  
-  override def += (char: Char): this.type = {
-    val c = char.codePoint
-    val n = size
-    if ((c >= 0x0000 && c <= 0xD7FF) ||
-        (c >= 0xE000 && c <= 0x10FFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF
-      prepare(n + 1)
-      string.codeUnits(n) = c
-      size = n + 1
-    }
-    else { // invalid code point
-      prepare(n + 1)
-      string.codeUnits(n) = 0xFFFD
-      size = n + 1
-    }
-    this
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (size + count > string.length) {
-      string = string.copy(size + count)
-      aliased = false
-    }
-    this
-  }
-  
-  override def state: String4 = {
-    if (size != string.length) string = string.copy(size)
-    aliased = true
-    string
-  }
-  
-  override def clear() {
-    string = String4.empty
-    aliased = true
-    size = 0
-  }
 }

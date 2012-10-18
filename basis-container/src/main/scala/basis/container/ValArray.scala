@@ -66,60 +66,60 @@ final class ValArray[A](mem: Mem)(implicit A: ValType[A]) extends Array[A] {
 
 object ValArray {
   def empty[A : ValType]: ValArray[A] = new ValArray[A](Mem.alloc[A](0))
-}
-
-final class ValArrayBuffer[A](implicit A: ValType[A]) extends Buffer[Any, A] {
-  override type State = ValArray[A]
   
-  private[this] var mem: Mem = Mem.alloc[A](0)
-  
-  private[this] var aliased: Boolean = false
-  
-  private[this] var length: Int = 0
-  
-  private[this] def capacity: Int = (mem.size / A.size.toLong).toInt
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    mem = mem.copy(A.size.toLong * size.toLong)
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > capacity) {
-      resize(expand(16, size))
-      aliased = false
+  final class Buffer[A](implicit A: ValType[A]) extends basis.Buffer[Any, A] {
+    override type State = ValArray[A]
+    
+    private[this] var mem: Mem = Mem.alloc[A](0)
+    
+    private[this] var aliased: Boolean = false
+    
+    private[this] var length: Int = 0
+    
+    private[this] def capacity: Int = (mem.size / A.size.toLong).toInt
+    
+    private[this] def expand(base: Int, size: Int): Int = {
+      var n = (base max size) - 1
+      n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+      n + 1
     }
-  }
-  
-  override def += (value: A): this.type = {
-    prepare(length + 1)
-    A.store(mem, A.size.toLong * length.toLong, value)
-    length += 1
-    this
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (length + count > capacity) {
-      resize(length + count)
-      aliased = false
+    
+    private[this] def resize(size: Int) {
+      mem = mem.copy(A.size.toLong * size.toLong)
     }
-    this
-  }
-  
-  override def state: ValArray[A] = {
-    if (length != capacity) resize(length)
-    aliased = true
-    new ValArray[A](mem)
-  }
-  
-  override def clear() {
-    mem = Mem.alloc[A](0)
-    aliased = false
-    length = 0
+    
+    private[this] def prepare(size: Int) {
+      if (aliased || size > capacity) {
+        resize(expand(16, size))
+        aliased = false
+      }
+    }
+    
+    override def += (value: A): this.type = {
+      prepare(length + 1)
+      A.store(mem, A.size.toLong * length.toLong, value)
+      length += 1
+      this
+    }
+    
+    override def expect(count: Int): this.type = {
+      if (length + count > capacity) {
+        resize(length + count)
+        aliased = false
+      }
+      this
+    }
+    
+    override def state: ValArray[A] = {
+      if (length != capacity) resize(length)
+      aliased = true
+      new ValArray[A](mem)
+    }
+    
+    override def clear() {
+      mem = Mem.alloc[A](0)
+      aliased = false
+      length = 0
+    }
   }
 }

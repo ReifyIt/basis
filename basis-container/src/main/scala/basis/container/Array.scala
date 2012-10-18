@@ -23,7 +23,8 @@ trait Array[+A] extends Any with Seq[A] {
   /** Returns the element at `index`. */
   def apply(index: Int): A
   
-  override def iterator: Iterator[A] = new ArrayIterator(this, 0, length)
+  override def iterator: Iterator[A] =
+    new Array.Iterator(this, 0, length)
   
   protected override def foreach[U](f: A => U) {
     var i = 0
@@ -36,64 +37,62 @@ trait Array[+A] extends Any with Seq[A] {
 }
 
 object Array extends AllArrayBuffers with SeqFactory[Array] {
-  implicit def Ops[A](self: Array[A]): ArrayOps[self.Self, A] =
-    new ArrayOps[self.Self, A](self)
-  
   def Buffer[A](implicit typeA: MemType[A]): Buffer[Any, A] { type State = Array[A] } = {
     import ValType._
     (typeA match {
-      case typeA: RefType[A]           => new RefArrayBuffer[A]
-      case PackedByte                  => new ByteArrayBuffer
-      case PackedShort  | PaddedShort  => new ShortArrayBuffer
-      case PackedInt    | PaddedInt    => new IntArrayBuffer
-      case PackedLong   | PaddedLong   => new LongArrayBuffer
-      case PackedFloat  | PaddedFloat  => new FloatArrayBuffer
-      case PackedDouble | PaddedDouble => new DoubleArrayBuffer
-      case PackedBoolean               => new BitArrayBuffer
-      case typeA: ValType[A]           => new ValArrayBuffer[A]()(typeA)
+      case typeA: RefType[A]           => new RefArray.Buffer[A]
+      case PackedByte                  => new ByteArray.Buffer
+      case PackedShort  | PaddedShort  => new ShortArray.Buffer
+      case PackedInt    | PaddedInt    => new IntArray.Buffer
+      case PackedLong   | PaddedLong   => new LongArray.Buffer
+      case PackedFloat  | PaddedFloat  => new FloatArray.Buffer
+      case PackedDouble | PaddedDouble => new DoubleArray.Buffer
+      case PackedBoolean               => new BitArray.Buffer
+      case typeA: ValType[A]           => new ValArray.Buffer[A]()(typeA)
     }).asInstanceOf[Buffer[Any, A] { type State = Array[A] }]
+  }
+  
+  private[basis] final class Iterator[+A]
+      (xs: Array[A], from: Int, until: Int)
+    extends basis.Iterator[A] {
+    
+    private[this] var lower: Int = 0 max from
+    private[this] var upper: Int = (lower max until) min xs.length
+    private[this] var index: Int = lower
+    
+    override def isEmpty: Boolean = index >= upper
+    
+    override def head: A = {
+      if (isEmpty) Iterator.empty.head
+      else xs(index)
+    }
+    
+    override def step() {
+      if (isEmpty) Iterator.empty.step
+      else index += 1
+    }
+    
+    override def dup: Array.Iterator[A] =
+      new Array.Iterator[A](xs, index, upper)
   }
   
   protected override def stringPrefix: String = "Array"
 }
 
 private[basis] class AllArrayBuffers extends ValArrayBuffers {
-  implicit def ByteBuffer: ByteArrayBuffer = new ByteArrayBuffer
-  implicit def ShortBuffer: ShortArrayBuffer = new ShortArrayBuffer
-  implicit def IntBuffer: IntArrayBuffer = new IntArrayBuffer
-  implicit def LongBuffer: LongArrayBuffer = new LongArrayBuffer
-  implicit def FloatBuffer: FloatArrayBuffer = new FloatArrayBuffer
-  implicit def DoubleBuffer: DoubleArrayBuffer = new DoubleArrayBuffer
-  implicit def BitBuffer: BitArrayBuffer = new BitArrayBuffer
+  implicit def ByteBuffer: ByteArray.Buffer = new ByteArray.Buffer
+  implicit def ShortBuffer: ShortArray.Buffer = new ShortArray.Buffer
+  implicit def IntBuffer: IntArray.Buffer = new IntArray.Buffer
+  implicit def LongBuffer: LongArray.Buffer = new LongArray.Buffer
+  implicit def FloatBuffer: FloatArray.Buffer = new FloatArray.Buffer
+  implicit def DoubleBuffer: DoubleArray.Buffer = new DoubleArray.Buffer
+  implicit def BitBuffer: BitArray.Buffer = new BitArray.Buffer
 }
 
 private[basis] class ValArrayBuffers extends RefArrayBuffers {
-  implicit def ValBuffer[A](implicit typeA: ValType[A]): ValArrayBuffer[A] = new ValArrayBuffer[A]
+  implicit def ValBuffer[A : ValType]: ValArray.Buffer[A] = new ValArray.Buffer[A]
 }
 
 private[basis] class RefArrayBuffers {
-  implicit def RefBuffer[A]: RefArrayBuffer[A] = new RefArrayBuffer[A]
-}
-
-private[basis] final class ArrayIterator[+A]
-    (xs: Array[A], from: Int, until: Int)
-  extends Iterator[A] {
-  
-  private[this] var lower: Int = 0 max from
-  private[this] var upper: Int = (lower max until) min xs.length
-  private[this] var index: Int = lower
-  
-  override def isEmpty: Boolean = index >= upper
-  
-  override def head: A = {
-    if (isEmpty) throw new scala.NoSuchElementException("head of empty iterator")
-    else xs(index)
-  }
-  
-  override def step() {
-    if (isEmpty) throw new java.lang.UnsupportedOperationException("empty iterator step")
-    else index += 1
-  }
-  
-  override def dup: ArrayIterator[A] = new ArrayIterator[A](xs, index, upper)
+  implicit def RefBuffer[A]: RefArray.Buffer[A] = new RefArray.Buffer[A]
 }

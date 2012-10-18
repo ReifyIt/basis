@@ -61,60 +61,60 @@ object IntArray {
   val empty: IntArray = new IntArray(new scala.Array[Int](0))
   
   def apply(xs: Int*): IntArray = macro ArrayMacros.literalIntArray
-}
-
-final class IntArrayBuffer extends Buffer[Any, Int] {
-  override type State = IntArray
   
-  private[this] var array: scala.Array[Int] = IntArray.empty.array
-  
-  private[this] var aliased: Boolean = true
-  
-  private[this] var length: Int = 0
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    val newArray = new scala.Array[Int](size)
-    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
-    array = newArray
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > array.length) {
-      resize(expand(16, size))
-      aliased = false
+  final class Buffer extends basis.Buffer[Any, Int] {
+    override type State = IntArray
+    
+    private[this] var array: scala.Array[Int] = IntArray.empty.array
+    
+    private[this] var aliased: Boolean = true
+    
+    private[this] var length: Int = 0
+    
+    private[this] def expand(base: Int, size: Int): Int = {
+      var n = (base max size) - 1
+      n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+      n + 1
     }
-  }
-  
-  override def += (value: Int): this.type = {
-    prepare(length + 1)
-    array(length) = value
-    length += 1
-    this
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (length + count > array.length) {
-      resize(length + count)
-      aliased = false
+    
+    private[this] def resize(size: Int) {
+      val newArray = new scala.Array[Int](size)
+      java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
+      array = newArray
     }
-    this
-  }
-  
-  override def state: IntArray = {
-    if (length != array.length) resize(length)
-    aliased = true
-    new IntArray(array)
-  }
-  
-  override def clear() {
-    array = IntArray.empty.array
-    aliased = true
-    length = 0
+    
+    private[this] def prepare(size: Int) {
+      if (aliased || size > array.length) {
+        resize(expand(16, size))
+        aliased = false
+      }
+    }
+    
+    override def += (value: Int): this.type = {
+      prepare(length + 1)
+      array(length) = value
+      length += 1
+      this
+    }
+    
+    override def expect(count: Int): this.type = {
+      if (length + count > array.length) {
+        resize(length + count)
+        aliased = false
+      }
+      this
+    }
+    
+    override def state: IntArray = {
+      if (length != array.length) resize(length)
+      aliased = true
+      new IntArray(array)
+    }
+    
+    override def clear() {
+      array = IntArray.empty.array
+      aliased = true
+      length = 0
+    }
   }
 }

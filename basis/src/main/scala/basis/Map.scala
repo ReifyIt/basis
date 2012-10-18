@@ -44,11 +44,11 @@ trait Map[A, +T] extends Any with Container[(A, T)] {
 }
 
 private[basis] class MapShow[A, T]
-    (name: String)(implicit A: Show[A], T: Show[T])
+    (stringPrefix: String)(implicit A: Show[A], T: Show[T])
   extends Show[Map[A, T]] {
   
-  override def show(map: Map[A, T])(implicit buffer: CharBuffer) {
-    buffer.append(name)
+  override def show(map: Map[A, T])(buffer: CharBuffer) {
+    buffer.append(stringPrefix)
     buffer += '('
     val iter = map.iterator
     if (!iter.isEmpty) {

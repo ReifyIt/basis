@@ -61,60 +61,60 @@ object RefArray {
   val empty: RefArray[Nothing] = new RefArray[Nothing](new scala.Array[AnyRef](0))
   
   def apply[A](xs: A*): RefArray[A] = macro ArrayMacros.literalRefArray[A]
-}
-
-final class RefArrayBuffer[A] extends Buffer[Any, A] {
-  override type State = RefArray[A]
   
-  private[this] var array: scala.Array[AnyRef] = RefArray.empty.array
-  
-  private[this] var aliased: Boolean = true
-  
-  private[this] var length: Int = 0
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    val newArray = new scala.Array[AnyRef](size)
-    java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
-    array = newArray
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > array.length) {
-      resize(expand(16, size))
-      aliased = false
+  final class Buffer[A] extends basis.Buffer[Any, A] {
+    override type State = RefArray[A]
+    
+    private[this] var array: scala.Array[AnyRef] = RefArray.empty.array
+    
+    private[this] var aliased: Boolean = true
+    
+    private[this] var length: Int = 0
+    
+    private[this] def expand(base: Int, size: Int): Int = {
+      var n = (base max size) - 1
+      n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+      n + 1
     }
-  }
-  
-  override def += (value: A): this.type = {
-    prepare(length + 1)
-    array(length) = value.asInstanceOf[AnyRef]
-    length += 1
-    this
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (length + count > array.length) {
-      resize(length + count)
-      aliased = false
+    
+    private[this] def resize(size: Int) {
+      val newArray = new scala.Array[AnyRef](size)
+      java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
+      array = newArray
     }
-    this
-  }
-  
-  override def state: RefArray[A] = {
-    if (length != array.length) resize(length)
-    aliased = true
-    new RefArray[A](array)
-  }
-  
-  override def clear() {
-    array = RefArray.empty.array
-    aliased = true
-    length = 0
+    
+    private[this] def prepare(size: Int) {
+      if (aliased || size > array.length) {
+        resize(expand(16, size))
+        aliased = false
+      }
+    }
+    
+    override def += (value: A): this.type = {
+      prepare(length + 1)
+      array(length) = value.asInstanceOf[AnyRef]
+      length += 1
+      this
+    }
+    
+    override def expect(count: Int): this.type = {
+      if (length + count > array.length) {
+        resize(length + count)
+        aliased = false
+      }
+      this
+    }
+    
+    override def state: RefArray[A] = {
+      if (length != array.length) resize(length)
+      aliased = true
+      new RefArray[A](array)
+    }
+    
+    override def clear() {
+      array = RefArray.empty.array
+      aliased = true
+      length = 0
+    }
   }
 }

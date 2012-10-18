@@ -7,15 +7,9 @@
 
 package basis
 
-/** A producer of textual object descriptions. */
-@scala.annotation.implicitNotFound("${T} has no implicit Show implementation.")
-trait Show[-T] {
-  /** Appends a description of the given value to a character buffer. */
-  def show(x: T)(buffer: CharBuffer): Unit
-}
-
-/** `Show` type class utilities. */
-object Show {
-  /** Returns the given type's implicit `Show` implementation. */
-  def apply[T](implicit T: Show[T]): T.type = T
+package object container {
+  implicit def ArrayOps[A](self: Array[A]): ArrayOps[self.Self, A] =
+    new ArrayOps[self.Self, A](self)
+  
+  implicit def ListOps[A](self: List[A]): ListOps[A] = new ListOps[A](self)
 }

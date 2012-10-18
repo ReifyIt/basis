@@ -31,7 +31,7 @@ package object basis {
     
     override def hash(x: Byte): Int = x.##
     
-    override def show(x: Byte)(implicit buffer: CharBuffer): Unit = Int.show(x)
+    override def show(x: Byte)(buffer: CharBuffer): Unit = Int.show(x)(buffer)
   }
   
   /** `Short` constants and implicit type class implementations. */
@@ -44,7 +44,7 @@ package object basis {
     
     override def hash(x: Short): Int = x.##
     
-    override def show(x: Short)(implicit buffer: CharBuffer): Unit = Int.show(x)
+    override def show(x: Short)(buffer: CharBuffer): Unit = Int.show(x)(buffer)
   }
   
   /** `Int` constants and implicit type class implementations. */
@@ -57,7 +57,7 @@ package object basis {
     
     override def hash(x: Int):Int = x.##
     
-    override def show(x: Int)(implicit buffer: CharBuffer) {
+    override def show(x: Int)(buffer: CharBuffer) {
       if (x < 0) buffer += '-'
       var ds = new scala.Array[scala.Char](10)
       var d = x
@@ -91,7 +91,7 @@ package object basis {
     
     override def hash(x: Long): Int = x.##
     
-    override def show(x: Long)(implicit buffer: CharBuffer) {
+    override def show(x: Long)(buffer: CharBuffer) {
       if (x < 0L) buffer += '-'
       var ds = new Array[Char](19)
       var d = x
@@ -130,7 +130,7 @@ package object basis {
     
     override def hash(x: Float): Int = x.##
     
-    override def show(x: Float)(implicit buffer: CharBuffer): Unit =
+    override def show(x: Float)(buffer: CharBuffer): Unit =
       buffer.append(java.lang.Float.toString(x))
   }
   
@@ -152,7 +152,7 @@ package object basis {
     
     override def hash(x: Double): Int = x.##
     
-    override def show(x: Double)(implicit buffer: CharBuffer): Unit =
+    override def show(x: Double)(buffer: CharBuffer): Unit =
       buffer.append(java.lang.Double.toString(x))
   }
   
@@ -166,7 +166,7 @@ package object basis {
     
     override def hash(x: Boolean): Int = x.##
     
-    override def show(x: Boolean)(implicit buffer: CharBuffer): Unit =
+    override def show(x: Boolean)(buffer: CharBuffer): Unit =
       buffer.append(if (x) "true" else "false")
   }
   
@@ -176,7 +176,7 @@ package object basis {
     
     override def hash(s: String): Int = s.##
     
-    override def show(s: String)(implicit buffer: CharBuffer) {
+    override def show(s: String)(buffer: CharBuffer) {
       buffer += '\"'
       var i = 0
       val n = s.length

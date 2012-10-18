@@ -53,11 +53,11 @@ object Iterator {
 }
 
 private[basis] class IteratorShow[-A]
-    (name: String)(implicit A : Show[A])
+    (stringPrefix: String)(implicit A : Show[A])
   extends Show[Iterator[A]] {
   
-  override def show(xs: Iterator[A])(implicit buffer: CharBuffer) {
-    buffer.append(name)
+  override def show(xs: Iterator[A])(buffer: CharBuffer) {
+    buffer.append(stringPrefix)
     buffer += '('
     val iter = xs.dup
     if (!iter.isEmpty) {

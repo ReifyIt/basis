@@ -45,7 +45,7 @@ final class HashMap[A, +T] private
   
   override def - (key: A): HashMap[A, T] = remove(key, A.hash(key), 0)
   
-  override def iterator: Iterator[(A, T)] = new HashMapIterator(this)
+  override def iterator: Iterator[(A, T)] = new HashMap.Iterator(this)
   
   protected override def foreach[U](f: ((A, T)) => U) {
     var i = 0
@@ -354,104 +354,105 @@ final class HashMap[A, +T] private
 object HashMap {
   def empty[A : Hash, T]: HashMap[A, T] = new HashMap[A, T](0, 0, RefArray.empty, RefArray.empty)
   
-  implicit def Buffer[A : Hash, T]: HashMapBuffer[A, T] = new HashMapBuffer[A, T]
-  
   implicit def Show[A : Show, T : Show]: Show[HashMap[A, T]] = new MapShow[A, T]("HashMap")
-}
-
-private[basis] final class HashMapIterator[A, +T](
-    self: HashMap[A, T],
-    private[this] var child: HashMapIterator[A, T],
-    private[this] var index: Int)
-  extends Iterator[(A, T)] {
   
-  import scala.annotation.tailrec
+  implicit def Buffer[A : Hash, T]: HashMap.Buffer[A, T] = new HashMap.Buffer[A, T]
   
-  def this(self: HashMap[A, T]) = this(self, null, 0)
-  
-  @tailrec override def isEmpty: Boolean = {
-    if (child != null)
-      child.asInstanceOf[Iterator[_]].isEmpty && { child = null; isEmpty }
-    else if (self.isTrie)
-      index >= 32 || !self.hasSlotAbove(index) ||
-        (!self.hasSlotAt(1 << index) && { index += 1; isEmpty })
-    else index >= self.rank
+  final class Buffer[A, T](implicit A: Hash[A]) extends basis.Buffer[Any, (A, T)] {
+    override type State = HashMap[A, T]
+    
+    private[this] var map: HashMap[A, T] = HashMap.empty[A, T]
+    
+    def += (key: A, value: T): this.type = {
+      map += (key, value)
+      this
+    }
+    
+    override def += (entry: (A, T)): this.type = this += (entry._1, entry._2)
+    
+    override def expect(count: Int): this.type = this
+    
+    override def state: HashMap[A, T] = map
+    
+    override def clear(): Unit = map = HashMap.empty[A, T]
   }
   
-  @tailrec override def head: (A, T) = {
-    if (child != null) {
-      if (!child.isEmpty) child.head
-      else {
-        child = null
-        head
-      }
+  private[basis] final class Iterator[A, +T](
+      self: HashMap[A, T],
+      private[this] var child: HashMap.Iterator[A, T],
+      private[this] var index: Int)
+    extends basis.Iterator[(A, T)] {
+    
+    import scala.annotation.tailrec
+    
+    def this(self: HashMap[A, T]) = this(self, null, 0)
+    
+    @tailrec override def isEmpty: Boolean = {
+      if (child != null)
+        child.asInstanceOf[basis.Iterator[_]].isEmpty && { child = null; isEmpty }
+      else if (self.isTrie)
+        index >= 32 || !self.hasSlotAbove(index) ||
+          (!self.hasSlotAt(1 << index) && { index += 1; isEmpty })
+      else index >= self.rank
     }
-    else if (self.isTrie) {
-      if (index < 32 && self.hasSlotAbove(index)) {
-        val n = 1 << index
-        if (self.hasEntryAt(n)) (self.keyAt(self.slot(n)), self.valAt(self.link(n)))
-        else if (self.hasSlotAt(n)) {
-          child = new HashMapIterator(self.nodeAt(self.slot(n)))
-          index += 1
-          head
-        }
+    
+    @tailrec override def head: (A, T) = {
+      if (child != null) {
+        if (!child.isEmpty) child.head
         else {
-          index += 1
+          child = null
           head
         }
       }
+      else if (self.isTrie) {
+        if (index < 32 && self.hasSlotAbove(index)) {
+          val n = 1 << index
+          if (self.hasEntryAt(n)) (self.keyAt(self.slot(n)), self.valAt(self.link(n)))
+          else if (self.hasSlotAt(n)) {
+            child = new HashMap.Iterator(self.nodeAt(self.slot(n)))
+            index += 1
+            head
+          }
+          else {
+            index += 1
+            head
+          }
+        }
+        else Iterator.empty.head
+      }
+      else if (index < self.rank) (self.keyAt(index), self.valAt(index))
       else Iterator.empty.head
     }
-    else if (index < self.rank) (self.keyAt(index), self.valAt(index))
-    else Iterator.empty.head
-  }
-  
-  @tailrec override def step() {
-    if (child != null) {
-      if (!child.isEmpty) child.step()
-      else {
-        child = null
-        step()
-      }
-    }
-    else if (self.isTrie) {
-      if (index < 32 && self.hasSlotAbove(index)) {
-        val n = 1 << index
-        if (self.hasEntryAt(n)) index += 1
-        else if (self.hasSlotAt(n)) {
-          child = new HashMapIterator(self.nodeAt(self.slot(n)))
-          index += 1
-          step()
-        }
+    
+    @tailrec override def step() {
+      if (child != null) {
+        if (!child.isEmpty) child.step()
         else {
-          index += 1
+          child = null
           step()
         }
       }
+      else if (self.isTrie) {
+        if (index < 32 && self.hasSlotAbove(index)) {
+          val n = 1 << index
+          if (self.hasEntryAt(n)) index += 1
+          else if (self.hasSlotAt(n)) {
+            child = new HashMap.Iterator(self.nodeAt(self.slot(n)))
+            index += 1
+            step()
+          }
+          else {
+            index += 1
+            step()
+          }
+        }
+        else Iterator.empty.step()
+      }
+      else if (index < self.rank) index += 1
       else Iterator.empty.step()
     }
-    else if (index < self.rank) index += 1
-    else Iterator.empty.step()
+    
+    override def dup: HashMap.Iterator[A, T] =
+      new HashMap.Iterator(self, child, index)
   }
-  
-  override def dup: HashMapIterator[A, T] = new HashMapIterator(self, child, index)
-}
-
-final class HashMapBuffer[A, T](implicit A: Hash[A]) extends Buffer[Any, (A, T)] {
-  override type State = HashMap[A, T]
-  
-  private[this] var map: HashMap[A, T] = HashMap.empty[A, T]
-  
-  def += (key: A, value: T): this.type = {
-    map += (key, value)
-    this
-  }
-  
-  override def += (entry: (A, T)): this.type = this += (entry._1, entry._2)
-  
-  override def expect(count: Int): this.type = this
-  
-  override def state: HashMap[A, T] = map
-  
-  override def clear(): Unit = map = HashMap.empty[A, T]
 }

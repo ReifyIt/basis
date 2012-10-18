@@ -185,7 +185,7 @@ private[basis] object ListMacros {
     : c.Expr[List[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val b = new ListBuffer[B]
+      val b = new List.Buffer[B]
       var xs = self.splice
       while (!xs.isEmpty) {
         val x = xs.head
@@ -202,7 +202,7 @@ private[basis] object ListMacros {
     : c.Expr[List[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val b = new ListBuffer[B]
+      val b = new List.Buffer[B]
       var xs = self.splice
       while (!xs.isEmpty) {
         b += f.splice(xs.head)
@@ -218,7 +218,7 @@ private[basis] object ListMacros {
     : c.Expr[List[B]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val b = new ListBuffer[B]
+      val b = new List.Buffer[B]
       var xs = self.splice
       while (!xs.isEmpty) {
         var ys = f.splice(xs.head)
@@ -238,7 +238,7 @@ private[basis] object ListMacros {
     : c.Expr[List[A]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val b = new ListBuffer[A]
+      val b = new List.Buffer[A]
       var xs = self.splice
       while (!xs.isEmpty) {
         val x = xs.head
@@ -267,7 +267,7 @@ private[basis] object ListMacros {
     : c.Expr[List[A]] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val b = new ListBuffer[A]
+      val b = new List.Buffer[A]
       var xs = self.splice
       while (!xs.isEmpty && p.splice(xs.head)) {
         b += xs.head
@@ -283,7 +283,7 @@ private[basis] object ListMacros {
     : c.Expr[(List[A], List[A])] = {
     val self = deconstruct[A](c)
     c.universe.reify {
-      val b = new ListBuffer[A]
+      val b = new List.Buffer[A]
       var xs = self.splice
       while (!xs.isEmpty && p.splice(xs.head)) {
         b += xs.head

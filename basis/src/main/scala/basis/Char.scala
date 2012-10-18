@@ -20,7 +20,7 @@ object Char extends Hash[Char] with Show[Char] {
   
   override def hash(x: Char): Int = x.codePoint.##
   
-  override def show(x: Char)(implicit buffer: CharBuffer): Unit = buffer += x
+  override def show(x: Char)(buffer: CharBuffer): Unit = buffer += x
   
   implicit def implicitly: this.type = this
 }
