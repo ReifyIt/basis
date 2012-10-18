@@ -24,12 +24,12 @@ trait Collection[+A] extends Any with Enumerator[A] {
 
 /** `Collection` type class implementations. */
 object Collection {
-  /* implicit */ def Show[A](implicit A: Show[A]): Show[Collection[A]] =
+  /* implicit */ def Show[A : Show]: Show[Collection[A]] =
     new CollectionShow[A]("Collection")
 }
 
 private[basis] class CollectionShow[-A]
-    (name: String)(implicit A : Show[A])
+    (name: String)(implicit A: Show[A])
   extends Show[Collection[A]] {
   
   override def show(xs: Collection[A])(implicit buffer: CharBuffer) {

@@ -22,13 +22,18 @@ final class HashSet[A] private
   override def isEmpty: Boolean = slots.isEmpty
   
   override def size: Int = {
-    var t: Int = 0
-    val iter = iterator
-    while (!iter.isEmpty) {
-      t += 1
-      iter.step()
+    if (!isTrie || slotMap == elemMap) rank
+    else  {
+      var t = 0
+      var i = 0
+      while (i < 32 && hasSlotAbove(i)) {
+        val n = 1 << i
+        if (hasElemAt(n)) t += 1
+        else if (hasSlotAt(n)) t += nodeAt(slot(n)).size
+        i += 1
+      }
+      t
     }
-    t
   }
   
   override def contains(element: A): Boolean = contains(element, A.hash(element), 0)
@@ -37,24 +42,23 @@ final class HashSet[A] private
   
   override def - (element: A): HashSet[A] = remove(element, A.hash(element), 0)
   
-  override def iterator: Iterator[A] = new HashSetIterator[A](this)
+  override def iterator: Iterator[A] = new HashSetIterator(this)
   
   protected override def foreach[U](f: A => U) {
+    var i = 0
     if (isTrie) {
-      var j = 0
-      while (j < 32 && hasSlotAbove(j)) {
-        val n = 1 << j
+      while (i < 32 && hasSlotAbove(i)) {
+        val n = 1 << i
         if (hasElemAt(n)) f(elemAt(slot(n)))
         else if (hasSlotAt(n)) nodeAt(slot(n)) foreach f
-        j += 1
+        i += 1
       }
     }
     else {
-      var j = 0
       var n = rank
-      while (j < n) {
-        f(elemAt(j))
-        j += 1
+      while (i < n) {
+        f(elemAt(i))
+        i += 1
       }
     }
   }
@@ -80,7 +84,7 @@ final class HashSet[A] private
     */
   private[basis] def hasElemAt(n: Int): Boolean = (elemMap & n) != 0
   
-  /** Returns the trie branch of the low 5 shifted hash bits.
+  /** Returns the trie branch for the low 5 shifted hash bits.
     * 
     * @param  h   the un-shifted hash code to branch on.
     * @param  k   the amount to right shift the hash code before branching.
@@ -94,19 +98,19 @@ final class HashSet[A] private
     */
   private[basis] def slot(n: Int): Int = (slotMap & (n - 1)).countSetBits
   
-  /** Returns the subset at the slot index.
+  /** Returns the subset at a slot index.
     * 
     * @param  i   the index of a slot known to hold a subset.
     */
   private[basis] def nodeAt(i: Int): HashSet[A] = slots(i).asInstanceOf[HashSet[A]]
   
-  /** Returns the element at the slot index.
+  /** Returns the element at a slot index.
     * 
     * @param  i   the index of a slot known to hold an element.
     */
   private[basis] def elemAt(i: Int): A = slots(i).asInstanceOf[A]
   
-  /** Returns the number of slots filled by this node. */
+  /** Returns the number of filled slots in this node. */
   private[basis] def rank: Int = slots.length
   
   /** Returns `true` if this node directly contains exactly one element. */
@@ -116,7 +120,7 @@ final class HashSet[A] private
   /** Returns the hash code of the elements in this known collision bucket. */
   private[basis] def bucketHash: Int = elemMap // assume(!isTrie)
   
-  /** Returns `true` if this node contains the element.
+  /** Returns `true` if this node contains the given element.
     * 
     * @param  elem  the element to search for.
     * @param  h     the element's hash code.
@@ -125,7 +129,7 @@ final class HashSet[A] private
   @tailrec private def contains(elem: A, h: Int, k: Int): Boolean = {
     if (isTrie) { // search trie
       val n = branch(h, k)
-      if (hasElemAt(n)) A.equal(elemAt(slot(n)), elem)
+      if (hasElemAt(n)) A.equal(elem, elemAt(slot(n)))
       else if (hasSlotAt(n)) nodeAt(slot(n)).contains(elem, h, k + 5)
       else false
     }
@@ -142,8 +146,8 @@ final class HashSet[A] private
     }
   }
   
-  /** Returns a copy of this set including the element, or this set itself if
-    * it already contains the element.
+  /** Returns a copy of this set including the given element, or this set
+    * itself if it already contains the element.
     * 
     * @param  elem  the element to include.
     * @param  h     the element's hash code.
@@ -151,68 +155,54 @@ final class HashSet[A] private
     */
   private def update(elem: A, h: Int, k: Int): HashSet[A] = {
     val n = branch(h, k)
-    if (isEmpty) { // update empty set
-      val newSlots = new scala.Array[AnyRef](1)
-      newSlots(0) = elem.asInstanceOf[AnyRef]
-      new HashSet[A](n, n, new RefArray[A](newSlots))
-      // new HashSet[A](n, n, RefArray[Any](elem)) // someday
-    }
+    if (isEmpty) // new unary set
+      new HashSet(n, n, newSlots(elem))
     else if (isTrie) { // update trie
       val i = slot(n)
       if (hasElemAt(n)) { // update element
         val e = elemAt(i)
         if (A.equal(elem, e)) this
-        else {
-          val newNode = merge(elem, h, e, A.hash(e), k + 5)
-          new HashSet[A](slotMap, elemMap ^ n, slots.update(i, newNode))
-        }
+        else // merge elements in new subset
+          new HashSet(slotMap, elemMap ^ n,
+            slots.update(i, merge(elem, h, e, A.hash(e), k + 5)))
       }
       else if (hasSlotAt(n)) { // update subset
         val node = nodeAt(i)
         val newNode = node.update(elem, h, k + 5)
         if (node eq newNode) this
-        else new HashSet[A](slotMap, elemMap, slots.update(i, newNode))
+        else new HashSet(slotMap, elemMap, slots.update(i, newNode))
       }
-      else new HashSet[A](slotMap | n, elemMap | n, slots.insert(i, elem))
+      else // insert element
+        new HashSet(slotMap | n, elemMap | n, slots.insert(i, elem))
     }
     else { // update collision bucket
-      if (h == bucketHash) new HashSet[A](0, bucketHash, slots :+ elem)
-      else resolve(elem, h, k)
+      if (h == bucketHash) {
+        var i = 0
+        var n = rank
+        while (i < n) {
+          if (A.equal(elem, elemAt(i))) return this
+          i += 1
+        }
+        new HashSet(0, bucketHash, slots :+ elem)
+      }
+      else // reconcile element with collision bucket
+        resolve(elem, h, k)
     }
   }
   
   /** Returns a set containing the two elements. */
   private[this] def merge(elemA: A, hashA: Int, elemB: A, hashB: Int, k: Int): HashSet[A] = {
-    if (hashA == hashB) { // full hash collision
-      val newSlots = new scala.Array[AnyRef](2)
-      newSlots(0) = elemA.asInstanceOf[AnyRef]
-      newSlots(1) = elemB.asInstanceOf[AnyRef]
-      new HashSet[A](0, hashA, new RefArray[Any](newSlots))
-      // new HashSet[A](0, hashA, RefArray[Any](elemA, elemB)) // someday
-    }
+    if (hashA == hashB) // new collision bucket
+      new HashSet(0, hashA, newSlots(elemA, elemB))
     else {
       val branchA = branch(hashA, k)
       val branchB = branch(hashB, k)
-      val newMap = branchA | branchB
-      if (branchA == branchB) { // hash prefix collision
-        val newNode = merge(elemA, hashA, elemB, hashB, k + 5)
-        val newSlots = new scala.Array[AnyRef](1)
-        newSlots(0) = newNode
-        new HashSet[A](newMap, 0, new RefArray[Any](newSlots))
-        // new HashSet[A](newMap, 0, RefArray[Any](newNode)) // someday
-      }
-      else { // divergent hash prefixes
-        val newSlots = new scala.Array[AnyRef](2)
-        if (((branchA - 1) & branchB) == 0) {
-          newSlots(0) = elemA.asInstanceOf[AnyRef]
-          newSlots(1) = elemB.asInstanceOf[AnyRef]
-        }
-        else {
-          newSlots(0) = elemB.asInstanceOf[AnyRef]
-          newSlots(1) = elemA.asInstanceOf[AnyRef]
-        }
-        new HashSet[A](newMap, newMap, new RefArray[Any](newSlots))
-      }
+      if (branchA == branchB) // new subset
+        new HashSet(branchA | branchB, 0,
+          newSlots(merge(elemA, hashA, elemB, hashB, k + 5)))
+      else // new branch
+        new HashSet(branchA | branchB, branchA | branchB,
+          if (((branchA - 1) & branchB) == 0) newSlots(elemA, elemB) else newSlots(elemB, elemA))
     }
   }
   
@@ -221,29 +211,16 @@ final class HashSet[A] private
     // assume(h != bucketHash)
     val bucketBranch = branch(bucketHash, k)
     val elemBranch = branch(h, k)
-    if (bucketBranch == elemBranch) { // hash prefix collision
-      val newNode = resolve(elem, h, k + 5)
-      val newSlots = new scala.Array[AnyRef](1)
-      newSlots(0) = newNode
-      new HashSet[A](bucketBranch, 0, new RefArray[Any](newSlots))
-      // new HashSet[A](bucketBranch, 0, RefArray[Any](newNode)) // someday
-    }
-    else {
-      val newSlots = new scala.Array[AnyRef](2)
-      if (((bucketBranch - 1) & elemBranch) == 0) {
-        newSlots(0) = this
-        newSlots(1) = elem.asInstanceOf[AnyRef]
-      }
-      else {
-        newSlots(0) = elem.asInstanceOf[AnyRef]
-        newSlots(1) = this
-      }
-      new HashSet[A](bucketBranch | elemBranch, elemBranch, new RefArray[Any](newSlots))
-    }
+    if (bucketBranch == elemBranch) // new subset
+      new HashSet(bucketBranch, 0,
+        newSlots(resolve(elem, h, k + 5)))
+    else // new branch
+      new HashSet(bucketBranch | elemBranch, elemBranch,
+        if (((bucketBranch - 1) & elemBranch) == 0) newSlots(this, elem) else newSlots(elem, this))
   }
   
-  /** Returns a copy of this set removing the element, or this set itself if
-    * it doesn't contain the element. */
+  /** Returns a copy of this set removing the given element, or this set itself
+    * if it doesn't contain the element. */
   private def remove(elem: A, h: Int, k: Int): HashSet[A] = {
     if (isEmpty) this
     else if (isTrie) { // remove from trie
@@ -251,7 +228,7 @@ final class HashSet[A] private
       val i = slot(n)
       if (hasElemAt(n)) { // remove element
         if (A.equal(elem, elemAt(i)))
-          new HashSet[A](slotMap ^ n, elemMap ^ n, slots.remove(i))
+          new HashSet(slotMap ^ n, elemMap ^ n, slots.remove(i))
         else this
       }
       else if (hasSlotAt(n)) { // remove from subset
@@ -259,10 +236,10 @@ final class HashSet[A] private
         val newNode = node.remove(elem, h, k + 5)
         if (node eq newNode) this
         else if (newNode.isEmpty) // remove empty subsets
-          new HashSet[A](slotMap ^ n, elemMap, slots.remove(i))
+          new HashSet(slotMap ^ n, elemMap, slots.remove(i))
         else if (newNode.isUnary) // lift unary subsets
-          new HashSet[A](slotMap, elemMap | n, slots.update(i, newNode.elemAt(0)))
-        else new HashSet[A](slotMap, elemMap, slots.update(i, newNode))
+          new HashSet(slotMap, elemMap | n, slots.update(i, newNode.elemAt(0)))
+        else new HashSet(slotMap, elemMap, slots.update(i, newNode))
       }
       else this
     }
@@ -272,13 +249,19 @@ final class HashSet[A] private
         val n = rank
         while (i < n) {
           if (A.equal(elem, elemAt(i)))
-            return new HashSet[A](0, bucketHash, slots.remove(i))
+            return new HashSet(0, bucketHash, slots.remove(i))
           i += 1
         }
       }
       this
     }
   }
+  
+  private[this] def newSlots(elem: Any): RefArray[Any] =
+    new RefArray(scala.Array(elem.asInstanceOf[AnyRef]))
+  
+  private[this] def newSlots(elemA: Any, elemB: Any): RefArray[Any] =
+    new RefArray(scala.Array(elemA.asInstanceOf[AnyRef], elemB.asInstanceOf[AnyRef]))
 }
 
 object HashSet extends ContainerFactory[HashSet] {
@@ -301,7 +284,7 @@ private[basis] final class HashSetIterator[A](
   
   @tailrec override def isEmpty: Boolean = {
     if (child != null)
-      child.asInstanceOf[Iterator[A]].isEmpty && { child = null; isEmpty }
+      child.asInstanceOf[Iterator[_]].isEmpty && { child = null; isEmpty }
     else if (self.isTrie)
       index >= 32 || !self.hasSlotAbove(index) ||
         (!self.hasSlotAt(1 << index) && { index += 1; isEmpty })
@@ -321,7 +304,7 @@ private[basis] final class HashSetIterator[A](
         val n = 1 << index
         if (self.hasElemAt(n)) self.elemAt(self.slot(n))
         else if (self.hasSlotAt(n)) {
-          child = new HashSetIterator[A](self.nodeAt(self.slot(n)))
+          child = new HashSetIterator(self.nodeAt(self.slot(n)))
           index += 1
           head
         }
@@ -349,7 +332,7 @@ private[basis] final class HashSetIterator[A](
         val n = 1 << index
         if (self.hasElemAt(n)) index += 1
         else if (self.hasSlotAt(n)) {
-          child = new HashSetIterator[A](self.nodeAt(self.slot(n)))
+          child = new HashSetIterator(self.nodeAt(self.slot(n)))
           index += 1
           step()
         }
@@ -364,7 +347,7 @@ private[basis] final class HashSetIterator[A](
     else Iterator.empty.step()
   }
   
-  override def dup: HashSetIterator[A] = new HashSetIterator[A](self, child, index)
+  override def dup: HashSetIterator[A] = new HashSetIterator(self, child, index)
 }
 
 final class HashSetBuffer[A](implicit A: Hash[A]) extends Buffer[Any, A] {

@@ -28,12 +28,12 @@ trait Container[+A] extends Any with Collection[A] {
 
 /** `Container` type class implementations. */
 object Container {
-  /* implicit */ def Show[A](implicit A: Show[A]): Show[Container[A]] =
+  /* implicit */ def Show[A : Show]: Show[Container[A]] =
     new ContainerShow[A]("Container")
 }
 
 private[basis] class ContainerShow[-A]
-    (name: String)(implicit A : Show[A])
+    (name: String)(implicit A: Show[A])
   extends Show[Container[A]] {
   
   override def show(xs: Container[A])(implicit buffer: CharBuffer) {

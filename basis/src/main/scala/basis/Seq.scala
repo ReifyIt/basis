@@ -30,8 +30,7 @@ object Seq {
   
   /* implicit */ def Hash[A : Hash]: Hash[Seq[A]] = new SeqHash[A]
   
-  /* implicit */ def Show[A](implicit A: Show[A]): Show[Seq[A]] =
-    new ContainerShow[A]("Seq")
+  /* implicit */ def Show[A : Show]: Show[Seq[A]] = new ContainerShow[A]("Seq")
 }
 
 private[basis] class SeqEqual[-A]

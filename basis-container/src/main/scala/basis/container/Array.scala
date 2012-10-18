@@ -15,7 +15,7 @@ import basis.collection._
   * 
   * @author Chris Sachs
   * 
-  * @define collection array
+  * @define collection  array
   */
 trait Array[+A] extends Any with Seq[A] {
   override type Self <: Array[A]
@@ -78,8 +78,6 @@ private[basis] class RefArrayBuffers {
 private[basis] final class ArrayIterator[+A]
     (xs: Array[A], from: Int, until: Int)
   extends Iterator[A] {
-  
-  import java.lang.Math.{max, min}
   
   private[this] var lower: Int = 0 max from
   private[this] var upper: Int = (lower max until) min xs.length
