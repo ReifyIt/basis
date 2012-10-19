@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.text
 
 /** A Unicode® code point. */
 class Char(val codePoint: Int) extends AnyVal {
