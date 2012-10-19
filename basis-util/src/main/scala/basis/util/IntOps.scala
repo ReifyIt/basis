@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.util
 
 /** Supplemental operations on `Int` values. */
 trait IntOps extends Any {

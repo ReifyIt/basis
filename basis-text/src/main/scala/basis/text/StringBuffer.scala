@@ -5,9 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.text
 
-private[basis] final class StringBuffer extends CharBuffer {
+import basis._
+
+final class StringBuffer extends CharBuffer {
   override type State = String
   
   private[this] var codeUnits: scala.Array[scala.Char] = null

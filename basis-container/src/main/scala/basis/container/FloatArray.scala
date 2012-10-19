@@ -8,6 +8,7 @@
 package basis.container
 
 import basis._
+import basis.util._
 
 class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float] {
   override def isEmpty: Boolean = array.length == 0

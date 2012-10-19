@@ -5,17 +5,18 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.text
 
-/** An equality relation. */
-@scala.annotation.implicitNotFound("${T} has no implicit Equal implementation.")
-trait Equal[-T] {
-  /** Returns `true` given equal values and `false` given unequal ones. */
-  def equal(x: T, y: T): Boolean
-}
+import basis._
 
-/** `Equal` type class utilities. */
-object Equal {
-  /** Returns the given type's implicit `Equal` implementation. */
-  def apply[T](implicit T: Equal[T]): T.type = T
+/** A specialized iterable sequence of Unicode® characters.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define collection  char sequence
+  */
+trait CharSeq extends Any with Seq[Char] {
+  override type Self <: CharSeq
+  
+  override def iterator: CharIterator
 }

@@ -8,6 +8,7 @@
 package basis.container
 
 import basis._
+import basis.util._
 
 class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
   override def isEmpty: Boolean = array.length == 0

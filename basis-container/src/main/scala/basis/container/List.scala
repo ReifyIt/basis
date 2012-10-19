@@ -168,6 +168,4 @@ object List extends SeqFactory[List] {
     override def dup: List.Iterator[A] =
       new List.Iterator[A](xs)
   }
-  
-  protected override def stringPrefix: String = "List"
 }

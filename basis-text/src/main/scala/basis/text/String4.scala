@@ -8,6 +8,7 @@
 package basis.text
 
 import basis._
+import basis.util._
 
 /** A 32-bit Unicode string comprised of a UTF-32 code unit sequence.
   * 

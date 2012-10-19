@@ -10,6 +10,7 @@ package basis.container
 import basis._
 import basis.data._
 import basis.collection._
+import basis.util._
 
 /** An indexed sequence of elements.
   * 
@@ -75,8 +76,6 @@ object Array extends AllArrayBuffers with SeqFactory[Array] {
     override def dup: Array.Iterator[A] =
       new Array.Iterator[A](xs, index, upper)
   }
-  
-  protected override def stringPrefix: String = "Array"
 }
 
 private[basis] class AllArrayBuffers extends ValArrayBuffers {

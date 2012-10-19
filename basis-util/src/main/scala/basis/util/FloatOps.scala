@@ -5,12 +5,15 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.util
 
-private[basis] object ShortMacros {
-  import scala.reflect.macros.Context
+/** Supplemental operations on `Float` values. */
+trait FloatOps extends Any {
+  def abs: Float = macro FloatMacros.abs
   
-  def MinValue(c: Context): c.Expr[Short] = c.literal(scala.Short.MinValue)
+  def min(that: Float): Float = macro FloatMacros.min
   
-  def MaxValue(c: Context): c.Expr[Short] = c.literal(scala.Short.MaxValue)
+  def max(that: Float): Float = macro FloatMacros.max
+  
+  def toIntBits: Int = macro FloatMacros.toIntBits
 }

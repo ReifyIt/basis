@@ -8,6 +8,7 @@
 package basis.container
 
 import basis._
+import basis.util._
 
 final class HashMap[A, +T] private
     (slotMap: Int, entryMap: Int, slots: RefArray[Any], links: RefArray[T])
@@ -353,8 +354,6 @@ final class HashMap[A, +T] private
 object HashMap {
   private[this] val Empty = new HashMap[Any, Nothing](0, 0, RefArray.empty, RefArray.empty)
   def empty[A, T]: HashMap[A, T] = Empty.asInstanceOf[HashMap[A, T]]
-  
-  implicit def Show[A : Show, T : Show]: Show[HashMap[A, T]] = new MapShow[A, T]("HashMap")
   
   implicit def Buffer[A, T]: HashMap.Buffer[A, T] = new HashMap.Buffer[A, T]
   

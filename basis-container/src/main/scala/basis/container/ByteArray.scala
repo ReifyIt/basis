@@ -8,6 +8,7 @@
 package basis.container
 
 import basis._
+import basis.util._
 
 class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
   override def isEmpty: Boolean = array.length == 0

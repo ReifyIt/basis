@@ -8,6 +8,7 @@
 package basis.container
 
 import basis._
+import basis.util._
 
 class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
   override def isEmpty: Boolean = words(0) == 0

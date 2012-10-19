@@ -48,27 +48,4 @@ object Iterator {
     
     protected override def foreach[U](f: Nothing => U): Unit = ()
   }
-  
-  implicit def Show[A : Show]: Show[Iterator[A]] = new IteratorShow[A]("Iterator")
-}
-
-private[basis] class IteratorShow[-A]
-    (stringPrefix: String)(implicit A : Show[A])
-  extends Show[Iterator[A]] {
-  
-  override def show(xs: Iterator[A])(buffer: CharBuffer) {
-    buffer.append(stringPrefix)
-    buffer += '('
-    val iter = xs.dup
-    if (!iter.isEmpty) {
-      A.show(iter.head)(buffer)
-      iter.step()
-      while (!iter.isEmpty) {
-        buffer += ',' += ' '
-        A.show(iter.head)(buffer)
-        iter.step()
-      }
-    }
-    buffer += ')'
-  }
 }

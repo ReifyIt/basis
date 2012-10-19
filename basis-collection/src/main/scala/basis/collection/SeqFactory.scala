@@ -9,8 +9,4 @@ package basis.collection
 
 import basis._
 
-trait SeqFactory[CC[X] <: Seq[X]] extends ContainerFactory[CC] {
-  implicit def Equal[A : Equal]: Equal[CC[A]] = new SeqEqual[A]
-  
-  implicit def Hash[A : Hash]: Hash[CC[A]] = new SeqHash[A]
-}
+trait SeqFactory[CC[X] <: Seq[X]] extends ContainerFactory[CC]

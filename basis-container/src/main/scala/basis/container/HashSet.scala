@@ -9,6 +9,7 @@ package basis.container
 
 import basis._
 import basis.collection._
+import basis.util._
 
 final class HashSet[A] private
     (slotMap: Int, elemMap: Int, slots: RefArray[Any])
@@ -364,6 +365,4 @@ object HashSet extends ContainerFactory[HashSet] {
     override def dup: HashSet.Iterator[A] =
       new HashSet.Iterator(self, child, index)
   }
-  
-  protected override def stringPrefix: String = "HashSet"
 }

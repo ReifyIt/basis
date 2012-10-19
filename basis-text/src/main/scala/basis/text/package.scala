@@ -7,15 +7,6 @@
 
 package basis
 
-/** Supplemental operations on `Double` values. */
-trait DoubleOps extends Any {
-  def abs: Double = macro DoubleMacros.abs
-  
-  def min(that: Double): Double = macro DoubleMacros.min
-  
-  def max(that: Double): Double = macro DoubleMacros.max
-  
-  def sqrt: Double = macro DoubleMacros.sqrt
-  
-  def toLongBits: Long = macro DoubleMacros.toLongBits
+package object text {
+  implicit def StringBuffer: StringBuffer = new StringBuffer
 }

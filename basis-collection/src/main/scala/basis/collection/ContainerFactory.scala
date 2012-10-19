@@ -18,8 +18,4 @@ trait ContainerFactory[CC[X] <: Container[X]] {
   
   def tabulate[A](n: Int)(f: Int => A)(implicit buffer: Buffer[CC[_], A]): buffer.State =
     macro ContainerMacros.tabulate[A]
-  
-  implicit def Show[A : Show]: Show[CC[A]] = new ContainerShow[A](stringPrefix)
-  
-  protected def stringPrefix: String
 }

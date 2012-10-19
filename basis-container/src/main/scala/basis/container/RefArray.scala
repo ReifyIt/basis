@@ -8,6 +8,7 @@
 package basis.container
 
 import basis._
+import basis.util._
 
 class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] {
   override def isEmpty: Boolean = array.length == 0

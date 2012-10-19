@@ -8,6 +8,7 @@
 package basis.container
 
 import basis._
+import basis.util._
 
 class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
   override def isEmpty: Boolean = array.length == 0

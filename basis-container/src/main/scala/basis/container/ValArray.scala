@@ -9,6 +9,7 @@ package basis.container
 
 import basis._
 import basis.data._
+import basis.util._
 
 final class ValArray[A](mem: Mem)(implicit A: ValType[A]) extends Array[A] {
   if (mem.size % A.size.toLong != 0L)

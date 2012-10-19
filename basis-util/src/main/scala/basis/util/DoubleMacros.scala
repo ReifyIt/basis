@@ -5,19 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.util
 
-private[basis] object DoubleMacros {
+private[util] object DoubleMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
-  
-  def MinValue(c: Context): c.Expr[Double] = c.literal(scala.Double.MinValue)
-  
-  def MaxValue(c: Context): c.Expr[Double] = c.literal(scala.Double.MaxValue)
-  
-  def Infinity(c: Context): c.Expr[Double] = c.literal(scala.Double.PositiveInfinity)
-  
-  def NaN(c: Context): c.Expr[Double] = c.literal(scala.Double.NaN)
   
   def abs(c: Context): c.Expr[Double] = {
     import c.universe._

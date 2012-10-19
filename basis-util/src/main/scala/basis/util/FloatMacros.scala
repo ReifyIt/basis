@@ -5,19 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.util
 
-private[basis] object FloatMacros {
+private[util] object FloatMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
-  
-  def MinValue(c: Context): c.Expr[Float] = c.literal(scala.Float.MinValue)
-  
-  def MaxValue(c: Context): c.Expr[Float] = c.literal(scala.Float.MaxValue)
-  
-  def Infinity(c: Context): c.Expr[Float] = c.literal(scala.Float.PositiveInfinity)
-  
-  def NaN(c: Context): c.Expr[Float] = c.literal(scala.Float.NaN)
   
   def abs(c: Context): c.Expr[Float] = {
     import c.universe._

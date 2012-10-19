@@ -5,16 +5,17 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.util
 
-/** A specialized iterable sequence of Unicode® characters.
-  * 
-  * @author Chris Sachs
-  * 
-  * @define collection  char sequence
-  */
-trait CharSeq extends Any with Seq[Char] {
-  override type Self <: CharSeq
+/** Supplemental operations on `Double` values. */
+trait DoubleOps extends Any {
+  def abs: Double = macro DoubleMacros.abs
   
-  override def iterator: CharIterator
+  def min(that: Double): Double = macro DoubleMacros.min
+  
+  def max(that: Double): Double = macro DoubleMacros.max
+  
+  def sqrt: Double = macro DoubleMacros.sqrt
+  
+  def toLongBits: Long = macro DoubleMacros.toLongBits
 }

@@ -5,7 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.text
+
+import basis._
 
 /** A specialized Unicode® character buffer. */
 trait CharBuffer extends Buffer[Nothing, Char] {

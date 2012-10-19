@@ -42,30 +42,3 @@ trait Map[A, +T] extends Any with Container[(A, T)] {
   /** Returns a copy of this $collection without any value associated with the given key. */
   def - (key: A): Map[A, T]
 }
-
-private[basis] class MapShow[A, T]
-    (stringPrefix: String)(implicit A: Show[A], T: Show[T])
-  extends Show[Map[A, T]] {
-  
-  override def show(map: Map[A, T])(buffer: CharBuffer) {
-    buffer.append(stringPrefix)
-    buffer += '('
-    val iter = map.iterator
-    if (!iter.isEmpty) {
-      val entry = iter.head
-      A.show(entry._1)(buffer)
-      buffer.append(" -> ")
-      T.show(entry._2)(buffer)
-      iter.step()
-      while (!iter.isEmpty) {
-        buffer += ',' += ' '
-        val entry = iter.head
-        A.show(entry._1)(buffer)
-        buffer.append(" -> ")
-        T.show(entry._2)(buffer)
-        iter.step()
-      }
-    }
-    buffer += ')'
-  }
-}

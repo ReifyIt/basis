@@ -21,34 +21,3 @@ trait Collection[+A] extends Any with Enumerator[A] {
   
   protected override def foreach[U](f: A => U): Unit
 }
-
-/** `Collection` type class implementations. */
-object Collection {
-  /* implicit */ def Show[A : Show]: Show[Collection[A]] =
-    new CollectionShow[A]("Collection")
-}
-
-private[basis] class CollectionShow[-A]
-    (stringPrefix: String)(implicit A: Show[A])
-  extends Show[Collection[A]] {
-  
-  override def show(xs: Collection[A])(buffer: CharBuffer) {
-    buffer.append(stringPrefix)
-    buffer += '('
-    Enumerator.traverse(xs)(new ShowEach[A](", "))
-    buffer += ')'
-  }
-}
-
-private[basis] final class ShowEach[-A]
-    (separator: String)
-    (implicit A: Show[A], buffer: CharBuffer)
-  extends scala.runtime.AbstractFunction1[A, Unit] {
-  
-  private[this] var empty: Boolean = true
-  
-  override def apply(x: A) {
-    if (!empty) buffer.append(separator) else empty = false
-    A.show(x)(buffer)
-  }
-}
