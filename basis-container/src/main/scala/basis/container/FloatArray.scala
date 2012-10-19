@@ -56,6 +56,8 @@ class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float]
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new FloatArray(newArray)
   }
+  
+  protected override def stringPrefix: String = "FloatArray"
 }
 
 object FloatArray {

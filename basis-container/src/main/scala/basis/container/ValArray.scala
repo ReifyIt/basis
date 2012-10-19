@@ -63,6 +63,8 @@ final class ValArray[A](mem: Mem)(implicit A: ValType[A]) extends Array[A] {
     Mem.copy(mem, 0L, newMem, A.size.toLong, mem.size)
     new ValArray[A](newMem)
   }
+  
+  protected override def stringPrefix: String = "ValArray"
 }
 
 object ValArray {

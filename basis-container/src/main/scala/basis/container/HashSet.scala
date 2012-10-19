@@ -11,11 +11,11 @@ import basis._
 import basis.collection._
 import basis.util._
 
+import scala.annotation.tailrec
+
 final class HashSet[A] private
     (slotMap: Int, elemMap: Int, slots: RefArray[Any])
   extends Set[A] {
-  
-  import scala.annotation.tailrec
   
   override type Self = HashSet[A]
   
@@ -262,6 +262,22 @@ final class HashSet[A] private
   
   private[this] def newSlots(elemA: Any, elemB: Any): RefArray[Any] =
     new RefArray(scala.Array(elemA.asInstanceOf[AnyRef], elemB.asInstanceOf[AnyRef]))
+  
+  override def toString: String = {
+    val s = new java.lang.StringBuilder("HashSet")
+    s.append('(')
+    if (!isEmpty) {
+      val iter = iterator
+      s.append(iter.head)
+      iter.step()
+      while (!iter.isEmpty) {
+        s.append(", ").append(iter.head)
+        iter.step()
+      }
+    }
+    s.append(')')
+    s.toString
+  }
 }
 
 object HashSet extends ContainerFactory[HashSet] {
@@ -292,8 +308,6 @@ object HashSet extends ContainerFactory[HashSet] {
       private[this] var child: HashSet.Iterator[A],
       private[this] var index: Int)
     extends basis.Iterator[A] {
-    
-    import scala.annotation.tailrec
     
     def this(self: HashSet[A]) = this(self, null, 0)
     

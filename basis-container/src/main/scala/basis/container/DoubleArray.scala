@@ -56,6 +56,8 @@ class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Doub
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new DoubleArray(newArray)
   }
+  
+  protected override def stringPrefix: String = "DoubleArray"
 }
 
 object DoubleArray {

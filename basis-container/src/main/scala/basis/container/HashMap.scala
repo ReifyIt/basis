@@ -10,11 +10,11 @@ package basis.container
 import basis._
 import basis.util._
 
+import scala.annotation.tailrec
+
 final class HashMap[A, +T] private
     (slotMap: Int, entryMap: Int, slots: RefArray[Any], links: RefArray[T])
   extends Map[A, T] {
-  
-  import scala.annotation.tailrec
   
   override type Self <: HashMap[A, T]
   
@@ -349,6 +349,24 @@ final class HashMap[A, +T] private
   
   private[this] def newLinks[U >: T](valueA: U, valueB: U): RefArray[U] =
     new RefArray(scala.Array(valueA.asInstanceOf[AnyRef], valueB.asInstanceOf[AnyRef]))
+  
+  override def toString: String = {
+    val s = new java.lang.StringBuilder("HashMap")
+    s.append('(')
+    if (!isEmpty) {
+      val iter = iterator
+      val entry = iter.head
+      s.append(entry._1).append(" -> ").append(entry._2)
+      iter.step()
+      while (!iter.isEmpty) {
+        val entry = iter.head
+        s.append(", ").append(entry._1).append(" -> ").append(entry._2)
+        iter.step()
+      }
+    }
+    s.append(')')
+    s.toString
+  }
 }
 
 object HashMap {
@@ -381,8 +399,6 @@ object HashMap {
       private[this] var child: HashMap.Iterator[A, T],
       private[this] var index: Int)
     extends basis.Iterator[(A, T)] {
-    
-    import scala.annotation.tailrec
     
     def this(self: HashMap[A, T]) = this(self, null, 0)
     

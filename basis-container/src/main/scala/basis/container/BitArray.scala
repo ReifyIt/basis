@@ -84,6 +84,8 @@ class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
   
   /** Returns a copy of this array with `bit` prepended. */
   def +: (bit: Boolean): BitArray = insert(0, bit)
+  
+  protected override def stringPrefix: String = "BitArray"
 }
 
 object BitArray {

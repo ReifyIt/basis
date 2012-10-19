@@ -9,6 +9,9 @@ package basis.container
 
 import basis._
 import basis.collection._
+import basis.util._
+
+import scala.annotation.tailrec
 
 /** A singly linked list of elements.
   * 
@@ -17,8 +20,6 @@ import basis.collection._
   * @define collection  list
   */
 sealed abstract class List[+A] extends Seq[A] {
-  import scala.annotation.tailrec
-  
   override type Self <: List[A]
   
   /** Returns the first element of this $collection. */
@@ -56,6 +57,31 @@ sealed abstract class List[+A] extends Seq[A] {
   
   final override def iterator: Iterator[A] =
     new List.Iterator[A](this)
+  
+  override def equals(other: Any): Boolean = other match {
+    case that: List[A] =>
+      var xs = this
+      var ys = that
+      var e = xs.isEmpty == ys.isEmpty
+      while (e && !xs.isEmpty && !ys.isEmpty) {
+        e = xs.head == ys.head
+        xs = xs.tail
+        ys = ys.tail
+      }
+      e
+    case _ => false
+  }
+  
+  override def hashCode: Int = {
+    import MurmurHash3._
+    var h = 2368702
+    var xs = this
+    while (!xs.isEmpty) {
+      h = mix(h, xs.head.##)
+      xs = xs.tail
+    }
+    mash(h)
+  }
 }
 
 final class ::[A](override val head: A, private[this] var next: List[A]) extends List[A] {
@@ -64,6 +90,19 @@ final class ::[A](override val head: A, private[this] var next: List[A]) extends
   override def tail: List[A] = next
   
   private[basis] def tail_=(tail: List[A]): Unit = next = tail
+  
+  override def toString: String = {
+    val s = new java.lang.StringBuilder("List")
+    s.append('(')
+    s.append(head)
+    var xs = tail
+    while (!xs.isEmpty) {
+      s.append(", ").append(xs.head)
+      xs = xs.tail
+    }
+    s.append(')')
+    s.toString
+  }
 }
 
 object Nil extends List[Nothing] {
@@ -75,7 +114,7 @@ object Nil extends List[Nothing] {
   override def tail: List[Nothing] =
     throw new java.lang.UnsupportedOperationException("tail of empty list")
   
-  override def toString: java.lang.String = "Nil"
+  override def toString: String = "Nil"
 }
 
 object :: {

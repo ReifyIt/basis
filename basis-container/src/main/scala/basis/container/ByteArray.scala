@@ -56,6 +56,8 @@ class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new ByteArray(newArray)
   }
+  
+  protected override def stringPrefix: String = "ByteArray"
 }
 
 object ByteArray {

@@ -56,6 +56,8 @@ class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] 
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new RefArray[B](newArray)
   }
+  
+  protected override def stringPrefix: String = "RefArray"
 }
 
 object RefArray {

@@ -35,6 +35,49 @@ trait Array[+A] extends Any with Seq[A] {
       i += 1
     }
   }
+  
+  override def equals(other: Any): Boolean = other match {
+    case that: Array[A] =>
+      var i = 0
+      val n = length
+      var e = n == that.length
+      while (e && i < n) {
+        e = this(i) == that(i)
+        i += 1
+      }
+      e
+    case _ => false
+  }
+  
+  override def hashCode: Int = {
+    import MurmurHash3._
+    var h = 63537721
+    var i = 0
+    val n = length
+    while (i < n) {
+      h = mix(h, this(i).##)
+      i += 1
+    }
+    mash(h)
+  }
+  
+  override def toString: String = {
+    val s = new java.lang.StringBuilder(stringPrefix)
+    s.append('(')
+    if (!isEmpty) {
+      s.append(this(0))
+      var i = 1
+      val n = length
+      while (i < length) {
+        s.append(", ").append(this(i))
+        i += 1
+      }
+    }
+    s.append(')')
+    s.toString
+  }
+  
+  protected def stringPrefix: String = "Array"
 }
 
 object Array extends AllArrayBuffers with SeqFactory[Array] {

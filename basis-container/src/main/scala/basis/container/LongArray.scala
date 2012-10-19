@@ -56,6 +56,8 @@ class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new LongArray(newArray)
   }
+  
+  protected override def stringPrefix: String = "LongArray"
 }
 
 object LongArray {

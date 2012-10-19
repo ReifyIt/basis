@@ -56,6 +56,8 @@ class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new IntArray(newArray)
   }
+  
+  protected override def stringPrefix: String = "IntArray"
 }
 
 object IntArray {

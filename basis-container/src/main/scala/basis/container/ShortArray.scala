@@ -56,6 +56,8 @@ class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short]
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
     new ShortArray(newArray)
   }
+  
+  protected override def stringPrefix: String = "ShortArray"
 }
 
 object ShortArray {
