@@ -7,8 +7,28 @@
 
 package basis
 
-/** A stateful traverser of elements. Import [[basis.collection.IteratorOps]] to
-  * extend this interface with a rich suite of optimized collection operations.
+/** A stateful traverser of elements. An iterator steps through each element
+  * of a collection, one element per `step()` until `isEmpty` returns `true`.
+  * Backtracking algorithms can `dup` an iterator's state and resume it after
+  * mutating the original.
+  * 
+  * Import [[basis.collection.IteratorOps]] to extend this interface with
+  * a rich suite of optimized collection operations.
+  * 
+  * == Iterator states ==
+  *
+  * Each `step()` forwards the iterator into one of three states:
+  * ''buffered'', ''empty'', or ''done''.
+  * 
+  *  - In the ''buffered'' state, `head` returns the current element,
+  *    and both `isEmpty` and `isDone` return `false`.
+  *  - In the ''empty'' state, `head` is undefined, `isEmpty` returns `true`,
+  *    and `isDone` returns `false`.
+  *  - In the ''done'' state, like the ''empty'' state, `head` is undefined,
+  *    and both `isEmpty` and `isDone` return `true`.
+  * 
+  * The distinct ''empty'' and ''done'' states facilitate low-overhead
+  * "chunked" iterator applications such as iteratees.
   * 
   * @author Chris Sachs
   * 
@@ -17,13 +37,16 @@ package basis
 trait Iterator[+A] extends Any with Enumerator[A] {
   override type Self <: Iterator[A]
   
-  /** Returns `true` if this $collection has no more elements. */
+  /** Returns `true` when this $collection has no more elements. */
+  def isDone: Boolean = isEmpty
+  
+  /** Returns `true` when this $collection has no more available elements. */
   def isEmpty: Boolean
   
-  /** Returns the current element of this $collection. */
+  /** Returns the currently buffered element. */
   def head: A
   
-  /** Advances this $collection to the next element. */
+  /** Advances this $collection to its next state. */
   def step(): Unit
   
   /** Returns a duplicate $collection with identical but independent state. */
@@ -33,19 +56,41 @@ trait Iterator[+A] extends Any with Enumerator[A] {
     while (!isEmpty) { f(head); step() }
 }
 
-/** Iterator utilities. */
+/** Constant iterators. */
 object Iterator {
   object empty extends Iterator[Nothing] {
+    override def isDone: Boolean = false
+    
     override def isEmpty: Boolean = true
     
     override def head: Nothing =
-      throw new scala.NoSuchElementException("head of empty iterator")
+      throw new scala.NoSuchElementException("Empty iterator has no element.")
     
     override def step(): Unit =
-      throw new java.lang.UnsupportedOperationException("empty iterator step")
+      throw new java.lang.UnsupportedOperationException("Can't advance empty iterator.")
     
     override def dup: Iterator.empty.type = this
     
     protected override def foreach[U](f: Nothing => U): Unit = ()
+    
+    override def toString: String = "empty"
+  }
+  
+  object done extends Iterator[Nothing] {
+    override def isDone: Boolean = true
+    
+    override def isEmpty: Boolean = true
+    
+    override def head: Nothing =
+      throw new scala.NoSuchElementException("Done iterator has no element.")
+    
+    override def step(): Unit =
+      throw new java.lang.UnsupportedOperationException("Can't advance done iterator.")
+    
+    override def dup: Iterator.done.type = this
+    
+    protected override def foreach[U](f: Nothing => U): Unit = ()
+    
+    override def toString: String = "done"
   }
 }

@@ -17,7 +17,7 @@ package basis
 trait Set[A] extends Any with Container[A] {
   override type Self <: Set[A]
   
-  /** Returns `true` if this $collection has no elements. */
+  /** Returns `true` if this $collection doesn't contain any elements. */
   def isEmpty: Boolean
   
   /** Returns the number of elements in this $collection. */
@@ -29,6 +29,6 @@ trait Set[A] extends Any with Container[A] {
   /** Returns a copy of this $collection containing the given element. */
   def + (element: A): Set[A]
   
-  /** Returns a copy of this $collection without the given element. */
+  /** Returns a copy of this $collection excluding the given element. */
   def - (element: A): Set[A]
 }

@@ -112,7 +112,7 @@ object Array extends AllArrayBuffers with SeqFactory[Array] {
     }
     
     override def step() {
-      if (isEmpty) Iterator.empty.step
+      if (isEmpty) Iterator.empty.step()
       else index += 1
     }
     

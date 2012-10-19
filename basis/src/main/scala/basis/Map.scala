@@ -21,7 +21,7 @@ trait Map[A, +T] extends Any with Container[(A, T)] {
   /** Returns a new iterator over the (key, value) pairs of this $collection. */
   override def iterator: Iterator[(A, T)]
   
-  /** Returns `true` if this $collection has no associations. */
+  /** Returns `true` if this $collection doesn't contain any associations. */
   def isEmpty: Boolean
   
   /** Returns the number of associations in this $collection. */
