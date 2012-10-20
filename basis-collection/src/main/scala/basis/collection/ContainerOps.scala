@@ -7,8 +7,6 @@
 
 package basis.collection
 
-import basis._
-
 class ContainerOps[+Self, +A](self: Container[A]) {
   def foreach[U](f: A => U): Unit =
     macro ContainerMacros.foreach[A, U]
@@ -94,6 +92,6 @@ private[basis] final class ContainerWithFilter[+A](self: Container[A], p: A => B
   protected override def foreach[U](f: A => U): Unit =
     Enumerator.traverse(self)(new Traversers.Filter(p, f))
   
-  override def iterator: basis.Iterator[A] =
+  override def iterator: Iterator[A] =
     new Iterators.Filter(self.iterator, p)
 }

@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 import scala.annotation.tailrec
@@ -45,7 +45,7 @@ final class HashMap[A, +T] private
   
   override def - (key: A): HashMap[A, T] = remove(key, key.##, 0)
   
-  override def iterator: Iterator[(A, T)] = new HashMap.Iterator(this)
+  override def iterator: Iterator[(A, T)] = new HashMap.Cursor(this)
   
   protected override def foreach[U](f: ((A, T)) => U) {
     var i = 0
@@ -373,9 +373,9 @@ object HashMap {
   private[this] val Empty = new HashMap[Any, Nothing](0, 0, RefArray.empty, RefArray.empty)
   def empty[A, T]: HashMap[A, T] = Empty.asInstanceOf[HashMap[A, T]]
   
-  implicit def Buffer[A, T]: HashMap.Buffer[A, T] = new HashMap.Buffer[A, T]
+  implicit def Builder[A, T]: Builder[A, T] = new Builder[A, T]
   
-  final class Buffer[A, T] extends basis.Buffer[Any, (A, T)] {
+  final class Builder[A, T] extends Buffer[Any, (A, T)] {
     override type State = HashMap[A, T]
     
     private[this] var map: HashMap[A, T] = HashMap.empty[A, T]
@@ -394,17 +394,17 @@ object HashMap {
     override def clear(): Unit = map = HashMap.empty[A, T]
   }
   
-  private[basis] final class Iterator[A, +T](
+  private[basis] final class Cursor[A, +T](
       self: HashMap[A, T],
-      private[this] var child: HashMap.Iterator[A, T],
+      private[this] var child: Cursor[A, T],
       private[this] var index: Int)
-    extends basis.Iterator[(A, T)] {
+    extends Iterator[(A, T)] {
     
     def this(self: HashMap[A, T]) = this(self, null, 0)
     
     @tailrec override def isEmpty: Boolean = {
       if (child != null)
-        child.asInstanceOf[basis.Iterator[_]].isEmpty && { child = null; isEmpty }
+        child.asInstanceOf[Iterator[_]].isEmpty && { child = null; isEmpty }
       else if (self.isTrie)
         index >= 32 || !self.hasSlotAbove(index) ||
           (!self.hasSlotAt(1 << index) && { index += 1; isEmpty })
@@ -424,7 +424,7 @@ object HashMap {
           val n = 1 << index
           if (self.hasEntryAt(n)) (self.keyAt(self.slot(n)), self.valAt(self.link(n)))
           else if (self.hasSlotAt(n)) {
-            child = new HashMap.Iterator(self.nodeAt(self.slot(n)))
+            child = new Cursor(self.nodeAt(self.slot(n)))
             index += 1
             head
           }
@@ -452,7 +452,7 @@ object HashMap {
           val n = 1 << index
           if (self.hasEntryAt(n)) index += 1
           else if (self.hasSlotAt(n)) {
-            child = new HashMap.Iterator(self.nodeAt(self.slot(n)))
+            child = new Cursor(self.nodeAt(self.slot(n)))
             index += 1
             step()
           }
@@ -467,7 +467,6 @@ object HashMap {
       else Iterator.empty.step()
     }
     
-    override def dup: HashMap.Iterator[A, T] =
-      new HashMap.Iterator(self, child, index)
+    override def dup: Cursor[A, T] = new Cursor(self, child, index)
   }
 }

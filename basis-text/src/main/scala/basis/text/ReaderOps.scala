@@ -7,12 +7,7 @@
 
 package basis.text
 
-import basis._
-
-/** A specialized iterator over Unicode® characters.
-  * 
-  * @define collection  character iterator
-  */
-trait CharIterator extends Any with Iterator[Char] {
-  override def head: Char
+class ReaderOps(self: Reader) {
+  def ++ (that: Reader): Reader =
+    if (self.isEmpty) that else new Readers.++(self.dup, that.dup)
 }

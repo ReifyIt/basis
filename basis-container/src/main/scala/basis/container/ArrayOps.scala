@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 
 class ArrayOps[+Self, +A](self: Array[A]) {
   def foreach[U](f: A => U): Unit =

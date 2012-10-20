@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collection
 
 /** An associated set of (key, value) pairs with unique keys. Import
   * [[basis.collection.MapOps]] to extend this interface with a full

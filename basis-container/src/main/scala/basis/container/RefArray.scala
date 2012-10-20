@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] {
@@ -65,7 +65,7 @@ object RefArray {
   
   def apply[A](xs: A*): RefArray[A] = macro ArrayMacros.literalRefArray[A]
   
-  final class Buffer[A] extends basis.Buffer[Any, A] {
+  final class Builder[A] extends Buffer[Any, A] {
     override type State = RefArray[A]
     
     private[this] var array: scala.Array[AnyRef] = RefArray.empty.array

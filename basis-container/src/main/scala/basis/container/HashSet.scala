@@ -7,7 +7,6 @@
 
 package basis.container
 
-import basis._
 import basis.collection._
 import basis.util._
 
@@ -42,7 +41,7 @@ final class HashSet[A] private
   
   override def - (element: A): HashSet[A] = remove(element, element.##, 0)
   
-  override def iterator: Iterator[A] = new HashSet.Iterator(this)
+  override def iterator: Iterator[A] = new HashSet.Cursor(this)
   
   protected override def foreach[U](f: A => U) {
     var i = 0
@@ -284,9 +283,9 @@ object HashSet extends ContainerFactory[HashSet] {
   private[this] val Empty = new HashSet[Nothing](0, 0, RefArray.empty)
   def empty[A]: HashSet[A] = Empty.asInstanceOf[HashSet[A]]
   
-  implicit def Buffer[A]: HashSet.Buffer[A] = new HashSet.Buffer[A]
+  implicit def Builder[A]: Builder[A] = new Builder[A]
   
-  final class Buffer[A] extends basis.Buffer[Any, A] {
+  final class Builder[A] extends Buffer[Any, A] {
     override type State = HashSet[A]
     
     private[this] var set: HashSet[A] = HashSet.empty[A]
@@ -303,17 +302,17 @@ object HashSet extends ContainerFactory[HashSet] {
     override def clear(): Unit = set = HashSet.empty[A]
   }
   
-  private[basis] final class Iterator[A](
+  private[basis] final class Cursor[A](
       self: HashSet[A],
-      private[this] var child: HashSet.Iterator[A],
+      private[this] var child: Cursor[A],
       private[this] var index: Int)
-    extends basis.Iterator[A] {
+    extends Iterator[A] {
     
     def this(self: HashSet[A]) = this(self, null, 0)
     
     @tailrec override def isEmpty: Boolean = {
       if (child != null)
-        child.asInstanceOf[basis.Iterator[_]].isEmpty && { child = null; isEmpty }
+        child.asInstanceOf[Iterator[_]].isEmpty && { child = null; isEmpty }
       else if (self.isTrie)
         index >= 32 || !self.hasSlotAbove(index) ||
           (!self.hasSlotAt(1 << index) && { index += 1; isEmpty })
@@ -333,7 +332,7 @@ object HashSet extends ContainerFactory[HashSet] {
           val n = 1 << index
           if (self.hasElemAt(n)) self.elemAt(self.slot(n))
           else if (self.hasSlotAt(n)) {
-            child = new HashSet.Iterator(self.nodeAt(self.slot(n)))
+            child = new Cursor(self.nodeAt(self.slot(n)))
             index += 1
             head
           }
@@ -361,7 +360,7 @@ object HashSet extends ContainerFactory[HashSet] {
           val n = 1 << index
           if (self.hasElemAt(n)) index += 1
           else if (self.hasSlotAt(n)) {
-            child = new HashSet.Iterator(self.nodeAt(self.slot(n)))
+            child = new Cursor(self.nodeAt(self.slot(n)))
             index += 1
             step()
           }
@@ -376,7 +375,6 @@ object HashSet extends ContainerFactory[HashSet] {
       else Iterator.empty.step()
     }
     
-    override def dup: HashSet.Iterator[A] =
-      new HashSet.Iterator(self, child, index)
+    override def dup: Cursor[A] = new Cursor(self, child, index)
   }
 }

@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
@@ -65,7 +65,7 @@ object ByteArray {
   
   def apply(xs: Byte*): ByteArray = macro ArrayMacros.literalByteArray
   
-  final class Buffer extends basis.Buffer[Any, Byte] {
+  final class Builder extends Buffer[Any, Byte] {
     override type State = ByteArray
     
     private[this] var array: scala.Array[Byte] = ByteArray.empty.array

@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
@@ -65,7 +65,7 @@ object LongArray {
   
   def apply(xs: Long*): LongArray = macro ArrayMacros.literalLongArray
   
-  final class Buffer extends basis.Buffer[Any, Long] {
+  final class Builder extends Buffer[Any, Long] {
     override type State = LongArray
     
     private[this] var array: scala.Array[Long] = LongArray.empty.array

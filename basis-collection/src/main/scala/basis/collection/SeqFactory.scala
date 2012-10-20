@@ -7,6 +7,4 @@
 
 package basis.collection
 
-import basis._
-
 trait SeqFactory[CC[X] <: Seq[X]] extends ContainerFactory[CC]

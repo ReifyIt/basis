@@ -7,7 +7,7 @@
 
 package basis.text
 
-import basis._
+import basis.collection._
 import basis.util._
 
 /** A 32-bit Unicode string comprised of a UTF-32 code unit sequence.
@@ -38,14 +38,7 @@ class String4(val codeUnits: scala.Array[Int]) extends AnyVal with Rope {
     })
   }
   
-  /** Returns a resized copy of this string. */
-  private[text] def copy(size: Int): String4 = {
-    val newCodeUnits = new scala.Array[Int](size)
-    java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, scala.math.min(codeUnits.length, size))
-    new String4(newCodeUnits)
-  }
-  
-  override def iterator: CharIterator = new String4Iterator(this, 0)
+  override def iterator: Reader = new String4.Cursor(this, 0)
   
   /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of invalid characters. */
@@ -75,33 +68,39 @@ object String4 {
   val empty: String4 = new String4(new scala.Array[Int](0))
   
   def apply(chars: java.lang.CharSequence): String4 = {
-    val s = new String4.Buffer
+    val s = new Builder
     s.append(chars)
     s.state
   }
   
-  implicit def Buffer: String4.Buffer = new String4.Buffer
+  implicit def Builder: Builder = new Builder
   
   /** A buffer for 32-bit Unicode strings in the UTF-32 encoding form.
     * Produces only well-formed code unit sequences. */
-  final class Buffer extends basis.Buffer[Any, Char] with CharBuffer {
+  final class Builder extends Buffer[Any, Char] with Writer {
     override type State = String4
     
-    private[this] var string: String4 = String4.empty
+    private[this] var codeUnits: scala.Array[Int] = String4.empty.codeUnits
     
     private[this] var aliased: Boolean = true
     
     private[this] var size: Int = 0
     
     private[this] def expand(base: Int, size: Int): Int = {
-      var n = scala.math.max(base, size) - 1
+      var n = (base max size) - 1
       n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
       n + 1
     }
     
+    private[this] def resize(size: Int) {
+      val newCodeUnits = new scala.Array[Int](size)
+      java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
+      codeUnits = newCodeUnits
+    }
+    
     private[this] def prepare(size: Int) {
-      if (aliased || size > string.length) {
-        string = string.copy(expand(16, size))
+      if (aliased || size > codeUnits.length) {
+        resize(expand(16, size))
         aliased = false
       }
     }
@@ -112,54 +111,54 @@ object String4 {
       if ((c >= 0x0000 && c <= 0xD7FF) ||
           (c >= 0xE000 && c <= 0x10FFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF
         prepare(n + 1)
-        string.codeUnits(n) = c
+        codeUnits(n) = c
         size = n + 1
       }
       else { // invalid code point
         prepare(n + 1)
-        string.codeUnits(n) = 0xFFFD
+        codeUnits(n) = 0xFFFD
         size = n + 1
       }
       this
     }
     
     override def expect(count: Int): this.type = {
-      if (size + count > string.length) {
-        string = string.copy(size + count)
+      if (size + count > codeUnits.length) {
+        resize(size + count)
         aliased = false
       }
       this
     }
     
     override def state: String4 = {
-      if (size != string.length) string = string.copy(size)
+      if (size != codeUnits.length) resize(size)
       aliased = true
-      string
+      new String4(codeUnits)
     }
     
     override def clear() {
-      string = String4.empty
+      codeUnits = String4.empty.codeUnits
       aliased = true
       size = 0
     }
   }
-}
-
-private[text] final class String4Iterator
-    (string: String4, private[this] var index: Int)
-  extends CharIterator {
   
-  override def isEmpty: Boolean = index >= string.length
-  
-  override def head: Char = {
-    if (isEmpty) throw new scala.NoSuchElementException("head of empty iterator")
-    else string(index)
+  private[text] final class Cursor
+      (string: String4, private[this] var index: Int)
+    extends Reader {
+    
+    override def isEmpty: Boolean = index >= string.length
+    
+    override def head: Char = {
+      if (isEmpty) Reader.empty.head
+      else string(index)
+    }
+    
+    override def step() {
+      if (isEmpty) Reader.empty.step()
+      else index += 1
+    }
+    
+    override def dup: Cursor = new Cursor(string, index)
   }
-  
-  override def step() {
-    if (isEmpty) throw new java.lang.UnsupportedOperationException("empty iterator step")
-    else index += 1
-  }
-  
-  override def dup: String4Iterator = new String4Iterator(string, index)
 }

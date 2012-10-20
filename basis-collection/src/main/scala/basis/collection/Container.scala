@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collection
 
 /** An iterable container of elements. Import [[basis.collection.ContainerOps]]
   * to extend this interface with a full suite of optimized collection operations.

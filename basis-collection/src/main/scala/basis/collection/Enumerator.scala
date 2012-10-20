@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collection
 
 /** A once traversable enumeration of elements. Enumerator declares only a
   * protected `foreach` method; it has no public methods. Import
@@ -21,8 +21,8 @@ trait Enumerator[+A] extends Any {
   
   /** Applies a function to each element of this $collection. The protected
     * status of `foreach` allows optimized static implementations to shadow
-    * this virtual method. To force a virtual `foreach` call, invoke
-    * [[Enumerator.traverse]].
+    * the virtual method. To force a virtual `foreach` call, invoke
+    * `Enumerator.traverse`.
     */
   protected def foreach[U](f: A => U): Unit
 }

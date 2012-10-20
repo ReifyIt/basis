@@ -7,8 +7,6 @@
 
 package basis.collection
 
-import basis._
-
 class CollectionOps[+Self, +A](self: Collection[A]) {
   import Enumerator.traverse
   

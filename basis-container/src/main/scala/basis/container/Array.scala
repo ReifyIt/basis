@@ -7,9 +7,8 @@
 
 package basis.container
 
-import basis._
-import basis.data._
 import basis.collection._
+import basis.data._
 import basis.util._
 
 /** An indexed sequence of elements.
@@ -25,7 +24,7 @@ trait Array[+A] extends Any with Seq[A] {
   def apply(index: Int): A
   
   override def iterator: Iterator[A] =
-    new Array.Iterator(this, 0, length)
+    new Array.Cursor(this, 0, length)
   
   protected override def foreach[U](f: A => U) {
     var i = 0
@@ -81,24 +80,24 @@ trait Array[+A] extends Any with Seq[A] {
 }
 
 object Array extends AllArrayBuffers with SeqFactory[Array] {
-  def Buffer[A](implicit typeA: MemType[A]): Buffer[Any, A] { type State = Array[A] } = {
+  def Builder[A](implicit typeA: MemType[A]): Buffer[Any, A] { type State = Array[A] } = {
     import ValType._
     (typeA match {
-      case typeA: RefType[A]           => new RefArray.Buffer[A]
-      case PackedByte                  => new ByteArray.Buffer
-      case PackedShort  | PaddedShort  => new ShortArray.Buffer
-      case PackedInt    | PaddedInt    => new IntArray.Buffer
-      case PackedLong   | PaddedLong   => new LongArray.Buffer
-      case PackedFloat  | PaddedFloat  => new FloatArray.Buffer
-      case PackedDouble | PaddedDouble => new DoubleArray.Buffer
-      case PackedBoolean               => new BitArray.Buffer
-      case typeA: ValType[A]           => new ValArray.Buffer[A]()(typeA)
+      case typeA: RefType[A]           => new RefArray.Builder[A]
+      case PackedByte                  => new ByteArray.Builder
+      case PackedShort  | PaddedShort  => new ShortArray.Builder
+      case PackedInt    | PaddedInt    => new IntArray.Builder
+      case PackedLong   | PaddedLong   => new LongArray.Builder
+      case PackedFloat  | PaddedFloat  => new FloatArray.Builder
+      case PackedDouble | PaddedDouble => new DoubleArray.Builder
+      case PackedBoolean               => new BitArray.Builder
+      case typeA: ValType[A]           => new ValArray.Builder[A]()(typeA)
     }).asInstanceOf[Buffer[Any, A] { type State = Array[A] }]
   }
   
-  private[basis] final class Iterator[+A]
+  private[basis] final class Cursor[+A]
       (xs: Array[A], from: Int, until: Int)
-    extends basis.Iterator[A] {
+    extends Iterator[A] {
     
     private[this] var lower: Int = 0 max from
     private[this] var upper: Int = (lower max until) min xs.length
@@ -116,25 +115,24 @@ object Array extends AllArrayBuffers with SeqFactory[Array] {
       else index += 1
     }
     
-    override def dup: Array.Iterator[A] =
-      new Array.Iterator[A](xs, index, upper)
+    override def dup: Cursor[A] = new Cursor[A](xs, index, upper)
   }
 }
 
 private[basis] class AllArrayBuffers extends ValArrayBuffers {
-  implicit def ByteBuffer: ByteArray.Buffer = new ByteArray.Buffer
-  implicit def ShortBuffer: ShortArray.Buffer = new ShortArray.Buffer
-  implicit def IntBuffer: IntArray.Buffer = new IntArray.Buffer
-  implicit def LongBuffer: LongArray.Buffer = new LongArray.Buffer
-  implicit def FloatBuffer: FloatArray.Buffer = new FloatArray.Buffer
-  implicit def DoubleBuffer: DoubleArray.Buffer = new DoubleArray.Buffer
-  implicit def BitBuffer: BitArray.Buffer = new BitArray.Buffer
+  implicit def ByteBuffer: ByteArray.Builder = new ByteArray.Builder
+  implicit def ShortBuffer: ShortArray.Builder = new ShortArray.Builder
+  implicit def IntBuffer: IntArray.Builder = new IntArray.Builder
+  implicit def LongBuffer: LongArray.Builder = new LongArray.Builder
+  implicit def FloatBuffer: FloatArray.Builder = new FloatArray.Builder
+  implicit def DoubleBuffer: DoubleArray.Builder = new DoubleArray.Builder
+  implicit def BitBuffer: BitArray.Builder = new BitArray.Builder
 }
 
 private[basis] class ValArrayBuffers extends RefArrayBuffers {
-  implicit def ValBuffer[A : ValType]: ValArray.Buffer[A] = new ValArray.Buffer[A]
+  implicit def ValBuffer[A : ValType]: ValArray.Builder[A] = new ValArray.Builder[A]
 }
 
 private[basis] class RefArrayBuffers {
-  implicit def RefBuffer[A]: RefArray.Buffer[A] = new RefArray.Buffer[A]
+  implicit def RefBuffer[A]: RefArray.Builder[A] = new RefArray.Builder[A]
 }

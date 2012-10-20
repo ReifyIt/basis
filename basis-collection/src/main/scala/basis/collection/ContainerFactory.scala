@@ -7,8 +7,6 @@
 
 package basis.collection
 
-import basis._
-
 trait ContainerFactory[CC[X] <: Container[X]] {
   def apply[A](xs: A*)(implicit buffer: Buffer[CC[_], A]): buffer.State =
     macro ContainerMacros.apply[A]

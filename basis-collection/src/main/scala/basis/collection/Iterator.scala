@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collection
 
 /** A stateful traverser of elements. An iterator steps through each element
   * of a collection, one element per `step()` until `isEmpty` returns `true`.
@@ -56,7 +56,7 @@ trait Iterator[+A] extends Any with Enumerator[A] {
     while (!isEmpty) { f(head); step() }
 }
 
-/** Constant iterators. */
+/** Singular iterators. */
 object Iterator {
   object empty extends Iterator[Nothing] {
     override def isDone: Boolean = false
@@ -69,7 +69,7 @@ object Iterator {
     override def step(): Unit =
       throw new java.lang.UnsupportedOperationException("Can't advance empty iterator.")
     
-    override def dup: Iterator.empty.type = this
+    override def dup: empty.type = this
     
     protected override def foreach[U](f: Nothing => U): Unit = ()
     
@@ -87,7 +87,7 @@ object Iterator {
     override def step(): Unit =
       throw new java.lang.UnsupportedOperationException("Can't advance done iterator.")
     
-    override def dup: Iterator.done.type = this
+    override def dup: done.type = this
     
     protected override def foreach[U](f: Nothing => U): Unit = ()
     

@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collection
 
 /** A traversable collection of elements. Collection declares only a protected
   * `foreach` method; it has no public methods. Import

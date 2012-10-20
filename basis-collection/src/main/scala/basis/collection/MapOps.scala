@@ -7,6 +7,4 @@
 
 package basis.collection
 
-import basis._
-
 class MapOps[+Self, A, +T](self: Map[A, T])

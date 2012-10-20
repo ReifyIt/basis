@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 
 private[basis] object ArrayMacros {
   import scala.collection.breakOut

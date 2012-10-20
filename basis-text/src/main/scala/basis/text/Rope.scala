@@ -7,14 +7,16 @@
 
 package basis.text
 
-import basis._
+import basis.collection._
 
-/** A sequence of Unicode® characters.
+/** A specialized iterable sequence of Unicode® characters.
   * 
   * @author Chris Sachs
   * 
   * @define collection  rope
   */
-trait Rope extends Any with CharSeq {
+trait Rope extends Any with Seq[Char] {
   override type Self <: Rope
+  
+  override def iterator: Reader
 }

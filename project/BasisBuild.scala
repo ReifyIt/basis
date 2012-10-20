@@ -12,32 +12,24 @@ import sbt.Keys._
 import Defaults.defaultSettings
 
 object BasisBuild extends Build {
-  lazy val all = Project(
-    id           = "all",
+  lazy val Basis = Project(
+    id           = "basis",
     base         = file("."),
     settings     = basicSettings,
     dependencies =
-      Seq(Basis,
-          BasisData,
-          BasisCollection,
+      Seq(BasisCollection,
           BasisContainer,
+          BasisData,
           BasisMath,
           BasisText,
           BasisUtil),
     aggregate    =
-      Seq(Basis,
-          BasisData,
-          BasisCollection,
+      Seq(BasisCollection,
           BasisContainer,
+          BasisData,
           BasisMath,
           BasisText,
           BasisUtil)
-  )
-  
-  lazy val Basis = Project(
-    id           = "basis",
-    base         = file("basis"),
-    settings     = commonSettings
   )
   
   lazy val BasisData = Project(
@@ -49,15 +41,14 @@ object BasisBuild extends Build {
   lazy val BasisCollection = Project(
     id           = "basis-collection",
     base         = file("basis-collection"),
-    settings     = commonSettings,
-    dependencies = Seq(Basis)
+    settings     = commonSettings
   )
   
   lazy val BasisContainer = Project(
     id           = "basis-container",
     base         = file("basis-container"),
     settings     = commonSettings,
-    dependencies = Seq(Basis, BasisData, BasisCollection, BasisUtil)
+    dependencies = Seq(BasisCollection, BasisData, BasisUtil)
   )
   
   lazy val BasisMath = Project(
@@ -70,7 +61,7 @@ object BasisBuild extends Build {
     id           = "basis-text",
     base         = file("basis-text"),
     settings     = commonSettings,
-    dependencies = Seq(Basis, BasisUtil)
+    dependencies = Seq(BasisCollection, BasisUtil)
   )
   
   lazy val BasisUtil = Project(

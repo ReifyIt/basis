@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Double] {
@@ -65,7 +65,7 @@ object DoubleArray {
   
   def apply(xs: Double*): DoubleArray = macro ArrayMacros.literalDoubleArray
   
-  final class Buffer extends basis.Buffer[Any, Double] {
+  final class Builder extends Buffer[Any, Double] {
     override type State = DoubleArray
     
     private[this] var array: scala.Array[Double] = DoubleArray.empty.array

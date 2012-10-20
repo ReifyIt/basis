@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.data._
 import basis.util._
 
@@ -70,7 +70,7 @@ final class ValArray[A](mem: Mem)(implicit A: ValType[A]) extends Array[A] {
 object ValArray {
   def empty[A : ValType]: ValArray[A] = new ValArray[A](Mem.alloc[A](0))
   
-  final class Buffer[A](implicit A: ValType[A]) extends basis.Buffer[Any, A] {
+  final class Builder[A](implicit A: ValType[A]) extends Buffer[Any, A] {
     override type State = ValArray[A]
     
     private[this] var mem: Mem = Mem.alloc[A](0)

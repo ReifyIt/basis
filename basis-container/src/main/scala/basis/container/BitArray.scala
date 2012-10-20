@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
@@ -91,7 +91,7 @@ class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
 object BitArray {
   val empty: BitArray = new BitArray(new scala.Array[Int](1))
   
-  final class Buffer extends basis.Buffer[Any, Boolean] {
+  final class Builder extends Buffer[Any, Boolean] {
     override type State = BitArray
     
     private[this] var words: scala.Array[Int] = BitArray.empty.words

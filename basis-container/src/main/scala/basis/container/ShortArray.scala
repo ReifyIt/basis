@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short] {
@@ -65,7 +65,7 @@ object ShortArray {
   
   def apply(xs: Short*): ShortArray = macro ArrayMacros.literalShortArray
   
-  final class Buffer extends basis.Buffer[Any, Short] {
+  final class Builder extends Buffer[Any, Short] {
     override type State = ShortArray
     
     private[this] var array: scala.Array[Short] = ShortArray.empty.array

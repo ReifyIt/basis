@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
@@ -65,7 +65,7 @@ object IntArray {
   
   def apply(xs: Int*): IntArray = macro ArrayMacros.literalIntArray
   
-  final class Buffer extends basis.Buffer[Any, Int] {
+  final class Builder extends Buffer[Any, Int] {
     override type State = IntArray
     
     private[this] var array: scala.Array[Int] = IntArray.empty.array

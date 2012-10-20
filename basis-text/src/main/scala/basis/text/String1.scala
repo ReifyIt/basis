@@ -7,7 +7,7 @@
 
 package basis.text
 
-import basis._
+import basis.collection._
 import basis.util._
 
 /** An 8-bit Unicode string comprised of a UTF-8 code unit sequence.
@@ -121,14 +121,7 @@ class String1(val codeUnits: scala.Array[Byte]) extends AnyVal with Rope {
     else index + 1
   }
   
-  /** Returns a resized copy of this string. */
-  private[text] def copy(size: Int): String1 = {
-    val newCodeUnits = new scala.Array[Byte](size)
-    java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
-    new String1(newCodeUnits)
-  }
-  
-  override def iterator: CharIterator = new String1Iterator(this, 0)
+  override def iterator: Reader = new String1.Cursor(this, 0)
   
   /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of the maximal subpart
@@ -200,19 +193,19 @@ object String1 {
   val empty: String1 = new String1(new scala.Array[Byte](0))
   
   def apply(chars: java.lang.CharSequence): String1 = {
-    val s = new String1.Buffer
+    val s = new Builder
     s.append(chars)
     s.state
   }
   
-  implicit def Buffer: String1.Buffer = new String1.Buffer
+  implicit def Builder: Builder = new Builder
   
   /** A buffer for 8-bit Unicode strings in the UTF-8 encoding form.
     * Produces only well-formed code unit sequences. */
-  final class Buffer extends basis.Buffer[Any, Char] with CharBuffer {
+  final class Builder extends Buffer[Any, Char] with Writer {
     override type State = String1
     
-    private[this] var string: String1 = String1.empty
+    private[this] var codeUnits: scala.Array[Byte] = String1.empty.codeUnits
     
     private[this] var aliased: Boolean = true
     
@@ -224,9 +217,15 @@ object String1 {
       n + 1
     }
     
+    private[this] def resize(size: Int) {
+      val newCodeUnits = new scala.Array[Byte](size)
+      java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
+      codeUnits = newCodeUnits
+    }
+    
     private[this] def prepare(size: Int) {
-      if (aliased || size > string.size) {
-        string = string.copy(expand(16, size))
+      if (aliased || size > codeUnits.length) {
+        resize(expand(16, size))
         aliased = false
       }
     }
@@ -236,78 +235,78 @@ object String1 {
       val n = size
       if (c >= 0x0000 && c <= 0x007F) { // U+0000..U+007F
         prepare(n + 1)
-        string.codeUnits(n) = c.toByte
+        codeUnits(n) = c.toByte
         size = n + 1
       }
       else if (c >= 0x0080 && c <= 0x07FF) { // U+0080..U+07FF
         prepare(n + 2)
-        string.codeUnits(n)     = (0xC0 | (c >>> 6)).toByte
-        string.codeUnits(n + 1) = (0x80 | (c & 0x3F)).toByte
+        codeUnits(n)     = (0xC0 | (c >>> 6)).toByte
+        codeUnits(n + 1) = (0x80 | (c & 0x3F)).toByte
         size = n + 2
       }
       else if (c >= 0x0800 && c <= 0xFFFF || // U+0800..U+D7FF
                c >= 0xE000 && c <= 0xFFFF) { // U+E000..U+FFFF
         prepare(n + 3)
-        string.codeUnits(n)     = (0xE0 | (c  >>> 12)).toByte
-        string.codeUnits(n + 1) = (0x80 | ((c >>>  6) & 0x3F)).toByte
-        string.codeUnits(n + 2) = (0x80 | (c & 0x3F)).toByte
+        codeUnits(n)     = (0xE0 | (c  >>> 12)).toByte
+        codeUnits(n + 1) = (0x80 | ((c >>>  6) & 0x3F)).toByte
+        codeUnits(n + 2) = (0x80 | (c & 0x3F)).toByte
         size = n + 3
       }
       else if (c >= 0x10000 && c <= 0x10FFFF) { // U+10000..U+10FFFF
         prepare(n + 4)
-        string.codeUnits(n)     = (0xF0 | (c  >>> 18)).toByte
-        string.codeUnits(n + 1) = (0x80 | ((c >>> 12) & 0x3F)).toByte
-        string.codeUnits(n + 2) = (0x80 | ((c >>>  6) & 0x3F)).toByte
-        string.codeUnits(n + 3) = (0x80 | (c & 0x3F)).toByte
+        codeUnits(n)     = (0xF0 | (c  >>> 18)).toByte
+        codeUnits(n + 1) = (0x80 | ((c >>> 12) & 0x3F)).toByte
+        codeUnits(n + 2) = (0x80 | ((c >>>  6) & 0x3F)).toByte
+        codeUnits(n + 3) = (0x80 | (c & 0x3F)).toByte
         size = n + 4
       }
       else { // surrogate or invalid code point
         prepare(n + 3)
-        string.codeUnits(n)     = 0xEF.toByte
-        string.codeUnits(n + 1) = 0xBF.toByte
-        string.codeUnits(n + 2) = 0xBD.toByte
+        codeUnits(n)     = 0xEF.toByte
+        codeUnits(n + 1) = 0xBF.toByte
+        codeUnits(n + 2) = 0xBD.toByte
         size = n + 3
       }
       this
     }
     
     override def expect(count: Int): this.type = {
-      if (size + count > string.size) {
-        string = string.copy(size + count)
+      if (size + count > codeUnits.length) {
+        resize(size + count)
         aliased = false
       }
       this
     }
     
     override def state: String1 = {
-      if (size != string.size) string = string.copy(size)
+      if (size != codeUnits.length) resize(size)
       aliased = true
-      string
+      new String1(codeUnits)
     }
     
     override def clear() {
-      string = String1.empty
+      codeUnits = String1.empty.codeUnits
       aliased = true
       size = 0
     }
   }
-}
-
-private[text] final class String1Iterator
-    (string: String1, private[this] var index: Int)
-  extends CharIterator {
   
-  override def isEmpty: Boolean = index >= string.size
-  
-  override def head: Char = {
-    if (isEmpty) throw new scala.NoSuchElementException("head of empty iterator")
-    else string(index)
+  private[text] final class Cursor
+      (string: String1, private[this] var index: Int)
+    extends Reader {
+    
+    override def isEmpty: Boolean = index >= string.size
+    
+    override def head: Char = {
+      if (isEmpty) Reader.empty.head
+      else string(index)
+    }
+    
+    override def step() {
+      if (isEmpty) Reader.empty.step()
+      else index = string.nextIndex(index)
+    }
+    
+    override def dup: Cursor = new Cursor(string, index)
   }
-  
-  override def step() {
-    if (isEmpty) throw new java.lang.UnsupportedOperationException("empty iterator step")
-    else index = string.nextIndex(index)
-  }
-  
-  override def dup: String1Iterator = new String1Iterator(string, index)
 }

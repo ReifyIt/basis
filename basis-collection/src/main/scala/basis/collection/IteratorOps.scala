@@ -7,8 +7,6 @@
 
 package basis.collection
 
-import basis._
-
 class IteratorOps[A](self: Iterator[A]) {
   def foreach[U](f: A => U): Unit =
     macro IteratorMacros.foreach[A, U]
@@ -82,5 +80,5 @@ class IteratorOps[A](self: Iterator[A]) {
     new Iterators.Zip(self.dup, that.dup)
   
   def ++ [B >: A](that: Iterator[B]): Iterator[B] =
-    new Iterators.++(self.dup, that.dup)
+    if (self.isEmpty) that else new Iterators.++(self.dup, that.dup)
 }

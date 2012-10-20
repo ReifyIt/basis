@@ -7,8 +7,6 @@
 
 package basis.collection
 
-import basis._
-
 private[basis] object IteratorMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context

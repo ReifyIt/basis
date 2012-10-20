@@ -7,12 +7,21 @@
 
 package basis.text
 
-import basis._
+import basis.collection._
 
-/** A specialized Unicode® character buffer. */
-trait CharBuffer extends Buffer[Nothing, Char] {
+/** A specialized Unicode® character buffer.
+  * 
+  * @author Chris Sachs
+  * 
+  * @define buffer  writer
+  */
+trait Writer extends Buffer[Nothing, Char] {
+  /** Appends a character to this $buffer. */
   /* FIXME: waiting on SI-6500 */
   //override def += (char: Char): this.type
+  
+  /** Prepares this $buffer to receive a certain number of characters. */
+  override def expect(count: Int): this.type
   
   def append(chars: java.lang.CharSequence): this.type = {
     val n = chars.length

@@ -7,7 +7,6 @@
 
 package basis.container
 
-import basis._
 import basis.collection._
 import basis.util._
 
@@ -35,7 +34,7 @@ sealed abstract class List[+A] extends Seq[A] {
   
   final def take(upper: Int): List[A] = {
     var xs = this
-    val b = new List.Buffer[A]
+    val b = new List.Builder[A]
     var i = 0
     while (i < upper && !xs.isEmpty) {
       i += 1
@@ -55,8 +54,7 @@ sealed abstract class List[+A] extends Seq[A] {
   @tailrec protected final override def foreach[U](f: A => U) =
     if (!isEmpty) { f(head); tail.foreach[U](f) }
   
-  final override def iterator: Iterator[A] =
-    new List.Iterator[A](this)
+  override def iterator: Iterator[A] = new List.Cursor(this)
   
   override def equals(other: Any): Boolean = other match {
     case that: List[A] =>
@@ -124,9 +122,9 @@ object :: {
 object List extends SeqFactory[List] {
   def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   
-  implicit def Buffer[A]: List.Buffer[A] = new List.Buffer[A]
+  implicit def Builder[A]: Builder[A] = new Builder[A]
   
-  final class Buffer[A] extends basis.Buffer[Any, A] {
+  final class Builder[A] extends Buffer[Any, A] {
     override type State = List[A]
     
     private[this] var last: ::[A] = _
@@ -188,9 +186,9 @@ object List extends SeqFactory[List] {
     }
   }
   
-  private[basis] final class Iterator[+A]
+  private[basis] final class Cursor[+A]
       (private[this] var xs: List[A])
-    extends basis.Iterator[A] {
+    extends Iterator[A] {
     
     override def isEmpty: Boolean = xs.isEmpty
     
@@ -204,7 +202,6 @@ object List extends SeqFactory[List] {
       else xs = xs.tail
     }
     
-    override def dup: List.Iterator[A] =
-      new List.Iterator[A](xs)
+    override def dup: Cursor[A] = new Cursor(xs)
   }
 }

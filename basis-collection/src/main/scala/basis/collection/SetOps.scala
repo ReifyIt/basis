@@ -7,6 +7,4 @@
 
 package basis.collection
 
-import basis._
-
 class SetOps[+Self, A](self: Set[A])

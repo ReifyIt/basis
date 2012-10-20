@@ -5,18 +5,21 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis.collection
 
-import basis._
-
-/** A specialized iterable sequence of Unicode® characters.
+/** An iterable sequence of elements. Import [[basis.collection.SeqOps]] to
+  * extend this interface with a full suite of optimized collection operations.
   * 
   * @author Chris Sachs
   * 
-  * @define collection  char sequence
+  * @define collection  sequence
   */
-trait CharSeq extends Any with Seq[Char] {
-  override type Self <: CharSeq
+trait Seq[+A] extends Any with Container[A] {
+  override type Self <: Seq[A]
   
-  override def iterator: CharIterator
+  /** Returns `true` if this $collection doesn't contain any elements. */
+  def isEmpty: Boolean
+  
+  /** Returns the number of elements in this $collection. */
+  def length: Int
 }

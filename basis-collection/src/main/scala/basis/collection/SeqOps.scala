@@ -7,8 +7,6 @@
 
 package basis.collection
 
-import basis._
-
 class SeqOps[+Self, +A](self: Seq[A]) {
   def foreach[U](f: A => U): Unit =
     macro ContainerMacros.foreach[A, U]

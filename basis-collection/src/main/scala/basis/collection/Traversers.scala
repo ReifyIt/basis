@@ -7,11 +7,9 @@
 
 package basis.collection
 
-import basis._
-
 private[basis] object Traversers {
-  import basis.Enumerator.traverse
   import scala.runtime.AbstractFunction1
+  import Enumerator.traverse
   
   final class FoldLeft[-A, +B](z: B)(op: (B, A) => B) extends AbstractFunction1[A, Unit] {
     private[this] var r: B = z

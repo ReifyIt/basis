@@ -7,7 +7,7 @@
 
 package basis.container
 
-import basis._
+import basis.collection._
 import basis.util._
 
 class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float] {
@@ -65,7 +65,7 @@ object FloatArray {
   
   def apply(xs: Float*): FloatArray = macro ArrayMacros.literalFloatArray
   
-  final class Buffer extends basis.Buffer[Any, Float] {
+  final class Builder extends Buffer[Any, Float] {
     override type State = FloatArray
     
     private[this] var array: scala.Array[Float] = FloatArray.empty.array

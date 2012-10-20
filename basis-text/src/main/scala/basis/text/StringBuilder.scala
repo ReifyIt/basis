@@ -7,9 +7,7 @@
 
 package basis.text
 
-import basis._
-
-final class StringBuffer extends CharBuffer {
+final class StringBuilder extends Writer {
   override type State = String
   
   private[this] var codeUnits: scala.Array[scala.Char] = null

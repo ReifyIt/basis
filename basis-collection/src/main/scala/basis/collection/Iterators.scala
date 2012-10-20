@@ -7,8 +7,6 @@
 
 package basis.collection
 
-import basis._
-
 private[basis] object Iterators {
   import scala.annotation.tailrec
   
@@ -259,6 +257,9 @@ private[basis] object Iterators {
       case 1 => ys.step()
     }
     
-    override def dup: Iterator[A] = new ++ [A](xs.dup, ys.dup, segment)
+    override def dup: Iterator[A] = segment match {
+      case 0 if !xs.isEmpty => new ++ [A](xs.dup, ys.dup, 0)
+      case _ => ys.dup
+    }
   }
 }
