@@ -8,14 +8,14 @@
 package basis
 
 package object collection {
-  implicit def EnumeratorOps[A](self: Enumerator[A]): EnumeratorOps[self.Self, A] =
-    new EnumeratorOps[self.Self, A](self)
+  //implicit def EnumeratorOps[A](self: Enumerator[A]): EnumeratorOps[self.Self, A] =
+  //  new EnumeratorOps[self.Self, A](self)
   
   implicit def IteratorOps[A](self: Iterator[A]): IteratorOps[A] =
     new IteratorOps[A](self)
   
-  implicit def CollectionOps[A](self: Collection[A]): CollectionOps[self.Self, A] =
-    new CollectionOps[self.Self, A](self)
+  //implicit def CollectionOps[A](self: Collection[A]): CollectionOps[self.Self, A] =
+  //  new CollectionOps[self.Self, A](self)
   
   implicit def ContainerOps[A](self: Container[A]): ContainerOps[self.Self, A] =
     new ContainerOps[self.Self, A](self)

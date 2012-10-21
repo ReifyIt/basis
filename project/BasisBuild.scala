@@ -100,7 +100,9 @@ object BasisBuild extends Build {
     scalacOptions in doc <++= (version, baseDirectory in LocalProject("basis")) map { (version, baseDirectory) =>
       val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
       val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-      Seq("-implicits", "-diagrams", "-sourcepath", baseDirectory.getAbsolutePath, "-doc-source-url", docSourceUrl)
+      Seq("-groups", "-implicits", "-diagrams",
+          "-sourcepath", baseDirectory.getAbsolutePath,
+          "-doc-source-url", docSourceUrl)
     }
   )
   

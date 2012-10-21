@@ -9,5 +9,5 @@ package basis.text
 
 class ReaderOps(self: Reader) {
   def ++ (that: Reader): Reader =
-    if (self.isEmpty) that else new Readers.++(self.dup, that.dup)
+    if (self.isEmpty) that.dup else new Readers.++(self.dup, that.dup)
 }

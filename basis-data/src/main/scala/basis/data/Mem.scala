@@ -7,7 +7,7 @@
 
 package basis.data
 
-/** A mutable sequence of bytes with supporting low-level memory operations.
+/** A mutable byte sequence with supporting low-level memory operations.
   * 
   * ==Address space==
   * 
@@ -69,24 +69,46 @@ package basis.data
   * scala> mem.loadUnalignedShort(1L).toHexString // load the unaligned middle bytes of the Int value.
   * res5: String = fffffeba
   * }}}
+  * 
+  * @groupname  general     Memory properties
+  * @groupprio  general     -10
+  * 
+  * @groupname  aligned     Loading and storing aligned primitive values
+  * @groupprio  aligned     -9
+  * 
+  * @groupname  unaligned   Loading and storing unaligned primitive values
+  * @groupprio  unaligned   -8
+  * 
+  * @groupname  composite   Loading and storing composite values
+  * @groupprio  composite   -7
+  * 
+  * @groupname  array       Loading and storing arrays of values
+  * @groupprio  array       -6
+  * 
+  * @groupname  bulk        Bulk transfer operations
+  * @groupprio  bulk        -5
   */
 trait Mem extends Any {
   import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
   import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
   
-  /** Returns the number of bytes in this memory's address space. */
+  /** Returns the number of bytes in this memory's address space.
+    * @group general */
   def size: Long
   
-  /** Returns this memory's internal word size. */
+  /** Returns this memory's internal word size.
+    * @group general */
   def unit: Int
   
-  /** Returns this memory's internal byte order. */
+  /** Returns this memory's internal byte order.
+    * @group general */
   def endian: ByteOrder
   
   /** Returns a resized copy of this memory.
     * 
     * @param  size  the number of bytes to copy.
     * @return the copied memory.
+    * @group  bulk
     */
   def copy(size: Long = this.size): Mem
   
@@ -94,6 +116,7 @@ trait Mem extends Any {
     * 
     * @param  address   the address to load.
     * @return the loaded `Byte` value.
+    * @group  aligned
     */
   def loadByte(address: Long): Byte
   
@@ -101,6 +124,7 @@ trait Mem extends Any {
     * 
     * @param  address   the storage address.
     * @param  value     the `Byte` value to store.
+    * @group  aligned
     */
   def storeByte(address: Long, value: Byte): Unit
   
@@ -109,6 +133,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 2-byte aligned address to load.
     * @return the loaded `Short` value.
+    * @group  aligned
     */
   def loadShort(address: Long): Short =
     loadUnalignedShort(address & -2L)
@@ -118,6 +143,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 2-byte aligned storage address.
     * @param  value     the `Short` value to store.
+    * @group  aligned
     */
   def storeShort(address: Long, value: Short): Unit =
     storeUnalignedShort(address & -2L, value)
@@ -127,6 +153,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 4-byte aligned address to load.
     * @return the loaded `Int` value.
+    * @group  aligned
     */
   def loadInt(address: Long): Int =
     loadUnalignedInt(address & -4L)
@@ -136,6 +163,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 4-byte aligned storage address.
     * @param  value     the `Int` value to store.
+    * @group  aligned
     */
   def storeInt(address: Long, value: Int): Unit =
     storeUnalignedInt(address & -4L, value)
@@ -145,6 +173,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 8-byte aligned address to load.
     * @return the loaded `Long` value.
+    * @group  aligned
     */ 
   def loadLong(address: Long): Long =
     loadUnalignedLong(address & -8L)
@@ -154,6 +183,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 8-byte aligned storage address.
     * @param  value     the `Long` value to store.
+    * @group  aligned
     */
   def storeLong(address: Long, value: Long): Unit =
     storeUnalignedLong(address & -8L, value)
@@ -163,6 +193,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 4-byte aligned address to load.
     * @return the loaded `Float` value.
+    * @group  aligned
     */
   def loadFloat(address: Long): Float =
     intBitsToFloat(loadInt(address))
@@ -172,6 +203,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 4-byte aligned storage address.
     * @param  value     the `Float` value to store.
+    * @group  aligned
     */
   def storeFloat(address: Long, value: Float): Unit =
     storeInt(address, floatToRawIntBits(value))
@@ -181,6 +213,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 8-byte aligned address to load.
     * @return the loaded `Double` value.
+    * @group  aligned
     */
   def loadDouble(address: Long): Double =
     longBitsToDouble(loadLong(address))
@@ -190,6 +223,7 @@ trait Mem extends Any {
     * 
     * @param  address   the 8-byte aligned storage address.
     * @param  value     the `Double` value to store.
+    * @group  aligned
     */
   def storeDouble(address: Long, value: Double): Unit =
     storeLong(address, doubleToRawLongBits(value))
@@ -198,6 +232,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Short` value.
+    * @group  unaligned
     */
   def loadUnalignedShort(address: Long): Short = {
     if (endian eq BigEndian) {
@@ -215,6 +250,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Short` value to store.
+    * @group  unaligned
     */
   def storeUnalignedShort(address: Long, value: Short) {
     if (endian eq BigEndian) {
@@ -232,6 +268,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Int` value.
+    * @group  unaligned
     */
   def loadUnalignedInt(address: Long): Int = {
     if (endian eq BigEndian) {
@@ -253,6 +290,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Int` value to store.
+    * @group  unaligned
     */
   def storeUnalignedInt(address: Long, value: Int) {
     if (endian eq BigEndian) {
@@ -274,6 +312,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Long` value.
+    * @group  unaligned
     */
   def loadUnalignedLong(address: Long): Long = {
     if (endian eq BigEndian) {
@@ -303,6 +342,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Long` value to store.
+    * @group  unaligned
     */
   def storeUnalignedLong(address: Long, value: Long) {
     if (endian eq BigEndian) {
@@ -332,6 +372,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Float` value.
+    * @group  unaligned
     */
   def loadUnalignedFloat(address: Long): Float =
     intBitsToFloat(loadUnalignedInt(address))
@@ -340,6 +381,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Float` value to store.
+    * @group  unaligned
     */
   def storeUnalignedFloat(address: Long, value: Float): Unit =
     storeUnalignedInt(address, floatToRawIntBits(value))
@@ -348,6 +390,7 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Double` value.
+    * @group  unaligned
     */
   def loadUnalignedDouble(address: Long): Double =
     longBitsToDouble(loadUnalignedLong(address))
@@ -356,15 +399,17 @@ trait Mem extends Any {
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Double` value to store.
+    * @group  unaligned
     */
   def storeUnalignedDouble(address: Long, value: Double): Unit =
     storeUnalignedLong(address, doubleToRawLongBits(value))
   
-  /** Moves a byte sequence to a different, potentially overlapping address.
+  /** Moves a byte range to a new, potentially overlapping address.
     * 
     * @param  fromAddress   the address to copy from.
     * @param  toAddress     the address to copy to.
     * @param  size          the number of bytes to copy.
+    * @group  bulk
     */
   def move(fromAddress: Long, toAddress: Long, size: Long) {
     val fromLimit = fromAddress + size
@@ -440,6 +485,7 @@ trait Mem extends Any {
     * 
     * @param  fromAddress   the lower bound of the address range.
     * @param  untilAddress  the excluded upper bound of the address range.
+    * @group  bulk
     */
   def clear(fromAddress: Long, untilAddress: Long) {
     var p = fromAddress

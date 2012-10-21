@@ -10,7 +10,12 @@ package basis.collection
 /** An iterable container of elements. Import [[basis.collection.ContainerOps]]
   * to extend this interface with a full suite of optimized collection operations.
   * 
-  * @author Chris Sachs
+  * @groupprio  Traversing    -6
+  * @groupprio  Folding       -5
+  * @groupprio  Querying      -4
+  * @groupprio  Transforming  -3
+  * @groupprio  Dividing      -2
+  * @groupprio  Expanding     -1
   * 
   * @define collection  container
   */

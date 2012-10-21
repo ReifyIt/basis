@@ -7,6 +7,8 @@
 
 package basis.text
 
+import basis.util._
+
 final class StringBuilder extends Writer {
   override type State = String
   
@@ -15,19 +17,15 @@ final class StringBuilder extends Writer {
   private[this] var size: Int = 0
   
   private[this] def expand(base: Int, size: Int): Int = {
-    var n = java.lang.Math.max(base, size) - 1
+    var n = (base max size) - 1
     n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
     n + 1
   }
   
   private[this] def resize(size: Int) {
     val newCodeUnits = new scala.Array[scala.Char](size)
-    if (codeUnits != null) {
-      java.lang.System.arraycopy(
-        codeUnits, 0,
-        newCodeUnits, 0,
-        java.lang.Math.min(codeUnits.length, size))
-    }
+    if (codeUnits != null)
+      java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
     codeUnits = newCodeUnits
   }
   

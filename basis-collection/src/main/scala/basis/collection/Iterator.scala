@@ -37,10 +37,10 @@ package basis.collection
 trait Iterator[+A] extends Any with Enumerator[A] {
   override type Self <: Iterator[A]
   
-  /** Returns `true` when this $collection has no more elements. */
-  def isDone: Boolean = isEmpty
+  /** Returns `true` when this $collection has reached a sentinel element. */
+  def isDone: Boolean = false
   
-  /** Returns `true` when this $collection has no more available elements. */
+  /** Returns `true` when this $collection has no more elements. */
   def isEmpty: Boolean
   
   /** Returns the currently buffered element. */

@@ -19,10 +19,10 @@ package object data {
     (base + (alignment - 1L)) & ~(alignment - 1L)
   
   /** Returns the alignment of type's implicit `ValType`. */
-  @inline def alignOf[T](implicit struct: ValType[T]): Long = struct.alignment
+  def alignOf[T](implicit struct: ValType[T]): Long = struct.alignment
   
   /** Returns the size of a type's implicit `ValType`. */
-  @inline def sizeOf[T](implicit struct: ValType[T]): Long = struct.size
+  def sizeOf[T](implicit struct: ValType[T]): Long = struct.size
   
   /** Returns the native byte order of the virtual machine. */
   implicit val NativeEndian: ByteOrder = {

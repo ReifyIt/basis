@@ -10,7 +10,7 @@ package basis.collection
 private[basis] object Iterators {
   import scala.annotation.tailrec
   
-  final class Collect[-A, +B](self: Iterator[A], q: scala.PartialFunction[A, B]) extends Iterator[B] {
+  final class Collect[-A, +B](self: Iterator[A], q: PartialFunction[A, B]) extends Iterator[B] {
     @tailrec override def isEmpty: Boolean =
       self.isEmpty || !q.isDefinedAt(self.head) || { self.step(); isEmpty }
     
