@@ -6,14 +6,14 @@
 \*                                                                      */
 
 package basis.collections
-package strict
+package sequential
 
-/** Strictly evaluated set operations.
+/** Operations available to all sets.
   * 
-  * @groupprio  Mapping     -3
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
+  * @groupprio  Traversing    -3
+  * @groupprio  Reducing      -2
+  * @groupprio  Querying      -1
   * 
   * @define collection  set
   */
-abstract class EagerSetOps[+Self, +A] private[strict] extends EagerContainerOps[Self, A]
+abstract class BasicSetOps[+A] private[sequential] extends BasicContainerOps[A]

@@ -61,14 +61,14 @@ class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
 }
 
 object LongArray {
-  val empty: LongArray = new LongArray(new scala.Array[Long](0))
+  val Empty: LongArray = new LongArray(new scala.Array[Long](0))
   
   def apply(xs: Long*): LongArray = macro ArrayMacros.literalLongArray
   
   final class Builder extends Buffer[Any, Long] {
     override type State = LongArray
     
-    private[this] var array: scala.Array[Long] = LongArray.empty.array
+    private[this] var array: scala.Array[Long] = LongArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -115,7 +115,7 @@ object LongArray {
     }
     
     override def clear() {
-      array = LongArray.empty.array
+      array = LongArray.Empty.array
       aliased = true
       length = 0
     }

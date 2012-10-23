@@ -9,22 +9,22 @@ package basis.collections
 
 /** A temporary buffer of elements.
   * 
-  * @groupprio  State       -2
-  * @groupprio  Appending   -1
+  * @groupprio  Examining   -2
+  * @groupprio  Updating    -1
   * 
   * @define buffer  buffer
   */
 trait Buffer[-Source, -A] {
   /** The type of state maintained by this $buffer.
-    * @group State */
+    * @group Examining */
   type State
   
   /** Adds a single element to this $buffer.
-    * @group Appending */
+    * @group Updating */
   def += (x: A): this.type
   
   /** Adds multiple elements to this $buffer.
-    * @group Appending */
+    * @group Updating */
   def ++= (xs: Enumerator[A]): this.type = {
     xs match {
       case xs: Container[A] =>
@@ -43,17 +43,17 @@ trait Buffer[-Source, -A] {
     this
   }
   
+  /** Resets this $buffer to its initial state.
+    * @group Updating */
+  def clear(): Unit
+  
   /** Prepares this $buffer to receive a certain number of elements.
-    * @group Appending */
+    * @group Updating */
   def expect(count: Int): this.type
   
   /** Returns the current state of this $buffer.
-    * @group State */
+    * @group Examining */
   def state: State
-  
-  /** Resets this $buffer to its initial state.
-    * @group State */
-  def clear(): Unit
 }
 
 private object Buffer {

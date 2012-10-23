@@ -61,14 +61,14 @@ class ShortArray(val array: scala.Array[Short]) extends AnyVal with Array[Short]
 }
 
 object ShortArray {
-  val empty: ShortArray = new ShortArray(new scala.Array[Short](0))
+  val Empty: ShortArray = new ShortArray(new scala.Array[Short](0))
   
   def apply(xs: Short*): ShortArray = macro ArrayMacros.literalShortArray
   
   final class Builder extends Buffer[Any, Short] {
     override type State = ShortArray
     
-    private[this] var array: scala.Array[Short] = ShortArray.empty.array
+    private[this] var array: scala.Array[Short] = ShortArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -115,7 +115,7 @@ object ShortArray {
     }
     
     override def clear() {
-      array = ShortArray.empty.array
+      array = ShortArray.Empty.array
       aliased = true
       length = 0
     }

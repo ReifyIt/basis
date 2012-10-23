@@ -10,13 +10,14 @@ package basis.collections
 /** A once traversable enumeration of elements. Enumerator declares only a
   * protected `foreach` method; it has no public methods.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Examining   -2
+  * @groupprio  Traversing  -1
   * 
   * @define collection  enumeration
   */
 trait Enumerator[+A] extends Any {
+  /** The family to which this $collection belongs.
+    * @group  Examining */
   type Self <: Enumerator[A]
   
   /** Applies a function to each element of this $collection. The protected

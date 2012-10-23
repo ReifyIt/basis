@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.collections
-package strict
+package sequential
 
 /** Strictly evaluated iterator operations.
   * 
@@ -14,7 +14,7 @@ package strict
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-abstract class EagerIteratorOps[+Self, +A] private[strict] {
+abstract class EagerIteratorOps[+Self, +A] private[sequential] {
   /** Returns the applications of a partial function to each iterated element
     * for which the function is defined.
     * 

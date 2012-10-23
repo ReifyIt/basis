@@ -79,7 +79,7 @@ trait Array[+A] extends Any with Seq[A] {
   protected def stringPrefix: String = "Array"
 }
 
-object Array extends AllArrayBuffers with SeqFactory[Array] {
+object Array extends AllArrayBuilders with SeqFactory[Array] {
   def Builder[A](implicit typeA: MemType[A]): Buffer[Any, A] { type State = Array[A] } = {
     import ValType._
     (typeA match {
@@ -95,22 +95,30 @@ object Array extends AllArrayBuffers with SeqFactory[Array] {
     }).asInstanceOf[Buffer[Any, A] { type State = Array[A] }]
   }
   
-  private[basis] final class Cursor[+A](xs: Array[A], from: Int, until: Int) extends Iterator[A] {
+  private[containers] final class Cursor[+A](xs: Array[A], from: Int, until: Int) extends Iterator[A] {
     private[this] var lower: Int = 0 max from
     private[this] var upper: Int = (lower max until) min xs.length
     private[this] var index: Int = lower
     
     override def isEmpty: Boolean = index >= upper
     
-    override def head: A = if (isEmpty) Done.head else xs(index)
+    override def head: A = if (isEmpty) Iterator.Empty.head else xs(index)
     
-    override def step(): Unit = if (isEmpty) Done.step() else index += 1
+    override def step(): Unit = if (isEmpty) Iterator.Empty.step() else index += 1
     
     override def dup: Cursor[A] = new Cursor[A](xs, index, upper)
   }
 }
 
-private[basis] class AllArrayBuffers extends ValArrayBuffers {
+private[containers] class RefArrayBuilders {
+  implicit def RefBuffer[A]: RefArray.Builder[A] = new RefArray.Builder[A]
+}
+
+private[containers] class ValArrayBuilders extends RefArrayBuilders {
+  implicit def ValBuffer[A : ValType]: ValArray.Builder[A] = new ValArray.Builder[A]
+}
+
+private[containers] class AllArrayBuilders extends ValArrayBuilders {
   implicit def ByteBuffer: ByteArray.Builder = new ByteArray.Builder
   implicit def ShortBuffer: ShortArray.Builder = new ShortArray.Builder
   implicit def IntBuffer: IntArray.Builder = new IntArray.Builder
@@ -118,12 +126,4 @@ private[basis] class AllArrayBuffers extends ValArrayBuffers {
   implicit def FloatBuffer: FloatArray.Builder = new FloatArray.Builder
   implicit def DoubleBuffer: DoubleArray.Builder = new DoubleArray.Builder
   implicit def BitBuffer: BitArray.Builder = new BitArray.Builder
-}
-
-private[basis] class ValArrayBuffers extends RefArrayBuffers {
-  implicit def ValBuffer[A : ValType]: ValArray.Builder[A] = new ValArray.Builder[A]
-}
-
-private[basis] class RefArrayBuffers {
-  implicit def RefBuffer[A]: RefArray.Builder[A] = new RefArray.Builder[A]
 }

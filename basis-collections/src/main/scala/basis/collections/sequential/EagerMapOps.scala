@@ -6,14 +6,14 @@
 \*                                                                      */
 
 package basis.collections
-package strict
+package sequential
 
-/** Strictly evaluated sequence operations.
+/** Strictly evaluated map operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   * 
-  * @define collection  sequence
+  * @define collection  map
   */
-abstract class EagerSeqOps[+Self, +A] private[strict] extends EagerContainerOps[Self, A]
+abstract class EagerMapOps[+Self, A, +T] private[sequential] extends EagerContainerOps[Self, (A, T)]

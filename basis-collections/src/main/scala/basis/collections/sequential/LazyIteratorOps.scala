@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.collections
-package nonstrict
+package sequential
 
 /** Nonstrictly evaluated iterator operations.
   * 
@@ -179,7 +179,7 @@ private object LazyIteratorOps {
       (outer: Iterator[A], f: A => Iterator[B], private[this] var inner: Iterator[B])
     extends Iterator[B] {
     
-    def this(outer: Iterator[A], f: A => Iterator[B]) = this(outer, f, Done)
+    def this(outer: Iterator[A], f: A => Iterator[B]) = this(outer, f, Iterator.Empty)
     
     @tailrec override def isEmpty: Boolean =
       inner.isEmpty && (outer.isEmpty || { inner = f(outer.head); outer.step(); isEmpty })
@@ -187,13 +187,13 @@ private object LazyIteratorOps {
     @tailrec override def head: B = {
       if (!inner.isEmpty) inner.head
       else if (!outer.isEmpty) { inner = f(outer.head); outer.step(); head }
-      else Done.head
+      else Iterator.Empty.head
     }
     
     @tailrec override def step() {
       if (!inner.isEmpty) inner.step()
       else if (!outer.isEmpty) { inner = f(outer.head); outer.step(); step() }
-      else Done.step()
+      else Iterator.Empty.step()
     }
     
     override def dup: Iterator[B] = new FlatMap[A, B](outer.dup, f, inner.dup)
@@ -256,7 +256,7 @@ private object LazyIteratorOps {
         if (p(x)) x
         else { iterating = false; head }
       }
-      else Done.head
+      else Iterator.Empty.head
     }
     
     @tailrec override def step() {
@@ -264,7 +264,7 @@ private object LazyIteratorOps {
         if (p(self.head)) self.step()
         else { iterating = false; step() }
       }
-      else Done.step()
+      else Iterator.Empty.step()
     }
     
     override def dup: Iterator[A] = new TakeWhile[A](self.dup, p, iterating)
@@ -303,12 +303,12 @@ private object LazyIteratorOps {
     
     override def head: A = {
       if (index < upper) self.head
-      else Done.head
+      else Iterator.Empty.head
     }
     
     override def step() {
       if (index < upper) { self.step(); index += 1 }
-      else Done.step()
+      else Iterator.Empty.step()
     }
     
     override def dup: Iterator[A] = new Take[A](self.dup, upper, index)
@@ -327,13 +327,13 @@ private object LazyIteratorOps {
     @tailrec override def head: A = {
       if (index < lower) { self.step(); index += 1; head }
       else if (index < upper) self.head
-      else Done.head
+      else Iterator.Empty.head
     }
     
     @tailrec override def step() {
       if (index < lower) { self.step(); index += 1; step() }
       else if (index < upper) self.step()
-      else Done.step()
+      else Iterator.Empty.step()
     }
     
     override def dup: Iterator[A] = new Slice[A](self.dup, lower, upper, index)

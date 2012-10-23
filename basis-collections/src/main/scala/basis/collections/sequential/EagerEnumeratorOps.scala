@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.collections
-package strict
+package sequential
 
 /** Strictly evaluated enumerator operations.
   * 

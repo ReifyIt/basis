@@ -61,14 +61,14 @@ class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
 }
 
 object ByteArray {
-  val empty: ByteArray = new ByteArray(new scala.Array[Byte](0))
+  val Empty: ByteArray = new ByteArray(new scala.Array[Byte](0))
   
   def apply(xs: Byte*): ByteArray = macro ArrayMacros.literalByteArray
   
   final class Builder extends Buffer[Any, Byte] {
     override type State = ByteArray
     
-    private[this] var array: scala.Array[Byte] = ByteArray.empty.array
+    private[this] var array: scala.Array[Byte] = ByteArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -115,7 +115,7 @@ object ByteArray {
     }
     
     override def clear() {
-      array = ByteArray.empty.array
+      array = ByteArray.Empty.array
       aliased = true
       length = 0
     }

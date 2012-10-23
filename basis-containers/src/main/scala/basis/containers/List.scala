@@ -91,7 +91,7 @@ final class ::[A](override val head: A, private[this] var next: List[A]) extends
   
   override def tail: List[A] = next
   
-  private[basis] def tail_=(tail: List[A]): Unit = next = tail
+  private[containers] def tail_=(tail: List[A]): Unit = next = tail
   
   override def toString: String = {
     val s = new java.lang.StringBuilder("List")
@@ -167,17 +167,21 @@ object List extends SeqFactory[List] {
       this
     }
     
-    override def expect(count: Int): this.type = this
-    /*
-    override def ++= (those: Enumerator[A]): Unit = those match {
-      case those: ::[A] =>
-        prepare()
-        last.tail = those
-        while (!last.tail.isEmpty) last = last.tail.asInstanceOf[::[A]]
-        aliased = true
-      case _ => super.++=(those)
+    override def ++= (xs: Enumerator[A]): this.type = {
+      xs match {
+        case Nil => ()
+        case xs: ::[A] =>
+          prepare()
+          last.tail = xs
+          while (!last.tail.isEmpty) last = last.tail.asInstanceOf[::[A]]
+          aliased = true
+        case _ => super.++=(xs)
+      }
+      this
     }
-    */
+    
+    override def expect(count: Int): this.type = this
+    
     override def state: List[A] = {
       aliased = true
       first
@@ -190,12 +194,12 @@ object List extends SeqFactory[List] {
     }
   }
   
-  private[basis] final class Cursor[+A](private[this] var xs: List[A]) extends Iterator[A] {
+  private[containers] final class Cursor[+A](private[this] var xs: List[A]) extends Iterator[A] {
     override def isEmpty: Boolean = xs.isEmpty
     
-    override def head: A = if (isEmpty) Done.head else xs.head
+    override def head: A = if (isEmpty) Iterator.Empty.head else xs.head
     
-    override def step(): Unit = if (isEmpty) Done.step() else xs = xs.tail
+    override def step(): Unit = if (isEmpty) Iterator.Empty.step() else xs = xs.tail
     
     override def dup: Cursor[A] = new Cursor(xs)
   }

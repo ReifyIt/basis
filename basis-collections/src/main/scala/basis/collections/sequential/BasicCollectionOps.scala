@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.collections
+package sequential
 
 /** Operations available to all collections.
   * 
@@ -13,7 +14,7 @@ package basis.collections
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
+class BasicCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
   /** Sequentially applies a function to each element of this collection.
     * 
     * @param  f   the function to apply to each element.
@@ -30,7 +31,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B =
-    new EnumeratorOps[B](__).fold[B](z)(op)
+    new BasicEnumeratorOps[B](__).fold[B](z)(op) // FIXME: waiting on SI-6482
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this non-empty collection.
@@ -40,7 +41,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduce[B >: A](op: (B, B) => B): B =
-    new EnumeratorOps[B](__).reduce[B](op)
+    new BasicEnumeratorOps[B](__).reduce[B](op) // FIXME: waiting on SI-6482
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this collection.
@@ -50,7 +51,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] =
-    new EnumeratorOps[B](__).reduceOption[B](op)
+    new BasicEnumeratorOps[B](__).reduceOption[B](op) // FIXME: waiting on SI-6482
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this collection.
@@ -61,7 +62,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def foldLeft[B](z: B)(op: (B, A) => B): B =
-    new EnumeratorOps[A](__).foldLeft[B](z)(op)
+    new BasicEnumeratorOps[A](__).foldLeft[B](z)(op)
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this non-empty collection.
@@ -71,7 +72,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B =
-    new EnumeratorOps[B](__).reduceLeft[B](op.asInstanceOf[(B, B) => B]) // work around typer bug
+    new BasicEnumeratorOps[B](__).reduceLeft[B](op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this collection.
@@ -81,7 +82,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
-    new EnumeratorOps[B](__).reduceLeftOption[B](op.asInstanceOf[(B, B) => B]) // work around typer bug
+    new BasicEnumeratorOps[B](__).reduceLeftOption[B](op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
   
   /** Returns the first element of this collection that satisfies a predicate.
     * 
@@ -90,7 +91,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def find(p: A => Boolean): Option[A] =
-    new EnumeratorOps[A](__).find(p)
+    new BasicEnumeratorOps[A](__).find(p)
   
   /** Returns `true` if a predicate holds for all elements of this collection.
     * 
@@ -99,7 +100,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def forall(p: A => Boolean): Boolean =
-    new EnumeratorOps[A](__).forall(p)
+    new BasicEnumeratorOps[A](__).forall(p)
   
   /** Returns `true` if a predicate holds for some element of this collection.
     * 
@@ -108,7 +109,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def exists(p: A => Boolean): Boolean =
-    new EnumeratorOps[A](__).exists(p)
+    new BasicEnumeratorOps[A](__).exists(p)
   
   /** Returns the number of elements in this collection that satisfy a predicate.
     * 
@@ -117,7 +118,7 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def count(p: A => Boolean): Int =
-    new EnumeratorOps[A](__).count(p)
+    new BasicEnumeratorOps[A](__).count(p)
   
   /** Returns the application of a partial function to the first element
     * of this collection for which the function is defined.
@@ -128,5 +129,5 @@ class CollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def select[B](q: PartialFunction[A, B]): Option[B] =
-    new EnumeratorOps[A](__).select[B](q)
+    new BasicEnumeratorOps[A](__).select[B](q)
 }

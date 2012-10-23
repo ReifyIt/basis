@@ -61,14 +61,14 @@ class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] 
 }
 
 object RefArray {
-  val empty: RefArray[Nothing] = new RefArray[Nothing](new scala.Array[AnyRef](0))
+  val Empty: RefArray[Nothing] = new RefArray[Nothing](new scala.Array[AnyRef](0))
   
   def apply[A](xs: A*): RefArray[A] = macro ArrayMacros.literalRefArray[A]
   
   final class Builder[A] extends Buffer[Any, A] {
     override type State = RefArray[A]
     
-    private[this] var array: scala.Array[AnyRef] = RefArray.empty.array
+    private[this] var array: scala.Array[AnyRef] = RefArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -115,7 +115,7 @@ object RefArray {
     }
     
     override def clear() {
-      array = RefArray.empty.array
+      array = RefArray.Empty.array
       aliased = true
       length = 0
     }

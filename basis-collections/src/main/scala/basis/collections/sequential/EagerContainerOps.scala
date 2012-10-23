@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.collections
-package strict
+package sequential
 
 /** Strictly evaluated container operations.
   * 
@@ -16,7 +16,7 @@ package strict
   * 
   * @define collection  container
   */
-abstract class EagerContainerOps[+Self, +A] private[strict] {
+abstract class EagerContainerOps[+Self, +A] private[sequential] {
   /** Returns the applications of a partial function to each element in this
     * $collection for which the function is defined.
     * 

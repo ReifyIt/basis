@@ -6,13 +6,12 @@
 \*                                                                      */
 
 package basis.collections
+package sequential
 
-/** Operations available to all maps.
+/** Nonstrictly evaluated sequence operations.
   * 
-  * @groupprio  Traversing    -3
-  * @groupprio  Reducing      -2
-  * @groupprio  Querying      -1
-  * 
-  * @define collection  map
+  * @groupprio  Mapping     -3
+  * @groupprio  Filtering   -2
+  * @groupprio  Combining   -1
   */
-abstract class MapOps[+A, +T] private[collections] extends ContainerOps[(A, T)]
+class LazySeqOps[+A](val __ : Seq[A]) extends AnyVal

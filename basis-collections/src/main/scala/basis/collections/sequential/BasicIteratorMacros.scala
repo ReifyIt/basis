@@ -6,15 +6,16 @@
 \*                                                                      */
 
 package basis.collections
+package sequential
 
-private[collections] object IteratorMacros {
+private[sequential] object BasicIteratorMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
   def foreach[A : c.WeakTypeTag, U](c: Context)(iterator: c.Tree, f: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) :: Nil,
       LabelDef(loop, Nil,
@@ -29,9 +30,9 @@ private[collections] object IteratorMacros {
   
   def foldLeft[A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(iterator: c.Tree, z: c.Tree, op: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val r    = c.fresh(newTermName("result$"))
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), z) ::
@@ -48,9 +49,9 @@ private[collections] object IteratorMacros {
   
   def reduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag](c: Context)(iterator: c.Tree, op: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val r    = c.fresh(newTermName("result$"))
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       If(
@@ -72,9 +73,9 @@ private[collections] object IteratorMacros {
   
   def reduceLeftOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag](c: Context)(iterator: c.Tree, op: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val r    = c.fresh(newTermName("result$"))
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) :: Nil,
       If(
@@ -96,9 +97,9 @@ private[collections] object IteratorMacros {
   
   def find[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, p: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val r    = c.fresh(newTermName("result$"))
+    val loop = c.fresh(newTermName("loop$"))
     val x    = c.fresh(newTermName("head$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
@@ -120,9 +121,9 @@ private[collections] object IteratorMacros {
   
   def forall[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, p: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val r    = c.fresh(newTermName("result$"))
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
@@ -141,9 +142,9 @@ private[collections] object IteratorMacros {
   
   def exists[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, p: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val r    = c.fresh(newTermName("result$"))
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
@@ -162,9 +163,9 @@ private[collections] object IteratorMacros {
   
   def count[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, p: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val t    = c.fresh(newTermName("total$"))
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
@@ -184,9 +185,9 @@ private[collections] object IteratorMacros {
   
   def select[A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(iterator: c.Tree, q: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val r    = c.fresh(newTermName("result$"))
+    val loop = c.fresh(newTermName("loop$"))
     val x    = c.fresh(newTermName("head$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::

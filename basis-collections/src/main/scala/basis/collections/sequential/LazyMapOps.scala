@@ -6,12 +6,12 @@
 \*                                                                      */
 
 package basis.collections
-package nonstrict
+package sequential
 
-/** Nonstrictly evaluated container operations.
+/** Nonstrictly evaluated map operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class LazyContainerOps[+A](val __ : Container[A]) extends AnyVal
+class LazyMapOps[+A, +T](val __ : Map[A, T]) extends AnyVal

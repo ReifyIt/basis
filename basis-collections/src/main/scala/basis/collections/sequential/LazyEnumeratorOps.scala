@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.collections
-package nonstrict
+package sequential
 
 /** Nonstrictly evaluated enumerator operations.
   * 

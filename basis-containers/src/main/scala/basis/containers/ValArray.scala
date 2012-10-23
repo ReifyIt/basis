@@ -68,7 +68,7 @@ final class ValArray[A](mem: Mem)(implicit A: ValType[A]) extends Array[A] {
 }
 
 object ValArray {
-  def empty[A : ValType]: ValArray[A] = new ValArray[A](Mem.alloc[A](0))
+  def Empty[A : ValType]: ValArray[A] = new ValArray[A](Mem.alloc[A](0))
   
   final class Builder[A](implicit A: ValType[A]) extends Buffer[Any, A] {
     override type State = ValArray[A]

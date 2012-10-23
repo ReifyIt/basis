@@ -61,14 +61,14 @@ class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
 }
 
 object IntArray {
-  val empty: IntArray = new IntArray(new scala.Array[Int](0))
+  val Empty: IntArray = new IntArray(new scala.Array[Int](0))
   
   def apply(xs: Int*): IntArray = macro ArrayMacros.literalIntArray
   
   final class Builder extends Buffer[Any, Int] {
     override type State = IntArray
     
-    private[this] var array: scala.Array[Int] = IntArray.empty.array
+    private[this] var array: scala.Array[Int] = IntArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -115,7 +115,7 @@ object IntArray {
     }
     
     override def clear() {
-      array = IntArray.empty.array
+      array = IntArray.Empty.array
       aliased = true
       length = 0
     }

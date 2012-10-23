@@ -6,13 +6,12 @@
 \*                                                                      */
 
 package basis.collections
+package sequential
 
-/** Operations available to all sets.
+/** Nonstrictly evaluated set operations.
   * 
-  * @groupprio  Traversing    -3
-  * @groupprio  Reducing      -2
-  * @groupprio  Querying      -1
-  * 
-  * @define collection  set
+  * @groupprio  Mapping     -3
+  * @groupprio  Filtering   -2
+  * @groupprio  Combining   -1
   */
-abstract class SetOps[+A] private[collections] extends ContainerOps[A]
+class LazySetOps[+A](val __ : Set[A]) extends AnyVal

@@ -61,14 +61,14 @@ class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float]
 }
 
 object FloatArray {
-  val empty: FloatArray = new FloatArray(new scala.Array[Float](0))
+  val Empty: FloatArray = new FloatArray(new scala.Array[Float](0))
   
   def apply(xs: Float*): FloatArray = macro ArrayMacros.literalFloatArray
   
   final class Builder extends Buffer[Any, Float] {
     override type State = FloatArray
     
-    private[this] var array: scala.Array[Float] = FloatArray.empty.array
+    private[this] var array: scala.Array[Float] = FloatArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -115,7 +115,7 @@ object FloatArray {
     }
     
     override def clear() {
-      array = FloatArray.empty.array
+      array = FloatArray.Empty.array
       aliased = true
       length = 0
     }

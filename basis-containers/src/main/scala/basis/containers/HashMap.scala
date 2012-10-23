@@ -279,7 +279,7 @@ final class HashMap[+A, +T] private
       if (branchA == branchB) // new submap
         new HashMap(branchA | branchB, 0,
           newSlots(merge(keyA, hashA, valueA, keyB, hashB, valueB, k + 5)),
-          RefArray.empty)
+          RefArray.Empty)
       else // new branch
         new HashMap(branchA | branchB, branchA | branchB,
           if (((branchA - 1) & branchB) == 0) newSlots(keyA, keyB) else newSlots(keyB, keyA),
@@ -295,7 +295,7 @@ final class HashMap[+A, +T] private
     if (bucketBranch == entryBranch) // new submap
       new HashMap(bucketBranch, 0,
         newSlots(resolve(key, h, value, k + 5)),
-        RefArray.empty)
+        RefArray.Empty)
     else // new branch
       new HashMap(bucketBranch | entryBranch, entryBranch,
         if (((bucketBranch - 1) & entryBranch) == 0) newSlots(this, key) else newSlots(key, this),
@@ -372,16 +372,16 @@ final class HashMap[+A, +T] private
   }
 }
 
-object HashMap {
-  private[this] val Empty = new HashMap[Any, Nothing](0, 0, RefArray.empty, RefArray.empty)
-  def empty[A, T]: HashMap[A, T] = Empty.asInstanceOf[HashMap[A, T]]
+object HashMap extends MapFactory[HashMap] {
+  val Empty: HashMap[Nothing, Nothing] =
+    new HashMap[Nothing, Nothing](0, 0, RefArray.Empty, RefArray.Empty)
   
   implicit def Builder[A, T]: Builder[A, T] = new Builder[A, T]
   
   final class Builder[A, T] extends Buffer[Any, (A, T)] {
     override type State = HashMap[A, T]
     
-    private[this] var map: HashMap[A, T] = HashMap.empty[A, T]
+    private[this] var map: HashMap[A, T] = HashMap.Empty
     
     def += (key: A, value: T): this.type = {
       map += (key, value)
@@ -394,7 +394,7 @@ object HashMap {
     
     override def state: HashMap[A, T] = map
     
-    override def clear(): Unit = map = HashMap.empty[A, T]
+    override def clear(): Unit = map = HashMap.Empty
   }
   
   private[basis] final class Cursor[+A, +T](
@@ -436,10 +436,10 @@ object HashMap {
             head
           }
         }
-        else Done.head
+        else Iterator.Empty.head
       }
       else if (index < self.rank) (self.keyAt(index), self.valAt(index))
-      else Done.head
+      else Iterator.Empty.head
     }
     
     @tailrec override def step() {
@@ -464,10 +464,10 @@ object HashMap {
             step()
           }
         }
-        else Done.step()
+        else Iterator.Empty.step()
       }
       else if (index < self.rank) index += 1
-      else Done.step()
+      else Iterator.Empty.step()
     }
     
     override def dup: Cursor[A, T] = new Cursor(self, child, index)

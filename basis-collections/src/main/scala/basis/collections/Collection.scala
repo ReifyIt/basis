@@ -10,9 +10,8 @@ package basis.collections
 /** A traversable collection of elements. Collection declares only a protected
   * `foreach` method; it has no public methods.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Examining   -2
+  * @groupprio  Traversing  -1
   * 
   * @define collection  collection
   */

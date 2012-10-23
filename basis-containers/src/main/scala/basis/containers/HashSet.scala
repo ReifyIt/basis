@@ -282,16 +282,15 @@ final class HashSet[+A] private
   }
 }
 
-object HashSet extends ContainerFactory[HashSet] {
-  private[this] val Empty = new HashSet[Nothing](0, 0, RefArray.empty)
-  def empty[A]: HashSet[A] = Empty.asInstanceOf[HashSet[A]]
+object HashSet extends SetFactory[HashSet] {
+  val Empty: HashSet[Nothing] = new HashSet[Nothing](0, 0, RefArray.Empty)
   
   implicit def Builder[A]: Builder[A] = new Builder[A]
   
   final class Builder[A] extends Buffer[Any, A] {
     override type State = HashSet[A]
     
-    private[this] var set: HashSet[A] = HashSet.empty[A]
+    private[this] var set: HashSet[A] = HashSet.Empty
     
     override def += (element: A): this.type = {
       set += element
@@ -302,7 +301,7 @@ object HashSet extends ContainerFactory[HashSet] {
     
     override def state: HashSet[A] = set
     
-    override def clear(): Unit = set = HashSet.empty[A]
+    override def clear(): Unit = set = HashSet.Empty
   }
   
   private[basis] final class Cursor[+A](
@@ -344,10 +343,10 @@ object HashSet extends ContainerFactory[HashSet] {
             head
           }
         }
-        else Done.head
+        else Iterator.Empty.head
       }
       else if (index < self.rank) self.elemAt(index)
-      else Done.head
+      else Iterator.Empty.head
     }
     
     @tailrec override def step() {
@@ -372,10 +371,10 @@ object HashSet extends ContainerFactory[HashSet] {
             step()
           }
         }
-        else Done.step()
+        else Iterator.Empty.step()
       }
       else if (index < self.rank) index += 1
-      else Done.step()
+      else Iterator.Empty.step()
     }
     
     override def dup: Cursor[A] = new Cursor(self, child, index)

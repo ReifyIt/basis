@@ -6,17 +6,17 @@
 \*                                                                      */
 
 package basis.collections
-package strict
+package sequential
 
-private[strict] object EagerIteratorMacros {
+private[sequential] object EagerIteratorMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
   def collect[A : c.WeakTypeTag, B](c: Context)(iterator: c.Tree, q: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val b    = BufferName(c)(buffer)
+    val loop = c.fresh(newTermName("loop$"))
     val x    = c.fresh(newTermName("head$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
@@ -38,9 +38,9 @@ private[strict] object EagerIteratorMacros {
   
   def map[A : c.WeakTypeTag, B](c: Context)(iterator: c.Tree, f: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val b    = BufferName(c)(buffer)
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       BufferDef(c)(buffer, b) ::
@@ -57,9 +57,9 @@ private[strict] object EagerIteratorMacros {
   
   def flatMap[A : c.WeakTypeTag, B](c: Context)(iterator: c.Tree, f: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val b    = BufferName(c)(buffer)
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       BufferDef(c)(buffer, b) ::
@@ -76,9 +76,9 @@ private[strict] object EagerIteratorMacros {
   
   def filter[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, p: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val b    = BufferName(c)(buffer)
+    val loop = c.fresh(newTermName("loop$"))
     val x    = c.fresh(newTermName("head$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
@@ -100,11 +100,11 @@ private[strict] object EagerIteratorMacros {
   
   def dropWhile[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, p: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop1 = c.fresh(newTermName("loop$"))
-    val loop2 = c.fresh(newTermName("loop$"))
     val iter  = c.fresh(newTermName("iter$"))
     val b     = BufferName(c)(buffer)
+    val loop1 = c.fresh(newTermName("loop$"))
     val x     = c.fresh(newTermName("head$"))
+    val loop2 = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       BufferDef(c)(buffer, b) ::
@@ -132,9 +132,9 @@ private[strict] object EagerIteratorMacros {
   
   def takeWhile[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, p: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val b    = BufferName(c)(buffer)
+    val loop = c.fresh(newTermName("loop$"))
     val x    = c.fresh(newTermName("head$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
@@ -157,12 +157,12 @@ private[strict] object EagerIteratorMacros {
   
   def span[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, p: c.Tree, bufferA: c.Tree, bufferB: c.Tree): c.Tree = {
     import c.universe._
-    val loop1 = c.fresh(newTermName("loop$"))
-    val loop2 = c.fresh(newTermName("loop$"))
     val iter  = c.fresh(newTermName("iter$"))
     val a     = BufferName(c)(bufferA)
     val b     = BufferName(c)(bufferB)
+    val loop1 = c.fresh(newTermName("loop$"))
     val x     = c.fresh(newTermName("head$"))
+    val loop2 = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       BufferDef(c)(bufferA, a) ::
@@ -193,12 +193,12 @@ private[strict] object EagerIteratorMacros {
   
   def drop[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, lower: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop1 = c.fresh(newTermName("loop$"))
-    val loop2 = c.fresh(newTermName("loop$"))
     val iter  = c.fresh(newTermName("iter$"))
     val b     = BufferName(c)(buffer)
     val i     = c.fresh(newTermName("i$"))
     val n     = c.fresh(newTermName("n$"))
+    val loop1 = c.fresh(newTermName("loop$"))
+    val loop2 = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       BufferDef(c)(buffer, b) ::
@@ -228,11 +228,11 @@ private[strict] object EagerIteratorMacros {
   
   def take[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, upper: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop = c.fresh(newTermName("loop$"))
     val iter = c.fresh(newTermName("iter$"))
     val b    = BufferName(c)(buffer)
     val i    = c.fresh(newTermName("i$"))
     val n    = c.fresh(newTermName("n$"))
+    val loop = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       BufferDef(c)(buffer, b) ::
@@ -255,12 +255,12 @@ private[strict] object EagerIteratorMacros {
   
   def slice[A : c.WeakTypeTag](c: Context)(iterator: c.Tree, lower: c.Tree, upper: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop1 = c.fresh(newTermName("loop$"))
-    val loop2 = c.fresh(newTermName("loop$"))
     val iter  = c.fresh(newTermName("iter$"))
     val b     = BufferName(c)(buffer)
     val i     = c.fresh(newTermName("i$"))
     val n     = c.fresh(newTermName("n$"))
+    val loop1 = c.fresh(newTermName("loop$"))
+    val loop2 = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter, IteratorTpe[A](c), iterator) ::
       BufferDef(c)(buffer, b) ::
@@ -295,10 +295,10 @@ private[strict] object EagerIteratorMacros {
   
   def zip[A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(xs: c.Tree, ys: c.Tree, buffer: c.Tree): c.Tree = {
     import c.universe._
-    val loop  = c.fresh(newTermName("loop$"))
     val iter1 = c.fresh(newTermName("iter$"))
     val iter2 = c.fresh(newTermName("iter$"))
     val b     = BufferName(c)(buffer)
+    val loop  = c.fresh(newTermName("loop$"))
     Block(
       ValDef(NoMods, iter1, IteratorTpe[A](c), xs) ::
       ValDef(NoMods, iter2, IteratorTpe[B](c), ys) ::

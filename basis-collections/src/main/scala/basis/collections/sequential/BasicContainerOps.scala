@@ -6,24 +6,27 @@
 \*                                                                      */
 
 package basis.collections
+package sequential
 
-/** Operations available to all iterators.
+/** Operations available to all containers.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
+  * 
+  * @define collection  container
   */
-abstract class IteratorOps[+A] private[collections] {
-  /** Sequentially applies a function to each iterated element.
+abstract class BasicContainerOps[+A] private[sequential] {
+  /** Sequentially applies a function to each element in this $collection.
     * 
     * @param  f   the function to apply to each element.
     * @group  Traversing
     */
   def foreach[U](f: A => U): Unit =
-    macro IteratorOps.foreach[A, U]
+    macro BasicContainerOps.foreach[A, U]
   
   /** Returns the repeated application of an associative binary operator
-    * between an identity value and all iterated elements.
+    * between an identity value and all elements in this $collection.
     * 
     * @param  z   the operator's identity element.
     * @param  op  the associative binary operator to apply.
@@ -31,30 +34,30 @@ abstract class IteratorOps[+A] private[collections] {
     * @group  Reducing
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B =
-    macro IteratorOps.foldLeft[A, B]
+    macro BasicContainerOps.foldLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all iterated elements–undefined for empty iterators.
+    * between all elements in this non-empty $collection.
     * 
     * @param  op  the associative binary operator to apply.
     * @return the reduced value.
     * @group  Reducing
     */
   def reduce[B >: A](op: (B, B) => B): B =
-    macro IteratorOps.reduceLeft[A, B]
+    macro BasicContainerOps.reduceLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all iterated elements.
+    * between all elements in this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this iterator is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] =
-    macro IteratorOps.reduceLeftOption[A, B]
+    macro BasicContainerOps.reduceLeftOption[A, B]
   
   /** Returns the left-to-right application of a binary operator between a
-    * start value and all iterated elements.
+    * start value and all elements in this $collection.
     * 
     * @param  z   the starting value.
     * @param  op  the binary operator to apply right-recursively.
@@ -62,66 +65,66 @@ abstract class IteratorOps[+A] private[collections] {
     * @group  Reducing
     */
   def foldLeft[B](z: B)(op: (B, A) => B): B =
-    macro IteratorOps.foldLeft[A, B]
+    macro BasicContainerOps.foldLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all iterated elements–undefined for empty iterators.
+    * all elements in this non-empty $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
     * @return the reduced value.
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B =
-    macro IteratorOps.reduceLeft[A, B]
+    macro BasicContainerOps.reduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all iterated elements.
+    * all elements in this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this iterator is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
-    macro IteratorOps.reduceLeftOption[A, B]
+    macro BasicContainerOps.reduceLeftOption[A, B]
   
-  /** Returns the first iterated element that satisfies a predicate.
+  /** Returns the first element in this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return some found element, or none if no element satisfies `p`.
     * @group  Querying
     */
   def find(p: A => Boolean): Option[A] =
-    macro IteratorOps.find[A]
+    macro BasicContainerOps.find[A]
   
-  /** Returns `true` if a predicate holds for all iterated elements.
+  /** Returns `true` if a predicate holds for all elements in this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if all elements satisfy `p`, else `false`.
     * @group  Querying
     */
   def forall(p: A => Boolean): Boolean =
-    macro IteratorOps.forall[A]
+    macro BasicContainerOps.forall[A]
   
-  /** Returns `true` if a predicate holds for some iterated element.
+  /** Returns `true` if a predicate holds for some element in this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if any element satisfies `p`, else `false`.
     * @group  Querying
     */
   def exists(p: A => Boolean): Boolean =
-    macro IteratorOps.exists[A]
+    macro BasicContainerOps.exists[A]
   
-  /** Returns the number of iterated elements that satisfy a predicate.
+  /** Returns the number of elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return the number of elements satisfying `p`.
     * @group  Querying
     */
   def count(p: A => Boolean): Int =
-    macro IteratorOps.count[A]
+    macro BasicContainerOps.count[A]
   
-  /** Returns the application of a partial function to the first iterated
-    * element for which the function is defined.
+  /** Returns the application of a partial function to the first element
+    * in this $collection for which the function is defined.
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
@@ -129,43 +132,43 @@ abstract class IteratorOps[+A] private[collections] {
     * @group  Querying
     */
   def select[B](q: PartialFunction[A, B]): Option[B] =
-    macro IteratorOps.select[A, B]
+    macro BasicContainerOps.select[A, B]
 }
 
-private object IteratorOps {
+private object BasicContainerOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
   private def deconstruct(c: Context): c.Tree = {
     import c.universe._
-    val Apply(_, iterator :: Nil) = c.prefix.tree
-    iterator
+    val Apply(_, container :: Nil) = c.prefix.tree
+    Select(container, "iterator")
   }
   
   def foreach[A : c.WeakTypeTag, U](c: Context)(f: c.Expr[A => U]): c.Expr[Unit] =
-    c.Expr(IteratorMacros.foreach[A, U](c)(deconstruct(c), f.tree))(c.TypeTag.Unit)
+    c.Expr(BasicIteratorMacros.foreach[A, U](c)(deconstruct(c), f.tree))(c.TypeTag.Unit)
   
   def foldLeft[A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(z: c.Expr[B])(op: c.Expr[(B, A) => B]): c.Expr[B] =
-    c.Expr(IteratorMacros.foldLeft[A, B](c)(deconstruct(c), z.tree, op.tree))(c.weakTypeTag[B])
+    c.Expr(BasicIteratorMacros.foldLeft[A, B](c)(deconstruct(c), z.tree, op.tree))(c.weakTypeTag[B])
   
   def reduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag](c: Context)(op: c.Expr[(B, A) => B]): c.Expr[B] =
-    c.Expr(IteratorMacros.reduceLeft[A, B](c)(deconstruct(c), op.tree))(c.weakTypeTag[B])
+    c.Expr(BasicIteratorMacros.reduceLeft[A, B](c)(deconstruct(c), op.tree))(c.weakTypeTag[B])
   
   def reduceLeftOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag](c: Context)(op: c.Expr[(B, A) => B]): c.Expr[Option[B]] =
-    c.Expr(IteratorMacros.reduceLeftOption[A, B](c)(deconstruct(c), op.tree))(c.TypeTag.Nothing)
+    c.Expr(BasicIteratorMacros.reduceLeftOption[A, B](c)(deconstruct(c), op.tree))(c.TypeTag.Nothing)
   
   def find[A : c.WeakTypeTag](c: Context)(p: c.Expr[A => Boolean]): c.Expr[Option[A]] =
-    c.Expr(IteratorMacros.find[A](c)(deconstruct(c), p.tree))(c.TypeTag.Nothing)
+    c.Expr(BasicIteratorMacros.find[A](c)(deconstruct(c), p.tree))(c.TypeTag.Nothing)
   
   def forall[A : c.WeakTypeTag](c: Context)(p: c.Expr[A => Boolean]): c.Expr[Boolean] =
-    c.Expr(IteratorMacros.forall[A](c)(deconstruct(c), p.tree))(c.TypeTag.Boolean)
+    c.Expr(BasicIteratorMacros.forall[A](c)(deconstruct(c), p.tree))(c.TypeTag.Boolean)
   
   def exists[A : c.WeakTypeTag](c: Context)(p: c.Expr[A => Boolean]): c.Expr[Boolean] =
-    c.Expr(IteratorMacros.exists[A](c)(deconstruct(c), p.tree))(c.TypeTag.Boolean)
+    c.Expr(BasicIteratorMacros.exists[A](c)(deconstruct(c), p.tree))(c.TypeTag.Boolean)
   
   def count[A : c.WeakTypeTag](c: Context)(p: c.Expr[A => Boolean]): c.Expr[Int] =
-    c.Expr(IteratorMacros.count[A](c)(deconstruct(c), p.tree))(c.TypeTag.Int)
+    c.Expr(BasicIteratorMacros.count[A](c)(deconstruct(c), p.tree))(c.TypeTag.Int)
   
   def select[A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(q: c.Expr[PartialFunction[A, B]]): c.Expr[Option[B]] =
-    c.Expr(IteratorMacros.select[A, B](c)(deconstruct(c), q.tree))(c.TypeTag.Nothing)
+    c.Expr(BasicIteratorMacros.select[A, B](c)(deconstruct(c), q.tree))(c.TypeTag.Nothing)
 }

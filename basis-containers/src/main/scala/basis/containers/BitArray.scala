@@ -89,12 +89,12 @@ class BitArray(val words: scala.Array[Int]) extends AnyVal with Array[Boolean] {
 }
 
 object BitArray {
-  val empty: BitArray = new BitArray(new scala.Array[Int](1))
+  val Empty: BitArray = new BitArray(new scala.Array[Int](1))
   
   final class Builder extends Buffer[Any, Boolean] {
     override type State = BitArray
     
-    private[this] var words: scala.Array[Int] = BitArray.empty.words
+    private[this] var words: scala.Array[Int] = BitArray.Empty.words
     
     private[this] var aliased: Boolean = true
     
@@ -150,7 +150,7 @@ object BitArray {
     }
     
     override def clear() {
-      words = BitArray.empty.words
+      words = BitArray.Empty.words
       aliased = true
       length = 0
     }

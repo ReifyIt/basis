@@ -27,10 +27,9 @@ package basis.collections
   * The distinct ''empty'' and ''done'' states facilitate low-overhead
   * "chunked" iterator applications such as iteratees.
   * 
-  * @groupprio  State       -4
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Examining   -3
+  * @groupprio  Iterating   -2
+  * @groupprio  Traversing  -1
   * 
   * @define collection  iterator
   */
@@ -38,42 +37,45 @@ trait Iterator[+A] extends Any with Enumerator[A] {
   override type Self <: Iterator[A]
   
   /** Returns `true` when this $collection has reached a sentinel element.
-    * @group State */
+    * @group Examining */
   def isDone: Boolean = false
   
   /** Returns `true` when this $collection has no more elements.
-    * @group State */
+    * @group Examining */
   def isEmpty: Boolean
   
   /** Returns the currently buffered element.
-    * @group State */
+    * @group Examining */
   def head: A
   
   /** Advances this $collection to its next state.
-    * @group State */
+    * @group Iterating */
   def step(): Unit
   
   /** Returns a duplicate $collection with identical but independent state.
-    * @group State */
+    * @group Iterating */
   def dup: Iterator[A]
   
   protected override def foreach[U](f: A => U): Unit =
     while (!isEmpty) { f(head); step() }
 }
 
-/** A terminated iterator. */
-object Done extends Iterator[Nothing] {
-  override def isDone: Boolean = true
-  
-  override def isEmpty: Boolean = true
-  
-  override def head: Nothing =
-    throw new scala.NoSuchElementException("Head of empty iterator.")
-  
-  override def step(): Unit =
-    throw new java.lang.UnsupportedOperationException("Empty iterator step.")
-  
-  override def dup: Done.type = this
-  
-  protected override def foreach[U](f: Nothing => U): Unit = ()
+/** A generic iterator factory. */
+object Iterator {
+  /** An empty iterator. */
+  object Empty extends Iterator[Nothing] {
+    override def isDone: Boolean = true
+    
+    override def isEmpty: Boolean = true
+    
+    override def head: Nothing =
+      throw new scala.NoSuchElementException("Head of empty iterator.")
+    
+    override def step(): Unit =
+      throw new java.lang.UnsupportedOperationException("Empty iterator step.")
+    
+    override def dup: Empty.type = this
+    
+    protected override def foreach[U](f: Nothing => U): Unit = ()
+  }
 }

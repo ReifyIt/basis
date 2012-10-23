@@ -7,21 +7,31 @@
 
 package basis.collections
 
+import scala.annotation.unchecked.uncheckedVariance
+
 /** A unique set of elements.
+  * 
+  * @groupprio  Examining   -3
+  * @groupprio  Iterating   -2
+  * @groupprio  Traversing  -1
   * 
   * @define collection  set
   */
 trait Set[+A] extends Any with Container[A] {
-  import scala.annotation.unchecked.uncheckedVariance
-  
   override type Self <: Set[A]
   
-  /** Returns `true` if this $collection doesn't contain any elements. */
+  /** Returns `true` if this $collection doesn't contain any elements.
+    * @group Examining */
   def isEmpty: Boolean
   
-  /** Returns the number of elements in this $collection. */
+  /** Returns the number of elements in this $collection.
+    * @group Examining */
   def size: Int
   
-  /** Returns `true` if this $collection contains the given element. */
+  /** Returns `true` if this $collection contains the given element.
+    * @group Examining */
   def contains(element: A @uncheckedVariance): Boolean
 }
+
+/** A generic set factory */
+object Set extends SetFactory[Set]

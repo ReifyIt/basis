@@ -6,12 +6,14 @@
 \*                                                                      */
 
 package basis.collections
-package nonstrict
+package sequential
 
-/** Nonstrictly evaluated sequence operations.
+/** Strictly evaluated sequence operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
+  * 
+  * @define collection  sequence
   */
-class LazySeqOps[+A](val __ : Seq[A]) extends AnyVal
+abstract class EagerSeqOps[+Self, +A] private[sequential] extends EagerContainerOps[Self, A]

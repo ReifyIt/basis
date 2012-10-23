@@ -9,11 +9,9 @@ package basis.collections
 
 /** An iterable sequence of elements.
   * 
-  * @groupprio  Properties    -5
-  * @groupprio  Iterating     -4
-  * @groupprio  Traversing    -3
-  * @groupprio  Reducing      -2
-  * @groupprio  Querying      -1
+  * @groupprio  Examining   -3
+  * @groupprio  Iterating   -2
+  * @groupprio  Traversing  -1
   * 
   * @define collection  sequence
   */
@@ -21,10 +19,13 @@ trait Seq[+A] extends Any with Container[A] {
   override type Self <: Seq[A]
   
   /** Returns `true` if this $collection doesn't contain any elements.
-    * @group Properties */
+    * @group Examining */
   def isEmpty: Boolean
   
   /** Returns the number of elements in this $collection.
-    * @group Properties */
+    * @group Examining */
   def length: Int
 }
+
+/** A generic sequence factory. */
+object Seq extends SeqFactory[Seq]

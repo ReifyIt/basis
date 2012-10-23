@@ -6,14 +6,12 @@
 \*                                                                      */
 
 package basis.collections
+package sequential
 
-trait ContainerFactory[CC[X] <: Container[X]] {
-  def apply[A](xs: A*)(implicit buffer: Buffer[CC[_], A]): buffer.State =
-    macro FactoryMacros.apply[A]
-  
-  def fill[A](n: Int)(element: => A)(implicit buffer: Buffer[CC[_], A]): buffer.State =
-    macro FactoryMacros.fill[A]
-  
-  def tabulate[A](n: Int)(f: Int => A)(implicit buffer: Buffer[CC[_], A]): buffer.State =
-    macro FactoryMacros.tabulate[A]
-}
+/** Nonstrictly evaluated container operations.
+  * 
+  * @groupprio  Mapping     -3
+  * @groupprio  Filtering   -2
+  * @groupprio  Combining   -1
+  */
+class LazyContainerOps[+A](val __ : Container[A]) extends AnyVal

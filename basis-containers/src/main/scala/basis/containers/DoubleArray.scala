@@ -61,14 +61,14 @@ class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Doub
 }
 
 object DoubleArray {
-  val empty: DoubleArray = new DoubleArray(new scala.Array[Double](0))
+  val Empty: DoubleArray = new DoubleArray(new scala.Array[Double](0))
   
   def apply(xs: Double*): DoubleArray = macro ArrayMacros.literalDoubleArray
   
   final class Builder extends Buffer[Any, Double] {
     override type State = DoubleArray
     
-    private[this] var array: scala.Array[Double] = DoubleArray.empty.array
+    private[this] var array: scala.Array[Double] = DoubleArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -115,7 +115,7 @@ object DoubleArray {
     }
     
     override def clear() {
-      array = DoubleArray.empty.array
+      array = DoubleArray.Empty.array
       aliased = true
       length = 0
     }

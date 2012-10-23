@@ -6,12 +6,12 @@
 \*                                                                      */
 
 package basis.collections
-package nonstrict
+package sequential
 
-/** Nonstrictly evaluated set operations.
+/** Nonstrictly evaluated collection operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class LazySetOps[+A](val __ : Set[A]) extends AnyVal
+class LazyCollectionOps[+A](val __ : Collection[A]) extends AnyVal
