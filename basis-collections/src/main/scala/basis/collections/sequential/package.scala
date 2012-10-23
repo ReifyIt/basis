@@ -6,12 +6,14 @@
 \*                                                                      */
 
 package basis.collections
-package sequential
 
-/** Non-strictly evaluated collection operations.
-  * 
-  * @groupprio  Mapping     -3
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
-  */
-class LazyCollectionOps[+A](val __ : Collection[A]) extends AnyVal
+package object sequential {
+  /** Implicit conversions that add common operations to collections. */
+  val common = new ProvideCommonOps
+  
+  /** Implicit conversions that add common and strict operations to collections. */
+  val strict = new ProvideEagerOps
+  
+  /** Implicit conversions that add command and non-strict operations to collections. */
+  val nonstrict = new ProvideLazyOps
+}

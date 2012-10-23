@@ -8,12 +8,12 @@
 package basis.collections
 package sequential
 
-/** Operations available to all maps.
+/** Common set operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   * 
-  * @define collection  map
+  * @define collection  set
   */
-abstract class BasicMapOps[+A, +T] private[sequential] extends BasicContainerOps[(A, T)]
+abstract class CommonSetOps[+A] private[sequential] extends CommonContainerOps[A]

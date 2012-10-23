@@ -8,12 +8,12 @@
 package basis.collections
 package sequential
 
-/** Operations available to all sets.
+/** Common sequence operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   * 
-  * @define collection  set
+  * @define collection  sequence
   */
-abstract class BasicSetOps[+A] private[sequential] extends BasicContainerOps[A]
+abstract class CommonSeqOps[+A] private[sequential] extends CommonContainerOps[A]

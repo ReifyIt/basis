@@ -8,13 +8,13 @@
 package basis.collections
 package sequential
 
-/** Operations available to all enumerators.
+/** Common enumerator operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
+class CommonEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
   /** Sequentially applies a function to each enumerated element.
     * 
     * @param  f   the function to apply to each element.
@@ -31,7 +31,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Reducing
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B = {
-    val f = new BasicEnumeratorOps.FoldLeft(z)(op)
+    val f = new CommonEnumeratorOps.FoldLeft(z)(op)
     traverse(__)(f)
     f.state
   }
@@ -44,7 +44,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduce[B >: A](op: (B, B) => B): B = {
-    val f = new BasicEnumeratorOps.ReduceLeft(op)
+    val f = new CommonEnumeratorOps.ReduceLeft(op)
     traverse(__)(f)
     if (f.isDefined) f.state
     else throw new java.lang.UnsupportedOperationException
@@ -58,7 +58,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] = {
-    val f = new BasicEnumeratorOps.ReduceLeft(op)
+    val f = new CommonEnumeratorOps.ReduceLeft(op)
     traverse(__)(f)
     if (f.isDefined) Some(f.state)
     else None
@@ -73,7 +73,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Reducing
     */
   def foldLeft[B](z: B)(op: (B, A) => B): B = {
-    val f = new BasicEnumeratorOps.FoldLeft(z)(op)
+    val f = new CommonEnumeratorOps.FoldLeft(z)(op)
     traverse(__)(f)
     f.state
   }
@@ -86,7 +86,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B = {
-    val f = new BasicEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
+    val f = new CommonEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
     traverse(__)(f)
     if (f.isDefined) f.state
     else throw new java.lang.UnsupportedOperationException
@@ -100,7 +100,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] = {
-    val f = new BasicEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
+    val f = new CommonEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
     traverse(__)(f)
     if (f.isDefined) Some(f.state)
     else None
@@ -113,7 +113,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Querying
     */
   def find(p: A => Boolean): Option[A] = {
-    val f = new BasicEnumeratorOps.Find(p)
+    val f = new CommonEnumeratorOps.Find(p)
     try traverse(__)(f) catch { case e: Break => () }
     f.state
   }
@@ -125,7 +125,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Querying
     */
   def forall(p: A => Boolean): Boolean = {
-    val f = new BasicEnumeratorOps.Forall(p)
+    val f = new CommonEnumeratorOps.Forall(p)
     try traverse(__)(f) catch { case e: Break => () }
     f.state
   }
@@ -137,7 +137,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Querying
     */
   def exists(p: A => Boolean): Boolean = {
-    val f = new BasicEnumeratorOps.Exists(p)
+    val f = new CommonEnumeratorOps.Exists(p)
     try traverse(__)(f) catch { case e: Break => () }
     f.state
   }
@@ -149,7 +149,7 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Querying
     */
   def count(p: A => Boolean): Int = {
-    val f = new BasicEnumeratorOps.Count(p)
+    val f = new CommonEnumeratorOps.Count(p)
     traverse(__)(f)
     f.state
   }
@@ -163,13 +163,13 @@ class BasicEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Querying
     */
   def select[B](q: PartialFunction[A, B]): Option[B] = {
-    val f = new BasicEnumeratorOps.Select(q)
+    val f = new CommonEnumeratorOps.Select(q)
     try traverse(__)(f) catch { case e: Break => () }
     f.state
   }
 }
 
-private object BasicEnumeratorOps {
+private object CommonEnumeratorOps {
   import scala.runtime.AbstractFunction1
   
   final class FoldLeft[-A, +B](z: B)(op: (B, A) => B) extends AbstractFunction1[A, Unit] {

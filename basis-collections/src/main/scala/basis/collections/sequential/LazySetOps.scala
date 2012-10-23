@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-/** Nonstrictly evaluated set operations.
+/** Non-strictly evaluated set operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2

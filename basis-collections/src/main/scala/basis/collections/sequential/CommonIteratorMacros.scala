@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-private[sequential] object BasicIteratorMacros {
+private[sequential] object CommonIteratorMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   

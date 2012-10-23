@@ -8,29 +8,8 @@
 package basis.collections
 package sequential
 
-/** Implicit conversions to extend collections with strictly evaluated operations. */
-object strict {
-  implicit def BasicEnumeratorOps[A](self: Enumerator[A]): BasicEnumeratorOps[A] =
-    new BasicEnumeratorOps[A](self)
-  
-  implicit def BasicCollectionOps[A](self: Collection[A]): BasicCollectionOps[A] =
-    new BasicCollectionOps[A](self)
-  
-  implicit def BasicIteratorOps[A](self: Iterator[A]): BasicIteratorOps[A] =
-    throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
-  
-  implicit def BasicContainerOps[A](self: Container[A]): BasicContainerOps[A] =
-    throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
-  
-  implicit def BasicSeqOps[A](self: Seq[A]): BasicSeqOps[A] =
-    throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
-  
-  implicit def BasicSetOps[A](self: Set[A]): BasicSetOps[A] =
-    throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
-  
-  implicit def BasicMapOps[A, T](self: Map[A, T]): BasicMapOps[A, T] =
-    throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
-  
+/** Implicit conversions that add common and strict operations to collections. */
+class ProvideEagerOps extends ProvideCommonOps {
   implicit def EagerEnumeratorOps[A](self: Enumerator[A]): EagerEnumeratorOps[self.Self, A] =
     new EagerEnumeratorOps[self.Self, A](self)
   
