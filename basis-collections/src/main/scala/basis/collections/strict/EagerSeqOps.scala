@@ -5,18 +5,15 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis.collections
+package strict
 
-import basis.collections._
-
-/** A specialized iterable sequence of Unicode® characters.
+/** Strictly evaluated sequence operations.
   * 
-  * @author Chris Sachs
+  * @groupprio  Mapping     -3
+  * @groupprio  Filtering   -2
+  * @groupprio  Combining   -1
   * 
-  * @define collection  rope
+  * @define collection  sequence
   */
-trait Rope extends Any with Seq[Char] {
-  override type Self <: Rope
-  
-  override def iterator: Reader
-}
+abstract class EagerSeqOps[+Self, +A] private[strict] extends EagerContainerOps[Self, A]

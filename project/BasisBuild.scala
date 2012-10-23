@@ -17,15 +17,15 @@ object BasisBuild extends Build {
     base         = file("."),
     settings     = basicSettings,
     dependencies =
-      Seq(BasisCollection,
-          BasisContainer,
+      Seq(BasisCollections,
+          BasisContainers,
           BasisData,
           BasisMath,
           BasisText,
           BasisUtil),
     aggregate    =
-      Seq(BasisCollection,
-          BasisContainer,
+      Seq(BasisCollections,
+          BasisContainers,
           BasisData,
           BasisMath,
           BasisText,
@@ -38,17 +38,17 @@ object BasisBuild extends Build {
     settings     = commonSettings
   )
   
-  lazy val BasisCollection = Project(
-    id           = "basis-collection",
-    base         = file("basis-collection"),
+  lazy val BasisCollections = Project(
+    id           = "basis-collections",
+    base         = file("basis-collections"),
     settings     = commonSettings
   )
   
-  lazy val BasisContainer = Project(
-    id           = "basis-container",
-    base         = file("basis-container"),
+  lazy val BasisContainers = Project(
+    id           = "basis-containers",
+    base         = file("basis-containers"),
     settings     = commonSettings,
-    dependencies = Seq(BasisCollection, BasisData, BasisUtil)
+    dependencies = Seq(BasisCollections, BasisData, BasisUtil)
   )
   
   lazy val BasisMath = Project(
@@ -61,7 +61,7 @@ object BasisBuild extends Build {
     id           = "basis-text",
     base         = file("basis-text"),
     settings     = commonSettings,
-    dependencies = Seq(BasisCollection, BasisUtil)
+    dependencies = Seq(BasisCollections, BasisUtil)
   )
   
   lazy val BasisUtil = Project(

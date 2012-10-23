@@ -5,18 +5,14 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis
 
-import basis.collections._
-
-/** A specialized iterable sequence of Unicode® characters.
-  * 
-  * @author Chris Sachs
-  * 
-  * @define collection  rope
-  */
-trait Rope extends Any with Seq[Char] {
-  override type Self <: Rope
+package object collections {
+  /** Applies a function to each of an enumerator's elements by invoking the
+    * enumerator's protected `foreach` method. */
+  def traverse[A, U](xs: Enumerator[A])(f: A => U): Unit =
+    Enumerator.traverse[A, U](xs)(f)
   
-  override def iterator: Reader
+  private[basis] final class Break extends java.lang.Throwable
+  private[basis] val Break = new Break
 }

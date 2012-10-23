@@ -7,7 +7,7 @@
 
 package basis.text
 
-import basis.collection._
+import basis.collections._
 
 /** A specialized Unicode® character buffer.
   * 

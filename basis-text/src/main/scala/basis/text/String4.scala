@@ -7,7 +7,7 @@
 
 package basis.text
 
-import basis.collection._
+import basis.collections._
 import basis.util._
 
 /** A 32-bit Unicode string comprised of a UTF-32 code unit sequence.

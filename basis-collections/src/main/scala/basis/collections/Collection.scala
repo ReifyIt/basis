@@ -5,18 +5,17 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis.collections
 
-import basis.collections._
-
-/** A specialized iterable sequence of Unicode® characters.
+/** A traversable collection of elements. Collection declares only a protected
+  * `foreach` method; it has no public methods.
   * 
-  * @author Chris Sachs
+  * @groupprio  Traversing  -3
+  * @groupprio  Reducing    -2
+  * @groupprio  Querying    -1
   * 
-  * @define collection  rope
+  * @define collection  collection
   */
-trait Rope extends Any with Seq[Char] {
-  override type Self <: Rope
-  
-  override def iterator: Reader
+trait Collection[+A] extends Any with Enumerator[A] {
+  override type Self <: Collection[A]
 }

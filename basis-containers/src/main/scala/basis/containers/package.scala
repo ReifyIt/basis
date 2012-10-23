@@ -5,18 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis
 
-import basis.collections._
-
-/** A specialized iterable sequence of Unicode® characters.
-  * 
-  * @author Chris Sachs
-  * 
-  * @define collection  rope
-  */
-trait Rope extends Any with Seq[Char] {
-  override type Self <: Rope
+package object containers {
+  implicit def ArrayOps[A](self: Array[A]): ArrayOps[self.Self, A] =
+    new ArrayOps[self.Self, A](self)
   
-  override def iterator: Reader
+  implicit def ListOps[A](self: List[A]): ListOps[A] = new ListOps[A](self)
 }

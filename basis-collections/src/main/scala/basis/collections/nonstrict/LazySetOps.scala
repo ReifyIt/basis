@@ -5,18 +5,13 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis.collections
+package nonstrict
 
-import basis.collections._
-
-/** A specialized iterable sequence of Unicode® characters.
+/** Nonstrictly evaluated set operations.
   * 
-  * @author Chris Sachs
-  * 
-  * @define collection  rope
+  * @groupprio  Mapping     -3
+  * @groupprio  Filtering   -2
+  * @groupprio  Combining   -1
   */
-trait Rope extends Any with Seq[Char] {
-  override type Self <: Rope
-  
-  override def iterator: Reader
-}
+class LazySetOps[+A](val __ : Set[A]) extends AnyVal

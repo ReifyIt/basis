@@ -5,18 +5,6 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis.collections
 
-import basis.collections._
-
-/** A specialized iterable sequence of Unicode® characters.
-  * 
-  * @author Chris Sachs
-  * 
-  * @define collection  rope
-  */
-trait Rope extends Any with Seq[Char] {
-  override type Self <: Rope
-  
-  override def iterator: Reader
-}
+trait SeqFactory[CC[X] <: Seq[X]] extends ContainerFactory[CC]

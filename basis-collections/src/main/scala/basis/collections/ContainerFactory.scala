@@ -5,18 +5,15 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis.collections
 
-import basis.collections._
-
-/** A specialized iterable sequence of Unicode® characters.
-  * 
-  * @author Chris Sachs
-  * 
-  * @define collection  rope
-  */
-trait Rope extends Any with Seq[Char] {
-  override type Self <: Rope
+trait ContainerFactory[CC[X] <: Container[X]] {
+  def apply[A](xs: A*)(implicit buffer: Buffer[CC[_], A]): buffer.State =
+    macro FactoryMacros.apply[A]
   
-  override def iterator: Reader
+  def fill[A](n: Int)(element: => A)(implicit buffer: Buffer[CC[_], A]): buffer.State =
+    macro FactoryMacros.fill[A]
+  
+  def tabulate[A](n: Int)(f: Int => A)(implicit buffer: Buffer[CC[_], A]): buffer.State =
+    macro FactoryMacros.tabulate[A]
 }
