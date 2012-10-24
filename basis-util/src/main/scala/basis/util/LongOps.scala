@@ -8,7 +8,7 @@
 package basis.util
 
 /** Supplemental operations on `Long` values. */
-trait LongOps extends Any {
+abstract class LongOps private[util] {
   def abs: Long = macro LongMacros.abs
   
   def min(that: Long): Long = macro LongMacros.min

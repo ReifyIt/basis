@@ -13,7 +13,5 @@ package sequential
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
-  * 
-  * @define collection  map
   */
-abstract class EagerMapOps[+Self, A, +T] private[sequential] extends EagerContainerOps[Self, (A, T)]
+abstract class EagerMapOps[+Self, A, +T] private[sequential]

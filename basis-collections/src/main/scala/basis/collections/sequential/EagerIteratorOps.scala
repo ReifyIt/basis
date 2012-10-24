@@ -154,7 +154,7 @@ abstract class EagerIteratorOps[+Self, +A] private[sequential] {
     macro EagerIteratorOps.++[A, B]
 }
 
-private object EagerIteratorOps {
+private[sequential] object EagerIteratorOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
@@ -169,80 +169,99 @@ private object EagerIteratorOps {
       (q: c.Expr[PartialFunction[A, B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.collect[A, B](c)(deconstruct(c), q.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.collect[A, B](c)(deconstruct(c), q.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def map[A : c.WeakTypeTag, B]
       (c: Context)
       (f: c.Expr[A => B])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.map[A, B](c)(deconstruct(c), f.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.map[A, B](c)(deconstruct(c), f.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def flatMap[A : c.WeakTypeTag, B]
       (c: Context)
       (f: c.Expr[A => Enumerator[B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.flatMap[A, B](c)(deconstruct(c), f.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.flatMap[A, B](c)(deconstruct(c), f.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def filter[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.filter[A](c)(deconstruct(c), p.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.filter[A](c)(deconstruct(c), p.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def dropWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.dropWhile[A](c)(deconstruct(c), p.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.dropWhile[A](c)(deconstruct(c), p.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def takeWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.takeWhile[A](c)(deconstruct(c), p.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.takeWhile[A](c)(deconstruct(c), p.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def span[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (bufferA: c.Expr[Buffer[_, A]], bufferB: c.Expr[Buffer[_, A]])
     : c.Expr[(bufferA.value.State, bufferB.value.State)] =
-    c.Expr(EagerIteratorMacros.span[A](c)(deconstruct(c), p.tree, bufferA.tree, bufferB.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.span[A](c)(deconstruct(c), p.tree, bufferA.tree, bufferB.tree)
+    } (Tuple2Tag(c)(BufferStateTag(c)(bufferA), BufferStateTag(c)(bufferB)))
   
   def drop[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.drop[A](c)(deconstruct(c), lower.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.drop[A](c)(deconstruct(c), lower.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def take[A : c.WeakTypeTag]
       (c: Context)
       (upper: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.take[A](c)(deconstruct(c), upper.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.take[A](c)(deconstruct(c), upper.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def slice[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int], upper: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.slice[A](c)(deconstruct(c), lower.tree, upper.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.slice[A](c)(deconstruct(c), lower.tree, upper.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def zip[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (that: c.Expr[Iterator[B]])
       (buffer: c.Expr[Buffer[_, (A, B)]])
     : c.Expr[buffer.value.State] = {
-    import c.universe._
-    val xs = deconstruct(c)
-    val ys = Select(that.tree, "iterator")
-    c.Expr(EagerIteratorMacros.zip[A, B](c)(xs, ys, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.zip[A, B](c)(deconstruct(c), that.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   }
   
   def ++ [A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
@@ -250,5 +269,28 @@ private object EagerIteratorOps {
       (that: c.Expr[Iterator[B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.++[A, B](c)(deconstruct(c), that.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.++[A, B](c)(deconstruct(c), that.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
+  
+  private def BufferStateTag
+      (c: Context)
+      (buffer: c.Expr[Buffer[_, _]])
+    : c.WeakTypeTag[buffer.value.State] = {
+    import c.universe._
+    c.WeakTypeTag(
+      typeRef(
+        singleType(NoPrefix, buffer.staticType.typeSymbol),
+        buffer.staticType.member(newTypeName("state")), Nil))
+  }
+  
+  private def Tuple2Tag[A : c.WeakTypeTag, B : c.WeakTypeTag]
+      (c: Context)
+    : c.WeakTypeTag[(A, B)] = {
+    import c.universe._
+    c.WeakTypeTag(
+      appliedType(
+        c.mirror.staticClass("scala.Tuple2").toType,
+        weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+  }
 }

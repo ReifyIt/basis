@@ -8,7 +8,7 @@
 package basis.util
 
 /** Supplemental operations on `Double` values. */
-trait DoubleOps extends Any {
+abstract class DoubleOps private[util] {
   def abs: Double = macro DoubleMacros.abs
   
   def min(that: Double): Double = macro DoubleMacros.min

@@ -8,7 +8,7 @@
 package basis.util
 
 /** Supplemental operations on `Float` values. */
-trait FloatOps extends Any {
+abstract class FloatOps private[util] {
   def abs: Float = macro FloatMacros.abs
   
   def min(that: Float): Float = macro FloatMacros.min

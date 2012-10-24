@@ -14,7 +14,7 @@ package sequential
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-class CommonEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
+class CommonEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
   /** Sequentially applies a function to each enumerated element.
     * 
     * @param  f   the function to apply to each element.
@@ -167,9 +167,15 @@ class CommonEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal {
     try traverse(__)(f) catch { case e: Break => () }
     f.state
   }
+  
+  @inline def eagerly: EagerEnumeratorOps[Self, A] =
+    new EagerEnumeratorOps[Self, A](__)
+  
+  @inline def lazily: LazyEnumeratorOps[A] =
+    new LazyEnumeratorOps[A](__)
 }
 
-private object CommonEnumeratorOps {
+private[sequential] object CommonEnumeratorOps {
   import scala.runtime.AbstractFunction1
   
   final class FoldLeft[-A, +B](z: B)(op: (B, A) => B) extends AbstractFunction1[A, Unit] {

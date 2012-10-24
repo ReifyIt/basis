@@ -152,7 +152,7 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     new EagerEnumeratorOps[Self, B](__).++[B](that)(buffer)
 }
 
-private object EagerCollectionOps {
+private[sequential] object EagerCollectionOps {
   import scala.runtime.AbstractFunction1
   
   final class DropWhileInto[-A](p: A => Boolean, buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {

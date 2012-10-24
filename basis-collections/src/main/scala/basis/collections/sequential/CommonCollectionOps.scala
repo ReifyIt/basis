@@ -14,7 +14,7 @@ package sequential
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
+class CommonCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
   /** Sequentially applies a function to each element of this collection.
     * 
     * @param  f   the function to apply to each element.
@@ -31,7 +31,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B =
-    new CommonEnumeratorOps[B](__).fold[B](z)(op) // FIXME: waiting on SI-6482
+    new CommonEnumeratorOps[Self, B](__).fold[B](z)(op) // FIXME: waiting on SI-6482
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this non-empty collection.
@@ -41,7 +41,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduce[B >: A](op: (B, B) => B): B =
-    new CommonEnumeratorOps[B](__).reduce[B](op) // FIXME: waiting on SI-6482
+    new CommonEnumeratorOps[Self, B](__).reduce[B](op) // FIXME: waiting on SI-6482
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this collection.
@@ -51,7 +51,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] =
-    new CommonEnumeratorOps[B](__).reduceOption[B](op) // FIXME: waiting on SI-6482
+    new CommonEnumeratorOps[Self, B](__).reduceOption[B](op) // FIXME: waiting on SI-6482
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this collection.
@@ -62,7 +62,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def foldLeft[B](z: B)(op: (B, A) => B): B =
-    new CommonEnumeratorOps[A](__).foldLeft[B](z)(op)
+    new CommonEnumeratorOps[Self, A](__).foldLeft[B](z)(op)
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this non-empty collection.
@@ -72,7 +72,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B =
-    new CommonEnumeratorOps[B](__).reduceLeft[B](op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
+    new CommonEnumeratorOps[Self, B](__).reduceLeft[B](op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this collection.
@@ -82,7 +82,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
-    new CommonEnumeratorOps[B](__).reduceLeftOption[B](op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
+    new CommonEnumeratorOps[Self, B](__).reduceLeftOption[B](op.asInstanceOf[(B, B) => B]) // FIXME: waiting on SI-6482
   
   /** Returns the first element of this collection that satisfies a predicate.
     * 
@@ -91,7 +91,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def find(p: A => Boolean): Option[A] =
-    new CommonEnumeratorOps[A](__).find(p)
+    new CommonEnumeratorOps[Self, A](__).find(p)
   
   /** Returns `true` if a predicate holds for all elements of this collection.
     * 
@@ -100,7 +100,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def forall(p: A => Boolean): Boolean =
-    new CommonEnumeratorOps[A](__).forall(p)
+    new CommonEnumeratorOps[Self, A](__).forall(p)
   
   /** Returns `true` if a predicate holds for some element of this collection.
     * 
@@ -109,7 +109,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def exists(p: A => Boolean): Boolean =
-    new CommonEnumeratorOps[A](__).exists(p)
+    new CommonEnumeratorOps[Self, A](__).exists(p)
   
   /** Returns the number of elements in this collection that satisfy a predicate.
     * 
@@ -118,7 +118,7 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def count(p: A => Boolean): Int =
-    new CommonEnumeratorOps[A](__).count(p)
+    new CommonEnumeratorOps[Self, A](__).count(p)
   
   /** Returns the application of a partial function to the first element
     * of this collection for which the function is defined.
@@ -129,5 +129,11 @@ class CommonCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
     * @group  Querying
     */
   def select[B](q: PartialFunction[A, B]): Option[B] =
-    new CommonEnumeratorOps[A](__).select[B](q)
+    new CommonEnumeratorOps[Self, A](__).select[B](q)
+  
+  @inline def eagerly: EagerCollectionOps[Self, A] =
+    new EagerCollectionOps[Self, A](__)
+  
+  @inline def lazily: LazyCollectionOps[A] =
+    new LazyCollectionOps[A](__)
 }

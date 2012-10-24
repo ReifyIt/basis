@@ -81,7 +81,7 @@ class EagerEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
   }
 }
 
-private object EagerEnumeratorOps {
+private[sequential] object EagerEnumeratorOps {
   import scala.runtime.AbstractFunction1
   
   final class CollectInto[-A, B](q: PartialFunction[A, B], buffer: Buffer[_, B]) extends AbstractFunction1[A, Unit] {

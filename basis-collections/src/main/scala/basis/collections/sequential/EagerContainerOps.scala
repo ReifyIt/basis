@@ -13,12 +13,10 @@ package sequential
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
-  * 
-  * @define collection  container
   */
 abstract class EagerContainerOps[+Self, +A] private[sequential] {
   /** Returns the applications of a partial function to each element in this
-    * $collection for which the function is defined.
+    * container for which the function is defined.
     * 
     * @param  q       the partial function to filter elements against and to
     *                 apply to applicable elements.
@@ -29,7 +27,7 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   def collect[B](q: PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State =
     macro EagerContainerOps.collect[A, B]
   
-  /** Returns the applications of a function to each element in this $collection.
+  /** Returns the applications of a function to each element in this container.
     * 
     * @param  f       the function to apply to each element.
     * @param  buffer  the implicit accumulator for mapped elements.
@@ -40,7 +38,7 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
     macro EagerContainerOps.map[A, B]
   
   /** Returns the concatenation of all elements returned by a function applied
-    * to each element in this $collection.
+    * to each element in this container.
     * 
     * @param  f       the enumerator-yielding function to apply to each element.
     * @param  buffer  the implicit accumulator for flattened elements.
@@ -50,7 +48,7 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   def flatMap[B](f: A => Enumerator[B])(implicit buffer: Buffer[Self, B]): buffer.State =
     macro EagerContainerOps.flatMap[A, B]
   
-  /** Returns all elements in this $collection that satisfy a predicate.
+  /** Returns all elements in this container that satisfy a predicate.
     * 
     * @param  p       the predicate to test elements against.
     * @param  buffer  the implicit accumulator for filtered elements.
@@ -60,7 +58,7 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   def filter(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro EagerContainerOps.filter[A]
   
-  /** Returns all elements following the longest prefix of this $collection
+  /** Returns all elements following the longest prefix of this container
     * for which each element satisfies a predicate.
     * 
     * @param  p       the predicate to test elements against.
@@ -72,7 +70,7 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   def dropWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro EagerContainerOps.dropWhile[A]
   
-  /** Returns the longest prefix of this $collection for which each element
+  /** Returns the longest prefix of this container for which each element
     * satisfies a predicate.
     * 
     * @param  p       the predicate to test elements against.
@@ -101,7 +99,7 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   //  : (builderA.State, builderB.State) =
   //  macro EagerContainerOps.span[A]
   
-  /** Returns all elements in this $collection following a prefix up to some length.
+  /** Returns all elements in this container following a prefix up to some length.
     * 
     * @param  lower   the length of the prefix to drop;
     *                 also the inclusive lower bound for indexes of elements to keep.
@@ -112,7 +110,7 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   def drop(lower: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro EagerContainerOps.drop[A]
   
-  /** Returns a prefix of this $collection up to some length.
+  /** Returns a prefix of this container up to some length.
     * 
     * @param  upper   the length of the prefix to take;
     *                 also the exclusive upper bound for indexes of elements to keep.
@@ -123,7 +121,7 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   def take(upper: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro EagerContainerOps.take[A]
   
-  /** Returns an interval of elements in this $collection.
+  /** Returns an interval of elements in this container.
     * 
     * @param  lower   the inclusive lower bound for indexes of elements to keep.
     * @param  upper   the exclusive upper bound for indexes of elements to keep.
@@ -135,9 +133,9 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   def slice(lower: Int, upper: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
     macro EagerContainerOps.slice[A]
   
-  /** Returns pairs of elements from this and another $collection.
+  /** Returns pairs of elements from this and another container.
     * 
-    * @param  that    the $collection whose elements to pair with these elements.
+    * @param  that    the container whose elements to pair with these elements.
     * @param  buffer  the accumulator for paired elements.
     * @return the accumulated pairs of corresponding elements.
     * @group  Combining
@@ -145,9 +143,9 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
   def zip[B](that: Container[B])(implicit buffer: Buffer[Self, (A, B)]): buffer.State =
     macro EagerContainerOps.zip[A, B]
   
-  /** Returns the concatenation of this and another $collection.
+  /** Returns the concatenation of this and another container.
     * 
-    * @param  that    the $collection to append to this $collection.
+    * @param  that    the container to append to this container.
     * @param  buffer  the implicit accumulator for concatenated elements.
     * @return the accumulated elements of both containers.
     * @group  Combining
@@ -156,14 +154,19 @@ abstract class EagerContainerOps[+Self, +A] private[sequential] {
     macro EagerContainerOps.++[A, B]
 }
 
-private object EagerContainerOps {
+private[sequential] object EagerContainerOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
   private def deconstruct(c: Context): c.Tree = {
     import c.universe._
     val Apply(_, container :: Nil) = c.prefix.tree
-    Select(container, "iterator")
+    container
+  }
+  
+  private def iterator(c: Context): c.Tree = {
+    import c.universe._
+    Select(deconstruct(c), "iterator")
   }
   
   def collect[A : c.WeakTypeTag, B]
@@ -171,70 +174,90 @@ private object EagerContainerOps {
       (q: c.Expr[PartialFunction[A, B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.collect[A, B](c)(deconstruct(c), q.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.collect[A, B](c)(iterator(c), q.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def map[A : c.WeakTypeTag, B]
       (c: Context)
       (f: c.Expr[A => B])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.map[A, B](c)(deconstruct(c), f.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.map[A, B](c)(iterator(c), f.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def flatMap[A : c.WeakTypeTag, B]
       (c: Context)
       (f: c.Expr[A => Enumerator[B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.flatMap[A, B](c)(deconstruct(c), f.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.flatMap[A, B](c)(iterator(c), f.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def filter[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.filter[A](c)(deconstruct(c), p.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.filter[A](c)(iterator(c), p.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def dropWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.dropWhile[A](c)(deconstruct(c), p.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.dropWhile[A](c)(iterator(c), p.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def takeWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.takeWhile[A](c)(deconstruct(c), p.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.takeWhile[A](c)(iterator(c), p.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def span[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (bufferA: c.Expr[Buffer[_, A]], bufferB: c.Expr[Buffer[_, A]])
     : c.Expr[(bufferA.value.State, bufferB.value.State)] =
-    c.Expr(EagerIteratorMacros.span[A](c)(deconstruct(c), p.tree, bufferA.tree, bufferB.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.span[A](c)(iterator(c), p.tree, bufferA.tree, bufferB.tree)
+    } (Tuple2Tag(c)(BufferStateTag(c)(bufferA), BufferStateTag(c)(bufferB)))
   
   def drop[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.drop[A](c)(deconstruct(c), lower.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.drop[A](c)(iterator(c), lower.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def take[A : c.WeakTypeTag]
       (c: Context)
       (upper: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.take[A](c)(deconstruct(c), upper.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.take[A](c)(iterator(c), upper.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def slice[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int], upper: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.slice[A](c)(deconstruct(c), lower.tree, upper.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.slice[A](c)(iterator(c), lower.tree, upper.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
   
   def zip[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
@@ -242,9 +265,9 @@ private object EagerContainerOps {
       (buffer: c.Expr[Buffer[_, (A, B)]])
     : c.Expr[buffer.value.State] = {
     import c.universe._
-    val xs = deconstruct(c)
-    val ys = Select(that.tree, "iterator")
-    c.Expr(EagerIteratorMacros.zip[A, B](c)(xs, ys, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.zip[A, B](c)(iterator(c), Select(that.tree, "iterator"), buffer.tree)
+    } (BufferStateTag(c)(buffer))
   }
   
   def ++ [A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
@@ -252,5 +275,28 @@ private object EagerContainerOps {
       (that: c.Expr[Container[B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr(EagerIteratorMacros.++[A, B](c)(deconstruct(c), that.tree, buffer.tree))(c.TypeTag.Nothing)
+    c.Expr {
+      IteratorMacros.++[A, B](c)(iterator(c), that.tree, buffer.tree)
+    } (BufferStateTag(c)(buffer))
+  
+  private def BufferStateTag
+      (c: Context)
+      (buffer: c.Expr[Buffer[_, _]])
+    : c.WeakTypeTag[buffer.value.State] = {
+    import c.universe._
+    c.WeakTypeTag(
+      typeRef(
+        singleType(NoPrefix, buffer.staticType.typeSymbol),
+        buffer.staticType.member(newTypeName("state")), Nil))
+  }
+  
+  private def Tuple2Tag[A : c.WeakTypeTag, B : c.WeakTypeTag]
+      (c: Context)
+    : c.WeakTypeTag[(A, B)] = {
+    import c.universe._
+    c.WeakTypeTag(
+      appliedType(
+        c.mirror.staticClass("scala.Tuple2").toType,
+        weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+  }
 }

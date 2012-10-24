@@ -8,7 +8,7 @@
 package basis.util
 
 /** Supplemental operations on `Int` values. */
-trait IntOps extends Any {
+abstract class IntOps private[util] {
   def abs: Int = macro IntMacros.abs
   
   def min(that: Int): Int = macro IntMacros.min
