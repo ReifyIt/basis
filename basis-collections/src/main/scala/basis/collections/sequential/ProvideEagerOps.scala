@@ -25,6 +25,9 @@ class ProvideEagerOps extends ProvideCommonOps {
   implicit def EagerSeqOps[A](self: Seq[A]): EagerSeqOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
+  implicit def EagerLinearSeqOps[A](self: LinearSeq[A]): EagerLinearSeqOps[self.Self, A] =
+    throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  
   implicit def EagerSetOps[A](self: Set[A]): EagerSetOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   

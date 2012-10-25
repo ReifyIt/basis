@@ -25,6 +25,9 @@ class ProvideLazyOps extends ProvideCommonOps {
   implicit def LazySeqOps[A](self: Seq[A]): LazySeqOps[A] =
     new LazySeqOps[A](self)
   
+  implicit def LazyLinearSeqOps[A](self: LinearSeq[A]): LazyLinearSeqOps[A] =
+    new LazyLinearSeqOps[A](self)
+  
   implicit def LazySetOps[A](self: Set[A]): LazySetOps[A] =
     new LazySetOps[A](self)
   

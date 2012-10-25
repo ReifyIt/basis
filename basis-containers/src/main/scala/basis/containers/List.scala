@@ -18,14 +18,10 @@ import scala.annotation.tailrec
   * 
   * @define collection  list
   */
-sealed abstract class List[+A] extends Seq[A] {
+sealed abstract class List[+A] extends LinearSeq[A] {
   override type Self <: List[A]
   
-  /** Returns the first element of this $collection. */
-  def head: A
-  
-  /** Returns all but the first element of this $collection. */
-  def tail: List[A]
+  override def tail: List[A]
   
   @tailrec final def drop(lower: Int): List[A] =
     if (lower <= 0 || isEmpty) this else tail.drop(lower - 1)

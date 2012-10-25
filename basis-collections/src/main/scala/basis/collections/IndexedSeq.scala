@@ -5,9 +5,18 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collections
 
-package object containers {
-  implicit def ArrayOps[A](self: Array[A]): ArrayOps[self.Self, A] =
-    new ArrayOps[self.Self, A](self)
+/** An indexed sequence of elements.
+  * 
+  * @groupprio  Examining   -3
+  * @groupprio  Iterating   -2
+  * @groupprio  Traversing  -1
+  */
+trait IndexedSeq[+A] extends Any with Seq[A] {
+  override type Self <: IndexedSeq[A]
+  
+  /** Returns the element at `index`.
+    * @group Examining */
+  def apply(index: Int): A
 }

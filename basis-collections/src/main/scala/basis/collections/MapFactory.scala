@@ -21,6 +21,17 @@ private object MapFactory {
     var b = Apply(Select(buffer.tree, "expect"), Literal(Constant(xs.length)) :: Nil)
     val iter = xs.iterator
     while (iter.hasNext) b = Apply(Select(b, "$plus$eq"), iter.next().tree :: Nil)
-    c.Expr(Select(b, "state"))(TypeTag.Nothing)
+    c.Expr(Select(b, "state"))(BufferStateTag(c)(buffer))
+  }
+  
+  private def BufferStateTag
+      (c: Context)
+      (buffer: c.Expr[Buffer[_, _]])
+    : c.WeakTypeTag[buffer.value.State] = {
+    import c.universe._
+    c.WeakTypeTag(
+      typeRef(
+        singleType(NoPrefix, buffer.staticType.typeSymbol),
+        buffer.staticType.member(newTypeName("state")), Nil))
   }
 }

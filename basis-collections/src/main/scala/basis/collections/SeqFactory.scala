@@ -30,7 +30,7 @@ private object SeqFactory {
     var b = Apply(Select(buffer.tree, "expect"), Literal(Constant(xs.length)) :: Nil)
     val iter = xs.iterator
     while (iter.hasNext) b = Apply(Select(b, "$plus$eq"), iter.next().tree :: Nil)
-    c.Expr(Select(b, "state"))(TypeTag.Nothing)
+    c.Expr(Select(b, "state"))(BufferStateTag(c)(buffer))
   }
   
   def fill[A]
@@ -43,7 +43,7 @@ private object SeqFactory {
     val i    = c.fresh(newTermName("i$"))
     val b    = BufferName(c)(buffer.tree)
     val loop = c.fresh(newTermName("loop$"))
-    c.Expr(
+    c.Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), count.tree) ::
         BufferDefExpect(c)(buffer.tree, b, Ident(i)) ::
@@ -55,7 +55,8 @@ private object SeqFactory {
               Assign(Ident(i), Apply(Select(Ident(i), "$minus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))(TypeTag.Nothing)
+        Select(Ident(b), "state"))
+    } (BufferStateTag(c)(buffer))
   }
   
   def tabulate[A]
@@ -69,7 +70,7 @@ private object SeqFactory {
     val n    = c.fresh(newTermName("n$"))
     val b    = BufferName(c)(buffer.tree)
     val loop = c.fresh(newTermName("loop$"))
-    c.Expr(
+    c.Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), count.tree) ::
@@ -82,7 +83,8 @@ private object SeqFactory {
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))(TypeTag.Nothing)
+        Select(Ident(b), "state"))
+    } (BufferStateTag(c)(buffer))
   }
   
   def iterate[A]
@@ -97,7 +99,7 @@ private object SeqFactory {
     val a    = c.fresh(newTermName("a$"))
     val i    = c.fresh(newTermName("i$"))
     val loop = c.fresh(newTermName("loop$"))
-    c.Expr(
+    c.Expr {
       Block(
         ValDef(NoMods, n, TypeTree(), count.tree) ::
         BufferDefExpect(c)(buffer.tree, b, Ident(n)) ::
@@ -117,7 +119,8 @@ private object SeqFactory {
                   Apply(Ident(loop), Nil)),
                 EmptyTree))),
           EmptyTree) :: Nil,
-        Select(Ident(b), "state")))(TypeTag.Nothing)
+        Select(Ident(b), "state"))
+    } (BufferStateTag(c)(buffer))
   }
   
   private def BufferName(c: Context)(buffer: c.Tree): c.TermName = {
@@ -134,5 +137,16 @@ private object SeqFactory {
       case Ident(_) => Apply(Select(buffer, "expect"), count :: Nil)
       case _ => ValDef(NoMods, name, TypeTree(), Apply(Select(buffer, "expect"), count :: Nil))
     }
+  }
+  
+  private def BufferStateTag
+      (c: Context)
+      (buffer: c.Expr[Buffer[_, _]])
+    : c.WeakTypeTag[buffer.value.State] = {
+    import c.universe._
+    c.WeakTypeTag(
+      typeRef(
+        singleType(NoPrefix, buffer.staticType.typeSymbol),
+        buffer.staticType.member(newTypeName("state")), Nil))
   }
 }
