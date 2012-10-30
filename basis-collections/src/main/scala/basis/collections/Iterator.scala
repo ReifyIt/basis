@@ -60,22 +60,19 @@ trait Iterator[+A] extends Any with Enumerator[A] {
     while (!isEmpty) { f(head); step() }
 }
 
-/** A generic iterator factory. */
-object Iterator {
-  /** An empty iterator. */
-  object Empty extends Iterator[Nothing] {
-    override def isDone: Boolean = true
-    
-    override def isEmpty: Boolean = true
-    
-    override def head: Nothing =
-      throw new scala.NoSuchElementException("Head of empty iterator.")
-    
-    override def step(): Unit =
-      throw new java.lang.UnsupportedOperationException("Empty iterator step.")
-    
-    override def dup: Empty.type = this
-    
-    protected override def foreach[U](f: Nothing => U): Unit = ()
-  }
+/** An empty iterator. */
+object Done extends Iterator[Nothing] {
+  override def isDone: Boolean = true
+  
+  override def isEmpty: Boolean = true
+  
+  override def head: Nothing =
+    throw new scala.NoSuchElementException("Head of empty iterator.")
+  
+  override def step(): Unit =
+    throw new java.lang.UnsupportedOperationException("Empty iterator step.")
+  
+  override def dup: Done.type = this
+  
+  protected override def foreach[U](f: Nothing => U): Unit = ()
 }

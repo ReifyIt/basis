@@ -14,9 +14,9 @@ package sequential
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class LazyEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal
+class NonStrictEnumeratorOps[+A](val __ : Enumerator[A]) extends AnyVal
 
-private object LazyEnumeratorOps {
+private object NonStrictEnumeratorOps {
   import scala.runtime.AbstractFunction1
   
   final class FoldLeft[-A, +B](z: B)(op: (B, A) => B) extends AbstractFunction1[A, Unit] {

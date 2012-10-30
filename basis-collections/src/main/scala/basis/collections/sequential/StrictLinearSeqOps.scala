@@ -8,15 +8,15 @@
 package basis.collections
 package sequential
 
-/** Strictly evaluated set operations.
+/** Strictly evaluated linear sequence operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-abstract class EagerSetOps[+Self, +A] private[sequential] {
+abstract class StrictLinearSeqOps[+Self, +A] private[sequential] {
   /** Returns the applications of a partial function to each element in this
-    * set for which the function is defined.
+    * sequence for which the function is defined.
     * 
     * @param  q       the partial function to filter elements against and to
     *                 apply to applicable elements.
@@ -25,9 +25,9 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State =
-    macro EagerContainerOps.collect[A, B]
+    macro StrictLinearSeqOps.collect[A, B]
   
-  /** Returns the applications of a function to each element in this set.
+  /** Returns the applications of a function to each element in this sequence.
     * 
     * @param  f       the function to apply to each element.
     * @param  buffer  the implicit accumulator for mapped elements.
@@ -35,10 +35,10 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Mapping
     */
   def map[B](f: A => B)(implicit buffer: Buffer[Self, B]): buffer.State =
-    macro EagerContainerOps.map[A, B]
+    macro StrictLinearSeqOps.map[A, B]
   
   /** Returns the concatenation of all elements returned by a function applied
-    * to each element in this set.
+    * to each element in this sequence.
     * 
     * @param  f       the enumerator-yielding function to apply to each element.
     * @param  buffer  the implicit accumulator for flattened elements.
@@ -46,9 +46,9 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Mapping
     */
   def flatMap[B](f: A => Enumerator[B])(implicit buffer: Buffer[Self, B]): buffer.State =
-    macro EagerContainerOps.flatMap[A, B]
+    macro StrictLinearSeqOps.flatMap[A, B]
   
-  /** Returns all elements in this set that satisfy a predicate.
+  /** Returns all elements in this sequence that satisfy a predicate.
     * 
     * @param  p       the predicate to test elements against.
     * @param  buffer  the implicit accumulator for filtered elements.
@@ -56,9 +56,9 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Filtering
     */
   def filter(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
-    macro EagerContainerOps.filter[A]
+    macro StrictLinearSeqOps.filter[A]
   
-  /** Returns all elements following the longest prefix of this set
+  /** Returns all elements following the longest prefix of this sequence
     * for which each element satisfies a predicate.
     * 
     * @param  p       the predicate to test elements against.
@@ -68,9 +68,9 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Filtering
     */
   def dropWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
-    macro EagerContainerOps.dropWhile[A]
+    macro StrictLinearSeqOps.dropWhile[A]
   
-  /** Returns the longest prefix of this set for which each element
+  /** Returns the longest prefix of this sequence for which each element
     * satisfies a predicate.
     * 
     * @param  p       the predicate to test elements against.
@@ -80,7 +80,7 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Filtering
     */
   def takeWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
-    macro EagerContainerOps.takeWhile[A]
+    macro StrictLinearSeqOps.takeWhile[A]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
     * which each element satisfies a predicate, and the suffix beginning with
@@ -97,9 +97,9 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
   //    implicit builderA: Buffer[Self, A],
   //             builderB: Buffer[Self, A])
   //  : (builderA.State, builderB.State) =
-  //  macro EagerContainerOps.span[A]
+  //  macro StrictLinearSeqOps.span[A]
   
-  /** Returns all elements in this set following a prefix up to some length.
+  /** Returns all elements in this sequence following a prefix up to some length.
     * 
     * @param  lower   the length of the prefix to drop;
     *                 also the inclusive lower bound for indexes of elements to keep.
@@ -108,9 +108,9 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Filtering
     */
   def drop(lower: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
-    macro EagerContainerOps.drop[A]
+    macro StrictLinearSeqOps.drop[A]
   
-  /** Returns a prefix of this set up to some length.
+  /** Returns a prefix of this sequence up to some length.
     * 
     * @param  upper   the length of the prefix to take;
     *                 also the exclusive upper bound for indexes of elements to keep.
@@ -119,9 +119,9 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Filtering
     */
   def take(upper: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
-    macro EagerContainerOps.take[A]
+    macro StrictLinearSeqOps.take[A]
   
-  /** Returns an interval of elements in this set.
+  /** Returns an interval of elements in this sequence.
     * 
     * @param  lower   the inclusive lower bound for indexes of elements to keep.
     * @param  upper   the exclusive upper bound for indexes of elements to keep.
@@ -131,25 +131,128 @@ abstract class EagerSetOps[+Self, +A] private[sequential] {
     * @group  Filtering
     */
   def slice(lower: Int, upper: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
-    macro EagerContainerOps.slice[A]
+    macro StrictLinearSeqOps.slice[A]
   
-  /** Returns pairs of elements from this and another set.
+  /** Returns pairs of elements from this and another sequence.
     * 
     * @param  that    the container whose elements to pair with these elements.
     * @param  buffer  the accumulator for paired elements.
     * @return the accumulated pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B](that: Container[B])(implicit buffer: Buffer[Self, (A, B)]): buffer.State =
-    macro EagerContainerOps.zip[A, B]
+  def zip[B](that: LinearSeq[B])(implicit buffer: Buffer[Self, (A, B)]): buffer.State =
+    macro StrictLinearSeqOps.zip[A, B]
   
-  /** Returns the concatenation of this and another set.
+  /** Returns the concatenation of this and another sequence.
     * 
-    * @param  that    the container to append to this set.
+    * @param  that    the container to append to this sequence.
     * @param  buffer  the implicit accumulator for concatenated elements.
     * @return the accumulated elements of both containers.
     * @group  Combining
     */
-  def ++ [B >: A](that: Container[B])(implicit buffer: Buffer[Self, B]): buffer.State =
-    macro EagerContainerOps.++[A, B]
+  def ++ [B >: A](that: LinearSeq[B])(implicit buffer: Buffer[Self, B]): buffer.State =
+    macro StrictLinearSeqOps.++[A, B]
+}
+
+private[sequential] object StrictLinearSeqOps {
+  import scala.collection.immutable.{::, Nil}
+  import scala.reflect.macros.Context
+  
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[LinearSeq[A]] = {
+    import c.universe._
+    val Apply(_, seq :: Nil) = c.prefix.tree
+    c.Expr(seq)(LinearSeqTag[A](c))
+  }
+  
+  def collect[A : c.WeakTypeTag, B]
+      (c: Context)
+      (q: c.Expr[PartialFunction[A, B]])
+      (buffer: c.Expr[Buffer[_, B]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).collect[A, B](unApply(c))(q)(buffer)
+  
+  def map[A : c.WeakTypeTag, B]
+      (c: Context)
+      (f: c.Expr[A => B])
+      (buffer: c.Expr[Buffer[_, B]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).map[A, B](unApply(c))(f)(buffer)
+  
+  def flatMap[A : c.WeakTypeTag, B]
+      (c: Context)
+      (f: c.Expr[A => Enumerator[B]])
+      (buffer: c.Expr[Buffer[_, B]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).flatMap[A, B](unApply(c))(f)(buffer)
+  
+  def filter[A : c.WeakTypeTag]
+      (c: Context)
+      (p: c.Expr[A => Boolean])
+      (buffer: c.Expr[Buffer[_, A]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).filter[A](unApply(c))(p)(buffer)
+  
+  def dropWhile[A : c.WeakTypeTag]
+      (c: Context)
+      (p: c.Expr[A => Boolean])
+      (buffer: c.Expr[Buffer[_, A]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).dropWhile[A](unApply(c))(p)(buffer)
+  
+  def takeWhile[A : c.WeakTypeTag]
+      (c: Context)
+      (p: c.Expr[A => Boolean])
+      (buffer: c.Expr[Buffer[_, A]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).takeWhile[A](unApply(c))(p)(buffer)
+  
+  def span[A : c.WeakTypeTag]
+      (c: Context)
+      (p: c.Expr[A => Boolean])
+      (bufferA: c.Expr[Buffer[_, A]], bufferB: c.Expr[Buffer[_, A]])
+    : c.Expr[(bufferA.value.State, bufferB.value.State)] =
+    new LinearSeqMacros[c.type](c).span[A](unApply(c))(p)(bufferA, bufferB)
+  
+  def drop[A : c.WeakTypeTag]
+      (c: Context)
+      (lower: c.Expr[Int])
+      (buffer: c.Expr[Buffer[_, A]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).drop[A](unApply(c))(lower)(buffer)
+  
+  def take[A : c.WeakTypeTag]
+      (c: Context)
+      (upper: c.Expr[Int])
+      (buffer: c.Expr[Buffer[_, A]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).take[A](unApply(c))(upper)(buffer)
+  
+  def slice[A : c.WeakTypeTag]
+      (c: Context)
+      (lower: c.Expr[Int], upper: c.Expr[Int])
+      (buffer: c.Expr[Buffer[_, A]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).slice[A](unApply(c))(lower, upper)(buffer)
+  
+  def zip[A : c.WeakTypeTag, B : c.WeakTypeTag]
+      (c: Context)
+      (that: c.Expr[LinearSeq[B]])
+      (buffer: c.Expr[Buffer[_, (A, B)]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).zip[A, B](unApply(c), that)(buffer)
+  
+  def ++ [A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
+      (c: Context)
+      (that: c.Expr[LinearSeq[B]])
+      (buffer: c.Expr[Buffer[_, B]])
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).++[B](unApply[A](c), that)(buffer)
+  
+  private def LinearSeqTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[LinearSeq[A]] = {
+    import c.universe._
+    c.WeakTypeTag(
+      appliedType(
+        c.mirror.staticClass("basis.collections.LinearSeq").toType,
+        weakTypeOf[A] :: Nil))
+  }
 }

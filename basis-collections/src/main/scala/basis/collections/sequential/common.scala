@@ -8,32 +8,35 @@
 package basis.collections
 package sequential
 
-/** Implicit conversions that add common and strict operations to collections. */
-class ProvideEagerOps extends ProvideCommonOps {
-  implicit def EagerEnumeratorOps[A](self: Enumerator[A]): EagerEnumeratorOps[self.Self, A] =
-    new EagerEnumeratorOps[self.Self, A](self)
+/** Implicit conversions that add common operations to collections. */
+class common {
+  implicit def CommonEnumeratorOps[A](self: Enumerator[A]): CommonEnumeratorOps[self.Self, A] =
+    new CommonEnumeratorOps[self.Self, A](self)
   
-  implicit def EagerCollectionOps[A](self: Collection[A]): EagerCollectionOps[self.Self, A] =
-    new EagerCollectionOps[self.Self, A](self)
+  implicit def CommonCollectionOps[A](self: Collection[A]): CommonCollectionOps[self.Self, A] =
+    new CommonCollectionOps[self.Self, A](self)
   
-  implicit def EagerIteratorOps[A](self: Iterator[A]): EagerIteratorOps[self.Self, A] =
+  implicit def CommonIteratorOps[A](self: Iterator[A]): CommonIteratorOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def EagerContainerOps[A](self: Container[A]): EagerContainerOps[self.Self, A] =
+  implicit def CommonContainerOps[A](self: Container[A]): CommonContainerOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def EagerSeqOps[A](self: Seq[A]): EagerSeqOps[self.Self, A] =
+  implicit def CommonSeqOps[A](self: Seq[A]): CommonSeqOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def EagerLinearSeqOps[A](self: LinearSeq[A]): EagerLinearSeqOps[self.Self, A] =
+  implicit def CommonLinearSeqOps[A](self: LinearSeq[A]): CommonLinearSeqOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def EagerIndexedSeqOps[A](self: IndexedSeq[A]): EagerIndexedSeqOps[self.Self, A] =
+  implicit def CommonIndexedSeqOps[A](self: IndexedSeq[A]): CommonIndexedSeqOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def EagerSetOps[A](self: Set[A]): EagerSetOps[self.Self, A] =
+  implicit def CommonSetOps[A](self: Set[A]): CommonSetOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def EagerMapOps[A, T](self: Map[A, T]): EagerMapOps[self.Self, A, T] =
+  implicit def CommonMapOps[A, T](self: Map[A, T]): CommonMapOps[self.Self, A, T] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
 }
+
+/** Implicit conversions that add common operations to collections. */
+object common extends common

@@ -8,10 +8,10 @@
 package basis.collections
 package sequential
 
-/** Non-strictly evaluated set operations.
+/** Strictly evaluated map operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class LazySetOps[+A](val __ : Set[A]) extends AnyVal
+abstract class StrictMapOps[+Self, A, +T] private[sequential]

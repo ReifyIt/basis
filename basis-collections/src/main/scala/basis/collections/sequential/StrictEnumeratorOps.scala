@@ -14,7 +14,7 @@ package sequential
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class EagerEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
+class StrictEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
   /** Returns the applications of a partial function to each enumerated element
     * for which the function is defined.
     * 
@@ -25,7 +25,7 @@ class EagerEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State = {
-    traverse(__)(new EagerEnumeratorOps.CollectInto(q, buffer))
+    traverse(__)(new StrictEnumeratorOps.CollectInto(q, buffer))
     buffer.state
   }
   
@@ -37,7 +37,7 @@ class EagerEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Mapping
     */
   def map[B](f: A => B)(implicit buffer: Buffer[Self, B]): buffer.State = {
-    traverse(__)(new EagerEnumeratorOps.MapInto(f, buffer))
+    traverse(__)(new StrictEnumeratorOps.MapInto(f, buffer))
     buffer.state
   }
   
@@ -50,7 +50,7 @@ class EagerEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Mapping
     */
   def flatMap[B](f: A => Enumerator[B])(implicit buffer: Buffer[Self, B]): buffer.State = {
-    traverse(__)(new EagerEnumeratorOps.FlatMapInto(f, buffer))
+    traverse(__)(new StrictEnumeratorOps.FlatMapInto(f, buffer))
     buffer.state
   }
   
@@ -62,7 +62,7 @@ class EagerEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Filtering
     */
   def filter(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State = {
-    traverse(__)(new EagerEnumeratorOps.FilterInto(p, buffer))
+    traverse(__)(new StrictEnumeratorOps.FilterInto(p, buffer))
     buffer.state
   }
   
@@ -74,14 +74,14 @@ class EagerEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
     * @group  Combining
     */
   def ++ [B >: A](that: Enumerator[B])(implicit buffer: Buffer[Self, B]): buffer.State = {
-    val f = new EagerEnumeratorOps.AddInto(buffer)
+    val f = new StrictEnumeratorOps.AddInto(buffer)
     traverse(__)(f)
     traverse(that)(f)
     buffer.state
   }
 }
 
-private[sequential] object EagerEnumeratorOps {
+private[sequential] object StrictEnumeratorOps {
   import scala.runtime.AbstractFunction1
   
   final class CollectInto[-A, B](q: PartialFunction[A, B], buffer: Buffer[_, B]) extends AbstractFunction1[A, Unit] {

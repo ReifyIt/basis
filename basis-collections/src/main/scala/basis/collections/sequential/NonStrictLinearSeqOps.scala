@@ -8,10 +8,10 @@
 package basis.collections
 package sequential
 
-/** Non-strictly evaluated collection operations.
+/** Non-strictly evaluated linear sequence operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class LazyCollectionOps[+A](val __ : Collection[A]) extends AnyVal
+class NonStrictLinearSeqOps[+A](val __ : LinearSeq[A]) extends AnyVal

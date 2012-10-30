@@ -22,7 +22,7 @@ trait Enumerator[+A] extends Any {
   
   /** Applies a function to each element of this $collection. The protected
     * status of `foreach` allows optimized static implementations to shadow
-    * the virtual method. To force a virtual `foreach` call, invoke
+    * this virtual method. To force a virtual `foreach` call, invoke
     * [[basis.collections#traverse traverse]].
     * 
     * @group  Traversing
@@ -33,5 +33,5 @@ trait Enumerator[+A] extends Any {
 private[collections] object Enumerator {
   /** Applies a function to each of an enumerator's elements by invoking the
     * enumerator's protected `foreach` method. */
-  private[collections] def traverse[A, U](xs: Enumerator[A])(f: A => U): Unit = xs.foreach[U](f)
+  def traverse[A, U](xs: Enumerator[A])(f: A => U): Unit = xs.foreach[U](f)
 }

@@ -56,7 +56,7 @@ trait Buffer[-Source, -A] {
   def state: State
 }
 
-private object Buffer {
+private[collections] object Buffer {
   import scala.runtime.AbstractFunction1
   
   final class AddInto[-A](buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {

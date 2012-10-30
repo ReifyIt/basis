@@ -77,8 +77,8 @@ package basis.memory
   * @groupname  unaligned   Loading and storing unaligned primitive values
   * @groupprio  unaligned   -8
   * 
-  * @groupname  composite   Loading and storing composite values
-  * @groupprio  composite   -7
+  * @groupname  compound    Loading and storing compound values
+  * @groupprio  compound    -7
   * 
   * @groupname  array       Loading and storing arrays of values
   * @groupprio  array       -6

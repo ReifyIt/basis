@@ -8,10 +8,10 @@
 package basis.collections
 package sequential
 
-/** Non-strictly evaluated indexed sequence operations.
+/** Non-strictly evaluated container operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class LazyIndexedSeqOps[+A](val __ : IndexedSeq[A]) extends AnyVal
+class NonStrictContainerOps[+A](val __ : Container[A]) extends AnyVal

@@ -35,7 +35,7 @@ trait LinearSeq[+A] extends Any with Seq[A] {
   }
   
   override def iterator: Iterator[A] =
-    new LinearSeq.Cursor(this)
+    new LinearSeqIterator(this)
   
   protected override def foreach[U](f: A => U) {
     var xs = this
@@ -46,30 +46,15 @@ trait LinearSeq[+A] extends Any with Seq[A] {
   }
 }
 
-/** A generic linear sequence factory. */
-object LinearSeq {
-  def apply[A](xs: A*)(implicit buffer: Buffer[LinearSeq[_], A]): buffer.State =
-    macro FactoryMacros.apply[A]
+private[collections] final class LinearSeqIterator[+A]
+    (private[this] var xs: LinearSeq[A])
+  extends Iterator[A] {
   
-  def fill[A](count: Int)(element: => A)(implicit buffer: Buffer[LinearSeq[_], A]): buffer.State =
-    macro FactoryMacros.fill[A]
+  override def isEmpty: Boolean = xs.isEmpty
   
-  def tabulate[A](count: Int)(f: Int => A)(implicit buffer: Buffer[LinearSeq[_], A]): buffer.State =
-    macro FactoryMacros.tabulate[A]
+  override def head: A = if (isEmpty) Done.head else xs.head
   
-  def iterate[A](start: A, count: Int)(f: A => A)(implicit buffer: Buffer[LinearSeq[_], A]): buffer.State =
-    macro FactoryMacros.iterate[A]
+  override def step(): Unit = if (isEmpty) Done.step() else xs = xs.tail
   
-  private[collections] final class Cursor[+A]
-      (private[this] var xs: LinearSeq[A])
-    extends Iterator[A] {
-    
-    override def isEmpty: Boolean = xs.isEmpty
-    
-    override def head: A = if (isEmpty) Iterator.Empty.head else xs.head
-    
-    override def step(): Unit = if (isEmpty) Iterator.Empty.step() else xs = xs.tail
-    
-    override def dup: Iterator[A] = new Cursor(xs)
-  }
+  override def dup: Iterator[A] = new LinearSeqIterator(xs)
 }

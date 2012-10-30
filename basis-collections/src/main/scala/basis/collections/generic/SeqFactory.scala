@@ -6,71 +6,39 @@
 \*                                                                      */
 
 package basis.collections
+package generic
 
-import scala.collection.immutable.{::, Nil}
-import scala.reflect.macros.Context
-
-private[collections] object FactoryMacros {
-  def apply[A]
-      (c: Context)
-      (xs: c.Expr[A]*)
-      (buffer: c.Expr[Buffer[_, A]])
-    : c.Expr[buffer.value.State] =
-    new FactoryMacros[c.type](c).apply[A](xs: _*)(buffer)
+trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {
+  def fill[A](count: Int)(element: => A): CC[A] =
+    macro SeqFactory.fill[CC, A]
   
-  def fill[A]
-      (c: Context)
-      (count: c.Expr[Int])
-      (element: c.Expr[A])
-      (buffer: c.Expr[Buffer[_, A]])
-    : c.Expr[buffer.value.State] =
-    new FactoryMacros[c.type](c).fill[A](count)(element)(buffer)
+  def tabulate[A](count: Int)(f: Int => A): CC[A] =
+    macro SeqFactory.tabulate[CC, A]
   
-  def tabulate[A]
-      (c: Context)
-      (count: c.Expr[Int])
-      (f: c.Expr[Int => A])
-      (buffer: c.Expr[Buffer[_, A]])
-    : c.Expr[buffer.value.State] =
-    new FactoryMacros[c.type](c).tabulate[A](count)(f)(buffer)
-  
-  def iterate[A]
-      (c: Context)
-      (start: c.Expr[A], count: c.Expr[Int])
-      (f: c.Expr[A => A])
-      (buffer: c.Expr[Buffer[_, A]])
-    : c.Expr[buffer.value.State] =
-    new FactoryMacros[c.type](c).iterate[A](start, count)(f)(buffer)
+  def iterate[A](start: A, count: Int)(f: A => A): CC[A] =
+    macro SeqFactory.iterate[CC, A]
 }
 
-private[collections] final class FactoryMacros[C <: Context](val context: C) {
-  import context.{Expr, fresh, WeakTypeTag}
-  import universe._
+private[collections] object SeqFactory {
+  import scala.collection.immutable.{::, Nil}
+  import scala.reflect.macros.Context
   
-  val universe: context.universe.type = context.universe
-  
-  def apply[A]
-      (xs: Expr[A]*)
-      (buffer: Expr[Buffer[_, A]])
-    : Expr[buffer.value.State] = {
-    var b = Apply(Select(buffer.tree, "expect"), Literal(Constant(xs.length)) :: Nil)
-    val iter = xs.iterator
-    while (iter.hasNext) b = Apply(Select(b, "$plus$eq"), iter.next().tree :: Nil)
-    Expr(Select(b, "state"))(BufferStateTag(buffer))
-  }
-  
-  def fill[A]
-      (count: Expr[Int])
-      (element: Expr[A])
-      (buffer: Expr[Buffer[_, A]])
-    : Expr[buffer.value.State] = {
+  def fill[CC[_], A]
+      (c: Context { type PrefixType <: SeqFactory[CC] })
+      (count: c.Expr[Int])
+      (element: c.Expr[A])
+      (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
+    : c.Expr[CC[A]] = {
+    import c.{Expr, fresh, prefix, WeakTypeTag}
+    import c.universe._
     val i    = newTermName(fresh("i$"))
     val b    = newTermName(fresh("buffer$"))
     val loop = newTermName(fresh("loop$"))
+    val buffer = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer.tree, "expect"), Ident(i) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer, "expect"), Ident(i) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$greater"), Literal(Constant(0)) :: Nil),
@@ -80,23 +48,27 @@ private[collections] final class FactoryMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (BufferStateTag(buffer))
+    } (WeakTypeTag[CC[A]](appliedType(CCTag.tpe, ATag.tpe :: Nil)))
   }
   
-  def tabulate[A]
-      (count: Expr[Int])
-      (f: Expr[Int => A])
-      (buffer: Expr[Buffer[_, A]])
-    : Expr[buffer.value.State] = {
+  def tabulate[CC[_], A]
+      (c: Context { type PrefixType <: SeqFactory[CC] })
+      (count: c.Expr[Int])
+      (f: c.Expr[Int => A])
+      (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
+    : c.Expr[CC[A]] = {
+    import c.{Expr, fresh, prefix, WeakTypeTag}
+    import c.universe._
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
     val b    = newTermName(fresh("buffer$"))
     val loop = newTermName(fresh("loop$"))
+    val buffer = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer.tree, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer, "expect"), Ident(n) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -106,23 +78,27 @@ private[collections] final class FactoryMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (BufferStateTag(buffer))
+    } (WeakTypeTag[CC[A]](appliedType(CCTag.tpe, ATag.tpe :: Nil)))
   }
   
-  def iterate[A]
-      (start: Expr[A], count: Expr[Int])
-      (f: Expr[A => A])
-      (buffer: Expr[Buffer[_, A]])
-    : Expr[buffer.value.State] = {
+  def iterate[CC[_], A]
+      (c: Context { type PrefixType <: SeqFactory[CC] })
+      (start: c.Expr[A], count: c.Expr[Int])
+      (f: c.Expr[A => A])
+      (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
+    : c.Expr[CC[A]] = {
+    import c.{Expr, fresh, prefix, WeakTypeTag}
+    import c.universe._
     val n    = newTermName(fresh("n$"))
     val b    = newTermName(fresh("buffer$"))
     val a    = newTermName(fresh("a$"))
     val i    = newTermName(fresh("i$"))
     val loop = newTermName(fresh("loop$"))
+    val buffer = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(NoMods, n, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer.tree, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer, "expect"), Ident(n) :: Nil)) ::
         If(
           Apply(Select(Ident(n), "$greater"), Literal(Constant(0)) :: Nil),
           Block(
@@ -140,16 +116,6 @@ private[collections] final class FactoryMacros[C <: Context](val context: C) {
                 EmptyTree))),
           EmptyTree) :: Nil,
         Select(Ident(b), "state"))
-    } (BufferStateTag(buffer))
+    } (WeakTypeTag[CC[A]](appliedType(CCTag.tpe, ATag.tpe :: Nil)))
   }
-  
-  private def BufferType(buffer: Expr[Buffer[_, _]]): Type = {
-    buffer.actualType.termSymbol match {
-      case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
-      case _ => buffer.actualType
-    }
-  }
-  
-  private def BufferStateTag(buffer: Expr[Buffer[_, _]]): WeakTypeTag[buffer.value.State] =
-    WeakTypeTag(typeRef(BufferType(buffer), buffer.actualType.member(newTypeName("State")), Nil))
 }

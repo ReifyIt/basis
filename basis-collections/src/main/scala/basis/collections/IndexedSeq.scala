@@ -25,7 +25,7 @@ trait IndexedSeq[+A] extends Any with Seq[A] {
   override def isEmpty: Boolean = length == 0
   
   override def iterator: Iterator[A] =
-    new IndexedSeq.Cursor(this, 0, length)
+    new IndexedSeqIterator(this, 0, length)
   
   protected override def foreach[U](f: A => U) {
     var i = 0
@@ -37,34 +37,19 @@ trait IndexedSeq[+A] extends Any with Seq[A] {
   }
 }
 
-/** A generic indexed sequence factory. */
-object IndexedSeq {
-  def apply[A](xs: A*)(implicit buffer: Buffer[IndexedSeq[_], A]): buffer.State =
-    macro FactoryMacros.apply[A]
+private[collections] final class IndexedSeqIterator[+A]
+    (xs: IndexedSeq[A], from: Int, until: Int)
+  extends Iterator[A] {
   
-  def fill[A](count: Int)(element: => A)(implicit buffer: Buffer[IndexedSeq[_], A]): buffer.State =
-    macro FactoryMacros.fill[A]
+  private[this] var upper: Int = (0 max upper) min xs.length
+  private[this] var lower: Int = (0 max lower) min upper
+  private[this] var index: Int = lower
   
-  def tabulate[A](count: Int)(f: Int => A)(implicit buffer: Buffer[IndexedSeq[_], A]): buffer.State =
-    macro FactoryMacros.tabulate[A]
+  override def isEmpty: Boolean = index >= upper
   
-  def iterate[A](start: A, count: Int)(f: A => A)(implicit buffer: Buffer[IndexedSeq[_], A]): buffer.State =
-    macro FactoryMacros.iterate[A]
+  override def head: A = if (isEmpty) Done.head else xs(index)
   
-  private[collections] final class Cursor[+A]
-      (xs: IndexedSeq[A], from: Int, until: Int)
-    extends Iterator[A] {
-    
-    private[this] var upper: Int = (0 max upper) min xs.length
-    private[this] var lower: Int = (0 max lower) min upper
-    private[this] var index: Int = lower
-    
-    override def isEmpty: Boolean = index >= upper
-    
-    override def head: A = if (isEmpty) Iterator.Empty.head else xs(index)
-    
-    override def step(): Unit = if (isEmpty) Iterator.Empty.step() else index += 1
-    
-    override def dup: Iterator[A] = new Cursor[A](xs, index, upper)
-  }
+  override def step(): Unit = if (isEmpty) Done.step() else index += 1
+  
+  override def dup: Iterator[A] = new IndexedSeqIterator(xs, index, upper)
 }

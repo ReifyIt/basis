@@ -6,14 +6,12 @@
 \*                                                                      */
 
 package basis.collections
+package sequential
 
-package object sequential {
-  /** Implicit conversions that add common operations to collections. */
-  val common = new ProvideCommonOps
-  
-  /** Implicit conversions that add common and strict operations to collections. */
-  val strict = new ProvideEagerOps
-  
-  /** Implicit conversions that add command and non-strict operations to collections. */
-  val nonstrict = new ProvideLazyOps
-}
+/** Non-strictly evaluated indexed sequence operations.
+  * 
+  * @groupprio  Mapping     -3
+  * @groupprio  Filtering   -2
+  * @groupprio  Combining   -1
+  */
+class NonStrictIndexedSeqOps[+A](val __ : IndexedSeq[A]) extends AnyVal

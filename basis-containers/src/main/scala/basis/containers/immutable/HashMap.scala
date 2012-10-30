@@ -9,6 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
+import basis.collections.generic._
 import basis.util._
 
 import scala.annotation.tailrec
@@ -373,11 +374,11 @@ final class HashMap[+A, +T] private
   }
 }
 
-object HashMap {
+object HashMap extends MapFactory[HashMap] {
   val Empty: HashMap[Nothing, Nothing] =
     new HashMap[Nothing, Nothing](0, 0, RefArray.Empty, RefArray.Empty)
   
-  implicit def Builder[A, T]: Builder[A, T] = new Builder[A, T]
+  implicit override def Builder[A, T]: Builder[A, T] = new Builder[A, T]
   
   final class Builder[A, T] extends Buffer[Any, (A, T)] {
     override type State = HashMap[A, T]
@@ -437,10 +438,10 @@ object HashMap {
             head
           }
         }
-        else Iterator.Empty.head
+        else Done.head
       }
       else if (index < self.rank) (self.keyAt(index), self.valAt(index))
-      else Iterator.Empty.head
+      else Done.head
     }
     
     @tailrec override def step() {
@@ -465,10 +466,10 @@ object HashMap {
             step()
           }
         }
-        else Iterator.Empty.step()
+        else Done.step()
       }
       else if (index < self.rank) index += 1
-      else Iterator.Empty.step()
+      else Done.step()
     }
     
     override def dup: Cursor[A, T] = new Cursor(self, child, index)

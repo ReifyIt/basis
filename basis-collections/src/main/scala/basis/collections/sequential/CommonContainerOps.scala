@@ -132,10 +132,10 @@ abstract class CommonContainerOps[+Self, +A] private[sequential] {
   def select[B](q: PartialFunction[A, B]): Option[B] =
     macro CommonContainerOps.select[A, B]
   
-  def eagerly: EagerContainerOps[Self, A] =
+  def eagerly: StrictContainerOps[Self, A] =
     macro CommonContainerOps.eagerly[Self, A]
   
-  def lazily: LazyContainerOps[A] =
+  def lazily: NonStrictContainerOps[A] =
     macro CommonContainerOps.lazily[A]
 }
 
@@ -210,24 +210,24 @@ private[sequential] object CommonContainerOps {
     : c.Expr[Option[B]] =
     new IteratorMacros[c.type](c).select[A, B](unApplyIterator(c))(q)
   
-  def eagerly[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context): c.Expr[EagerContainerOps[Self, A]] = {
+  def eagerly[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context): c.Expr[StrictContainerOps[Self, A]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
-          "basis"), "collections"), "sequential"), "strict"), "EagerContainerOps"),
+          "basis"), "collections"), "sequential"), "strict"), "StrictContainerOps"),
         unApply(c).tree :: Nil)
-    } (EagerContainerOpsTag[Self, A](c))
+    } (StrictContainerOpsTag[Self, A](c))
   }
   
-  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[LazyContainerOps[A]] = {
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictContainerOps[A]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
-          "basis"), "collections"), "sequential"), "strict"), "LazyContainerOps"),
+          "basis"), "collections"), "sequential"), "strict"), "NonStrictContainerOps"),
         unApply(c).tree :: Nil)
-    } (LazyContainerOpsTag[A](c))
+    } (NonStrictContainerOpsTag[A](c))
   }
   
   private def ContainerTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Container[A]] = {
@@ -246,21 +246,21 @@ private[sequential] object CommonContainerOps {
         weakTypeOf[A] :: Nil))
   }
   
-  private def EagerContainerOpsTag[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[EagerContainerOps[Self, A]] = {
+  private def StrictContainerOpsTag[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictContainerOps[Self, A]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.collections.sequential.EagerContainerOps").toType,
+        c.mirror.staticClass("basis.collections.sequential.StrictContainerOps").toType,
         weakTypeOf[Self] :: weakTypeOf[A] :: Nil))
   }
   
-  private def LazyContainerOpsTag[A : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[LazyContainerOps[A]] = {
+  private def NonStrictContainerOpsTag[A : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[NonStrictContainerOps[A]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.collections.sequential.LazyContainerOps").toType,
+        c.mirror.staticClass("basis.collections.sequential.NonStrictContainerOps").toType,
         weakTypeOf[A] :: Nil))
   }
 }

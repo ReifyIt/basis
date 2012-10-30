@@ -131,9 +131,9 @@ class CommonCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
   def select[B](q: PartialFunction[A, B]): Option[B] =
     new CommonEnumeratorOps[Self, A](__).select[B](q)
   
-  @inline def eagerly: EagerCollectionOps[Self, A] =
-    new EagerCollectionOps[Self, A](__)
+  @inline def eagerly: StrictCollectionOps[Self, A] =
+    new StrictCollectionOps[Self, A](__)
   
-  @inline def lazily: LazyCollectionOps[A] =
-    new LazyCollectionOps[A](__)
+  @inline def lazily: NonStrictCollectionOps[A] =
+    new NonStrictCollectionOps[A](__)
 }

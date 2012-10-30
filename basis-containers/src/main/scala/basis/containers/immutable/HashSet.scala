@@ -9,6 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
+import basis.collections.generic._
 import basis.util._
 
 import scala.annotation.tailrec
@@ -283,10 +284,10 @@ final class HashSet[+A] private
   }
 }
 
-object HashSet {
+object HashSet extends SetFactory[HashSet] {
   val Empty: HashSet[Nothing] = new HashSet[Nothing](0, 0, RefArray.Empty)
   
-  implicit def Builder[A]: Builder[A] = new Builder[A]
+  implicit override def Builder[A]: Builder[A] = new Builder[A]
   
   final class Builder[A] extends Buffer[Any, A] {
     override type State = HashSet[A]
@@ -344,10 +345,10 @@ object HashSet {
             head
           }
         }
-        else Iterator.Empty.head
+        else Done.head
       }
       else if (index < self.rank) self.elemAt(index)
-      else Iterator.Empty.head
+      else Done.head
     }
     
     @tailrec override def step() {
@@ -372,10 +373,10 @@ object HashSet {
             step()
           }
         }
-        else Iterator.Empty.step()
+        else Done.step()
       }
       else if (index < self.rank) index += 1
-      else Iterator.Empty.step()
+      else Done.step()
     }
     
     override def dup: Cursor[A] = new Cursor(self, child, index)

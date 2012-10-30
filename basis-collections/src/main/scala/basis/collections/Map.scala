@@ -44,9 +44,3 @@ trait Map[+A, +T] extends Any with Container[(A, T)] {
     * @group Iterating */
   override def iterator: Iterator[(A, T)]
 }
-
-/** A generic map factory. */
-object Map {
-  def apply[A, T](xs: (A, T)*)(implicit buffer: Buffer[Map[_, _], (A, T)]): buffer.State =
-    macro FactoryMacros.apply[(A, T)]
-}

@@ -14,7 +14,7 @@ package sequential
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
+class NonStrictIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
   /** Returns a new iterator that applies a partial function to each iterated
     * element for which the function is defined, and skips all elements where
     * the function is undefined.
@@ -25,7 +25,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B]): Iterator[B] =
-    new LazyIteratorOps.Collect(__.dup, q)
+    new NonStrictIteratorOps.Collect(__.dup, q)
   
   /** Returns a new iterator that applies a function to each iterated element.
     * 
@@ -34,7 +34,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Mapping
     */
   def map[B](f: A => B): Iterator[B] =
-    new LazyIteratorOps.Map(__.dup, f)
+    new NonStrictIteratorOps.Map(__.dup, f)
   
   /** Returns a new iterator that concatenates the iterators returned by a
     * function applied to each iterated element.
@@ -44,7 +44,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Mapping
     */
   def flatMap[B](f: A => Iterator[B]): Iterator[B] =
-    new LazyIteratorOps.FlatMap(__.dup, f)
+    new NonStrictIteratorOps.FlatMap(__.dup, f)
   
   /** Returns a new iterator that skips all iterated elements that don't satisfy a predicate.
     * 
@@ -53,7 +53,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Filtering
     */
   def filter(p: A => Boolean): Iterator[A] =
-    new LazyIteratorOps.Filter(__.dup, p)
+    new NonStrictIteratorOps.Filter(__.dup, p)
   
   /** Returns a new iterator that skips all iterated elements that don't satisfy a predicate.
     * 
@@ -72,7 +72,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Filtering
     */
   def dropWhile(p: A => Boolean): Iterator[A] =
-    new LazyIteratorOps.DropWhile(__.dup, p)
+    new NonStrictIteratorOps.DropWhile(__.dup, p)
   
   /** Returns a new iterator over the longest prefix of iterated elements
     * for which each element satisfies a predicate.
@@ -83,7 +83,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Filtering
     */
   def takeWhile(p: A => Boolean): Iterator[A] =
-    new LazyIteratorOps.TakeWhile(__.dup, p)
+    new NonStrictIteratorOps.TakeWhile(__.dup, p)
   
   /** Returns a pair of (prefix, suffix) iterators with the first iterator
     * covering the longest prefix for which each element satisfies a predicate,
@@ -105,7 +105,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Filtering
     */
   def drop(lower: Int): Iterator[A] =
-    new LazyIteratorOps.Drop(__.dup, lower)
+    new NonStrictIteratorOps.Drop(__.dup, lower)
   
   /** Returns an iterator over a prefix of iterated elements up to some length.
     * 
@@ -115,7 +115,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Filtering
     */
   def take(upper: Int): Iterator[A] =
-    new LazyIteratorOps.Take(__.dup, upper)
+    new NonStrictIteratorOps.Take(__.dup, upper)
   
   /** Returns a new iterator over an interval of iterated elements.
     * 
@@ -126,7 +126,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Filtering
     */
   def slice(lower: Int, upper: Int): Iterator[A] =
-    new LazyIteratorOps.Slice(__.dup, lower, upper)
+    new NonStrictIteratorOps.Slice(__.dup, lower, upper)
   
   /** Returns an iterator over pairs of elements from this and another iterator.
     * 
@@ -135,7 +135,7 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Combining
     */
   def zip[B](that: Iterator[B]): Iterator[(A, B)] =
-    new LazyIteratorOps.Zip(__.dup, that.dup)
+    new NonStrictIteratorOps.Zip(__.dup, that.dup)
   
   /** Returns a new iterator covering both this and another iterator.
     * 
@@ -144,10 +144,10 @@ class LazyIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     * @group  Combining
     */
   def ++ [B >: A](that: Iterator[B]): Iterator[B] =
-    if (__.isEmpty) that.dup else new LazyIteratorOps.++(__.dup, that.dup)
+    if (__.isEmpty) that.dup else new NonStrictIteratorOps.++(__.dup, that.dup)
 }
 
-private object LazyIteratorOps {
+private object NonStrictIteratorOps {
   import scala.annotation.tailrec
   
   final class Collect[-A, +B](self: Iterator[A], q: PartialFunction[A, B]) extends Iterator[B] {
@@ -179,7 +179,7 @@ private object LazyIteratorOps {
       (outer: Iterator[A], f: A => Iterator[B], private[this] var inner: Iterator[B])
     extends Iterator[B] {
     
-    def this(outer: Iterator[A], f: A => Iterator[B]) = this(outer, f, Iterator.Empty)
+    def this(outer: Iterator[A], f: A => Iterator[B]) = this(outer, f, Done)
     
     @tailrec override def isEmpty: Boolean =
       inner.isEmpty && (outer.isEmpty || { inner = f(outer.head); outer.step(); isEmpty })
@@ -187,13 +187,13 @@ private object LazyIteratorOps {
     @tailrec override def head: B = {
       if (!inner.isEmpty) inner.head
       else if (!outer.isEmpty) { inner = f(outer.head); outer.step(); head }
-      else Iterator.Empty.head
+      else Done.head
     }
     
     @tailrec override def step() {
       if (!inner.isEmpty) inner.step()
       else if (!outer.isEmpty) { inner = f(outer.head); outer.step(); step() }
-      else Iterator.Empty.step()
+      else Done.step()
     }
     
     override def dup: Iterator[B] = new FlatMap[A, B](outer.dup, f, inner.dup)
@@ -256,7 +256,7 @@ private object LazyIteratorOps {
         if (p(x)) x
         else { iterating = false; head }
       }
-      else Iterator.Empty.head
+      else Done.head
     }
     
     @tailrec override def step() {
@@ -264,7 +264,7 @@ private object LazyIteratorOps {
         if (p(self.head)) self.step()
         else { iterating = false; step() }
       }
-      else Iterator.Empty.step()
+      else Done.step()
     }
     
     override def dup: Iterator[A] = new TakeWhile[A](self.dup, p, iterating)
@@ -303,12 +303,12 @@ private object LazyIteratorOps {
     
     override def head: A = {
       if (index < upper) self.head
-      else Iterator.Empty.head
+      else Done.head
     }
     
     override def step() {
       if (index < upper) { self.step(); index += 1 }
-      else Iterator.Empty.step()
+      else Done.step()
     }
     
     override def dup: Iterator[A] = new Take[A](self.dup, upper, index)
@@ -327,13 +327,13 @@ private object LazyIteratorOps {
     @tailrec override def head: A = {
       if (index < lower) { self.step(); index += 1; head }
       else if (index < upper) self.head
-      else Iterator.Empty.head
+      else Done.head
     }
     
     @tailrec override def step() {
       if (index < lower) { self.step(); index += 1; step() }
       else if (index < upper) self.step()
-      else Iterator.Empty.step()
+      else Done.step()
     }
     
     override def dup: Iterator[A] = new Slice[A](self.dup, lower, upper, index)

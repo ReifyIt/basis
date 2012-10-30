@@ -8,10 +8,10 @@
 package basis.collections
 package sequential
 
-/** Non-strictly evaluated container operations.
+/** Non-strictly evaluated set operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class LazyContainerOps[+A](val __ : Container[A]) extends AnyVal
+class NonStrictSetOps[+A](val __ : Set[A]) extends AnyVal

@@ -8,15 +8,15 @@
 package basis.collections
 package sequential
 
-/** Strictly evaluated collection operations.
+/** Strictly evaluated set operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
-  /** Returns the applications of a partial function to each element of this
-    * collection for which the function is defined.
+abstract class StrictSetOps[+Self, +A] private[sequential] {
+  /** Returns the applications of a partial function to each element in this
+    * set for which the function is defined.
     * 
     * @param  q       the partial function to filter elements against and to
     *                 apply to applicable elements.
@@ -25,9 +25,9 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B])(implicit buffer: Buffer[Self, B]): buffer.State =
-    new EagerEnumeratorOps[Self, A](__).collect[B](q)(buffer)
+    macro StrictContainerOps.collect[A, B]
   
-  /** Returns the applications of a function to each element of this collection.
+  /** Returns the applications of a function to each element in this set.
     * 
     * @param  f       the function to apply to each element.
     * @param  buffer  the implicit accumulator for mapped elements.
@@ -35,10 +35,10 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     * @group  Mapping
     */
   def map[B](f: A => B)(implicit buffer: Buffer[Self, B]): buffer.State =
-    new EagerEnumeratorOps[Self, A](__).map[B](f)(buffer)
+    macro StrictContainerOps.map[A, B]
   
   /** Returns the concatenation of all elements returned by a function applied
-    * to each element of this collection.
+    * to each element in this set.
     * 
     * @param  f       the enumerator-yielding function to apply to each element.
     * @param  buffer  the implicit accumulator for flattened elements.
@@ -46,9 +46,9 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     * @group  Mapping
     */
   def flatMap[B](f: A => Enumerator[B])(implicit buffer: Buffer[Self, B]): buffer.State =
-    new EagerEnumeratorOps[Self, A](__).flatMap[B](f)(buffer)
+    macro StrictContainerOps.flatMap[A, B]
   
-  /** Returns all elements of this collection that satisfy a predicate.
+  /** Returns all elements in this set that satisfy a predicate.
     * 
     * @param  p       the predicate to test elements against.
     * @param  buffer  the implicit accumulator for filtered elements.
@@ -56,9 +56,9 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     * @group  Filtering
     */
   def filter(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
-    new EagerEnumeratorOps[Self, A](__).filter(p)(buffer)
+    macro StrictContainerOps.filter[A]
   
-  /** Returns all elements following the longest prefix of this collection
+  /** Returns all elements following the longest prefix of this set
     * for which each element satisfies a predicate.
     * 
     * @param  p       the predicate to test elements against.
@@ -67,12 +67,10 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State = {
-    traverse(__)(new EagerCollectionOps.DropWhileInto(p, buffer))
-    buffer.state
-  }
+  def dropWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
+    macro StrictContainerOps.dropWhile[A]
   
-  /** Returns the longest prefix of this collection for which each element
+  /** Returns the longest prefix of this set for which each element
     * satisfies a predicate.
     * 
     * @param  p       the predicate to test elements against.
@@ -81,10 +79,8 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State = {
-    traverse(__)(new EagerCollectionOps.TakeWhileInto(p, buffer))
-    buffer.state
-  }
+  def takeWhile(p: A => Boolean)(implicit buffer: Buffer[Self, A]): buffer.State =
+    macro StrictContainerOps.takeWhile[A]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
     * which each element satisfies a predicate, and the suffix beginning with
@@ -96,12 +92,14 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     * @return the pair of accumulated prefix and suffix elements.
     * @group  Filtering
     */
-  def span(p: A => Boolean)(implicit bufferA: Buffer[Self, A], bufferB: Buffer[Self, A]): (bufferA.State, bufferB.State) = {
-    traverse(__)(new EagerCollectionOps.SpanInto(p, bufferA, bufferB))
-    (bufferA.state, bufferB.state)
-  }
+  //FIXME: SI-6447
+  //def span(p: A => Boolean)(
+  //    implicit builderA: Buffer[Self, A],
+  //             builderB: Buffer[Self, A])
+  //  : (builderA.State, builderB.State) =
+  //  macro StrictContainerOps.span[A]
   
-  /** Returns all elements of this collection following a prefix up to some length.
+  /** Returns all elements in this set following a prefix up to some length.
     * 
     * @param  lower   the length of the prefix to drop;
     *                 also the inclusive lower bound for indexes of elements to keep.
@@ -109,12 +107,10 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop(lower: Int)(implicit buffer: Buffer[Self, A]): buffer.State = {
-    traverse(__)(new EagerCollectionOps.DropInto(lower, buffer))
-    buffer.state
-  }
+  def drop(lower: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
+    macro StrictContainerOps.drop[A]
   
-  /** Returns a prefix of this collection up to some length.
+  /** Returns a prefix of this set up to some length.
     * 
     * @param  upper   the length of the prefix to take;
     *                 also the exclusive upper bound for indexes of elements to keep.
@@ -122,12 +118,10 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take(upper: Int)(implicit buffer: Buffer[Self, A]): buffer.State = {
-    traverse(__)(new EagerCollectionOps.TakeInto(upper, buffer))
-    buffer.state
-  }
+  def take(upper: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
+    macro StrictContainerOps.take[A]
   
-  /** Returns an interval of elements of this collection.
+  /** Returns an interval of elements in this set.
     * 
     * @param  lower   the inclusive lower bound for indexes of elements to keep.
     * @param  upper   the exclusive upper bound for indexes of elements to keep.
@@ -136,53 +130,26 @@ class EagerCollectionOps[+Self, +A](val __ : Collection[A]) extends AnyVal {
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice(lower: Int, upper: Int)(implicit buffer: Buffer[Self, A]): buffer.State = {
-    traverse(__)(new EagerCollectionOps.SliceInto(lower, upper, buffer))
-    buffer.state
-  }
+  def slice(lower: Int, upper: Int)(implicit buffer: Buffer[Self, A]): buffer.State =
+    macro StrictContainerOps.slice[A]
   
-  /** Returns the concatenation of this and another collection.
+  /** Returns pairs of elements from this and another set.
     * 
-    * @param  that    the collection to append to this collection.
-    * @param  buffer  the implicit accumulator for concatenated elements.
-    * @return the accumulated elements of both collections.
+    * @param  that    the container whose elements to pair with these elements.
+    * @param  buffer  the accumulator for paired elements.
+    * @return the accumulated pairs of corresponding elements.
     * @group  Combining
     */
-  def ++ [B >: A](that: Collection[B])(implicit buffer: Buffer[Self, B]): buffer.State =
-    new EagerEnumeratorOps[Self, B](__).++[B](that)(buffer)
-}
-
-private[sequential] object EagerCollectionOps {
-  import scala.runtime.AbstractFunction1
+  def zip[B](that: Container[B])(implicit buffer: Buffer[Self, (A, B)]): buffer.State =
+    macro StrictContainerOps.zip[A, B]
   
-  final class DropWhileInto[-A](p: A => Boolean, buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {
-    private[this] var taking: Boolean = false
-    override def apply(x: A): Unit = if (taking || (!p(x) && { taking = true; true })) buffer += x
-  }
-  
-  final class TakeWhileInto[-A](p: A => Boolean, buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = if (p(x)) buffer += x else throw Break
-  }
-  
-  final class SpanInto[-A](p: A => Boolean, bufferA: Buffer[_, A], bufferB: Buffer[_, A]) extends AbstractFunction1[A, Unit] {
-    private[this] var taking: Boolean = false
-    override def apply(x: A): Unit = if (!taking && (p(x) || { taking = true; false })) bufferA += x else bufferB += x
-  }
-  
-  final class DropInto[-A](lower: Int, buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {
-    private[this] var i = 0
-    override def apply(x: A): Unit = if (i >= lower) buffer += x else i += 1
-  }
-  
-  final class TakeInto[-A](upper: Int, buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {
-    private[this] var i = 0
-    override def apply(x: A): Unit = if (i < upper) { buffer += x; i += 1 } else throw Break
-  }
-  
-  final class SliceInto[-A](lower: Int, upper: Int, buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {
-    private[this] var l = scala.math.max(0, lower)
-    private[this] var u = scala.math.max(l, upper)
-    private[this] var i = 0
-    override def apply(x: A): Unit = if (i < u) { if (i >= l) buffer += x; i += 1 } else throw Break
-  }
+  /** Returns the concatenation of this and another set.
+    * 
+    * @param  that    the container to append to this set.
+    * @param  buffer  the implicit accumulator for concatenated elements.
+    * @return the accumulated elements of both containers.
+    * @group  Combining
+    */
+  def ++ [B >: A](that: Container[B])(implicit buffer: Buffer[Self, B]): buffer.State =
+    macro StrictContainerOps.++[A, B]
 }

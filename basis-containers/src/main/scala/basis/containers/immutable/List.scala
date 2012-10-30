@@ -9,6 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
+import basis.collections.generic._
 import basis.util._
 
 import scala.annotation.tailrec
@@ -118,10 +119,11 @@ object :: {
   def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
 }
 
-object List {
-  def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
+object List extends SeqFactory[List] {
+  // FIXME: don't hurt the compiler!
+  //override def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   
-  implicit def Builder[A]: Builder[A] = new Builder[A]
+  implicit override def Builder[A]: Builder[A] = new Builder[A]
   
   final class Builder[A] extends Buffer[Any, A] {
     override type State = List[A]

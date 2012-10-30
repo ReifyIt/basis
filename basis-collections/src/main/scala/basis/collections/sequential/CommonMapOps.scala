@@ -15,10 +15,10 @@ package sequential
   * @groupprio  Querying      -1
   */
 abstract class CommonMapOps[+Self, +A, +T] private[sequential] {
-  def eagerly: EagerMapOps[Self, A, T] =
+  def eagerly: StrictMapOps[Self, A, T] =
     macro CommonMapOps.eagerly[Self, A, T]
   
-  def lazily: LazyMapOps[A, T] =
+  def lazily: NonStrictMapOps[A, T] =
     macro CommonMapOps.lazily[A, T]
 }
 
@@ -32,41 +32,41 @@ private[sequential] object CommonMapOps {
     map
   }
   
-  def eagerly[Self : c.WeakTypeTag, A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[EagerMapOps[Self, A, T]] = {
+  def eagerly[Self : c.WeakTypeTag, A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[StrictMapOps[Self, A, T]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
-          "basis"), "collections"), "sequential"), "strict"), "EagerMapOps"),
+          "basis"), "collections"), "sequential"), "strict"), "StrictMapOps"),
         deconstruct(c) :: Nil)
-    } (EagerMapOpsTag[Self, A, T](c))
+    } (StrictMapOpsTag[Self, A, T](c))
   }
   
-  def lazily[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[LazyMapOps[A, T]] = {
+  def lazily[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[NonStrictMapOps[A, T]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
-          "basis"), "collections"), "sequential"), "strict"), "LazyMapOps"),
+          "basis"), "collections"), "sequential"), "strict"), "NonStrictMapOps"),
         deconstruct(c) :: Nil)
-    } (LazyMapOpsTag[A, T](c))
+    } (NonStrictMapOpsTag[A, T](c))
   }
   
-  private def EagerMapOpsTag[Self : c.WeakTypeTag, A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[EagerMapOps[Self, A, T]] = {
+  private def StrictMapOpsTag[Self : c.WeakTypeTag, A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictMapOps[Self, A, T]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.collections.sequential.EagerMapOps").toType,
+        c.mirror.staticClass("basis.collections.sequential.StrictMapOps").toType,
         weakTypeOf[Self] :: weakTypeOf[A] :: weakTypeOf[T] :: Nil))
   }
   
-  private def LazyMapOpsTag[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[LazyMapOps[A, T]] = {
+  private def NonStrictMapOpsTag[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[NonStrictMapOps[A, T]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.collections.sequential.LazyMapOps").toType,
+        c.mirror.staticClass("basis.collections.sequential.NonStrictMapOps").toType,
         weakTypeOf[A] :: weakTypeOf[T] :: Nil))
   }
 }

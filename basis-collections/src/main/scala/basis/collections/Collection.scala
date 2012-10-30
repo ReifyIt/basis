@@ -18,9 +18,3 @@ package basis.collections
 trait Collection[+A] extends Any with Enumerator[A] {
   override type Self <: Collection[A]
 }
-
-/** A generic collection factory */
-object Collection {
-  def apply[A](xs: A*)(implicit buffer: Buffer[Collection[_], A]): buffer.State =
-    macro FactoryMacros.apply[A]
-}

@@ -6,12 +6,6 @@
 \*                                                                      */
 
 package basis.collections
-package sequential
+package generic
 
-/** Strictly evaluated map operations.
-  * 
-  * @groupprio  Mapping     -3
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
-  */
-abstract class EagerMapOps[+Self, A, +T] private[sequential]
+trait SetFactory[+CC[_]] extends BuilderFactory[CC]

@@ -32,9 +32,3 @@ trait Set[+A] extends Any with Container[A] {
     * @group Examining */
   def contains(element: A @uncheckedVariance): Boolean
 }
-
-/** A generic set factory */
-object Set {
-  def apply[A](xs: A*)(implicit buffer: Buffer[Set[_], A]): buffer.State =
-    macro FactoryMacros.apply[A]
-}

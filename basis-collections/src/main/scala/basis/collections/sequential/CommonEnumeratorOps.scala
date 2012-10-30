@@ -168,11 +168,11 @@ class CommonEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
     f.state
   }
   
-  @inline def eagerly: EagerEnumeratorOps[Self, A] =
-    new EagerEnumeratorOps[Self, A](__)
+  @inline def eagerly: StrictEnumeratorOps[Self, A] =
+    new StrictEnumeratorOps[Self, A](__)
   
-  @inline def lazily: LazyEnumeratorOps[A] =
-    new LazyEnumeratorOps[A](__)
+  @inline def lazily: NonStrictEnumeratorOps[A] =
+    new NonStrictEnumeratorOps[A](__)
 }
 
 private[sequential] object CommonEnumeratorOps {
