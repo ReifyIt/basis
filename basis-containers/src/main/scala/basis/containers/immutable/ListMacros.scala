@@ -6,16 +6,17 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 
-private[containers] object ListMacros {
+private[immutable] object ListMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
   def apply[A](c: Context)(xs: c.Expr[A]*): c.Expr[List[A]] = {
     import c.universe._
-    var list: c.Tree = Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "Nil")
+    var list: c.Tree = Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), "Nil")
     val iter = xs.reverseIterator
     while (iter.hasNext) list = Apply(Select(list, "$colon$colon"), iter.next().tree :: Nil)
     c.Expr(list)(ListTag[A](c))
@@ -25,7 +26,7 @@ private[containers] object ListMacros {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.containers.List").toType,
+        c.mirror.staticClass("basis.containers.immutable.List").toType,
         weakTypeOf[A] :: Nil))
   }
 }

@@ -6,69 +6,70 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 import basis.util._
 
-class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float] {
+class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): Float = array(index)
+  override def apply(index: Int): Int = array(index)
   
   /** Returns a copy of this array with a new `value` at `index`. */
-  def update(index: Int, value: Float): FloatArray = {
+  def update(index: Int, value: Int): IntArray = {
     val newArray = array.clone
     newArray(index) = value
-    new FloatArray(newArray)
+    new IntArray(newArray)
   }
   
   /** Returns a copy of this array with a new `value` inserted at `index`. */
-  def insert(index: Int, value: Float): FloatArray = {
-    val newArray = new scala.Array[Float](array.length + 1)
+  def insert(index: Int, value: Int): IntArray = {
+    val newArray = new scala.Array[Int](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
     newArray(index) = value
     java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
-    new FloatArray(newArray)
+    new IntArray(newArray)
   }
   
   /** Returns a copy of this array with `index` removed. */
-  def remove(index: Int): FloatArray = {
-    val newArray = new scala.Array[Float](array.length - 1)
+  def remove(index: Int): IntArray = {
+    val newArray = new scala.Array[Int](array.length - 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
     java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
-    new FloatArray(newArray)
+    new IntArray(newArray)
   }
   
   /** Returns a copy of this array with `value` appended. */
-  def :+ (value: Float): FloatArray = {
-    val newArray = new scala.Array[Float](array.length + 1)
+  def :+ (value: Int): IntArray = {
+    val newArray = new scala.Array[Int](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
     newArray(newArray.length) = value
-    new FloatArray(newArray)
+    new IntArray(newArray)
   }
   
   /** Returns a copy of this array with `value` prepended. */
-  def +: (value: Float): FloatArray = {
-    val newArray = new scala.Array[Float](array.length + 1)
+  def +: (value: Int): IntArray = {
+    val newArray = new scala.Array[Int](array.length + 1)
     newArray(0) = value
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
-    new FloatArray(newArray)
+    new IntArray(newArray)
   }
   
-  protected override def stringPrefix: String = "FloatArray"
+  protected override def stringPrefix: String = "IntArray"
 }
 
-object FloatArray {
-  val Empty: FloatArray = new FloatArray(new scala.Array[Float](0))
+object IntArray {
+  val Empty: IntArray = new IntArray(new scala.Array[Int](0))
   
-  def apply(xs: Float*): FloatArray = macro ArrayMacros.literalFloatArray
+  def apply(xs: Int*): IntArray = macro ArrayMacros.literalIntArray
   
-  final class Builder extends Buffer[Any, Float] {
-    override type State = FloatArray
+  final class Builder extends Buffer[Any, Int] {
+    override type State = IntArray
     
-    private[this] var array: scala.Array[Float] = FloatArray.Empty.array
+    private[this] var array: scala.Array[Int] = IntArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -81,7 +82,7 @@ object FloatArray {
     }
     
     private[this] def resize(size: Int) {
-      val newArray = new scala.Array[Float](size)
+      val newArray = new scala.Array[Int](size)
       java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
       array = newArray
     }
@@ -93,7 +94,7 @@ object FloatArray {
       }
     }
     
-    override def += (value: Float): this.type = {
+    override def += (value: Int): this.type = {
       prepare(length + 1)
       array(length) = value
       length += 1
@@ -108,14 +109,14 @@ object FloatArray {
       this
     }
     
-    override def state: FloatArray = {
+    override def state: IntArray = {
       if (length != array.length) resize(length)
       aliased = true
-      new FloatArray(array)
+      new IntArray(array)
     }
     
     override def clear() {
-      array = FloatArray.Empty.array
+      array = IntArray.Empty.array
       aliased = true
       length = 0
     }

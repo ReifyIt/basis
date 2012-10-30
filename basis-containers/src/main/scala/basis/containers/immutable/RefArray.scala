@@ -6,69 +6,70 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 import basis.util._
 
-class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
+class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): Int = array(index)
+  override def apply(index: Int): A = array(index).asInstanceOf[A]
   
   /** Returns a copy of this array with a new `value` at `index`. */
-  def update(index: Int, value: Int): IntArray = {
+  def update[B >: A](index: Int, value: B): RefArray[B] = {
     val newArray = array.clone
-    newArray(index) = value
-    new IntArray(newArray)
+    newArray(index) = value.asInstanceOf[AnyRef]
+    new RefArray[B](newArray)
   }
   
   /** Returns a copy of this array with a new `value` inserted at `index`. */
-  def insert(index: Int, value: Int): IntArray = {
-    val newArray = new scala.Array[Int](array.length + 1)
+  def insert[B >: A](index: Int, value: B): RefArray[B] = {
+    val newArray = new scala.Array[AnyRef](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
-    newArray(index) = value
+    newArray(index) = value.asInstanceOf[AnyRef]
     java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
-    new IntArray(newArray)
+    new RefArray[B](newArray)
   }
   
   /** Returns a copy of this array with `index` removed. */
-  def remove(index: Int): IntArray = {
-    val newArray = new scala.Array[Int](array.length - 1)
+  def remove(index: Int): RefArray[A] = {
+    val newArray = new scala.Array[AnyRef](array.length - 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
     java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
-    new IntArray(newArray)
+    new RefArray[A](newArray)
   }
   
   /** Returns a copy of this array with `value` appended. */
-  def :+ (value: Int): IntArray = {
-    val newArray = new scala.Array[Int](array.length + 1)
+  def :+ [B >: A](value: B): RefArray[B] = {
+    val newArray = new scala.Array[AnyRef](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
-    newArray(newArray.length) = value
-    new IntArray(newArray)
+    newArray(newArray.length) = value.asInstanceOf[AnyRef]
+    new RefArray[B](newArray)
   }
   
   /** Returns a copy of this array with `value` prepended. */
-  def +: (value: Int): IntArray = {
-    val newArray = new scala.Array[Int](array.length + 1)
-    newArray(0) = value
+  def +: [B >: A](value: B): RefArray[B] = {
+    val newArray = new scala.Array[AnyRef](array.length + 1)
+    newArray(0) = value.asInstanceOf[AnyRef]
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
-    new IntArray(newArray)
+    new RefArray[B](newArray)
   }
   
-  protected override def stringPrefix: String = "IntArray"
+  protected override def stringPrefix: String = "RefArray"
 }
 
-object IntArray {
-  val Empty: IntArray = new IntArray(new scala.Array[Int](0))
+object RefArray {
+  val Empty: RefArray[Nothing] = new RefArray[Nothing](new scala.Array[AnyRef](0))
   
-  def apply(xs: Int*): IntArray = macro ArrayMacros.literalIntArray
+  def apply[A](xs: A*): RefArray[A] = macro ArrayMacros.literalRefArray[A]
   
-  final class Builder extends Buffer[Any, Int] {
-    override type State = IntArray
+  final class Builder[A] extends Buffer[Any, A] {
+    override type State = RefArray[A]
     
-    private[this] var array: scala.Array[Int] = IntArray.Empty.array
+    private[this] var array: scala.Array[AnyRef] = RefArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -81,7 +82,7 @@ object IntArray {
     }
     
     private[this] def resize(size: Int) {
-      val newArray = new scala.Array[Int](size)
+      val newArray = new scala.Array[AnyRef](size)
       java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
       array = newArray
     }
@@ -93,9 +94,9 @@ object IntArray {
       }
     }
     
-    override def += (value: Int): this.type = {
+    override def += (value: A): this.type = {
       prepare(length + 1)
-      array(length) = value
+      array(length) = value.asInstanceOf[AnyRef]
       length += 1
       this
     }
@@ -108,14 +109,14 @@ object IntArray {
       this
     }
     
-    override def state: IntArray = {
+    override def state: RefArray[A] = {
       if (length != array.length) resize(length)
       aliased = true
-      new IntArray(array)
+      new RefArray[A](array)
     }
     
     override def clear() {
-      array = IntArray.Empty.array
+      array = RefArray.Empty.array
       aliased = true
       length = 0
     }

@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 import basis.data._
@@ -81,20 +82,20 @@ object Array extends AllArrayBuilders with SeqFactory[Array] {
   }
 }
 
-private[containers] class RefArrayBuilders {
-  implicit def RefBuffer[A]: RefArray.Builder[A] = new RefArray.Builder[A]
+private[immutable] class RefArrayBuilders {
+  implicit def RefBuilder[A]: RefArray.Builder[A] = new RefArray.Builder[A]
 }
 
-private[containers] class ValArrayBuilders extends RefArrayBuilders {
-  implicit def ValBuffer[A : ValType]: ValArray.Builder[A] = new ValArray.Builder[A]
+private[immutable] class ValArrayBuilders extends RefArrayBuilders {
+  implicit def ValBuilder[A : ValType]: ValArray.Builder[A] = new ValArray.Builder[A]
 }
 
-private[containers] class AllArrayBuilders extends ValArrayBuilders {
-  implicit def ByteBuffer: ByteArray.Builder = new ByteArray.Builder
-  implicit def ShortBuffer: ShortArray.Builder = new ShortArray.Builder
-  implicit def IntBuffer: IntArray.Builder = new IntArray.Builder
-  implicit def LongBuffer: LongArray.Builder = new LongArray.Builder
-  implicit def FloatBuffer: FloatArray.Builder = new FloatArray.Builder
-  implicit def DoubleBuffer: DoubleArray.Builder = new DoubleArray.Builder
-  implicit def BitBuffer: BitArray.Builder = new BitArray.Builder
+private[immutable] class AllArrayBuilders extends ValArrayBuilders {
+  implicit def ByteBuilder: ByteArray.Builder = new ByteArray.Builder
+  implicit def ShortBuilder: ShortArray.Builder = new ShortArray.Builder
+  implicit def IntBuilder: IntArray.Builder = new IntArray.Builder
+  implicit def LongBuilder: LongArray.Builder = new LongArray.Builder
+  implicit def FloatBuilder: FloatArray.Builder = new FloatArray.Builder
+  implicit def DoubleBuilder: DoubleArray.Builder = new DoubleArray.Builder
+  implicit def BitBuilder: BitArray.Builder = new BitArray.Builder
 }

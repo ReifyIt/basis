@@ -6,10 +6,11 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 
-private[basis] object ArrayMacros {
+private[immutable] object ArrayMacros {
   import scala.collection.breakOut
   import scala.collection.immutable.{List, ::, Nil}
   import scala.reflect.macros.Context
@@ -35,7 +36,7 @@ private[basis] object ArrayMacros {
     import c.universe._
     Apply(
       Select(
-        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("ByteArray"))),
+        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("ByteArray"))),
         nme.CONSTRUCTOR),
       array :: Nil)
   }
@@ -44,7 +45,7 @@ private[basis] object ArrayMacros {
     import c.universe._
     Apply(
       Select(
-        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("ShortArray"))),
+        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("ShortArray"))),
         nme.CONSTRUCTOR),
       array :: Nil)
   }
@@ -53,7 +54,7 @@ private[basis] object ArrayMacros {
     import c.universe._
     Apply(
       Select(
-        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("IntArray"))),
+        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("IntArray"))),
         nme.CONSTRUCTOR),
       array :: Nil)
   }
@@ -62,7 +63,7 @@ private[basis] object ArrayMacros {
     import c.universe._
     Apply(
       Select(
-        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("LongArray"))),
+        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("LongArray"))),
         nme.CONSTRUCTOR),
       array :: Nil)
   }
@@ -71,7 +72,7 @@ private[basis] object ArrayMacros {
     import c.universe._
     Apply(
       Select(
-        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("FloatArray"))),
+        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("FloatArray"))),
         nme.CONSTRUCTOR),
       array :: Nil)
   }
@@ -80,7 +81,7 @@ private[basis] object ArrayMacros {
     import c.universe._
     Apply(
       Select(
-        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("DoubleArray"))),
+        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("DoubleArray"))),
         nme.CONSTRUCTOR),
       array :: Nil)
   }
@@ -89,7 +90,7 @@ private[basis] object ArrayMacros {
     import c.universe._
     Apply(
       Select(
-        New(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "container"), newTypeName("RefArray"))),
+        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("RefArray"))),
         nme.CONSTRUCTOR),
       array :: Nil)
   }

@@ -41,7 +41,8 @@ object BasisBuild extends Build {
   lazy val BasisCollections = Project(
     id           = "basis-collections",
     base         = file("basis-collections"),
-    settings     = commonSettings
+    settings     = commonSettings,
+    dependencies = Seq(BasisUtil)
   )
   
   lazy val BasisContainers = Project(

@@ -6,69 +6,70 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 import basis.util._
 
-class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] {
+class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Double] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): A = array(index).asInstanceOf[A]
+  override def apply(index: Int): Double = array(index)
   
   /** Returns a copy of this array with a new `value` at `index`. */
-  def update[B >: A](index: Int, value: B): RefArray[B] = {
+  def update(index: Int, value: Double): DoubleArray = {
     val newArray = array.clone
-    newArray(index) = value.asInstanceOf[AnyRef]
-    new RefArray[B](newArray)
+    newArray(index) = value
+    new DoubleArray(newArray)
   }
   
   /** Returns a copy of this array with a new `value` inserted at `index`. */
-  def insert[B >: A](index: Int, value: B): RefArray[B] = {
-    val newArray = new scala.Array[AnyRef](array.length + 1)
+  def insert(index: Int, value: Double): DoubleArray = {
+    val newArray = new scala.Array[Double](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
-    newArray(index) = value.asInstanceOf[AnyRef]
+    newArray(index) = value
     java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
-    new RefArray[B](newArray)
+    new DoubleArray(newArray)
   }
   
   /** Returns a copy of this array with `index` removed. */
-  def remove(index: Int): RefArray[A] = {
-    val newArray = new scala.Array[AnyRef](array.length - 1)
+  def remove(index: Int): DoubleArray = {
+    val newArray = new scala.Array[Double](array.length - 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
     java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
-    new RefArray[A](newArray)
+    new DoubleArray(newArray)
   }
   
   /** Returns a copy of this array with `value` appended. */
-  def :+ [B >: A](value: B): RefArray[B] = {
-    val newArray = new scala.Array[AnyRef](array.length + 1)
+  def :+ (value: Double): DoubleArray = {
+    val newArray = new scala.Array[Double](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
-    newArray(newArray.length) = value.asInstanceOf[AnyRef]
-    new RefArray[B](newArray)
+    newArray(newArray.length) = value
+    new DoubleArray(newArray)
   }
   
   /** Returns a copy of this array with `value` prepended. */
-  def +: [B >: A](value: B): RefArray[B] = {
-    val newArray = new scala.Array[AnyRef](array.length + 1)
-    newArray(0) = value.asInstanceOf[AnyRef]
+  def +: (value: Double): DoubleArray = {
+    val newArray = new scala.Array[Double](array.length + 1)
+    newArray(0) = value
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
-    new RefArray[B](newArray)
+    new DoubleArray(newArray)
   }
   
-  protected override def stringPrefix: String = "RefArray"
+  protected override def stringPrefix: String = "DoubleArray"
 }
 
-object RefArray {
-  val Empty: RefArray[Nothing] = new RefArray[Nothing](new scala.Array[AnyRef](0))
+object DoubleArray {
+  val Empty: DoubleArray = new DoubleArray(new scala.Array[Double](0))
   
-  def apply[A](xs: A*): RefArray[A] = macro ArrayMacros.literalRefArray[A]
+  def apply(xs: Double*): DoubleArray = macro ArrayMacros.literalDoubleArray
   
-  final class Builder[A] extends Buffer[Any, A] {
-    override type State = RefArray[A]
+  final class Builder extends Buffer[Any, Double] {
+    override type State = DoubleArray
     
-    private[this] var array: scala.Array[AnyRef] = RefArray.Empty.array
+    private[this] var array: scala.Array[Double] = DoubleArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -81,7 +82,7 @@ object RefArray {
     }
     
     private[this] def resize(size: Int) {
-      val newArray = new scala.Array[AnyRef](size)
+      val newArray = new scala.Array[Double](size)
       java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
       array = newArray
     }
@@ -93,9 +94,9 @@ object RefArray {
       }
     }
     
-    override def += (value: A): this.type = {
+    override def += (value: Double): this.type = {
       prepare(length + 1)
-      array(length) = value.asInstanceOf[AnyRef]
+      array(length) = value
       length += 1
       this
     }
@@ -108,14 +109,14 @@ object RefArray {
       this
     }
     
-    override def state: RefArray[A] = {
+    override def state: DoubleArray = {
       if (length != array.length) resize(length)
       aliased = true
-      new RefArray[A](array)
+      new DoubleArray(array)
     }
     
     override def clear() {
-      array = RefArray.Empty.array
+      array = DoubleArray.Empty.array
       aliased = true
       length = 0
     }

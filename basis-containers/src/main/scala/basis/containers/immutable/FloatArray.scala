@@ -6,69 +6,70 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 import basis.util._
 
-class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Double] {
+class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): Double = array(index)
+  override def apply(index: Int): Float = array(index)
   
   /** Returns a copy of this array with a new `value` at `index`. */
-  def update(index: Int, value: Double): DoubleArray = {
+  def update(index: Int, value: Float): FloatArray = {
     val newArray = array.clone
     newArray(index) = value
-    new DoubleArray(newArray)
+    new FloatArray(newArray)
   }
   
   /** Returns a copy of this array with a new `value` inserted at `index`. */
-  def insert(index: Int, value: Double): DoubleArray = {
-    val newArray = new scala.Array[Double](array.length + 1)
+  def insert(index: Int, value: Float): FloatArray = {
+    val newArray = new scala.Array[Float](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
     newArray(index) = value
     java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
-    new DoubleArray(newArray)
+    new FloatArray(newArray)
   }
   
   /** Returns a copy of this array with `index` removed. */
-  def remove(index: Int): DoubleArray = {
-    val newArray = new scala.Array[Double](array.length - 1)
+  def remove(index: Int): FloatArray = {
+    val newArray = new scala.Array[Float](array.length - 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
     java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
-    new DoubleArray(newArray)
+    new FloatArray(newArray)
   }
   
   /** Returns a copy of this array with `value` appended. */
-  def :+ (value: Double): DoubleArray = {
-    val newArray = new scala.Array[Double](array.length + 1)
+  def :+ (value: Float): FloatArray = {
+    val newArray = new scala.Array[Float](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
     newArray(newArray.length) = value
-    new DoubleArray(newArray)
+    new FloatArray(newArray)
   }
   
   /** Returns a copy of this array with `value` prepended. */
-  def +: (value: Double): DoubleArray = {
-    val newArray = new scala.Array[Double](array.length + 1)
+  def +: (value: Float): FloatArray = {
+    val newArray = new scala.Array[Float](array.length + 1)
     newArray(0) = value
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
-    new DoubleArray(newArray)
+    new FloatArray(newArray)
   }
   
-  protected override def stringPrefix: String = "DoubleArray"
+  protected override def stringPrefix: String = "FloatArray"
 }
 
-object DoubleArray {
-  val Empty: DoubleArray = new DoubleArray(new scala.Array[Double](0))
+object FloatArray {
+  val Empty: FloatArray = new FloatArray(new scala.Array[Float](0))
   
-  def apply(xs: Double*): DoubleArray = macro ArrayMacros.literalDoubleArray
+  def apply(xs: Float*): FloatArray = macro ArrayMacros.literalFloatArray
   
-  final class Builder extends Buffer[Any, Double] {
-    override type State = DoubleArray
+  final class Builder extends Buffer[Any, Float] {
+    override type State = FloatArray
     
-    private[this] var array: scala.Array[Double] = DoubleArray.Empty.array
+    private[this] var array: scala.Array[Float] = FloatArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -81,7 +82,7 @@ object DoubleArray {
     }
     
     private[this] def resize(size: Int) {
-      val newArray = new scala.Array[Double](size)
+      val newArray = new scala.Array[Float](size)
       java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
       array = newArray
     }
@@ -93,7 +94,7 @@ object DoubleArray {
       }
     }
     
-    override def += (value: Double): this.type = {
+    override def += (value: Float): this.type = {
       prepare(length + 1)
       array(length) = value
       length += 1
@@ -108,14 +109,14 @@ object DoubleArray {
       this
     }
     
-    override def state: DoubleArray = {
+    override def state: FloatArray = {
       if (length != array.length) resize(length)
       aliased = true
-      new DoubleArray(array)
+      new FloatArray(array)
     }
     
     override def clear() {
-      array = DoubleArray.Empty.array
+      array = FloatArray.Empty.array
       aliased = true
       length = 0
     }

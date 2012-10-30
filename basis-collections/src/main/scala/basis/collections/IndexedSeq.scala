@@ -7,6 +7,8 @@
 
 package basis.collections
 
+import basis.util._
+
 /** An indexed sequence of elements.
   * 
   * @groupprio  Examining   -3
@@ -41,10 +43,8 @@ object IndexedSeq extends SeqFactory[IndexedSeq] {
       (xs: IndexedSeq[A], from: Int, until: Int)
     extends Iterator[A] {
     
-    import java.lang.Math.{max, min}
-    
-    private[this] var lower: Int = max(0, from)
-    private[this] var upper: Int = min(max(lower, until), xs.length)
+    private[this] var upper: Int = (0 max upper) min xs.length
+    private[this] var lower: Int = (0 max lower) min upper
     private[this] var index: Int = lower
     
     override def isEmpty: Boolean = index >= upper

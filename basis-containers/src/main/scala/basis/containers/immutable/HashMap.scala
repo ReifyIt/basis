@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 import basis.util._
@@ -397,7 +398,7 @@ object HashMap extends MapFactory[HashMap] {
     override def clear(): Unit = map = HashMap.Empty
   }
   
-  private[basis] final class Cursor[+A, +T](
+  private[immutable] final class Cursor[+A, +T](
       self: HashMap[A, T],
       private[this] var child: Cursor[A, T],
       private[this] var index: Int)

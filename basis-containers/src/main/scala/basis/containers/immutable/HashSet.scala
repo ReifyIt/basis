@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 import basis.util._
@@ -304,7 +305,7 @@ object HashSet extends SetFactory[HashSet] {
     override def clear(): Unit = set = HashSet.Empty
   }
   
-  private[basis] final class Cursor[+A](
+  private[immutable] final class Cursor[+A](
       self: HashSet[A],
       private[this] var child: Cursor[A],
       private[this] var index: Int)

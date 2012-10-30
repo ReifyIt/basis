@@ -6,69 +6,70 @@
 \*                                                                      */
 
 package basis.containers
+package immutable
 
 import basis.collections._
 import basis.util._
 
-class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
+class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): Long = array(index)
+  override def apply(index: Int): Byte = array(index)
   
   /** Returns a copy of this array with a new `value` at `index`. */
-  def update(index: Int, value: Long): LongArray = {
+  def update(index: Int, value: Byte): ByteArray = {
     val newArray = array.clone
     newArray(index) = value
-    new LongArray(newArray)
+    new ByteArray(newArray)
   }
   
   /** Returns a copy of this array with a new `value` inserted at `index`. */
-  def insert(index: Int, value: Long): LongArray = {
-    val newArray = new scala.Array[Long](array.length + 1)
+  def insert(index: Int, value: Byte): ByteArray = {
+    val newArray = new scala.Array[Byte](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
     newArray(index) = value
     java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
-    new LongArray(newArray)
+    new ByteArray(newArray)
   }
   
   /** Returns a copy of this array with `index` removed. */
-  def remove(index: Int): LongArray = {
-    val newArray = new scala.Array[Long](array.length - 1)
+  def remove(index: Int): ByteArray = {
+    val newArray = new scala.Array[Byte](array.length - 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, index)
     java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
-    new LongArray(newArray)
+    new ByteArray(newArray)
   }
   
   /** Returns a copy of this array with `value` appended. */
-  def :+ (value: Long): LongArray = {
-    val newArray = new scala.Array[Long](array.length + 1)
+  def :+ (value: Byte): ByteArray = {
+    val newArray = new scala.Array[Byte](array.length + 1)
     java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
     newArray(newArray.length) = value
-    new LongArray(newArray)
+    new ByteArray(newArray)
   }
   
   /** Returns a copy of this array with `value` prepended. */
-  def +: (value: Long): LongArray = {
-    val newArray = new scala.Array[Long](array.length + 1)
+  def +: (value: Byte): ByteArray = {
+    val newArray = new scala.Array[Byte](array.length + 1)
     newArray(0) = value
     java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
-    new LongArray(newArray)
+    new ByteArray(newArray)
   }
   
-  protected override def stringPrefix: String = "LongArray"
+  protected override def stringPrefix: String = "ByteArray"
 }
 
-object LongArray {
-  val Empty: LongArray = new LongArray(new scala.Array[Long](0))
+object ByteArray {
+  val Empty: ByteArray = new ByteArray(new scala.Array[Byte](0))
   
-  def apply(xs: Long*): LongArray = macro ArrayMacros.literalLongArray
+  def apply(xs: Byte*): ByteArray = macro ArrayMacros.literalByteArray
   
-  final class Builder extends Buffer[Any, Long] {
-    override type State = LongArray
+  final class Builder extends Buffer[Any, Byte] {
+    override type State = ByteArray
     
-    private[this] var array: scala.Array[Long] = LongArray.Empty.array
+    private[this] var array: scala.Array[Byte] = ByteArray.Empty.array
     
     private[this] var aliased: Boolean = true
     
@@ -81,7 +82,7 @@ object LongArray {
     }
     
     private[this] def resize(size: Int) {
-      val newArray = new scala.Array[Long](size)
+      val newArray = new scala.Array[Byte](size)
       java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
       array = newArray
     }
@@ -93,7 +94,7 @@ object LongArray {
       }
     }
     
-    override def += (value: Long): this.type = {
+    override def += (value: Byte): this.type = {
       prepare(length + 1)
       array(length) = value
       length += 1
@@ -108,14 +109,14 @@ object LongArray {
       this
     }
     
-    override def state: LongArray = {
+    override def state: ByteArray = {
       if (length != array.length) resize(length)
       aliased = true
-      new LongArray(array)
+      new ByteArray(array)
     }
     
     override def clear() {
-      array = LongArray.Empty.array
+      array = ByteArray.Empty.array
       aliased = true
       length = 0
     }
