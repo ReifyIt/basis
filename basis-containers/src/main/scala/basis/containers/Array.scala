@@ -17,23 +17,8 @@ import basis.util._
   * 
   * @define collection  array
   */
-trait Array[+A] extends Any with Seq[A] {
+trait Array[+A] extends Any with IndexedSeq[A] {
   override type Self <: Array[A]
-  
-  /** Returns the element at `index`. */
-  def apply(index: Int): A
-  
-  override def iterator: Iterator[A] =
-    new Array.Cursor(this, 0, length)
-  
-  protected override def foreach[U](f: A => U) {
-    var i = 0
-    val n = length
-    while (i < n) {
-      f(this(i))
-      i += 1
-    }
-  }
   
   override def equals(other: Any): Boolean = other match {
     case that: Array[A] =>
@@ -93,20 +78,6 @@ object Array extends AllArrayBuilders with SeqFactory[Array] {
       case PackedBoolean               => new BitArray.Builder
       case typeA: ValType[A]           => new ValArray.Builder[A]()(typeA)
     }).asInstanceOf[Buffer[Any, A] { type State = Array[A] }]
-  }
-  
-  private[containers] final class Cursor[+A](xs: Array[A], from: Int, until: Int) extends Iterator[A] {
-    private[this] var lower: Int = 0 max from
-    private[this] var upper: Int = (lower max until) min xs.length
-    private[this] var index: Int = lower
-    
-    override def isEmpty: Boolean = index >= upper
-    
-    override def head: A = if (isEmpty) Iterator.Empty.head else xs(index)
-    
-    override def step(): Unit = if (isEmpty) Iterator.Empty.step() else index += 1
-    
-    override def dup: Cursor[A] = new Cursor[A](xs, index, upper)
   }
 }
 

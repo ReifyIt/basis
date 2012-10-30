@@ -158,10 +158,10 @@ private[sequential] object EagerLinearSeqOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def deconstruct(c: Context): c.Tree = {
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[LinearSeq[A]] = {
     import c.universe._
     val Apply(_, seq :: Nil) = c.prefix.tree
-    seq
+    c.Expr(seq)(LinearSeqTag[A](c))
   }
   
   def collect[A : c.WeakTypeTag, B]
@@ -169,129 +169,90 @@ private[sequential] object EagerLinearSeqOps {
       (q: c.Expr[PartialFunction[A, B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.collect[A, B](c)(deconstruct(c), q.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).collect[A, B](unApply(c))(q)(buffer)
   
   def map[A : c.WeakTypeTag, B]
       (c: Context)
       (f: c.Expr[A => B])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.map[A, B](c)(deconstruct(c), f.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).map[A, B](unApply(c))(f)(buffer)
   
   def flatMap[A : c.WeakTypeTag, B]
       (c: Context)
       (f: c.Expr[A => Enumerator[B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.flatMap[A, B](c)(deconstruct(c), f.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).flatMap[A, B](unApply(c))(f)(buffer)
   
   def filter[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.filter[A](c)(deconstruct(c), p.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).filter[A](unApply(c))(p)(buffer)
   
   def dropWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.dropWhile[A](c)(deconstruct(c), p.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).dropWhile[A](unApply(c))(p)(buffer)
   
   def takeWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.takeWhile[A](c)(deconstruct(c), p.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).takeWhile[A](unApply(c))(p)(buffer)
   
   def span[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (bufferA: c.Expr[Buffer[_, A]], bufferB: c.Expr[Buffer[_, A]])
     : c.Expr[(bufferA.value.State, bufferB.value.State)] =
-    c.Expr {
-      LinearSeqMacros.span[A](c)(deconstruct(c), p.tree, bufferA.tree, bufferB.tree)
-    } (Tuple2Tag(c)(BufferStateTag(c)(bufferA), BufferStateTag(c)(bufferB)))
+    new LinearSeqMacros[c.type](c).span[A](unApply(c))(p)(bufferA, bufferB)
   
   def drop[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.drop[A](c)(deconstruct(c), lower.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).drop[A](unApply(c))(lower)(buffer)
   
   def take[A : c.WeakTypeTag]
       (c: Context)
       (upper: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.take[A](c)(deconstruct(c), upper.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).take[A](unApply(c))(upper)(buffer)
   
   def slice[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int], upper: c.Expr[Int])
       (buffer: c.Expr[Buffer[_, A]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.slice[A](c)(deconstruct(c), lower.tree, upper.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).slice[A](unApply(c))(lower, upper)(buffer)
   
   def zip[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (that: c.Expr[LinearSeq[B]])
       (buffer: c.Expr[Buffer[_, (A, B)]])
-    : c.Expr[buffer.value.State] = {
-    import c.universe._
-    c.Expr {
-      LinearSeqMacros.zip[A, B](c)(deconstruct(c), that.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
-  }
+    : c.Expr[buffer.value.State] =
+    new LinearSeqMacros[c.type](c).zip[A, B](unApply(c), that)(buffer)
   
   def ++ [A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (that: c.Expr[LinearSeq[B]])
       (buffer: c.Expr[Buffer[_, B]])
     : c.Expr[buffer.value.State] =
-    c.Expr {
-      LinearSeqMacros.++[A, B](c)(deconstruct(c), that.tree, buffer.tree)
-    } (BufferStateTag(c)(buffer))
+    new LinearSeqMacros[c.type](c).++[B](unApply[A](c), that)(buffer)
   
-  private def BufferStateTag
-      (c: Context)
-      (buffer: c.Expr[Buffer[_, _]])
-    : c.WeakTypeTag[buffer.value.State] = {
-    import c.universe._
-    c.WeakTypeTag(
-      typeRef(
-        singleType(NoPrefix, buffer.staticType.typeSymbol),
-        buffer.staticType.member(newTypeName("state")), Nil))
-  }
-  
-  private def Tuple2Tag[A : c.WeakTypeTag, B : c.WeakTypeTag]
-      (c: Context)
-    : c.WeakTypeTag[(A, B)] = {
+  private def LinearSeqTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[LinearSeq[A]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("scala.Tuple2").toType,
-        weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+        c.mirror.staticClass("basis.collections.LinearSeq").toType,
+        weakTypeOf[A] :: Nil))
   }
 }

@@ -143,89 +143,72 @@ private[sequential] object CommonContainerOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def deconstruct(c: Context): c.Tree = {
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Container[A]] = {
     import c.universe._
     val Apply(_, container :: Nil) = c.prefix.tree
-    container
+    c.Expr(container)(ContainerTag[A](c))
   }
   
-  private def iterator(c: Context): c.Tree = {
+  private def unApplyIterator[A : c.WeakTypeTag](c: Context): c.Expr[Iterator[A]] = {
     import c.universe._
-    Select(deconstruct(c), "iterator")
+    val Apply(_, container :: Nil) = c.prefix.tree
+    c.Expr(Select(container, "iterator"))(IteratorTag[A](c))
   }
   
   def foreach[A : c.WeakTypeTag, U]
       (c: Context)
       (f: c.Expr[A => U])
     : c.Expr[Unit] =
-    c.Expr {
-      IteratorMacros.foreach[A, U](c)(iterator(c), f.tree)
-    } (c.TypeTag.Unit)
+    new IteratorMacros[c.type](c).foreach[A, U](unApplyIterator(c))(f)
   
   def foldLeft[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (z: c.Expr[B])
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    c.Expr {
-      IteratorMacros.foldLeft[A, B](c)(iterator(c), z.tree, op.tree)
-    } (c.weakTypeTag[B])
+    new IteratorMacros[c.type](c).foldLeft[A, B](unApplyIterator(c))(z)(op)
   
   def reduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    c.Expr {
-      IteratorMacros.reduceLeft[A, B](c)(iterator(c), op.tree)
-    } (c.weakTypeTag[B])
+    new IteratorMacros[c.type](c).reduceLeft[A, B](unApplyIterator(c))(op)
   
   def reduceLeftOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[Option[B]] =
-    c.Expr {
-      IteratorMacros.reduceLeftOption[A, B](c)(iterator(c), op.tree)
-    } (OptionTag[B](c))
+    new IteratorMacros[c.type](c).reduceLeftOption[A, B](unApplyIterator(c))(op)
   
   def find[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Option[A]] =
-    c.Expr {
-      IteratorMacros.find[A](c)(iterator(c), p.tree)
-    } (OptionTag[A](c))
+    new IteratorMacros[c.type](c).find[A](unApplyIterator(c))(p)
   
   def forall[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    c.Expr {
-      IteratorMacros.forall[A](c)(iterator(c), p.tree)
-    } (c.TypeTag.Boolean)
+    new IteratorMacros[c.type](c).forall[A](unApplyIterator(c))(p)
   
   def exists[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    c.Expr {
-      IteratorMacros.exists[A](c)(iterator(c), p.tree)
-    } (c.TypeTag.Boolean)
+    new IteratorMacros[c.type](c).exists[A](unApplyIterator(c))(p)
   
   def count[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Int] =
-    c.Expr {
-      IteratorMacros.count[A](c)(iterator(c), p.tree)
-    } (c.TypeTag.Int)
+    new IteratorMacros[c.type](c).count[A](unApplyIterator(c))(p)
   
   def select[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
-    c.Expr {
-      IteratorMacros.select[A, B](c)(iterator(c), q.tree)
-    } (OptionTag[B](c))
+    new IteratorMacros[c.type](c).select[A, B](unApplyIterator(c))(q)
   
   def eagerly[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context): c.Expr[EagerContainerOps[Self, A]] = {
     import c.universe._
@@ -233,7 +216,7 @@ private[sequential] object CommonContainerOps {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "EagerContainerOps"),
-        deconstruct(c) :: Nil)
+        unApply(c).tree :: Nil)
     } (EagerContainerOpsTag[Self, A](c))
   }
   
@@ -243,8 +226,24 @@ private[sequential] object CommonContainerOps {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "LazyContainerOps"),
-        deconstruct(c) :: Nil)
+        unApply(c).tree :: Nil)
     } (LazyContainerOpsTag[A](c))
+  }
+  
+  private def ContainerTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Container[A]] = {
+    import c.universe._
+    c.WeakTypeTag(
+      appliedType(
+        c.mirror.staticClass("basis.collections.Container").toType,
+        weakTypeOf[A] :: Nil))
+  }
+  
+  private def IteratorTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Iterator[A]] = {
+    import c.universe._
+    c.WeakTypeTag(
+      appliedType(
+        c.mirror.staticClass("basis.collections.Iterator").toType,
+        weakTypeOf[A] :: Nil))
   }
   
   private def EagerContainerOpsTag[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context)
@@ -262,14 +261,6 @@ private[sequential] object CommonContainerOps {
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.LazyContainerOps").toType,
-        weakTypeOf[A] :: Nil))
-  }
-  
-  private def OptionTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Option[A]] = {
-    import c.universe._
-    c.WeakTypeTag(
-      appliedType(
-        c.mirror.staticClass("scala.Option").toType,
         weakTypeOf[A] :: Nil))
   }
 }

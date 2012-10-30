@@ -143,84 +143,66 @@ private[sequential] object CommonIteratorOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def deconstruct(c: Context): c.Tree = {
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Iterator[A]] = {
     import c.universe._
     val Apply(_, iterator :: Nil) = c.prefix.tree
-    iterator
+    c.Expr(iterator)(IteratorTag[A](c))
   }
   
   def foreach[A : c.WeakTypeTag, U]
       (c: Context)
       (f: c.Expr[A => U])
     : c.Expr[Unit] =
-    c.Expr {
-      IteratorMacros.foreach[A, U](c)(deconstruct(c), f.tree)
-    } (c.TypeTag.Unit)
+    new IteratorMacros[c.type](c).foreach[A, U](unApply(c))(f)
   
   def foldLeft[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (z: c.Expr[B])
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    c.Expr {
-      IteratorMacros.foldLeft[A, B](c)(deconstruct(c), z.tree, op.tree)
-    } (c.weakTypeTag[B])
+    new IteratorMacros[c.type](c).foldLeft[A, B](unApply(c))(z)(op)
   
   def reduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    c.Expr {
-      IteratorMacros.reduceLeft[A, B](c)(deconstruct(c), op.tree)
-    } (c.weakTypeTag[B])
+    new IteratorMacros[c.type](c).reduceLeft[A, B](unApply(c))(op)
   
   def reduceLeftOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[Option[B]] =
-    c.Expr {
-      IteratorMacros.reduceLeftOption[A, B](c)(deconstruct(c), op.tree)
-    } (OptionTag[B](c))
+    new IteratorMacros[c.type](c).reduceLeftOption[A, B](unApply(c))(op)
   
   def find[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Option[A]] =
-    c.Expr {
-      IteratorMacros.find[A](c)(deconstruct(c), p.tree)
-    } (OptionTag[A](c))
+    new IteratorMacros[c.type](c).find[A](unApply(c))(p)
   
   def forall[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    c.Expr {
-      IteratorMacros.forall[A](c)(deconstruct(c), p.tree)
-    } (c.TypeTag.Boolean)
+    new IteratorMacros[c.type](c).forall[A](unApply(c))(p)
   
   def exists[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    c.Expr {
-      IteratorMacros.exists[A](c)(deconstruct(c), p.tree)
-    } (c.TypeTag.Boolean)
+    new IteratorMacros[c.type](c).exists[A](unApply(c))(p)
   
   def count[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Int] =
-    c.Expr {
-      IteratorMacros.count[A](c)(deconstruct(c), p.tree)
-    } (c.TypeTag.Int)
+    new IteratorMacros[c.type](c).count[A](unApply(c))(p)
   
   def select[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
-    c.Expr {
-      IteratorMacros.select[A, B](c)(deconstruct(c), q.tree)
-    } (OptionTag[B](c))
+    new IteratorMacros[c.type](c).select[A, B](unApply(c))(q)
   
   def eagerly[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context): c.Expr[EagerIteratorOps[Self, A]] = {
     import c.universe._
@@ -228,7 +210,7 @@ private[sequential] object CommonIteratorOps {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "EagerIteratorOps"),
-        deconstruct(c) :: Nil)
+        unApply(c).tree :: Nil)
     } (EagerIteratorOpsTag[Self, A](c))
   }
   
@@ -238,8 +220,16 @@ private[sequential] object CommonIteratorOps {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "LazyIteratorOps"),
-        deconstruct(c) :: Nil)
+        unApply(c).tree :: Nil)
     } (LazyIteratorOpsTag[A](c))
+  }
+  
+  private def IteratorTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Iterator[A]] = {
+    import c.universe._
+    c.WeakTypeTag(
+      appliedType(
+        c.mirror.staticClass("basis.collections.Iterator").toType,
+        weakTypeOf[A] :: Nil))
   }
   
   private def EagerIteratorOpsTag[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context)
@@ -257,14 +247,6 @@ private[sequential] object CommonIteratorOps {
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.LazyIteratorOps").toType,
-        weakTypeOf[A] :: Nil))
-  }
-  
-  private def OptionTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Option[A]] = {
-    import c.universe._
-    c.WeakTypeTag(
-      appliedType(
-        c.mirror.staticClass("scala.Option").toType,
         weakTypeOf[A] :: Nil))
   }
 }

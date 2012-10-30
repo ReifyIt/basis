@@ -54,8 +54,6 @@ sealed abstract class List[+A] extends LinearSeq[A] {
   @tailrec protected final override def foreach[U](f: A => U) =
     if (!isEmpty) { f(head); tail.foreach[U](f) }
   
-  override def iterator: Iterator[A] = new List.Cursor(this)
-  
   override def equals(other: Any): Boolean = other match {
     case that: List[A] =>
       var xs = this
@@ -188,15 +186,5 @@ object List extends SeqFactory[List] {
       first = Nil
       aliased = true
     }
-  }
-  
-  private[containers] final class Cursor[+A](private[this] var xs: List[A]) extends Iterator[A] {
-    override def isEmpty: Boolean = xs.isEmpty
-    
-    override def head: A = if (isEmpty) Iterator.Empty.head else xs.head
-    
-    override def step(): Unit = if (isEmpty) Iterator.Empty.step() else xs = xs.tail
-    
-    override def dup: Cursor[A] = new Cursor(xs)
   }
 }

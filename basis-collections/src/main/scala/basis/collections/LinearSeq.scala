@@ -23,4 +23,41 @@ trait LinearSeq[+A] extends Any with Seq[A] {
   /** Returns all except the first element of this $collection.
     * @group Examining */
   def tail: LinearSeq[A]
+  
+  override def length: Int = {
+    var xs = this
+    var count = 0
+    while (!xs.isEmpty) {
+      count += 1
+      xs = xs.tail
+    }
+    count
+  }
+  
+  override def iterator: Iterator[A] =
+    new LinearSeq.Cursor(this)
+  
+  protected override def foreach[U](f: A => U) {
+    var xs = this
+    while (!xs.isEmpty) {
+      f(xs.head)
+      xs = xs.tail
+    }
+  }
+}
+
+/** A generic linear sequence factory. */
+object LinearSeq extends SeqFactory[LinearSeq] {
+  private[collections] final class Cursor[+A]
+      (private[this] var xs: LinearSeq[A])
+    extends Iterator[A] {
+    
+    override def isEmpty: Boolean = xs.isEmpty
+    
+    override def head: A = if (isEmpty) Iterator.Empty.head else xs.head
+    
+    override def step(): Unit = if (isEmpty) Iterator.Empty.step() else xs = xs.tail
+    
+    override def dup: Iterator[A] = new Cursor(xs)
+  }
 }

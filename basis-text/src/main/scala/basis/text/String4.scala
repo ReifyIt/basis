@@ -16,7 +16,7 @@ import basis.util._
   * 
   * @define collection  string
   */
-class String4(val codeUnits: scala.Array[Int]) extends AnyVal with Rope {
+class String4(val codeUnits: scala.Array[Int]) extends AnyVal with IndexedSeq[Char] with Rope {
   override type Self = String4
   
   override def isEmpty: Boolean = codeUnits.length == 0
@@ -26,7 +26,7 @@ class String4(val codeUnits: scala.Array[Int]) extends AnyVal with Rope {
   
   /** Returns the character at `index`. Substitutes the replacement character
     * U+FFFD in lieu of invalid characters. */
-  def apply(index: Int): Char = {
+  override def apply(index: Int): Char = {
     val n = codeUnits.length
     if (index < 0 || index >= n)
       throw new java.lang.IndexOutOfBoundsException(index.toString)

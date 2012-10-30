@@ -28,6 +28,9 @@ class ProvideCommonOps {
   implicit def CommonLinearSeqOps[A](self: LinearSeq[A]): CommonLinearSeqOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
+  implicit def CommonIndexedSeqOps[A](self: IndexedSeq[A]): CommonIndexedSeqOps[self.Self, A] =
+    throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  
   implicit def CommonSetOps[A](self: Set[A]): CommonSetOps[self.Self, A] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   

@@ -5,9 +5,13 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.collections
+package sequential
 
-package object containers {
-  implicit def ArrayOps[A](self: Array[A]): ArrayOps[self.Self, A] =
-    new ArrayOps[self.Self, A](self)
-}
+/** Non-strictly evaluated indexed sequence operations.
+  * 
+  * @groupprio  Mapping     -3
+  * @groupprio  Filtering   -2
+  * @groupprio  Combining   -1
+  */
+class LazyIndexedSeqOps[+A](val __ : IndexedSeq[A]) extends AnyVal
