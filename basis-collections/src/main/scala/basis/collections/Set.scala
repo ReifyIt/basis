@@ -34,4 +34,7 @@ trait Set[+A] extends Any with Container[A] {
 }
 
 /** A generic set factory */
-object Set extends SetFactory[Set]
+object Set {
+  def apply[A](xs: A*)(implicit buffer: Buffer[Set[_], A]): buffer.State =
+    macro FactoryMacros.apply[A]
+}

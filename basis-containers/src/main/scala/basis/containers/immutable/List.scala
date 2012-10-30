@@ -118,7 +118,7 @@ object :: {
   def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
 }
 
-object List extends SeqFactory[List] {
+object List {
   def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   
   implicit def Builder[A]: Builder[A] = new Builder[A]

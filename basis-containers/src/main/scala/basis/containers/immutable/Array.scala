@@ -65,7 +65,7 @@ trait Array[+A] extends Any with IndexedSeq[A] {
   protected def stringPrefix: String = "Array"
 }
 
-object Array extends AllArrayBuilders with SeqFactory[Array] {
+object Array extends AllArrayBuilders {
   def Builder[A](implicit typeA: DataType[A]): Buffer[Any, A] { type State = Array[A] } = {
     import ValType._
     (typeA match {

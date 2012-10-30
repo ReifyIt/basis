@@ -283,7 +283,7 @@ final class HashSet[+A] private
   }
 }
 
-object HashSet extends SetFactory[HashSet] {
+object HashSet {
   val Empty: HashSet[Nothing] = new HashSet[Nothing](0, 0, RefArray.Empty)
   
   implicit def Builder[A]: Builder[A] = new Builder[A]

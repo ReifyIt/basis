@@ -373,7 +373,7 @@ final class HashMap[+A, +T] private
   }
 }
 
-object HashMap extends MapFactory[HashMap] {
+object HashMap {
   val Empty: HashMap[Nothing, Nothing] =
     new HashMap[Nothing, Nothing](0, 0, RefArray.Empty, RefArray.Empty)
   

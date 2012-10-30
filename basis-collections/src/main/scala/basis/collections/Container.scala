@@ -27,3 +27,9 @@ trait Container[+A] extends Any with Collection[A] {
     while (!xs.isEmpty) { f(xs.head); xs.step() }
   }
 }
+
+/** A generic container factory */
+object Container {
+  def apply[A](xs: A*)(implicit buffer: Buffer[Container[_], A]): buffer.State =
+    macro FactoryMacros.apply[A]
+}

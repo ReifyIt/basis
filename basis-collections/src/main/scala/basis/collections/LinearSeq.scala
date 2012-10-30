@@ -47,7 +47,19 @@ trait LinearSeq[+A] extends Any with Seq[A] {
 }
 
 /** A generic linear sequence factory. */
-object LinearSeq extends SeqFactory[LinearSeq] {
+object LinearSeq {
+  def apply[A](xs: A*)(implicit buffer: Buffer[LinearSeq[_], A]): buffer.State =
+    macro FactoryMacros.apply[A]
+  
+  def fill[A](count: Int)(element: => A)(implicit buffer: Buffer[LinearSeq[_], A]): buffer.State =
+    macro FactoryMacros.fill[A]
+  
+  def tabulate[A](count: Int)(f: Int => A)(implicit buffer: Buffer[LinearSeq[_], A]): buffer.State =
+    macro FactoryMacros.tabulate[A]
+  
+  def iterate[A](start: A, count: Int)(f: A => A)(implicit buffer: Buffer[LinearSeq[_], A]): buffer.State =
+    macro FactoryMacros.iterate[A]
+  
   private[collections] final class Cursor[+A]
       (private[this] var xs: LinearSeq[A])
     extends Iterator[A] {
