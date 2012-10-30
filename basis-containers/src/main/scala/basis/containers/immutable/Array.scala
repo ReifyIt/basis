@@ -9,7 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.data._
+import basis.memory._
 import basis.util._
 
 /** An indexed sequence of elements.
@@ -66,7 +66,7 @@ trait Array[+A] extends Any with IndexedSeq[A] {
 }
 
 object Array extends AllArrayBuilders with SeqFactory[Array] {
-  def Builder[A](implicit typeA: MemType[A]): Buffer[Any, A] { type State = Array[A] } = {
+  def Builder[A](implicit typeA: DataType[A]): Buffer[Any, A] { type State = Array[A] } = {
     import ValType._
     (typeA match {
       case typeA: RefType[A]           => new RefArray.Builder[A]

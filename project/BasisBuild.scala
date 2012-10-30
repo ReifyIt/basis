@@ -19,23 +19,17 @@ object BasisBuild extends Build {
     dependencies =
       Seq(BasisCollections,
           BasisContainers,
-          BasisData,
           BasisMath,
+          BasisMemory,
           BasisText,
           BasisUtil),
     aggregate    =
       Seq(BasisCollections,
           BasisContainers,
-          BasisData,
           BasisMath,
+          BasisMemory,
           BasisText,
           BasisUtil)
-  )
-  
-  lazy val BasisData = Project(
-    id           = "basis-data",
-    base         = file("basis-data"),
-    settings     = commonSettings
   )
   
   lazy val BasisCollections = Project(
@@ -49,12 +43,18 @@ object BasisBuild extends Build {
     id           = "basis-containers",
     base         = file("basis-containers"),
     settings     = commonSettings,
-    dependencies = Seq(BasisCollections, BasisData, BasisUtil)
+    dependencies = Seq(BasisCollections, BasisMemory, BasisUtil)
   )
   
   lazy val BasisMath = Project(
     id           = "basis-math",
     base         = file("basis-math"),
+    settings     = commonSettings
+  )
+  
+  lazy val BasisMemory = Project(
+    id           = "basis-memory",
+    base         = file("basis-memory"),
     settings     = commonSettings
   )
   
