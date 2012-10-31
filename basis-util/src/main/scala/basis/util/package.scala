@@ -8,6 +8,10 @@
 package basis
 
 package object util {
+  /** Implicitly adds arrow (-> and →) associators to all values. */
+  implicit def Arrow[A](left: A): Arrow[A] =
+    throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  
   /** Implicitly adds supplemental operations to `Int` values. */
   implicit def IntOps(value: Int): IntOps =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")

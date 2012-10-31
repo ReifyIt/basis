@@ -5,16 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.containers
-package immutable
+package basis.util
 
-import basis.collections._
-
-import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
-
-class HashMapSpec extends FunSpec with ShouldMatchers with MapBehaviors {
-  override def suiteName = "HashMap"
+/** Infix arrow (-> and →) associators. */
+abstract class Arrow[A] private[util] {
+  def -> [B](right: B): (A, B) = macro ArrowMacros.->[A, B]
   
-  it should behave like genericMap(HashMap)
+  def → [B](right: B): (A, B) = macro ArrowMacros.->[A, B]
 }

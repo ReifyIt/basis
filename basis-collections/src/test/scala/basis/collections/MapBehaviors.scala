@@ -8,13 +8,13 @@
 package basis.collections
 
 import basis.collections.generic._
+import basis.util._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 trait MapBehaviors { this: FunSpec =>
   import ShouldMatchers._
-  import Predef._
   
   def genericMap[CC[A, T] <: Map[A, T]](CC: MapFactory[CC]) {
     describe(s"An empty associative $CC") {
