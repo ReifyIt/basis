@@ -248,7 +248,7 @@ private[collections] final class IteratorMacros[C <: Context](val context: C) {
           If(
             Select(Select(Ident(iter), "isEmpty"), "unary_$bang"),
             Block(
-              ValDef(NoMods, x, TypeTree(weakTypeOf[A]), Select(Ident(iter), "head")) :: Nil,
+              ValDef(NoMods, x, TypeTree(), Select(Ident(iter), "head")) :: Nil,
               If(
                 Apply(Select(q.tree, "isDefinedAt"), Ident(x) :: Nil),
                 Assign(

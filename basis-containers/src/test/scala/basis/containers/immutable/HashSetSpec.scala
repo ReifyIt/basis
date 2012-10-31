@@ -10,6 +10,7 @@ package immutable
 
 import basis.collections._
 import basis.collections.generic._
+import basis.collections.sequential._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
@@ -18,7 +19,8 @@ class HashSetSpec
   extends FunSpec
     with ShouldMatchers
     with SetFactoryBehaviors
-    with SetBehaviors {
+    with SetBehaviors
+    with CommonSetBehaviors {
   
   override def suiteName = "HashSet specification"
   
@@ -27,4 +29,8 @@ class HashSetSpec
   it should behave like GenericCollection(HashSet)
   it should behave like GenericContainer(HashSet)
   it should behave like GenericSet(HashSet)
+  
+  it should behave like GenericCommonCollection(HashSet)
+  it should behave like GenericCommonContainer(HashSet)
+  it should behave like GenericCommonSet(HashSet)
 }
