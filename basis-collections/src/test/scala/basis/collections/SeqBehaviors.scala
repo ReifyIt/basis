@@ -15,7 +15,7 @@ import org.scalatest.matchers.ShouldMatchers
 trait SeqBehaviors extends ContainerBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def genericSeq[CC[A] <: Seq[A]](CC: BuilderFactory[CC]) {
+  def GenericSeq[CC[A] <: Seq[A]](CC: BuilderFactory[CC]) {
     describe(s"An empty $CC sequence") {
       it("should know that it's empty") {
         val xs = CC[Any]()

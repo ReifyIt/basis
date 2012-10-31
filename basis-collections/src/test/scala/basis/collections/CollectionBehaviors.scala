@@ -15,7 +15,7 @@ import org.scalatest.matchers.ShouldMatchers
 trait CollectionBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def genericCollection[CC[A] <: Collection[A]](CC: BuilderFactory[CC]) {
+  def GenericCollection[CC[A] <: Collection[A]](CC: BuilderFactory[CC]) {
     describe(s"An empty $CC collection") {
       it("should not traverse any elements") {
         val xs = CC[Any]()
@@ -23,15 +23,17 @@ trait CollectionBehaviors { this: FunSpec =>
       }
     }
     
-    describe(s"A non-empty $CC collection") {
-      it("should traverse a single element once") {
+    describe(s"A unary $CC collection") {
+      it("should traverse its element once") {
         val xs = CC(null)
         var i = 0
         traverse(xs)(x => i += 1)
         i should be (1)
       }
-      
-      it("should traverse multiple elements once each (in any order)") {
+    }
+    
+    describe(s"A non-empty $CC collection") {
+      it("should traverse its elements once each (in any order)") {
         val xs = CC(2, 3, 5, 7)
         var i = 0
         traverse(xs)(x => i += x)

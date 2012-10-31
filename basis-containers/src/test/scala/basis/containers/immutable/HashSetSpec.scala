@@ -9,14 +9,22 @@ package basis.containers
 package immutable
 
 import basis.collections._
+import basis.collections.generic._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class HashSetSpec extends FunSpec with ShouldMatchers with SetBehaviors {
-  override def suiteName = "HashSet"
+class HashSetSpec
+  extends FunSpec
+    with ShouldMatchers
+    with SetFactoryBehaviors
+    with SetBehaviors {
   
-  it should behave like genericCollection(HashSet)
-  it should behave like genericContainer(HashSet)
-  it should behave like genericSet(HashSet)
+  override def suiteName = "HashSet specification"
+  
+  it should behave like GenericSetFactory(HashSet)
+  
+  it should behave like GenericCollection(HashSet)
+  it should behave like GenericContainer(HashSet)
+  it should behave like GenericSet(HashSet)
 }

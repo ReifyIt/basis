@@ -9,15 +9,23 @@ package basis.containers
 package immutable
 
 import basis.collections._
+import basis.collections.generic._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class ListSpec extends FunSpec with ShouldMatchers with LinearSeqBehaviors {
-  override def suiteName = "List"
+class ListSpec
+  extends FunSpec
+    with ShouldMatchers
+    with SeqFactoryBehaviors
+    with LinearSeqBehaviors {
   
-  it should behave like genericCollection(List)
-  it should behave like genericContainer(List)
-  it should behave like genericSeq(List)
-  it should behave like genericLinearSeq(List)
+  override def suiteName = "List specification"
+  
+  it should behave like GenericSeqFactory(List)
+  
+  it should behave like GenericCollection(List)
+  it should behave like GenericContainer(List)
+  it should behave like GenericSeq(List)
+  it should behave like GenericLinearSeq(List)
 }

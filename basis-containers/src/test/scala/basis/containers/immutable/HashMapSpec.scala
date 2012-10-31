@@ -9,12 +9,20 @@ package basis.containers
 package immutable
 
 import basis.collections._
+import basis.collections.generic._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class HashMapSpec extends FunSpec with ShouldMatchers with MapBehaviors {
-  override def suiteName = "HashMap"
+class HashMapSpec
+  extends FunSpec
+    with ShouldMatchers
+    with MapFactoryBehaviors
+    with MapBehaviors {
   
-  it should behave like genericMap(HashMap)
+  override def suiteName = "HashMap specification"
+  
+  it should behave like GenericMapFactory(HashMap)
+  
+  it should behave like GenericMap(HashMap)
 }
