@@ -64,7 +64,7 @@ class FloatArray(val array: scala.Array[Float]) extends AnyVal with Array[Float]
 object FloatArray {
   val Empty: FloatArray = new FloatArray(new scala.Array[Float](0))
   
-  def apply(xs: Float*): FloatArray = macro ArrayMacros.literalFloatArray
+  def apply(xs: Float*): FloatArray = macro ArrayMacros.FloatArray
   
   final class Builder extends Buffer[Any, Float] {
     override type State = FloatArray

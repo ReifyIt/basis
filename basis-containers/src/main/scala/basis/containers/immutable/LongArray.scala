@@ -64,7 +64,7 @@ class LongArray(val array: scala.Array[Long]) extends AnyVal with Array[Long] {
 object LongArray {
   val Empty: LongArray = new LongArray(new scala.Array[Long](0))
   
-  def apply(xs: Long*): LongArray = macro ArrayMacros.literalLongArray
+  def apply(xs: Long*): LongArray = macro ArrayMacros.LongArray
   
   final class Builder extends Buffer[Any, Long] {
     override type State = LongArray

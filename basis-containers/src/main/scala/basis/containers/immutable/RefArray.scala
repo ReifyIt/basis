@@ -64,7 +64,7 @@ class RefArray[+A](val array: scala.Array[AnyRef]) extends AnyVal with Array[A] 
 object RefArray {
   val Empty: RefArray[Nothing] = new RefArray[Nothing](new scala.Array[AnyRef](0))
   
-  def apply[A](xs: A*): RefArray[A] = macro ArrayMacros.literalRefArray[A]
+  def apply[A](xs: A*): RefArray[A] = macro ArrayMacros.RefArray[A]
   
   final class Builder[A] extends Buffer[Any, A] {
     override type State = RefArray[A]

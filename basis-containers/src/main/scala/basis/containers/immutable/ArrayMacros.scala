@@ -8,178 +8,83 @@
 package basis.containers
 package immutable
 
-import basis.collections._
-
 private[immutable] object ArrayMacros {
-  import scala.collection.breakOut
   import scala.collection.immutable.{List, ::, Nil}
   import scala.reflect.macros.Context
   
-  private def initArray(c: Context)(tpt: c.Tree, xs: List[c.Tree], length: Int): c.Tree = {
+  private def NewArray[A : c.WeakTypeTag](c: Context)(elems: List[c.Expr[A]]): c.Expr[scala.Array[A]] = {
+    import c.{Expr, fresh, mirror, WeakTypeTag}
     import c.universe._
-    val array = c.fresh(newTermName("array$"))
-    Block(
-      ValDef(Modifiers(), array, TypeTree(),
-        Apply(
-          Select(
-            New(AppliedTypeTree(Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Array")), tpt :: Nil)),
-            nme.CONSTRUCTOR),
-          Literal(Constant(length)) :: Nil)) ::
-      xs.zipWithIndex.map {
-        case (x, i) => Apply(Select(Ident(array), "update"), Literal(Constant(i)) :: x :: Nil)
-      },
-      Ident(array)
-    )
+    val ArrayType = appliedType(mirror.staticClass("scala.Array").toType, weakTypeOf[A] :: Nil)
+    val array = newTermName(fresh("array$"))
+    val appends = List.newBuilder[Tree]
+    var length = 0
+    var xs = elems
+    while (!xs.isEmpty) {
+      appends += Apply(Select(Ident(array), "update"), Literal(Constant(length)) :: xs.head.tree :: Nil)
+      length += 1
+      xs = xs.tail
+    }
+    Expr {
+      Block(
+        ValDef(NoMods, array, TypeTree(), New(ArrayType, Literal(Constant(xs.length)))) ::
+        appends.result,
+        Ident(array))
+    } (WeakTypeTag(ArrayType))
   }
   
-  private def newByteArray(c: Context)(array: c.Tree): c.Tree = {
+  def ByteArray(c: Context)(xs: c.Expr[Byte]*): c.Expr[ByteArray] = {
+    import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
-    Apply(
-      Select(
-        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("ByteArray"))),
-        nme.CONSTRUCTOR),
-      array :: Nil)
+    val ArrayType = mirror.staticClass("basis.containers.immutable.ByteArray").toType
+    Expr(New(ArrayType, NewArray(c)(xs.toList)(TypeTag.Byte).tree))(WeakTypeTag(ArrayType))
   }
   
-  private def newShortArray(c: Context)(array: c.Tree): c.Tree = {
+  def ShortArray(c: Context)(xs: c.Expr[Short]*): c.Expr[ShortArray] = {
+    import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
-    Apply(
-      Select(
-        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("ShortArray"))),
-        nme.CONSTRUCTOR),
-      array :: Nil)
+    val ArrayType = mirror.staticClass("basis.containers.immutable.ShortArray").toType
+    Expr(New(ArrayType, NewArray(c)(xs.toList)(TypeTag.Short).tree))(WeakTypeTag(ArrayType))
   }
   
-  private def newIntArray(c: Context)(array: c.Tree): c.Tree = {
+  def IntArray(c: Context)(xs: c.Expr[Int]*): c.Expr[IntArray] = {
+    import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
-    Apply(
-      Select(
-        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("IntArray"))),
-        nme.CONSTRUCTOR),
-      array :: Nil)
+    val ArrayType = mirror.staticClass("basis.containers.immutable.IntArray").toType
+    Expr(New(ArrayType, NewArray(c)(xs.toList)(TypeTag.Int).tree))(WeakTypeTag(ArrayType))
   }
   
-  private def newLongArray(c: Context)(array: c.Tree): c.Tree = {
+  def LongArray(c: Context)(xs: c.Expr[Long]*): c.Expr[LongArray] = {
+    import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
-    Apply(
-      Select(
-        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("LongArray"))),
-        nme.CONSTRUCTOR),
-      array :: Nil)
+    val ArrayType = mirror.staticClass("basis.containers.immutable.LongArray").toType
+    Expr(New(ArrayType, NewArray(c)(xs.toList)(TypeTag.Long).tree))(WeakTypeTag(ArrayType))
   }
   
-  private def newFloatArray(c: Context)(array: c.Tree): c.Tree = {
+  def FloatArray(c: Context)(xs: c.Expr[Float]*): c.Expr[FloatArray] = {
+    import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
-    Apply(
-      Select(
-        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("FloatArray"))),
-        nme.CONSTRUCTOR),
-      array :: Nil)
+    val ArrayType = mirror.staticClass("basis.containers.immutable.FloatArray").toType
+    Expr(New(ArrayType, NewArray(c)(xs.toList)(TypeTag.Float).tree))(WeakTypeTag(ArrayType))
   }
   
-  private def newDoubleArray(c: Context)(array: c.Tree): c.Tree = {
+  def DoubleArray(c: Context)(xs: c.Expr[Double]*): c.Expr[DoubleArray] = {
+    import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
-    Apply(
-      Select(
-        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("DoubleArray"))),
-        nme.CONSTRUCTOR),
-      array :: Nil)
+    val ArrayType = mirror.staticClass("basis.containers.immutable.DoubleArray").toType
+    Expr(New(ArrayType, NewArray(c)(xs.toList)(TypeTag.Double).tree))(WeakTypeTag(ArrayType))
   }
   
-  private def newRefArray(c: Context)(array: c.Tree): c.Tree = {
+  def RefArray[A : c.WeakTypeTag](c: Context)(xs: c.Expr[A]*): c.Expr[RefArray[A]] = {
+    import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
-    Apply(
-      Select(
-        New(Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "immutable"), newTypeName("RefArray"))),
-        nme.CONSTRUCTOR),
-      array :: Nil)
-  }
-  
-  def literalByteArray(c: Context)(xs: c.Expr[Byte]*): c.Expr[ByteArray] = {
-    import c.universe._
-    c.Expr(
-      newByteArray(c)(
-        initArray(c)(
-          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Byte")),
-          exprsToTrees(c)(xs: _*),
-          xs.length))
-    )(WeakTypeTag.Nothing)
-  }
-  
-  def literalShortArray(c: Context)(xs: c.Expr[Short]*): c.Expr[ShortArray] = {
-    import c.universe._
-    c.Expr(
-      newShortArray(c)(
-        initArray(c)(
-          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Short")),
-          exprsToTrees(c)(xs: _*),
-          xs.length))
-    )(WeakTypeTag.Nothing)
-  }
-  
-  def literalIntArray(c: Context)(xs: c.Expr[Int]*): c.Expr[IntArray] = {
-    import c.universe._
-    c.Expr(
-      newIntArray(c)(
-        initArray(c)(
-          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Int")),
-          exprsToTrees(c)(xs: _*),
-          xs.length))
-    )(WeakTypeTag.Nothing)
-  }
-  
-  def literalLongArray(c: Context)(xs: c.Expr[Long]*): c.Expr[LongArray] = {
-    import c.universe._
-    c.Expr(
-      newLongArray(c)(
-        initArray(c)(
-          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Long")),
-          exprsToTrees(c)(xs: _*),
-          xs.length))
-    )(WeakTypeTag.Nothing)
-  }
-  
-  def literalFloatArray(c: Context)(xs: c.Expr[Float]*): c.Expr[FloatArray] = {
-    import c.universe._
-    c.Expr(
-      newFloatArray(c)(
-        initArray(c)(
-          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Float")),
-          exprsToTrees(c)(xs: _*),
-          xs.length))
-    )(WeakTypeTag.Nothing)
-  }
-  
-  def literalDoubleArray(c: Context)(xs: c.Expr[Double]*): c.Expr[DoubleArray] = {
-    import c.universe._
-    c.Expr(
-      newDoubleArray(c)(
-        initArray(c)(
-          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Double")),
-          exprsToTrees(c)(xs: _*),
-          xs.length))
-    )(WeakTypeTag.Nothing)
-  }
-  
-  def literalRefArray[A : c.WeakTypeTag](c: Context)(xs: c.Expr[A]*): c.Expr[RefArray[A]] = {
-    import c.universe._
-    c.Expr[RefArray[A]](
-      newRefArray(c)(
-        initArray(c)(
-          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("AnyRef")),
-          exprsToAnyRefTrees(c)(xs: _*),
-          xs.length))
-    )
-  }
-  
-  private def exprsToTrees(c: Context)(xs: c.Expr[_]*): List[c.Tree] = xs.map(_.tree)(breakOut)
-  
-  private def exprsToAnyRefTrees(c: Context)(xs: c.Expr[_]*): List[c.Tree] = {
-    import c.universe._
-    xs.map { x =>
-      TypeApply(
-        Select(x.tree, "asInstanceOf"),
-        Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("AnyRef")) :: Nil)
-    } (breakOut)
+    val ArrayType = appliedType(mirror.staticClass("basis.containers.immutable.RefArray").toType, weakTypeOf[A] :: Nil)
+    val refs = List.newBuilder[Expr[AnyRef]]
+    var ys = xs.toList
+    while (!ys.isEmpty) {
+      refs += Expr(TypeApply(Select(ys.head.tree, "asInstanceOf"), TypeTree(definitions.AnyRefTpe) :: Nil))(TypeTag.AnyRef)
+      ys = ys.tail
+    }
+    Expr(New(ArrayType, NewArray(c)(refs.result)(TypeTag.AnyRef).tree))(WeakTypeTag(ArrayType))
   }
 }

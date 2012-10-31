@@ -64,7 +64,7 @@ class ByteArray(val array: scala.Array[Byte]) extends AnyVal with Array[Byte] {
 object ByteArray {
   val Empty: ByteArray = new ByteArray(new scala.Array[Byte](0))
   
-  def apply(xs: Byte*): ByteArray = macro ArrayMacros.literalByteArray
+  def apply(xs: Byte*): ByteArray = macro ArrayMacros.ByteArray
   
   final class Builder extends Buffer[Any, Byte] {
     override type State = ByteArray

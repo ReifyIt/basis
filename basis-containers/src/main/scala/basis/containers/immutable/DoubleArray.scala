@@ -64,7 +64,7 @@ class DoubleArray(val array: scala.Array[Double]) extends AnyVal with Array[Doub
 object DoubleArray {
   val Empty: DoubleArray = new DoubleArray(new scala.Array[Double](0))
   
-  def apply(xs: Double*): DoubleArray = macro ArrayMacros.literalDoubleArray
+  def apply(xs: Double*): DoubleArray = macro ArrayMacros.DoubleArray
   
   final class Builder extends Buffer[Any, Double] {
     override type State = DoubleArray

@@ -64,7 +64,7 @@ class IntArray(val array: scala.Array[Int]) extends AnyVal with Array[Int] {
 object IntArray {
   val Empty: IntArray = new IntArray(new scala.Array[Int](0))
   
-  def apply(xs: Int*): IntArray = macro ArrayMacros.literalIntArray
+  def apply(xs: Int*): IntArray = macro ArrayMacros.IntArray
   
   final class Builder extends Buffer[Any, Int] {
     override type State = IntArray
