@@ -34,8 +34,7 @@ trait LinearSeq[+A] extends Any with Seq[A] {
     count
   }
   
-  override def iterator: Iterator[A] =
-    new LinearSeqIterator(this)
+  override def iterator: Iterator[A] = new LinearSeqIterator(this)
   
   protected override def foreach[U](f: A => U) {
     var xs = this

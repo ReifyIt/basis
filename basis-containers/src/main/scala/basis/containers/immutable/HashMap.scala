@@ -380,6 +380,8 @@ object HashMap extends MapFactory[HashMap] {
   
   implicit override def Builder[A, T]: Builder[A, T] = new Builder[A, T]
   
+  override def toString: String = "HashMap"
+  
   final class Builder[A, T] extends Buffer[Any, (A, T)] {
     override type State = HashMap[A, T]
     

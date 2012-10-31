@@ -289,6 +289,8 @@ object HashSet extends SetFactory[HashSet] {
   
   implicit override def Builder[A]: Builder[A] = new Builder[A]
   
+  override def toString: String = "HashSet"
+  
   final class Builder[A] extends Buffer[Any, A] {
     override type State = HashSet[A]
     

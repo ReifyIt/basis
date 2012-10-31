@@ -24,8 +24,7 @@ trait IndexedSeq[+A] extends Any with Seq[A] {
   
   override def isEmpty: Boolean = length == 0
   
-  override def iterator: Iterator[A] =
-    new IndexedSeqIterator(this, 0, length)
+  override def iterator: Iterator[A] = new IndexedSeqIterator(this, 0, length)
   
   protected override def foreach[U](f: A => U) {
     var i = 0

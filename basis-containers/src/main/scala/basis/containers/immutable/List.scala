@@ -125,6 +125,8 @@ object List extends SeqFactory[List] {
   
   implicit override def Builder[A]: Builder[A] = new Builder[A]
   
+  override def toString: String = "List"
+  
   final class Builder[A] extends Buffer[Any, A] {
     override type State = List[A]
     

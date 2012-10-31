@@ -43,7 +43,10 @@ object BasisBuild extends Build {
     id           = "basis-containers",
     base         = file("basis-containers"),
     settings     = commonSettings,
-    dependencies = Seq(BasisCollections, BasisMemory, BasisUtil)
+    dependencies =
+      Seq(BasisCollections % "compile->compile;test->test",
+          BasisMemory,
+          BasisUtil)
   )
   
   lazy val BasisMath = Project(
@@ -62,7 +65,9 @@ object BasisBuild extends Build {
     id           = "basis-text",
     base         = file("basis-text"),
     settings     = commonSettings,
-    dependencies = Seq(BasisCollections, BasisUtil)
+    dependencies =
+      Seq(BasisCollections,
+          BasisUtil)
   )
   
   lazy val BasisUtil = Project(
