@@ -134,22 +134,34 @@ object List extends SeqFactory[List] {
     
     private[this] var first: List[A] = Nil
     
-    private[this] var aliased: Boolean = true
+    private[this] var length: Int = 0
+    
+    private[this] var aliased: Int = -1 // index of the first aliased cons cell
     
     private[this] def prepare() {
-      if (!first.isEmpty && aliased) {
-        var these = first
-        last = new ::(these.head, Nil)
+      var xs = first
+      if (aliased == 0) {
+        last = new ::(xs.head, Nil)
         first = last
-        these = these.tail
-        while (!these.isEmpty) {
-          val link = last
-          last = new ::(these.head, Nil)
-          link.tail = last
-          these = these.tail
-        }
-        aliased = false
+        xs = xs.tail
       }
+      else if (aliased > 0) {
+        var i = 0
+        while (i < aliased) {
+          last = xs.asInstanceOf[::[A]]
+          xs = xs.tail
+          i += 1
+        }
+      }
+      if (aliased >= 0) {
+        while (!xs.isEmpty) {
+          val next = new ::(xs.head, Nil)
+          last.tail = next
+          last = next
+          xs = xs.tail
+        }
+      }
+      aliased = -1
     }
     
     override def += (element: A): this.type = {
@@ -159,37 +171,47 @@ object List extends SeqFactory[List] {
       }
       else {
         prepare()
-        val link = last
-        last = new ::(element, Nil)
-        link.tail = last
+        val next = new ::(element, Nil)
+        last.tail = next
+        last = next
       }
+      length += 1
       this
     }
     
-    override def ++= (xs: Enumerator[A]): this.type = {
-      xs match {
-        case Nil => ()
-        case xs: ::[A] =>
+    override def ++= (xs: Enumerator[A]): this.type = xs match {
+      case Nil => this
+      case xs: ::[A] =>
+        if (first.isEmpty) {
+          last = xs
+          first = last
+          aliased = 0
+        }
+        else {
           prepare()
           last.tail = xs
-          while (!last.tail.isEmpty) last = last.tail.asInstanceOf[::[A]]
-          aliased = true
-        case _ => super.++=(xs)
-      }
-      this
+          aliased = length + 1
+        }
+        while (!last.tail.isEmpty) {
+          last = last.tail.asInstanceOf[::[A]]
+          length += 1
+        }
+        this
+      case _ => super.++=(xs)
     }
     
     override def expect(count: Int): this.type = this
     
     override def state: List[A] = {
-      aliased = true
+      if (length > 0) aliased = 0
       first
     }
     
     override def clear() {
       last = null
       first = Nil
-      aliased = true
+      length = 0
+      aliased = -1
     }
   }
 }
