@@ -21,9 +21,9 @@ trait CommonSeqBehaviors extends CommonContainerBehaviors { this: FunSpec =>
     describe(s"A common $CC sequence") {
       it("should traverse its elements once each with foreach") {
         val xs = CC(2, 3, 5, 7)
-        var i = 0
-        xs foreach (x => i += x)
-        i should be (17)
+        var n = 0
+        xs foreach (i => n += i)
+        n should be (17)
       }
       
       it("should fold") {

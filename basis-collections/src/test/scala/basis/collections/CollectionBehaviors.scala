@@ -26,18 +26,18 @@ trait CollectionBehaviors { this: FunSpec =>
     describe(s"A unary $CC collection") {
       it("should traverse its element once") {
         val xs = CC(null)
-        var i = 0
-        traverse(xs)(x => i += 1)
-        i should be (1)
+        var n = 0
+        traverse(xs)(x => n += 1)
+        n should be (1)
       }
     }
     
     describe(s"A non-empty $CC collection") {
       it("should traverse its elements once each (in any order)") {
         val xs = CC(2, 3, 5, 7)
-        var i = 0
-        traverse(xs)(x => i += x)
-        i should be (17)
+        var n = 0
+        traverse(xs)(i => n += i)
+        n should be (17)
       }
     }
   }
