@@ -20,7 +20,8 @@ class ListSpec
     with ShouldMatchers
     with SeqFactoryBehaviors
     with LinearSeqBehaviors
-    with CommonLinearSeqBehaviors {
+    with CommonLinearSeqBehaviors
+    with StrictLinearSeqBehaviors {
   
   override def suiteName = "List specification"
   
@@ -35,4 +36,9 @@ class ListSpec
   it should behave like GenericCommonContainer(List)
   it should behave like GenericCommonSeq(List)
   it should behave like GenericCommonLinearSeq(List)
+  
+  it should behave like GenericStrictCollection(List)
+  it should behave like GenericStrictContainer(List)
+  it should behave like GenericStrictSeq(List)
+  it should behave like GenericStrictLinearSeq(List)
 }

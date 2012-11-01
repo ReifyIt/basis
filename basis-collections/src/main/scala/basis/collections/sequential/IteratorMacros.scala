@@ -626,7 +626,7 @@ private[collections] final class IteratorMacros[C <: Context](val context: C) {
                 Apply(Ident(loop), Nil)),
               EmptyTree),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "result"))
+        Select(Ident(b), "state"))
     } (BufferStateTag(buffer))
   }
   
@@ -640,7 +640,7 @@ private[collections] final class IteratorMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(), buffer.tree) ::
         Apply(Select(Ident(b), "$plus$plus$eq"), these.tree :: Nil) ::
         Apply(Select(Ident(b), "$plus$plus$eq"), those.tree :: Nil) :: Nil,
-        Select(Ident(b), "result"))
+        Select(Ident(b), "state"))
     } (BufferStateTag(buffer))
   }
   

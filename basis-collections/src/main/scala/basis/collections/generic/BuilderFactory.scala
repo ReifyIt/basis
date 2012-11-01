@@ -30,6 +30,6 @@ private[collections] object BuilderFactory {
     var b = Apply(Select(buffer, "expect"), Literal(Constant(xs.length)) :: Nil)
     val iter = xs.iterator
     while (iter.hasNext) b = Apply(Select(b, "$plus$eq"), iter.next().tree :: Nil)
-    Expr(Select(b, "state"))(WeakTypeTag[CC[A]](appliedType(CCTag.tpe, ATag.tpe :: Nil)))
+    Expr(Select(b, "state"))(WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
   }
 }

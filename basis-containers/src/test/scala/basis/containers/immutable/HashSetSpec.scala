@@ -20,7 +20,8 @@ class HashSetSpec
     with ShouldMatchers
     with SetFactoryBehaviors
     with SetBehaviors
-    with CommonSetBehaviors {
+    with CommonSetBehaviors
+    with StrictSetBehaviors {
   
   override def suiteName = "HashSet specification"
   
@@ -33,4 +34,8 @@ class HashSetSpec
   it should behave like GenericCommonCollection(HashSet)
   it should behave like GenericCommonContainer(HashSet)
   it should behave like GenericCommonSet(HashSet)
+  
+  it should behave like GenericStrictCollection(HashSet)
+  it should behave like GenericStrictContainer(HashSet)
+  it should behave like GenericStrictSet(HashSet)
 }

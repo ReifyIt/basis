@@ -754,7 +754,7 @@ private[collections] final class IndexedSeqMacros[C <: Context](val context: C) 
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "result"))
+        Select(Ident(b), "state"))
     } (BufferStateTag(buffer))
   }
   
@@ -800,7 +800,7 @@ private[collections] final class IndexedSeqMacros[C <: Context](val context: C) 
             Apply(Select(Select(Ident(xs), "length"), "$plus"), Select(Ident(ys), "length") :: Nil) :: Nil)) ::
         Apply(Select(Ident(b), "$plus$plus$eq"), Ident(xs) :: Nil) ::
         Apply(Select(Ident(b), "$plus$plus$eq"), Ident(ys) :: Nil) :: Nil,
-        Select(Ident(b), "result"))
+        Select(Ident(b), "state"))
     } (BufferStateTag(buffer))
   }
   
