@@ -15,6 +15,5 @@ package basis.collections
   * 
   * @define collection  collection
   */
-trait Collection[+A] extends Any with Enumerator[A] {
-  override type Self <: Collection[A]
-}
+trait Collection[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Collection[A]] with Enumerator[A]

@@ -15,14 +15,14 @@ package basis.collections
   * 
   * @define collection  container
   */
-trait Container[+A] extends Any with Collection[A] {
-  override type Self <: Container[A]
+trait Container[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Container[A]] with Collection[A] {
   
   /** Returns a new iterator over the elements of this $collection.
     * @group Iterating */
   def iterator: Iterator[A]
   
-  protected override def foreach[U](f: A => U) {
+  protected override def foreach[@specialized(Unit) U](f: A => U) {
     val xs = iterator
     while (!xs.isEmpty) { f(xs.head); xs.step() }
   }

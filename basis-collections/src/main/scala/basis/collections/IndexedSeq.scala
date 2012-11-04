@@ -15,8 +15,8 @@ import basis.util._
   * @groupprio  Iterating   -2
   * @groupprio  Traversing  -1
   */
-trait IndexedSeq[+A] extends Any with Seq[A] {
-  override type Self <: IndexedSeq[A]
+trait IndexedSeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[IndexedSeq[A]] with Seq[A] {
   
   /** Returns the element at `index`.
     * @group Examining */
@@ -26,7 +26,7 @@ trait IndexedSeq[+A] extends Any with Seq[A] {
   
   override def iterator: Iterator[A] = new IndexedSeqIterator(this, 0, length)
   
-  protected override def foreach[U](f: A => U) {
+  protected override def foreach[@specialized(Unit) U](f: A => U) {
     var i = 0
     val n = length
     while (i < n) {
@@ -36,7 +36,7 @@ trait IndexedSeq[+A] extends Any with Seq[A] {
   }
 }
 
-private[collections] final class IndexedSeqIterator[+A]
+private[collections] final class IndexedSeqIterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
     (xs: IndexedSeq[A], from: Int, until: Int)
   extends Iterator[A] {
   

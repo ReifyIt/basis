@@ -9,7 +9,7 @@ package basis.collections
 package generic
 
 trait MapFactory[+CC[_, _]] {
-  def Builder[A, T]: Buffer[Any, (A, T)] { type State <: CC[A, T] }
+  def Builder[A, T]: Builder[Any, (A, T), CC[A, T]]
   
   def apply[A, T](xs: (A, T)*): CC[A, T] =
     macro MapFactory.apply[CC, A, T]
@@ -26,8 +26,8 @@ private[collections] object MapFactory {
     : c.Expr[CC[A, T]] = {
     import c.{Expr, prefix, WeakTypeTag}
     import c.universe._
-    val buffer = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: TypeTree(TTag.tpe) :: Nil)
-    var b = Apply(Select(buffer, "expect"), Literal(Constant(xs.length)) :: Nil)
+    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: TypeTree(TTag.tpe) :: Nil)
+    var b = Apply(Select(builder, "expect"), Literal(Constant(xs.length)) :: Nil)
     val iter = xs.iterator
     while (iter.hasNext) b = Apply(Select(b, "$plus$eq"), iter.next().tree :: Nil)
     Expr(Select(b, "state"))(WeakTypeTag[CC[A, T]](appliedType(CCTag.tpe, ATag.tpe :: TTag.tpe :: Nil)))

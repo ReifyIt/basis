@@ -33,8 +33,8 @@ package basis.collections
   * 
   * @define collection  iterator
   */
-trait Iterator[+A] extends Any with Enumerator[A] {
-  override type Self <: Iterator[A]
+trait Iterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Iterator[A]] with Enumerator[A] {
   
   /** Returns `true` when this $collection has reached a sentinel element.
     * @group Examining */
@@ -56,7 +56,7 @@ trait Iterator[+A] extends Any with Enumerator[A] {
     * @group Iterating */
   def dup: Iterator[A]
   
-  protected override def foreach[U](f: A => U): Unit =
+  protected override def foreach[@specialized(Unit) U](f: A => U): Unit =
     while (!isEmpty) { f(head); step() }
 }
 
@@ -74,5 +74,5 @@ object Done extends Iterator[Nothing] {
   
   override def dup: Done.type = this
   
-  protected override def foreach[U](f: Nothing => U): Unit = ()
+  protected override def foreach[@specialized(Unit) U](f: Nothing => U): Unit = ()
 }

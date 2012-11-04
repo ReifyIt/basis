@@ -32,13 +32,13 @@ private[collections] object SeqFactory {
     import c.{Expr, fresh, prefix, WeakTypeTag}
     import c.universe._
     val i    = newTermName(fresh("i$"))
-    val b    = newTermName(fresh("buffer$"))
+    val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
-    val buffer = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
+    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer, "expect"), Ident(i) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(), Apply(Select(builder, "expect"), Ident(i) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$greater"), Literal(Constant(0)) :: Nil),
@@ -61,14 +61,14 @@ private[collections] object SeqFactory {
     import c.universe._
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
-    val b    = newTermName(fresh("buffer$"))
+    val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
-    val buffer = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
+    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(), Apply(Select(builder, "expect"), Ident(n) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -90,15 +90,15 @@ private[collections] object SeqFactory {
     import c.{Expr, fresh, prefix, WeakTypeTag}
     import c.universe._
     val n    = newTermName(fresh("n$"))
-    val b    = newTermName(fresh("buffer$"))
+    val b    = newTermName(fresh("builder$"))
     val a    = newTermName(fresh("a$"))
     val i    = newTermName(fresh("i$"))
     val loop = newTermName(fresh("loop$"))
-    val buffer = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
+    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(NoMods, n, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(buffer, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(), Apply(Select(builder, "expect"), Ident(n) :: Nil)) ::
         If(
           Apply(Select(Ident(n), "$greater"), Literal(Constant(0)) :: Nil),
           Block(

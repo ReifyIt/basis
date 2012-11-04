@@ -10,31 +10,31 @@ package sequential
 
 /** Implicit conversions that add common and strict operations to collections. */
 class strict extends common {
-  implicit def StrictEnumeratorOps[A](self: Enumerator[A]): StrictEnumeratorOps[self.Self, A] =
-    new StrictEnumeratorOps[self.Self, A](self)
+  implicit def StrictEnumeratorOps[A](self: Enumerator[A]): StrictEnumeratorOps[A, self.Family] =
+    new StrictEnumeratorOps[A, self.Family](self)
   
-  implicit def StrictCollectionOps[A](self: Collection[A]): StrictCollectionOps[self.Self, A] =
-    new StrictCollectionOps[self.Self, A](self)
+  implicit def StrictCollectionOps[A](self: Collection[A]): StrictCollectionOps[A, self.Family] =
+    new StrictCollectionOps[A, self.Family](self)
   
-  implicit def StrictIteratorOps[A](self: Iterator[A]): StrictIteratorOps[self.Self, A] =
+  implicit def StrictIteratorOps[A](self: Iterator[A]): StrictIteratorOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def StrictContainerOps[A](self: Container[A]): StrictContainerOps[self.Self, A] =
+  implicit def StrictContainerOps[A](self: Container[A]): StrictContainerOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def StrictSeqOps[A](self: Seq[A]): StrictSeqOps[self.Self, A] =
+  implicit def StrictSeqOps[A](self: Seq[A]): StrictSeqOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def StrictLinearSeqOps[A](self: LinearSeq[A]): StrictLinearSeqOps[self.Self, A] =
+  implicit def StrictLinearSeqOps[A](self: LinearSeq[A]): StrictLinearSeqOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def StrictIndexedSeqOps[A](self: IndexedSeq[A]): StrictIndexedSeqOps[self.Self, A] =
+  implicit def StrictIndexedSeqOps[A](self: IndexedSeq[A]): StrictIndexedSeqOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def StrictSetOps[A](self: Set[A]): StrictSetOps[self.Self, A] =
+  implicit def StrictSetOps[A](self: Set[A]): StrictSetOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def StrictMapOps[A, T](self: Map[A, T]): StrictMapOps[self.Self, A, T] =
+  implicit def StrictMapOps[A, T](self: Map[A, T]): StrictMapOps[A, T, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
 }
 

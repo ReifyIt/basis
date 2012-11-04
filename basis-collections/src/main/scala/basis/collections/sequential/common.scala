@@ -10,31 +10,31 @@ package sequential
 
 /** Implicit conversions that add common operations to collections. */
 class common {
-  implicit def CommonEnumeratorOps[A](self: Enumerator[A]): CommonEnumeratorOps[self.Self, A] =
-    new CommonEnumeratorOps[self.Self, A](self)
+  implicit def CommonEnumeratorOps[A](self: Enumerator[A]): CommonEnumeratorOps[A, self.Family] =
+    new CommonEnumeratorOps[A, self.Family](self)
   
-  implicit def CommonCollectionOps[A](self: Collection[A]): CommonCollectionOps[self.Self, A] =
-    new CommonCollectionOps[self.Self, A](self)
+  implicit def CommonCollectionOps[A](self: Collection[A]): CommonCollectionOps[A, self.Family] =
+    new CommonCollectionOps[A, self.Family](self)
   
-  implicit def CommonIteratorOps[A](self: Iterator[A]): CommonIteratorOps[self.Self, A] =
+  implicit def CommonIteratorOps[A](self: Iterator[A]): CommonIteratorOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def CommonContainerOps[A](self: Container[A]): CommonContainerOps[self.Self, A] =
+  implicit def CommonContainerOps[A](self: Container[A]): CommonContainerOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def CommonSeqOps[A](self: Seq[A]): CommonSeqOps[self.Self, A] =
+  implicit def CommonSeqOps[A](self: Seq[A]): CommonSeqOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def CommonLinearSeqOps[A](self: LinearSeq[A]): CommonLinearSeqOps[self.Self, A] =
+  implicit def CommonLinearSeqOps[A](self: LinearSeq[A]): CommonLinearSeqOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def CommonIndexedSeqOps[A](self: IndexedSeq[A]): CommonIndexedSeqOps[self.Self, A] =
+  implicit def CommonIndexedSeqOps[A](self: IndexedSeq[A]): CommonIndexedSeqOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def CommonSetOps[A](self: Set[A]): CommonSetOps[self.Self, A] =
+  implicit def CommonSetOps[A](self: Set[A]): CommonSetOps[A, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit def CommonMapOps[A, T](self: Map[A, T]): CommonMapOps[self.Self, A, T] =
+  implicit def CommonMapOps[A, T](self: Map[A, T]): CommonMapOps[A, T, self.Family] =
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
 }
 

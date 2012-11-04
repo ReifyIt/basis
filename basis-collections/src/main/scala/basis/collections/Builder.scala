@@ -7,24 +7,15 @@
 
 package basis.collections
 
-/** A temporary buffer of elements.
+/** An accumulator of elements.
   * 
-  * @groupprio  Examining   -2
-  * @groupprio  Updating    -1
-  * 
-  * @define buffer  buffer
+  * @define builder   builder
   */
-trait Buffer[-Source, -A] {
-  /** The type of state maintained by this $buffer.
-    * @group Examining */
-  type State
-  
-  /** Adds a single element to this $buffer.
-    * @group Updating */
+trait Builder[-From, @specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A, +To] {
+  /** Adds a single element to this $builder. */
   def += (x: A): this.type
   
-  /** Adds multiple elements to this $buffer.
-    * @group Updating */
+  /** Adds multiple elements to this $builder. */
   def ++= (xs: Enumerator[A]): this.type = {
     xs match {
       case xs: Container[A] =>
@@ -38,28 +29,25 @@ trait Buffer[-Source, -A] {
           this += iter.head
           iter.step()
         }
-      case _ => traverse(xs)(new Buffer.AddInto(this))
+      case _ => traverse(xs)(new Builder.AddInto(this))
     }
     this
   }
   
-  /** Resets this $buffer to its initial state.
-    * @group Updating */
+  /** Resets this $builder to its initial state. */
   def clear(): Unit
   
-  /** Prepares this $buffer to receive a certain number of elements.
-    * @group Updating */
+  /** Prepares this $builder to receive a certain number of elements. */
   def expect(count: Int): this.type
   
-  /** Returns the current state of this $buffer.
-    * @group Examining */
-  def state: State
+  /** Returns the current state of this $builder. */
+  def state: To
 }
 
-private[collections] object Buffer {
+private[collections] object Builder {
   import scala.runtime.AbstractFunction1
   
-  final class AddInto[-A](buffer: Buffer[_, A]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = buffer += x
+  final class AddInto[-A](builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
+    override def apply(x: A): Unit = builder += x
   }
 }

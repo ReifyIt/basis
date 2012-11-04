@@ -8,6 +8,7 @@
 package basis.memory
 
 import scala.annotation.implicitNotFound
+import scala.reflect.ClassTag
 
 /** A data storage strategy. Each data type is either a [[RefType]] or a [[ValType]].
   * 
@@ -74,7 +75,7 @@ object RefType {
   * @tparam T   the modeled instance type.
   */
 @implicitNotFound("${T} has no implicit ValType.")
-abstract class ValType[T] extends DataType[T] {
+abstract class ValType[T](implicit val tag: ClassTag[T]) extends DataType[T] {
   /** Returns the power-of-two alignment of this type's frame. The alignment
     * must evenly divide all addresses used to store this type's values. */
   def alignment: Long

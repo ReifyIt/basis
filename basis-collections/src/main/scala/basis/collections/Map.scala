@@ -17,9 +17,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * 
   * @define collection  map
   */
-trait Map[+A, +T] extends Any with Container[(A, T)] {
-  override type Self <: Map[A, T]
-  
+trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
   /** Returns `true` if this $collection doesn't contain any associations.
     * @group Examining */
   def isEmpty: Boolean

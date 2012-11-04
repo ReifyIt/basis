@@ -16,12 +16,10 @@ import scala.annotation.tailrec
 import scala.annotation.unchecked.uncheckedVariance
 
 final class HashSet[+A] private
-    (slotMap: Int, elemMap: Int, slots: RefArray[Any])
-  extends Set[A] {
+    (slotMap: Int, elemMap: Int, slots: Array[AnyRef])
+  extends Family[HashSet[A]] with Set[A] {
   
-  override type Self <: HashSet[A]
-  
-  override def isEmpty: Boolean = slots.isEmpty
+  override def isEmpty: Boolean = slots.length == 0
   
   override def size: Int = {
     if (!isTrie || slotMap == elemMap) rank
@@ -48,7 +46,7 @@ final class HashSet[+A] private
   
   override def iterator: Iterator[A] = new HashSet.Cursor(this)
   
-  protected override def foreach[U](f: A => U) {
+  protected override def foreach[@specialized(Unit) U](f: A => U) {
     var i = 0
     if (isTrie) {
       while (i < 32 && hasSlotAbove(i)) {
@@ -168,16 +166,16 @@ final class HashSet[+A] private
         if (elem == e) this
         else // merge elements in new subset
           new HashSet(slotMap, elemMap ^ n,
-            slots.update(i, merge(elem, h, e, e.##, k + 5)))
+            updateSlot(i, merge(elem, h, e, e.##, k + 5)))
       }
       else if (hasSlotAt(n)) { // update subset
         val node = nodeAt(i)
         val newNode = node.update(elem, h, k + 5)
         if (node eq newNode) this
-        else new HashSet(slotMap, elemMap, slots.update(i, newNode))
+        else new HashSet(slotMap, elemMap, updateSlot(i, newNode))
       }
       else // insert element
-        new HashSet(slotMap | n, elemMap | n, slots.insert(i, elem))
+        new HashSet(slotMap | n, elemMap | n, insertSlot(i, elem))
     }
     else { // update collision bucket
       if (h == bucketHash) {
@@ -187,7 +185,7 @@ final class HashSet[+A] private
           if (elem == elemAt(i)) return this
           i += 1
         }
-        new HashSet(0, bucketHash, slots :+ elem)
+        new HashSet(0, bucketHash, appendSlot(elem))
       }
       else // reconcile element with collision bucket
         resolve(elem, h, k)
@@ -232,7 +230,7 @@ final class HashSet[+A] private
       val i = slot(n)
       if (hasElemAt(n)) { // remove element
         if (elem == elemAt(i))
-          new HashSet(slotMap ^ n, elemMap ^ n, slots.remove(i))
+          new HashSet(slotMap ^ n, elemMap ^ n, removeSlot(i))
         else this
       }
       else if (hasSlotAt(n)) { // remove from subset
@@ -240,10 +238,10 @@ final class HashSet[+A] private
         val newNode = node.remove(elem, h, k + 5)
         if (node eq newNode) this
         else if (newNode.isEmpty) // remove empty subsets
-          new HashSet(slotMap ^ n, elemMap, slots.remove(i))
+          new HashSet(slotMap ^ n, elemMap, removeSlot(i))
         else if (newNode.isUnary) // lift unary subsets
-          new HashSet(slotMap, elemMap | n, slots.update(i, newNode.elemAt(0)))
-        else new HashSet(slotMap, elemMap, slots.update(i, newNode))
+          new HashSet(slotMap, elemMap | n, updateSlot(i, newNode.elemAt(0)))
+        else new HashSet(slotMap, elemMap, updateSlot(i, newNode))
       }
       else this
     }
@@ -253,7 +251,7 @@ final class HashSet[+A] private
         val n = rank
         while (i < n) {
           if (elem == elemAt(i))
-            return new HashSet(0, bucketHash, slots.remove(i))
+            return new HashSet(0, bucketHash, removeSlot(i))
           i += 1
         }
       }
@@ -261,11 +259,39 @@ final class HashSet[+A] private
     }
   }
   
-  private[this] def newSlots(elem: Any): RefArray[Any] =
-    new RefArray(scala.Array(elem.asInstanceOf[AnyRef]))
+  private[this] def newSlots(elem: Any): Array[AnyRef] =
+    Array(elem.asInstanceOf[AnyRef])
   
-  private[this] def newSlots(elemA: Any, elemB: Any): RefArray[Any] =
-    new RefArray(scala.Array(elemA.asInstanceOf[AnyRef], elemB.asInstanceOf[AnyRef]))
+  private[this] def newSlots(elemA: Any, elemB: Any): Array[AnyRef] =
+    Array(elemA.asInstanceOf[AnyRef], elemB.asInstanceOf[AnyRef])
+  
+  private[this] def updateSlot(index: Int, elem: Any): Array[AnyRef] = {
+    val newSlots = slots.clone
+    newSlots(index) = elem.asInstanceOf[AnyRef]
+    newSlots
+  }
+  
+  private[this] def appendSlot(elem: Any): Array[AnyRef] = {
+    val newSlots = new Array[AnyRef](slots.length + 1)
+    java.lang.System.arraycopy(slots, 0, newSlots, 0, slots.length)
+    newSlots(newSlots.length) = elem.asInstanceOf[AnyRef]
+    newSlots
+  }
+  
+  private[this] def insertSlot(index: Int, elem: Any): Array[AnyRef] = {
+    val newSlots = new Array[AnyRef](slots.length + 1)
+    java.lang.System.arraycopy(slots, 0, newSlots, 0, index)
+    newSlots(index) = elem.asInstanceOf[AnyRef]
+    java.lang.System.arraycopy(slots, index, newSlots, index + 1, slots.length - index)
+    newSlots
+  }
+  
+  private[this] def removeSlot(index: Int): Array[AnyRef] = {
+    val newSlots = new Array[AnyRef](slots.length - 1)
+    java.lang.System.arraycopy(slots, 0, newSlots, 0, index)
+    java.lang.System.arraycopy(slots, index + 1, newSlots, index, newSlots.length - index)
+    newSlots
+  }
   
   override def toString: String = {
     val s = new java.lang.StringBuilder("HashSet")
@@ -285,28 +311,12 @@ final class HashSet[+A] private
 }
 
 object HashSet extends SetFactory[HashSet] {
-  val Empty: HashSet[Nothing] = new HashSet[Nothing](0, 0, RefArray.Empty)
+  val Empty: HashSet[Nothing] = new HashSet[Nothing](0, 0, new Array[AnyRef](0))
   
-  implicit override def Builder[A]: Builder[A] = new Builder[A]
+  implicit override def Builder[A]: Builder[Any, A, HashSet[A]] =
+    new HashSetBuilder[A]
   
   override def toString: String = "HashSet"
-  
-  final class Builder[A] extends Buffer[Any, A] {
-    override type State = HashSet[A]
-    
-    private[this] var set: HashSet[A] = HashSet.Empty
-    
-    override def += (element: A): this.type = {
-      set += element
-      this
-    }
-    
-    override def expect(count: Int): this.type = this
-    
-    override def state: HashSet[A] = set
-    
-    override def clear(): Unit = set = HashSet.Empty
-  }
   
   private[immutable] final class Cursor[+A](
       self: HashSet[A],
@@ -383,4 +393,19 @@ object HashSet extends SetFactory[HashSet] {
     
     override def dup: Cursor[A] = new Cursor(self, child, index)
   }
+}
+
+private[containers] final class HashSetBuilder[A] extends Builder[Any, A, HashSet[A]] {
+  private[this] var set: HashSet[A] = HashSet.Empty
+  
+  override def += (element: A): this.type = {
+    set += element
+    this
+  }
+  
+  override def expect(count: Int): this.type = this
+  
+  override def state: HashSet[A] = set
+  
+  override def clear(): Unit = set = HashSet.Empty
 }

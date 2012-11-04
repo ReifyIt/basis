@@ -13,9 +13,7 @@ package basis.collections
   * @groupprio  Iterating   -2
   * @groupprio  Traversing  -1
   */
-trait LinearSeq[+A] extends Any with Seq[A] {
-  override type Self <: LinearSeq[A]
-  
+trait LinearSeq[+A] extends Any with Family[LinearSeq[A]] with Seq[A] {
   /** Returns the first element of this $collection.
     * @group Examining */
   def head: A
@@ -36,7 +34,7 @@ trait LinearSeq[+A] extends Any with Seq[A] {
   
   override def iterator: Iterator[A] = new LinearSeqIterator(this)
   
-  protected override def foreach[U](f: A => U) {
+  protected override def foreach[@specialized(Unit) U](f: A => U) {
     var xs = this
     while (!xs.isEmpty) {
       f(xs.head)

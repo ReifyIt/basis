@@ -14,7 +14,7 @@ package sequential
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-class CommonEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
+class CommonEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
   /** Sequentially applies a function to each enumerated element.
     * 
     * @param  f   the function to apply to each element.
@@ -168,8 +168,8 @@ class CommonEnumeratorOps[+Self, +A](val __ : Enumerator[A]) extends AnyVal {
     f.state
   }
   
-  @inline def eagerly: StrictEnumeratorOps[Self, A] =
-    new StrictEnumeratorOps[Self, A](__)
+  @inline def eagerly: StrictEnumeratorOps[A, Family] =
+    new StrictEnumeratorOps[A, Family](__)
   
   @inline def lazily: NonStrictEnumeratorOps[A] =
     new NonStrictEnumeratorOps[A](__)

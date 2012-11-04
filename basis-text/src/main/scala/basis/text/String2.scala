@@ -12,13 +12,9 @@ import basis.util._
 
 /** A 16-bit Unicode string comprised of a UTF-16 code unit sequence.
   * 
-  * @author Chris Sachs
-  * 
   * @define collection  string
   */
-class String2(val codeUnits: scala.Array[scala.Char]) extends AnyVal with Rope {
-  override type Self = String2
-  
+final class String2(codeUnits: Array[scala.Char]) extends Family[String2] with Seq[Int] {
   override def isEmpty: Boolean = codeUnits.length == 0
   
   /** Counts the number of code points in this string. */
@@ -38,21 +34,19 @@ class String2(val codeUnits: scala.Array[scala.Char]) extends AnyVal with Rope {
   
   /** Returns a decoded character beginning at `index`. Substitutes the
     * replacement character U+FFFD at invalid indexes. */
-  def apply(index: Int): Char = {
+  def apply(index: Int): Int = {
     val n = codeUnits.length
     if (index < 0 || index >= n)
       throw new java.lang.IndexOutOfBoundsException(index.toString)
-    new Char({
-      val c1 = codeUnits(index)
-      if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
-      else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
-        val c2 = codeUnits(index + 1)
-        if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
-          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
-        else 0xFFFD
-      }
+    val c1 = codeUnits(index)
+    if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
+    else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
+      val c2 = codeUnits(index + 1)
+      if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
+        (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
       else 0xFFFD
-    })
+    }
+    else 0xFFFD
   }
   
   def nextIndex(index: Int): Int = {
@@ -71,14 +65,15 @@ class String2(val codeUnits: scala.Array[scala.Char]) extends AnyVal with Rope {
     else index + 1
   }
   
-  override def iterator: Reader = new String2.Cursor(this, 0)
+  override def iterator: Iterator[Int] = new String2Iterator(this, 0)
   
   /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
-  protected override def foreach[U](f: Char => U) {
+  /*
+  protected override def foreach[@specialized(Unit) U](f: Int => U) {
     var i = 0
     val n = codeUnits.length
-    while (i < n) f(new Char({
+    while (i < n) f({
       val c1 = codeUnits(i).toInt
       i += 1
       if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
@@ -91,15 +86,15 @@ class String2(val codeUnits: scala.Array[scala.Char]) extends AnyVal with Rope {
         else 0xFFFD
       }
       else 0xFFFD
-    }))
+    }: Int)
   }
-  
+  */
   override def toString: String = {
     val s = new java.lang.StringBuilder
     var i = 0
     val n = size
     while (i < n) {
-      s.appendCodePoint(apply(i).codePoint)
+      s.appendCodePoint(this(i))
       i = nextIndex(i)
     }
     s.toString
@@ -108,107 +103,95 @@ class String2(val codeUnits: scala.Array[scala.Char]) extends AnyVal with Rope {
 
 /** A factory for 16-bit Unicode strings. */
 object String2 {
-  val empty: String2 = new String2(new scala.Array[scala.Char](0))
+  val Empty: String2 = new String2(new Array[scala.Char](0))
   
   def apply(chars: java.lang.CharSequence): String2 = {
-    val s = new Builder
+    val s = new String2Builder
     s.append(chars)
     s.state
   }
   
-  implicit def Builder: Builder = new Builder
+  implicit def Builder: StringBuilder[Any, String2] = new String2Builder
+}
+
+/** A builder for 16-bit Unicode strings in the UTF-16 encoding form.
+  * Produces only well-formed code unit sequences. */
+private[text] final class String2Builder extends StringBuilder[Any, String2] {
+  private[this] var codeUnits: Array[scala.Char] = _
   
-  /** A buffer for 16-bit Unicode strings in the UTF-16 encoding form.
-    * Produces only well-formed code unit sequences. */
-  final class Builder extends Buffer[Any, Char] with Writer {
-    override type State = String2
-    
-    private[this] var codeUnits: scala.Array[scala.Char] = String2.empty.codeUnits
-    
-    private[this] var aliased: Boolean = true
-    
-    private[this] var size: Int = 0
-    
-    private[this] def expand(base: Int, size: Int): Int = {
-      var n = (base max size) - 1
-      n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-      n + 1
-    }
-    
-    private[this] def resize(size: Int) {
-      val newCodeUnits = new scala.Array[scala.Char](size)
-      java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
-      codeUnits = newCodeUnits
-    }
-    
-    private[this] def prepare(size: Int) {
-      if (aliased || size > codeUnits.length) {
-        resize(expand(16, size))
-        aliased = false
-      }
-    }
-    
-    override def += (char: Char): this.type = {
-      val c = char.codePoint
-      val n = size
-      if ((c >= 0x0000 && c <= 0xD7FF) ||
-          (c >= 0xE000 && c <= 0xFFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF
-        prepare(n + 1)
-        codeUnits(n) = c.toChar
-        size = n + 1
-      }
-      else if (c >= 0x10000 && c <= 0x10FFFF) { // U+10000..U+10FFFF
-        prepare(n + 2)
-        val u = c - 0x10000
-        codeUnits(n)     = (0xD800 | (u >>> 10)).toChar
-        codeUnits(n + 1) = (0xDC00 | (u & 0x3FF)).toChar
-        size = n + 2
-      }
-      else { // invalid code point
-        prepare(n + 1)
-        codeUnits(n) = 0xFFFD.toChar
-        size = n + 1
-      }
-      this
-    }
-    
-    override def expect(count: Int): this.type = {
-      if (size + count > codeUnits.length) {
-        resize(size + count)
-        aliased = false
-      }
-      this
-    }
-    
-    override def state: String2 = {
-      if (size != codeUnits.length) resize(size)
-      aliased = true
-      new String2(codeUnits)
-    }
-    
-    override def clear() {
-      codeUnits = String2.empty.codeUnits
-      aliased = true
-      size = 0
+  private[this] var aliased: Boolean = true
+  
+  private[this] var size: Int = 0
+  
+  private[this] def expand(base: Int, size: Int): Int = {
+    var n = (base max size) - 1
+    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+    n + 1
+  }
+  
+  private[this] def resize(size: Int) {
+    val newCodeUnits = new Array[scala.Char](size)
+    if (codeUnits != null) java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
+    codeUnits = newCodeUnits
+  }
+  
+  private[this] def prepare(size: Int) {
+    if (aliased || size > codeUnits.length) {
+      resize(expand(16, size))
+      aliased = false
     }
   }
   
-  private[text] final class Cursor
-      (string: String2, private[this] var index: Int)
-    extends Reader {
-    
-    override def isEmpty: Boolean = index >= string.size
-    
-    override def head: Char = {
-      if (isEmpty) Reader.empty.head
-      else string(index)
+  override def += (c: Int): this.type = {
+    val n = size
+    if ((c >= 0x0000 && c <= 0xD7FF) ||
+        (c >= 0xE000 && c <= 0xFFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF
+      prepare(n + 1)
+      codeUnits(n) = c.toChar
+      size = n + 1
     }
-    
-    override def step() {
-      if (isEmpty) Reader.empty.step()
-      else index = string.nextIndex(index)
+    else if (c >= 0x10000 && c <= 0x10FFFF) { // U+10000..U+10FFFF
+      prepare(n + 2)
+      val u = c - 0x10000
+      codeUnits(n)     = (0xD800 | (u >>> 10)).toChar
+      codeUnits(n + 1) = (0xDC00 | (u & 0x3FF)).toChar
+      size = n + 2
     }
-    
-    override def dup: Cursor = new Cursor(string, index)
+    else { // invalid code point
+      prepare(n + 1)
+      codeUnits(n) = 0xFFFD.toChar
+      size = n + 1
+    }
+    this
   }
+  
+  override def expect(count: Int): this.type = {
+    if (codeUnits == null || size + count > codeUnits.length) {
+      resize(size + count)
+      aliased = false
+    }
+    this
+  }
+  
+  override def state: String2 = {
+    if (codeUnits == null || size != codeUnits.length) resize(size)
+    aliased = true
+    new String2(codeUnits)
+  }
+  
+  override def clear() {
+    codeUnits = null
+    aliased = true
+    size = 0
+  }
+}
+
+private[text] final class String2Iterator(string: String2, private[this] var index: Int) extends Iterator[Int] {
+  override def isEmpty: Boolean = index >= string.size
+  
+  override def head: Int = if (isEmpty) Done.head else string(index)
+  
+  override def step(): Unit = if (isEmpty) Done.step() else index = string.nextIndex(index)
+  
+  override def dup: Iterator[Int] = new String2Iterator(string, index)
 }

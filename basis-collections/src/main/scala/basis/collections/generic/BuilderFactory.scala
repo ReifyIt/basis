@@ -9,7 +9,7 @@ package basis.collections
 package generic
 
 trait BuilderFactory[+CC[_]] {
-  def Builder[A]: Buffer[Any, A] { type State <: CC[A] }
+  implicit def Builder[A]: Builder[Any, A, CC[A]]
   
   def apply[A](xs: A*): CC[A] =
     macro BuilderFactory.apply[CC, A]
@@ -26,8 +26,8 @@ private[collections] object BuilderFactory {
     : c.Expr[CC[A]] = {
     import c.{Expr, prefix, WeakTypeTag}
     import c.universe._
-    val buffer = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
-    var b = Apply(Select(buffer, "expect"), Literal(Constant(xs.length)) :: Nil)
+    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
+    var b = Apply(Select(builder, "expect"), Literal(Constant(xs.length)) :: Nil)
     val iter = xs.iterator
     while (iter.hasNext) b = Apply(Select(b, "$plus$eq"), iter.next().tree :: Nil)
     Expr(Select(b, "state"))(WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))

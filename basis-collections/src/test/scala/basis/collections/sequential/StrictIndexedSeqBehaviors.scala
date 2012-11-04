@@ -18,7 +18,7 @@ trait StrictIndexedSeqBehaviors extends StrictSeqBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
   def GenericStrictIndexedSeq[CC[A] <: IndexedSeq[A]](CC: BuilderFactory[CC]) {
-    implicit def Builder[A] = CC.Builder[A].asInstanceOf[Buffer[Any, A] { type State = CC[A] }]
+    import CC.Builder
     
     describe(s"A strict indexed $CC sequence") {
       it("should collect all elements defined by a partial function") {

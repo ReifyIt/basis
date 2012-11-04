@@ -18,7 +18,7 @@ trait StrictContainerBehaviors extends StrictCollectionBehaviors { this: FunSpec
   import ShouldMatchers._
   
   def GenericStrictContainer[CC[A] <: Container[A]](CC: BuilderFactory[CC]) {
-    implicit def Builder[A] = CC.Builder[A].asInstanceOf[Buffer[Any, A] { type State = CC[A] }]
+    import CC.Builder
     
     describe(s"A strict $CC container") {
       it("should collect all elements defined by a partial function") {

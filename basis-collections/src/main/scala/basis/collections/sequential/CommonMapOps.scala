@@ -14,9 +14,9 @@ package sequential
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-abstract class CommonMapOps[+Self, +A, +T] private[sequential] {
-  def eagerly: StrictMapOps[Self, A, T] =
-    macro CommonMapOps.eagerly[Self, A, T]
+abstract class CommonMapOps[A, T, Family] private[sequential] {
+  def eagerly: StrictMapOps[A, T, Family] =
+    macro CommonMapOps.eagerly[A, T, Family]
   
   def lazily: NonStrictMapOps[A, T] =
     macro CommonMapOps.lazily[A, T]
@@ -32,14 +32,14 @@ private[sequential] object CommonMapOps {
     map
   }
   
-  def eagerly[Self : c.WeakTypeTag, A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[StrictMapOps[Self, A, T]] = {
+  def eagerly[A : c.WeakTypeTag, T : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context): c.Expr[StrictMapOps[A, T, Family]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "StrictMapOps"),
         deconstruct(c) :: Nil)
-    } (StrictMapOpsTag[Self, A, T](c))
+    } (StrictMapOpsTag[A, T, Family](c))
   }
   
   def lazily[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[NonStrictMapOps[A, T]] = {
@@ -52,13 +52,13 @@ private[sequential] object CommonMapOps {
     } (NonStrictMapOpsTag[A, T](c))
   }
   
-  private def StrictMapOpsTag[Self : c.WeakTypeTag, A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[StrictMapOps[Self, A, T]] = {
+  private def StrictMapOpsTag[A : c.WeakTypeTag, T : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictMapOps[A, T, Family]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.StrictMapOps").toType,
-        weakTypeOf[Self] :: weakTypeOf[A] :: weakTypeOf[T] :: Nil))
+        weakTypeOf[A] :: weakTypeOf[T] :: weakTypeOf[Family] :: Nil))
   }
   
   private def NonStrictMapOpsTag[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context)

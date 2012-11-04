@@ -15,8 +15,8 @@ package basis.collections
   * 
   * @define collection  sequence
   */
-trait Seq[+A] extends Any with Container[A] {
-  override type Self <: Seq[A]
+trait Seq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Seq[A]] with Container[A] {
   
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Examining */

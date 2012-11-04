@@ -10,15 +10,12 @@ package basis.collections
 /** A once traversable enumeration of elements. Enumerator declares only a
   * protected `foreach` method; it has no public methods.
   * 
-  * @groupprio  Examining   -2
   * @groupprio  Traversing  -1
   * 
   * @define collection  enumeration
   */
-trait Enumerator[+A] extends Any {
-  /** The family to which this $collection belongs.
-    * @group  Examining */
-  type Self <: Enumerator[A]
+trait Enumerator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Enumerator[A]] {
   
   /** Applies a function to each element of this $collection. The protected
     * status of `foreach` allows optimized static implementations to shadow
@@ -27,7 +24,7 @@ trait Enumerator[+A] extends Any {
     * 
     * @group  Traversing
     */
-  protected def foreach[U](f: A => U): Unit
+  protected def foreach[@specialized(Unit) U](f: A => U): Unit
 }
 
 private[collections] object Enumerator {

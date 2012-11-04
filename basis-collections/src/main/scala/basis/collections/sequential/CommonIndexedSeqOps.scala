@@ -14,7 +14,7 @@ package sequential
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-abstract class CommonIndexedSeqOps[+Self, A] private[sequential] {
+abstract class CommonIndexedSeqOps[A, Family] private[sequential] {
   /** Sequentially applies a function to each element in this sequence.
     * 
     * @param  f   the function to apply to each element.
@@ -163,8 +163,8 @@ abstract class CommonIndexedSeqOps[+Self, A] private[sequential] {
   def select[B](q: PartialFunction[A, B]): Option[B] =
     macro CommonIndexedSeqOps.select[A, B]
   
-  def eagerly: StrictIndexedSeqOps[Self, A] =
-    macro CommonIndexedSeqOps.eagerly[Self, A]
+  def eagerly: StrictIndexedSeqOps[A, Family] =
+    macro CommonIndexedSeqOps.eagerly[A, Family]
   
   def lazily: NonStrictIndexedSeqOps[A] =
     macro CommonIndexedSeqOps.lazily[A]
@@ -254,14 +254,14 @@ private[sequential] object CommonIndexedSeqOps {
     : c.Expr[Option[B]] =
     new IndexedSeqMacros[c.type](c).select[A, B](unApply(c))(q)
   
-  def eagerly[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context): c.Expr[StrictIndexedSeqOps[Self, A]] = {
+  def eagerly[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context): c.Expr[StrictIndexedSeqOps[A, Family]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "StrictIndexedSeqOps"),
         unApply[A](c).tree :: Nil)
-    } (StrictIndexedSeqOpsTag[Self, A](c))
+    } (StrictIndexedSeqOpsTag[A, Family](c))
   }
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictIndexedSeqOps[A]] = {
@@ -282,13 +282,13 @@ private[sequential] object CommonIndexedSeqOps {
         weakTypeOf[A] :: Nil))
   }
   
-  private def StrictIndexedSeqOpsTag[Self : c.WeakTypeTag, A : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[StrictIndexedSeqOps[Self, A]] = {
+  private def StrictIndexedSeqOpsTag[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictIndexedSeqOps[A, Family]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.StrictIndexedSeqOps").toType,
-        weakTypeOf[Self] :: weakTypeOf[A] :: Nil))
+        weakTypeOf[A] :: weakTypeOf[Family] :: Nil))
   }
   
   private def NonStrictIndexedSeqOpsTag[A : c.WeakTypeTag](c: Context)

@@ -14,4 +14,4 @@ package sequential
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-abstract class StrictMapOps[+Self, A, +T] private[sequential]
+abstract class StrictMapOps[A, T, Family] private[sequential]

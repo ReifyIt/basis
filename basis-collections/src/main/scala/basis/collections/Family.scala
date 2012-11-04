@@ -5,9 +5,8 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.text
+package basis.collections
 
-class ReaderOps(self: Reader) {
-  def ++ (that: Reader): Reader =
-    if (self.isEmpty) that.dup else new Readers.++(self.dup, that.dup)
+trait Family[+T] extends Any {
+  type Family = T
 }

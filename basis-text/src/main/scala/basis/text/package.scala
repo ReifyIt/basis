@@ -8,7 +8,5 @@
 package basis
 
 package object text {
-  implicit def ReaderOps(self: Reader): ReaderOps = new ReaderOps(self)
-  
-  implicit def StringBuilder: StringBuilder = new StringBuilder
+  implicit def StringBuilder: StringBuilder[Any, String] = new JavaStringBuilder
 }

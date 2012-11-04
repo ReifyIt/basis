@@ -18,7 +18,7 @@ trait StrictSeqBehaviors extends StrictContainerBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
   def GenericStrictSeq[CC[A] <: Seq[A]](CC: BuilderFactory[CC]) {
-    implicit def Builder[A] = CC.Builder[A].asInstanceOf[Buffer[Any, A] { type State = CC[A] }]
+    import CC.Builder
     
     describe(s"A strict $CC sequence") {
       it("should collect all elements defined by a partial function") {

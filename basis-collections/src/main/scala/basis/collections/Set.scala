@@ -17,9 +17,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * 
   * @define collection  set
   */
-trait Set[+A] extends Any with Container[A] {
-  override type Self <: Set[A]
-  
+trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Examining */
   def isEmpty: Boolean

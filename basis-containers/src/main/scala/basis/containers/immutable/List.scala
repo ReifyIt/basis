@@ -16,13 +16,9 @@ import scala.annotation.tailrec
 
 /** A singly linked list of elements.
   * 
-  * @author Chris Sachs
-  * 
   * @define collection  list
   */
-sealed abstract class List[+A] extends LinearSeq[A] {
-  override type Self <: List[A]
-  
+sealed abstract class List[+A] extends Family[List[A]] with LinearSeq[A] {
   override def tail: List[A]
   
   @tailrec final def drop(lower: Int): List[A] =
@@ -30,7 +26,7 @@ sealed abstract class List[+A] extends LinearSeq[A] {
   
   final def take(upper: Int): List[A] = {
     var xs = this
-    val b = new List.Builder[A]
+    val b = new ListBuilder[A]
     var i = 0
     while (i < upper && !xs.isEmpty) {
       i += 1
@@ -53,7 +49,7 @@ sealed abstract class List[+A] extends LinearSeq[A] {
   
   final def ::[B >: A](x: B): List[B] = new ::[B](x, this)
   
-  @tailrec protected final override def foreach[U](f: A => U) =
+  @tailrec protected final override def foreach[@specialized(Unit) U](f: A => U) =
     if (!isEmpty) { f(head); tail.foreach[U](f) }
   
   override def equals(other: Any): Boolean = other match {
@@ -123,95 +119,93 @@ object List extends SeqFactory[List] {
   // FIXME: don't hurt the compiler!
   //override def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   
-  implicit override def Builder[A]: Builder[A] = new Builder[A]
+  implicit override def Builder[A]: Builder[Any, A, List[A]] = new ListBuilder[A]
   
   override def toString: String = "List"
+}
+
+private[containers] final class ListBuilder[A] extends Builder[Any, A, List[A]] {
+  private[this] var last: ::[A] = _
   
-  final class Builder[A] extends Buffer[Any, A] {
-    override type State = List[A]
-    
-    private[this] var last: ::[A] = _
-    
-    private[this] var first: List[A] = Nil
-    
-    private[this] var length: Int = 0
-    
-    private[this] var aliased: Int = -1 // index of the first aliased cons cell
-    
-    private[this] def prepare() {
-      var xs = first
-      if (aliased == 0) {
-        last = new ::(xs.head, Nil)
-        first = last
+  private[this] var first: List[A] = Nil
+  
+  private[this] var length: Int = 0
+  
+  private[this] var aliased: Int = -1 // index of the first aliased cons cell
+  
+  private[this] def prepare() {
+    var xs = first
+    if (aliased == 0) {
+      last = new ::(xs.head, Nil)
+      first = last
+      xs = xs.tail
+    }
+    else if (aliased > 0) {
+      var i = 0
+      while (i < aliased) {
+        last = xs.asInstanceOf[::[A]]
+        xs = xs.tail
+        i += 1
+      }
+    }
+    if (aliased >= 0) {
+      while (!xs.isEmpty) {
+        val next = new ::(xs.head, Nil)
+        last.tail = next
+        last = next
         xs = xs.tail
       }
-      else if (aliased > 0) {
-        var i = 0
-        while (i < aliased) {
-          last = xs.asInstanceOf[::[A]]
-          xs = xs.tail
-          i += 1
-        }
-      }
-      if (aliased >= 0) {
-        while (!xs.isEmpty) {
-          val next = new ::(xs.head, Nil)
-          last.tail = next
-          last = next
-          xs = xs.tail
-        }
-      }
-      aliased = -1
     }
-    
-    override def += (element: A): this.type = {
+    aliased = -1
+  }
+  
+  override def += (element: A): this.type = {
+    if (first.isEmpty) {
+      last = new ::(element, Nil)
+      first = last
+    }
+    else {
+      prepare()
+      val next = new ::(element, Nil)
+      last.tail = next
+      last = next
+    }
+    length += 1
+    this
+  }
+  
+  override def ++= (xs: Enumerator[A]): this.type = xs match {
+    case Nil => this
+    case xs: ::[A] =>
       if (first.isEmpty) {
-        last = new ::(element, Nil)
+        last = xs
         first = last
+        aliased = 0
       }
       else {
         prepare()
-        val next = new ::(element, Nil)
-        last.tail = next
-        last = next
+        last.tail = xs
+        aliased = length + 1
       }
-      length += 1
+      while (!last.tail.isEmpty) {
+        last = last.tail.asInstanceOf[::[A]]
+        length += 1
+      }
       this
-    }
-    
-    override def ++= (xs: Enumerator[A]): this.type = xs match {
-      case Nil => this
-      case xs: ::[A] =>
-        if (first.isEmpty) {
-          last = xs
-          first = last
-          aliased = 0
-        }
-        else {
-          prepare()
-          last.tail = xs
-          aliased = length + 1
-        }
-        while (!last.tail.isEmpty) {
-          last = last.tail.asInstanceOf[::[A]]
-          length += 1
-        }
-        this
-      case _ => super.++=(xs)
-    }
-    
-    override def expect(count: Int): this.type = this
-    
-    override def state: List[A] = {
-      if (length > 0) aliased = 0
-      first
-    }
-    
-    override def clear() {
-      last = null
-      first = Nil
-      length = 0
-      aliased = -1
-    }
+    case _ => super.++=(xs)
+  }
+  
+  override def expect(count: Int): this.type = this
+  
+  override def state: List[A] = {
+    if (length > 0) aliased = 0
+    first
+  }
+  
+  override def clear() {
+    last = null
+    first = Nil
+    length = 0
+    aliased = -1
   }
 }

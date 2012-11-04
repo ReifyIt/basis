@@ -16,12 +16,10 @@ import scala.annotation.tailrec
 import scala.annotation.unchecked.uncheckedVariance
 
 final class HashMap[+A, +T] private
-    (slotMap: Int, entryMap: Int, slots: RefArray[Any], links: RefArray[T])
-  extends Map[A, T] {
+    (slotMap: Int, entryMap: Int, slots: Array[AnyRef], links: Array[AnyRef])
+  extends Family[HashMap[A, T]] with Map[A, T] {
   
-  override type Self <: HashMap[A, T]
-  
-  override def isEmpty: Boolean = slots.isEmpty
+  override def isEmpty: Boolean = slots.length == 0
   
   override def size: Int = {
     if (!isTrie || slotMap == entryMap) rank
@@ -52,7 +50,7 @@ final class HashMap[+A, +T] private
   
   override def iterator: Iterator[(A, T)] = new HashMap.Cursor(this)
   
-  protected override def foreach[U](f: ((A, T)) => U) {
+  protected override def foreach[@specialized(Unit) U](f: ((A, T)) => U) {
     var i = 0
     if (isTrie) {
       while (i < 32 && hasSlotAbove(i)) {
@@ -128,7 +126,7 @@ final class HashMap[+A, +T] private
     * 
     * @param  i   the index of a link known to hold a value.
     */
-  private[basis] def valAt(i: Int): T = links(i)
+  private[basis] def valAt(i: Int): T = links(i).asInstanceOf[T]
   
   /** Returns the number of filled slots in this node. */
   private[basis] def rank: Int = slots.length
@@ -236,20 +234,20 @@ final class HashMap[+A, +T] private
       if (hasEntryAt(n)) { // update entry
         val e = keyAt(i)
         if (key == e) // replace value
-          new HashMap(slotMap, entryMap, slots, links.update(link(n), value))
+          new HashMap(slotMap, entryMap, slots, updateLink(link(n), value))
         else // merge keys in new submap
           new HashMap(slotMap, entryMap ^ n,
-            slots.update(i, merge(key, h, value, e, e.##, valAt(j), k + 5)),
-            links.remove(j))
+            updateSlot(i, merge(key, h, value, e, e.##, valAt(j), k + 5)),
+            removeLink(j))
       }
       else if (hasSlotAt(n)) { // update submap
         val node = nodeAt(i)
         val newNode = node.update(key, h, value, k + 5)
         if (node eq newNode) this
-        else new HashMap(slotMap, entryMap, slots.update(i, newNode), links)
+        else new HashMap(slotMap, entryMap, updateSlot(i, newNode), links)
       }
       else // insert entry
-        new HashMap(slotMap | n, entryMap | n, slots.insert(i, key), links.insert(j, value))
+        new HashMap(slotMap | n, entryMap | n, insertSlot(i, key), insertLink(j, value))
     }
     else { // update collision bucket
       if (h == bucketHash) {
@@ -257,10 +255,10 @@ final class HashMap[+A, +T] private
         var n = rank
         while (i < n) {
           if (key == keyAt(i))
-            return new HashMap(0, bucketHash, slots, links.update(i, value))
+            return new HashMap(0, bucketHash, slots, updateLink(i, value))
           i += 1
         }
-        new HashMap(0, bucketHash, slots :+ key, links :+ value)
+        new HashMap(0, bucketHash, appendSlot(key), appendLink(value))
       }
       else // reconcile key with collision bucket
         resolve(key, h, value, k)
@@ -281,7 +279,7 @@ final class HashMap[+A, +T] private
       if (branchA == branchB) // new submap
         new HashMap(branchA | branchB, 0,
           newSlots(merge(keyA, hashA, valueA, keyB, hashB, valueB, k + 5)),
-          RefArray.Empty)
+          new Array[AnyRef](0))
       else // new branch
         new HashMap(branchA | branchB, branchA | branchB,
           if (((branchA - 1) & branchB) == 0) newSlots(keyA, keyB) else newSlots(keyB, keyA),
@@ -297,7 +295,7 @@ final class HashMap[+A, +T] private
     if (bucketBranch == entryBranch) // new submap
       new HashMap(bucketBranch, 0,
         newSlots(resolve(key, h, value, k + 5)),
-        RefArray.Empty)
+        new Array[AnyRef](0))
     else // new branch
       new HashMap(bucketBranch | entryBranch, entryBranch,
         if (((bucketBranch - 1) & entryBranch) == 0) newSlots(this, key) else newSlots(key, this),
@@ -314,7 +312,7 @@ final class HashMap[+A, +T] private
       val j = link(n)
       if (hasEntryAt(n)) { // remove entry
         if (key == keyAt(i))
-          new HashMap(slotMap ^ n, entryMap ^ n, slots.remove(i), links.remove(j))
+          new HashMap(slotMap ^ n, entryMap ^ n, removeSlot(i), removeLink(j))
         else this
       }
       else if (hasSlotAt(n)) { // remove from submap
@@ -322,10 +320,10 @@ final class HashMap[+A, +T] private
         val newNode = node.remove(key, h, k + 5)
         if (node eq newNode) this
         else if (newNode.isEmpty) // remove empty submaps
-          new HashMap(slotMap ^ n, entryMap, slots.remove(i), links)
+          new HashMap(slotMap ^ n, entryMap, removeSlot(i), links)
         else if (newNode.isUnary) // lift unary submaps
-          new HashMap(slotMap, entryMap | n, slots.update(i, newNode.keyAt(0)), links.update(j, newNode.valAt(0)))
-        else new HashMap(slotMap, entryMap, slots.update(i, newNode), links)
+          new HashMap(slotMap, entryMap | n, updateSlot(i, newNode.keyAt(0)), updateLink(j, newNode.valAt(0)))
+        else new HashMap(slotMap, entryMap, updateSlot(i, newNode), links)
       }
       else this
     }
@@ -335,7 +333,7 @@ final class HashMap[+A, +T] private
         val n = rank
         while (i < n) {
           if (key == keyAt(i))
-            return new HashMap(0, bucketHash, slots.remove(i), links.remove(i))
+            return new HashMap(0, bucketHash, removeSlot(i), removeLink(i))
           i += 1
         }
       }
@@ -343,17 +341,73 @@ final class HashMap[+A, +T] private
     }
   }
   
-  private[this] def newSlots(elem: Any): RefArray[Any] =
-    new RefArray(scala.Array(elem.asInstanceOf[AnyRef]))
+  private[this] def newSlots(elem: Any): Array[AnyRef] =
+    Array(elem.asInstanceOf[AnyRef])
   
-  private[this] def newSlots(elemA: Any, elemB: Any): RefArray[Any] =
-    new RefArray(scala.Array(elemA.asInstanceOf[AnyRef], elemB.asInstanceOf[AnyRef]))
+  private[this] def newSlots(elemA: Any, elemB: Any): Array[AnyRef] =
+    Array(elemA.asInstanceOf[AnyRef], elemB.asInstanceOf[AnyRef])
   
-  private[this] def newLinks[U >: T](value: U): RefArray[U] =
-    new RefArray(scala.Array(value.asInstanceOf[AnyRef]))
+  private[this] def updateSlot(index: Int, elem: Any): Array[AnyRef] = {
+    val newSlots = slots.clone
+    newSlots(index) = elem.asInstanceOf[AnyRef]
+    newSlots
+  }
   
-  private[this] def newLinks[U >: T](valueA: U, valueB: U): RefArray[U] =
-    new RefArray(scala.Array(valueA.asInstanceOf[AnyRef], valueB.asInstanceOf[AnyRef]))
+  private[this] def appendSlot(elem: Any): Array[AnyRef] = {
+    val newSlots = new Array[AnyRef](slots.length + 1)
+    java.lang.System.arraycopy(slots, 0, newSlots, 0, slots.length)
+    newSlots(newSlots.length) = elem.asInstanceOf[AnyRef]
+    newSlots
+  }
+  
+  private[this] def insertSlot(index: Int, elem: Any): Array[AnyRef] = {
+    val newSlots = new Array[AnyRef](slots.length + 1)
+    java.lang.System.arraycopy(slots, 0, newSlots, 0, index)
+    newSlots(index) = elem.asInstanceOf[AnyRef]
+    java.lang.System.arraycopy(slots, index, newSlots, index + 1, slots.length - index)
+    newSlots
+  }
+  
+  private[this] def removeSlot(index: Int): Array[AnyRef] = {
+    val newSlots = new Array[AnyRef](slots.length - 1)
+    java.lang.System.arraycopy(slots, 0, newSlots, 0, index)
+    java.lang.System.arraycopy(slots, index + 1, newSlots, index, newSlots.length - index)
+    newSlots
+  }
+  
+  private[this] def newLinks[U >: T](value: U): Array[AnyRef] =
+    Array(value.asInstanceOf[AnyRef])
+  
+  private[this] def newLinks[U >: T](valueA: U, valueB: U): Array[AnyRef] =
+    Array(valueA.asInstanceOf[AnyRef], valueB.asInstanceOf[AnyRef])
+  
+  private[this] def updateLink[U >: T](index: Int, value: U): Array[AnyRef] = {
+    val newLinks = links.clone
+    newLinks(index) = value.asInstanceOf[AnyRef]
+    newLinks
+  }
+  
+  private[this] def appendLink[U >: T](value: U): Array[AnyRef] = {
+    val newLinks = new Array[AnyRef](links.length + 1)
+    java.lang.System.arraycopy(links, 0, newLinks, 0, links.length)
+    newLinks(newLinks.length) = value.asInstanceOf[AnyRef]
+    newLinks
+  }
+  
+  private[this] def insertLink[U >: T](index: Int, value: U): Array[AnyRef] = {
+    val newLinks = new Array[AnyRef](links.length + 1)
+    java.lang.System.arraycopy(links, 0, newLinks, 0, index)
+    newLinks(index) = value.asInstanceOf[AnyRef]
+    java.lang.System.arraycopy(links, index, newLinks, index + 1, links.length - index)
+    newLinks
+  }
+  
+  private[this] def removeLink(index: Int): Array[AnyRef] = {
+    val newLinks = new Array[AnyRef](links.length - 1)
+    java.lang.System.arraycopy(links, 0, newLinks, 0, index)
+    java.lang.System.arraycopy(links, index + 1, newLinks, index, newLinks.length - index)
+    newLinks
+  }
   
   override def toString: String = {
     val s = new java.lang.StringBuilder("HashMap")
@@ -376,30 +430,12 @@ final class HashMap[+A, +T] private
 
 object HashMap extends MapFactory[HashMap] {
   val Empty: HashMap[Nothing, Nothing] =
-    new HashMap[Nothing, Nothing](0, 0, RefArray.Empty, RefArray.Empty)
+    new HashMap[Nothing, Nothing](0, 0, new Array[AnyRef](0), new Array[AnyRef](0))
   
-  implicit override def Builder[A, T]: Builder[A, T] = new Builder[A, T]
+  implicit override def Builder[A, T]: Builder[Any, (A, T), HashMap[A, T]] =
+    new HashMapBuilder[A, T]
   
   override def toString: String = "HashMap"
-  
-  final class Builder[A, T] extends Buffer[Any, (A, T)] {
-    override type State = HashMap[A, T]
-    
-    private[this] var map: HashMap[A, T] = HashMap.Empty
-    
-    def += (key: A, value: T): this.type = {
-      map += (key, value)
-      this
-    }
-    
-    override def += (entry: (A, T)): this.type = this += (entry._1, entry._2)
-    
-    override def expect(count: Int): this.type = this
-    
-    override def state: HashMap[A, T] = map
-    
-    override def clear(): Unit = map = HashMap.Empty
-  }
   
   private[immutable] final class Cursor[+A, +T](
       self: HashMap[A, T],
@@ -476,4 +512,21 @@ object HashMap extends MapFactory[HashMap] {
     
     override def dup: Cursor[A, T] = new Cursor(self, child, index)
   }
+}
+
+private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T), HashMap[A, T]] {
+  private[this] var map: HashMap[A, T] = HashMap.Empty
+  
+  def += (key: A, value: T): this.type = {
+    map += (key, value)
+    this
+  }
+  
+  override def += (entry: (A, T)): this.type = this += (entry._1, entry._2)
+  
+  override def expect(count: Int): this.type = this
+  
+  override def state: HashMap[A, T] = map
+  
+  override def clear(): Unit = map = HashMap.Empty
 }
