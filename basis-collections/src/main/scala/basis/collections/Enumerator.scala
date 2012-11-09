@@ -24,7 +24,7 @@ trait Enumerator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A
     * 
     * @group  Traversing
     */
-  protected def foreach[@specialized(Unit) U](f: A => U): Unit
+  protected def foreach[U](f: A => U): Unit
 }
 
 private[collections] object Enumerator {

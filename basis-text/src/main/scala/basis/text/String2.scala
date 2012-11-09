@@ -69,8 +69,7 @@ final class String2(codeUnits: Array[scala.Char]) extends Family[String2] with S
   
   /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
-  /*
-  protected override def foreach[@specialized(Unit) U](f: Int => U) {
+  protected override def foreach[U](f: Int => U) {
     var i = 0
     val n = codeUnits.length
     while (i < n) f({
@@ -88,7 +87,7 @@ final class String2(codeUnits: Array[scala.Char]) extends Family[String2] with S
       else 0xFFFD
     }: Int)
   }
-  */
+  
   override def toString: String = {
     val s = new java.lang.StringBuilder
     var i = 0
@@ -103,7 +102,7 @@ final class String2(codeUnits: Array[scala.Char]) extends Family[String2] with S
 
 /** A factory for 16-bit Unicode strings. */
 object String2 {
-  val Empty: String2 = new String2(new Array[scala.Char](0))
+  val empty: String2 = new String2(new Array[scala.Char](0))
   
   def apply(chars: java.lang.CharSequence): String2 = {
     val s = new String2Builder

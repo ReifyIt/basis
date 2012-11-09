@@ -98,7 +98,7 @@ private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A, Ar
   override def state: ArraySeq[A] = {
     if (array == null || length != array.length) resize(length)
     aliased = true
-    new RefArraySeq[A](array)
+    new RefArraySeq(array)
   }
   
   override def clear() {

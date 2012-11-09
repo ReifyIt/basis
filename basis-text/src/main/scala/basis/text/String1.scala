@@ -120,8 +120,7 @@ final class String1(codeUnits: Array[Byte]) extends Family[String1] with Seq[Int
   /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of the maximal subpart
     * of any ill-formed subsequences. */
-  /*
-  protected override def foreach[@specialized(Unit) U](f: Int => U) {
+  protected override def foreach[U](f: Int => U) {
     var i = 0
     var n = codeUnits.length
     while (i < n) f({
@@ -170,7 +169,7 @@ final class String1(codeUnits: Array[Byte]) extends Family[String1] with Seq[Int
       else 0xFFFD
     }: Int)
   }
-  */
+  
   override def toString: String = {
     val s = new java.lang.StringBuilder
     var i = 0
@@ -185,7 +184,7 @@ final class String1(codeUnits: Array[Byte]) extends Family[String1] with Seq[Int
 
 /** A factory for 8-bit Unicode strings. */
 object String1 {
-  val Empty: String1 = new String1(new Array[Byte](0))
+  val empty: String1 = new String1(new Array[Byte](0))
   
   def apply(chars: java.lang.CharSequence): String1 = {
     val s = new String1Builder

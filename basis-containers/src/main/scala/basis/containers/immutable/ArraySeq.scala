@@ -40,7 +40,7 @@ abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Bool
   /** Returns a copy of this array with `value` prepended. */
   def +: [B >: A](value: B): ArraySeq[B] = Predef.???
   
-  protected override def foreach[@specialized(Unit) U](f: A => U) {
+  protected override def foreach[U](f: A => U) {
     var i = 0
     val n = length
     while (i < n) {

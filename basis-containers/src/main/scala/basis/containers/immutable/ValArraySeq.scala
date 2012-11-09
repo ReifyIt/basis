@@ -114,7 +114,7 @@ private[containers] final class ValArraySeqBuilder[A](implicit struct: ValType[A
   override def state: ArraySeq[A] = {
     if (length != capacity) resize(length)
     aliased = true
-    new ValArraySeq[A](data, length)
+    new ValArraySeq(data, length)
   }
   
   override def clear() {

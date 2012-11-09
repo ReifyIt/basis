@@ -26,7 +26,7 @@ trait IndexedSeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A
   
   override def iterator: Iterator[A] = new IndexedSeqIterator(this, 0, length)
   
-  protected override def foreach[@specialized(Unit) U](f: A => U) {
+  protected override def foreach[U](f: A => U) {
     var i = 0
     val n = length
     while (i < n) {

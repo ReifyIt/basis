@@ -56,7 +56,7 @@ trait Iterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
     * @group Iterating */
   def dup: Iterator[A]
   
-  protected override def foreach[@specialized(Unit) U](f: A => U): Unit =
+  protected override def foreach[U](f: A => U): Unit =
     while (!isEmpty) { f(head); step() }
 }
 
@@ -74,5 +74,5 @@ object Done extends Iterator[Nothing] {
   
   override def dup: Done.type = this
   
-  protected override def foreach[@specialized(Unit) U](f: Nothing => U): Unit = ()
+  protected override def foreach[U](f: Nothing => U): Unit = ()
 }

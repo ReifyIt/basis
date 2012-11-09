@@ -22,7 +22,7 @@ trait Container[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
     * @group Iterating */
   def iterator: Iterator[A]
   
-  protected override def foreach[@specialized(Unit) U](f: A => U) {
+  protected override def foreach[U](f: A => U) {
     val xs = iterator
     while (!xs.isEmpty) { f(xs.head); xs.step() }
   }

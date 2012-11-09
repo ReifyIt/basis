@@ -36,8 +36,7 @@ final class String4(codeUnits: Array[Int]) extends Family[String4] with IndexedS
   
   /** Sequentially applies a function to each code point in this string.
     * Applies the replacement character U+FFFD in lieu of invalid characters. */
-  /*
-  protected override def foreach[@specialized(Unit) U](f: Int => U) {
+  protected override def foreach[U](f: Int => U) {
     var i = 0
     val n = length
     while (i < n) {
@@ -45,7 +44,7 @@ final class String4(codeUnits: Array[Int]) extends Family[String4] with IndexedS
       i += 1
     }
   }
-  */
+  
   override def toString: String = {
     val s = new java.lang.StringBuilder
     var i = 0
@@ -60,7 +59,7 @@ final class String4(codeUnits: Array[Int]) extends Family[String4] with IndexedS
 
 /** A factory for 32-bit Unicode strings. */
 object String4 {
-  val Empty: String4 = new String4(new Array[Int](0))
+  val empty: String4 = new String4(new Array[Int](0))
   
   def apply(chars: java.lang.CharSequence): String4 = {
     val s = new String4Builder

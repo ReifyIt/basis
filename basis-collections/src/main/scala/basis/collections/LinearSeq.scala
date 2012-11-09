@@ -34,7 +34,7 @@ trait LinearSeq[+A] extends Any with Family[LinearSeq[A]] with Seq[A] {
   
   override def iterator: Iterator[A] = new LinearSeqIterator(this)
   
-  protected override def foreach[@specialized(Unit) U](f: A => U) {
+  protected override def foreach[U](f: A => U) {
     var xs = this
     while (!xs.isEmpty) {
       f(xs.head)

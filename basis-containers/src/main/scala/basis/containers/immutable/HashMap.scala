@@ -50,7 +50,7 @@ final class HashMap[+A, +T] private
   
   override def iterator: Iterator[(A, T)] = new HashMap.Cursor(this)
   
-  protected override def foreach[@specialized(Unit) U](f: ((A, T)) => U) {
+  protected override def foreach[U](f: ((A, T)) => U) {
     var i = 0
     if (isTrie) {
       while (i < 32 && hasSlotAbove(i)) {
@@ -429,7 +429,7 @@ final class HashMap[+A, +T] private
 }
 
 object HashMap extends MapFactory[HashMap] {
-  val Empty: HashMap[Nothing, Nothing] =
+  val empty: HashMap[Nothing, Nothing] =
     new HashMap[Nothing, Nothing](0, 0, new Array[AnyRef](0), new Array[AnyRef](0))
   
   implicit override def Builder[A, T]: Builder[Any, (A, T), HashMap[A, T]] =
@@ -515,7 +515,7 @@ object HashMap extends MapFactory[HashMap] {
 }
 
 private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T), HashMap[A, T]] {
-  private[this] var map: HashMap[A, T] = HashMap.Empty
+  private[this] var map: HashMap[A, T] = HashMap.empty
   
   def += (key: A, value: T): this.type = {
     map += (key, value)
@@ -528,5 +528,5 @@ private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)
   
   override def state: HashMap[A, T] = map
   
-  override def clear(): Unit = map = HashMap.Empty
+  override def clear(): Unit = map = HashMap.empty
 }

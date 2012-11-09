@@ -49,7 +49,7 @@ sealed abstract class List[+A] extends Family[List[A]] with LinearSeq[A] {
   
   final def ::[B >: A](x: B): List[B] = new ::[B](x, this)
   
-  @tailrec protected final override def foreach[@specialized(Unit) U](f: A => U) =
+  @tailrec protected final override def foreach[U](f: A => U) =
     if (!isEmpty) { f(head); tail.foreach[U](f) }
   
   override def equals(other: Any): Boolean = other match {
