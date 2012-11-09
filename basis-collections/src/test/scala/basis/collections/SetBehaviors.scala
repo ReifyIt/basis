@@ -64,6 +64,19 @@ trait SetBehaviors extends ContainerBehaviors { this: FunSpec =>
         withClue("element 0") ((xs contains 0) should be (false))
         withClue("element 5") ((xs contains 5) should be (false))
       }
+      
+      it("should not contain duplicate elements") {
+        val iter = CC(2, 2, 3, 5, 5, 5, 7, 7).iterator
+        var n = iter.head
+        iter.step()
+        n += iter.head
+        iter.step()
+        n += iter.head
+        iter.step()
+        n += iter.head
+        iter.step()
+        n should be (17)
+      }
     }
   }
 }
