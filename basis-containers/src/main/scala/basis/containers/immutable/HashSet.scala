@@ -23,7 +23,7 @@ final class HashSet[+A] private[containers] (
   
   import HashSet.{VOID, LEAF, TREE, KNOT}
   
-  override def isEmpty: Boolean = slots.length == 0
+  override def isEmpty: Boolean = slotMap == 0
   
   override def size: Int = {
     var t = 0
@@ -34,8 +34,8 @@ final class HashSet[+A] private[containers] (
       ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
         case VOID => ()
         case LEAF => t += 1; i += 1
-        case TREE => t += getTree(i).size; i += 1
-        case KNOT => t += getKnot(i).size; i += 1
+        case TREE => t += treeAt(i).size; i += 1
+        case KNOT => t += knotAt(i).size; i += 1
       }
       treeMap >>>= 1
       leafMap >>>= 1
@@ -51,39 +51,53 @@ final class HashSet[+A] private[containers] (
   /** Returns a copy of this $collection, excluding the given element. */
   def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
   
-  private def isUnary: Boolean = slots.length == 1 && leafMap != 0
-  
   private def knotMap: Int = treeMap & leafMap
   
   private def slotMap: Int = treeMap | leafMap
   
   private def choose(hash: Int, shift: Int): Int = 1 << ((hash >>> shift) & 0x1F)
   
-  private def lookup(branch: Int): Int = (slotMap & (branch - 1)).countSetBits
+  private def select(branch: Int): Int = (slotMap & (branch - 1)).countSetBits
   
   private def follow(branch: Int): Int =
     (if ((leafMap & branch) != 0) 1 else 0) | (if ((treeMap & branch) != 0) 2 else 0)
   
-  private[containers] def getLeaf(index: Int): A = slots(index).asInstanceOf[A]
+  private[containers] def leafAt(index: Int): A =
+    slots(index).asInstanceOf[A]
   
-  private def setLeaf[B >: A](index: Int, elem: B): this.type = {
-    slots(index) = elem.asInstanceOf[AnyRef]
+  private def getLeaf(branch: Int): A =
+    slots(select(branch)).asInstanceOf[A]
+  
+  private def setLeaf[B >: A](branch: Int, leaf: B): this.type = {
+    slots(select(branch)) = leaf.asInstanceOf[AnyRef]
     this
   }
   
-  private[containers] def getTree(index: Int): HashSet[A] = slots(index).asInstanceOf[HashSet[A]]
+  private[containers] def treeAt(index: Int): HashSet[A] =
+    slots(index).asInstanceOf[HashSet[A]]
   
-  private def setTree[B >: A](index: Int, tree: HashSet[B]): this.type = {
-    slots(index) = tree.asInstanceOf[AnyRef]
+  private def getTree(branch: Int): HashSet[A] =
+    slots(select(branch)).asInstanceOf[HashSet[A]]
+  
+  private def setTree[B >: A](branch: Int, tree: HashSet[B]): this.type = {
+    slots(select(branch)) = tree
     this
   }
   
-  private[containers] def getKnot(index: Int): ArraySet[A] = slots(index).asInstanceOf[ArraySet[A]]
+  private[containers] def knotAt(index: Int): ArraySet[A] =
+    slots(index).asInstanceOf[ArraySet[A]]
   
-  private def setKnot[B >: A](index: Int, knot: ArraySet[B]): this.type = {
-    slots(index) = knot.asInstanceOf[AnyRef]
+  private def getKnot(branch: Int): ArraySet[A] =
+    slots(select(branch)).asInstanceOf[ArraySet[A]]
+  
+  private def setKnot[B >: A](branch: Int, knot: ArraySet[B]): this.type = {
+    slots(select(branch)) = knot
     this
   }
+  
+  private def isUnary: Boolean = treeMap == 0 && leafMap.countSetBits == 1
+  
+  private def unaryElement: A = slots(0).asInstanceOf[A]
   
   private def remap(treeMap: Int, leafMap: Int): HashSet[A] = {
     var oldSlotMap = this.treeMap | this.leafMap
@@ -94,7 +108,7 @@ final class HashSet[+A] private[containers] (
       var j = 0
       val slots = new Array[AnyRef](newSlotMap.countSetBits)
       while (newSlotMap != 0) {
-        if (((oldSlotMap & newSlotMap) & 1) == 1) slots(j) = this.slots(i)
+        if ((oldSlotMap & newSlotMap & 1) == 1) slots(j) = this.slots(i)
         if ((oldSlotMap & 1) == 1) i += 1
         if ((newSlotMap & 1) == 1) j += 1
         oldSlotMap >>>= 1
@@ -106,63 +120,60 @@ final class HashSet[+A] private[containers] (
   
   @tailrec private def contains(elem: A @uncheckedVariance, elemHash: Int, shift: Int): Boolean = {
     val branch = choose(elemHash, shift)
-    val index = lookup(branch)
     (follow(branch): @switch) match {
       case VOID => false
-      case LEAF => elem == getLeaf(index)
-      case TREE => getTree(index).contains(elem, elemHash, shift + 5)
-      case KNOT => getKnot(index).contains(elem)
+      case LEAF => elem == getLeaf(branch)
+      case TREE => getTree(branch).contains(elem, elemHash, shift + 5)
+      case KNOT => getKnot(branch).contains(elem)
     }
   }
   
   private def update[B >: A](elem: B, elemHash: Int, shift: Int): HashSet[B] = {
     val branch = choose(elemHash, shift)
-    val index = lookup(branch)
     (follow(branch): @switch) match {
-      case VOID => remap(treeMap, leafMap | branch).setLeaf(index, elem)
+      case VOID => remap(treeMap, leafMap | branch).setLeaf(branch, elem)
       case LEAF =>
-        val leaf = getLeaf(index)
+        val leaf = getLeaf(branch)
         val leafHash = leaf.##
         if (elemHash == leafHash && elem == leaf) this
         else if (elemHash != leafHash)
           remap(treeMap | branch, leafMap ^ branch).
-            setTree(index, merge(elem, elemHash, leaf, leafHash, shift + 5))
-        else remap(treeMap | branch, leafMap).setKnot(index, ArraySet(elem, leaf))
+            setTree(branch, merge(leaf, leafHash, elem, elemHash, shift + 5))
+        else remap(treeMap | branch, leafMap).setKnot(branch, ArraySet(leaf, elem))
       case TREE =>
-        val oldTree = getTree(index)
+        val oldTree = getTree(branch)
         val newTree = oldTree.update(elem, elemHash, shift + 5)
         if (oldTree eq newTree) this
-        else remap(treeMap, leafMap).setTree(index, newTree)
+        else remap(treeMap, leafMap).setTree(branch, newTree)
       case KNOT =>
-        val oldKnot = getKnot(index)
+        val oldKnot = getKnot(branch)
         val newKnot = oldKnot + elem
         if (oldKnot eq newKnot) this
-        else remap(treeMap, leafMap).setKnot(index, newKnot)
+        else remap(treeMap, leafMap).setKnot(branch, newKnot)
     }
   }
   
   private def remove(elem: A @uncheckedVariance, elemHash: Int, shift: Int): HashSet[A] = {
     val branch = choose(elemHash, shift)
-    val index = lookup(branch)
     (follow(branch): @switch) match {
       case VOID => this
       case LEAF =>
-        if (elem != getLeaf(index)) this
+        if (elem != getLeaf(branch)) this
         else remap(treeMap, leafMap ^ branch)
       case TREE =>
-        val oldTree = getTree(index)
+        val oldTree = getTree(branch)
         val newTree = oldTree.remove(elem, elemHash, shift + 5)
         if (oldTree eq newTree) this
         else if (newTree.isEmpty) remap(treeMap ^ branch, leafMap)
-        else if (newTree.isUnary) remap(treeMap ^ branch, leafMap | branch).setLeaf(index, newTree.getLeaf(0))
-        else remap(treeMap, leafMap).setTree(index, newTree)
+        else if (newTree.isUnary) remap(treeMap ^ branch, leafMap | branch).setLeaf(branch, newTree.unaryElement)
+        else remap(treeMap, leafMap).setTree(branch, newTree)
       case KNOT =>
-        val oldKnot = getKnot(index)
+        val oldKnot = getKnot(branch)
         val newKnot = oldKnot - elem
         if (oldKnot eq newKnot) this
         else if (newKnot.isEmpty) remap(treeMap ^ branch, leafMap)
-        else if (newKnot.isUnary) remap(treeMap ^ branch, leafMap | branch).setLeaf(index, newKnot(0))
-        else remap(treeMap, leafMap).setKnot(index, newKnot)
+        else if (newKnot.isUnary) remap(treeMap ^ branch, leafMap | branch).setLeaf(branch, newKnot.unaryElement)
+        else remap(treeMap, leafMap).setKnot(branch, newKnot)
     }
   }
   
@@ -199,9 +210,9 @@ final class HashSet[+A] private[containers] (
     while ((treeMap | leafMap) != 0) {
       ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
         case VOID => ()
-        case LEAF => f(getLeaf(i)); i += 1
-        case TREE => getTree(i).foreach(f); i += 1
-        case KNOT => getKnot(i).foreach(f); i += 1
+        case LEAF => f(leafAt(i)); i += 1
+        case TREE => treeAt(i).foreach(f); i += 1
+        case KNOT => knotAt(i).foreach(f); i += 1
       }
       treeMap >>>= 1
       leafMap >>>= 1
@@ -248,7 +259,7 @@ private[containers] final class HashSetIterator[+A](
   def this(tree: HashSet[A]) = {
     this(new Array[AnyRef](7), 0, new Array[Int](21), 0)
     node = tree
-    index = 0
+    i = 0
     treeMap = tree.treeMap
     leafMap = tree.leafMap
   }
@@ -256,8 +267,8 @@ private[containers] final class HashSetIterator[+A](
   private[this] def node: AnyRef = nodes(depth)
   private[this] def node_=(node: AnyRef): Unit = nodes(depth) = node
   
-  private[this] def index: Int = stack(stackPointer)
-  private[this] def index_=(index: Int): Unit = stack(stackPointer) = index
+  private[this] def i: Int = stack(stackPointer)
+  private[this] def i_=(index: Int): Unit = stack(stackPointer) = index
   
   private[this] def treeMap: Int = stack(stackPointer + 1)
   private[this] def treeMap_=(treeMap: Int): Unit = stack(stackPointer + 1) = treeMap
@@ -265,12 +276,14 @@ private[containers] final class HashSetIterator[+A](
   private[this] def leafMap: Int = stack(stackPointer + 2)
   private[this] def leafMap_=(leafMap: Int): Unit = stack(stackPointer + 2) = leafMap
   
+  private[this] def follow: Int = leafMap & 1 | (treeMap & 1) << 1
+  
   private[this] def push(tree: HashSet[A]) {
     depth += 1
     node = tree
     
     stackPointer += 3
-    index = 0
+    i = 0
     treeMap = tree.treeMap
     leafMap = tree.leafMap
   }
@@ -280,64 +293,64 @@ private[containers] final class HashSetIterator[+A](
     node = knot
     
     stackPointer += 3
-    index = 0
+    i = 0
   }
   
   private[this] def pop() {
     node = null
     depth -= 1
     
-    index = 0
+    i = 0
     treeMap = 0
     leafMap = 0
     stackPointer -= 3
     
-    index += 1
+    i += 1
     treeMap >>>= 1
     leafMap >>>= 1
   }
   
   @tailrec override def isEmpty: Boolean = node match {
     case node: HashSet[A] =>
-      if ((treeMap | leafMap) != 0) ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
+      if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
           leafMap >>>= 1
           isEmpty
         case LEAF => false
         case TREE =>
-          push(node.getTree(index))
+          push(node.treeAt(i))
           isEmpty
         case KNOT =>
-          push(node.getKnot(index))
+          push(node.knotAt(i))
           isEmpty
       }
       else if (depth > 0) { pop(); isEmpty }
       else true
     case node: ArraySet[A] =>
-      if (index < node.size) false
+      if (i < node.size) false
       else { pop(); isEmpty }
   }
   
   @tailrec override def head: A = node match {
     case node: HashSet[A] =>
-      if ((treeMap | leafMap) != 0) ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
+      if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
           leafMap >>>= 1
           head
-        case LEAF => node.getLeaf(index)
+        case LEAF => node.leafAt(i)
         case TREE =>
-          push(node.getTree(index))
+          push(node.treeAt(i))
           head
         case KNOT =>
-          push(node.getKnot(index))
+          push(node.knotAt(i))
           head
       }
       else if (depth > 0) { pop(); head }
       else Done.head
     case node: ArraySet[A] =>
-      if (index < node.size) node(index)
+      if (i < node.size) node.elementAt(i)
       else { pop(); head }
   }
   
@@ -345,14 +358,14 @@ private[containers] final class HashSetIterator[+A](
     case node: HashSet[A] =>
       val slotMap = treeMap | leafMap
       if (slotMap != 0) {
-        if ((slotMap & 1) == 1) index += 1
+        if ((slotMap & 1) == 1) i += 1
         treeMap >>>= 1
         leafMap >>>= 1
       }
       else if (depth > 0) { pop(); step() }
       else Done.step()
     case node: ArraySet[A] =>
-      if (index < node.size) index += 1
+      if (i < node.size) i += 1
       else { pop(); step() }
   }
   

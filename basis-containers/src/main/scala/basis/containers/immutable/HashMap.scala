@@ -12,28 +12,35 @@ import basis.collections._
 import basis.collections.generic._
 import basis.util._
 
-import scala.annotation.tailrec
+import scala.annotation.{switch, tailrec}
 import scala.annotation.unchecked.uncheckedVariance
 
-final class HashMap[+A, +T] private
-    (slotMap: Int, entryMap: Int, slots: Array[AnyRef], links: Array[AnyRef])
+final class HashMap[+A, +T] private[containers] (
+    private[containers] val treeMap: Int,
+    private[containers] val leafMap: Int,
+    slots: Array[AnyRef])
   extends Family[HashMap[A, T]] with Map[A, T] {
   
-  override def isEmpty: Boolean = slots.length == 0
+  import HashMap.{VOID, LEAF, TREE, KNOT}
+  
+  override def isEmpty: Boolean = slotMap == 0
   
   override def size: Int = {
-    if (!isTrie || slotMap == entryMap) rank
-    else {
-      var t = 0
-      var i = 0
-      while (i < 32 && hasSlotAbove(i)) {
-        val n = 1 << i
-        if (hasEntryAt(n)) t += 1
-        else if (hasSlotAt(n)) t += nodeAt(slot(n)).size
-        i += 1
+    var t = 0
+    var i = 0
+    var treeMap = this.treeMap
+    var leafMap = this.leafMap
+    while ((treeMap | leafMap) != 0) {
+      ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
+        case VOID => ()
+        case LEAF => t += 1; i += 1
+        case TREE => t += treeAt(i).size; i += 1
+        case KNOT => t += knotAt(i).size; i += 1
       }
-      t
+      treeMap >>>= 1
+      leafMap >>>= 1
     }
+    t
   }
   
   override def contains(key: A @uncheckedVariance): Boolean = contains(key, key.##, 0)
@@ -48,365 +55,242 @@ final class HashMap[+A, +T] private
   /** Returns a copy of this $collection without any value associated with the given key. */
   def - (key: A @uncheckedVariance): HashMap[A, T] = remove(key, key.##, 0)
   
-  override def iterator: Iterator[(A, T)] = new HashMap.Cursor(this)
+  private def knotMap: Int = treeMap & leafMap
+  
+  private def slotMap: Int = treeMap | leafMap
+  
+  private def choose(hash: Int, shift: Int): Int = 1 << ((hash >>> shift) & 0x1F)
+  
+  private def select(branch: Int): Int = (slotMap & (branch - 1)).countSetBits
+  
+  private def lookup(branch: Int): Int = (leafMap & (branch - 1)).countSetBits
+  
+  private def follow(branch: Int): Int =
+    (if ((leafMap & branch) != 0) 1 else 0) | (if ((treeMap & branch) != 0) 2 else 0)
+  
+  private[containers] def keyAt(index: Int): A =
+    slots(index).asInstanceOf[A]
+  
+  private def getKey(branch: Int): A =
+    slots(select(branch)).asInstanceOf[A]
+  
+  private def setKey[B >: A](branch: Int, key: B): this.type = {
+    slots(select(branch)) = key.asInstanceOf[AnyRef]
+    this
+  }
+  
+  private[containers] def valueAt(index: Int): T =
+    slots(slots.length - index - 1).asInstanceOf[T]
+  
+  private def getValue(branch: Int): T =
+    slots(slots.length - lookup(branch) - 1).asInstanceOf[T]
+  
+  private def setValue[U >: T](branch: Int, value: U): this.type = {
+    slots(slots.length - lookup(branch) - 1) = value.asInstanceOf[AnyRef]
+    this
+  }
+  
+  private def setLeaf[B >: A, U >: T](branch: Int, key: B, value: U): this.type = {
+    slots(select(branch)) = key.asInstanceOf[AnyRef]
+    slots(slots.length - lookup(branch) - 1) = value.asInstanceOf[AnyRef]
+    this
+  }
+  
+  private[containers] def treeAt(index: Int): HashMap[A, T] =
+    slots(index).asInstanceOf[HashMap[A, T]]
+  
+  private def getTree(branch: Int): HashMap[A, T] =
+    slots(select(branch)).asInstanceOf[HashMap[A, T]]
+  
+  private def setTree[B >: A, U >: T](branch: Int, tree: HashMap[B, U]): this.type = {
+    slots(select(branch)) = tree
+    this
+  }
+  
+  private[containers] def knotAt(index: Int): ArrayMap[A, T] =
+    slots(index).asInstanceOf[ArrayMap[A, T]]
+  
+  private def getKnot(branch: Int): ArrayMap[A, T] =
+    slots(select(branch)).asInstanceOf[ArrayMap[A, T]]
+  
+  private def setKnot[B >: A, U >: T](branch: Int, knot: ArrayMap[B, U]): this.type = {
+    slots(select(branch)) = knot
+    this
+  }
+  
+  private def isUnary: Boolean = treeMap == 0 && leafMap.countSetBits == 1
+  
+  private def unaryKey: A = slots(0).asInstanceOf[A]
+  
+  private def unaryValue: T = slots(1).asInstanceOf[T]
+  
+  private def remap(treeMap: Int, leafMap: Int): HashMap[A, T] = {
+    var oldLeafMap = this.leafMap
+    var newLeafMap = leafMap
+    var oldSlotMap = this.treeMap | this.leafMap
+    var newSlotMap = treeMap | leafMap
+    if (oldLeafMap == newLeafMap && oldSlotMap == newSlotMap)
+      new HashMap(treeMap, leafMap, this.slots.clone)
+    else {
+      var i = 0
+      var j = 0
+      val slots = new Array[AnyRef](newSlotMap.countSetBits + newLeafMap.countSetBits)
+      while (newSlotMap != 0) {
+        if ((oldSlotMap & newSlotMap & 1) == 1) slots(j) = this.slots(i)
+        if ((oldSlotMap & 1) == 1) i += 1
+        if ((newSlotMap & 1) == 1) j += 1
+        oldSlotMap >>>= 1
+        newSlotMap >>>= 1
+      }
+      i = this.slots.length - 1
+      j = slots.length - 1
+      while (newLeafMap != 0) {
+        if ((oldLeafMap & newLeafMap & 1) == 1) slots(j) = this.slots(i)
+        if ((oldLeafMap & 1) == 1) i -= 1
+        if ((newLeafMap & 1) == 1) j -= 1
+        oldLeafMap >>>= 1
+        newLeafMap >>>= 1
+      }
+      new HashMap(treeMap, leafMap, slots)
+    }
+  }
+  
+  @tailrec private def contains(key: A @uncheckedVariance, keyHash: Int, shift: Int): Boolean = {
+    val branch = choose(keyHash, shift)
+    (follow(branch): @switch) match {
+      case VOID => false
+      case LEAF => key == getKey(branch)
+      case TREE => getTree(branch).contains(key, keyHash, shift + 5)
+      case KNOT => getKnot(branch).contains(key)
+    }
+  }
+  
+  @tailrec private def apply(key: A @uncheckedVariance, keyHash: Int, shift: Int): T = {
+    val branch = choose(keyHash, shift)
+    (follow(branch): @switch) match {
+      case VOID => throw new NoSuchElementException(key.toString)
+      case LEAF =>
+        if (key == getKey(branch)) getValue(branch)
+        else throw new NoSuchElementException(key.toString)
+      case TREE => getTree(branch).apply(key, keyHash, shift + 5)
+      case KNOT => getKnot(branch).apply(key)
+    }
+  }
+  
+  @tailrec private def get(key: A @uncheckedVariance, keyHash: Int, shift: Int): Option[T] = {
+    val branch = choose(keyHash, shift)
+    (follow(branch): @switch) match {
+      case VOID => None
+      case LEAF => if (key == getKey(branch)) Some(getValue(branch)) else None
+      case TREE => getTree(branch).get(key, keyHash, shift + 5)
+      case KNOT => getKnot(branch).get(key)
+    }
+  }
+  
+  private def update[B >: A, U >: T](key: B, keyHash: Int, value: U, shift: Int): HashMap[B, U] = {
+    val branch = choose(keyHash, shift)
+    (follow(branch): @switch) match {
+      case VOID => remap(treeMap, leafMap | branch).setLeaf(branch, key, value)
+      case LEAF =>
+        val leaf = getKey(branch)
+        val leafHash = leaf.##
+        if (keyHash == leafHash && key == leaf) this
+        else if (keyHash != leafHash)
+          remap(treeMap | branch, leafMap ^ branch).
+            setTree(branch, merge(leaf, leafHash, getValue(branch), key, keyHash, value, shift + 5))
+        else
+          remap(treeMap | branch, leafMap).
+            setKnot(branch, ArrayMap(leaf, getValue(branch), key, value))
+      case TREE =>
+        val oldTree = getTree(branch)
+        val newTree = oldTree.update(key, keyHash, value, shift + 5)
+        if (oldTree eq newTree) this
+        else remap(treeMap, leafMap).setTree(branch, newTree)
+      case KNOT =>
+        val oldKnot = getKnot(branch)
+        val newKnot = oldKnot + (key, value)
+        if (oldKnot eq newKnot) this
+        else remap(treeMap, leafMap).setKnot(branch, newKnot)
+    }
+  }
+  
+  private def remove(key: A @uncheckedVariance, keyHash: Int, shift: Int): HashMap[A, T] = {
+    val branch = choose(keyHash, shift)
+    (follow(branch): @switch) match {
+      case VOID => this
+      case LEAF =>
+        if (key != getKey(branch)) this
+        else remap(treeMap, leafMap ^ branch)
+      case TREE =>
+        val oldTree = getTree(branch)
+        val newTree = oldTree.remove(key, keyHash, shift + 5)
+        if (oldTree eq newTree) this
+        else if (newTree.isEmpty) remap(treeMap ^ branch, leafMap)
+        else if (newTree.isUnary)
+          remap(treeMap ^ branch, leafMap | branch).
+            setLeaf(branch, newTree.unaryKey, newTree.unaryValue)
+        else remap(treeMap, leafMap).setTree(branch, newTree)
+      case KNOT =>
+        val oldKnot = getKnot(branch)
+        val newKnot = oldKnot - key
+        if (oldKnot eq newKnot) this
+        else if (newKnot.isEmpty) remap(treeMap ^ branch, leafMap)
+        else if (newKnot.isUnary)
+          remap(treeMap ^ branch, leafMap | branch).
+            setLeaf(branch, newKnot.unaryKey, newKnot.unaryValue)
+        else remap(treeMap, leafMap).setKnot(branch, newKnot)
+    }
+  }
+  
+  private def merge[B >: A, U >: T](
+      key0: B, hash0: Int, value0: U,
+      key1: B, hash1: Int, value1: U,
+      shift: Int)
+    : HashMap[B, U] = {
+    // assume(hash0 != hash1)
+    val branch0 = choose(hash0, shift)
+    val branch1 = choose(hash1, shift)
+    val slotMap = branch0 | branch1
+    if (branch0 == branch1) {
+      val slots = new Array[AnyRef](1)
+      slots(0) = merge(key0, hash0, value0, key1, hash1, value1, shift + 5)
+      new HashMap(slotMap, 0, slots)
+    }
+    else {
+      val slots = new Array[AnyRef](4)
+      if (((branch0 - 1) & branch1) == 0) {
+        slots(0) = key0.asInstanceOf[AnyRef]
+        slots(1) = key1.asInstanceOf[AnyRef]
+        slots(2) = value1.asInstanceOf[AnyRef]
+        slots(3) = value0.asInstanceOf[AnyRef]
+      }
+      else {
+        slots(0) = key1.asInstanceOf[AnyRef]
+        slots(1) = key0.asInstanceOf[AnyRef]
+        slots(2) = value0.asInstanceOf[AnyRef]
+        slots(3) = value1.asInstanceOf[AnyRef]
+      }
+      new HashMap(0, slotMap, slots)
+    }
+  }
+  
+  override def iterator: Iterator[(A, T)] = new HashMapIterator(this)
   
   protected override def foreach[U](f: ((A, T)) => U) {
     var i = 0
-    if (isTrie) {
-      while (i < 32 && hasSlotAbove(i)) {
-        val n = 1 << i
-        if (hasEntryAt(n)) f((keyAt(slot(n)), valAt(link(n))))
-        else if (hasSlotAt(n)) nodeAt(slot(n)) foreach f
-        i += 1
+    var j = 0
+    var treeMap = this.treeMap
+    var leafMap = this.leafMap
+    while ((treeMap | leafMap) != 0) {
+      ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
+        case VOID => ()
+        case LEAF => f((keyAt(i), valueAt(j))); i += 1; j += 1
+        case TREE => treeAt(i).foreach(f); i += 1
+        case KNOT => knotAt(i).foreach(f); i += 1
       }
+      treeMap >>>= 1
+      leafMap >>>= 1
     }
-    else {
-      var n = rank
-      while (i < n) {
-        f((keyAt(i), valAt(i)))
-        i += 1
-      }
-    }
-  }
-  
-  /** Returns `true` for a trie and 'false' for a collision bucket. */
-  private[basis] def isTrie: Boolean = slotMap != 0
-  
-  /** Returns `true` if this trie defines slots for higher branches.
-    * 
-    * @param  j   the branch index to look above.
-    */
-  private[basis] def hasSlotAbove(j: Int): Boolean = (slotMap >>> j) != 0
-  
-  /** Returns `true` if the nth trie branch contains an entry or a submap.
-    * 
-    * @param  n   the single set bit identifying the branch to test.
-    */
-  private[basis] def hasSlotAt(n: Int): Boolean = (slotMap & n) != 0
-  
-  /** Returns `true` if the nth trie branch contains an entry.
-    * 
-    * @param  n   the single set bit identifying the branch to test.
-    */
-  private[basis] def hasEntryAt(n: Int): Boolean = (entryMap & n) != 0
-  
-  /** Returns the trie branch for the low 5 shifted hash bits.
-    * 
-    * @param  h   the un-shifted hash code to branch on.
-    * @param  k   the amount to right shift the hash code before branching.
-    * @return a single set bit identifying the next branch.
-    */
-  private[basis] def branch(h: Int, k: Int): Int = 1 << ((h >>> k) & 0x1F)
-  
-  /** Returns the slot index of a non-empty trie branch.
-    * 
-    * @param  n   the single set bit identifying a non-empty trie branch.
-    */
-  private[basis] def slot(n: Int): Int = (slotMap & (n - 1)).countSetBits
-  
-  /** Returns the link index of an entry-holding trie branch.
-    * 
-    * @param  n   the single set bit identifying an entry-holding trie branch.
-    */
-  private[basis] def link(n: Int): Int = (entryMap & (n - 1)).countSetBits
-  
-  /** Returns the submap at a slot index.
-    * 
-    * @param  i   the index of a slot known to hold a submap.
-    */
-  private[basis] def nodeAt(i: Int): HashMap[A, T] = slots(i).asInstanceOf[HashMap[A, T]]
-  
-  /** Returns the key at a slot index.
-    * 
-    * @param  i   the index of a slot known to hold an entry.
-    */
-  private[basis] def keyAt(i: Int): A = slots(i).asInstanceOf[A]
-  
-  /** Returns the value at a link index.
-    * 
-    * @param  i   the index of a link known to hold a value.
-    */
-  private[basis] def valAt(i: Int): T = links(i).asInstanceOf[T]
-  
-  /** Returns the number of filled slots in this node. */
-  private[basis] def rank: Int = slots.length
-  
-  /** Returns `true` if this node directly contains exactly one entry. */
-  private[basis] def isUnary: Boolean =
-    rank == 1 && (slotMap == entryMap || slotMap == 0)
-  
-  /** Returns the hash code of the keys in this known collision bucket. */
-  private[basis] def bucketHash: Int = entryMap // assume(!isTrie)
-  
-  /** Returns `true` if this node has a value associated with the given key.
-    * 
-    * @param  key   the key to lookup.
-    * @param  h     the key's hash code.
-    * @param  k     the shift-level of this node.
-    */
-  @tailrec private def contains(key: A @uncheckedVariance, h: Int, k: Int): Boolean = {
-    if (isTrie) { // search trie
-      val n = branch(h, k)
-      if (hasEntryAt(n)) key == keyAt(slot(n))
-      else if (hasSlotAt(n)) nodeAt(slot(n)).contains(key, h, k + 5)
-      else false
-    }
-    else { // search collision bucket
-      if (h == bucketHash) {
-        var i = 0
-        val n = rank
-        while (i < n) {
-          if (key == keyAt(i)) return true
-          i += 1
-        }
-      }
-      false
-    }
-  }
-  
-  /** Returns the value associated with the given key.
-    * 
-    * @param  key   the key to lookup.
-    * @param  h     the key's hash code.
-    * @param  k     the shift-level of this node.
-    */
-  @tailrec private def apply(key: A @uncheckedVariance, h: Int, k: Int): T = {
-    if (isTrie) { // search trie
-      val n = branch(h, k)
-      if (hasEntryAt(n) && key == keyAt(slot(n))) valAt(link(n))
-      else if (hasSlotAt(n)) nodeAt(slot(n)).apply(key, h, k + 5)
-      else throw new scala.NoSuchElementException(key.toString)
-    }
-    else { // search collision bucket
-      if (h == bucketHash) {
-        var i = 0
-        val n = rank
-        while (i < n) {
-          if (key == keyAt(i)) return valAt(i)
-          i += 1
-        }
-      }
-      throw new scala.NoSuchElementException(key.toString)
-    }
-  }
-  
-  /** Returns some value associated with the given key, or none if no association exists.
-    * 
-    * @param  key   the key to lookup.
-    * @param  h     the key's hash code.
-    * @param  k     the shift-level of this node.
-    */
-  @tailrec private def get(key: A @uncheckedVariance, h: Int, k: Int): Option[T] = {
-    if (isTrie) { // search trie
-      val n = branch(h, k)
-      if (hasEntryAt(n) && key == keyAt(slot(n))) Some(valAt(link(n)))
-      else if (hasSlotAt(n)) nodeAt(slot(n)).get(key, h, k + 5)
-      else None
-    }
-    else { // search collision bucket
-      if (h == bucketHash) {
-        var i = 0
-        val n = rank
-        while (i < n) {
-          if (key == keyAt(i)) return Some(valAt(i))
-          i += 1
-        }
-      }
-      None
-    }
-  }
-  
-  /** Returns a copy of this map the given value associated with the given
-    * key, or this map itself if it already contains the key, value pair.
-    * 
-    * @param  key     the key to lookup.
-    * @param  h       the key's hash code.
-    * @param  value   the value to associate the the key.
-    * @param  k       the shift-level of this node.
-    */
-  private def update[B >: A, U >: T](key: B, h: Int, value: U, k: Int): HashMap[B, U] = {
-    val n = branch(h, k)
-    if (isEmpty) // new unary map
-      new HashMap(n, n, newSlots(key), newLinks(value))
-    else if (isTrie) { // update trie
-      val i = slot(n)
-      val j = link(n)
-      if (hasEntryAt(n)) { // update entry
-        val e = keyAt(i)
-        if (key == e) // replace value
-          new HashMap(slotMap, entryMap, slots, updateLink(link(n), value))
-        else // merge keys in new submap
-          new HashMap(slotMap, entryMap ^ n,
-            updateSlot(i, merge(key, h, value, e, e.##, valAt(j), k + 5)),
-            removeLink(j))
-      }
-      else if (hasSlotAt(n)) { // update submap
-        val node = nodeAt(i)
-        val newNode = node.update(key, h, value, k + 5)
-        if (node eq newNode) this
-        else new HashMap(slotMap, entryMap, updateSlot(i, newNode), links)
-      }
-      else // insert entry
-        new HashMap(slotMap | n, entryMap | n, insertSlot(i, key), insertLink(j, value))
-    }
-    else { // update collision bucket
-      if (h == bucketHash) {
-        var i = 0
-        var n = rank
-        while (i < n) {
-          if (key == keyAt(i))
-            return new HashMap(0, bucketHash, slots, updateLink(i, value))
-          i += 1
-        }
-        new HashMap(0, bucketHash, appendSlot(key), appendLink(value))
-      }
-      else // reconcile key with collision bucket
-        resolve(key, h, value, k)
-    }
-  }
-  
-  /** Returns a map containing the two key, value pairs. */
-  private[this] def merge[B >: A, U >: T](
-      keyA: B, hashA: Int, valueA: U,
-      keyB: B, hashB: Int, valueB: U,
-      k: Int)
-    : HashMap[B, U] = {
-    if (hashA == hashB) // new collision bucket
-      new HashMap(0, hashA, newSlots(keyA, keyB), newLinks(valueA, valueB))
-    else {
-      val branchA = branch(hashA, k)
-      val branchB = branch(hashB, k)
-      if (branchA == branchB) // new submap
-        new HashMap(branchA | branchB, 0,
-          newSlots(merge(keyA, hashA, valueA, keyB, hashB, valueB, k + 5)),
-          new Array[AnyRef](0))
-      else // new branch
-        new HashMap(branchA | branchB, branchA | branchB,
-          if (((branchA - 1) & branchB) == 0) newSlots(keyA, keyB) else newSlots(keyB, keyA),
-          if (((branchA - 1) & branchB) == 0) newLinks(valueA, valueB) else newLinks(valueB, valueA))
-    }
-  }
-  
-  /** Returns a set containing this hash bucket and the key, value pair. */
-  private[this] def resolve[B >: A, U >: T](key: B, h: Int, value: U, k: Int): HashMap[B, U] = {
-    // assume(h != bucketHash)
-    val bucketBranch = branch(bucketHash, k)
-    val entryBranch = branch(h, k)
-    if (bucketBranch == entryBranch) // new submap
-      new HashMap(bucketBranch, 0,
-        newSlots(resolve(key, h, value, k + 5)),
-        new Array[AnyRef](0))
-    else // new branch
-      new HashMap(bucketBranch | entryBranch, entryBranch,
-        if (((bucketBranch - 1) & entryBranch) == 0) newSlots(this, key) else newSlots(key, this),
-        newLinks(value))
-  }
-  
-  /** Returns a copy of this map without a value associated with the given key,
-    * or this map itself if it doesn't contain the key. */
-  private def remove(key: A @uncheckedVariance, h: Int, k: Int): HashMap[A, T] = {
-    if (isEmpty) this
-    else if (isTrie) { // remove from trie
-      val n = branch(h, k)
-      val i = slot(n)
-      val j = link(n)
-      if (hasEntryAt(n)) { // remove entry
-        if (key == keyAt(i))
-          new HashMap(slotMap ^ n, entryMap ^ n, removeSlot(i), removeLink(j))
-        else this
-      }
-      else if (hasSlotAt(n)) { // remove from submap
-        val node = nodeAt(i)
-        val newNode = node.remove(key, h, k + 5)
-        if (node eq newNode) this
-        else if (newNode.isEmpty) // remove empty submaps
-          new HashMap(slotMap ^ n, entryMap, removeSlot(i), links)
-        else if (newNode.isUnary) // lift unary submaps
-          new HashMap(slotMap, entryMap | n, updateSlot(i, newNode.keyAt(0)), updateLink(j, newNode.valAt(0)))
-        else new HashMap(slotMap, entryMap, updateSlot(i, newNode), links)
-      }
-      else this
-    }
-    else { // remove from collision bucket
-      if (h == bucketHash) {
-        var i = 0
-        val n = rank
-        while (i < n) {
-          if (key == keyAt(i))
-            return new HashMap(0, bucketHash, removeSlot(i), removeLink(i))
-          i += 1
-        }
-      }
-      this
-    }
-  }
-  
-  private[this] def newSlots(elem: Any): Array[AnyRef] =
-    Array(elem.asInstanceOf[AnyRef])
-  
-  private[this] def newSlots(elemA: Any, elemB: Any): Array[AnyRef] =
-    Array(elemA.asInstanceOf[AnyRef], elemB.asInstanceOf[AnyRef])
-  
-  private[this] def updateSlot(index: Int, elem: Any): Array[AnyRef] = {
-    val newSlots = slots.clone
-    newSlots(index) = elem.asInstanceOf[AnyRef]
-    newSlots
-  }
-  
-  private[this] def appendSlot(elem: Any): Array[AnyRef] = {
-    val newSlots = new Array[AnyRef](slots.length + 1)
-    java.lang.System.arraycopy(slots, 0, newSlots, 0, slots.length)
-    newSlots(newSlots.length) = elem.asInstanceOf[AnyRef]
-    newSlots
-  }
-  
-  private[this] def insertSlot(index: Int, elem: Any): Array[AnyRef] = {
-    val newSlots = new Array[AnyRef](slots.length + 1)
-    java.lang.System.arraycopy(slots, 0, newSlots, 0, index)
-    newSlots(index) = elem.asInstanceOf[AnyRef]
-    java.lang.System.arraycopy(slots, index, newSlots, index + 1, slots.length - index)
-    newSlots
-  }
-  
-  private[this] def removeSlot(index: Int): Array[AnyRef] = {
-    val newSlots = new Array[AnyRef](slots.length - 1)
-    java.lang.System.arraycopy(slots, 0, newSlots, 0, index)
-    java.lang.System.arraycopy(slots, index + 1, newSlots, index, newSlots.length - index)
-    newSlots
-  }
-  
-  private[this] def newLinks[U >: T](value: U): Array[AnyRef] =
-    Array(value.asInstanceOf[AnyRef])
-  
-  private[this] def newLinks[U >: T](valueA: U, valueB: U): Array[AnyRef] =
-    Array(valueA.asInstanceOf[AnyRef], valueB.asInstanceOf[AnyRef])
-  
-  private[this] def updateLink[U >: T](index: Int, value: U): Array[AnyRef] = {
-    val newLinks = links.clone
-    newLinks(index) = value.asInstanceOf[AnyRef]
-    newLinks
-  }
-  
-  private[this] def appendLink[U >: T](value: U): Array[AnyRef] = {
-    val newLinks = new Array[AnyRef](links.length + 1)
-    java.lang.System.arraycopy(links, 0, newLinks, 0, links.length)
-    newLinks(newLinks.length) = value.asInstanceOf[AnyRef]
-    newLinks
-  }
-  
-  private[this] def insertLink[U >: T](index: Int, value: U): Array[AnyRef] = {
-    val newLinks = new Array[AnyRef](links.length + 1)
-    java.lang.System.arraycopy(links, 0, newLinks, 0, index)
-    newLinks(index) = value.asInstanceOf[AnyRef]
-    java.lang.System.arraycopy(links, index, newLinks, index + 1, links.length - index)
-    newLinks
-  }
-  
-  private[this] def removeLink(index: Int): Array[AnyRef] = {
-    val newLinks = new Array[AnyRef](links.length - 1)
-    java.lang.System.arraycopy(links, 0, newLinks, 0, index)
-    java.lang.System.arraycopy(links, index + 1, newLinks, index, newLinks.length - index)
-    newLinks
   }
   
   override def toString: String = {
@@ -429,100 +313,156 @@ final class HashMap[+A, +T] private
 }
 
 object HashMap extends MapFactory[HashMap] {
-  val empty: HashMap[Nothing, Nothing] =
-    new HashMap[Nothing, Nothing](0, 0, new Array[AnyRef](0), new Array[AnyRef](0))
+  val empty: HashMap[Nothing, Nothing] = new HashMap(0, 0, new Array[AnyRef](0))
   
-  implicit override def Builder[A, T]: Builder[Any, (A, T), HashMap[A, T]] =
-    new HashMapBuilder[A, T]
+  implicit override def Builder[A, T]: Builder[Any, (A, T), HashMap[A, T]] = new HashMapBuilder
   
   override def toString: String = "HashMap"
   
-  private[immutable] final class Cursor[+A, +T](
-      self: HashMap[A, T],
-      private[this] var child: Cursor[A, T],
-      private[this] var index: Int)
-    extends Iterator[(A, T)] {
-    
-    def this(self: HashMap[A, T]) = this(self, null, 0)
-    
-    @tailrec override def isEmpty: Boolean = {
-      if (child != null)
-        child.asInstanceOf[Iterator[_]].isEmpty && { child = null; isEmpty }
-      else if (self.isTrie)
-        index >= 32 || !self.hasSlotAbove(index) ||
-          (!self.hasSlotAt(1 << index) && { index += 1; isEmpty })
-      else index >= self.rank
-    }
-    
-    @tailrec override def head: (A, T) = {
-      if (child != null) {
-        if (!child.isEmpty) child.head
-        else {
-          child = null
-          head
-        }
-      }
-      else if (self.isTrie) {
-        if (index < 32 && self.hasSlotAbove(index)) {
-          val n = 1 << index
-          if (self.hasEntryAt(n)) (self.keyAt(self.slot(n)), self.valAt(self.link(n)))
-          else if (self.hasSlotAt(n)) {
-            child = new Cursor(self.nodeAt(self.slot(n)))
-            index += 1
-            head
-          }
-          else {
-            index += 1
-            head
-          }
-        }
-        else Done.head
-      }
-      else if (index < self.rank) (self.keyAt(index), self.valAt(index))
-      else Done.head
-    }
-    
-    @tailrec override def step() {
-      if (child != null) {
-        if (!child.isEmpty) child.step()
-        else {
-          child = null
-          step()
-        }
-      }
-      else if (self.isTrie) {
-        if (index < 32 && self.hasSlotAbove(index)) {
-          val n = 1 << index
-          if (self.hasEntryAt(n)) index += 1
-          else if (self.hasSlotAt(n)) {
-            child = new Cursor(self.nodeAt(self.slot(n)))
-            index += 1
-            step()
-          }
-          else {
-            index += 1
-            step()
-          }
-        }
-        else Done.step()
-      }
-      else if (index < self.rank) index += 1
-      else Done.step()
-    }
-    
-    override def dup: Cursor[A, T] = new Cursor(self, child, index)
+  private[containers] final val VOID = 0
+  private[containers] final val LEAF = 1
+  private[containers] final val TREE = 2
+  private[containers] final val KNOT = 3
+}
+
+private[containers] final class HashMapIterator[+A, +T](
+    nodes: Array[AnyRef], private[this] var depth: Int,
+    stack: Array[Int], private[this] var stackPointer: Int)
+  extends Iterator[(A, T)] {
+  
+  import HashMap.{VOID, LEAF, TREE, KNOT}
+  
+  def this(tree: HashMap[A, T]) = {
+    this(new Array[AnyRef](7), 0, new Array[Int](28), 0)
+    node = tree
+    i = 0
+    j = 0
+    treeMap = tree.treeMap
+    leafMap = tree.leafMap
   }
+  
+  private[this] def node: AnyRef = nodes(depth)
+  private[this] def node_=(node: AnyRef): Unit = nodes(depth) = node
+  
+  private[this] def i: Int = stack(stackPointer)
+  private[this] def i_=(index: Int): Unit = stack(stackPointer) = index
+  
+  private[this] def j: Int = stack(stackPointer + 1)
+  private[this] def j_=(index: Int): Unit = stack(stackPointer + 1) = index
+  
+  private[this] def treeMap: Int = stack(stackPointer + 2)
+  private[this] def treeMap_=(treeMap: Int): Unit = stack(stackPointer + 2) = treeMap
+  
+  private[this] def leafMap: Int = stack(stackPointer + 3)
+  private[this] def leafMap_=(leafMap: Int): Unit = stack(stackPointer + 3) = leafMap
+  
+  private[this] def follow: Int = leafMap & 1 | (treeMap & 1) << 1
+  
+  private[this] def push(tree: HashMap[A, T]) {
+    depth += 1
+    node = tree
+    
+    stackPointer += 4
+    i = 0
+    j = 0
+    treeMap = tree.treeMap
+    leafMap = tree.leafMap
+  }
+  
+  private[this] def push(knot: ArrayMap[A, T]) {
+    depth += 1
+    node = knot
+    
+    stackPointer += 4
+    i = 0
+  }
+  
+  private[this] def pop() {
+    node = null
+    depth -= 1
+    
+    i = 0
+    j = 0
+    treeMap = 0
+    leafMap = 0
+    stackPointer -= 4
+    
+    i += 1
+    treeMap >>>= 1
+    leafMap >>>= 1
+  }
+  
+  @tailrec override def isEmpty: Boolean = node match {
+    case node: HashMap[A, T] =>
+      if ((treeMap | leafMap) != 0) (follow: @switch) match {
+        case VOID =>
+          treeMap >>>= 1
+          leafMap >>>= 1
+          isEmpty
+        case LEAF => false
+        case TREE =>
+          push(node.treeAt(i))
+          isEmpty
+        case KNOT =>
+          push(node.knotAt(i))
+          isEmpty
+      }
+      else if (depth > 0) { pop(); isEmpty }
+      else true
+    case node: ArrayMap[A, T] =>
+      if (i < node.size) false
+      else { pop(); isEmpty }
+  }
+  
+  @tailrec override def head: (A, T) = node match {
+    case node: HashMap[A, T] =>
+      if ((treeMap | leafMap) != 0) (follow: @switch) match {
+        case VOID =>
+          treeMap >>>= 1
+          leafMap >>>= 1
+          head
+        case LEAF => (node.keyAt(i), node.valueAt(j))
+        case TREE =>
+          push(node.treeAt(i))
+          head
+        case KNOT =>
+          push(node.knotAt(i))
+          head
+      }
+      else if (depth > 0) { pop(); head }
+      else Done.head
+    case node: ArrayMap[A, T] =>
+      if (i < node.size) (node.keyAt(i), node.valueAt(i))
+      else { pop(); head }
+  }
+  
+  @tailrec override def step(): Unit = node match {
+    case node: HashMap[A, T] =>
+      val slotMap = treeMap | leafMap
+      if (slotMap != 0) {
+        if ((slotMap & 1) == 1) i += 1
+        if ((leafMap & 1) == 1) j += 1
+        treeMap >>>= 1
+        leafMap >>>= 1
+      }
+      else if (depth > 0) { pop(); step() }
+      else Done.step()
+    case node: ArrayMap[A, T] =>
+      if (i < node.size) i += 1
+      else { pop(); step() }
+  }
+  
+  override def dup: Iterator[(A, T)] =
+    new HashMapIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
 private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T), HashMap[A, T]] {
   private[this] var map: HashMap[A, T] = HashMap.empty
   
-  def += (key: A, value: T): this.type = {
-    map += (key, value)
+  override def += (entry: (A, T)): this.type = {
+    map += (entry._1, entry._2)
     this
   }
-  
-  override def += (entry: (A, T)): this.type = this += (entry._1, entry._2)
   
   override def expect(count: Int): this.type = this
   

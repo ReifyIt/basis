@@ -19,8 +19,6 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
   
   override def isEmpty: Boolean = slots.length == 0
   
-  private[containers] def isUnary: Boolean = slots.length == 1
-  
   override def size: Int = slots.length
   
   override def contains(elem: A @uncheckedVariance): Boolean = {
@@ -32,8 +30,6 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
     }
     false
   }
-  
-  def apply(index: Int): A = slots(index).asInstanceOf[A]
   
   def + [B >: A](elem: B): ArraySet[B] = {
     var i = 0
@@ -62,9 +58,15 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
     }
   }
   
+  private[containers] def isUnary: Boolean = slots.length == 1
+  
+  private[containers] def unaryElement: A = slots(0).asInstanceOf[A]
+  
+  private[containers] def elementAt(index: Int): A = slots(index).asInstanceOf[A]
+  
   override def iterator: Iterator[A] = new ArraySetIterator(slots, 0)
   
-  override def foreach[U](f: A => U) {
+  protected[containers] override def foreach[U](f: A => U) {
     var i = 0
     val n = slots.length
     while (i < n) {
@@ -112,7 +114,7 @@ private[containers] final class ArraySetIterator[+A]
 }
 
 private[containers] final class ArraySetBuilder[A] extends Builder[Any, A, ArraySet[A]] {
-  private[this] var set: HashSet[A] = HashSet.empty
+  private[this] var seen: HashSet[A] = HashSet.empty
   
   private[this] var slots: Array[AnyRef] = _
   
@@ -140,8 +142,8 @@ private[containers] final class ArraySetBuilder[A] extends Builder[Any, A, Array
   }
   
   override def += (elem: A): this.type = {
-    if (!set.contains(elem)) {
-      set += elem
+    if (!seen.contains(elem)) {
+      seen += elem
       prepare(size + 1)
       slots(size) = elem.asInstanceOf[AnyRef]
       size += 1
@@ -164,7 +166,7 @@ private[containers] final class ArraySetBuilder[A] extends Builder[Any, A, Array
   }
   
   override def clear() {
-    set = HashSet.empty
+    seen = HashSet.empty
     slots = null
     aliased = true
     size = 0
