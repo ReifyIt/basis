@@ -119,7 +119,7 @@ object List extends SeqFactory[List] {
   // FIXME: don't hurt the compiler!
   //override def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   
-  implicit override def Builder[A]: Builder[Any, A, List[A]] = new ListBuilder[A]
+  implicit override def Builder[A]: Builder[Any, A, List[A]] = new ListBuilder
   
   override def toString: String = "List"
 }

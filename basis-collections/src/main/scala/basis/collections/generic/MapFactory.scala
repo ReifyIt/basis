@@ -9,7 +9,7 @@ package basis.collections
 package generic
 
 trait MapFactory[+CC[_, _]] {
-  def Builder[A, T]: Builder[Any, (A, T), CC[A, T]]
+  implicit def Builder[A, T]: Builder[Any, (A, T), CC[A, T]]
   
   def apply[A, T](xs: (A, T)*): CC[A, T] =
     macro MapFactory.apply[CC, A, T]

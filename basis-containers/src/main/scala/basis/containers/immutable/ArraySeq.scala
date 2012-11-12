@@ -81,7 +81,7 @@ abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Bool
       s.append(this(0))
       var i = 1
       val n = length
-      while (i < length) {
+      while (i < n) {
         s.append(", ").append(this(i))
         i += 1
       }
