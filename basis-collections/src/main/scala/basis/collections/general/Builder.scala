@@ -6,6 +6,7 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
 /** An accumulator of elements.
   * 

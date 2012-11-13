@@ -6,14 +6,16 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
 import scala.annotation.unchecked.uncheckedVariance
 
 /** An associated set of (key, value) pairs with unique keys.
   * 
-  * @groupprio  Examining   -3
-  * @groupprio  Iterating   -2
-  * @groupprio  Traversing  -1
+  * @groupprio  Examining     -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
   * 
   * @define collection  map
   */

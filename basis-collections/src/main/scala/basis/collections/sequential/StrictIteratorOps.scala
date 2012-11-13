@@ -8,13 +8,15 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Strictly evaluated iterator operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-abstract class StrictIteratorOps[A, Family] private[sequential] {
+abstract class StrictIteratorOps[A, From] private[sequential] {
   /** Returns the applications of a partial function to each iterated element
     * for which the function is defined.
     * 
@@ -24,7 +26,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @return the accumulated elements filtered and mapped by `q`.
     * @group  Mapping
     */
-  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[Family, B, To]): To =
+  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[From, B, To]): To =
     macro StrictIteratorOps.collect[A, B, To]
   
   /** Returns the applications of a function to each iterated element.
@@ -34,7 +36,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @return the accumulated elements mapped by `f`.
     * @group  Mapping
     */
-  def map[B, To](f: A => B)(implicit builder: Builder[Family, B, To]): To =
+  def map[B, To](f: A => B)(implicit builder: Builder[From, B, To]): To =
     macro StrictIteratorOps.map[A, B, To]
   
   /** Returns the concatenation of all elements returned by a function applied
@@ -45,7 +47,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[Family, B, To]): To =
+  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[From, B, To]): To =
     macro StrictIteratorOps.flatMap[A, B, To]
   
   /** Returns all iterated elements that satisfy a predicate.
@@ -55,7 +57,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To =
+  def filter[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
     macro StrictIteratorOps.filter[A, To]
   
   /** Returns all iterated elements following the longest prefix for which
@@ -67,7 +69,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To =
+  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
     macro StrictIteratorOps.dropWhile[A, To]
   
   /** Returns the longest prefix for which each iterated element satisfies
@@ -79,7 +81,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To =
+  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
     macro StrictIteratorOps.takeWhile[A, To]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
@@ -93,8 +95,8 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @group  Filtering
     */
   def span[To](p: A => Boolean)(
-      implicit builderA: Builder[Family, A, To],
-               builderB: Builder[Family, A, To])
+      implicit builderA: Builder[From, A, To],
+               builderB: Builder[From, A, To])
     : (To, To) =
     macro StrictIteratorOps.span[A, To]
   
@@ -106,7 +108,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop[To](lower: Int)(implicit builder: Builder[Family, A, To]): To =
+  def drop[To](lower: Int)(implicit builder: Builder[From, A, To]): To =
     macro StrictIteratorOps.drop[A, To]
   
   /** Returns a prefix of iterated elements up to some length.
@@ -117,7 +119,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take[To](upper: Int)(implicit builder: Builder[Family, A, To]): To =
+  def take[To](upper: Int)(implicit builder: Builder[From, A, To]): To =
     macro StrictIteratorOps.take[A, To]
   
   /** Returns an interval of iterated elements.
@@ -129,7 +131,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[Family, A, To]): To =
+  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[From, A, To]): To =
     macro StrictIteratorOps.slice[A, To]
   
   /** Returns pairs of elements from this and another iterator.
@@ -139,7 +141,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @return the accumulated pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B, To](that: Iterator[B])(implicit builder: Builder[Family, (A, B), To]): To =
+  def zip[B, To](that: Iterator[B])(implicit builder: Builder[From, (A, B), To]): To =
     macro StrictIteratorOps.zip[A, B, To]
   
   /** Returns the concatenation of this and another iterator.
@@ -149,7 +151,7 @@ abstract class StrictIteratorOps[A, Family] private[sequential] {
     * @return the accumulated elements of both containers.
     * @group  Combining
     */
-  def ++ [B >: A, To](that: Iterator[B])(implicit builder: Builder[Family, B, To]): To =
+  def ++ [B >: A, To](that: Iterator[B])(implicit builder: Builder[From, B, To]): To =
     macro StrictIteratorOps.++[A, B, To]
 }
 
@@ -250,6 +252,6 @@ private[sequential] object StrictIteratorOps {
   private def IteratorTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Iterator[A]] = {
     import c.{mirror, WeakTypeTag}
     import c.universe._
-    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.Iterator").toType, weakTypeOf[A] :: Nil))
+    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.general.Iterator").toType, weakTypeOf[A] :: Nil))
   }
 }

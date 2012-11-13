@@ -8,15 +8,17 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Common map operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-abstract class CommonMapOps[A, T, Family] private[sequential] {
-  def eagerly: StrictMapOps[A, T, Family] =
-    macro CommonMapOps.eagerly[A, T, Family]
+abstract class CommonMapOps[A, T, From] private[sequential] {
+  def eagerly: StrictMapOps[A, T, From] =
+    macro CommonMapOps.eagerly[A, T, From]
   
   def lazily: NonStrictMapOps[A, T] =
     macro CommonMapOps.lazily[A, T]
@@ -32,14 +34,14 @@ private[sequential] object CommonMapOps {
     map
   }
   
-  def eagerly[A : c.WeakTypeTag, T : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context): c.Expr[StrictMapOps[A, T, Family]] = {
+  def eagerly[A : c.WeakTypeTag, T : c.WeakTypeTag, From : c.WeakTypeTag](c: Context): c.Expr[StrictMapOps[A, T, From]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "StrictMapOps"),
         deconstruct(c) :: Nil)
-    } (StrictMapOpsTag[A, T, Family](c))
+    } (StrictMapOpsTag[A, T, From](c))
   }
   
   def lazily[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[NonStrictMapOps[A, T]] = {
@@ -52,13 +54,13 @@ private[sequential] object CommonMapOps {
     } (NonStrictMapOpsTag[A, T](c))
   }
   
-  private def StrictMapOpsTag[A : c.WeakTypeTag, T : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[StrictMapOps[A, T, Family]] = {
+  private def StrictMapOpsTag[A : c.WeakTypeTag, T : c.WeakTypeTag, From : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictMapOps[A, T, From]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.StrictMapOps").toType,
-        weakTypeOf[A] :: weakTypeOf[T] :: weakTypeOf[Family] :: Nil))
+        weakTypeOf[A] :: weakTypeOf[T] :: weakTypeOf[From] :: Nil))
   }
   
   private def NonStrictMapOpsTag[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context)

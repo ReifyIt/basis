@@ -8,6 +8,8 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
@@ -645,7 +647,7 @@ private[collections] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   private def LinearSeqType[A : WeakTypeTag]: Type =
-    appliedType(mirror.staticClass("basis.collections.LinearSeq").toType, weakTypeOf[A] :: Nil)
+    appliedType(mirror.staticClass("basis.collections.general.LinearSeq").toType, weakTypeOf[A] :: Nil)
   
   implicit private def OptionTag[A : WeakTypeTag]: WeakTypeTag[Option[A]] =
     WeakTypeTag(appliedType(mirror.staticClass("scala.Option").toType, weakTypeOf[A] :: Nil))

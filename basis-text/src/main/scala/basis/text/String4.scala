@@ -8,13 +8,14 @@
 package basis.text
 
 import basis.collections._
+import basis.collections.general._
 import basis.util._
 
 /** A 32-bit Unicode string comprised of a UTF-32 code unit sequence.
   * 
   * @define collection  string
   */
-final class String4(codeUnits: Array[Int]) extends Family[String4] with IndexedSeq[Int] {
+final class String4(codeUnits: Array[Int]) extends Equals with Family[String4] with IndexedSeq[Int] {
   override def isEmpty: Boolean = codeUnits.length == 0
   
   /** Returns the number of code points in this string. */
@@ -135,7 +136,10 @@ private[text] final class String4Builder extends StringBuilder[Any, String4] {
   }
 }
 
-private[text] final class String4Iterator(string: String4, private[this] var index: Int) extends Iterator[Int] {
+private[text] final class String4Iterator
+    (string: String4, private[this] var index: Int)
+  extends Iterator[Int] {
+  
   override def isEmpty: Boolean = index >= string.length
   
   override def head: Int = if (isEmpty) Done.head else string(index)

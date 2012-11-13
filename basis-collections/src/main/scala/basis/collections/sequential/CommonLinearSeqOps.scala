@@ -8,13 +8,15 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Common linear sequence operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-abstract class CommonLinearSeqOps[A, Family] private[sequential] {
+abstract class CommonLinearSeqOps[A, From] private[sequential] {
   /** Sequentially applies a function to each element in this sequence.
     * 
     * @param  f   the function to apply to each element.
@@ -132,8 +134,8 @@ abstract class CommonLinearSeqOps[A, Family] private[sequential] {
   def select[B](q: PartialFunction[A, B]): Option[B] =
     macro CommonLinearSeqOps.select[A, B]
   
-  def eagerly: StrictLinearSeqOps[A, Family] =
-    macro CommonLinearSeqOps.eagerly[A, Family]
+  def eagerly: StrictLinearSeqOps[A, From] =
+    macro CommonLinearSeqOps.eagerly[A, From]
   
   def lazily: NonStrictLinearSeqOps[A] =
     macro CommonLinearSeqOps.lazily[A]
@@ -204,14 +206,14 @@ private[sequential] object CommonLinearSeqOps {
     : c.Expr[Option[B]] =
     new LinearSeqMacros[c.type](c).select[A, B](unApply(c))(q)
   
-  def eagerly[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context): c.Expr[StrictLinearSeqOps[A, Family]] = {
+  def eagerly[A : c.WeakTypeTag, From : c.WeakTypeTag](c: Context): c.Expr[StrictLinearSeqOps[A, From]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "StrictLinearSeqOps"),
         unApply[A](c).tree :: Nil)
-    } (StrictLinearSeqOpsTag[A, Family](c))
+    } (StrictLinearSeqOpsTag[A, From](c))
   }
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictLinearSeqOps[A]] = {
@@ -228,17 +230,17 @@ private[sequential] object CommonLinearSeqOps {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.collections.LinearSeq").toType,
+        c.mirror.staticClass("basis.collections.general.LinearSeq").toType,
         weakTypeOf[A] :: Nil))
   }
   
-  private def StrictLinearSeqOpsTag[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[StrictLinearSeqOps[A, Family]] = {
+  private def StrictLinearSeqOpsTag[A : c.WeakTypeTag, From : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictLinearSeqOps[A, From]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.StrictLinearSeqOps").toType,
-        weakTypeOf[A] :: weakTypeOf[Family] :: Nil))
+        weakTypeOf[A] :: weakTypeOf[From] :: Nil))
   }
   
   private def NonStrictLinearSeqOpsTag[A : c.WeakTypeTag](c: Context)

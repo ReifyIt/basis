@@ -6,19 +6,21 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
 /** A linear sequence of elements.
   * 
-  * @groupprio  Examining   -3
-  * @groupprio  Iterating   -2
-  * @groupprio  Traversing  -1
+  * @groupprio  Examining     -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
   */
 trait LinearSeq[+A] extends Any with Family[LinearSeq[A]] with Seq[A] {
   /** Returns the first element of this $collection.
     * @group Examining */
   def head: A
   
-  /** Returns all except the first element of this $collection.
+  /** Returns all elements except the first of this $collection.
     * @group Examining */
   def tail: LinearSeq[A]
   

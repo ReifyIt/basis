@@ -6,6 +6,20 @@
 \*                                                                      */
 
 package basis.collections
-package generic
+package immutable
 
-trait SetFactory[+CC[_]] extends BuilderFactory[CC]
+/** An immutable linear sequence.
+  * 
+  * @groupprio  Examining     -5
+  * @groupprio  Iterating     -4
+  * @groupprio  Traversing    -3
+  * @groupprio  Updating      -2
+  * @groupprio  Classifying   -1
+  */
+trait LinearSeq[+A]
+  extends Any
+    with Equals
+    with Immutable
+    with Family[LinearSeq[A]]
+    with Seq[A]
+    with general.LinearSeq[A]

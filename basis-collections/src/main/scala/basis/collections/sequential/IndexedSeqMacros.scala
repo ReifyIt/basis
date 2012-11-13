@@ -8,6 +8,8 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 

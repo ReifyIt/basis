@@ -7,13 +7,5 @@
 
 package basis.collections
 
-/** A traversable collection of elements. Collection declares only a protected
-  * `foreach` method; it has no public methods.
-  * 
-  * @groupprio  Examining   -2
-  * @groupprio  Traversing  -1
-  * 
-  * @define collection  collection
-  */
-trait Collection[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Collection[A]] with Enumerator[A]
+/** A marker for mutable collections. */
+trait Mutable extends Any

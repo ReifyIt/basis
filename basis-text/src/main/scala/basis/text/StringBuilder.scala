@@ -7,7 +7,7 @@
 
 package basis.text
 
-import basis.collections._
+import basis.collections.general._
 
 /** A builder for Unicode® character strings.
   * 

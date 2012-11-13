@@ -9,15 +9,19 @@ package basis.containers
 package immutable
 
 import basis.collections._
+import basis.collections.general._
 import basis.memory._
 import basis.util._
 
-/** A contiguous array of elements.
+/** A contiguous immutable array.
   * 
   * @define collection  array
   */
 abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Family[ArraySeq[A]] with IndexedSeq[A] {
+  extends Equals
+    with Immutable
+    with Family[ArraySeq[A]]
+    with immutable.IndexedSeq[A] {
   
   override def isEmpty: Boolean
   
@@ -25,20 +29,21 @@ abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Bool
   
   override def apply(index: Int): A
   
-  /** Returns a copy of this array with a new `value` at `index`. */
-  def update[B >: A](index: Int, value: B): ArraySeq[B] = Predef.???
+  override def update[B >: A](index: Int, value: B): ArraySeq[B] = Predef.???
   
-  /** Returns a copy of this array with a new `value` inserted at `index`. */
+  /** Returns a copy of this array with a new `value` inserted at `index`.
+    * @group Updating */
   def insert[B >: A](index: Int, value: B): ArraySeq[B] = Predef.???
   
-  /** Returns a copy of this array with `index` removed. */
+  /** Returns a copy of this array with `index` removed.
+    * @group Updating */
   def remove(index: Int): ArraySeq[A] = Predef.???
   
   /** Returns a copy of this array with `value` appended. */
-  def :+ [B >: A](value: B): ArraySeq[B] = Predef.???
+  override def :+ [B >: A](value: B): ArraySeq[B] = Predef.???
   
   /** Returns a copy of this array with `value` prepended. */
-  def +: [B >: A](value: B): ArraySeq[B] = Predef.???
+  override def +: [B >: A](value: B): ArraySeq[B] = Predef.???
   
   protected override def foreach[U](f: A => U) {
     var i = 0
@@ -49,46 +54,7 @@ abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Bool
     }
   }
   
-  override def equals(other: Any): Boolean = other match {
-    case that: ArraySeq[A] =>
-      var i = 0
-      val n = length
-      var e = n == that.length
-      while (e && i < n) {
-        e = this(i) == that(i)
-        i += 1
-      }
-      e
-    case _ => false
-  }
-  
-  override def hashCode: Int = {
-    import MurmurHash3._
-    var h = 63537721
-    var i = 0
-    val n = length
-    while (i < n) {
-      h = mix(h, this(i).##)
-      i += 1
-    }
-    mash(h)
-  }
-  
-  override def toString: String = {
-    val s = new java.lang.StringBuilder("ArraySeq")
-    s.append('(')
-    if (!isEmpty) {
-      s.append(this(0))
-      var i = 1
-      val n = length
-      while (i < n) {
-        s.append(", ").append(this(i))
-        i += 1
-      }
-    }
-    s.append(')')
-    s.toString
-  }
+  protected override def stringPrefix: String = "ArraySeq"
 }
 
 object ArraySeq {

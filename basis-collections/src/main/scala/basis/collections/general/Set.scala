@@ -6,23 +6,29 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
-/** An iterable sequence of elements.
+import scala.annotation.unchecked.uncheckedVariance
+
+/** A unique set of elements.
   * 
-  * @groupprio  Examining   -3
-  * @groupprio  Iterating   -2
-  * @groupprio  Traversing  -1
+  * @groupprio  Examining     -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
   * 
-  * @define collection  sequence
+  * @define collection  set
   */
-trait Seq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Seq[A]] with Container[A] {
-  
+trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Examining */
   def isEmpty: Boolean
   
   /** Returns the number of elements in this $collection.
     * @group Examining */
-  def length: Int
+  def size: Int
+  
+  /** Returns `true` if this $collection contains the given element.
+    * @group Examining */
+  def contains(element: A @uncheckedVariance): Boolean
 }

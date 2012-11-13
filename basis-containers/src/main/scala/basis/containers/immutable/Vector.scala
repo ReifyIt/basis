@@ -9,25 +9,11 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.generic._
+import basis.collections.general._
 import basis.util._
 
-sealed abstract class Vector[+A] private[containers] extends Family[Vector[A]] with IndexedSeq[A] {
-  override def toString: String = {
-    val s = new java.lang.StringBuilder("Vector")
-    s.append('(')
-    if (!isEmpty) {
-      s.append(this(0))
-      var i = 1
-      val n = length
-      while (i < n) {
-        s.append(", ").append(this(i))
-        i += 1
-      }
-    }
-    s.append(')')
-    s.toString
-  }
+sealed abstract class Vector[+A] extends Equals with Family[Vector[A]] with IndexedSeq[A] {
+  protected override def stringPrefix: String = "Vector"
 }
 
 private[containers] final class Vector0 extends Vector[Nothing] {

@@ -8,13 +8,15 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Strictly evaluated enumerator operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class StrictEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
+class StrictEnumeratorOps[A, From](val __ : Enumerator[A]) extends AnyVal {
   /** Returns the applications of a partial function to each enumerated element
     * for which the function is defined.
     * 
@@ -24,7 +26,7 @@ class StrictEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
     * @return the accumulated elements filtered and mapped by `q`.
     * @group  Mapping
     */
-  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[Family, B, To]): To = {
+  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[From, B, To]): To = {
     traverse(__)(new StrictEnumeratorOps.CollectInto(q, builder))
     builder.state
   }
@@ -36,7 +38,7 @@ class StrictEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
     * @return the accumulated elements mapped by `f`.
     * @group  Mapping
     */
-  def map[B, To](f: A => B)(implicit builder: Builder[Family, B, To]): To = {
+  def map[B, To](f: A => B)(implicit builder: Builder[From, B, To]): To = {
     traverse(__)(new StrictEnumeratorOps.MapInto(f, builder))
     builder.state
   }
@@ -49,7 +51,7 @@ class StrictEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
     * @return the concatenation of all enumerators produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[Family, B, To]): To = {
+  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[From, B, To]): To = {
     traverse(__)(new StrictEnumeratorOps.FlatMapInto(f, builder))
     builder.state
   }
@@ -61,7 +63,7 @@ class StrictEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To = {
+  def filter[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To = {
     traverse(__)(new StrictEnumeratorOps.FilterInto(p, builder))
     builder.state
   }
@@ -73,7 +75,7 @@ class StrictEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
     * @return the accumulated elements of both enumerators.
     * @group  Combining
     */
-  def ++ [B >: A, To](that: Enumerator[B])(implicit builder: Builder[Family, B, To]): To = {
+  def ++ [B >: A, To](that: Enumerator[B])(implicit builder: Builder[From, B, To]): To = {
     val f = new StrictEnumeratorOps.AddInto(builder)
     traverse(__)(f)
     traverse(that)(f)

@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.collections
-package generic
+package general
 
 import basis.util._
 

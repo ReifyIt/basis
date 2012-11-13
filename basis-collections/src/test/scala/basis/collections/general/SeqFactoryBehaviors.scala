@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.collections
-package generic
+package general
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers

@@ -8,13 +8,15 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Strictly evaluated linear sequence operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-abstract class StrictLinearSeqOps[A, Family] private[sequential] {
+abstract class StrictLinearSeqOps[A, From] private[sequential] {
   /** Returns the applications of a partial function to each element in this
     * sequence for which the function is defined.
     * 
@@ -24,7 +26,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @return the accumulated elements filtered and mapped by `q`.
     * @group  Mapping
     */
-  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[Family, B, To]): To =
+  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[From, B, To]): To =
     macro StrictLinearSeqOps.collect[A, B, To]
   
   /** Returns the applications of a function to each element in this sequence.
@@ -34,7 +36,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @return the accumulated elements mapped by `f`.
     * @group  Mapping
     */
-  def map[B, To](f: A => B)(implicit builder: Builder[Family, B, To]): To =
+  def map[B, To](f: A => B)(implicit builder: Builder[From, B, To]): To =
     macro StrictLinearSeqOps.map[A, B, To]
   
   /** Returns the concatenation of all elements returned by a function applied
@@ -45,7 +47,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[Family, B, To]): To =
+  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[From, B, To]): To =
     macro StrictLinearSeqOps.flatMap[A, B, To]
   
   /** Returns all elements in this sequence that satisfy a predicate.
@@ -55,7 +57,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To =
+  def filter[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
     macro StrictLinearSeqOps.filter[A, To]
   
   /** Returns all elements following the longest prefix of this sequence
@@ -67,7 +69,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To =
+  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
     macro StrictLinearSeqOps.dropWhile[A, To]
   
   /** Returns the longest prefix of this sequence for which each element
@@ -79,7 +81,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To =
+  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
     macro StrictLinearSeqOps.takeWhile[A, To]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
@@ -93,8 +95,8 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @group  Filtering
     */
   def span[To](p: A => Boolean)(
-      implicit builderA: Builder[Family, A, To],
-               builderB: Builder[Family, A, To])
+      implicit builderA: Builder[From, A, To],
+               builderB: Builder[From, A, To])
     : (To, To) =
     macro StrictLinearSeqOps.span[A, To]
   
@@ -106,7 +108,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop[To](lower: Int)(implicit builder: Builder[Family, A, To]): To =
+  def drop[To](lower: Int)(implicit builder: Builder[From, A, To]): To =
     macro StrictLinearSeqOps.drop[A, To]
   
   /** Returns a prefix of this sequence up to some length.
@@ -117,7 +119,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take[To](upper: Int)(implicit builder: Builder[Family, A, To]): To =
+  def take[To](upper: Int)(implicit builder: Builder[From, A, To]): To =
     macro StrictLinearSeqOps.take[A, To]
   
   /** Returns an interval of elements in this sequence.
@@ -129,7 +131,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[Family, A, To]): To =
+  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[From, A, To]): To =
     macro StrictLinearSeqOps.slice[A, To]
   
   /** Returns pairs of elements from this and another sequence.
@@ -139,7 +141,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @return the accumulated pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B, To](that: LinearSeq[B])(implicit builder: Builder[Family, (A, B), To]): To =
+  def zip[B, To](that: LinearSeq[B])(implicit builder: Builder[From, (A, B), To]): To =
     macro StrictLinearSeqOps.zip[A, B, To]
   
   /** Returns the concatenation of this and another sequence.
@@ -149,7 +151,7 @@ abstract class StrictLinearSeqOps[A, Family] private[sequential] {
     * @return the accumulated elements of both containers.
     * @group  Combining
     */
-  def ++ [B >: A, To](that: LinearSeq[B])(implicit builder: Builder[Family, B, To]): To =
+  def ++ [B >: A, To](that: LinearSeq[B])(implicit builder: Builder[From, B, To]): To =
     macro StrictLinearSeqOps.++[A, B, To]
 }
 
@@ -250,6 +252,6 @@ private[sequential] object StrictLinearSeqOps {
   private def LinearSeqTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[LinearSeq[A]] = {
     import c.{mirror, WeakTypeTag}
     import c.universe._
-    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.LinearSeq").toType, weakTypeOf[A] :: Nil))
+    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.general.LinearSeq").toType, weakTypeOf[A] :: Nil))
   }
 }

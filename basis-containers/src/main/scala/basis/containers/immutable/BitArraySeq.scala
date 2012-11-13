@@ -8,7 +8,7 @@
 package basis.containers
 package immutable
 
-import basis.collections._
+import basis.collections.general._
 import basis.util._
 
 private[containers] final class BitArraySeq(words: Array[Int], override val length: Int) extends ArraySeq[Boolean] {

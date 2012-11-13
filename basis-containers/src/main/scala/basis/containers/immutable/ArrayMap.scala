@@ -9,13 +9,15 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.generic._
+import basis.collections.general._
 import basis.util._
 
 import scala.annotation.unchecked.uncheckedVariance
 
 final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
-  extends Family[ArrayMap[A, T]] with Map[A, T] {
+  extends Immutable
+    with Family[ArrayMap[A, T]]
+    with immutable.Map[A, T] {
   
   override def isEmpty: Boolean = slots.length == 0
   
@@ -51,7 +53,7 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
     None
   }
   
-  def + [B >: A, U >: T](key: B, value: U): ArrayMap[B, U] = {
+  override def + [B >: A, U >: T](key: B, value: U): ArrayMap[B, U] = {
     var i = 0
     val n = slots.length
     while (i < n && key != slots(i)) i += 2
@@ -65,7 +67,7 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
     }
   }
   
-  def - (key: A @uncheckedVariance): ArrayMap[A, T] = {
+  override def - (key: A @uncheckedVariance): ArrayMap[A, T] = {
     var i = 0
     val n = slots.length
     while (i < n && key != slots(i)) i += 2

@@ -8,6 +8,7 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
 import basis.util._
 
 /** Strictly evaluated collection operations.
@@ -16,7 +17,7 @@ import basis.util._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
+class StrictCollectionOps[A, From](val __ : Collection[A]) extends AnyVal {
   /** Returns the applications of a partial function to each element of this
     * collection for which the function is defined.
     * 
@@ -26,8 +27,8 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     * @return the accumulated elements filtered and mapped by `q`.
     * @group  Mapping
     */
-  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[Family, B, To]): To =
-    new StrictEnumeratorOps[A, Family](__).collect[B, To](q)(builder)
+  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[From, B, To]): To =
+    new StrictEnumeratorOps[A, From](__).collect[B, To](q)(builder)
   
   /** Returns the applications of a function to each element of this collection.
     * 
@@ -36,8 +37,8 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     * @return the accumulated elements mapped by `f`.
     * @group  Mapping
     */
-  def map[B, To](f: A => B)(implicit builder: Builder[Family, B, To]): To =
-    new StrictEnumeratorOps[A, Family](__).map[B, To](f)(builder)
+  def map[B, To](f: A => B)(implicit builder: Builder[From, B, To]): To =
+    new StrictEnumeratorOps[A, From](__).map[B, To](f)(builder)
   
   /** Returns the concatenation of all elements returned by a function applied
     * to each element of this collection.
@@ -47,8 +48,8 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[Family, B, To]): To =
-    new StrictEnumeratorOps[A, Family](__).flatMap[B, To](f)(builder)
+  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[From, B, To]): To =
+    new StrictEnumeratorOps[A, From](__).flatMap[B, To](f)(builder)
   
   /** Returns all elements of this collection that satisfy a predicate.
     * 
@@ -57,8 +58,8 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To =
-    new StrictEnumeratorOps[A, Family](__).filter[To](p)(builder)
+  def filter[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
+    new StrictEnumeratorOps[A, From](__).filter[To](p)(builder)
   
   /** Returns all elements following the longest prefix of this collection
     * for which each element satisfies a predicate.
@@ -69,7 +70,7 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To = {
+  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To = {
     traverse(__)(new StrictCollectionOps.DropWhileInto(p, builder))
     builder.state
   }
@@ -83,7 +84,7 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[Family, A, To]): To = {
+  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To = {
     traverse(__)(new StrictCollectionOps.TakeWhileInto(p, builder))
     builder.state
   }
@@ -98,7 +99,7 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     * @return the pair of accumulated prefix and suffix elements.
     * @group  Filtering
     */
-  def span[To](p: A => Boolean)(implicit builderA: Builder[Family, A, To], builderB: Builder[Family, A, To]): (To, To) = {
+  def span[To](p: A => Boolean)(implicit builderA: Builder[From, A, To], builderB: Builder[From, A, To]): (To, To) = {
     traverse(__)(new StrictCollectionOps.SpanInto(p, builderA, builderB))
     (builderA.state, builderB.state)
   }
@@ -111,7 +112,7 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop[To](lower: Int)(implicit builder: Builder[Family, A, To]): To = {
+  def drop[To](lower: Int)(implicit builder: Builder[From, A, To]): To = {
     traverse(__)(new StrictCollectionOps.DropInto(lower, builder))
     builder.state
   }
@@ -124,7 +125,7 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take[To](upper: Int)(implicit builder: Builder[Family, A, To]): To = {
+  def take[To](upper: Int)(implicit builder: Builder[From, A, To]): To = {
     traverse(__)(new StrictCollectionOps.TakeInto(upper, builder))
     builder.state
   }
@@ -138,7 +139,7 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[Family, A, To]): To = {
+  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[From, A, To]): To = {
     traverse(__)(new StrictCollectionOps.SliceInto(lower, upper, builder))
     builder.state
   }
@@ -150,8 +151,8 @@ class StrictCollectionOps[A, Family](val __ : Collection[A]) extends AnyVal {
     * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A, To](that: Collection[B])(implicit builder: Builder[Family, B, To]): To =
-    new StrictEnumeratorOps[B, Family](__).++[B, To](that)(builder)
+  def ++ [B >: A, To](that: Collection[B])(implicit builder: Builder[From, B, To]): To =
+    new StrictEnumeratorOps[B, From](__).++[B, To](that)(builder)
 }
 
 private[sequential] object StrictCollectionOps {

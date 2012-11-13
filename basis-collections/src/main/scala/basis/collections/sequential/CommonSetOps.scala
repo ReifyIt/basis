@@ -8,13 +8,15 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Common set operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-abstract class CommonSetOps[A, Family] private[sequential] {
+abstract class CommonSetOps[A, From] private[sequential] {
   /** Sequentially applies a function to each element in this set.
     * 
     * @param  f   the function to apply to each element.
@@ -132,8 +134,8 @@ abstract class CommonSetOps[A, Family] private[sequential] {
   def select[B](q: PartialFunction[A, B]): Option[B] =
     macro CommonContainerOps.select[A, B]
   
-  def eagerly: StrictSetOps[A, Family] =
-    macro CommonSetOps.eagerly[A, Family]
+  def eagerly: StrictSetOps[A, From] =
+    macro CommonSetOps.eagerly[A, From]
   
   def lazily: NonStrictSetOps[A] =
     macro CommonSetOps.lazily[A]
@@ -149,14 +151,14 @@ private[sequential] object CommonSetOps {
     set
   }
   
-  def eagerly[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context): c.Expr[StrictSetOps[A, Family]] = {
+  def eagerly[A : c.WeakTypeTag, From : c.WeakTypeTag](c: Context): c.Expr[StrictSetOps[A, From]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "StrictSetOps"),
         deconstruct(c) :: Nil)
-    } (StrictSetOpsTag[A, Family](c))
+    } (StrictSetOpsTag[A, From](c))
   }
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictSetOps[A]] = {
@@ -169,13 +171,13 @@ private[sequential] object CommonSetOps {
     } (NonStrictSetOpsTag[A](c))
   }
   
-  private def StrictSetOpsTag[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[StrictSetOps[A, Family]] = {
+  private def StrictSetOpsTag[A : c.WeakTypeTag, From : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictSetOps[A, From]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.StrictSetOps").toType,
-        weakTypeOf[A] :: weakTypeOf[Family] :: Nil))
+        weakTypeOf[A] :: weakTypeOf[From] :: Nil))
   }
   
   private def NonStrictSetOpsTag[A : c.WeakTypeTag](c: Context)

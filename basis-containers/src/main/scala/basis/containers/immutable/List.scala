@@ -9,16 +9,21 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.generic._
+import basis.collections.general._
 import basis.util._
 
 import scala.annotation.tailrec
 
-/** A singly linked list of elements.
+/** An immutable singly linked list.
   * 
   * @define collection  list
   */
-sealed abstract class List[+A] extends Family[List[A]] with LinearSeq[A] {
+sealed abstract class List[+A]
+  extends Equals
+    with Immutable
+    with Family[List[A]]
+    with immutable.LinearSeq[A] {
+  
   override def tail: List[A]
   
   @tailrec final def drop(lower: Int): List[A] =
@@ -47,35 +52,17 @@ sealed abstract class List[+A] extends Family[List[A]] with LinearSeq[A] {
   @tailrec private[this] def reverse(sx: List[A], xs: List[A]): List[A] =
     if (xs.isEmpty) sx else reverse(xs.head :: sx, xs.tail)
   
-  final def ::[B >: A](x: B): List[B] = new ::[B](x, this)
+  final def :: [B >: A](elem: B): List[B] = new ::[B](elem, this)
+  
+  final override def :+ [B >: A](elem: B): List[B] =
+    (new ListBuilder[B] ++= this += elem).state
+  
+  final override def +: [B >: A](elem: B): List[B] = new ::[B](elem, this)
   
   @tailrec protected final override def foreach[U](f: A => U) =
     if (!isEmpty) { f(head); tail.foreach[U](f) }
   
-  override def equals(other: Any): Boolean = other match {
-    case that: List[A] =>
-      var xs = this
-      var ys = that
-      var e = xs.isEmpty == ys.isEmpty
-      while (e && !xs.isEmpty && !ys.isEmpty) {
-        e = xs.head == ys.head
-        xs = xs.tail
-        ys = ys.tail
-      }
-      e
-    case _ => false
-  }
-  
-  override def hashCode: Int = {
-    import MurmurHash3._
-    var h = 2368702
-    var xs = this
-    while (!xs.isEmpty) {
-      h = mix(h, xs.head.##)
-      xs = xs.tail
-    }
-    mash(h)
-  }
+  protected override def stringPrefix: String = "List"
 }
 
 final class ::[A](override val head: A, private[this] var next: List[A]) extends List[A] {
@@ -84,19 +71,6 @@ final class ::[A](override val head: A, private[this] var next: List[A]) extends
   override def tail: List[A] = next
   
   private[containers] def tail_=(tail: List[A]): Unit = next = tail
-  
-  override def toString: String = {
-    val s = new java.lang.StringBuilder("List")
-    s.append('(')
-    s.append(head)
-    var xs = tail
-    while (!xs.isEmpty) {
-      s.append(", ").append(xs.head)
-      xs = xs.tail
-    }
-    s.append(')')
-    s.toString
-  }
 }
 
 object Nil extends List[Nothing] {
@@ -107,8 +81,6 @@ object Nil extends List[Nothing] {
   
   override def tail: List[Nothing] =
     throw new java.lang.UnsupportedOperationException("tail of empty list")
-  
-  override def toString: String = "Nil"
 }
 
 object :: {

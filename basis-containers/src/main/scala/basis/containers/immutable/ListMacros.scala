@@ -8,9 +8,7 @@
 package basis.containers
 package immutable
 
-import basis.collections._
-
-private[immutable] object ListMacros {
+private[containers] object ListMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   

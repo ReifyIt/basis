@@ -6,11 +6,12 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
 /** A stateful traverser of elements. An iterator steps through each element
-  * of a collection, one element per `step()` until `isEmpty` returns `true`.
+  * of a collection, one element per `step()`, until `isEmpty` returns `true`.
   * Backtracking algorithms can `dup` an iterator's state and resume it after
-  * mutating the original.
+  * mutating the original iterator.
   * 
   * == Iterator states ==
   *
@@ -27,9 +28,10 @@ package basis.collections
   * The distinct ''empty'' and ''done'' states facilitate low-overhead
   * "chunked" iterator applications such as iteratees.
   * 
-  * @groupprio  Examining   -3
-  * @groupprio  Iterating   -2
-  * @groupprio  Traversing  -1
+  * @groupprio  Examining     -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
   * 
   * @define collection  iterator
   */
@@ -67,10 +69,10 @@ object Done extends Iterator[Nothing] {
   override def isEmpty: Boolean = true
   
   override def head: Nothing =
-    throw new scala.NoSuchElementException("Head of empty iterator.")
+    throw new NoSuchElementException("Head of empty iterator.")
   
   override def step(): Unit =
-    throw new java.lang.UnsupportedOperationException("Empty iterator step.")
+    throw new UnsupportedOperationException("Empty iterator step.")
   
   override def dup: Done.type = this
   

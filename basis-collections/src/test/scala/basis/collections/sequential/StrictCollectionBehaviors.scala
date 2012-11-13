@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-import basis.collections.generic._
+import basis.collections.general._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers

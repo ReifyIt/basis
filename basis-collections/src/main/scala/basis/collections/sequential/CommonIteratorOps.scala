@@ -8,13 +8,15 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Common iterator operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-abstract class CommonIteratorOps[A, Family] private[sequential] {
+abstract class CommonIteratorOps[A, From] private[sequential] {
   /** Sequentially applies a function to each iterated element.
     * 
     * @param  f   the function to apply to each element.
@@ -132,8 +134,8 @@ abstract class CommonIteratorOps[A, Family] private[sequential] {
   def select[B](q: PartialFunction[A, B]): Option[B] =
     macro CommonIteratorOps.select[A, B]
   
-  def eagerly: StrictIteratorOps[A, Family] =
-    macro CommonIteratorOps.eagerly[A, Family]
+  def eagerly: StrictIteratorOps[A, From] =
+    macro CommonIteratorOps.eagerly[A, From]
   
   def lazily: NonStrictIteratorOps[A] =
     macro CommonIteratorOps.lazily[A]
@@ -204,14 +206,14 @@ private[sequential] object CommonIteratorOps {
     : c.Expr[Option[B]] =
     new IteratorMacros[c.type](c).select[A, B](unApply(c))(q)
   
-  def eagerly[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context): c.Expr[StrictIteratorOps[A, Family]] = {
+  def eagerly[A : c.WeakTypeTag, From : c.WeakTypeTag](c: Context): c.Expr[StrictIteratorOps[A, From]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "StrictIteratorOps"),
         unApply(c).tree :: Nil)
-    } (StrictIteratorOpsTag[A, Family](c))
+    } (StrictIteratorOpsTag[A, From](c))
   }
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictIteratorOps[A]] = {
@@ -228,17 +230,17 @@ private[sequential] object CommonIteratorOps {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.collections.Iterator").toType,
+        c.mirror.staticClass("basis.collections.general.Iterator").toType,
         weakTypeOf[A] :: Nil))
   }
   
-  private def StrictIteratorOpsTag[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[StrictIteratorOps[A, Family]] = {
+  private def StrictIteratorOpsTag[A : c.WeakTypeTag, From : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictIteratorOps[A, From]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.StrictIteratorOps").toType,
-        weakTypeOf[A] :: weakTypeOf[Family] :: Nil))
+        weakTypeOf[A] :: weakTypeOf[From] :: Nil))
   }
   
   private def NonStrictIteratorOpsTag[A : c.WeakTypeTag](c: Context)

@@ -8,13 +8,15 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Common enumerator operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-class CommonEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
+class CommonEnumeratorOps[A, From](val __ : Enumerator[A]) extends AnyVal {
   /** Sequentially applies a function to each enumerated element.
     * 
     * @param  f   the function to apply to each element.
@@ -168,8 +170,8 @@ class CommonEnumeratorOps[A, Family](val __ : Enumerator[A]) extends AnyVal {
     f.state
   }
   
-  @inline def eagerly: StrictEnumeratorOps[A, Family] =
-    new StrictEnumeratorOps[A, Family](__)
+  @inline def eagerly: StrictEnumeratorOps[A, From] =
+    new StrictEnumeratorOps[A, From](__)
   
   @inline def lazily: NonStrictEnumeratorOps[A] =
     new NonStrictEnumeratorOps[A](__)

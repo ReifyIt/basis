@@ -8,6 +8,8 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Non-strictly evaluated map operations.
   * 
   * @groupprio  Mapping     -3

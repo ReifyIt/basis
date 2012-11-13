@@ -8,13 +8,15 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Common container operations.
   * 
   * @groupprio  Traversing    -3
   * @groupprio  Reducing      -2
   * @groupprio  Querying      -1
   */
-abstract class CommonContainerOps[A, Family] private[sequential] {
+abstract class CommonContainerOps[A, From] private[sequential] {
   /** Sequentially applies a function to each element in this container.
     * 
     * @param  f   the function to apply to each element.
@@ -132,8 +134,8 @@ abstract class CommonContainerOps[A, Family] private[sequential] {
   def select[B](q: PartialFunction[A, B]): Option[B] =
     macro CommonContainerOps.select[A, B]
   
-  def eagerly: StrictContainerOps[A, Family] =
-    macro CommonContainerOps.eagerly[A, Family]
+  def eagerly: StrictContainerOps[A, From] =
+    macro CommonContainerOps.eagerly[A, From]
   
   def lazily: NonStrictContainerOps[A] =
     macro CommonContainerOps.lazily[A]
@@ -210,14 +212,14 @@ private[sequential] object CommonContainerOps {
     : c.Expr[Option[B]] =
     new IteratorMacros[c.type](c).select[A, B](unApplyIterator(c))(q)
   
-  def eagerly[A : c.WeakTypeTag, Family: c.WeakTypeTag](c: Context): c.Expr[StrictContainerOps[A, Family]] = {
+  def eagerly[A : c.WeakTypeTag, From: c.WeakTypeTag](c: Context): c.Expr[StrictContainerOps[A, From]] = {
     import c.universe._
     c.Expr {
       Apply(
         Select(Select(Select(Select(Select(Ident(nme.ROOTPKG),
           "basis"), "collections"), "sequential"), "strict"), "StrictContainerOps"),
         unApply(c).tree :: Nil)
-    } (StrictContainerOpsTag[A, Family](c))
+    } (StrictContainerOpsTag[A, From](c))
   }
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictContainerOps[A]] = {
@@ -234,7 +236,7 @@ private[sequential] object CommonContainerOps {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.collections.Container").toType,
+        c.mirror.staticClass("basis.collections.general.Container").toType,
         weakTypeOf[A] :: Nil))
   }
   
@@ -242,17 +244,17 @@ private[sequential] object CommonContainerOps {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
-        c.mirror.staticClass("basis.collections.Iterator").toType,
+        c.mirror.staticClass("basis.collections.general.Iterator").toType,
         weakTypeOf[A] :: Nil))
   }
   
-  private def StrictContainerOpsTag[A : c.WeakTypeTag, Family : c.WeakTypeTag](c: Context)
-    : c.WeakTypeTag[StrictContainerOps[A, Family]] = {
+  private def StrictContainerOpsTag[A : c.WeakTypeTag, From : c.WeakTypeTag](c: Context)
+    : c.WeakTypeTag[StrictContainerOps[A, From]] = {
     import c.universe._
     c.WeakTypeTag(
       appliedType(
         c.mirror.staticClass("basis.collections.sequential.StrictContainerOps").toType,
-        weakTypeOf[A] :: weakTypeOf[Family] :: Nil))
+        weakTypeOf[A] :: weakTypeOf[From] :: Nil))
   }
   
   private def NonStrictContainerOpsTag[A : c.WeakTypeTag](c: Context)

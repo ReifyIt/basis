@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.collections
-package generic
+package general
 
 trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {
   def fill[A](count: Int)(element: => A): CC[A] =

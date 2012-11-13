@@ -9,7 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.generic._
+import basis.collections.general._
 import basis.util._
 
 import scala.annotation.{switch, tailrec}
@@ -19,7 +19,9 @@ final class HashSet[+A] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Family[HashSet[A]] with Set[A] {
+  extends Immutable
+    with Family[HashSet[A]]
+    with immutable.Set[A] {
   
   import HashSet.{VOID, LEAF, TREE, KNOT}
   
@@ -45,11 +47,9 @@ final class HashSet[+A] private[containers] (
   
   override def contains(elem: A @uncheckedVariance): Boolean = contains(elem, elem.##, 0)
   
-  /** Returns a copy of this $collection containing the given element. */
-  def + [B >: A](elem: B): HashSet[B] = update(elem, elem.##, 0)
+  override def + [B >: A](elem: B): HashSet[B] = update(elem, elem.##, 0)
   
-  /** Returns a copy of this $collection, excluding the given element. */
-  def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
+  override def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
   
   private def knotMap: Int = treeMap & leafMap
   

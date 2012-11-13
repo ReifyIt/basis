@@ -8,10 +8,12 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Strictly evaluated map operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-abstract class StrictMapOps[A, T, Family] private[sequential]
+abstract class StrictMapOps[A, T, From] private[sequential]

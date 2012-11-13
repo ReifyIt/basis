@@ -6,18 +6,18 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
 import basis.util._
 
 /** An indexed sequence of elements.
   * 
-  * @groupprio  Examining   -3
-  * @groupprio  Iterating   -2
-  * @groupprio  Traversing  -1
+  * @groupprio  Examining     -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
   */
-trait IndexedSeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[IndexedSeq[A]] with Seq[A] {
-  
+trait IndexedSeq[+A] extends Any with Family[IndexedSeq[A]] with Seq[A] {
   /** Returns the element at `index`.
     * @group Examining */
   def apply(index: Int): A
@@ -36,7 +36,7 @@ trait IndexedSeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A
   }
 }
 
-private[collections] final class IndexedSeqIterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+private[collections] final class IndexedSeqIterator[+A]
     (xs: IndexedSeq[A], from: Int, until: Int)
   extends Iterator[A] {
   

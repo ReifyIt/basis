@@ -8,6 +8,8 @@
 package basis.collections
 package sequential
 
+import basis.collections.general._
+
 /** Implicit conversions that add common and non-strict operations to collections. */
 class nonstrict extends common {
   implicit def NonStrictEnumeratorOps[A](self: Enumerator[A]): NonStrictEnumeratorOps[A] =

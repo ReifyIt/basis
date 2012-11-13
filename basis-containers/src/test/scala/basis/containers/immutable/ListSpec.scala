@@ -9,7 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.generic._
+import basis.collections.general._
 import basis.collections.sequential._
 
 import org.scalatest.FunSpec

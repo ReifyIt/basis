@@ -6,21 +6,21 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
 /** A once traversable enumeration of elements. Enumerator declares only a
   * protected `foreach` method; it has no public methods.
   * 
-  * @groupprio  Traversing  -1
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
   * 
   * @define collection  enumeration
   */
-trait Enumerator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Enumerator[A]] {
-  
+trait Enumerator[+A] extends Any with Family[Enumerator[A]] {
   /** Applies a function to each element of this $collection. The protected
     * status of `foreach` allows optimized static implementations to shadow
     * this virtual method. To force a virtual `foreach` call, invoke
-    * [[basis.collections#traverse traverse]].
+    * [[basis.collections.general#traverse traverse]].
     * 
     * @group  Traversing
     */

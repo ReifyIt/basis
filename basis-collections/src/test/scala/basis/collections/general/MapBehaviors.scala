@@ -6,8 +6,8 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
-import basis.collections.generic._
 import basis.util._
 
 import org.scalatest.FunSpec

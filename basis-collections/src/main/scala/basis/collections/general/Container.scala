@@ -6,18 +6,18 @@
 \*                                                                      */
 
 package basis.collections
+package general
 
 /** An iterable container of elements.
   * 
-  * @groupprio  Examining   -3
-  * @groupprio  Iterating   -2
-  * @groupprio  Traversing  -1
+  * @groupprio  Examining     -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
   * 
   * @define collection  container
   */
-trait Container[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Container[A]] with Collection[A] {
-  
+trait Container[+A] extends Any with Family[Container[A]] with Collection[A] {
   /** Returns a new iterator over the elements of this $collection.
     * @group Iterating */
   def iterator: Iterator[A]
@@ -25,5 +25,21 @@ trait Container[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   protected override def foreach[U](f: A => U) {
     val xs = iterator
     while (!xs.isEmpty) { f(xs.head); xs.step() }
+  }
+  
+  override def toString: String = {
+    val s = new java.lang.StringBuilder(stringPrefix)
+    s.append('(')
+    val these = iterator
+    if (!these.isEmpty) {
+      s.append(these.head)
+      these.step()
+      while (!these.isEmpty) {
+        s.append(", ").append(these.head)
+        these.step()
+      }
+    }
+    s.append(')')
+    s.toString
   }
 }
