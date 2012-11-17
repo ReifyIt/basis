@@ -9,7 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.general._
+import basis.collections.traversable._
 import basis.util._
 
 sealed abstract class Vector[+A] extends Equals with Family[Vector[A]] with IndexedSeq[A] {

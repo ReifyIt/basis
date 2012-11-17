@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
+import basis.collections.traversable._
 
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
@@ -233,7 +233,7 @@ private[collections] final class LinearSeqMacros[C <: Context](val context: C) {
     } (TypeTag.Int)
   }
   
-  def select[A : WeakTypeTag, B : WeakTypeTag]
+  def choose[A : WeakTypeTag, B : WeakTypeTag]
       (seq: Expr[LinearSeq[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Option[B]] = {
@@ -647,7 +647,7 @@ private[collections] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   private def LinearSeqType[A : WeakTypeTag]: Type =
-    appliedType(mirror.staticClass("basis.collections.general.LinearSeq").toType, weakTypeOf[A] :: Nil)
+    appliedType(mirror.staticClass("basis.collections.traversable.LinearSeq").toType, weakTypeOf[A] :: Nil)
   
   implicit private def OptionTag[A : WeakTypeTag]: WeakTypeTag[Option[A]] =
     WeakTypeTag(appliedType(mirror.staticClass("scala.Option").toType, weakTypeOf[A] :: Nil))

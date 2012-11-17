@@ -9,7 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.general._
+import basis.collections.traversable._
 import basis.collections.sequential._
 
 import org.scalatest.FunSpec
@@ -20,7 +20,7 @@ class ListSpec
     with ShouldMatchers
     with SeqFactoryBehaviors
     with LinearSeqBehaviors
-    with CommonLinearSeqBehaviors
+    with GeneralLinearSeqBehaviors
     with StrictLinearSeqBehaviors {
   
   override def suiteName = "List specification"
@@ -32,10 +32,10 @@ class ListSpec
   it should behave like GenericSeq(List)
   it should behave like GenericLinearSeq(List)
   
-  it should behave like GenericCommonCollection(List)
-  it should behave like GenericCommonContainer(List)
-  it should behave like GenericCommonSeq(List)
-  it should behave like GenericCommonLinearSeq(List)
+  it should behave like GenericGeneralCollection(List)
+  it should behave like GenericGeneralContainer(List)
+  it should behave like GenericGeneralSeq(List)
+  it should behave like GenericGeneralLinearSeq(List)
   
   it should behave like GenericStrictCollection(List)
   it should behave like GenericStrictContainer(List)

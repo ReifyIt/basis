@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
+import basis.collections.traversable._
 
 /** Strictly evaluated container operations.
   * 
@@ -258,6 +258,6 @@ private[sequential] object StrictContainerOps {
   private def IteratorTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Iterator[A]] = {
     import c.{mirror, WeakTypeTag}
     import c.universe._
-    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.general.Iterator").toType, weakTypeOf[A] :: Nil))
+    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.Iterator").toType, weakTypeOf[A] :: Nil))
   }
 }

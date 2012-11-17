@@ -22,4 +22,4 @@ trait Container[+A]
     with Immutable
     with Family[Container[A]]
     with Collection[A]
-    with general.Container[A]
+    with traversable.Container[A]

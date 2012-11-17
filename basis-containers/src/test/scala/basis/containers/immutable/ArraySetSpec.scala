@@ -9,7 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.general._
+import basis.collections.traversable._
 import basis.collections.sequential._
 
 import org.scalatest.FunSpec
@@ -20,7 +20,7 @@ class ArraySetSpec
     with ShouldMatchers
     with SetFactoryBehaviors
     with SetBehaviors
-    with CommonSetBehaviors
+    with GeneralSetBehaviors
     with StrictSetBehaviors {
   
   override def suiteName = "ArraySet specification"
@@ -31,9 +31,9 @@ class ArraySetSpec
   it should behave like GenericContainer(ArraySet)
   it should behave like GenericSet(ArraySet)
   
-  it should behave like GenericCommonCollection(ArraySet)
-  it should behave like GenericCommonContainer(ArraySet)
-  it should behave like GenericCommonSet(ArraySet)
+  it should behave like GenericGeneralCollection(ArraySet)
+  it should behave like GenericGeneralContainer(ArraySet)
+  it should behave like GenericGeneralSet(ArraySet)
   
   it should behave like GenericStrictCollection(ArraySet)
   it should behave like GenericStrictContainer(ArraySet)

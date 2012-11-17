@@ -9,7 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.general._
+import basis.collections.traversable._
 import basis.collections.sequential._
 
 import org.scalatest.FunSpec
@@ -20,7 +20,7 @@ class HashSetSpec
     with ShouldMatchers
     with SetFactoryBehaviors
     with SetBehaviors
-    with CommonSetBehaviors
+    with GeneralSetBehaviors
     with StrictSetBehaviors {
   
   override def suiteName = "HashSet specification"
@@ -31,9 +31,9 @@ class HashSetSpec
   it should behave like GenericContainer(HashSet)
   it should behave like GenericSet(HashSet)
   
-  it should behave like GenericCommonCollection(HashSet)
-  it should behave like GenericCommonContainer(HashSet)
-  it should behave like GenericCommonSet(HashSet)
+  it should behave like GenericGeneralCollection(HashSet)
+  it should behave like GenericGeneralContainer(HashSet)
+  it should behave like GenericGeneralSet(HashSet)
   
   it should behave like GenericStrictCollection(HashSet)
   it should behave like GenericStrictContainer(HashSet)

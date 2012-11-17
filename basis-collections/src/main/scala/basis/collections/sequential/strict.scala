@@ -8,10 +8,10 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
+import basis.collections.traversable._
 
-/** Implicit conversions that add common and strict operations to collections. */
-class strict extends common {
+/** Implicit conversions that add general and strict operations to collections. */
+class strict extends general {
   implicit def StrictEnumeratorOps[A](self: Enumerator[A]): StrictEnumeratorOps[A, self.Parent] =
     new StrictEnumeratorOps[A, self.Parent](self)
   
@@ -40,5 +40,5 @@ class strict extends common {
     throw new java.lang.UnsupportedOperationException("Can't instantiate macro interface at runtime.")
 }
 
-/** Implicit conversions that add common and strict operations to collections. */
+/** Implicit conversions that add general and strict operations to collections. */
 object strict extends strict

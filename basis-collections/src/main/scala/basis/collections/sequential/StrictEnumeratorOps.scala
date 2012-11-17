@@ -8,8 +8,6 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
-
 /** Strictly evaluated enumerator operations.
   * 
   * @groupprio  Mapping     -3

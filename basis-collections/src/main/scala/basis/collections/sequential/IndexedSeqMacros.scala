@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
+import basis.collections.traversable._
 
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
@@ -357,7 +357,7 @@ private[collections] final class IndexedSeqMacros[C <: Context](val context: C) 
     } (TypeTag.Int)
   }
   
-  def select[A, B : WeakTypeTag]
+  def choose[A, B : WeakTypeTag]
       (seq: Expr[IndexedSeq[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Option[B]] = {

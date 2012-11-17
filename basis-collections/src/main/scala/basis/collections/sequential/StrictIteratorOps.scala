@@ -8,8 +8,6 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
-
 /** Strictly evaluated iterator operations.
   * 
   * @groupprio  Mapping     -3
@@ -252,6 +250,6 @@ private[sequential] object StrictIteratorOps {
   private def IteratorTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[Iterator[A]] = {
     import c.{mirror, WeakTypeTag}
     import c.universe._
-    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.general.Iterator").toType, weakTypeOf[A] :: Nil))
+    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.Iterator").toType, weakTypeOf[A] :: Nil))
   }
 }

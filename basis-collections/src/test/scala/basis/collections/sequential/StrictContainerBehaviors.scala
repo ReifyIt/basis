@@ -8,13 +8,13 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
+import basis.collections.traversable._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 trait StrictContainerBehaviors extends StrictCollectionBehaviors { this: FunSpec =>
-  import strict.{CommonContainerOps, StrictContainerOps}
+  import strict.{GeneralContainerOps, StrictContainerOps}
   import ShouldMatchers._
   
   def GenericStrictContainer[CC[A] <: Container[A]](CC: BuilderFactory[CC]) {

@@ -9,7 +9,7 @@ package basis.containers
 package immutable
 
 import basis.collections._
-import basis.collections.general._
+import basis.collections.traversable._
 import basis.collections.sequential._
 
 import org.scalatest.FunSpec
@@ -20,7 +20,7 @@ class VectorSpec
     with ShouldMatchers
     with SeqFactoryBehaviors
     with IndexedSeqBehaviors
-    with CommonIndexedSeqBehaviors
+    with GeneralIndexedSeqBehaviors
     with StrictIndexedSeqBehaviors {
   
   override def suiteName = "Vector specification"
@@ -32,10 +32,10 @@ class VectorSpec
   it should behave like GenericSeq(Vector)
   it should behave like GenericIndexedSeq(Vector)
   
-  it should behave like GenericCommonCollection(Vector)
-  it should behave like GenericCommonContainer(Vector)
-  it should behave like GenericCommonSeq(Vector)
-  it should behave like GenericCommonIndexedSeq(Vector)
+  it should behave like GenericGeneralCollection(Vector)
+  it should behave like GenericGeneralContainer(Vector)
+  it should behave like GenericGeneralSeq(Vector)
+  it should behave like GenericGeneralIndexedSeq(Vector)
   
   it should behave like GenericStrictCollection(Vector)
   it should behave like GenericStrictContainer(Vector)

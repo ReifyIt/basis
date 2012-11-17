@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
+import basis.collections.traversable._
 
 /** Strictly evaluated linear sequence operations.
   * 
@@ -252,6 +252,6 @@ private[sequential] object StrictLinearSeqOps {
   private def LinearSeqTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[LinearSeq[A]] = {
     import c.{mirror, WeakTypeTag}
     import c.universe._
-    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.general.LinearSeq").toType, weakTypeOf[A] :: Nil))
+    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.traversable.LinearSeq").toType, weakTypeOf[A] :: Nil))
   }
 }

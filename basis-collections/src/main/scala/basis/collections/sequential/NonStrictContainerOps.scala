@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
+import basis.collections.traversable._
 
 /** Non-strictly evaluated container operations.
   * 

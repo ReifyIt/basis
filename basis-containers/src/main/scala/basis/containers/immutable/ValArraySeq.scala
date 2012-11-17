@@ -8,7 +8,7 @@
 package basis.containers
 package immutable
 
-import basis.collections.general._
+import basis.collections._
 import basis.memory._
 import basis.util._
 

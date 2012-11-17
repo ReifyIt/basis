@@ -25,7 +25,7 @@ trait Set[+A]
     with Immutable
     with Family[Set[A]]
     with Container[A]
-    with general.Set[A] {
+    with traversable.Set[A] {
   
   /** Returns a copy of this $collection containing the given element.
     * @group Updating */

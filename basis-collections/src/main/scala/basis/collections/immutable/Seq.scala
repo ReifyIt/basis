@@ -24,7 +24,7 @@ trait Seq[+A]
     with Immutable
     with Family[Seq[A]]
     with Container[A]
-    with general.Seq[A] {
+    with traversable.Seq[A] {
   
   /** Returns a copy of this $collection with the given element appended.
     * @group Updating */

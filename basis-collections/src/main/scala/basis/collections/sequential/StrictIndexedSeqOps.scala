@@ -8,7 +8,7 @@
 package basis.collections
 package sequential
 
-import basis.collections.general._
+import basis.collections.traversable._
 
 /** Strictly evaluated indexed sequence operations.
   * 
@@ -267,6 +267,6 @@ private[sequential] object StrictIndexedSeqOps {
   private def IndexedSeqTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[IndexedSeq[A]] = {
     import c.{mirror, WeakTypeTag}
     import c.universe._
-    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.general.IndexedSeq").toType, weakTypeOf[A] :: Nil))
+    WeakTypeTag(appliedType(mirror.staticClass("basis.collections.traversable.IndexedSeq").toType, weakTypeOf[A] :: Nil))
   }
 }

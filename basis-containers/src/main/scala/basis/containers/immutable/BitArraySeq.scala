@@ -8,10 +8,13 @@
 package basis.containers
 package immutable
 
-import basis.collections.general._
+import basis.collections._
 import basis.util._
 
-private[containers] final class BitArraySeq(words: Array[Int], override val length: Int) extends ArraySeq[Boolean] {
+private[containers] final class BitArraySeq
+    (words: Array[Int], override val length: Int)
+  extends ArraySeq[Boolean] {
+  
   override def isEmpty: Boolean = length == 0
   
   override def apply(index: Int): Boolean = {

@@ -8,7 +8,7 @@
 package basis.text
 
 import basis.collections._
-import basis.collections.general._
+import basis.collections.traversable._
 import basis.util._
 
 /** An 8-bit Unicode string comprised of a UTF-8 code unit sequence.

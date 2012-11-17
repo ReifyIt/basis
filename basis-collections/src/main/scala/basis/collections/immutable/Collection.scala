@@ -18,4 +18,4 @@ trait Collection[+A]
   extends Any
     with Immutable
     with Family[Collection[A]]
-    with general.Collection[A]
+    with traversable.Collection[A]

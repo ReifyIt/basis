@@ -22,7 +22,7 @@ trait IndexedSeq[+A]
     with Immutable
     with Family[IndexedSeq[A]]
     with Seq[A]
-    with general.IndexedSeq[A] {
+    with traversable.IndexedSeq[A] {
   
   /** Returns a copy of this $collection with the given element at the given index.
     * @group Updating */

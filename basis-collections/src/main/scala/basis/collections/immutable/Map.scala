@@ -25,7 +25,7 @@ trait Map[+A, +T]
     with Immutable
     with Family[Map[A, T]]
     with Container[(A, T)]
-    with general.Map[A, T] {
+    with traversable.Map[A, T] {
   
   /** Returns a copy of this $collection with the given value associated with the given key.
     * @group Updating */

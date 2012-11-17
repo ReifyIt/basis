@@ -22,4 +22,4 @@ trait LinearSeq[+A]
     with Immutable
     with Family[LinearSeq[A]]
     with Seq[A]
-    with general.LinearSeq[A]
+    with traversable.LinearSeq[A]
