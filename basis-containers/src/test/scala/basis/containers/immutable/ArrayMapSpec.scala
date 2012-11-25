@@ -17,12 +17,12 @@ import org.scalatest.matchers.ShouldMatchers
 class ArrayMapSpec
   extends FunSpec
     with ShouldMatchers
-    with MapFactoryBehaviors
-    with MapBehaviors {
+    with generic.MapFactoryBehaviors
+    with traversable.MapBehaviors {
   
   override def suiteName = "ArrayMap specification"
   
   it should behave like GenericMapFactory(ArrayMap)
   
-  it should behave like GenericMap(ArrayMap)
+  it should behave like TraversableMap(ArrayMap)
 }

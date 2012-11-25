@@ -14,7 +14,7 @@ import org.scalatest.matchers.ShouldMatchers
 trait CollectionBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def GenericCollection[CC[A] <: Collection[A]](CC: BuilderFactory[CC]) {
+  def TraversableCollection[CC[A] <: Collection[A]](CC: generic.BuilderFactory[CC]) {
     describe(s"An empty $CC collection") {
       it("should not traverse any elements") {
         val xs = CC[Any]()

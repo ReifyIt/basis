@@ -8,15 +8,13 @@
 package basis.collections
 package traversable
 
-import basis.collections.traversable._
-
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 trait IndexedSeqBehaviors extends SeqBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def GenericIndexedSeq[CC[X] <: IndexedSeq[X]](CC: BuilderFactory[CC]) {
+  def TraversableIndexedSeq[CC[X] <: IndexedSeq[X]](CC: generic.BuilderFactory[CC]) {
     describe(s"An empty indexed $CC sequence") {
       it("should have length zero") {
         val xs = CC[Any]()

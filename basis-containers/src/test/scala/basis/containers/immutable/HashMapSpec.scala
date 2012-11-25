@@ -17,12 +17,12 @@ import org.scalatest.matchers.ShouldMatchers
 class HashMapSpec
   extends FunSpec
     with ShouldMatchers
-    with MapFactoryBehaviors
-    with MapBehaviors {
+    with generic.MapFactoryBehaviors
+    with traversable.MapBehaviors {
   
   override def suiteName = "HashMap specification"
   
   it should behave like GenericMapFactory(HashMap)
   
-  it should behave like GenericMap(HashMap)
+  it should behave like TraversableMap(HashMap)
 }

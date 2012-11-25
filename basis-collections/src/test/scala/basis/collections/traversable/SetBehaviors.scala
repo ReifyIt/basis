@@ -14,7 +14,7 @@ import org.scalatest.matchers.ShouldMatchers
 trait SetBehaviors extends ContainerBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def GenericSet[CC[A] <: Set[A]](CC: BuilderFactory[CC]) {
+  def TraversableSet[CC[A] <: Set[A]](CC: generic.BuilderFactory[CC]) {
     describe(s"An empty unique $CC") {
       it("should known that it's empty") {
         val xs = CC[Any]()

@@ -10,7 +10,6 @@ package immutable
 
 import basis.collections._
 import basis.collections.traversable._
-import basis.collections.sequential._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
@@ -18,27 +17,27 @@ import org.scalatest.matchers.ShouldMatchers
 class ListSpec
   extends FunSpec
     with ShouldMatchers
-    with SeqFactoryBehaviors
-    with LinearSeqBehaviors
-    with GeneralLinearSeqBehaviors
-    with StrictLinearSeqBehaviors {
+    with generic.SeqFactoryBehaviors
+    with traversable.LinearSeqBehaviors
+    with sequential.general.LinearSeqOpsBehaviors
+    with sequential.strict.LinearSeqOpsBehaviors {
   
   override def suiteName = "List specification"
   
   it should behave like GenericSeqFactory(List)
   
-  it should behave like GenericCollection(List)
-  it should behave like GenericContainer(List)
-  it should behave like GenericSeq(List)
-  it should behave like GenericLinearSeq(List)
+  it should behave like TraversableCollection(List)
+  it should behave like TraversableContainer(List)
+  it should behave like TraversableSeq(List)
+  it should behave like TraversableLinearSeq(List)
   
-  it should behave like GenericGeneralCollection(List)
-  it should behave like GenericGeneralContainer(List)
-  it should behave like GenericGeneralSeq(List)
-  it should behave like GenericGeneralLinearSeq(List)
+  it should behave like SequentialGeneralCollectionOps(List)
+  it should behave like SequentialGeneralContainerOps(List)
+  it should behave like SequentialGeneralSeqOps(List)
+  it should behave like SequentialGeneralLinearSeqOps(List)
   
-  it should behave like GenericStrictCollection(List)
-  it should behave like GenericStrictContainer(List)
-  it should behave like GenericStrictSeq(List)
-  it should behave like GenericStrictLinearSeq(List)
+  it should behave like SequentialStrictCollectionOps(List)
+  it should behave like SequentialStrictContainerOps(List)
+  it should behave like SequentialStrictSeqOps(List)
+  it should behave like SequentialStrictLinearSeqOps(List)
 }

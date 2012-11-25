@@ -22,11 +22,19 @@ import basis.util._
 trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Examining */
-  def isEmpty: Boolean
+  def isEmpty: Boolean = iterator.isEmpty
   
   /** Returns the number of elements in this $collection.
     * @group Examining */
-  def length: Int
+  def length: Int = {
+    var count = 0
+    var these = iterator
+    while (!these.isEmpty) {
+      count += 1
+      these.step()
+    }
+    count
+  }
   
   /** Returns `true` if this $collection might equal another object, otherwise `false`.
     * @group Classifying */

@@ -14,7 +14,7 @@ import org.scalatest.matchers.ShouldMatchers
 trait ContainerBehaviors extends CollectionBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def GenericContainer[CC[A] <: Container[A]](CC: BuilderFactory[CC]) {
+  def TraversableContainer[CC[A] <: Container[A]](CC: generic.BuilderFactory[CC]) {
     describe(s"An empty $CC container's iterator") {
       it("should be empty") {
         val xs = CC[Any]()

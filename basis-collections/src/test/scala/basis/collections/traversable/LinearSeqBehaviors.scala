@@ -14,7 +14,7 @@ import org.scalatest.matchers.ShouldMatchers
 trait LinearSeqBehaviors extends SeqBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def GenericLinearSeq[CC[X] <: LinearSeq[X]](CC: BuilderFactory[CC]) {
+  def TraversableLinearSeq[CC[X] <: LinearSeq[X]](CC: generic.BuilderFactory[CC]) {
     describe(s"An empty linear $CC sequence") {
       it("should have no head") {
         val xs = CC[Any]()

@@ -15,7 +15,7 @@ package basis.util
   * mash(mix(mix(mix(seed, x.##), y.##), z.##))
   * }}}
   * 
-  * @see    [[http://code.google.com/p/smhasher/]]
+  * @see  [[http://code.google.com/p/smhasher/]]
   */
 object MurmurHash3 {
   import java.lang.Integer.{ rotateLeft => rotl }

@@ -22,23 +22,54 @@ import scala.annotation.unchecked.uncheckedVariance
 trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
   /** Returns `true` if this $collection doesn't contain any associations.
     * @group Examining */
-  def isEmpty: Boolean
+  def isEmpty: Boolean = iterator.isEmpty
   
   /** Returns the number of associations in this $collection.
     * @group Examining */
-  def size: Int
+  def size: Int = {
+    var count = 0
+    val entries = iterator
+    while (!entries.isEmpty) {
+      count += 1
+      entries.step()
+    }
+    count
+  }
   
   /** Returns `true` if this $collection has a value associated with the given key.
     * @group Examining */
-  def contains(key: A @uncheckedVariance): Boolean
+  def contains(key: A @uncheckedVariance): Boolean = {
+    val entries = iterator
+    while (!entries.isEmpty) {
+      if (key == entries.head._1) return true
+      entries.step()
+    }
+    false
+  }
   
   /** Returns the value associated with the given key.
     * @group Examining */
-  def apply(key: A @uncheckedVariance): T
+  def apply(key: A @uncheckedVariance): T = {
+    val entries = iterator
+    while (!entries.isEmpty) {
+      val entry = entries.head
+      if (key == entry._1) return entry._2
+      entries.step()
+    }
+    throw new NoSuchElementException(key.toString)
+  }
   
   /** Returns some value associated with the given key, or none if no association exists.
     * @group Examining */
-  def get(key: A @uncheckedVariance): Option[T]
+  def get(key: A @uncheckedVariance): Option[T] = {
+    val entries = iterator
+    while (!entries.isEmpty) {
+      val entry = entries.head
+      if (key == entry._1) return Some(entry._2)
+      entries.step()
+    }
+    None
+  }
   
   /** Returns a new iterator over the (key, value) pairs of this $collection.
     * @group Iterating */

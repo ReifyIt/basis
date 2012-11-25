@@ -10,7 +10,6 @@ package immutable
 
 import basis.collections._
 import basis.collections.traversable._
-import basis.collections.sequential._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
@@ -18,24 +17,24 @@ import org.scalatest.matchers.ShouldMatchers
 class HashSetSpec
   extends FunSpec
     with ShouldMatchers
-    with SetFactoryBehaviors
-    with SetBehaviors
-    with GeneralSetBehaviors
-    with StrictSetBehaviors {
+    with generic.SetFactoryBehaviors
+    with traversable.SetBehaviors
+    with sequential.general.SetOpsBehaviors
+    with sequential.strict.SetOpsBehaviors {
   
   override def suiteName = "HashSet specification"
   
   it should behave like GenericSetFactory(HashSet)
   
-  it should behave like GenericCollection(HashSet)
-  it should behave like GenericContainer(HashSet)
-  it should behave like GenericSet(HashSet)
+  it should behave like TraversableCollection(HashSet)
+  it should behave like TraversableContainer(HashSet)
+  it should behave like TraversableSet(HashSet)
   
-  it should behave like GenericGeneralCollection(HashSet)
-  it should behave like GenericGeneralContainer(HashSet)
-  it should behave like GenericGeneralSet(HashSet)
+  it should behave like SequentialGeneralCollectionOps(HashSet)
+  it should behave like SequentialGeneralContainerOps(HashSet)
+  it should behave like SequentialGeneralSetOps(HashSet)
   
-  it should behave like GenericStrictCollection(HashSet)
-  it should behave like GenericStrictContainer(HashSet)
-  it should behave like GenericStrictSet(HashSet)
+  it should behave like SequentialStrictCollectionOps(HashSet)
+  it should behave like SequentialStrictContainerOps(HashSet)
+  it should behave like SequentialStrictSetOps(HashSet)
 }

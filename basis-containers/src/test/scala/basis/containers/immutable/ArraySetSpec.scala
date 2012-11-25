@@ -10,7 +10,6 @@ package immutable
 
 import basis.collections._
 import basis.collections.traversable._
-import basis.collections.sequential._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
@@ -18,24 +17,24 @@ import org.scalatest.matchers.ShouldMatchers
 class ArraySetSpec
   extends FunSpec
     with ShouldMatchers
-    with SetFactoryBehaviors
-    with SetBehaviors
-    with GeneralSetBehaviors
-    with StrictSetBehaviors {
+    with generic.SetFactoryBehaviors
+    with traversable.SetBehaviors
+    with sequential.general.SetOpsBehaviors
+    with sequential.strict.SetOpsBehaviors {
   
   override def suiteName = "ArraySet specification"
   
   it should behave like GenericSetFactory(ArraySet)
   
-  it should behave like GenericCollection(ArraySet)
-  it should behave like GenericContainer(ArraySet)
-  it should behave like GenericSet(ArraySet)
+  it should behave like TraversableCollection(ArraySet)
+  it should behave like TraversableContainer(ArraySet)
+  it should behave like TraversableSet(ArraySet)
   
-  it should behave like GenericGeneralCollection(ArraySet)
-  it should behave like GenericGeneralContainer(ArraySet)
-  it should behave like GenericGeneralSet(ArraySet)
+  it should behave like SequentialGeneralCollectionOps(ArraySet)
+  it should behave like SequentialGeneralContainerOps(ArraySet)
+  it should behave like SequentialGeneralSetOps(ArraySet)
   
-  it should behave like GenericStrictCollection(ArraySet)
-  it should behave like GenericStrictContainer(ArraySet)
-  it should behave like GenericStrictSet(ArraySet)
+  it should behave like SequentialStrictCollectionOps(ArraySet)
+  it should behave like SequentialStrictContainerOps(ArraySet)
+  it should behave like SequentialStrictSetOps(ArraySet)
 }

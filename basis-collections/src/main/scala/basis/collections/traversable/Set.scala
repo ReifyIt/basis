@@ -22,13 +22,28 @@ import scala.annotation.unchecked.uncheckedVariance
 trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Examining */
-  def isEmpty: Boolean
+  def isEmpty: Boolean = iterator.isEmpty
   
   /** Returns the number of elements in this $collection.
     * @group Examining */
-  def size: Int
+  def size: Int = {
+    var count = 0
+    val these = iterator
+    while (!these.isEmpty) {
+      count += 1
+      these.step()
+    }
+    count
+  }
   
   /** Returns `true` if this $collection contains the given element.
     * @group Examining */
-  def contains(element: A @uncheckedVariance): Boolean
+  def contains(element: A @uncheckedVariance): Boolean = {
+    val these = iterator
+    while (!these.isEmpty) {
+      if (element == these.head) return true
+      these.step()
+    }
+    false
+  }
 }

@@ -15,6 +15,8 @@ package immutable
   * @groupprio  Traversing    -3
   * @groupprio  Updating      -2
   * @groupprio  Classifying   -1
+  * 
+  * @define collection  sequence
   */
 trait LinearSeq[+A]
   extends Any

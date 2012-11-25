@@ -16,11 +16,11 @@ package traversable
   * @groupprio  Classifying   -1
   */
 trait LinearSeq[+A] extends Any with Family[LinearSeq[A]] with Seq[A] {
-  /** Returns the first element of this $collection.
+  /** Returns the first element of this non-empty $collection.
     * @group Examining */
   def head: A
   
-  /** Returns all elements except the first of this $collection.
+  /** Returns all elements except the first of this non-empty $collection.
     * @group Examining */
   def tail: LinearSeq[A]
   
