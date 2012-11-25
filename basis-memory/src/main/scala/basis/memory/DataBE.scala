@@ -8,7 +8,7 @@
 package basis.memory
 
 /** Big-endian data. */
-trait DataBE extends Any with Data {
+private[memory] trait DataBE extends Data {
   override def endian: BigEndian.type = BigEndian
   
   override def copy(size: Long): DataBE
@@ -61,7 +61,7 @@ trait DataBE extends Any with Data {
 }
 
 /** An allocator for big-endian data backed by a primitive array. */
-object DataBE extends Allocator with (Long => DataBE) {
+private[memory] object DataBE extends Allocator with (Long => DataBE) {
   override def MaxSize: Long = Int.MaxValue.toLong << 3
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): DataBE = {

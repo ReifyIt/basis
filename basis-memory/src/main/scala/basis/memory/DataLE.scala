@@ -8,7 +8,7 @@
 package basis.memory
 
 /** Little-endian data. */
-trait DataLE extends Any with Data {
+private[memory] trait DataLE extends Data {
   override def endian: LittleEndian.type = LittleEndian
   
   override def copy(size: Long): DataLE
@@ -61,7 +61,7 @@ trait DataLE extends Any with Data {
 }
 
 /** An allocator for little-endian data backed by a primitive array. */
-object DataLE extends Allocator with (Long => DataLE) {
+private[memory] object DataLE extends Allocator with (Long => DataLE) {
   override def MaxSize: Long = Int.MaxValue << 3
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): DataLE = {

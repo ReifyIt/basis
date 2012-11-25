@@ -8,17 +8,10 @@
 package basis.memory
 
 /** Big-endian data backed by a `Byte` array. */
-class Data1BE(val words: Array[Byte]) extends AnyVal with DataBE {
-  import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
-  import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
-  
-  override def size: Long = words.length.toLong
-  
-  override def unit: Int = 1
-  
+private[memory] final class Data1BE(override val words: Array[Byte]) extends Data1 with DataBE {
   override def endian: BigEndian.type = BigEndian
   
-  override def copy(size: Long = this.size): Data1BE = {
+  override def copy(size: Long): Data1BE = {
     Predef.require(0L <= size && size <= Int.MaxValue.toLong)
     val words = new Array[Byte](size.toInt)
     java.lang.System.arraycopy(this.words, 0, words, 0, java.lang.Math.min(this.words.length, words.length))
@@ -30,36 +23,6 @@ class Data1BE(val words: Array[Byte]) extends AnyVal with DataBE {
   
   override def storeByte(address: Long, value: Byte): Unit =
     words(address.toInt) = value
-  
-  override def loadShort(address: Long): Short =
-    loadUnalignedShort(address & -2L)
-  
-  override def storeShort(address: Long, value: Short): Unit =
-    storeUnalignedShort(address & -2L, value)
-  
-  override def loadInt(address: Long): Int =
-    loadUnalignedInt(address & -4L)
-  
-  override def storeInt(address: Long, value: Int): Unit =
-    storeUnalignedInt(address & -4L, value)
-  
-  override def loadLong(address: Long): Long =
-    loadUnalignedLong(address & -8L)
-  
-  override def storeLong(address: Long, value: Long): Unit =
-    storeUnalignedLong(address & -8L, value)
-  
-  override def loadFloat(address: Long): Float =
-    intBitsToFloat(loadUnalignedInt(address & -4L))
-  
-  override def storeFloat(address: Long, value: Float): Unit =
-    storeUnalignedInt(address & -4L, floatToRawIntBits(value))
-  
-  override def loadDouble(address: Long): Double =
-    longBitsToDouble(loadUnalignedLong(address & -8L))
-  
-  override def storeDouble(address: Long, value: Double): Unit =
-    storeUnalignedLong(address & -8L, doubleToRawLongBits(value))
   
   override def loadUnalignedShort(address: Long): Short = {
     val i = address.toInt
@@ -113,31 +76,11 @@ class Data1BE(val words: Array[Byte]) extends AnyVal with DataBE {
     words(i + 7) =  value.toByte
   }
   
-  override def loadUnalignedFloat(address: Long): Float =
-    intBitsToFloat(loadUnalignedInt(address))
-  
-  override def storeUnalignedFloat(address: Long, value: Float): Unit =
-    storeUnalignedInt(address, floatToRawIntBits(value))
-  
-  override def loadUnalignedDouble(address: Long): Double =
-    longBitsToDouble(loadUnalignedLong(address))
-  
-  override def storeUnalignedDouble(address: Long, value: Double): Unit =
-    storeUnalignedLong(address, doubleToRawLongBits(value))
-  
-  override def move(fromAddress: Long, toAddress: Long, size: Long): Unit =
-    java.lang.System.arraycopy(words, fromAddress.toInt, words, toAddress.toInt, size.toInt)
-  
-  override def clear(fromAddress: Long, untilAddress: Long): Unit =
-    java.util.Arrays.fill(words, fromAddress.toInt, untilAddress.toInt, 0.toByte)
-  
-  def toLE: Data1LE = new Data1LE(words)
-  
   override def toString: String = "Data1BE"+"("+ size +")"
 }
 
 /** An allocator for big-endian data backed by a `Byte` array. */
-object Data1BE extends Allocator with (Long => Data1BE) {
+private[memory] object Data1BE extends Allocator with (Long => Data1BE) {
   override def MaxSize: Long = Int.MaxValue.toLong
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): Data1BE =
@@ -148,8 +91,6 @@ object Data1BE extends Allocator with (Long => Data1BE) {
     val words = new Array[Byte](size.toInt)
     new Data1BE(words)
   }
-  
-  def unapply(data: Data1BE): Some[Array[Byte]] = Some(data.words)
   
   override def toString: String = "Data1BE"
 }

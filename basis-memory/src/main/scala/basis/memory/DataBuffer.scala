@@ -8,7 +8,7 @@
 package basis.memory
 
 /** `ByteBuffer` backed data. */
-class DataBuffer(val buffer: java.nio.ByteBuffer) extends AnyVal with Data {
+private[memory] final class DataBuffer(val buffer: java.nio.ByteBuffer) extends Data {
   override def size: Long = buffer.capacity.toLong
   
   override def unit: Int = 1
@@ -128,21 +128,11 @@ class DataBuffer(val buffer: java.nio.ByteBuffer) extends AnyVal with Data {
     }
   }
   
-  def toBE: DataBuffer = {
-    if (buffer.order eq java.nio.ByteOrder.BIG_ENDIAN) this
-    else new DataBuffer(buffer.duplicate.order(java.nio.ByteOrder.BIG_ENDIAN))
-  }
-  
-  def toLE: DataBuffer = {
-    if (buffer.order eq java.nio.ByteOrder.LITTLE_ENDIAN) this
-    else new DataBuffer(buffer.duplicate.order(java.nio.ByteOrder.LITTLE_ENDIAN))
-  }
-  
   override def toString: String = "DataBuffer"+"("+ size +")"
 }
 
 /** An allocator for native-endian data backed by a `ByteBuffer`. */
-object DataBuffer extends Allocator with (Long => DataBuffer) {
+private[memory] object DataBuffer extends Allocator with (Long => DataBuffer) {
   override def MaxSize: Long = Int.MaxValue.toLong
   
   override def alloc[T](count: Long)(implicit unit: ValType[T]): DataBuffer =
@@ -155,8 +145,6 @@ object DataBuffer extends Allocator with (Long => DataBuffer) {
       else java.nio.ByteOrder.LITTLE_ENDIAN
     ))
   }
-  
-  def unapply(data: DataBuffer): Some[java.nio.ByteBuffer] = Some(data.buffer)
   
   override def toString: String = "DataBuffer"
 }

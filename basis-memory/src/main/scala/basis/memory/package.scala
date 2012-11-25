@@ -30,7 +30,4 @@ package object memory {
     else if (java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.LITTLE_ENDIAN) LittleEndian
     else throw new MatchError(java.nio.ByteOrder.nativeOrder)
   }
-  
-  /** Implicitly extends `Data` with compound load and store operations. */
-  implicit def DataOps(data: Data): DataOps = new DataOps(data)
 }

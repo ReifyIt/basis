@@ -10,103 +10,103 @@ package basis.memory
 import scala.reflect.macros.Context
 
 private[memory] object DataMacros {
-  def load[T](c: Context)(address: c.Expr[Long])
-      (field: c.Expr[ValType[_]]): c.Expr[T] = {
-    import c.universe._
-    val Apply(_, data :: Nil) = c.prefix.tree
+  def load[R : c.WeakTypeTag]
+      (c: Context { type PrefixType <: Data })
+      (address: c.Expr[Long])
+      (field: c.Expr[ValType[_]]): c.Expr[R] = {
     c.Expr {
-      new DataMacros[c.type](c).loadField(field, data, address.tree)
-    } (WeakTypeTag.Nothing)
+      new DataMacros[c.type](c).loadField(field, c.prefix.tree, address.tree)
+    } (c.weakTypeTag[R])
   }
   
-  def store[T](c: Context)(address: c.Expr[Long], value: c.Expr[T])
+  def store[T]
+      (c: Context { type PrefixType <: Data })
+      (address: c.Expr[Long], value: c.Expr[T])
       (field: c.Expr[ValType[_]]): c.Expr[Unit] = {
-    import c.universe._
-    val Apply(_, data :: Nil) = c.prefix.tree
     c.Expr {
-      new DataMacros[c.type](c).storeField(field, data, address.tree, value.tree)
-    } (WeakTypeTag.Unit)
+      new DataMacros[c.type](c).storeField(field, c.prefix.tree, address.tree, value.tree)
+    } (c.WeakTypeTag.Unit)
   }
   
-  def load2[T1, T2, R](c: Context)(address: c.Expr[Long])
+  def load2[T1, T2, R : c.WeakTypeTag]
+      (c: Context { type PrefixType <: Data })
+      (address: c.Expr[Long])
       (f: c.Expr[(T1, T2) => R])
       (field1: c.Expr[ValType[_]], field2: c.Expr[ValType[_]]): c.Expr[R] = {
-    import c.universe._
-    val Apply(_, data :: Nil) = c.prefix.tree
     c.Expr {
       new DataMacros[c.type](c).load(
         field1 :: field2 :: Nil,
-        data, address.tree, f.tree)
-    } (WeakTypeTag.Nothing)
+        c.prefix.tree, address.tree, f.tree)
+    } (c.weakTypeTag[R])
   }
   
-  def store2[T1, T2](c: Context)(address: c.Expr[Long])
+  def store2[T1, T2]
+      (c: Context { type PrefixType <: Data })
+      (address: c.Expr[Long])
       (value1: c.Expr[T1], value2: c.Expr[T2])
       (field1: c.Expr[ValType[_]], field2: c.Expr[ValType[_]]): c.Expr[Unit] = {
-    import c.universe._
-    val Apply(_, data :: Nil) = c.prefix.tree
     c.Expr {
       new DataMacros[c.type](c).store(
         field1 :: field2 :: Nil,
         value1 :: value2 :: Nil,
-        data, address.tree)
-    } (WeakTypeTag.Unit)
+        c.prefix.tree, address.tree)
+    } (c.WeakTypeTag.Unit)
   }
   
-  def load3[T1, T2, T3, R](c: Context)(address: c.Expr[Long])
+  def load3[T1, T2, T3, R : c.WeakTypeTag]
+      (c: Context { type PrefixType <: Data })
+      (address: c.Expr[Long])
       (f: c.Expr[(T1, T2, T3) => R])
       (field1: c.Expr[ValType[_]], field2: c.Expr[ValType[_]],
        field3: c.Expr[ValType[_]]): c.Expr[R] = {
-    import c.universe._
-    val Apply(_, data :: Nil) = c.prefix.tree
     c.Expr {
       new DataMacros[c.type](c).load(
-      field1 :: field2 :: field3 :: Nil,
-      data, address.tree, f.tree)
-    } (WeakTypeTag.Nothing)
+        field1 :: field2 :: field3 :: Nil,
+        c.prefix.tree, address.tree, f.tree)
+    } (c.weakTypeTag[R])
   }
   
-  def store3[T1, T2, T3](c: Context)(address: c.Expr[Long])
+  def store3[T1, T2, T3]
+      (c: Context { type PrefixType <: Data })
+      (address: c.Expr[Long])
       (value1: c.Expr[T1], value2: c.Expr[T2],
        value3: c.Expr[T3])
       (field1: c.Expr[ValType[_]], field2: c.Expr[ValType[_]],
        field3: c.Expr[ValType[_]]): c.Expr[Unit] = {
-    import c.universe._
-    val Apply(_, data :: Nil) = c.prefix.tree
     c.Expr {
       new DataMacros[c.type](c).store(
         field1 :: field2 :: field3 :: Nil,
         value1 :: value2 :: value3 :: Nil,
-        data, address.tree)
-    } (WeakTypeTag.Unit)
+        c.prefix.tree, address.tree)
+    } (c.WeakTypeTag.Unit)
   }
   
-  def load4[T1, T2, T3, T4, R](c: Context)(address: c.Expr[Long])
+  def load4[T1, T2, T3, T4, R : c.WeakTypeTag]
+      (c: Context { type PrefixType <: Data })
+      (address: c.Expr[Long])
       (f: c.Expr[(T1, T2, T3, T4) => R])
       (field1: c.Expr[ValType[_]], field2: c.Expr[ValType[_]],
        field3: c.Expr[ValType[_]], field4: c.Expr[ValType[_]]): c.Expr[R] = {
-    import c.universe._
-    val Apply(_, data :: Nil) = c.prefix.tree
     c.Expr {
       new DataMacros[c.type](c).load(
         field1 :: field2 :: field3 :: field4 :: Nil,
-        data, address.tree, f.tree)
-    } (WeakTypeTag.Nothing)
+        c.prefix.tree, address.tree, f.tree)
+    } (c.weakTypeTag[R])
   }
   
-  def store4[T1, T2, T3, T4](c: Context)(address: c.Expr[Long])
+  def store4[T1, T2, T3, T4]
+      (c: Context { type PrefixType <: Data })
+      (address: c.Expr[Long])
       (value1: c.Expr[T1], value2: c.Expr[T2],
        value3: c.Expr[T3], value4: c.Expr[T4])
       (field1: c.Expr[ValType[_]], field2: c.Expr[ValType[_]],
        field3: c.Expr[ValType[_]], field4: c.Expr[ValType[_]]): c.Expr[Unit] = {
-    import c.universe._
-    val Apply(_, data :: Nil) = c.prefix.tree
     c.Expr {
       new DataMacros[c.type](c).store(
         field1 :: field2 :: field3 :: field4 :: Nil,
         value1 :: value2 :: value3 :: value4 :: Nil,
-        data, address.tree)
-    } (WeakTypeTag.Unit)
+        c.prefix.tree, address.tree)
+    } (c.WeakTypeTag.Unit)
   }
 }
 
