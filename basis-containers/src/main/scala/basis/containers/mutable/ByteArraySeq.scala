@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.containers
-package immutable
+package mutable
 
 import basis.collections._
 import basis.util._
@@ -18,48 +18,39 @@ private[containers] final class ByteArraySeq(array: Array[Byte]) extends ArraySe
   
   override def apply(index: Int): Byte = array(index)
   
-  override def update[B >: Byte](index: Int, value: B): ArraySeq[B] = value match {
-    case value: Byte =>
-      val newArray = array.clone
-      newArray(index) = value
-      new ByteArraySeq(newArray)
-    case _ => super.update(index, value)
+  override def update(index: Int, value: Byte): Unit = array(index) = value
+  
+  override def copyToArray(xs: Array[Byte], start: Int, count: Int): Unit =
+    java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+  
+  override def copyToArray(xs: Array[Byte], start: Int): Unit =
+    java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
+  
+  override def copyToArray(xs: Array[Byte]): Unit =
+    java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+  
+  override def iterator: Iterator[Byte] = new ByteArraySeqIterator(array)
+}
+
+private[containers] final class ByteArraySeqIterator
+    (array: Array[Byte], private[this] var i: Int, n: Int)
+  extends Iterator[Byte] {
+  
+  def this(array: Array[Byte]) = this(array, 0, array.length)
+  
+  override def isEmpty: Boolean = i >= n
+  
+  override def head: Byte = {
+    if (i < n) array(i)
+    else Done.head
   }
   
-  override def insert[B >: Byte](index: Int, value: B): ArraySeq[B] = value match {
-    case value: Byte =>
-      val newArray = new Array[Byte](array.length + 1)
-      java.lang.System.arraycopy(array, 0, newArray, 0, index)
-      newArray(index) = value
-      java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
-      new ByteArraySeq(newArray)
-    case _ => super.insert(index, value)
+  override def step() {
+    if (i < n) i += 1
+    else Done.step()
   }
   
-  override def remove(index: Int): ArraySeq[Byte] = {
-    val newArray = new Array[Byte](array.length - 1)
-    java.lang.System.arraycopy(array, 0, newArray, 0, index)
-    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
-    new ByteArraySeq(newArray)
-  }
-  
-  override def :+ [B >: Byte](value: B): ArraySeq[B] = value match {
-    case value: Byte =>
-      val newArray = new Array[Byte](array.length + 1)
-      java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
-      newArray(newArray.length) = value
-      new ByteArraySeq(newArray)
-    case _ => super.:+(value)
-  }
-  
-  override def +: [B >: Byte](value: B): ArraySeq[B] = value match {
-    case value: Byte =>
-      val newArray = new Array[Byte](array.length + 1)
-      newArray(0) = value
-      java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
-      new ByteArraySeq(newArray)
-    case _ => super.+:(value)
-  }
+  override def dup: Iterator[Byte] = new ByteArraySeqIterator(array, i, n)
 }
 
 private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte, ArraySeq[Byte]] {
@@ -93,6 +84,15 @@ private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte, A
     array(length) = value
     length += 1
     this
+  }
+  
+  override def ++= (xs: Enumerator[Byte]): this.type = xs match {
+    case xs: ByteArraySeq =>
+      prepare(length + xs.length)
+      xs.copyToArray(array, length)
+      length += xs.length
+      this
+    case _ => super.++=(xs)
   }
   
   override def expect(count: Int): this.type = {

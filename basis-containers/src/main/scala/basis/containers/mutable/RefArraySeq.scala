@@ -6,52 +6,60 @@
 \*                                                                      */
 
 package basis.containers
-package immutable
+package mutable
 
 import basis.collections._
 import basis.util._
 
-private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends ArraySeq[A] {
+private[containers] final class RefArraySeq[A](array: Array[AnyRef]) extends ArraySeq[A] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
   override def apply(index: Int): A = array(index).asInstanceOf[A]
   
-  override def update[B >: A](index: Int, value: B): ArraySeq[B] = {
-    val newArray = array.clone
-    newArray(index) = value.asInstanceOf[AnyRef]
-    new RefArraySeq(newArray)
+  override def update(index: Int, value: A): Unit = array(index) = value.asInstanceOf[AnyRef]
+  
+  override def copyToArray(xs: Array[A], start: Int, count: Int) {
+    if (xs.isInstanceOf[Array[AnyRef]])
+      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+    else super.copyToArray(xs, start, count)
   }
   
-  override def insert[B >: A](index: Int, value: B): ArraySeq[B] = {
-    val newArray = new Array[AnyRef](array.length + 1)
-    java.lang.System.arraycopy(array, 0, newArray, 0, index)
-    newArray(index) = value.asInstanceOf[AnyRef]
-    java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
-    new RefArraySeq(newArray)
+  override def copyToArray(xs: Array[A], start: Int) {
+    if (xs.isInstanceOf[Array[AnyRef]])
+      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
+    else super.copyToArray(xs, start)
   }
   
-  override def remove(index: Int): ArraySeq[A] = {
-    val newArray = new Array[AnyRef](array.length - 1)
-    java.lang.System.arraycopy(array, 0, newArray, 0, index)
-    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
-    new RefArraySeq(newArray)
+  override def copyToArray(xs: Array[A]) {
+    if (xs.isInstanceOf[Array[AnyRef]])
+      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+    else super.copyToArray(xs)
   }
   
-  override def :+ [B >: A](value: B): ArraySeq[B] = {
-    val newArray = new Array[AnyRef](array.length + 1)
-    java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
-    newArray(newArray.length) = value.asInstanceOf[AnyRef]
-    new RefArraySeq(newArray)
+  override def iterator: Iterator[A] = new RefArraySeqIterator(array)
+}
+
+private[containers] final class RefArraySeqIterator[A]
+    (array: Array[AnyRef], private[this] var i: Int, n: Int)
+  extends Iterator[A] {
+  
+  def this(array: Array[AnyRef]) = this(array, 0, array.length)
+  
+  override def isEmpty: Boolean = i >= n
+  
+  override def head: A = {
+    if (i < n) array(i).asInstanceOf[A]
+    else Done.head
   }
   
-  override def +: [B >: A](value: B): ArraySeq[B] = {
-    val newArray = new Array[AnyRef](array.length + 1)
-    newArray(0) = value.asInstanceOf[AnyRef]
-    java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
-    new RefArraySeq(newArray)
+  override def step() {
+    if (i < n) i += 1
+    else Done.step()
   }
+  
+  override def dup: Iterator[A] = new RefArraySeqIterator(array, i, n)
 }
 
 private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A, ArraySeq[A]] {
@@ -85,6 +93,15 @@ private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A, Ar
     array(length) = value.asInstanceOf[AnyRef]
     length += 1
     this
+  }
+  
+  override def ++= (xs: Enumerator[A]): this.type = xs match {
+    case xs: RefArraySeq[A] =>
+      prepare(length + xs.length)
+      xs.copyToArray(array.asInstanceOf[Array[A]], length)
+      length += xs.length
+      this
+    case _ => super.++=(xs)
   }
   
   override def expect(count: Int): this.type = {

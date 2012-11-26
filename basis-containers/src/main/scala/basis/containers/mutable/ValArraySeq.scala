@@ -6,71 +6,30 @@
 \*                                                                      */
 
 package basis.containers
-package immutable
+package mutable
 
 import basis.collections._
 import basis.memory._
 import basis.util._
 
-private[containers] final class ValArraySeq[+A]
+private[containers] final class ValArraySeq[A]
     (data: Data, override val length: Int)
     (implicit struct: ValType[A])
   extends ArraySeq[A] {
-  
-  import struct.tag
   
   override def isEmpty: Boolean = length == 0
   
   override def apply(index: Int): A =
     struct.load(data, struct.size.toLong * index.toLong)
   
-  override def update[B >: A](index: Int, value: B): ArraySeq[B] = value match {
-    case value: A =>
-      val newData = data.copy()
-      struct.store(data, struct.size.toLong * index.toLong, value)
-      new ValArraySeq(newData, length)
-    case _ => super.update(index, value)
-  }
-  
-  override def insert[B >: A](index: Int, value: B): ArraySeq[B] = value match {
-    case value: A =>
-      val offset = struct.size.toLong * index.toLong
-      val newData = Data(data.size + struct.size.toLong)
-      Data.copy(data, 0L, newData, 0L, offset)
-      struct.store(data, offset, value)
-      Data.copy(data, offset, newData, offset + struct.size.toLong, data.size - offset)
-      new ValArraySeq(newData, length + 1)
-    case _ => super.insert(index, value)
-  }
-  
-  override def remove(index: Int): ArraySeq[A] = {
-    val offset = struct.size.toLong * index.toLong
-    val newData = Data(data.size - struct.size.toLong)
-    Data.copy(data, 0L, newData, 0L, offset)
-    Data.copy(data, offset + struct.size.toLong, newData, offset, newData.size - offset)
-    new ValArraySeq(newData, length - 1)
-  }
-  
-  override def :+ [B >: A](value: B): ArraySeq[B] = value match {
-    case value: A =>
-      val newData = Data(data.size + struct.size.toLong)
-      Data.copy(data, 0L, newData, 0L, data.size)
-      struct.store(data, data.size, value)
-      new ValArraySeq(newData, length + 1)
-    case _ => super.:+(value)
-  }
-  
-  override def +: [B >: A](value: B): ArraySeq[B] = value match {
-    case value: A =>
-      val newData = Data(data.size + struct.size.toLong)
-      struct.store(data, 0L, value)
-      Data.copy(data, 0L, newData, struct.size.toLong, data.size)
-      new ValArraySeq(newData, length + 1)
-    case _ => super.+:(value)
-  }
+  override def update(index: Int, value: A): Unit =
+    struct.store(data, struct.size.toLong * index.toLong, value)
 }
 
-private[containers] final class ValArraySeqBuilder[A](implicit struct: ValType[A]) extends Builder[Any, A, ArraySeq[A]] {
+private[containers] final class ValArraySeqBuilder[A]
+    (implicit struct: ValType[A])
+  extends Builder[Any, A, ArraySeq[A]] {
+  
   private[this] var data: Data = Data.alloc[A](0)
   
   private[this] var aliased: Boolean = false

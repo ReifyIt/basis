@@ -6,7 +6,7 @@
 \*                                                                      */
 
 package basis.containers
-package immutable
+package mutable
 
 import basis.collections._
 import basis.util._
@@ -18,48 +18,39 @@ private[containers] final class IntArraySeq(array: Array[Int]) extends ArraySeq[
   
   override def apply(index: Int): Int = array(index)
   
-  override def update[B >: Int](index: Int, value: B): ArraySeq[B] = value match {
-    case value: Int =>
-      val newArray = array.clone
-      newArray(index) = value
-      new IntArraySeq(newArray)
-    case _ => super.update(index, value)
+  override def update(index: Int, value: Int): Unit = array(index) = value
+  
+  override def copyToArray(xs: Array[Int], start: Int, count: Int): Unit =
+    java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+  
+  override def copyToArray(xs: Array[Int], start: Int): Unit =
+    java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
+  
+  override def copyToArray(xs: Array[Int]): Unit =
+    java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+  
+  override def iterator: Iterator[Int] = new IntArraySeqIterator(array)
+}
+
+private[containers] final class IntArraySeqIterator
+    (array: Array[Int], private[this] var i: Int, n: Int)
+  extends Iterator[Int] {
+  
+  def this(array: Array[Int]) = this(array, 0, array.length)
+  
+  override def isEmpty: Boolean = i >= n
+  
+  override def head: Int = {
+    if (i < n) array(i)
+    else Done.head
   }
   
-  override def insert[B >: Int](index: Int, value: B): ArraySeq[B] = value match {
-    case value: Int =>
-      val newArray = new Array[Int](array.length + 1)
-      java.lang.System.arraycopy(array, 0, newArray, 0, index)
-      newArray(index) = value
-      java.lang.System.arraycopy(array, index, newArray, index + 1, array.length - index)
-      new IntArraySeq(newArray)
-    case _ => super.insert(index, value)
+  override def step() {
+    if (i < n) i += 1
+    else Done.step()
   }
   
-  override def remove(index: Int): ArraySeq[Int] = {
-    val newArray = new Array[Int](array.length - 1)
-    java.lang.System.arraycopy(array, 0, newArray, 0, index)
-    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
-    new IntArraySeq(newArray)
-  }
-  
-  override def :+ [B >: Int](value: B): ArraySeq[B] = value match {
-    case value: Int =>
-      val newArray = new Array[Int](array.length + 1)
-      java.lang.System.arraycopy(array, 0, newArray, 0, array.length)
-      newArray(newArray.length) = value
-      new IntArraySeq(newArray)
-    case _ => super.:+(value)
-  }
-  
-  override def +: [B >: Int](value: B): ArraySeq[B] = value match {
-    case value: Int =>
-      val newArray = new Array[Int](array.length + 1)
-      newArray(0) = value
-      java.lang.System.arraycopy(array, 0, newArray, 1, array.length)
-      new IntArraySeq(newArray)
-    case _ => super.+:(value)
-  }
+  override def dup: Iterator[Int] = new IntArraySeqIterator(array, i, n)
 }
 
 private[containers] final class IntArraySeqBuilder extends Builder[Any, Int, ArraySeq[Int]] {
@@ -93,6 +84,15 @@ private[containers] final class IntArraySeqBuilder extends Builder[Any, Int, Arr
     array(length) = value
     length += 1
     this
+  }
+  
+  override def ++= (xs: Enumerator[Int]): this.type = xs match {
+    case xs: IntArraySeq =>
+      prepare(length + xs.length)
+      xs.copyToArray(array, length)
+      length += xs.length
+      this
+    case _ => super.++=(xs)
   }
   
   override def expect(count: Int): this.type = {
