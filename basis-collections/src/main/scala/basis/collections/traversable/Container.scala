@@ -30,13 +30,13 @@ trait Container[+A] extends Any with Family[Container[A]] with Collection[A] {
   override def toString: String = {
     val s = new java.lang.StringBuilder(stringPrefix)
     s.append('(')
-    val these = iterator
-    if (!these.isEmpty) {
-      s.append(these.head)
-      these.step()
-      while (!these.isEmpty) {
-        s.append(", ").append(these.head)
-        these.step()
+    val xs = iterator
+    if (!xs.isEmpty) {
+      s.append(xs.head)
+      xs.step()
+      while (!xs.isEmpty) {
+        s.append(", ").append(xs.head)
+        xs.step()
       }
     }
     s.append(')')

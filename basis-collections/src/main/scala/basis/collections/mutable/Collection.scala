@@ -15,6 +15,7 @@ package mutable
   * @groupprio  Classifying   -1
   */
 trait Collection[A]
-  extends Mutable
+  extends Any
+    with Mutable
     with Family[Collection[A]]
     with traversable.Collection[A]

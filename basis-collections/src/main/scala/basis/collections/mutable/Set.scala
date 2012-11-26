@@ -19,16 +19,17 @@ package mutable
   * @define collection  set
   */
 trait Set[A]
-  extends Mutable
+  extends Any
+    with Mutable
     with Family[Set[A]]
     with Container[A]
     with traversable.Set[A] {
   
   /** Adds the given element to this $collection.
     * @group Modifying */
-  def += (elem: A): this.type
+  def += (elem: A): Unit
   
   /** Removes the given element from this $collection.
     * @group Modifying */
-  def -= (elem: A): this.type
+  def -= (elem: A): Unit
 }

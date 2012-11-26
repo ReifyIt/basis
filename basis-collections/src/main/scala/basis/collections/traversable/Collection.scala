@@ -22,8 +22,9 @@ trait Collection[+A] extends Any with Family[Collection[A]] with Enumerator[A] {
     * @group Classifying */
   override def toString: String = {
     val s = new java.lang.StringBuilder(stringPrefix)
+    var e = true
     s.append('(')
-    foreach(new Collection.AddString(s, ", "))
+    foreach(x => (if (e) { e = false; s } else s.append(", ")).append(x))
     s.append(')')
     s.toString
   }
@@ -31,13 +32,4 @@ trait Collection[+A] extends Any with Family[Collection[A]] with Enumerator[A] {
   /** Returns a string that identifies this type of $collection.
     * @group Classifying */
   protected def stringPrefix: String = getClass.getSimpleName
-}
-
-private[collections] object Collection {
-  import scala.runtime.AbstractFunction1
-  
-  final class AddString[-A](s: java.lang.StringBuilder, separator: String) extends AbstractFunction1[A, Unit] {
-    private[this] var e: Boolean = false
-    override def apply(x: A): Unit = (if (!e) { e = true; s} else s.append(separator)).append(x)
-  }
 }

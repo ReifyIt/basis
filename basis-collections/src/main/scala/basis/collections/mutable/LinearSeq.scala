@@ -19,7 +19,8 @@ package mutable
   * @define collection  sequence
   */
 trait LinearSeq[A]
-  extends Equals
+  extends Any
+    with Equals
     with Mutable
     with Family[LinearSeq[A]]
     with Seq[A]

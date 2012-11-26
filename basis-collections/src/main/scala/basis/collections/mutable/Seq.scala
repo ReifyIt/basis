@@ -19,17 +19,9 @@ package mutable
   * @define collection  sequence
   */
 trait Seq[A]
-  extends Equals
+  extends Any
+    with Equals
     with Mutable
     with Family[Seq[A]]
     with Container[A]
-    with traversable.Seq[A] {
-  
-  /** Appends the given element to this $collection.
-    * @group Modifying */
-  def += (elem: A): this.type
-  
-  /** Prepends the given element to this $collection.
-    * @group Modifying */
-  def +=: (elem: A): this.type
-}
+    with traversable.Seq[A]

@@ -27,13 +27,13 @@ trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
   /** Returns the number of elements in this $collection.
     * @group Examining */
   def length: Int = {
-    var count = 0
-    var these = iterator
-    while (!these.isEmpty) {
-      count += 1
-      these.step()
+    var n = 0
+    var xs = iterator
+    while (!xs.isEmpty) {
+      n += 1
+      xs.step()
     }
-    count
+    n
   }
   
   /** Returns `true` if this $collection might equal another object, otherwise `false`.
@@ -44,14 +44,14 @@ trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
     * @group Classifying */
   override def equals(other: Any): Boolean = other match {
     case that: Seq[_] if that.canEqual(this) =>
-      val these = this.iterator
-      val those = that.iterator
-      while (!these.isEmpty && !those.isEmpty) {
-        if (these.head != those.head) return false
-        these.step()
-        those.step()
+      val xs = this.iterator
+      val ys = that.iterator
+      while (!xs.isEmpty && !ys.isEmpty) {
+        if (xs.head != ys.head) return false
+        xs.step()
+        ys.step()
       }
-      these.isEmpty && those.isEmpty
+      xs.isEmpty && ys.isEmpty
     case _ => false
   }
   
@@ -60,10 +60,10 @@ trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
   override def hashCode: Int = {
     import MurmurHash3._
     var h = 63537721
-    val these = iterator
-    while (!these.isEmpty) {
-      h = mix(h, these.head.##)
-      these.step()
+    val xs = iterator
+    while (!xs.isEmpty) {
+      h = mix(h, xs.head.##)
+      xs.step()
     }
     mash(h)
   }

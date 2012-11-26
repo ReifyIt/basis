@@ -24,31 +24,35 @@ trait IndexedSeq[+A] extends Any with Family[IndexedSeq[A]] with Seq[A] {
   
   override def isEmpty: Boolean = length == 0
   
-  override def iterator: Iterator[A] = new IndexedSeqIterator(this, 0, length)
+  override def iterator: Iterator[A] = new IndexedSeqIterator(this)
   
   protected override def foreach[U](f: A => U) {
     var i = 0
     val n = length
     while (i < n) {
-      f(apply(i))
+      f(this(i))
       i += 1
     }
   }
 }
 
 private[collections] final class IndexedSeqIterator[+A]
-    (xs: IndexedSeq[A], from: Int, until: Int)
+    (xs: IndexedSeq[A], private[this] var i: Int, n: Int)
   extends Iterator[A] {
   
-  private[this] var upper: Int = (0 max upper) min xs.length
-  private[this] var lower: Int = (0 max lower) min upper
-  private[this] var index: Int = lower
+  def this(xs: IndexedSeq[A]) = this(xs, 0, xs.length)
   
-  override def isEmpty: Boolean = index >= upper
+  override def isEmpty: Boolean = i >= n
   
-  override def head: A = if (isEmpty) Done.head else xs(index)
+  override def head: A = {
+    if (i < n) xs(i)
+    else Done.head
+  }
   
-  override def step(): Unit = if (isEmpty) Done.step() else index += 1
+  override def step() {
+    if (i < n) i += 1
+    else Done.step()
+  }
   
-  override def dup: Iterator[A] = new IndexedSeqIterator(xs, index, upper)
+  override def dup: Iterator[A] = new IndexedSeqIterator(xs, i, n)
 }

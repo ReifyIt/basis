@@ -19,7 +19,8 @@ package mutable
   * @define collection  sequence
   */
 trait IndexedSeq[A]
-  extends Equals
+  extends Any
+    with Equals
     with Mutable
     with Family[IndexedSeq[A]]
     with Seq[A]
@@ -27,5 +28,5 @@ trait IndexedSeq[A]
   
   /** Replaces the element at `index` with the given one.
     * @group Modifying */
-  def update(index: Int, elem: A): this.type
+  def update(index: Int, elem: A): Unit
 }
