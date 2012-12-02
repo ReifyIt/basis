@@ -11,7 +11,7 @@ import basis.collections._
 import basis.collections.traversable._
 import basis.sequential.strict._
 
-trait Strict {
+private[sequential] trait Strict {
   implicit final def StrictEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A, these.Parent] =
     macro Strict.StrictEnumeratorOps[A]
   
@@ -72,7 +72,7 @@ private[sequential] object Strict {
     Expr(New(CollectionOpsTag.tpe, these.tree))(CollectionOpsTag)
   }
   
-  private def ParentType[A : c.WeakTypeTag](c: Context)(these: c.Expr[Family[A]]): c.Type = {
+  private def ParentType(c: Context)(these: c.Expr[Family[_]]): c.Type = {
     import c.universe._
     val TheseType = these.tree.symbol match {
       case symbol: TermSymbol if symbol.isStable => singleType(NoPrefix, symbol)

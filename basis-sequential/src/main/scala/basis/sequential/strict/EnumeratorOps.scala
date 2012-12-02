@@ -91,7 +91,7 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @group  Filtering
     */
   def takeWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To = {
-    label(traverse(these)(new EnumeratorOps.TakeWhileInto(p, builder)))
+    flow(traverse(these)(new EnumeratorOps.TakeWhileInto(p, builder)))
     builder.state
   }
   
@@ -132,7 +132,7 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @group  Filtering
     */
   def take[To](upper: Int)(implicit builder: Builder[From, A, To]): To = {
-    label(traverse(these)(new EnumeratorOps.TakeInto(upper, builder)))
+    flow(traverse(these)(new EnumeratorOps.TakeInto(upper, builder)))
     builder.state
   }
   
@@ -146,7 +146,7 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @group  Filtering
     */
   def slice[To](lower: Int, upper: Int)(implicit builder: Builder[From, A, To]): To = {
-    label(traverse(these)(new EnumeratorOps.SliceInto(lower, upper, builder)))
+    flow(traverse(these)(new EnumeratorOps.SliceInto(lower, upper, builder)))
     builder.state
   }
   
@@ -192,7 +192,7 @@ private[strict] object EnumeratorOps {
   }
   
   final class TakeWhileInto[-A](p: A => Boolean, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = if (p(x)) builder += x else label.break()
+    override def apply(x: A): Unit = if (p(x)) builder += x else flow.break()
   }
   
   final class SpanInto[-A](p: A => Boolean, builder1: Builder[_, A, _], builder2: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
@@ -207,14 +207,14 @@ private[strict] object EnumeratorOps {
   
   final class TakeInto[-A](upper: Int, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
     private[this] var i = 0
-    override def apply(x: A): Unit = if (i < upper) { builder += x; i += 1 } else label.break()
+    override def apply(x: A): Unit = if (i < upper) { builder += x; i += 1 } else flow.break()
   }
   
   final class SliceInto[-A](lower: Int, upper: Int, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
     private[this] var l = 0 max lower
     private[this] var u = l max upper
     private[this] var i = 0
-    override def apply(x: A): Unit = if (i < u) { if (i >= l) builder += x; i += 1 } else label.break()
+    override def apply(x: A): Unit = if (i < u) { if (i >= l) builder += x; i += 1 } else flow.break()
   }
   
   final class AddInto[-A](builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {

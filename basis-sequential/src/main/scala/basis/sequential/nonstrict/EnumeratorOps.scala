@@ -190,7 +190,7 @@ private[nonstrict] object EnumeratorOps {
     extends Enumerator[A] {
     
     protected override def foreach[U](f: A => U) {
-      label(traverse(base)(x => if (p(x)) f(x) else label.break()))
+      flow(traverse(base)(x => if (p(x)) f(x) else flow.break()))
     }
   }
   
@@ -212,7 +212,7 @@ private[nonstrict] object EnumeratorOps {
     
     protected override def foreach[U](f: A => U) {
       var i = 0
-      label(traverse(base)(x => if (i < upper) { f(x); i += 1 } else label.break()))
+      flow(traverse(base)(x => if (i < upper) { f(x); i += 1 } else flow.break()))
     }
   }
   
@@ -226,7 +226,7 @@ private[nonstrict] object EnumeratorOps {
       var l = 0 max lower
       val u = l max upper
       var i = 0
-      if (l < u) label(traverse(base)(x => if (i < u) { if (i >= l) f(x); i += 1 } else label.break()))
+      if (l < u) flow(traverse(base)(x => if (i < u) { if (i >= l) f(x); i += 1 } else flow.break()))
     }
   }
   

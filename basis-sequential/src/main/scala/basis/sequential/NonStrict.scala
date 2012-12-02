@@ -11,7 +11,7 @@ import basis.collections._
 import basis.collections.traversable._
 import basis.sequential.nonstrict._
 
-trait NonStrict {
+private[sequential] trait NonStrict {
   implicit final def NonStrictEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A] =
     macro NonStrict.NonStrictEnumeratorOps[A]
   

@@ -8,7 +8,7 @@
 package basis
 
 package object sequential {
-  import basis.util.control._
+  import basis.control._
   
-  private[sequential] val label = new Label
+  private[sequential] val flow = new Flow
 }

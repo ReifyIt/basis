@@ -11,7 +11,7 @@ import basis.collections._
 import basis.collections.traversable._
 import basis.sequential.general._
 
-trait General {
+private[sequential] trait General {
   implicit final def GeneralEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A] =
     macro General.GeneralEnumeratorOps[A]
   
