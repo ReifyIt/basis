@@ -109,9 +109,15 @@ private[containers] final class ArraySetIterator[+A]
   
   override def isEmpty: Boolean = index >= slots.length
   
-  override def head: A = if (isEmpty) Done.head else slots(index).asInstanceOf[A]
+  override def head: A = {
+    if (!isEmpty) slots(index).asInstanceOf[A]
+    else throw new NoSuchElementException("Head of empty iterator.")
+  }
   
-  override def step(): Unit = if (isEmpty) Done.step() else index += 1
+  override def step() {
+    if (!isEmpty) index += 1
+    else throw new UnsupportedOperationException("Empty iterator step.")
+  }
   
   override def dup: Iterator[A] = new ArraySetIterator(slots, index)
 }

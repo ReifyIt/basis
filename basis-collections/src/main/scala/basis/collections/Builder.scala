@@ -7,7 +7,7 @@
 
 package basis.collections
 
-/** An object accumulator.
+/** An element accumulator.
   * 
   * @define builder   builder
   */

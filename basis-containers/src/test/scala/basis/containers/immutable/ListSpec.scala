@@ -10,6 +10,7 @@ package immutable
 
 import basis.collections._
 import basis.collections.traversable._
+import basis.sequential
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers

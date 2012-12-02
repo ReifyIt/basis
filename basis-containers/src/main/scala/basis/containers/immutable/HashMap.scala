@@ -431,7 +431,7 @@ private[containers] final class HashMapIterator[+A, +T](
           head
       }
       else if (depth > 0) { pop(); head }
-      else Done.head
+      else throw new NoSuchElementException("Head of empty iterator.")
     case node: ArrayMap[A, T] =>
       if (i < node.size) (node.keyAt(i), node.valueAt(i))
       else { pop(); head }
@@ -447,7 +447,7 @@ private[containers] final class HashMapIterator[+A, +T](
         leafMap >>>= 1
       }
       else if (depth > 0) { pop(); step() }
-      else Done.step()
+      else throw new UnsupportedOperationException("Empty iterator step.")
     case node: ArrayMap[A, T] =>
       if (i < node.size) i += 1
       else { pop(); step() }

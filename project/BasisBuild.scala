@@ -21,6 +21,7 @@ object BasisBuild extends Build {
           BasisContainers,
           BasisMath,
           BasisMemory,
+          BasisSequential,
           BasisText,
           BasisUtil),
     aggregate    =
@@ -28,6 +29,7 @@ object BasisBuild extends Build {
           BasisContainers,
           BasisMath,
           BasisMemory,
+          BasisSequential,
           BasisText,
           BasisUtil)
   )
@@ -45,6 +47,7 @@ object BasisBuild extends Build {
     settings     = commonSettings,
     dependencies =
       Seq(BasisCollections % "compile->compile;test->test",
+          BasisSequential % "test->test",
           BasisMemory,
           BasisUtil)
   )
@@ -59,6 +62,15 @@ object BasisBuild extends Build {
     id           = "basis-memory",
     base         = file("basis-memory"),
     settings     = commonSettings
+  )
+  
+  lazy val BasisSequential = Project(
+    id           = "basis-sequential",
+    base         = file("basis-sequential"),
+    settings     = commonSettings,
+    dependencies =
+      Seq(BasisCollections % "compile->compile;test->test",
+          BasisUtil)
   )
   
   lazy val BasisText = Project(
@@ -98,7 +110,7 @@ object BasisBuild extends Build {
   )
   
   lazy val scalaSettings = Seq(
-    scalaVersion   := "2.10.0-RC2",
+    scalaVersion   := "2.10.0-RC3",
     scalacOptions ++= Seq("-language:_", "-Yno-predef")
   )
   
@@ -114,8 +126,8 @@ object BasisBuild extends Build {
   
   lazy val compileSettings = Seq(
     scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC2" % "provided",
-    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC2" % "1.8" % "test"
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC3" % "provided",
+    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC3" % "1.8-B1" % "test"
   )
   
   lazy val publishSettings = Seq(

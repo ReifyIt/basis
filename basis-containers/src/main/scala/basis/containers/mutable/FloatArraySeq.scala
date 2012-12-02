@@ -42,12 +42,12 @@ private[containers] final class FloatArraySeqIterator
   
   override def head: Float = {
     if (i < n) array(i)
-    else Done.head
+    else throw new NoSuchElementException("Head of empty iterator.")
   }
   
   override def step() {
     if (i < n) i += 1
-    else Done.step()
+    else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
   override def dup: Iterator[Float] = new FloatArraySeqIterator(array, i, n)

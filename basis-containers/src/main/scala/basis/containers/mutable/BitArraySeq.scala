@@ -42,12 +42,12 @@ private[containers] final class BitArraySeqIterator
   
   override def head: Boolean = {
     if (i < n) ((words(i >> 5) >>> (31 - (i & 0x1F))) & 1) == 1
-    else Done.head
+    else throw new NoSuchElementException("Head of empty iterator.")
   }
   
   override def step() {
     if (i < n) i += 1
-    else Done.step()
+    else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
   override def dup: Iterator[Boolean] = new BitArraySeqIterator(words, i, n)

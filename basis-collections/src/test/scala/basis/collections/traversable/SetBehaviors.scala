@@ -8,13 +8,15 @@
 package basis.collections
 package traversable
 
+import basis.collections.generic._
+
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 trait SetBehaviors extends ContainerBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def TraversableSet[CC[A] <: Set[A]](CC: generic.BuilderFactory[CC]) {
+  def TraversableSet[CC[A] <: Set[A]](CC: BuilderFactory[CC]) {
     describe(s"An empty unique $CC") {
       it("should known that it's empty") {
         val xs = CC[Any]()

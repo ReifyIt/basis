@@ -51,9 +51,15 @@ private[collections] final class LinearSeqIterator[+A]
   
   override def isEmpty: Boolean = xs.isEmpty
   
-  override def head: A = if (isEmpty) Done.head else xs.head
+  override def head: A = {
+    if (!xs.isEmpty) xs.head
+    else throw new NoSuchElementException("Head of empty iterator.")
+  }
   
-  override def step(): Unit = if (isEmpty) Done.step() else xs = xs.tail
+  override def step() {
+    if (!xs.isEmpty) xs = xs.tail
+    else throw new UnsupportedOperationException("Empty iterator step.")
+  }
   
   override def dup: Iterator[A] = new LinearSeqIterator(xs)
 }

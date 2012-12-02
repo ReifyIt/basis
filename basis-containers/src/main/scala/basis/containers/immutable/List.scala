@@ -78,10 +78,10 @@ object Nil extends List[Nothing] {
   override def isEmpty: Boolean = true
   
   override def head: Nothing =
-    throw new scala.NoSuchElementException("head of empty list")
+    throw new NoSuchElementException("Head of empty list,")
   
   override def tail: List[Nothing] =
-    throw new java.lang.UnsupportedOperationException("tail of empty list")
+    throw new UnsupportedOperationException("Tail of empty list.")
 }
 
 object :: {

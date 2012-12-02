@@ -8,6 +8,8 @@
 package basis.collections
 package traversable
 
+import basis.collections.generic._
+
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
@@ -15,7 +17,7 @@ trait MapBehaviors extends ContainerBehaviors { this: FunSpec =>
   import ShouldMatchers._
   import basis.util.ArrowOps
   
-  def TraversableMap[CC[A, T] <: Map[A, T]](CC: generic.MapFactory[CC]) {
+  def TraversableMap[CC[A, T] <: Map[A, T]](CC: MapFactory[CC]) {
     describe(s"An empty associative $CC") {
       it("should known that it's empty") {
         val xs = CC[Any, Any]()

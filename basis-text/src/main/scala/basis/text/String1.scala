@@ -196,6 +196,25 @@ object String1 {
   implicit def Builder: StringBuilder[Any, String1] = new String1Builder
 }
 
+private[text] final class String1Iterator
+    (string: String1, private[this] var index: Int)
+  extends Iterator[Int] {
+  
+  override def isEmpty: Boolean = index >= string.size
+  
+  override def head: Int = {
+    if (!isEmpty) string(index)
+    else throw new NoSuchElementException("Head of empty iterator.")
+  }
+  
+  override def step() {
+    if (!isEmpty) index = string.nextIndex(index)
+    else throw new UnsupportedOperationException("Empty iterator step.")
+  }
+  
+  override def dup: Iterator[Int] = new String1Iterator(string, index)
+}
+
 /** A builder for 8-bit Unicode strings in the UTF-8 encoding form.
   * Produces only well-formed code unit sequences. */
 private[text] final class String1Builder extends StringBuilder[Any, String1] {
@@ -282,17 +301,4 @@ private[text] final class String1Builder extends StringBuilder[Any, String1] {
     aliased = true
     size = 0
   }
-}
-
-private[text] final class String1Iterator
-    (string: String1, private[this] var index: Int)
-  extends Iterator[Int] {
-  
-  override def isEmpty: Boolean = index >= string.size
-  
-  override def head: Int = if (isEmpty) Done.head else string(index)
-  
-  override def step(): Unit = if (isEmpty) Done.step() else index = string.nextIndex(index)
-  
-  override def dup: Iterator[Int] = new String1Iterator(string, index)
 }

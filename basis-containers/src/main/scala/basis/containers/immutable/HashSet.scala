@@ -349,7 +349,7 @@ private[containers] final class HashSetIterator[+A](
           head
       }
       else if (depth > 0) { pop(); head }
-      else Done.head
+      else throw new NoSuchElementException("Head of empty iterator.")
     case node: ArraySet[A] =>
       if (i < node.size) node.elementAt(i)
       else { pop(); head }
@@ -364,7 +364,7 @@ private[containers] final class HashSetIterator[+A](
         leafMap >>>= 1
       }
       else if (depth > 0) { pop(); step() }
-      else Done.step()
+      else throw new UnsupportedOperationException("Empty iterator step.")
     case node: ArraySet[A] =>
       if (i < node.size) i += 1
       else { pop(); step() }

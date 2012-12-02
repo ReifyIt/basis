@@ -258,7 +258,7 @@ private[containers] final class VectorIterator[+A](
   
   override def head: A = {
     if (index < length) node1(index & 0x1F).asInstanceOf[A]
-    else Done.head
+    else throw new NoSuchElementException("Head of empty iterator.")
   }
   
   override def step() {
@@ -271,7 +271,7 @@ private[containers] final class VectorIterator[+A](
       if (diff >= (1 << 10)) node2 = node3(index >>> 10 & 0x1F)
       if (diff >= (1 <<  5)) node1 = node2(index >>>  5 & 0x1F)
     }
-    else Done.step()
+    else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
   override def dup: Iterator[A] =

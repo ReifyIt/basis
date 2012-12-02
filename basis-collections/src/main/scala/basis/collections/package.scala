@@ -7,13 +7,9 @@
 
 package basis
 
-import basis.util.control._
-
 package object collections {
   /** Applies a function to each element of an enumerator by invoking its
     * protected `foreach` method. */
   def traverse[A, U](xs: Enumerator[A])(f: A => U): Unit =
     Enumerator.traverse[A, U](xs)(f)
-  
-  private[collections] val label = new Label
 }

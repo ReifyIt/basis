@@ -8,7 +8,7 @@
 package basis.util
 
 /** Infix arrow (-> and →) associators. */
-trait ArrowOps[A] extends Any {
+final class ArrowOps[+A] {
   def -> [B](right: B): (A, B) = macro ArrowMacros.->[A, B]
   
   def → [B](right: B): (A, B) = macro ArrowMacros.->[A, B]
@@ -18,12 +18,11 @@ private[util] object ArrowMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[A] = {
+  def -> [A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(right: c.Expr[B]): c.Expr[(A, B)] = {
+    import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
     val Apply(_, left :: Nil) = c.prefix.tree
-    c.Expr(c.typeCheck(left, c.weakTypeOf[A]))(c.weakTypeTag[A])
+    val PairType = appliedType(mirror.staticClass("scala.Tuple2").toType, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
+    Expr(New(PairType, left, right.tree))(WeakTypeTag(PairType))
   }
-  
-  def -> [A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(right: c.Expr[B]): c.Expr[(A, B)] =
-    c.universe.reify((unApply[A](c).splice, right.splice))
 }

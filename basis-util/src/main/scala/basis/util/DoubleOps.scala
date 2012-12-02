@@ -8,12 +8,12 @@
 package basis.util
 
 /** Supplemental operations on `Double` values. */
-trait DoubleOps extends Any {
+final class DoubleOps {
   def abs: Double = macro DoubleMacros.abs
   
-  def min(that: Double): Double = macro DoubleMacros.min
+  def min(y: Double): Double = macro DoubleMacros.min
   
-  def max(that: Double): Double = macro DoubleMacros.max
+  def max(y: Double): Double = macro DoubleMacros.max
   
   def sqrt: Double = macro DoubleMacros.sqrt
   
@@ -24,24 +24,43 @@ private[util] object DoubleMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def unApply(c: Context): c.Expr[Double] = {
+  def abs(c: Context): c.Expr[Double] = {
+    import c.{Expr, prefix, TypeTag}
     import c.universe._
-    val Apply(_, value :: Nil) = c.prefix.tree
-    c.Expr(c.typeCheck(value, definitions.DoubleTpe))(c.TypeTag.Double)
+    val Apply(_, x :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "abs"), x :: Nil))(TypeTag.Double)
   }
   
-  def abs(c: Context): c.Expr[Double] =
-    c.universe.reify(java.lang.Math.abs(unApply(c).splice))
+  def min(c: Context)(y: c.Expr[Double]): c.Expr[Double] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "min"), x :: y.tree :: Nil))(TypeTag.Double)
+  }
   
-  def max(c: Context)(that: c.Expr[Double]): c.Expr[Double] =
-    c.universe.reify(java.lang.Math.max(unApply(c).splice, that.splice))
+  def max(c: Context)(y: c.Expr[Double]): c.Expr[Double] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "max"), x :: y.tree :: Nil))(TypeTag.Double)
+  }
   
-  def min(c: Context)(that: c.Expr[Double]): c.Expr[Double] =
-    c.universe.reify(java.lang.Math.min(unApply(c).splice, that.splice))
+  def sqrt(c: Context): c.Expr[Double] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "sqrt"), x :: Nil))(TypeTag.Double)
+  }
   
-  def sqrt(c: Context): c.Expr[Double] =
-    c.universe.reify(java.lang.Math.sqrt(unApply(c).splice))
-  
-  def toLongBits(c: Context): c.Expr[Long] =
-    c.universe.reify(java.lang.Double.doubleToLongBits(unApply(c).splice))
+  def toLongBits(c: Context): c.Expr[Long] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Double = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double")
+    Expr(Apply(Select(Double, "doubleToLongBits"), x :: Nil))(TypeTag.Long)
+  }
 }

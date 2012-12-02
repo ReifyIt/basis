@@ -8,7 +8,7 @@
 package basis.collections
 package generic
 
-import traversable._
+import basis.collections.traversable._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers

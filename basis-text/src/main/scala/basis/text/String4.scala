@@ -71,6 +71,25 @@ object String4 {
   implicit def Builder: StringBuilder[Any, String4] = new String4Builder
 }
 
+private[text] final class String4Iterator
+    (string: String4, private[this] var index: Int)
+  extends Iterator[Int] {
+  
+  override def isEmpty: Boolean = index >= string.length
+  
+  override def head: Int = {
+    if (!isEmpty) string(index)
+    else throw new NoSuchElementException("Head of empty iterator.")
+  }
+  
+  override def step() {
+    if (!isEmpty) index += 1
+    else throw new UnsupportedOperationException("Empty iterator step.")
+  }
+  
+  override def dup: Iterator[Int] = new String4Iterator(string, index)
+}
+
 /** A builder for 32-bit Unicode strings in the UTF-32 encoding form.
   * Produces only well-formed code unit sequences. */
 private[text] final class String4Builder extends StringBuilder[Any, String4] {
@@ -134,17 +153,4 @@ private[text] final class String4Builder extends StringBuilder[Any, String4] {
     aliased = true
     size = 0
   }
-}
-
-private[text] final class String4Iterator
-    (string: String4, private[this] var index: Int)
-  extends Iterator[Int] {
-  
-  override def isEmpty: Boolean = index >= string.length
-  
-  override def head: Int = if (isEmpty) Done.head else string(index)
-  
-  override def step(): Unit = if (isEmpty) Done.step() else index += 1
-  
-  override def dup: Iterator[Int] = new String4Iterator(string, index)
 }

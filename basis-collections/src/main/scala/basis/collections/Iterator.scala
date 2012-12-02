@@ -60,20 +60,3 @@ trait Iterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   protected override def foreach[U](f: A => U): Unit =
     while (!isEmpty) { f(head); step() }
 }
-
-/** An empty iterator. */
-object Done extends Iterator[Nothing] {
-  override def isDone: Boolean = true
-  
-  override def isEmpty: Boolean = true
-  
-  override def head: Nothing =
-    throw new NoSuchElementException("Head of empty iterator.")
-  
-  override def step(): Unit =
-    throw new UnsupportedOperationException("Empty iterator step.")
-  
-  override def dup: Done.type = this
-  
-  protected override def foreach[U](f: Nothing => U): Unit = ()
-}

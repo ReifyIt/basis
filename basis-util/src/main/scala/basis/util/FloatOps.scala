@@ -8,12 +8,12 @@
 package basis.util
 
 /** Supplemental operations on `Float` values. */
-trait FloatOps extends Any {
+final class FloatOps extends {
   def abs: Float = macro FloatMacros.abs
   
-  def min(that: Float): Float = macro FloatMacros.min
+  def min(y: Float): Float = macro FloatMacros.min
   
-  def max(that: Float): Float = macro FloatMacros.max
+  def max(y: Float): Float = macro FloatMacros.max
   
   def toIntBits: Int = macro FloatMacros.toIntBits
 }
@@ -22,21 +22,35 @@ private[util] object FloatMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def unApply(c: Context): c.Expr[Float] = {
+  def abs(c: Context): c.Expr[Float] = {
+    import c.{Expr, prefix, TypeTag}
     import c.universe._
-    val Apply(_, value :: Nil) = c.prefix.tree
-    c.Expr(c.typeCheck(value, definitions.FloatTpe))(c.TypeTag.Float)
+    val Apply(_, x :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "abs"), x :: Nil))(TypeTag.Float)
   }
   
-  def abs(c: Context): c.Expr[Float] =
-    c.universe.reify(java.lang.Math.abs(unApply(c).splice))
+  def min(c: Context)(y: c.Expr[Float]): c.Expr[Float] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "min"), x :: y.tree :: Nil))(TypeTag.Float)
+  }
   
-  def max(c: Context)(that: c.Expr[Float]): c.Expr[Float] =
-    c.universe.reify(java.lang.Math.max(unApply(c).splice, that.splice))
+  def max(c: Context)(y: c.Expr[Float]): c.Expr[Float] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "max"), x :: y.tree :: Nil))(TypeTag.Float)
+  }
   
-  def min(c: Context)(that: c.Expr[Float]): c.Expr[Float] =
-    c.universe.reify(java.lang.Math.min(unApply(c).splice, that.splice))
-  
-  def toIntBits(c: Context): c.Expr[Int] =
-    c.universe.reify(java.lang.Float.floatToIntBits(unApply(c).splice))
+  def toIntBits(c: Context): c.Expr[Int] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Float = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float")
+    Expr(Apply(Select(Float, "floatToIntBits"), x :: Nil))(TypeTag.Int)
+  }
 }

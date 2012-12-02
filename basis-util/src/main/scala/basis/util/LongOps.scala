@@ -8,12 +8,12 @@
 package basis.util
 
 /** Supplemental operations on `Long` values. */
-trait LongOps extends Any {
+final class LongOps {
   def abs: Long = macro LongMacros.abs
   
-  def min(that: Long): Long = macro LongMacros.min
+  def min(b: Long): Long = macro LongMacros.min
   
-  def max(that: Long): Long = macro LongMacros.max
+  def max(b: Long): Long = macro LongMacros.max
   
   def signum: Int = macro LongMacros.signum
   
@@ -30,33 +30,67 @@ private[util] object LongMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def unApply(c: Context): c.Expr[Long] = {
+  def abs(c: Context): c.Expr[Long] = {
+    import c.{Expr, prefix, TypeTag}
     import c.universe._
-    val Apply(_, value :: Nil) = c.prefix.tree
-    c.Expr(c.typeCheck(value, definitions.LongTpe))(c.TypeTag.Long)
+    val Apply(_, a :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "abs"), a :: Nil))(TypeTag.Long)
   }
   
-  def abs(c: Context): c.Expr[Long] =
-    c.universe.reify(java.lang.Math.abs(unApply(c).splice))
+  def min(c: Context)(b: c.Expr[Long]): c.Expr[Long] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, a :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "min"), a :: b.tree :: Nil))(TypeTag.Long)
+  }
   
-  def max(c: Context)(that: c.Expr[Long]): c.Expr[Long] =
-    c.universe.reify(java.lang.Math.max(unApply(c).splice, that.splice))
+  def max(c: Context)(b: c.Expr[Long]): c.Expr[Long] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, a :: Nil) = prefix.tree
+    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
+    Expr(Apply(Select(Math, "max"), a :: b.tree :: Nil))(TypeTag.Long)
+  }
   
-  def min(c: Context)(that: c.Expr[Long]): c.Expr[Long] =
-    c.universe.reify(java.lang.Math.min(unApply(c).splice, that.splice))
+  def signum(c: Context): c.Expr[Int] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, a :: Nil) = prefix.tree
+    val Long = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long")
+    Expr(Apply(Select(Long, "signum"), a :: Nil))(TypeTag.Int)
+  }
   
-  def signum(c: Context): c.Expr[Int] =
-    c.universe.reify(java.lang.Long.signum(unApply(c).splice))
+  def countSetBits(c: Context): c.Expr[Int] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, a :: Nil) = prefix.tree
+    val Long = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long")
+    Expr(Apply(Select(Long, "bitCount"), a :: Nil))(TypeTag.Int)
+  }
   
-  def countSetBits(c: Context): c.Expr[Int] =
-    c.universe.reify(java.lang.Long.bitCount(unApply(c).splice))
+  def countLeadingZeros(c: Context): c.Expr[Int] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, a :: Nil) = prefix.tree
+    val Long = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long")
+    Expr(Apply(Select(Long, "numberOfLeadingZeros"), a :: Nil))(TypeTag.Int)
+  }
   
-  def countLeadingZeros(c: Context): c.Expr[Int] =
-    c.universe.reify(java.lang.Long.numberOfLeadingZeros(unApply(c).splice))
+  def countTrailingZeros(c: Context): c.Expr[Int] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, a :: Nil) = prefix.tree
+    val Long = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long")
+    Expr(Apply(Select(Long, "numberOfTrailingZeros"), a :: Nil))(TypeTag.Int)
+  }
   
-  def countTrailingZeros(c: Context): c.Expr[Int] =
-    c.universe.reify(java.lang.Long.numberOfTrailingZeros(unApply(c).splice))
-  
-  def toDoubleBits(c: Context): c.Expr[Double] =
-    c.universe.reify(java.lang.Double.longBitsToDouble(unApply(c).splice))
+  def toDoubleBits(c: Context): c.Expr[Double] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, a :: Nil) = prefix.tree
+    val Double = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double")
+    Expr(Apply(Select(Double, "longBitsToDouble"), a :: Nil))(TypeTag.Double)
+  }
 }

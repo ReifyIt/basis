@@ -8,13 +8,15 @@
 package basis.collections
 package traversable
 
+import basis.collections.generic._
+
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
 trait ContainerBehaviors extends CollectionBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def TraversableContainer[CC[A] <: Container[A]](CC: generic.BuilderFactory[CC]) {
+  def TraversableContainer[CC[A] <: Container[A]](CC: BuilderFactory[CC]) {
     describe(s"An empty $CC container's iterator") {
       it("should be empty") {
         val xs = CC[Any]()
@@ -33,7 +35,7 @@ trait ContainerBehaviors extends CollectionBehaviors { this: FunSpec =>
     }
     
     describe(s"A unary $CC container's iterator") {
-       it("should step over its element") {
+      it("should step over its element") {
         val iter = CC(null).iterator
         withClue("1st state isEmpty") (iter.isEmpty should be (false))
         iter.step()

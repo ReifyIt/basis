@@ -137,11 +137,14 @@ private[containers] final class ArrayMapIterator[+A, +T]
   override def isEmpty: Boolean = index >= slots.length
   
   override def head: (A, T) = {
-    if (isEmpty) Done.head
-    else (slots(index).asInstanceOf[A], slots(index + 1).asInstanceOf[T])
+    if (!isEmpty) (slots(index).asInstanceOf[A], slots(index + 1).asInstanceOf[T])
+    else throw new NoSuchElementException("Head of empty iterator.")
   }
   
-  override def step(): Unit = if (isEmpty) Done.step() else index += 2
+  override def step() {
+    if (!isEmpty) index += 2
+    else throw new UnsupportedOperationException("Empty iterator step.")
+  }
   
   override def dup: Iterator[(A, T)] = new ArrayMapIterator(slots, index)
 }
