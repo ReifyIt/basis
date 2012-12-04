@@ -8,8 +8,6 @@
 package basis.collections
 package immutable
 
-import scala.annotation.unchecked.uncheckedVariance
-
 /** An immutable set of (key, value) pairs with unique keys.
   * 
   * @groupprio  Examining     -5
@@ -20,12 +18,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * 
   * @define collection  map
   */
-trait Map[+A, +T]
-  extends Any
-    with Immutable
-    with Family[Map[A, T]]
-    with Container[(A, T)]
-    with traversable.Map[A, T] {
+trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] with traversable.Map[A, T] {
+  import scala.annotation.unchecked.uncheckedVariance
   
   /** Returns a copy of this $collection with the given value associated with the given key.
     * @group Updating */

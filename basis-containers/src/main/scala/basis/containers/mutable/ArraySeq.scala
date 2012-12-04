@@ -25,10 +25,7 @@ import basis.util._
   * @define collection  array sequence
   */
 abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
-  extends Equals
-    with Mutable
-    with Family[ArraySeq[A]]
-    with mutable.IndexedSeq[A] {
+  extends Equals with Family[ArraySeq[A]] with mutable.IndexedSeq[A] {
   
   override def apply(index: Int): A
   

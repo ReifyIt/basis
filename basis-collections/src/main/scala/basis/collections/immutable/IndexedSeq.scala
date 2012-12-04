@@ -18,14 +18,7 @@ package immutable
   * 
   * @define collection  sequence
   */
-trait IndexedSeq[+A]
-  extends Any
-    with Equals
-    with Immutable
-    with Family[IndexedSeq[A]]
-    with Seq[A]
-    with traversable.IndexedSeq[A] {
-  
+trait IndexedSeq[+A] extends Any with Equals with Family[IndexedSeq[A]] with Seq[A] with traversable.IndexedSeq[A] {
   /** Returns a copy of this $collection with the given element at the given index.
     * @group Updating */
   def update[B >: A](index: Int, elem: B): IndexedSeq[B]

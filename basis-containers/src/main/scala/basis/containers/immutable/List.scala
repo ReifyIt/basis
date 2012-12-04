@@ -13,18 +13,13 @@ import basis.collections.generic._
 import basis.collections.traversable._
 import basis.util._
 
-import scala.annotation.tailrec
-
 /** An immutable singly linked list.
   * 
   * @define collection  list
   */
-sealed abstract class List[+A]
-  extends Equals
-    with Immutable
-    with Family[List[A]]
-    with immutable.LinearSeq[A] {
-  
+sealed abstract class List[+A] extends Equals with Family[List[A]] with immutable.LinearSeq[A] {
+  import scala.annotation.tailrec
+
   override def tail: List[A]
   
   @tailrec final def drop(lower: Int): List[A] =

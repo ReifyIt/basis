@@ -16,8 +16,4 @@ package immutable
   * 
   * @define collection  collection
   */
-trait Collection[+A]
-  extends Any
-    with Immutable
-    with Family[Collection[A]]
-    with traversable.Collection[A]
+trait Collection[+A] extends Any with Family[Collection[A]] with traversable.Collection[A]

@@ -16,9 +16,7 @@ import basis.util._
 import scala.annotation.unchecked.uncheckedVariance
 
 final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
-  extends Immutable
-    with Family[ArrayMap[A, T]]
-    with immutable.Map[A, T] {
+  extends Family[ArrayMap[A, T]] with immutable.Map[A, T] {
   
   override def isEmpty: Boolean = slots.length == 0
   

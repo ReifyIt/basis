@@ -18,13 +18,7 @@ package mutable
   * 
   * @define collection  set
   */
-trait Set[A]
-  extends Any
-    with Mutable
-    with Family[Set[A]]
-    with Container[A]
-    with traversable.Set[A] {
-  
+trait Set[A] extends Any with Family[Set[A]] with Container[A] with traversable.Set[A] {
   /** Adds the given element to this $collection.
     * @group Modifying */
   def += (elem: A): Unit

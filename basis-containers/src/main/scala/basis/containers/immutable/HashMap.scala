@@ -20,9 +20,7 @@ final class HashMap[+A, +T] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Immutable
-    with Family[HashMap[A, T]]
-    with immutable.Map[A, T] {
+  extends Family[HashMap[A, T]] with immutable.Map[A, T] {
   
   import HashMap.{VOID, LEAF, TREE, KNOT}
   

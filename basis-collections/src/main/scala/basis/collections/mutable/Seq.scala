@@ -18,10 +18,4 @@ package mutable
   * 
   * @define collection  sequence
   */
-trait Seq[A]
-  extends Any
-    with Equals
-    with Mutable
-    with Family[Seq[A]]
-    with Container[A]
-    with traversable.Seq[A]
+trait Seq[A] extends Any with Equals with Family[Seq[A]] with Container[A] with traversable.Seq[A]

@@ -8,8 +8,6 @@
 package basis.collections
 package immutable
 
-import scala.annotation.unchecked.uncheckedVariance
-
 /** An immutable set of elements.
   * 
   * @groupprio  Examining     -5
@@ -20,12 +18,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * 
   * @define collection  set
   */
-trait Set[+A]
-  extends Any
-    with Immutable
-    with Family[Set[A]]
-    with Container[A]
-    with traversable.Set[A] {
+trait Set[+A] extends Any with Family[Set[A]] with Container[A] with traversable.Set[A] {
+  import scala.annotation.unchecked.uncheckedVariance
   
   /** Returns a copy of this $collection containing the given element.
     * @group Updating */

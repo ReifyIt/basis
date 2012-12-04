@@ -18,14 +18,7 @@ package immutable
   * 
   * @define collection  sequence
   */
-trait Seq[+A]
-  extends Any
-    with Equals
-    with Immutable
-    with Family[Seq[A]]
-    with Container[A]
-    with traversable.Seq[A] {
-  
+trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] with traversable.Seq[A] {
   /** Returns a copy of this $collection with the given element appended.
     * @group Updating */
   def :+ [B >: A](elem: B): Seq[B]

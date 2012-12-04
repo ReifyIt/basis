@@ -18,14 +18,7 @@ package mutable
   * 
   * @define collection  sequence
   */
-trait IndexedSeq[A]
-  extends Any
-    with Equals
-    with Mutable
-    with Family[IndexedSeq[A]]
-    with Seq[A]
-    with traversable.IndexedSeq[A] {
-  
+trait IndexedSeq[A] extends Any with Equals with Family[IndexedSeq[A]] with Seq[A] with traversable.IndexedSeq[A] {
   /** Replaces the element at `index` with the given one.
     * @group Modifying */
   def update(index: Int, elem: A): Unit

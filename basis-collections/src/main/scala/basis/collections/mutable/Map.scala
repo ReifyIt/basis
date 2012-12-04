@@ -18,13 +18,7 @@ package mutable
   * 
   * @define collection  map
   */
-trait Map[A, T]
-  extends Any
-    with Mutable
-    with Family[Map[A, T]]
-    with Container[(A, T)]
-    with traversable.Map[A, T] {
-  
+trait Map[A, T] extends Any with Family[Map[A, T]] with Container[(A, T)] with traversable.Map[A, T] {
   /** Adds an association from the given value to the given key.
     * @group Modifying */
   def += (key: A, value: T): Unit

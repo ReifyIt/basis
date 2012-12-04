@@ -16,9 +16,7 @@ import basis.util._
 import scala.annotation.unchecked.uncheckedVariance
 
 final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
-  extends Immutable
-    with Family[ArraySet[A]]
-    with immutable.Set[A] {
+  extends Family[ArraySet[A]] with immutable.Set[A] {
   
   override def isEmpty: Boolean = slots.length == 0
   

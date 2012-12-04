@@ -18,10 +18,4 @@ package immutable
   * 
   * @define collection  sequence
   */
-trait LinearSeq[+A]
-  extends Any
-    with Equals
-    with Immutable
-    with Family[LinearSeq[A]]
-    with Seq[A]
-    with traversable.LinearSeq[A]
+trait LinearSeq[+A] extends Any with Equals with Family[LinearSeq[A]] with Seq[A] with traversable.LinearSeq[A]

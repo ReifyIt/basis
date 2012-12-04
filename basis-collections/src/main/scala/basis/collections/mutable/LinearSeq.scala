@@ -18,14 +18,7 @@ package mutable
   * 
   * @define collection  sequence
   */
-trait LinearSeq[A]
-  extends Any
-    with Equals
-    with Mutable
-    with Family[LinearSeq[A]]
-    with Seq[A]
-    with traversable.LinearSeq[A] {
-  
+trait LinearSeq[A] extends Any with Equals with Family[LinearSeq[A]] with Seq[A] with traversable.LinearSeq[A] {
   /** Sets the first element of this non-empty $collection.
     * @group Modifying */
   def head_= (elem: A): Unit

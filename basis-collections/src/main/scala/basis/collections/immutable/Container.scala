@@ -17,9 +17,4 @@ package immutable
   * 
   * @define collection  container
   */
-trait Container[+A]
-  extends Any
-    with Immutable
-    with Family[Container[A]]
-    with Collection[A]
-    with traversable.Container[A]
+trait Container[+A] extends Any with Family[Container[A]] with Collection[A] with traversable.Container[A]

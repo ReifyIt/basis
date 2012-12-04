@@ -17,9 +17,4 @@ package mutable
   * 
   * @define collection  container
   */
-trait Container[A]
-  extends Any
-    with Mutable
-    with Family[Container[A]]
-    with Collection[A]
-    with traversable.Container[A]
+trait Container[A] extends Any with Family[Container[A]] with Collection[A] with traversable.Container[A]
