@@ -53,7 +53,9 @@ private[containers] final class ShortArraySeqIterator
   override def dup: Iterator[Short] = new ShortArraySeqIterator(array, i, n)
 }
 
-private[containers] final class ShortArraySeqBuilder extends Builder[Any, Short, ArraySeq[Short]] {
+private[containers] final class ShortArraySeqBuilder extends Builder[Any, Short] {
+  override type State = ArraySeq[Short]
+  
   private[this] var array: Array[Short] = _
   
   private[this] var aliased: Boolean = true

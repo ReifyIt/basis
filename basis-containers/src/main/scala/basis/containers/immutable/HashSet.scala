@@ -240,7 +240,7 @@ final class HashSet[+A] private[containers] (
 object HashSet extends SetFactory[HashSet] {
   val empty: HashSet[Nothing] = new HashSet(0, 0, new Array[AnyRef](0))
   
-  implicit override def Builder[A]: Builder[Any, A, HashSet[A]] = new HashSetBuilder
+  implicit override def Builder[A]: Builder[Any, A] { type State = HashSet[A] } = new HashSetBuilder
   
   override def toString: String = "HashSet"
   
@@ -374,7 +374,9 @@ private[containers] final class HashSetIterator[+A](
     new HashSetIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
-private[containers] final class HashSetBuilder[A] extends Builder[Any, A, HashSet[A]] {
+private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
+  override type State = HashSet[A]
+  
   private[this] var set: HashSet[A] = HashSet.empty
   
   override def += (elem: A): this.type = {

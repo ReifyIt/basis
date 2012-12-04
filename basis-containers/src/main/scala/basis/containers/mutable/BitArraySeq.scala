@@ -53,7 +53,9 @@ private[containers] final class BitArraySeqIterator
   override def dup: Iterator[Boolean] = new BitArraySeqIterator(words, i, n)
 }
 
-private[containers] final class BitArraySeqBuilder extends Builder[Any, Boolean, ArraySeq[Boolean]] {
+private[containers] final class BitArraySeqBuilder extends Builder[Any, Boolean] {
+  override type State = ArraySeq[Boolean]
+  
   private[this] var words: Array[Int] = _
   
   private[this] var aliased: Boolean = true

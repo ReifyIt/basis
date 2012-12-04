@@ -26,8 +26,8 @@ final class SeqOps[+A, +From] {
     * @return the accumulated elements filtered and mapped by `q`.
     * @group  Mapping
     */
-  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[From, B, To]): To =
-    macro ContainerOps.collect[A, B, To]
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State =
+    macro ContainerOps.collect[A, B]
   
   /** Returns the applications of a function to each element in this sequence.
     * 
@@ -36,8 +36,8 @@ final class SeqOps[+A, +From] {
     * @return the accumulated elements mapped by `f`.
     * @group  Mapping
     */
-  def map[B, To](f: A => B)(implicit builder: Builder[From, B, To]): To =
-    macro ContainerOps.map[A, B, To]
+  def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State =
+    macro ContainerOps.map[A, B]
   
   /** Returns the concatenation of all elements returned by a function applied
     * to each element in this sequence.
@@ -47,8 +47,8 @@ final class SeqOps[+A, +From] {
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[From, B, To]): To =
-    macro ContainerOps.flatMap[A, B, To]
+  def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+    macro ContainerOps.flatMap[A, B]
   
   /** Returns all elements in this sequence that satisfy a predicate.
     * 
@@ -57,8 +57,8 @@ final class SeqOps[+A, +From] {
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
-    macro ContainerOps.filter[A, To]
+  def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+    macro ContainerOps.filter[A]
   
   /** Returns all elements following the longest prefix of this sequence
     * for which each element satisfies a predicate.
@@ -69,8 +69,8 @@ final class SeqOps[+A, +From] {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
-    macro ContainerOps.dropWhile[A, To]
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+    macro ContainerOps.dropWhile[A]
   
   /** Returns the longest prefix of this sequence for which each element
     * satisfies a predicate.
@@ -81,8 +81,8 @@ final class SeqOps[+A, +From] {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
-    macro ContainerOps.takeWhile[A, To]
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+    macro ContainerOps.takeWhile[A]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
     * which each element satisfies a predicate, and the suffix beginning with
@@ -94,8 +94,11 @@ final class SeqOps[+A, +From] {
     * @return the pair of accumulated prefix and suffix elements.
     * @group  Filtering
     */
-  def span[To](p: A => Boolean)(implicit builder1: Builder[From, A, To], builder2: Builder[From, A, To]): (To, To) =
-    macro ContainerOps.span[A, To]
+  //FIXME: SI-6447
+  //def span(p: A => Boolean)
+  //    (implicit builder1: Builder[From, A], builder2: Builder[From, A])
+  //  : (builder1.State, builder2.State) =
+  //  macro ContainerOps.span[A]
   
   /** Returns all elements in this sequence following a prefix up to some length.
     * 
@@ -105,8 +108,8 @@ final class SeqOps[+A, +From] {
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop[To](lower: Int)(implicit builder: Builder[From, A, To]): To =
-    macro ContainerOps.drop[A, To]
+  def drop(lower: Int)(implicit builder: Builder[From, A]): builder.State =
+    macro ContainerOps.drop[A]
   
   /** Returns a prefix of this sequence up to some length.
     * 
@@ -116,8 +119,8 @@ final class SeqOps[+A, +From] {
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take[To](upper: Int)(implicit builder: Builder[From, A, To]): To =
-    macro ContainerOps.take[A, To]
+  def take(upper: Int)(implicit builder: Builder[From, A]): builder.State =
+    macro ContainerOps.take[A]
   
   /** Returns an interval of elements in this sequence.
     * 
@@ -128,8 +131,8 @@ final class SeqOps[+A, +From] {
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[From, A, To]): To =
-    macro ContainerOps.slice[A, To]
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State =
+    macro ContainerOps.slice[A]
   
   /** Returns pairs of elements from this and another sequence.
     * 
@@ -138,8 +141,8 @@ final class SeqOps[+A, +From] {
     * @return the accumulated pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B, To](those: Container[B])(implicit builder: Builder[From, (A, B), To]): To =
-    macro ContainerOps.zip[A, B, To]
+  def zip[B](those: Container[B])(implicit builder: Builder[From, (A, B)]): builder.State =
+    macro ContainerOps.zip[A, B]
   
   /** Returns the concatenation of this and another sequence.
     * 
@@ -148,6 +151,6 @@ final class SeqOps[+A, +From] {
     * @return the accumulated elements of both sequences.
     * @group  Combining
     */
-  def ++ [B >: A, To](those: Seq[B])(implicit builder: Builder[From, B, To]): To =
-    macro ContainerOps.++[B, To]
+  def ++ [B >: A](those: Seq[B])(implicit builder: Builder[From, B]): builder.State =
+    macro ContainerOps.++[B]
 }

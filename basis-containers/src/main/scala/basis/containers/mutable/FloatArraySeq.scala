@@ -53,7 +53,9 @@ private[containers] final class FloatArraySeqIterator
   override def dup: Iterator[Float] = new FloatArraySeqIterator(array, i, n)
 }
 
-private[containers] final class FloatArraySeqBuilder extends Builder[Any, Float, ArraySeq[Float]] {
+private[containers] final class FloatArraySeqBuilder extends Builder[Any, Float] {
+  override type State = ArraySeq[Float]
+  
   private[this] var array: Array[Float] = _
   
   private[this] var aliased: Boolean = true

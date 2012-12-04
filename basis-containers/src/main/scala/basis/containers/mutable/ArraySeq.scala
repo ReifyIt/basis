@@ -90,7 +90,7 @@ object ArraySeq {
   def apply[A](xs: A*)(implicit struct: DataType[A]): ArraySeq[A] =
     macro ArraySeqMacros.apply[A]
   
-  implicit def Builder[A](implicit struct: DataType[A]): Builder[Any, A, ArraySeq[A]] = {
+  implicit def Builder[A](implicit struct: DataType[A]): Builder[Any, A] { type State = ArraySeq[A] } = {
     import ValType._
     (struct match {
       case _ : RefType[A]              => new RefArraySeqBuilder[A]
@@ -102,7 +102,7 @@ object ArraySeq {
       case PackedDouble | PaddedDouble => new DoubleArraySeqBuilder
       case PackedBoolean               => new BitArraySeqBuilder
       case struct: ValType[A]          => new ValArraySeqBuilder[A]()(struct)
-    }).asInstanceOf[Builder[Any, A, ArraySeq[A]]]
+    }).asInstanceOf[Builder[Any, A] { type State = ArraySeq[A] }]
   }
 }
 

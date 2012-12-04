@@ -11,13 +11,16 @@ package basis.collections
   * 
   * @define builder   builder
   */
-trait Builder[-From, @specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A, +To] {
+trait Builder[-From, @specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A] {
+  /** The type of state maintained by this $builder. */
+  type State
+  
   /** Adds a single element to this $builder. */
   def += (x: A): this.type
   
   /** Adds multiple elements to this $builder. */
   def ++= (xs: Enumerator[A]): this.type = {
-    traverse(xs)(new Builder.AddInto(this))
+    traverse(xs)(new Builder.Append[A](this))
     this
   }
   
@@ -28,13 +31,14 @@ trait Builder[-From, @specialized(Byte, Short, Int, Long, Float, Double, Boolean
   def expect(count: Int): this.type
   
   /** Returns the current state of this $builder. */
-  def state: To
+  def state: State
 }
 
 private[collections] object Builder {
-  import scala.runtime.AbstractFunction1
-  
-  final class AddInto[-A](builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
+  final class Append[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A]
+      (builder: Builder[_, A])
+    extends (A => Unit) {
+    
     override def apply(x: A): Unit = builder += x
   }
 }

@@ -98,7 +98,7 @@ object ArraySet extends SetFactory[ArraySet] {
     }
   }
   
-  implicit override def Builder[A]: Builder[Any, A, ArraySet[A]] = new ArraySetBuilder
+  implicit override def Builder[A]: Builder[Any, A] { type State = ArraySet[A] } = new ArraySetBuilder
   
   override def toString: String = "ArraySet"
 }
@@ -122,7 +122,9 @@ private[containers] final class ArraySetIterator[+A]
   override def dup: Iterator[A] = new ArraySetIterator(slots, index)
 }
 
-private[containers] final class ArraySetBuilder[A] extends Builder[Any, A, ArraySet[A]] {
+private[containers] final class ArraySetBuilder[A] extends Builder[Any, A] {
+  override type State = ArraySet[A]
+  
   private[this] var seen: HashSet[A] = HashSet.empty
   
   private[this] var slots: Array[AnyRef] = _

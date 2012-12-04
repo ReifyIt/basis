@@ -23,6 +23,7 @@ private[containers] object ListMacros {
   private def ListTag[A : c.WeakTypeTag](c: Context): c.WeakTypeTag[List[A]] = {
     import c.{mirror, WeakTypeTag}
     import c.universe._
-    WeakTypeTag(appliedType(mirror.staticClass("basis.containers.immutable.List").toType, weakTypeOf[A] :: Nil))
+    val ListTpc = mirror.staticClass("basis.containers.immutable.List").toType
+    WeakTypeTag(appliedType(ListTpc, weakTypeOf[A] :: Nil))
   }
 }

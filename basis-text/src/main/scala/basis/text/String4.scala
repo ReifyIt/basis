@@ -68,7 +68,7 @@ object String4 {
     s.state
   }
   
-  implicit def Builder: StringBuilder[Any, String4] = new String4Builder
+  implicit def Builder: StringBuilder[Any] { type State = String4 } = new String4Builder
 }
 
 private[text] final class String4Iterator
@@ -92,7 +92,9 @@ private[text] final class String4Iterator
 
 /** A builder for 32-bit Unicode strings in the UTF-32 encoding form.
   * Produces only well-formed code unit sequences. */
-private[text] final class String4Builder extends StringBuilder[Any, String4] {
+private[text] final class String4Builder extends StringBuilder[Any] {
+  override type State = String4
+  
   private[this] var codeUnits: Array[Int] = _
   
   private[this] var aliased: Boolean = true

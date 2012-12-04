@@ -25,8 +25,8 @@ final class IteratorOps[+A, +From] {
     * @return the accumulated elements filtered and mapped by `q`.
     * @group  Mapping
     */
-  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[From, B, To]): To =
-    macro IteratorOps.collect[A, B, To]
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State =
+    macro IteratorOps.collect[A, B]
   
   /** Returns the applications of a function to each element in this iterator.
     * 
@@ -35,8 +35,8 @@ final class IteratorOps[+A, +From] {
     * @return the accumulated elements mapped by `f`.
     * @group  Mapping
     */
-  def map[B, To](f: A => B)(implicit builder: Builder[From, B, To]): To =
-    macro IteratorOps.map[A, B, To]
+  def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State =
+    macro IteratorOps.map[A, B]
   
   /** Returns the concatenation of all elements returned by a function applied
     * to each element in this iterator.
@@ -46,8 +46,8 @@ final class IteratorOps[+A, +From] {
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[From, B, To]): To =
-    macro IteratorOps.flatMap[A, B, To]
+  def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+    macro IteratorOps.flatMap[A, B]
   
   /** Returns all elements in this iterator that satisfy a predicate.
     * 
@@ -56,8 +56,8 @@ final class IteratorOps[+A, +From] {
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
-    macro IteratorOps.filter[A, To]
+  def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+    macro IteratorOps.filter[A]
   
   /** Returns all elements following the longest prefix of this iterator
     * for which each element satisfies a predicate.
@@ -68,8 +68,8 @@ final class IteratorOps[+A, +From] {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
-    macro IteratorOps.dropWhile[A, To]
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+    macro IteratorOps.dropWhile[A]
   
   /** Returns the longest prefix of this iterator for which each element
     * satisfies a predicate.
@@ -80,8 +80,8 @@ final class IteratorOps[+A, +From] {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To =
-    macro IteratorOps.takeWhile[A, To]
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+    macro IteratorOps.takeWhile[A]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
     * which each element satisfies a predicate, and the suffix beginning with
@@ -93,8 +93,11 @@ final class IteratorOps[+A, +From] {
     * @return the pair of accumulated prefix and suffix elements.
     * @group  Filtering
     */
-  def span[To](p: A => Boolean)(implicit builder1: Builder[From, A, To], builder2: Builder[From, A, To]): (To, To) =
-    macro IteratorOps.span[A, To]
+  //FIXME: SI-6447
+  //def span(p: A => Boolean)
+  //    (implicit builder1: Builder[From, A], builder2: Builder[From, A])
+  //  : (builder1.State, builder2.State) =
+  //  macro IteratorOps.span[A]
   
   /** Returns all elements in this iterator following a prefix up to some length.
     * 
@@ -104,8 +107,8 @@ final class IteratorOps[+A, +From] {
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop[To](lower: Int)(implicit builder: Builder[From, A, To]): To =
-    macro IteratorOps.drop[A, To]
+  def drop(lower: Int)(implicit builder: Builder[From, A]): builder.State =
+    macro IteratorOps.drop[A]
   
   /** Returns a prefix of this iterator up to some length.
     * 
@@ -115,8 +118,8 @@ final class IteratorOps[+A, +From] {
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take[To](upper: Int)(implicit builder: Builder[From, A, To]): To =
-    macro IteratorOps.take[A, To]
+  def take(upper: Int)(implicit builder: Builder[From, A]): builder.State =
+    macro IteratorOps.take[A]
   
   /** Returns an interval of elements in this iterator.
     * 
@@ -127,8 +130,8 @@ final class IteratorOps[+A, +From] {
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[From, A, To]): To =
-    macro IteratorOps.slice[A, To]
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State =
+    macro IteratorOps.slice[A]
   
   /** Returns pairs of elements from this and another iterator.
     * 
@@ -137,8 +140,8 @@ final class IteratorOps[+A, +From] {
     * @return the accumulated pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B, To](those: Iterator[B])(implicit builder: Builder[From, (A, B), To]): To =
-    macro IteratorOps.zip[A, B, To]
+  def zip[B](those: Iterator[B])(implicit builder: Builder[From, (A, B)]): builder.State =
+    macro IteratorOps.zip[A, B]
   
   /** Returns the concatenation of this and another iterator.
     * 
@@ -147,8 +150,8 @@ final class IteratorOps[+A, +From] {
     * @return the accumulated elements of both iterators.
     * @group  Combining
     */
-  def ++ [B >: A, To](those: Iterator[B])(implicit builder: Builder[From, B, To]): To =
-    macro IteratorOps.++[B, To]
+  def ++ [B >: A](those: Iterator[B])(implicit builder: Builder[From, B]): builder.State =
+    macro IteratorOps.++[B]
 }
 
 private[strict] object IteratorOps {
@@ -159,95 +162,94 @@ private[strict] object IteratorOps {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, iterator :: Nil) = prefix.tree
-    val IteratorTag =
-      WeakTypeTag[Iterator[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Iterator").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(typeCheck(iterator, IteratorTag.tpe))(IteratorTag)
+    val IteratorType =
+      appliedType(
+        mirror.staticClass("basis.collections.Iterator").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(iterator, IteratorType))(WeakTypeTag(IteratorType))
   }
   
-  def collect[A : c.WeakTypeTag, B, To : c.WeakTypeTag]
+  def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (q: c.Expr[PartialFunction[A, B]])
-      (builder: c.Expr[Builder[_, B, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).collect[A, B, To](unApply[A](c))(q)(builder)
+      (builder: c.Expr[Builder[_, B]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).collect[A, B](unApply[A](c))(q)(builder)
   
-  def map[A : c.WeakTypeTag, B, To : c.WeakTypeTag]
+  def map[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => B])
-      (builder: c.Expr[Builder[_, B, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).map[A, B, To](unApply[A](c))(f)(builder)
+      (builder: c.Expr[Builder[_, B]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).map[A, B](unApply[A](c))(f)(builder)
   
-  def flatMap[A : c.WeakTypeTag, B, To : c.WeakTypeTag]
+  def flatMap[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => Enumerator[B]])
-      (builder: c.Expr[Builder[_, B, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).flatMap[A, B, To](unApply[A](c))(f)(builder)
+      (builder: c.Expr[Builder[_, B]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).flatMap[A, B](unApply[A](c))(f)(builder)
   
-  def filter[A : c.WeakTypeTag, To : c.WeakTypeTag]
+  def filter[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (builder: c.Expr[Builder[_, A, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).filter[A, To](unApply[A](c))(p)(builder)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).filter[A](unApply[A](c))(p)(builder)
   
-  def dropWhile[A : c.WeakTypeTag, To : c.WeakTypeTag]
+  def dropWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (builder: c.Expr[Builder[_, A, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).dropWhile[A, To](unApply[A](c))(p)(builder)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).dropWhile[A](unApply[A](c))(p)(builder)
   
-  def takeWhile[A : c.WeakTypeTag, To : c.WeakTypeTag]
+  def takeWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (builder: c.Expr[Builder[_, A, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).takeWhile[A, To](unApply[A](c))(p)(builder)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).takeWhile[A](unApply[A](c))(p)(builder)
   
-  def span[A : c.WeakTypeTag, To : c.WeakTypeTag]
+  def span[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-      (builder1: c.Expr[Builder[_, A, To]], builder2: c.Expr[Builder[_, A, To]])
-    : c.Expr[(To, To)] =
-    new IteratorMacros[c.type](c).span[A, To](unApply[A](c))(p)(builder1, builder2)
+      (builder1: c.Expr[Builder[_, A]], builder2: c.Expr[Builder[_, A]])
+    : c.Expr[(builder1.value.State, builder2.value.State)] =
+    new IteratorMacros[c.type](c).span[A](unApply[A](c))(p)(builder1, builder2)
   
-  def drop[A : c.WeakTypeTag, To : c.WeakTypeTag]
+  def drop[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int])
-      (builder: c.Expr[Builder[_, A, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).drop[A, To](unApply[A](c))(lower)(builder)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).drop[A](unApply[A](c))(lower)(builder)
   
-  def take[A : c.WeakTypeTag, To : c.WeakTypeTag]
+  def take[A : c.WeakTypeTag]
       (c: Context)
       (upper: c.Expr[Int])
-      (builder: c.Expr[Builder[_, A, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).take[A, To](unApply[A](c))(upper)(builder)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).take[A](unApply[A](c))(upper)(builder)
   
-  def slice[A : c.WeakTypeTag, To : c.WeakTypeTag]
+  def slice[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int], upper: c.Expr[Int])
-      (builder: c.Expr[Builder[_, A, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).slice[A, To](unApply[A](c))(lower, upper)(builder)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).slice[A](unApply[A](c))(lower, upper)(builder)
   
-  def zip[A : c.WeakTypeTag, B : c.WeakTypeTag, To: c.WeakTypeTag]
+  def zip[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (those: c.Expr[Iterator[B]])
-      (builder: c.Expr[Builder[_, (A, B), To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).zip[A, B, To](unApply[A](c), those)(builder)
+      (builder: c.Expr[Builder[_, (A, B)]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
   
-  def ++ [A : c.WeakTypeTag, To : c.WeakTypeTag]
+  def ++ [A : c.WeakTypeTag]
       (c: Context)
       (those: c.Expr[Iterator[A]])
-      (builder: c.Expr[Builder[_, A, To]])
-    : c.Expr[To] =
-    new IteratorMacros[c.type](c).++[A, To](unApply[A](c), those)(builder)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new IteratorMacros[c.type](c).++[A](unApply[A](c), those)(builder)
 }

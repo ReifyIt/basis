@@ -53,7 +53,9 @@ private[containers] final class DoubleArraySeqIterator
   override def dup: Iterator[Double] = new DoubleArraySeqIterator(array, i, n)
 }
 
-private[containers] final class DoubleArraySeqBuilder extends Builder[Any, Double, ArraySeq[Double]] {
+private[containers] final class DoubleArraySeqBuilder extends Builder[Any, Double] {
+  override type State = ArraySeq[Double]
+  
   private[this] var array: Array[Double] = _
   
   private[this] var aliased: Boolean = true

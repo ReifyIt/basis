@@ -92,12 +92,14 @@ object List extends SeqFactory[List] {
   // FIXME: don't hurt the compiler!
   //override def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   
-  implicit override def Builder[A]: Builder[Any, A, List[A]] = new ListBuilder
+  implicit override def Builder[A]: Builder[Any, A] { type State = List[A] } = new ListBuilder
   
   override def toString: String = "List"
 }
 
-private[containers] final class ListBuilder[A] extends Builder[Any, A, List[A]] {
+private[containers] final class ListBuilder[A] extends Builder[Any, A] {
+  override type State = List[A]
+  
   private[this] var last: ::[A] = _
   
   private[this] var first: List[A] = Nil

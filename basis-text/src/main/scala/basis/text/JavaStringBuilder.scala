@@ -9,7 +9,9 @@ package basis.text
 
 import basis.util._
 
-private[text] final class JavaStringBuilder extends StringBuilder[Any, String] {
+private[text] final class JavaStringBuilder extends StringBuilder[Any] {
+  override type State = String
+  
   private[this] var codeUnits: Array[scala.Char] = null
   
   private[this] var size: Int = 0

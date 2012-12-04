@@ -125,7 +125,7 @@ object ArrayMap extends MapFactory[ArrayMap] {
     new ArrayMap(slots)
   }
   
-  implicit override def Builder[A, T]: Builder[Any, (A, T), ArrayMap[A, T]] = new ArrayMapBuilder
+  implicit override def Builder[A, T]: Builder[Any, (A, T)] { type State = ArrayMap[A, T] } = new ArrayMapBuilder
   
   override def toString: String = "ArrayMap"
 }
@@ -149,7 +149,9 @@ private[containers] final class ArrayMapIterator[+A, +T]
   override def dup: Iterator[(A, T)] = new ArrayMapIterator(slots, index)
 }
 
-private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T), ArrayMap[A, T]] {
+private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T)] {
+  override type State = ArrayMap[A, T]
+  
   private[this] var seen: HashMap[A, Int] = HashMap.empty
   
   private[this] var slots: Array[AnyRef] = _

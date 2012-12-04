@@ -10,7 +10,7 @@ package generic
 
 import traversable._
 
-trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {
+trait SeqFactory[CC[_]] extends BuilderFactory[CC] {
   def fill[A](count: Int)(element: => A): CC[A] =
     macro SeqFactory.fill[CC, A]
   
@@ -50,7 +50,7 @@ private[generic] object SeqFactory {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (WeakTypeTag[CC[A]](appliedType(CCTag.tpe, ATag.tpe :: Nil)))
+    } (WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
   }
   
   def tabulate[CC[_], A]
@@ -80,7 +80,7 @@ private[generic] object SeqFactory {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (WeakTypeTag[CC[A]](appliedType(CCTag.tpe, ATag.tpe :: Nil)))
+    } (WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
   }
   
   def iterate[CC[_], A]
@@ -118,6 +118,6 @@ private[generic] object SeqFactory {
                 EmptyTree))),
           EmptyTree) :: Nil,
         Select(Ident(b), "state"))
-    } (WeakTypeTag[CC[A]](appliedType(CCTag.tpe, ATag.tpe :: Nil)))
+    } (WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
   }
 }

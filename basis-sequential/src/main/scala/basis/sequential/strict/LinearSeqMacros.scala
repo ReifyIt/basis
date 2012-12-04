@@ -20,19 +20,19 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   
   val universe: context.universe.type = context.universe
   
-  def collect[A : WeakTypeTag, B, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def collect[A : WeakTypeTag, B]
+      (these: Expr[LinearSeq[A]])
       (q: Expr[PartialFunction[A, B]])
-      (builder: Expr[Builder[_, B, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, B]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -46,21 +46,21 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def map[A : WeakTypeTag, B, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def map[A : WeakTypeTag, B]
+      (these: Expr[LinearSeq[A]])
       (f: Expr[A => B])
-      (builder: Expr[Builder[_, B, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, B]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -70,21 +70,21 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def flatMap[A : WeakTypeTag, B, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def flatMap[A : WeakTypeTag, B]
+      (these: Expr[LinearSeq[A]])
       (f: Expr[A => Enumerator[B]])
-      (builder: Expr[Builder[_, B, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, B]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -94,22 +94,22 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def filter[A : WeakTypeTag, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def filter[A : WeakTypeTag]
+      (these: Expr[LinearSeq[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -123,14 +123,14 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def dropWhile[A : WeakTypeTag, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def dropWhile[A : WeakTypeTag]
+      (these: Expr[LinearSeq[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val b     = newTermName(fresh("builder$"))
     val loop1 = newTermName(fresh("loop$"))
@@ -138,8 +138,8 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -160,22 +160,22 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def takeWhile[A : WeakTypeTag, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def takeWhile[A : WeakTypeTag]
+      (these: Expr[LinearSeq[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -190,14 +190,14 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
                 EmptyTree)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def span[A : WeakTypeTag, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def span[A : WeakTypeTag]
+      (these: Expr[LinearSeq[A]])
       (p: Expr[A => Boolean])
-      (builderA: Expr[Builder[_, A, To]], builderB: Expr[Builder[_, A, To]])
-    : Expr[(To, To)] = {
+      (builder1: Expr[Builder[_, A]], builder2: Expr[Builder[_, A]])
+    : Expr[(builder1.value.State, builder2.value.State)] = {
     val xs    = newTermName(fresh("xs$"))
     val a     = newTermName(fresh("builder$"))
     val b     = newTermName(fresh("builder$"))
@@ -206,9 +206,9 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
-        ValDef(NoMods, a, TypeTree(), builderA.tree) ::
-        ValDef(NoMods, b, TypeTree(), builderB.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(NoMods, a, TypeTree(BuilderType(builder1)), builder1.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder2)), builder2.tree) ::
         LabelDef(loop1, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -233,14 +233,14 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
         ApplyConstructor(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Tuple2")),
           Select(Ident(a), "state") :: Select(Ident(b), "state") :: Nil))
-    } (Tuple2Tag(weakTypeTag[To], weakTypeTag[To]))
+    } (Tuple2Tag(StateTag(builder1), StateTag(builder2)))
   }
   
-  def drop[A : WeakTypeTag, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def drop[A : WeakTypeTag]
+      (these: Expr[LinearSeq[A]])
       (lower: Expr[Int])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val i     = newTermName(fresh("i$"))
     val n     = newTermName(fresh("n$"))
@@ -249,10 +249,10 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), lower.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -273,14 +273,14 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def take[A : WeakTypeTag, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def take[A : WeakTypeTag]
+      (these: Expr[LinearSeq[A]])
       (upper: Expr[Int])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
@@ -288,10 +288,10 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), upper.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -305,14 +305,14 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               EmptyTree),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def slice[A : WeakTypeTag, To : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+  def slice[A : WeakTypeTag]
+      (these: Expr[LinearSeq[A]])
       (lower: Expr[Int], upper: Expr[Int])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val i     = newTermName(fresh("i$"))
     val n     = newTermName(fresh("n$"))
@@ -321,10 +321,10 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(Modifiers(Flag.MUTABLE), n, TypeTree(), lower.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -350,13 +350,13 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               EmptyTree),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def zip[A : WeakTypeTag, B : WeakTypeTag, To : WeakTypeTag]
+  def zip[A : WeakTypeTag, B : WeakTypeTag]
       (these: Expr[LinearSeq[A]], those: Expr[LinearSeq[B]])
-      (builder: Expr[Builder[_, (A, B), To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, (A, B)]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val ys   = newTermName(fresh("ys$"))
     val b    = newTermName(fresh("builder$"))
@@ -365,7 +365,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(LinearSeqType[B]), those.tree) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -383,26 +383,40 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
               EmptyTree),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def ++ [A, To : WeakTypeTag]
+  def ++ [A]
       (these: Expr[LinearSeq[A]], those: Expr[LinearSeq[A]])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val b = newTermName(fresh("builder$"))
     Expr {
       Block(
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         Apply(Select(Ident(b), "$plus$plus$eq"), these.tree :: Nil) ::
         Apply(Select(Ident(b), "$plus$plus$eq"), those.tree :: Nil) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  private def LinearSeqType[A : WeakTypeTag]: Type =
-    appliedType(mirror.staticClass("basis.collections.traversable.LinearSeq").toType, weakTypeOf[A] :: Nil)
+  private def LinearSeqType[A : WeakTypeTag]: Type = {
+    val LinearSeqTpc = mirror.staticClass("basis.collections.traversable.LinearSeq").toType
+    appliedType(LinearSeqTpc, weakTypeOf[A] :: Nil)
+  }
   
-  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] =
-    WeakTypeTag(appliedType(mirror.staticClass("scala.Tuple2").toType, weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+  private def BuilderType(builder: Expr[Builder[_, _]]): Type = builder.tree.symbol match {
+    case symbol: TermSymbol if symbol.isStable => singleType(NoPrefix, symbol)
+    case _ => builder.actualType
+  }
+  
+  private def StateTag(builder: Expr[Builder[_, _]]): WeakTypeTag[builder.value.State] = {
+    val StateSymbol = mirror.staticClass("basis.collections.Builder").toType.member(newTypeName("State"))
+    WeakTypeTag(typeRef(BuilderType(builder), StateSymbol, Nil))
+  }
+  
+  private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
+    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
+    WeakTypeTag(appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+  }
 }

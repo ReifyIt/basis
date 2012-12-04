@@ -111,7 +111,7 @@ object String2 {
     s.state
   }
   
-  implicit def Builder: StringBuilder[Any, String2] = new String2Builder
+  implicit def Builder: StringBuilder[Any] { type State = String2 } = new String2Builder
 }
 
 private[text] final class String2Iterator
@@ -135,7 +135,9 @@ private[text] final class String2Iterator
 
 /** A builder for 16-bit Unicode strings in the UTF-16 encoding form.
   * Produces only well-formed code unit sequences. */
-private[text] final class String2Builder extends StringBuilder[Any, String2] {
+private[text] final class String2Builder extends StringBuilder[Any] {
+  override type State = String2
+  
   private[this] var codeUnits: Array[scala.Char] = _
   
   private[this] var aliased: Boolean = true

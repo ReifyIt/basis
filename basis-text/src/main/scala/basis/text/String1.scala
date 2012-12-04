@@ -193,7 +193,7 @@ object String1 {
     s.state
   }
   
-  implicit def Builder: StringBuilder[Any, String1] = new String1Builder
+  implicit def Builder: StringBuilder[Any] { type State = String1 } = new String1Builder
 }
 
 private[text] final class String1Iterator
@@ -217,7 +217,9 @@ private[text] final class String1Iterator
 
 /** A builder for 8-bit Unicode strings in the UTF-8 encoding form.
   * Produces only well-formed code unit sequences. */
-private[text] final class String1Builder extends StringBuilder[Any, String1] {
+private[text] final class String1Builder extends StringBuilder[Any] {
+  override type State = String1
+  
   private[this] var codeUnits: Array[Byte] = _
   
   private[this] var aliased: Boolean = true

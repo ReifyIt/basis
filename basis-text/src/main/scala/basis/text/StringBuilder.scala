@@ -13,7 +13,7 @@ import basis.collections._
   * 
   * @define builder  string builder
   */
-abstract class StringBuilder[-From, +To] extends Builder[From, Int, To] {
+abstract class StringBuilder[-From] extends Builder[From, Int] {
   /** Prepares this $builder to receive a certain number of characters. */
   override def expect(count: Int): this.type
   

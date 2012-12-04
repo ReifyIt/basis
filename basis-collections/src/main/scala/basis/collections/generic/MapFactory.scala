@@ -10,8 +10,8 @@ package generic
 
 import traversable._
 
-trait MapFactory[+CC[_, _]] {
-  implicit def Builder[A, T]: Builder[Any, (A, T), CC[A, T]]
+trait MapFactory[CC[_, _]] {
+  implicit def Builder[A, T]: Builder[Any, (A, T)] { type State = CC[A, T] }
   
   def apply[A, T](xs: (A, T)*): CC[A, T] =
     macro MapFactory.apply[CC, A, T]
@@ -32,6 +32,6 @@ private[generic] object MapFactory {
     var b = Apply(Select(builder, "expect"), Literal(Constant(xs.length)) :: Nil)
     val iter = xs.iterator
     while (iter.hasNext) b = Apply(Select(b, "$plus$eq"), iter.next().tree :: Nil)
-    Expr(Select(b, "state"))(WeakTypeTag[CC[A, T]](appliedType(CCTag.tpe, ATag.tpe :: TTag.tpe :: Nil)))
+    Expr(Select(b, "state"))(WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: TTag.tpe :: Nil)))
   }
 }

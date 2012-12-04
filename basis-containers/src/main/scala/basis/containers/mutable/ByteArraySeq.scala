@@ -53,7 +53,9 @@ private[containers] final class ByteArraySeqIterator
   override def dup: Iterator[Byte] = new ByteArraySeqIterator(array, i, n)
 }
 
-private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte, ArraySeq[Byte]] {
+private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte] {
+  override type State = ArraySeq[Byte]
+  
   private[this] var array: Array[Byte] = _
   
   private[this] var aliased: Boolean = true

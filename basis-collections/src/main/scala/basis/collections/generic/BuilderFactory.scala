@@ -8,8 +8,8 @@
 package basis.collections
 package generic
 
-trait BuilderFactory[+CC[_]] {
-  implicit def Builder[A]: Builder[Any, A, CC[A]]
+trait BuilderFactory[CC[_]] {
+  implicit def Builder[A]: Builder[Any, A] { type State = CC[A] }
   
   def apply[A](xs: A*): CC[A] =
     macro BuilderFactory.apply[CC, A]

@@ -316,7 +316,7 @@ final class HashMap[+A, +T] private[containers] (
 object HashMap extends MapFactory[HashMap] {
   val empty: HashMap[Nothing, Nothing] = new HashMap(0, 0, new Array[AnyRef](0))
   
-  implicit override def Builder[A, T]: Builder[Any, (A, T), HashMap[A, T]] = new HashMapBuilder
+  implicit override def Builder[A, T]: Builder[Any, (A, T)] { type State = HashMap[A, T] } = new HashMapBuilder
   
   override def toString: String = "HashMap"
   
@@ -457,7 +457,9 @@ private[containers] final class HashMapIterator[+A, +T](
     new HashMapIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
-private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T), HashMap[A, T]] {
+private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)] {
+  override type State = HashMap[A, T]
+  
   private[this] var map: HashMap[A, T] = HashMap.empty
   
   override def += (entry: (A, T)): this.type = {

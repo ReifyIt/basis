@@ -62,7 +62,9 @@ private[containers] final class RefArraySeqIterator[A]
   override def dup: Iterator[A] = new RefArraySeqIterator(array, i, n)
 }
 
-private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A, ArraySeq[A]] {
+private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
+  override type State = ArraySeq[A]
+  
   private[this] var array: Array[AnyRef] = _
   
   private[this] var aliased: Boolean = true

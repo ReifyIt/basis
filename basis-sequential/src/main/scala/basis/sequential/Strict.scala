@@ -50,12 +50,11 @@ private[sequential] object Strict {
     : c.Expr[EnumeratorOps[A, these.value.Parent]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val EnumeratorOpsTag =
-      WeakTypeTag[EnumeratorOps[A, these.value.Parent]](
-        appliedType(
-          mirror.staticClass("basis.sequential.strict.EnumeratorOps").toType,
-          weakTypeOf[A] :: ParentType(c)(these) :: Nil))
-    Expr(New(EnumeratorOpsTag.tpe, these.tree))(EnumeratorOpsTag)
+    val EnumeratorOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.strict.EnumeratorOps").toType,
+        weakTypeOf[A] :: ParentType(c)(these) :: Nil)
+    Expr(New(EnumeratorOpsType, these.tree))(WeakTypeTag(EnumeratorOpsType))
   }
   
   def StrictCollectionOps[A : c.WeakTypeTag]
@@ -64,12 +63,11 @@ private[sequential] object Strict {
     : c.Expr[CollectionOps[A, these.value.Parent]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val CollectionOpsTag =
-      WeakTypeTag[CollectionOps[A, these.value.Parent]](
-        appliedType(
-          mirror.staticClass("basis.sequential.strict.CollectionOps").toType,
-          weakTypeOf[A] :: ParentType(c)(these) :: Nil))
-    Expr(New(CollectionOpsTag.tpe, these.tree))(CollectionOpsTag)
+    val CollectionOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.strict.CollectionOps").toType,
+        weakTypeOf[A] :: ParentType(c)(these) :: Nil)
+    Expr(New(CollectionOpsType, these.tree))(WeakTypeTag(CollectionOpsType))
   }
   
   private def ParentType(c: Context)(these: c.Expr[Family[_]]): c.Type = {

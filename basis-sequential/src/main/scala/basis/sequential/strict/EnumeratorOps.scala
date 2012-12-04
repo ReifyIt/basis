@@ -25,8 +25,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return the accumulated elements filtered and mapped by `q`.
     * @group  Mapping
     */
-  def collect[B, To](q: PartialFunction[A, B])(implicit builder: Builder[From, B, To]): To = {
-    traverse(these)(new EnumeratorOps.CollectInto(q, builder))
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State = {
+    traverse(these)(new EnumeratorOps.CollectInto(q)(builder))
     builder.state
   }
   
@@ -37,8 +37,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return the accumulated elements mapped by `f`.
     * @group  Mapping
     */
-  def map[B, To](f: A => B)(implicit builder: Builder[From, B, To]): To = {
-    traverse(these)(new EnumeratorOps.MapInto(f, builder))
+  def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State = {
+    traverse(these)(new EnumeratorOps.MapInto(f)(builder))
     builder.state
   }
   
@@ -50,8 +50,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B, To](f: A => Enumerator[B])(implicit builder: Builder[From, B, To]): To = {
-    traverse(these)(new EnumeratorOps.FlatMapInto(f, builder))
+  def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[From, B]): builder.State = {
+    traverse(these)(new EnumeratorOps.FlatMapInto(f)(builder))
     builder.state
   }
   
@@ -62,8 +62,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To = {
-    traverse(these)(new EnumeratorOps.FilterInto(p, builder))
+  def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State = {
+    traverse(these)(new EnumeratorOps.FilterInto(p)(builder))
     builder.state
   }
   
@@ -76,8 +76,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To = {
-    traverse(these)(new EnumeratorOps.DropWhileInto(p, builder))
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State = {
+    traverse(these)(new EnumeratorOps.DropWhileInto(p)(builder))
     builder.state
   }
   
@@ -90,8 +90,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile[To](p: A => Boolean)(implicit builder: Builder[From, A, To]): To = {
-    flow(traverse(these)(new EnumeratorOps.TakeWhileInto(p, builder)))
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State = {
+    flow(traverse(these)(new EnumeratorOps.TakeWhileInto(p)(builder)))
     builder.state
   }
   
@@ -105,8 +105,10 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return the pair of accumulated prefix and suffix elements.
     * @group  Filtering
     */
-  def span[To](p: A => Boolean)(implicit builder1: Builder[From, A, To], builder2: Builder[From, A, To]): (To, To) = {
-    traverse(these)(new EnumeratorOps.SpanInto(p, builder1, builder2))
+  def span(p: A => Boolean)
+      (implicit builder1: Builder[From, A], builder2: Builder[From, A])
+    : (builder1.State, builder2.State) = {
+    traverse(these)(new EnumeratorOps.SpanInto(p)(builder1, builder2))
     (builder1.state, builder2.state)
   }
   
@@ -118,8 +120,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop[To](lower: Int)(implicit builder: Builder[From, A, To]): To = {
-    traverse(these)(new EnumeratorOps.DropInto(lower, builder))
+  def drop(lower: Int)(implicit builder: Builder[From, A]): builder.State = {
+    traverse(these)(new EnumeratorOps.DropInto(lower)(builder))
     builder.state
   }
   
@@ -131,8 +133,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take[To](upper: Int)(implicit builder: Builder[From, A, To]): To = {
-    flow(traverse(these)(new EnumeratorOps.TakeInto(upper, builder)))
+  def take(upper: Int)(implicit builder: Builder[From, A]): builder.State = {
+    flow(traverse(these)(new EnumeratorOps.TakeInto(upper)(builder)))
     builder.state
   }
   
@@ -145,8 +147,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice[To](lower: Int, upper: Int)(implicit builder: Builder[From, A, To]): To = {
-    flow(traverse(these)(new EnumeratorOps.SliceInto(lower, upper, builder)))
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State = {
+    flow(traverse(these)(new EnumeratorOps.SliceInto(lower, upper)(builder)))
     builder.state
   }
   
@@ -157,8 +159,8 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return the accumulated elements of both enumerators.
     * @group  Combining
     */
-  def ++ [B >: A, To](those: Enumerator[B])(implicit builder: Builder[From, B, To]): To = {
-    val f = new EnumeratorOps.AddInto(builder)
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State = {
+    val f = new EnumeratorOps.Append(builder)
     traverse(these)(f)
     traverse(those)(f)
     builder.state
@@ -169,55 +171,132 @@ private[strict] object EnumeratorOps {
   import scala.runtime.AbstractFunction1
   import basis.util.IntOps
   
-  final class CollectInto[-A, B](q: PartialFunction[A, B], builder: Builder[_, B, _]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = if (q.isDefinedAt(x)) builder += q(x)
+  final class CollectInto[-A, B]
+      (q: PartialFunction[A, B])
+      (builder: Builder[_, B])
+    extends AbstractFunction1[A, Unit] {
+    
+    override def apply(x: A) {
+      if (q.isDefinedAt(x)) builder += q(x)
+    }
   }
   
-  final class MapInto[-A, +B](f: A => B, builder: Builder[_, B, _]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = builder += f(x)
+  final class MapInto[-A, +B]
+      (f: A => B)
+      (builder: Builder[_, B])
+    extends AbstractFunction1[A, Unit] {
+    
+    override def apply(x: A) {
+      builder += f(x)
+    }
   }
   
-  final class FlatMapInto[-A, +B](f: A => Enumerator[B], builder: Builder[_, B, _]) extends AbstractFunction1[A, Unit] {
-    private[this] val add = new AddInto(builder)
-    override def apply(x: A): Unit = traverse(f(x))(add)
+  final class FlatMapInto[-A, +B]
+      (f: A => Enumerator[B])
+      (builder: Builder[_, B])
+    extends AbstractFunction1[A, Unit] {
+    
+    private[this] val append = new Append(builder)
+    
+    override def apply(x: A) {
+      traverse(f(x))(append)
+    }
   }
   
-  final class FilterInto[-A](p: A => Boolean, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = if (p(x)) builder += x
+  final class FilterInto[-A]
+      (p: A => Boolean)
+      (builder: Builder[_, A])
+    extends AbstractFunction1[A, Unit] {
+    
+    override def apply(x: A) {
+      if (p(x)) builder += x
+    }
   }
   
-  final class DropWhileInto[-A](p: A => Boolean, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
+  final class DropWhileInto[-A]
+      (p: A => Boolean)
+      (builder: Builder[_, A])
+    extends AbstractFunction1[A, Unit] {
+    
     private[this] var taking: Boolean = false
-    override def apply(x: A): Unit = if (taking || (!p(x) && { taking = true; true })) builder += x
+    
+    override def apply(x: A) {
+      if (taking || (!p(x) && { taking = true; true })) builder += x
+    }
   }
   
-  final class TakeWhileInto[-A](p: A => Boolean, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = if (p(x)) builder += x else flow.break()
+  final class TakeWhileInto[-A]
+      (p: A => Boolean)
+      (builder: Builder[_, A])
+    extends AbstractFunction1[A, Unit] {
+    
+    override def apply(x: A) {
+      if (p(x)) builder += x
+      else flow.break()
+    }
   }
   
-  final class SpanInto[-A](p: A => Boolean, builder1: Builder[_, A, _], builder2: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
+  final class SpanInto[-A]
+      (p: A => Boolean)
+      (builder1: Builder[_, A], builder2: Builder[_, A])
+    extends AbstractFunction1[A, Unit] {
+    
     private[this] var taking: Boolean = false
-    override def apply(x: A): Unit = if (!taking && (p(x) || { taking = true; false })) builder1 += x else builder2 += x
+    
+    override def apply(x: A) {
+      if (!taking && (p(x) || { taking = true; false })) builder1 += x
+      else builder2 += x
+    }
   }
   
-  final class DropInto[-A](lower: Int, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
+  final class DropInto[-A]
+      (lower: Int)
+      (builder: Builder[_, A])
+    extends AbstractFunction1[A, Unit] {
+    
     private[this] var i = 0
-    override def apply(x: A): Unit = if (i >= lower) builder += x else i += 1
+    
+    override def apply(x: A) {
+      if (i >= lower) builder += x
+      else i += 1
+    }
   }
   
-  final class TakeInto[-A](upper: Int, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
+  final class TakeInto[-A]
+      (upper: Int)
+      (builder: Builder[_, A])
+    extends AbstractFunction1[A, Unit] {
+    
     private[this] var i = 0
-    override def apply(x: A): Unit = if (i < upper) { builder += x; i += 1 } else flow.break()
+    
+    override def apply(x: A) {
+      if (i < upper) {
+        builder += x
+        i += 1
+      }
+      else flow.break()
+    }
   }
   
-  final class SliceInto[-A](lower: Int, upper: Int, builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
+  final class SliceInto[-A]
+      (lower: Int, upper: Int)
+      (builder: Builder[_, A])
+    extends AbstractFunction1[A, Unit] {
+    
     private[this] var l = 0 max lower
     private[this] var u = l max upper
     private[this] var i = 0
-    override def apply(x: A): Unit = if (i < u) { if (i >= l) builder += x; i += 1 } else flow.break()
+    
+    override def apply(x: A) {
+      if (i < u) {
+        if (i >= l) builder += x
+        i += 1
+      }
+      else flow.break()
+    }
   }
   
-  final class AddInto[-A](builder: Builder[_, A, _]) extends AbstractFunction1[A, Unit] {
+  final class Append[-A](builder: Builder[_, A]) extends AbstractFunction1[A, Unit] {
     override def apply(x: A): Unit = builder += x
   }
 }

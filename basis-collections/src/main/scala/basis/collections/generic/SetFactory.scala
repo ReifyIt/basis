@@ -10,4 +10,4 @@ package generic
 
 import traversable._
 
-trait SetFactory[+CC[_]] extends BuilderFactory[CC]
+trait SetFactory[CC[_]] extends BuilderFactory[CC]

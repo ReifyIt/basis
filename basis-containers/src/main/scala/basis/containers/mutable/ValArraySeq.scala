@@ -26,9 +26,8 @@ private[containers] final class ValArraySeq[A]
     struct.store(data, struct.size.toLong * index.toLong, value)
 }
 
-private[containers] final class ValArraySeqBuilder[A]
-    (implicit struct: ValType[A])
-  extends Builder[Any, A, ArraySeq[A]] {
+private[containers] final class ValArraySeqBuilder[A](implicit struct: ValType[A]) extends Builder[Any, A] {
+  override type State = ArraySeq[A]
   
   private[this] var data: Data = Data.alloc[A](0)
   

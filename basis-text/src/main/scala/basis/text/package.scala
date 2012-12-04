@@ -8,5 +8,5 @@
 package basis
 
 package object text {
-  implicit def StringBuilder: StringBuilder[Any, String] = new JavaStringBuilder
+  implicit def StringBuilder: StringBuilder[Any] { type State = String } = new JavaStringBuilder
 }

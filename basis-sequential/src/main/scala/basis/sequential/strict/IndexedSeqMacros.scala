@@ -20,11 +20,11 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   
   val universe: context.universe.type = context.universe
   
-  def collect[A, B, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def collect[A, B]
+      (these: Expr[IndexedSeq[A]])
       (q: Expr[PartialFunction[A, B]])
-      (builder: Expr[Builder[_, B, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, B]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
@@ -33,10 +33,10 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("x$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -50,14 +50,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def map[A, B, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def map[A, B]
+      (these: Expr[IndexedSeq[A]])
       (f: Expr[A => B])
-      (builder: Expr[Builder[_, B, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, B]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
@@ -65,10 +65,10 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(builder.tree, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), Apply(Select(builder.tree, "expect"), Ident(n) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -78,14 +78,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def flatMap[A, B, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def flatMap[A, B]
+      (these: Expr[IndexedSeq[A]])
       (f: Expr[A => Enumerator[B]])
-      (builder: Expr[Builder[_, B, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, B]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
@@ -93,10 +93,10 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -106,14 +106,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def filter[A, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def filter[A]
+      (these: Expr[IndexedSeq[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
@@ -122,10 +122,10 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("x$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -139,14 +139,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def dropWhile[A, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def dropWhile[A]
+      (these: Expr[IndexedSeq[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val i     = newTermName(fresh("i$"))
     val n     = newTermName(fresh("n$"))
@@ -156,10 +156,10 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -180,14 +180,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def takeWhile[A, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def takeWhile[A]
+      (these: Expr[IndexedSeq[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
@@ -196,10 +196,10 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("x$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
-        ValDef(NoMods, b, TypeTree(), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -214,14 +214,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
                 EmptyTree)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def span[A, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def span[A]
+      (these: Expr[IndexedSeq[A]])
       (p: Expr[A => Boolean])
-      (builderA: Expr[Builder[_, A, To]], builderB: Expr[Builder[_, A, To]])
-    : Expr[(To, To)] = {
+      (builder1: Expr[Builder[_, A]], builder2: Expr[Builder[_, A]])
+    : Expr[(builder1.value.State, builder2.value.State)] = {
     val xs    = newTermName(fresh("xs$"))
     val i     = newTermName(fresh("i$"))
     val n     = newTermName(fresh("n$"))
@@ -232,11 +232,11 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
-        ValDef(NoMods, a, TypeTree(), builderA.tree) ::
-        ValDef(NoMods, b, TypeTree(), builderB.tree) ::
+        ValDef(NoMods, a, TypeTree(BuilderType(builder1)), builder1.tree) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder2)), builder2.tree) ::
         LabelDef(loop1, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -261,14 +261,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
         ApplyConstructor(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Tuple2")),
           Select(Ident(a), "state") :: Select(Ident(b), "state") :: Nil))
-    } (Tuple2Tag(weakTypeTag[To], weakTypeTag[To]))
+    } (Tuple2Tag(StateTag(builder1), StateTag(builder2)))
   }
   
-  def drop[A, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def drop[A]
+      (these: Expr[IndexedSeq[A]])
       (lower: Expr[Int])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val n    = newTermName(fresh("n$"))
     val i    = newTermName(fresh("i$"))
@@ -276,11 +276,11 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(),
           min(max(Literal(Constant(0)), lower.tree), Ident(n))) ::
-        ValDef(NoMods, b, TypeTree(),
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)),
           Apply(Select(builder.tree, "expect"), Apply(Select(Ident(n), "$minus"), Ident(i) :: Nil) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
@@ -291,14 +291,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def take[A, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def take[A]
+      (these: Expr[IndexedSeq[A]])
       (upper: Expr[Int])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
@@ -306,10 +306,10 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), min(upper.tree, Select(Ident(xs), "length"))) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(builder.tree, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), Apply(Select(builder.tree, "expect"), Ident(n) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -319,14 +319,14 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def slice[A, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+  def slice[A]
+      (these: Expr[IndexedSeq[A]])
       (lower: Expr[Int], upper: Expr[Int])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val n    = newTermName(fresh("n$"))
     val i    = newTermName(fresh("i$"))
@@ -334,12 +334,12 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(NoMods, n, TypeTree(), 
           min(max(Literal(Constant(0)), upper.tree), Select(Ident(xs), "length"))) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(),
           min(max(Literal(Constant(0)), lower.tree), Ident(n))) ::
-        ValDef(NoMods, b, TypeTree(),
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)),
           Apply(Select(builder.tree, "expect"), Apply(Select(Ident(n), "$minus"), Ident(i) :: Nil) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
@@ -350,22 +350,22 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def reverse[A, To : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+  def reverse[A]
+      (these: Expr[IndexedSeq[A]])
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(NoMods, i, TypeTree(), Select(Ident(xs), "length")) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(builder.tree, "expect"), Ident(i) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), Apply(Select(builder.tree, "expect"), Ident(i) :: Nil)) ::
         Assign(Ident(i), Apply(Select(Ident(i), "$minus"), Literal(Constant(1)) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
@@ -376,13 +376,13 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def zip[A, B, To : WeakTypeTag]
+  def zip[A, B]
       (these: Expr[IndexedSeq[A]], those: Expr[IndexedSeq[B]])
-      (builder: Expr[Builder[_, (A, B), To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, (A, B)]])
+    : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val ys   = newTermName(fresh("ys$"))
     val i    = newTermName(fresh("i$"))
@@ -395,7 +395,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
         ValDef(NoMods, ys, TypeTree(), those.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), min(Select(Ident(xs), "length"), Select(Ident(ys), "length"))) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(builder.tree, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)), Apply(Select(builder.tree, "expect"), Ident(n) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -409,13 +409,13 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
-  def ++ [A, To : WeakTypeTag]
+  def ++ [A]
       (these: Expr[IndexedSeq[A]], those: Expr[IndexedSeq[A]])
-      (builder: Expr[Builder[_, A, To]])
-    : Expr[To] = {
+      (builder: Expr[Builder[_, A]])
+    : Expr[builder.value.State] = {
     val xs = newTermName(fresh("xs$"))
     val ys = newTermName(fresh("ys$"))
     val b  = newTermName(fresh("builder$"))
@@ -423,13 +423,13 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(NoMods, ys, TypeTree(), those.tree) ::
-        ValDef(NoMods, b, TypeTree(),
+        ValDef(NoMods, b, TypeTree(BuilderType(builder)),
           Apply(Select(builder.tree, "expect"),
             Apply(Select(Select(Ident(xs), "length"), "$plus"), Select(Ident(ys), "length") :: Nil) :: Nil)) ::
         Apply(Select(Ident(b), "$plus$plus$eq"), Ident(xs) :: Nil) ::
         Apply(Select(Ident(b), "$plus$plus$eq"), Ident(ys) :: Nil) :: Nil,
         Select(Ident(b), "state"))
-    } (weakTypeTag[To])
+    } (StateTag(builder))
   }
   
   private def max(x: Tree, y: Tree): Tree =
@@ -438,6 +438,18 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   private def min(x: Tree, y: Tree): Tree =
     Apply(Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "min"), x :: y :: Nil)
   
-  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] =
-    WeakTypeTag(appliedType(mirror.staticClass("scala.Tuple2").toType, weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+  private def BuilderType(builder: Expr[Builder[_, _]]): Type = builder.tree.symbol match {
+    case symbol: TermSymbol if symbol.isStable => singleType(NoPrefix, symbol)
+    case _ => builder.actualType
+  }
+  
+  private def StateTag(builder: Expr[Builder[_, _]]): WeakTypeTag[builder.value.State] = {
+    val StateSymbol = mirror.staticClass("basis.collections.Builder").toType.member(newTypeName("State"))
+    WeakTypeTag(typeRef(BuilderType(builder), StateSymbol, Nil))
+  }
+  
+  private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
+    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
+    WeakTypeTag(appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+  }
 }
