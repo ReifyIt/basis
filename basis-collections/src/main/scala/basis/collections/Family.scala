@@ -9,7 +9,7 @@ package basis.collections
 
 /** A family of related collections. */
 trait Family[+Type] extends Any {
-  /** The characteristic type of this family.
+  /** The base type of this collection's family.
     * @group Classifying */
-  type Parent = Type
+  type Family = Type
 }
