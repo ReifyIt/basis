@@ -7,4 +7,4 @@
 
 package basis.sequential
 
-package object nonstrict extends General with NonStrict
+package object nonstrict extends general.Implicits with nonstrict.Implicits

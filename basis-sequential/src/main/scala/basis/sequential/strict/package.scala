@@ -7,4 +7,4 @@
 
 package basis.sequential
 
-package object strict extends General with Strict
+package object strict extends general.Implicits with strict.Implicits

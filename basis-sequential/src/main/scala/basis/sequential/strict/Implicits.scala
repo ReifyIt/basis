@@ -6,20 +6,20 @@
 \*                                                                      */
 
 package basis.sequential
+package strict
 
 import basis.collections._
 import basis.collections.traversable._
-import basis.sequential.strict._
 
-private[sequential] trait Strict {
+private[sequential] trait Implicits {
   implicit final def StrictEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A, these.Family] =
-    macro Strict.StrictEnumeratorOps[A]
+    macro Implicits.StrictEnumeratorOps[A]
   
   implicit final def StrictIteratorOps[A](these: Iterator[A]): IteratorOps[A, these.Family] =
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
   implicit final def StrictCollectionOps[A](these: Collection[A]): CollectionOps[A, these.Family] =
-    macro Strict.StrictCollectionOps[A]
+    macro Implicits.StrictCollectionOps[A]
   
   implicit final def StrictContainerOps[A](these: Container[A]): ContainerOps[A, these.Family] =
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
@@ -40,7 +40,7 @@ private[sequential] trait Strict {
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
 }
 
-private[sequential] object Strict {
+private[sequential] object Implicits {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   

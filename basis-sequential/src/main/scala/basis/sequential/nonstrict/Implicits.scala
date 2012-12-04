@@ -6,41 +6,41 @@
 \*                                                                      */
 
 package basis.sequential
+package nonstrict
 
 import basis.collections._
 import basis.collections.traversable._
-import basis.sequential.nonstrict._
 
-private[sequential] trait NonStrict {
+private[sequential] trait Implicits {
   implicit final def NonStrictEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A] =
-    macro NonStrict.NonStrictEnumeratorOps[A]
+    macro Implicits.NonStrictEnumeratorOps[A]
   
   implicit final def NonStrictIteratorOps[A](these: Iterator[A]): IteratorOps[A] =
-    macro NonStrict.NonStrictIteratorOps[A]
+    macro Implicits.NonStrictIteratorOps[A]
   
   implicit final def NonStrictCollectionOps[A](these: Collection[A]): CollectionOps[A] =
-    macro NonStrict.NonStrictCollectionOps[A]
+    macro Implicits.NonStrictCollectionOps[A]
   
   implicit final def NonStrictContainerOps[A](these: Container[A]): ContainerOps[A] =
-    macro NonStrict.NonStrictContainerOps[A]
+    macro Implicits.NonStrictContainerOps[A]
   
   implicit final def NonStrictSeqOps[A](these: Seq[A]): SeqOps[A] =
-    macro NonStrict.NonStrictSeqOps[A]
+    macro Implicits.NonStrictSeqOps[A]
   
   implicit final def NonStrictLinearSeqOps[A](these: LinearSeq[A]): LinearSeqOps[A] =
-    macro NonStrict.NonStrictLinearSeqOps[A]
+    macro Implicits.NonStrictLinearSeqOps[A]
   
   implicit final def NonStrictIndexedSeqOps[A](these: IndexedSeq[A]): IndexedSeqOps[A] =
-    macro NonStrict.NonStrictIndexedSeqOps[A]
+    macro Implicits.NonStrictIndexedSeqOps[A]
   
   implicit final def NonStrictSetOps[A](these: Set[A]): SetOps[A] =
-    macro NonStrict.NonStrictSetOps[A]
+    macro Implicits.NonStrictSetOps[A]
   
   implicit final def NonStrictMapOps[A, T](these: Map[A, T]): MapOps[A, T] =
-    macro NonStrict.NonStrictMapOps[A, T]
+    macro Implicits.NonStrictMapOps[A, T]
 }
 
-private[sequential] object NonStrict {
+private[sequential] object Implicits {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   

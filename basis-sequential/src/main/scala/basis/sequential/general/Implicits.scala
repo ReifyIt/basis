@@ -6,20 +6,20 @@
 \*                                                                      */
 
 package basis.sequential
+package general
 
 import basis.collections._
 import basis.collections.traversable._
-import basis.sequential.general._
 
-private[sequential] trait General {
+private[sequential] trait Implicits {
   implicit final def GeneralEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A] =
-    macro General.GeneralEnumeratorOps[A]
+    macro Implicits.GeneralEnumeratorOps[A]
   
   implicit final def GeneralIteratorOps[A](these: Iterator[A]): IteratorOps[A] =
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
   implicit final def GeneralCollectionOps[A](these: Collection[A]): CollectionOps[A] =
-    macro General.GeneralCollectionOps[A]
+    macro Implicits.GeneralCollectionOps[A]
   
   implicit final def GeneralContainerOps[A](these: Container[A]): ContainerOps[A] =
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
@@ -40,7 +40,7 @@ private[sequential] trait General {
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
 }
 
-private[sequential] object General {
+private[sequential] object Implicits {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
