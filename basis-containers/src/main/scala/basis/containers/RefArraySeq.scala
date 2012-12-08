@@ -6,42 +6,50 @@
 \*                                                                      */
 
 package basis.containers
-package mutable
 
 import basis.collections._
 import basis.util._
 
-private[containers] final class ByteArraySeq(array: Array[Byte]) extends ArraySeq[Byte] {
+private[containers] final class RefArraySeq[A](array: Array[AnyRef]) extends ArraySeq[A] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): Byte = array(index)
+  override def apply(index: Int): A = array(index).asInstanceOf[A]
   
-  override def update(index: Int, value: Byte): Unit = array(index) = value
+  override def update(index: Int, value: A): Unit = array(index) = value.asInstanceOf[AnyRef]
   
-  override def copyToArray(xs: Array[Byte], start: Int, count: Int): Unit =
-    java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+  override def copyToArray(xs: Array[A], start: Int, count: Int) {
+    if (xs.isInstanceOf[Array[AnyRef]])
+      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+    else super.copyToArray(xs, start, count)
+  }
   
-  override def copyToArray(xs: Array[Byte], start: Int): Unit =
-    java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
+  override def copyToArray(xs: Array[A], start: Int) {
+    if (xs.isInstanceOf[Array[AnyRef]])
+      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
+    else super.copyToArray(xs, start)
+  }
   
-  override def copyToArray(xs: Array[Byte]): Unit =
-    java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+  override def copyToArray(xs: Array[A]) {
+    if (xs.isInstanceOf[Array[AnyRef]])
+      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+    else super.copyToArray(xs)
+  }
   
-  override def iterator: Iterator[Byte] = new ByteArraySeqIterator(array)
+  override def iterator: Iterator[A] = new RefArraySeqIterator(array)
 }
 
-private[containers] final class ByteArraySeqIterator
-    (array: Array[Byte], private[this] var i: Int, n: Int)
-  extends Iterator[Byte] {
+private[containers] final class RefArraySeqIterator[A]
+    (array: Array[AnyRef], private[this] var i: Int, n: Int)
+  extends Iterator[A] {
   
-  def this(array: Array[Byte]) = this(array, 0, array.length)
+  def this(array: Array[AnyRef]) = this(array, 0, array.length)
   
   override def isEmpty: Boolean = i >= n
   
-  override def head: Byte = {
-    if (i < n) array(i)
+  override def head: A = {
+    if (i < n) array(i).asInstanceOf[A]
     else throw new NoSuchElementException("Head of empty iterator.")
   }
   
@@ -50,13 +58,13 @@ private[containers] final class ByteArraySeqIterator
     else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
-  override def dup: Iterator[Byte] = new ByteArraySeqIterator(array, i, n)
+  override def dup: Iterator[A] = new RefArraySeqIterator(array, i, n)
 }
 
-private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte] {
-  override type State = ArraySeq[Byte]
+private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
+  override type State = ArraySeq[A]
   
-  private[this] var array: Array[Byte] = _
+  private[this] var array: Array[AnyRef] = _
   
   private[this] var aliased: Boolean = true
   
@@ -69,7 +77,7 @@ private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte] {
   }
   
   private[this] def resize(size: Int) {
-    val newArray = new Array[Byte](size)
+    val newArray = new Array[AnyRef](size)
     if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
     array = newArray
   }
@@ -81,17 +89,17 @@ private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte] {
     }
   }
   
-  override def += (value: Byte): this.type = {
+  override def += (value: A): this.type = {
     prepare(length + 1)
-    array(length) = value
+    array(length) = value.asInstanceOf[AnyRef]
     length += 1
     this
   }
   
-  override def ++= (xs: Enumerator[Byte]): this.type = xs match {
-    case xs: ByteArraySeq =>
+  override def ++= (xs: Enumerator[A]): this.type = xs match {
+    case xs: RefArraySeq[A] =>
       prepare(length + xs.length)
-      xs.copyToArray(array, length)
+      xs.copyToArray(array.asInstanceOf[Array[A]], length)
       length += xs.length
       this
     case _ => super.++=(xs)
@@ -105,10 +113,10 @@ private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte] {
     this
   }
   
-  override def state: ArraySeq[Byte] = {
+  override def state: ArraySeq[A] = {
     if (array == null || length != array.length) resize(length)
     aliased = true
-    new ByteArraySeq(array)
+    new RefArraySeq(array)
   }
   
   override def clear() {

@@ -6,7 +6,6 @@
 \*                                                                      */
 
 package basis.containers
-package immutable
 
 private[containers] object ListMacros {
   import scala.collection.immutable.{::, Nil}

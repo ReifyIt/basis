@@ -6,51 +6,41 @@
 \*                                                                      */
 
 package basis.containers
-package mutable
 
 import basis.collections._
 import basis.util._
 
-private[containers] final class RefArraySeq[A](array: Array[AnyRef]) extends ArraySeq[A] {
+private[containers] final class ShortArraySeq(array: Array[Short]) extends ArraySeq[Short] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): A = array(index).asInstanceOf[A]
+  override def apply(index: Int): Short = array(index)
   
-  override def update(index: Int, value: A): Unit = array(index) = value.asInstanceOf[AnyRef]
+  override def update(index: Int, value: Short): Unit = array(index) = value
   
-  override def copyToArray(xs: Array[A], start: Int, count: Int) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
-    else super.copyToArray(xs, start, count)
-  }
+  override def copyToArray(xs: Array[Short], start: Int, count: Int): Unit =
+    java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
   
-  override def copyToArray(xs: Array[A], start: Int) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
-    else super.copyToArray(xs, start)
-  }
+  override def copyToArray(xs: Array[Short], start: Int): Unit =
+    java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
   
-  override def copyToArray(xs: Array[A]) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
-    else super.copyToArray(xs)
-  }
+  override def copyToArray(xs: Array[Short]): Unit =
+    java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
   
-  override def iterator: Iterator[A] = new RefArraySeqIterator(array)
+  override def iterator: Iterator[Short] = new ShortArraySeqIterator(array)
 }
 
-private[containers] final class RefArraySeqIterator[A]
-    (array: Array[AnyRef], private[this] var i: Int, n: Int)
-  extends Iterator[A] {
+private[containers] final class ShortArraySeqIterator
+    (array: Array[Short], private[this] var i: Int, n: Int)
+  extends Iterator[Short] {
   
-  def this(array: Array[AnyRef]) = this(array, 0, array.length)
+  def this(array: Array[Short]) = this(array, 0, array.length)
   
   override def isEmpty: Boolean = i >= n
   
-  override def head: A = {
-    if (i < n) array(i).asInstanceOf[A]
+  override def head: Short = {
+    if (i < n) array(i)
     else throw new NoSuchElementException("Head of empty iterator.")
   }
   
@@ -59,13 +49,13 @@ private[containers] final class RefArraySeqIterator[A]
     else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
-  override def dup: Iterator[A] = new RefArraySeqIterator(array, i, n)
+  override def dup: Iterator[Short] = new ShortArraySeqIterator(array, i, n)
 }
 
-private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
-  override type State = ArraySeq[A]
+private[containers] final class ShortArraySeqBuilder extends Builder[Any, Short] {
+  override type State = ArraySeq[Short]
   
-  private[this] var array: Array[AnyRef] = _
+  private[this] var array: Array[Short] = _
   
   private[this] var aliased: Boolean = true
   
@@ -78,7 +68,7 @@ private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
   }
   
   private[this] def resize(size: Int) {
-    val newArray = new Array[AnyRef](size)
+    val newArray = new Array[Short](size)
     if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
     array = newArray
   }
@@ -90,17 +80,17 @@ private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
     }
   }
   
-  override def += (value: A): this.type = {
+  override def += (value: Short): this.type = {
     prepare(length + 1)
-    array(length) = value.asInstanceOf[AnyRef]
+    array(length) = value
     length += 1
     this
   }
   
-  override def ++= (xs: Enumerator[A]): this.type = xs match {
-    case xs: RefArraySeq[A] =>
+  override def ++= (xs: Enumerator[Short]): this.type = xs match {
+    case xs: ShortArraySeq =>
       prepare(length + xs.length)
-      xs.copyToArray(array.asInstanceOf[Array[A]], length)
+      xs.copyToArray(array, length)
       length += xs.length
       this
     case _ => super.++=(xs)
@@ -114,10 +104,10 @@ private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
     this
   }
   
-  override def state: ArraySeq[A] = {
+  override def state: ArraySeq[Short] = {
     if (array == null || length != array.length) resize(length)
     aliased = true
-    new RefArraySeq(array)
+    new ShortArraySeq(array)
   }
   
   override def clear() {

@@ -6,41 +6,40 @@
 \*                                                                      */
 
 package basis.containers
-package mutable
 
 import basis.collections._
 import basis.util._
 
-private[containers] final class FloatArraySeq(array: Array[Float]) extends ArraySeq[Float] {
+private[containers] final class DoubleArraySeq(array: Array[Double]) extends ArraySeq[Double] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): Float = array(index)
+  override def apply(index: Int): Double = array(index)
   
-  override def update(index: Int, value: Float): Unit = array(index) = value
+  override def update(index: Int, value: Double): Unit = array(index) = value
   
-  override def copyToArray(xs: Array[Float], start: Int, count: Int): Unit =
+  override def copyToArray(xs: Array[Double], start: Int, count: Int): Unit =
     java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
   
-  override def copyToArray(xs: Array[Float], start: Int): Unit =
+  override def copyToArray(xs: Array[Double], start: Int): Unit =
     java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
   
-  override def copyToArray(xs: Array[Float]): Unit =
+  override def copyToArray(xs: Array[Double]): Unit =
     java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
   
-  override def iterator: Iterator[Float] = new FloatArraySeqIterator(array)
+  override def iterator: Iterator[Double] = new DoubleArraySeqIterator(array)
 }
 
-private[containers] final class FloatArraySeqIterator
-    (array: Array[Float], private[this] var i: Int, n: Int)
-  extends Iterator[Float] {
+private[containers] final class DoubleArraySeqIterator
+    (array: Array[Double], private[this] var i: Int, n: Int)
+  extends Iterator[Double] {
   
-  def this(array: Array[Float]) = this(array, 0, array.length)
+  def this(array: Array[Double]) = this(array, 0, array.length)
   
   override def isEmpty: Boolean = i >= n
   
-  override def head: Float = {
+  override def head: Double = {
     if (i < n) array(i)
     else throw new NoSuchElementException("Head of empty iterator.")
   }
@@ -50,13 +49,13 @@ private[containers] final class FloatArraySeqIterator
     else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
-  override def dup: Iterator[Float] = new FloatArraySeqIterator(array, i, n)
+  override def dup: Iterator[Double] = new DoubleArraySeqIterator(array, i, n)
 }
 
-private[containers] final class FloatArraySeqBuilder extends Builder[Any, Float] {
-  override type State = ArraySeq[Float]
+private[containers] final class DoubleArraySeqBuilder extends Builder[Any, Double] {
+  override type State = ArraySeq[Double]
   
-  private[this] var array: Array[Float] = _
+  private[this] var array: Array[Double] = _
   
   private[this] var aliased: Boolean = true
   
@@ -69,7 +68,7 @@ private[containers] final class FloatArraySeqBuilder extends Builder[Any, Float]
   }
   
   private[this] def resize(size: Int) {
-    val newArray = new Array[Float](size)
+    val newArray = new Array[Double](size)
     if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
     array = newArray
   }
@@ -81,15 +80,15 @@ private[containers] final class FloatArraySeqBuilder extends Builder[Any, Float]
     }
   }
   
-  override def += (value: Float): this.type = {
+  override def += (value: Double): this.type = {
     prepare(length + 1)
     array(length) = value
     length += 1
     this
   }
   
-  override def ++= (xs: Enumerator[Float]): this.type = xs match {
-    case xs: FloatArraySeq =>
+  override def ++= (xs: Enumerator[Double]): this.type = xs match {
+    case xs: DoubleArraySeq =>
       prepare(length + xs.length)
       xs.copyToArray(array, length)
       length += xs.length
@@ -105,10 +104,10 @@ private[containers] final class FloatArraySeqBuilder extends Builder[Any, Float]
     this
   }
   
-  override def state: ArraySeq[Float] = {
+  override def state: ArraySeq[Double] = {
     if (array == null || length != array.length) resize(length)
     aliased = true
-    new FloatArraySeq(array)
+    new DoubleArraySeq(array)
   }
   
   override def clear() {

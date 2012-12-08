@@ -6,41 +6,40 @@
 \*                                                                      */
 
 package basis.containers
-package mutable
 
 import basis.collections._
 import basis.util._
 
-private[containers] final class ShortArraySeq(array: Array[Short]) extends ArraySeq[Short] {
+private[containers] final class LongArraySeq(array: Array[Long]) extends ArraySeq[Long] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
-  override def apply(index: Int): Short = array(index)
+  override def apply(index: Int): Long = array(index)
   
-  override def update(index: Int, value: Short): Unit = array(index) = value
+  override def update(index: Int, value: Long): Unit = array(index) = value
   
-  override def copyToArray(xs: Array[Short], start: Int, count: Int): Unit =
+  override def copyToArray(xs: Array[Long], start: Int, count: Int): Unit =
     java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
   
-  override def copyToArray(xs: Array[Short], start: Int): Unit =
+  override def copyToArray(xs: Array[Long], start: Int): Unit =
     java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
   
-  override def copyToArray(xs: Array[Short]): Unit =
+  override def copyToArray(xs: Array[Long]): Unit =
     java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
   
-  override def iterator: Iterator[Short] = new ShortArraySeqIterator(array)
+  override def iterator: Iterator[Long] = new LongArraySeqIterator(array)
 }
 
-private[containers] final class ShortArraySeqIterator
-    (array: Array[Short], private[this] var i: Int, n: Int)
-  extends Iterator[Short] {
+private[containers] final class LongArraySeqIterator
+    (array: Array[Long], private[this] var i: Int, n: Int)
+  extends Iterator[Long] {
   
-  def this(array: Array[Short]) = this(array, 0, array.length)
+  def this(array: Array[Long]) = this(array, 0, array.length)
   
   override def isEmpty: Boolean = i >= n
   
-  override def head: Short = {
+  override def head: Long = {
     if (i < n) array(i)
     else throw new NoSuchElementException("Head of empty iterator.")
   }
@@ -50,13 +49,13 @@ private[containers] final class ShortArraySeqIterator
     else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
-  override def dup: Iterator[Short] = new ShortArraySeqIterator(array, i, n)
+  override def dup: Iterator[Long] = new LongArraySeqIterator(array, i, n)
 }
 
-private[containers] final class ShortArraySeqBuilder extends Builder[Any, Short] {
-  override type State = ArraySeq[Short]
+private[containers] final class LongArraySeqBuilder extends Builder[Any, Long] {
+  override type State = ArraySeq[Long]
   
-  private[this] var array: Array[Short] = _
+  private[this] var array: Array[Long] = _
   
   private[this] var aliased: Boolean = true
   
@@ -69,7 +68,7 @@ private[containers] final class ShortArraySeqBuilder extends Builder[Any, Short]
   }
   
   private[this] def resize(size: Int) {
-    val newArray = new Array[Short](size)
+    val newArray = new Array[Long](size)
     if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
     array = newArray
   }
@@ -81,15 +80,15 @@ private[containers] final class ShortArraySeqBuilder extends Builder[Any, Short]
     }
   }
   
-  override def += (value: Short): this.type = {
+  override def += (value: Long): this.type = {
     prepare(length + 1)
     array(length) = value
     length += 1
     this
   }
   
-  override def ++= (xs: Enumerator[Short]): this.type = xs match {
-    case xs: ShortArraySeq =>
+  override def ++= (xs: Enumerator[Long]): this.type = xs match {
+    case xs: LongArraySeq =>
       prepare(length + xs.length)
       xs.copyToArray(array, length)
       length += xs.length
@@ -105,10 +104,10 @@ private[containers] final class ShortArraySeqBuilder extends Builder[Any, Short]
     this
   }
   
-  override def state: ArraySeq[Short] = {
+  override def state: ArraySeq[Long] = {
     if (array == null || length != array.length) resize(length)
     aliased = true
-    new ShortArraySeq(array)
+    new LongArraySeq(array)
   }
   
   override def clear() {

@@ -6,7 +6,6 @@
 \*                                                                      */
 
 package basis.containers
-package mutable
 
 import basis.collections._
 import basis.collections.traversable._
