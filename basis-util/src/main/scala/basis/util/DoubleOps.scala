@@ -9,6 +9,10 @@ package basis.util
 
 /** Supplemental operations on `Double` values. */
 final class DoubleOps {
+  def isNaN: Boolean = macro DoubleMacros.isNaN
+  
+  def isInfinite: Boolean = macro DoubleMacros.isInfinite
+  
   def abs: Double = macro DoubleMacros.abs
   
   def min(y: Double): Double = macro DoubleMacros.min
@@ -23,6 +27,22 @@ final class DoubleOps {
 private[util] object DoubleMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
+  
+  def isNaN(c: Context): c.Expr[Boolean] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Double = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double")
+    Expr(Apply(Select(Double, "isNaN"), x :: Nil))(TypeTag.Boolean)
+  }
+  
+  def isInfinite(c: Context): c.Expr[Boolean] = {
+    import c.{Expr, prefix, TypeTag}
+    import c.universe._
+    val Apply(_, x :: Nil) = prefix.tree
+    val Double = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double")
+    Expr(Apply(Select(Double, "isInfinite"), x :: Nil))(TypeTag.Boolean)
+  }
   
   def abs(c: Context): c.Expr[Double] = {
     import c.{Expr, prefix, TypeTag}
