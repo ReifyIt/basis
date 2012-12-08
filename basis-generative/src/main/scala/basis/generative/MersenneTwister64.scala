@@ -7,6 +7,8 @@
 
 package basis.generative
 
+import basis.util._
+
 /** A 64-bit pseudorandom number generator. Implements Makoto Matsumoto and
   * Takuji Nishimura's MT19937-64 algorithm.
   * 
@@ -31,7 +33,7 @@ final class MersenneTwister64 private (
     this(19650218L)
     var i = 0
     var j = 0
-    var k = java.lang.Math.max(312, key.length)
+    var k = 312 max key.length
     while (k != 0) {
       state(i) = (state(i) ^ ((state(i - 1) ^ (state(i - 1) >>> 62)) * 3935559000370003845L)) + key(j) + j
       i += 1

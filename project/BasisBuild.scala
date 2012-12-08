@@ -65,7 +65,8 @@ object BasisBuild extends Build {
   lazy val BasisGenerative = Project(
     id           = "basis-generative",
     base         = file("basis-generative"),
-    settings     = commonSettings
+    settings     = commonSettings,
+    dependencies = Seq(BasisUtil)
   )
   
   lazy val BasisMath = Project(

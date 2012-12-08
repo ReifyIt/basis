@@ -7,6 +7,8 @@
 
 package basis.generative
 
+import basis.util._
+
 /** A 32-bit pseudorandom number generator. Implements Makoto Matsumoto and
   * Takuji Nishimura's MT19937 algorithm.
   * 
@@ -31,7 +33,7 @@ final class MersenneTwister32 private (
     this(19650218)
     var i = 0
     var j = 0
-    var k = java.lang.Math.max(624, key.length)
+    var k = 624 max key.length
     while (k != 0) {
       state(i) = (state(i) ^ ((state(i - 1) ^ (state(i - 1) >>> 30)) * 1664525)) + key(j) + j
       i += 1

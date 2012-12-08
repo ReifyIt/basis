@@ -7,6 +7,8 @@
 
 package basis.generative
 
+import basis.util._
+
 abstract class Randomness {
   def asByte: Arbitrary[Byte] = new ByteView
   
@@ -42,6 +44,44 @@ abstract class Randomness {
   
   def asBoolean: Arbitrary[Boolean] = new BooleanView
   
+  def choose(lower: Byte, upper: Byte): Byte = {
+    if (upper < lower) throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    val size = (upper - lower) + 1
+    (lower + (toInt() % size).abs).toByte
+  }
+  
+  def choose(lower: Short, upper: Short): Short = {
+    if (upper < lower) throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    val size = (upper - lower) + 1
+    (lower + (toInt() % size).abs).toShort
+  }
+  
+  def choose(lower: Int, upper: Int): Int = {
+    val size = (upper - lower) + 1
+    if (upper < lower || size < 0) throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    lower + (toInt() % size).abs
+  }
+  
+  def choose(lower: Long, upper: Long): Long = {
+    val size = (upper - lower) + 1L
+    if (upper < lower || size < 0L) throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    lower + (toLong() % size).abs
+  }
+  
+  def choose(lower: Float, upper: Float): Float = {
+    val size = upper - lower
+    if (size.isNaN || size.isInfinite || size < 0.0F)
+      throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    lower + toFloat() * size
+  }
+  
+  def choose(lower: Double, upper: Double): Double = {
+    val size = upper - lower
+    if (size.isNaN || size.isInfinite || size < 0.0)
+      throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    lower + toDouble() * size
+  }
+  
   def toByte(): Byte
   
   def toShort(): Short
@@ -61,11 +101,11 @@ abstract class Randomness {
     override def toString: String = Randomness.this.toString +"."+"asByte"
   }
   
-  private final class ByteRangeView(l: Byte, u: Byte) extends Arbitrary[Byte] {
-    if (u < l) throw new IllegalArgumentException(s"Invalid range ($l, $u).")
-    private[this] val d: Int = (u - l) + 1
-    override def apply(): Byte = (l + java.lang.Math.abs(toInt() % d)).toByte
-    override def toString: String = Randomness.this.toString +"."+"asByte"+"("+ l +", "+ u +")"
+  private final class ByteRangeView(lower: Byte, upper: Byte) extends Arbitrary[Byte] {
+    if (upper < lower) throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    private[this] val size: Int = (upper - lower) + 1
+    override def apply(): Byte = (lower + (toInt() % size).abs).toByte
+    override def toString: String = Randomness.this.toString +"."+"asByte"+"("+ lower +", "+ upper +")"
   }
   
   private final class PositiveByteView extends Arbitrary[Byte] {
@@ -78,11 +118,11 @@ abstract class Randomness {
     override def toString: String = Randomness.this.toString +"."+"asShort"
   }
   
-  private final class ShortRangeView(l: Short, u: Short) extends Arbitrary[Short] {
-    if (u < l) throw new IllegalArgumentException(s"Invalid range ($l, $u).")
-    private[this] val d: Int = (u - l) + 1
-    override def apply(): Short = (l + java.lang.Math.abs(toInt() % d)).toShort
-    override def toString: String = Randomness.this.toString +"."+"asShort"+"("+ l +", "+ u +")"
+  private final class ShortRangeView(lower: Short, upper: Short) extends Arbitrary[Short] {
+    if (upper < lower) throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    private[this] val size: Int = (upper - lower) + 1
+    override def apply(): Short = (lower + (toInt() % size).abs).toShort
+    override def toString: String = Randomness.this.toString +"."+"asShort"+"("+ lower +", "+ upper +")"
   }
   
   private final class PositiveShortView extends Arbitrary[Short] {
@@ -95,11 +135,11 @@ abstract class Randomness {
     override def toString: String = Randomness.this.toString +"."+"asInt"
   }
   
-  private final class IntRangeView(l: Int, u: Int) extends Arbitrary[Int] {
-    private[this] val d: Int = (u - l) + 1
-    if (u < l || d < 0) throw new IllegalArgumentException(s"Invalid range ($l, $u).")
-    override def apply(): Int = l + java.lang.Math.abs(toInt() % d)
-    override def toString: String = Randomness.this.toString +"."+"asInt"+"("+ l +", "+ u +")"
+  private final class IntRangeView(lower: Int, upper: Int) extends Arbitrary[Int] {
+    private[this] val size: Int = (upper - lower) + 1
+    if (upper < lower || size < 0) throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    override def apply(): Int = lower + (toInt() % size).abs
+    override def toString: String = Randomness.this.toString +"."+"asInt"+"("+ lower +", "+ upper +")"
   }
   
   private final class PositiveIntView extends Arbitrary[Int] {
@@ -112,11 +152,11 @@ abstract class Randomness {
     override def toString: String = Randomness.this.toString +"."+"asLong"
   }
   
-  private final class LongRangeView(l: Long, u: Long) extends Arbitrary[Long] {
-    private[this] val d: Long = (u - l) + 1L
-    if (u < l || d < 0L) throw new IllegalArgumentException(s"Invalid range ($l, $u).")
-    override def apply(): Long = l + java.lang.Math.abs(toLong() % d)
-    override def toString: String = Randomness.this.toString +"."+"asLong"+"("+ l +", "+ u +")"
+  private final class LongRangeView(lower: Long, upper: Long) extends Arbitrary[Long] {
+    private[this] val size: Long = (upper - lower) + 1L
+    if (upper < lower || size < 0L) throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    override def apply(): Long = lower + (toLong() % size).abs
+    override def toString: String = Randomness.this.toString +"."+"asLong"+"("+ lower +", "+ upper +")"
   }
   
   private final class PositiveLongView extends Arbitrary[Long] {
@@ -129,12 +169,12 @@ abstract class Randomness {
     override def toString: String = Randomness.this.toString +"."+"asFloat"
   }
   
-  private final class FloatRangeView(l: Float, u: Float) extends Arbitrary[Float] {
-    private[this] val d: Float = u - l
-    if (java.lang.Float.isNaN(d) || java.lang.Float.isInfinite(d) || d < 0.0F)
-      throw new IllegalArgumentException(s"Invalid range ($l, $u).")
-    override def apply(): Float = l + toFloat() * d
-    override def toString: String = Randomness.this.toString +"."+"asFloat"+"("+ l +", "+ u +")"
+  private final class FloatRangeView(lower: Float, upper: Float) extends Arbitrary[Float] {
+    private[this] val size: Float = upper - lower
+    if (size.isNaN || size.isInfinite || size < 0.0F)
+      throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    override def apply(): Float = lower + toFloat() * size
+    override def toString: String = Randomness.this.toString +"."+"asFloat"+"("+ lower +", "+ upper +")"
   }
   
   private final class DoubleView extends Arbitrary[Double] {
@@ -142,12 +182,12 @@ abstract class Randomness {
     override def toString: String = Randomness.this.toString +"."+"asDouble"
   }
   
-  private final class DoubleRangeView(l: Double, u: Double) extends Arbitrary[Double] {
-    private[this] val d: Double = u - l
-    if (java.lang.Double.isNaN(d) || java.lang.Double.isInfinite(d) || d < 0.0)
-      throw new IllegalArgumentException(s"Invalid range ($l, $u).")
-    override def apply(): Double = l + toDouble() * d
-    override def toString: String = Randomness.this.toString +"."+"asDouble"+"("+ l +", "+ u +")"
+  private final class DoubleRangeView(lower: Double, upper: Double) extends Arbitrary[Double] {
+    private[this] val size: Double = upper - lower
+    if (size.isNaN || size.isInfinite || size < 0.0)
+      throw new IllegalArgumentException(s"Invalid range ($lower, $upper).")
+    override def apply(): Double = lower + toDouble() * size
+    override def toString: String = Randomness.this.toString +"."+"asDouble"+"("+ lower +", "+ upper +")"
   }
   
   private final class BooleanView extends Arbitrary[Boolean] {
