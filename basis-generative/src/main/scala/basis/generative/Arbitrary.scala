@@ -11,113 +11,111 @@ import scala.annotation.{implicitNotFound, tailrec, unspecialized}
 
 @implicitNotFound("No implicit generator available for Arbitrary[${R}].")
 trait Arbitrary[@specialized(Specializable.Primitives) +R] extends (() => R) {
-  @unspecialized def map[T](f: R => T): Arbitrary[T] =
-    new Arbitrary.Map(this)(f)
+  @unspecialized def map[T](f: R => T): Arbitrary[T] = new Map(f)
   
-  @unspecialized def flatMap[T](f: R => Arbitrary[T]): Arbitrary[T] =
-    new Arbitrary.FlatMap(this)(f)
+  @unspecialized def flatMap[T](f: R => Arbitrary[T]): Arbitrary[T] = new FlatMap(f)
   
-  @unspecialized def filter(p: R => Boolean): Arbitrary[R] =
-    new Arbitrary.Filter(this, 1024)(p)
+  @unspecialized def filter(p: R => Boolean): Arbitrary[R] = new Filter(1024)(p)
   
-  @unspecialized def withFilter(p: R => Boolean): Arbitrary[R] =
-    new Arbitrary.Filter(this, 1024)(p)
+  @unspecialized def withFilter(p: R => Boolean): Arbitrary[R] = new Filter(1024)(p)
   
   override def toString: String = "<arbitrary>"
+  
+  private final class Map[+T](f: R => T) extends Arbitrary[T] {
+    override def apply(): T = f(Arbitrary.this())
+    override def toString: String = Arbitrary.this.toString +"."+"map"+"("+ f +")"
+  }
+  
+  private final class FlatMap[+T](f: R => Arbitrary[T]) extends Arbitrary[T] {
+    override def apply(): T = f(Arbitrary.this())()
+    override def toString: String = Arbitrary.this.toString +"."+"flatMap"+"("+ f +")"
+  }
+  
+  private final class Filter(TTL: Int)(p: R => Boolean) extends Arbitrary[R] {
+    @tailrec private[this] def apply(ttl: Int): R = {
+      if (ttl < 0) throw new ArbitraryException("improbable filter")
+      val x = Arbitrary.this()
+      if (p(x)) x
+      else apply(ttl - 1)
+    }
+    override def apply(): R = apply(TTL)
+    override def toString: String = Arbitrary.this.toString +"."+"filter"+"("+ p +")"
+  }
 }
 
 object Arbitrary {
   @inline def apply[R](implicit R: Arbitrary[R]): R.type = R
   
-  implicit object Byte extends Arbitrary[Byte] {
-    private[this] val gen = new MersenneTwister32
-    override def apply() = synchronized(gen().toByte)
-    override def toString = "Byte"
+  implicit def Byte: Arbitrary[Byte] =
+    new MersenneTwister32().asByte
+  
+  def Byte(lower: Byte, upper: Byte): Arbitrary[Byte] =
+    new MersenneTwister32().asByte(lower, upper)
+  
+  def PositiveByte: Arbitrary[Byte] =
+    new MersenneTwister32().asPositiveByte
+  
+  implicit def Short: Arbitrary[Short] =
+    new MersenneTwister32().asShort
+  
+  def Short(lower: Short, upper: Short): Arbitrary[Short] =
+    new MersenneTwister32().asShort(lower, upper)
+  
+  def PositiveShort: Arbitrary[Short] =
+    new MersenneTwister32().asPositiveShort
+  
+  implicit def Int: Arbitrary[Int] =
+    new MersenneTwister32()
+  
+  def Int(lower: Int, upper: Int): Arbitrary[Int] =
+    new MersenneTwister32().asInt(lower, upper)
+  
+  def PositiveInt: Arbitrary[Int] =
+    new MersenneTwister32().asPositiveInt
+  
+  implicit def Long: Arbitrary[Long] =
+    new MersenneTwister64()
+  
+  def Long(lower: Long, upper: Long): Arbitrary[Long] =
+    new MersenneTwister64().asLong(lower, upper)
+  
+  def PositiveLong: Arbitrary[Long] =
+    new MersenneTwister64().asPositiveLong
+  
+  implicit def Float: Arbitrary[Float] =
+    new MersenneTwister32().asFloat
+  
+  def Float(lower: Float, upper: Float): Arbitrary[Float] =
+    new MersenneTwister32().asFloat(lower, upper)
+  
+  implicit def Double: Arbitrary[Double] =
+    new MersenneTwister64().asDouble
+  
+  def Double(lower: Double, upper: Double): Arbitrary[Double] =
+    new MersenneTwister64().asDouble(lower, upper)
+  
+  implicit def Boolean: Arbitrary[Boolean] =
+    new MersenneTwister32().asBoolean
+  
+  private object Void extends Arbitrary[Unit] {
+    override def apply(): Unit = ()
+    override def toString: String = "Unit"
   }
   
-  object PositiveByte extends Arbitrary[Byte] {
-    private[this] val gen = new MersenneTwister32
-    override def apply() = synchronized((gen() & 0x7F).toByte)
-    override def toString = "PositiveByte"
-  }
-  
-  implicit object Short extends Arbitrary[Short] {
-    private[this] val gen = new MersenneTwister32
-    override def apply() = synchronized(gen().toShort)
-    override def toString = "Short"
-  }
-  
-  object PositiveShort extends Arbitrary[Short] {
-    private[this] val gen = new MersenneTwister32
-    override def apply() = synchronized((gen() & 0x7FFF).toShort)
-    override def toString = "PositiveShort"
-  }
-  
-  implicit object Int extends Arbitrary[Int] {
-    private[this] val gen = new MersenneTwister32
-    override def apply() = synchronized(gen())
-    override def toString = "Int"
-  }
-  
-  object PositiveInt extends Arbitrary[Int] {
-    private[this] val gen = new MersenneTwister32
-    override def apply() = synchronized(gen() & 0x7FFFFFFF)
-    override def toString = "PositiveInt"
-  }
-  
-  private final class IntRange(lower: Int, upper: Int) extends Arbitrary[Int] {
-    if (lower > upper) throw new IllegalArgumentException("lower > upper")
-    private[this] val size: Long = (upper - lower) + 1L
-    override def apply(): Int = (lower + (Arbitrary.PositiveInt() % size)).toInt
-  }
-  
-  implicit object Long extends Arbitrary[Long] {
-    private[this] val gen = new MersenneTwister64
-    override def apply() = synchronized(gen())
-    override def toString = "Long"
-  }
-  
-  object PositiveLong extends Arbitrary[Long] {
-    private[this] val gen = new MersenneTwister64
-    override def apply() = synchronized(gen() & 0x7FFFFFFFFFFFFFFFL)
-    override def toString = "PositiveLong"
-  }
-  
-  implicit object Float extends Arbitrary[Float] {
-    private[this] val gen = new MersenneTwister32
-    override def apply() = synchronized((gen() >>> 8) / (1 << 24).toFloat)
-    override def toString = "Float"
-  }
-  
-  implicit object Double extends Arbitrary[Double] {
-    private[this] val gen = new MersenneTwister64
-    override def apply() = synchronized((gen() >>> 11) / (1L << 53).toDouble)
-    override def toString = "Double"
-  }
-  
-  implicit object Boolean extends Arbitrary[Boolean] {
-    private[this] val gen = new MersenneTwister32
-    override def apply() = synchronized((gen() & 1) != 0)
-    override def toString = "AnyBoolean"
-  }
-  
-  implicit object Unit extends Arbitrary[Unit] {
-    override def apply() = ()
-    override def toString = "Unit"
-  }
+  implicit def Unit: Arbitrary[Unit] = Void
   
   private final class Constant[@specialized(Specializable.Primitives) +R](value: R) extends Arbitrary[R] {
-    override def apply() = value
-    override def toString = value.toString
+    override def apply(): R = value
+    override def toString: String = value.toString
   }
   
-  implicit def Constant[@specialized(Specializable.Primitives) R](value: R): Arbitrary[R] = new Constant(value)
+  def Constant[@specialized(Specializable.Primitives) R](value: R): Arbitrary[R] = new Constant(value)
   
   private final class Tuple2[+T1, +T2]
       (implicit T1: Arbitrary[T1], T2: Arbitrary[T2])
     extends Arbitrary[(T1, T2)] {
     override def apply() = (T1(), T2())
-    override def toString = s"($T1, $T2)"
+    override def toString: String = s"($T1, $T2)"
   }
   
   implicit def Tuple2[T1, T2]
@@ -128,7 +126,7 @@ object Arbitrary {
       (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3])
     extends Arbitrary[(T1, T2, T3)] {
     override def apply() = (T1(), T2(), T3())
-    override def toString = s"($T1, $T2, $T3)"
+    override def toString: String = s"($T1, $T2, $T3)"
   }
   
   implicit def Tuple3[T1, T2, T3]
@@ -139,7 +137,7 @@ object Arbitrary {
       (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3], T4: Arbitrary[T4])
     extends Arbitrary[(T1, T2, T3, T4)] {
     override def apply() = (T1(), T2(), T3(), T4())
-    override def toString = s"($T1, $T2, $T3, $T4)"
+    override def toString: String = s"($T1, $T2, $T3, $T4)"
   }
   
   implicit def Tuple4[T1, T2, T3, T4]
@@ -150,8 +148,8 @@ object Arbitrary {
       (f: T1 => R)
       (implicit T1: Arbitrary[T1])
     extends Arbitrary[R] {
-    override def apply() = f(T1())
-    override def toString = "<arbitrary1>"
+    override def apply(): R = f(T1())
+    override def toString: String = "<arbitrary1>"
   }
   
   def apply[T1, R]
@@ -163,8 +161,8 @@ object Arbitrary {
       (f: (T1, T2) => R)
       (implicit T1: Arbitrary[T1], T2: Arbitrary[T2])
     extends Arbitrary[R] {
-    override def apply() = f(T1(), T2())
-    override def toString = "<arbitrary2>"
+    override def apply(): R = f(T1(), T2())
+    override def toString: String = "<arbitrary2>"
   }
   
   def apply[T1, T2, R]
@@ -176,8 +174,8 @@ object Arbitrary {
       (f: (T1, T2, T3) => R)
       (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3])
     extends Arbitrary[R] {
-    override def apply() = f(T1(), T2(), T3())
-    override def toString = "<arbitrary3>"
+    override def apply(): R = f(T1(), T2(), T3())
+    override def toString: String = "<arbitrary3>"
   }
   
   def apply[T1, T2, T3, R]
@@ -189,33 +187,12 @@ object Arbitrary {
       (f: (T1, T2, T3, T4) => R)
       (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3], T4: Arbitrary[T4])
     extends Arbitrary[R] {
-    override def apply() = f(T1(), T2(), T3(), T4())
-    override def toString = "<arbitrary4>"
+    override def apply(): R = f(T1(), T2(), T3(), T4())
+    override def toString: String = "<arbitrary4>"
   }
   
   def apply[T1, T2, T3, T4, R]
       (f: (T1, T2, T3, T4) => R)
       (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3], T4: Arbitrary[T4])
     : Arbitrary[R] = new Function4(f)
-  
-  private final class Map[-T, +R](T: Arbitrary[T])(f: T => R) extends Arbitrary[R] {
-    override def apply() = f(T())
-    override def toString = s"$T.map($f)"
-  }
-  
-  private final class FlatMap[-T, +R](T: Arbitrary[T])(f: T => Arbitrary[R]) extends Arbitrary[R] {
-    override def apply() = f(T())()
-    override def toString = s"$T.flatMap($f)"
-  }
-  
-  private final class Filter[+R](R: Arbitrary[R], TTL: Int)(p: R => Boolean) extends Arbitrary[R] {
-    @tailrec private[this] def apply(ttl: Int): R = {
-      if (ttl < 0) throw new ArbitraryException("improbable filter")
-      val x = R()
-      if (p(x)) x
-      else apply(ttl - 1)
-    }
-    override def apply() = apply(TTL)
-    override def toString = s"$R.filter($p)"
-  }
 }

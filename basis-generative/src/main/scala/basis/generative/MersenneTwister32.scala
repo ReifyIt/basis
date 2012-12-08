@@ -15,7 +15,7 @@ package basis.generative
 final class MersenneTwister32 private (
     private[this] val state: Array[Int],
     private[this] var index: Int)
-  extends Arbitrary[Int] {
+  extends Randomness with Arbitrary[Int] {
   
   def this(seed: Int) = {
     this(new Array[Int](624), 0)
@@ -56,7 +56,7 @@ final class MersenneTwister32 private (
     state(0) = 1 << 31
   }
   
-  def this() = this(5489)
+  def this() = this(java.lang.System.currentTimeMillis.toInt)
   
   private[this] def generate() {
     val state = this.state
@@ -88,6 +88,20 @@ final class MersenneTwister32 private (
     index = if (index < 623) index + 1 else 0
     x
   }
+  
+  override def toByte(): Byte = apply().toByte
+  
+  override def toShort(): Short = apply().toShort
+  
+  override def toInt(): Int = apply()
+  
+  override def toLong(): Long = (apply().toLong << 32) | apply().toLong
+  
+  override def toFloat(): Float = (toInt() >>> 8).toFloat / (1 << 24).toFloat
+  
+  override def toDouble(): Double = (toLong() >>> 11).toDouble / (1L << 53).toDouble
+  
+  override def toBoolean(): Boolean = (apply() >>> 31) != 0
   
   override def toString: String = "MersenneTwister32"
 }

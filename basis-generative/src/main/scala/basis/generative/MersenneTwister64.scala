@@ -15,7 +15,7 @@ package basis.generative
 final class MersenneTwister64 private (
     private[this] val state: Array[Long],
     private[this] var index: Int)
-  extends Arbitrary[Long] {
+  extends Randomness with Arbitrary[Long] {
   
   def this(seed: Long) = {
     this(new Array[Long](312), 0)
@@ -56,7 +56,7 @@ final class MersenneTwister64 private (
     state(0) = 1L << 63
   }
   
-  def this() = this(5489L)
+  def this() = this(java.lang.System.currentTimeMillis)
   
   private[this] def generate() {
     val state = this.state
@@ -88,6 +88,20 @@ final class MersenneTwister64 private (
     index = if (index < 311) index + 1 else 0
     x
   }
+  
+  override def toByte(): Byte = apply().toByte
+  
+  override def toShort(): Short = apply().toShort
+  
+  override def toInt(): Int = apply().toInt
+  
+  override def toLong(): Long = apply()
+  
+  override def toFloat(): Float = (toInt() >>> 8).toFloat / (1 << 24).toFloat
+  
+  override def toDouble(): Double = (toLong() >>> 11).toDouble / (1L << 53).toDouble
+  
+  override def toBoolean(): Boolean = (apply() >>> 63) != 0
   
   override def toString: String = "MersenneTwister64"
 }
