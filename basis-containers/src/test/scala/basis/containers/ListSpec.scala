@@ -8,7 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.traversable._
 import basis.sequential
 
 import org.scalatest.FunSpec
@@ -17,8 +16,8 @@ import org.scalatest.matchers.ShouldMatchers
 class ListSpec
   extends FunSpec
     with ShouldMatchers
-    with generic.SeqFactoryBehaviors
-    with traversable.LinearSeqBehaviors
+    with SeqFactoryBehaviors
+    with LinearSeqBehaviors
     with sequential.general.LinearSeqOpsBehaviors
     with sequential.strict.LinearSeqOpsBehaviors {
   

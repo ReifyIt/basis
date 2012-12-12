@@ -9,7 +9,6 @@ package basis.sequential
 package strict
 
 import basis.collections._
-import basis.collections.traversable._
 
 /** Strictly evaluated indexed sequence operations.
   * 
@@ -176,7 +175,7 @@ private[strict] object IndexedSeqOps {
     val IndexedSeqTag =
       WeakTypeTag[IndexedSeq[A]](
         appliedType(
-          mirror.staticClass("basis.collections.traversable.IndexedSeq").toType,
+          mirror.staticClass("basis.collections.IndexedSeq").toType,
           weakTypeOf[A] :: Nil))
     Expr(typeCheck(sequence, IndexedSeqTag.tpe))(IndexedSeqTag)
   }

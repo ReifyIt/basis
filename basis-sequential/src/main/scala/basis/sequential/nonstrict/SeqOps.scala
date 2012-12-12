@@ -9,7 +9,6 @@ package basis.sequential
 package nonstrict
 
 import basis.collections._
-import basis.collections.traversable._
 
 /** Non-strictly evaluated sequence operations.
   * 

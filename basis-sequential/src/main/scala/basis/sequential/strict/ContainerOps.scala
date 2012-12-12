@@ -9,7 +9,6 @@ package basis.sequential
 package strict
 
 import basis.collections._
-import basis.collections.traversable._
 
 /** Strictly evaluated container operations.
   * 
@@ -166,7 +165,7 @@ private[strict] object ContainerOps {
     val ContainerTag =
       WeakTypeTag[Container[A]](
         appliedType(
-          mirror.staticClass("basis.collections.traversable.Container").toType,
+          mirror.staticClass("basis.collections.Container").toType,
           weakTypeOf[A] :: Nil))
     Expr(c.typeCheck(container, ContainerTag.tpe))(ContainerTag)
   }

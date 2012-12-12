@@ -9,7 +9,6 @@ package basis.sequential
 package nonstrict
 
 import basis.collections._
-import basis.collections.traversable._
 
 private[sequential] trait Implicits {
   implicit final def NonStrictEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A] =

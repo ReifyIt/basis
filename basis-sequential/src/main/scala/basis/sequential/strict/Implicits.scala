@@ -9,7 +9,6 @@ package basis.sequential
 package strict
 
 import basis.collections._
-import basis.collections.traversable._
 
 private[sequential] trait Implicits {
   implicit final def StrictEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A, these.Family] =

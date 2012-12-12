@@ -6,9 +6,6 @@
 \*                                                                      */
 
 package basis.collections
-package generic
-
-import basis.collections.traversable._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers

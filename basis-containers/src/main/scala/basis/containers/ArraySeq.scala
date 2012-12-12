@@ -8,14 +8,13 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.traversable._
 import basis.memory._
 import basis.util._
 
 /** A contiguous mutable array.
   * 
   * @groupprio  Examining     -6
-  * @groupprio  Modifying     -5
+  * @groupprio  Mutating      -5
   * @groupprio  Copying       -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
@@ -24,11 +23,13 @@ import basis.util._
   * @define collection  array sequence
   */
 abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
-  extends Equals with Family[ArraySeq[A]] with mutable.IndexedSeq[A] {
+  extends Equals with Family[ArraySeq[A]] with IndexedSeq[A] {
   
   override def apply(index: Int): A
   
-  override def update(index: Int, value: A): Unit
+  /** Replaces the element at `index` with the given one.
+    * @group Mutating */
+  def update(index: Int, value: A): Unit
   
   /** Copies elementes from this $collection to an array slice.
     * 
@@ -103,7 +104,7 @@ object ArraySeq {
 }
 
 private[containers] object ArraySeqMacros {
-  import scala.collection.immutable.{::, Nil}
+  import scala.collection.immutable.Nil
   import scala.reflect.macros.Context
   
   def apply[A : c.WeakTypeTag](c: Context)(xs: c.Expr[A]*)(struct: c.Expr[DataType[A]]): c.Expr[ArraySeq[A]] = {
@@ -111,7 +112,7 @@ private[containers] object ArraySeqMacros {
     import c.universe._
     val ArraySeqType =
       appliedType(
-        mirror.staticClass("basis.containers.mutable.ArraySeq").toType,
+        mirror.staticClass("basis.containers.ArraySeq").toType,
         weakTypeOf[A] :: Nil)
     var b =
       Apply(

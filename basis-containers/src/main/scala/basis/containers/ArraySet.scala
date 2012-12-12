@@ -8,14 +8,12 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.generic._
-import basis.collections.traversable._
 import basis.util._
 
-import scala.annotation.unchecked.uncheckedVariance
-
 final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
-  extends Family[ArraySet[A]] with immutable.Set[A] {
+  extends Family[ArraySet[A]] with Set[A] {
+  
+  import scala.annotation.unchecked.uncheckedVariance
   
   override def isEmpty: Boolean = slots.length == 0
   
@@ -31,7 +29,9 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
     false
   }
   
-  override def + [B >: A](elem: B): ArraySet[B] = {
+  /** Returns a copy of this $collection containing the given element.
+    * @group Updating */
+  def + [B >: A](elem: B): ArraySet[B] = {
     var i = 0
     val n = slots.length
     while (i < n && elem != slots(i)) i += 1
@@ -44,7 +44,9 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
     }
   }
   
-  override def - (elem: A @uncheckedVariance): ArraySet[A] = {
+  /** Returns a copy of this $collection, excluding the given element.
+    * @group Updating */
+  def - (elem: A @uncheckedVariance): ArraySet[A] = {
     var i = 0
     val n = slots.length
     while (i < n && elem != slots(i)) i += 1

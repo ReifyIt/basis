@@ -8,17 +8,15 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.generic._
-import basis.collections.traversable._
 import basis.util._
 
 /** An immutable singly linked list.
   * 
   * @define collection  list
   */
-sealed abstract class List[+A] extends Equals with Family[List[A]] with immutable.LinearSeq[A] {
+sealed abstract class List[+A] extends Equals with Family[List[A]] with LinearSeq[A] {
   import scala.annotation.tailrec
-
+  
   override def tail: List[A]
   
   @tailrec final def drop(lower: Int): List[A] =
@@ -49,10 +47,10 @@ sealed abstract class List[+A] extends Equals with Family[List[A]] with immutabl
   
   final def :: [B >: A](elem: B): List[B] = new ::[B](elem, this)
   
-  final override def :+ [B >: A](elem: B): List[B] =
+  final def :+ [B >: A](elem: B): List[B] =
     (new ListBuilder[B] ++= this += elem).state
   
-  final override def +: [B >: A](elem: B): List[B] = new ::[B](elem, this)
+  final def +: [B >: A](elem: B): List[B] = new ::[B](elem, this)
   
   @tailrec protected final override def foreach[U](f: A => U) =
     if (!isEmpty) { f(head); tail.foreach[U](f) }
@@ -89,6 +87,23 @@ object List extends SeqFactory[List] {
   implicit override def Builder[A]: Builder[Any, A] { type State = List[A] } = new ListBuilder
   
   override def toString: String = "List"
+}
+
+private[containers] object ListMacros {
+  import scala.reflect.macros.Context
+  
+  def apply[A](c: Context)(xs: c.Expr[A]*): c.Expr[List[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val ListType =
+      appliedType(
+        mirror.staticClass("basis.containers.List").toType,
+        weakTypeOf[A] :: scala.collection.immutable.Nil)
+    var b: Tree = Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "containers"), "Nil")
+    val iter = xs.reverseIterator
+    while (iter.hasNext) b = Apply(Select(b, "$colon$colon"), iter.next().tree :: scala.collection.immutable.Nil)
+    Expr(b)(WeakTypeTag(ListType))
+  }
 }
 
 private[containers] final class ListBuilder[A] extends Builder[Any, A] {

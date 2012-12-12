@@ -18,7 +18,7 @@ private[containers] final class BitArraySeq
   
   override def apply(index: Int): Boolean = {
     if (index < 0 || index >= length)
-      throw new java.lang.IndexOutOfBoundsException(index.toString)
+      throw new IndexOutOfBoundsException(index.toString)
     ((words(index >> 5) >>> (31 - (index & 0x1F))) & 1) == 1
   }
   

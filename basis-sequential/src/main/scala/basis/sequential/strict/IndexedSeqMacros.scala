@@ -9,7 +9,6 @@ package basis.sequential
 package strict
 
 import basis.collections._
-import basis.collections.traversable._
 
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context

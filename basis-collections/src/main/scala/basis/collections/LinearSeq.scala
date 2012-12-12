@@ -6,53 +6,59 @@
 \*                                                                      */
 
 package basis.collections
-package traversable
 
-import basis.util._
-
-/** An indexed sequence of elements.
+/** A linear sequence of elements.
   * 
   * @groupprio  Examining     -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   */
-trait IndexedSeq[+A] extends Any with Family[IndexedSeq[A]] with Seq[A] {
-  /** Returns the element at `index`.
+trait LinearSeq[+A] extends Any with Family[LinearSeq[A]] with Seq[A] {
+  /** Returns the first element of this non-empty $collection.
     * @group Examining */
-  def apply(index: Int): A
+  def head: A
   
-  override def isEmpty: Boolean = length == 0
+  /** Returns all elements except the first of this non-empty $collection.
+    * @group Examining */
+  def tail: LinearSeq[A]
   
-  override def iterator: Iterator[A] = new IndexedSeqIterator(this)
+  override def length: Int = {
+    var xs = this
+    var count = 0
+    while (!xs.isEmpty) {
+      count += 1
+      xs = xs.tail
+    }
+    count
+  }
+  
+  override def iterator: Iterator[A] = new LinearSeqIterator(this)
   
   protected override def foreach[U](f: A => U) {
-    var i = 0
-    val n = length
-    while (i < n) {
-      f(this(i))
-      i += 1
+    var xs = this
+    while (!xs.isEmpty) {
+      f(xs.head)
+      xs = xs.tail
     }
   }
 }
 
-private[collections] final class IndexedSeqIterator[+A]
-    (xs: IndexedSeq[A], private[this] var i: Int, n: Int)
+private[collections] final class LinearSeqIterator[+A]
+    (private[this] var xs: LinearSeq[A])
   extends Iterator[A] {
   
-  def this(xs: IndexedSeq[A]) = this(xs, 0, xs.length)
-  
-  override def isEmpty: Boolean = i >= n
+  override def isEmpty: Boolean = xs.isEmpty
   
   override def head: A = {
-    if (i < n) xs(i)
+    if (!xs.isEmpty) xs.head
     else throw new NoSuchElementException("Head of empty iterator.")
   }
   
   override def step() {
-    if (i < n) i += 1
+    if (!xs.isEmpty) xs = xs.tail
     else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
-  override def dup: Iterator[A] = new IndexedSeqIterator(xs, i, n)
+  override def dup: Iterator[A] = new LinearSeqIterator(xs)
 }

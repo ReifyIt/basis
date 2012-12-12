@@ -9,8 +9,6 @@ package basis.sequential
 package general
 
 import basis.collections._
-import basis.collections.generic._
-import basis.collections.traversable._
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers

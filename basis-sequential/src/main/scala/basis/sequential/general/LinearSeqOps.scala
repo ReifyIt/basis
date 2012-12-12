@@ -9,7 +9,6 @@ package basis.sequential
 package general
 
 import basis.collections._
-import basis.collections.traversable._
 
 /** General linear sequence operations.
   * 
@@ -147,7 +146,7 @@ private[general] object LinearSeqOps {
     val LinearSeqTag =
       WeakTypeTag[LinearSeq[A]](
         appliedType(
-          mirror.staticClass("basis.collections.traversable.LinearSeq").toType,
+          mirror.staticClass("basis.collections.LinearSeq").toType,
           weakTypeOf[A] :: Nil))
     Expr(typeCheck(sequence, LinearSeqTag.tpe))(LinearSeqTag)
   }

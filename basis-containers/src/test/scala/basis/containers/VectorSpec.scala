@@ -8,7 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.traversable._
 import basis.sequential
 
 import org.scalatest.FunSpec
@@ -17,8 +16,8 @@ import org.scalatest.matchers.ShouldMatchers
 class VectorSpec
   extends FunSpec
     with ShouldMatchers
-    with generic.SeqFactoryBehaviors
-    with traversable.IndexedSeqBehaviors
+    with SeqFactoryBehaviors
+    with IndexedSeqBehaviors
     with sequential.general.IndexedSeqOpsBehaviors
     with sequential.strict.IndexedSeqOpsBehaviors {
   

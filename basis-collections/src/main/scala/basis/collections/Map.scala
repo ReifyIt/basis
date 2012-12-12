@@ -6,9 +6,6 @@
 \*                                                                      */
 
 package basis.collections
-package traversable
-
-import scala.annotation.unchecked.uncheckedVariance
 
 /** An associated set of (key, value) pairs with unique keys.
   * 
@@ -20,6 +17,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * @define collection  map
   */
 trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
+  import scala.annotation.unchecked.uncheckedVariance
+  
   /** Returns `true` if this $collection doesn't contain any associations.
     * @group Examining */
   def isEmpty: Boolean = iterator.isEmpty

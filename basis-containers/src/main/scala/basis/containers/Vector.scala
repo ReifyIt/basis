@@ -8,9 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.generic._
-import basis.collections.traversable._
-import basis.util._
 
 sealed abstract class Vector[+A] extends Equals with Family[Vector[A]] with IndexedSeq[A] {
   protected override def stringPrefix: String = "Vector"

@@ -9,7 +9,6 @@ package basis.sequential
 package general
 
 import basis.collections._
-import basis.collections.traversable._
 
 /** General map operations.
   * 

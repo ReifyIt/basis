@@ -8,7 +8,6 @@
 package basis.text
 
 import basis.collections._
-import basis.collections.traversable._
 import basis.util._
 
 /** A 16-bit Unicode string comprised of a UTF-16 code unit sequence.

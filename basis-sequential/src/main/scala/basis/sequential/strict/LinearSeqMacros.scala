@@ -9,7 +9,6 @@ package basis.sequential
 package strict
 
 import basis.collections._
-import basis.collections.traversable._
 
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
@@ -401,7 +400,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   private def LinearSeqType[A : WeakTypeTag]: Type = {
-    val LinearSeqTpc = mirror.staticClass("basis.collections.traversable.LinearSeq").toType
+    val LinearSeqTpc = mirror.staticClass("basis.collections.LinearSeq").toType
     appliedType(LinearSeqTpc, weakTypeOf[A] :: Nil)
   }
   

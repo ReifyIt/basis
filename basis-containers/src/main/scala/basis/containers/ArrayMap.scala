@@ -8,14 +8,12 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.generic._
-import basis.collections.traversable._
 import basis.util._
 
-import scala.annotation.unchecked.uncheckedVariance
-
 final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
-  extends Family[ArrayMap[A, T]] with immutable.Map[A, T] {
+  extends Family[ArrayMap[A, T]] with Map[A, T] {
+  
+  import scala.annotation.unchecked.uncheckedVariance
   
   override def isEmpty: Boolean = slots.length == 0
   
@@ -51,7 +49,9 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
     None
   }
   
-  override def + [B >: A, U >: T](key: B, value: U): ArrayMap[B, U] = {
+  /** Returns a copy of this $collection with the given value associated with the given key.
+    * @group Updating */
+  def + [B >: A, U >: T](key: B, value: U): ArrayMap[B, U] = {
     var i = 0
     val n = slots.length
     while (i < n && key != slots(i)) i += 2
@@ -65,7 +65,9 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
     }
   }
   
-  override def - (key: A @uncheckedVariance): ArrayMap[A, T] = {
+  /** Returns a copy of this $collection without any value associated with the given key.
+    * @group Updating */
+  def - (key: A @uncheckedVariance): ArrayMap[A, T] = {
     var i = 0
     val n = slots.length
     while (i < n && key != slots(i)) i += 2

@@ -6,9 +6,6 @@
 \*                                                                      */
 
 package basis.collections
-package traversable
-
-import basis.util._
 
 /** An iterable sequence of elements.
   * 
@@ -58,7 +55,7 @@ trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
   /** Returns a hash of the elements in this $collection.
     * @group Classifying */
   override def hashCode: Int = {
-    import MurmurHash3._
+    import basis.util.MurmurHash3._
     var h = 63537721
     val xs = iterator
     while (!xs.isEmpty) {

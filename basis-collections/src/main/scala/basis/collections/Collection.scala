@@ -6,40 +6,29 @@
 \*                                                                      */
 
 package basis.collections
-package traversable
 
-/** An iterable container of elements.
+/** A traversable collection of elements. Collection declares only a protected
+  * `foreach` method; it has no public methods.
   * 
-  * @groupprio  Examining     -4
-  * @groupprio  Iterating     -3
+  * @groupprio  Examining     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   * 
-  * @define collection  container
+  * @define collection  collection
   */
-trait Container[+A] extends Any with Family[Container[A]] with Collection[A] {
-  /** Returns a new iterator over the elements of this $collection.
-    * @group Iterating */
-  def iterator: Iterator[A]
-  
-  protected override def foreach[U](f: A => U) {
-    val xs = iterator
-    while (!xs.isEmpty) { f(xs.head); xs.step() }
-  }
-  
+trait Collection[+A] extends Any with Family[Collection[A]] with Enumerator[A] {
+  /** Returns a string representation of this $collection.
+    * @group Classifying */
   override def toString: String = {
     val s = new java.lang.StringBuilder(stringPrefix)
+    var e = true
     s.append('(')
-    val xs = iterator
-    if (!xs.isEmpty) {
-      s.append(xs.head)
-      xs.step()
-      while (!xs.isEmpty) {
-        s.append(", ").append(xs.head)
-        xs.step()
-      }
-    }
+    foreach(x => (if (e) { e = false; s } else s.append(", ")).append(x))
     s.append(')')
     s.toString
   }
+  
+  /** Returns a string that identifies this type of $collection.
+    * @group Classifying */
+  protected def stringPrefix: String = getClass.getSimpleName
 }

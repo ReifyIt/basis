@@ -8,7 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.traversable._
 import basis.sequential
 
 import org.scalatest.FunSpec
@@ -17,8 +16,8 @@ import org.scalatest.matchers.ShouldMatchers
 class HashSetSpec
   extends FunSpec
     with ShouldMatchers
-    with generic.SetFactoryBehaviors
-    with traversable.SetBehaviors
+    with SetFactoryBehaviors
+    with SetBehaviors
     with sequential.general.SetOpsBehaviors
     with sequential.strict.SetOpsBehaviors {
   

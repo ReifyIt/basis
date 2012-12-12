@@ -6,9 +6,6 @@
 \*                                                                      */
 
 package basis.collections
-package traversable
-
-import scala.annotation.unchecked.uncheckedVariance
 
 /** A unique set of elements.
   * 
@@ -20,6 +17,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * @define collection  set
   */
 trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
+  import scala.annotation.unchecked.uncheckedVariance
+  
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Examining */
   def isEmpty: Boolean = iterator.isEmpty

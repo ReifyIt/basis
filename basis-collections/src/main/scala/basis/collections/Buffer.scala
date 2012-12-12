@@ -6,12 +6,11 @@
 \*                                                                      */
 
 package basis.collections
-package mutable
 
-/** A mutable buffer.
+/** A mutable buffer of elements.
   * 
   * @groupprio  Examining     -7
-  * @groupprio  Modifying     -6
+  * @groupprio  Mutating      -6
   * @groupprio  Inserting     -5
   * @groupprio  Removing      -4
   * @groupprio  Iterating     -3
@@ -26,7 +25,7 @@ trait Buffer[A] extends Equals with Family[Buffer[A]] with Seq[A] {
   def apply(index: Int): A
   
   /** Replaces the element at `index` with the given one.
-    * @group Modifying */
+    * @group Mutating */
   def update(index: Int, elem: A): Unit
   
   /** Appends a single element to this $collection.

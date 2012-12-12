@@ -8,8 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.generic._
-import basis.collections.traversable._
 import basis.util._
 
 import scala.annotation.{switch, tailrec}
@@ -19,7 +17,7 @@ final class HashMap[+A, +T] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Family[HashMap[A, T]] with immutable.Map[A, T] {
+  extends Family[HashMap[A, T]] with Map[A, T] {
   
   import HashMap.{VOID, LEAF, TREE, KNOT}
   
@@ -49,9 +47,13 @@ final class HashMap[+A, +T] private[containers] (
   
   override def get(key: A @uncheckedVariance): Option[T] = get(key, key.##, 0)
   
-  override def + [B >: A, U >: T](key: B, value: U): HashMap[B, U] = update(key, key.##, value, 0)
+  /** Returns a copy of this $collection with the given value associated with the given key.
+    * @group Updating */
+  def + [B >: A, U >: T](key: B, value: U): HashMap[B, U] = update(key, key.##, value, 0)
   
-  override def - (key: A @uncheckedVariance): HashMap[A, T] = remove(key, key.##, 0)
+  /** Returns a copy of this $collection without any value associated with the given key.
+    * @group Updating */
+  def - (key: A @uncheckedVariance): HashMap[A, T] = remove(key, key.##, 0)
   
   private def knotMap: Int = treeMap & leafMap
   

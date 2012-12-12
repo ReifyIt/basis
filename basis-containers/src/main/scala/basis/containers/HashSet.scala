@@ -8,8 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.collections.generic._
-import basis.collections.traversable._
 import basis.util._
 
 import scala.annotation.{switch, tailrec}
@@ -19,7 +17,7 @@ final class HashSet[+A] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Family[HashSet[A]] with immutable.Set[A] {
+  extends Family[HashSet[A]] with Set[A] {
   
   import HashSet.{VOID, LEAF, TREE, KNOT}
   
@@ -45,9 +43,13 @@ final class HashSet[+A] private[containers] (
   
   override def contains(elem: A @uncheckedVariance): Boolean = contains(elem, elem.##, 0)
   
-  override def + [B >: A](elem: B): HashSet[B] = update(elem, elem.##, 0)
+  /** Returns a copy of this $collection containing the given element.
+    * @group Updating */
+  def + [B >: A](elem: B): HashSet[B] = update(elem, elem.##, 0)
   
-  override def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
+  /** Returns a copy of this $collection, excluding the given element.
+    * @group Updating */
+  def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
   
   private def knotMap: Int = treeMap & leafMap
   

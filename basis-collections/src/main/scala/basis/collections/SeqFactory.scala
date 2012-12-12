@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.collections
-package generic
-
-import traversable._
 
 trait SeqFactory[CC[_]] extends BuilderFactory[CC] {
-  def fill[A](count: Int)(element: => A): CC[A] =
+  def fill[A](count: Int)(elem: => A): CC[A] =
     macro SeqFactory.fill[CC, A]
   
   def tabulate[A](count: Int)(f: Int => A): CC[A] =
@@ -21,14 +18,14 @@ trait SeqFactory[CC[_]] extends BuilderFactory[CC] {
     macro SeqFactory.iterate[CC, A]
 }
 
-private[generic] object SeqFactory {
+private[collections] object SeqFactory {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
   def fill[CC[_], A]
       (c: Context { type PrefixType <: SeqFactory[CC] })
       (count: c.Expr[Int])
-      (element: c.Expr[A])
+      (elem: c.Expr[A])
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
     import c.{Expr, fresh, prefix, WeakTypeTag}
@@ -45,7 +42,7 @@ private[generic] object SeqFactory {
           If(
             Apply(Select(Ident(i), "$greater"), Literal(Constant(0)) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), element.tree :: Nil) ::
+              Apply(Select(Ident(b), "$plus$eq"), elem.tree :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$minus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,

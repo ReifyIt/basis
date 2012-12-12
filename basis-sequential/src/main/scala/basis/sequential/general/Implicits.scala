@@ -9,7 +9,6 @@ package basis.sequential
 package general
 
 import basis.collections._
-import basis.collections.traversable._
 
 private[sequential] trait Implicits {
   implicit final def GeneralEnumeratorOps[A](these: Enumerator[A]): EnumeratorOps[A] =
