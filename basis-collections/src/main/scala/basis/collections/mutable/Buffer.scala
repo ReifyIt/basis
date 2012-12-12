@@ -23,24 +23,27 @@ package mutable
 trait Buffer[A] extends Equals with Family[Buffer[A]] with Seq[A] {
   /** Returns the element at `index`.
     * @group Examining */
-  def apply(index: Int): A = {
-    var i = 0
-    var xs = iterator
-    while (i < index && !xs.isEmpty) {
-      i += 1
-      xs.step()
-    }
-    if (i == index) xs.head
-    else throw new IndexOutOfBoundsException(index.toString)
-  }
+  def apply(index: Int): A
+  
+  /** Replaces the element at `index` with the given one.
+    * @group Modifying */
+  def update(index: Int, elem: A): Unit
   
   /** Appends a single element to this $collection.
     * @group Inserting */
   def += (elem: A): this.type
   
+  /** Appends multiple elements to this $collection.
+    * @group Inserting */
+  def ++= (elems: Enumerator[A]): this.type
+  
   /** Prepends a single element to this $collection.
     * @group Inserting */
   def +=: (elem: A): this.type
+  
+  /** Prepends multiple elements to this $collection.
+    * @group Inserting */
+  def ++=: (elems: Enumerator[A]): this.type
   
   /** Removes the first occurrence of an element from this $collection.
     * @group Removing */
@@ -52,7 +55,7 @@ trait Buffer[A] extends Equals with Family[Buffer[A]] with Seq[A] {
   
   /** Inserts multiple elements into this $collection, starting at `index`.
     * @group Inserting */
-  def insert(index: Int, elems: A*): Unit
+  def insertAll(index: Int, elems: Enumerator[A]): Unit
   
   /** Removes and returns the element of this $collection at `index`.
     * @group Removing */
