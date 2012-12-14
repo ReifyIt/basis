@@ -143,12 +143,11 @@ private[general] object LinearSeqOps {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, sequence :: Nil) = prefix.tree
-    val LinearSeqTag =
-      WeakTypeTag[LinearSeq[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.LinearSeq").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(typeCheck(sequence, LinearSeqTag.tpe))(LinearSeqTag)
+    val LinearSeqType =
+      appliedType(
+        mirror.staticClass("basis.collections.LinearSeq").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(sequence, LinearSeqType))(WeakTypeTag(LinearSeqType))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]

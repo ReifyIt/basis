@@ -237,9 +237,13 @@ final class HashSet[+A] private[containers] (
 }
 
 object HashSet extends SetFactory[HashSet] {
+  import scala.reflect.ClassTag
+  
   val empty: HashSet[Nothing] = new HashSet(0, 0, new Array[AnyRef](0))
   
-  implicit override def Builder[A]: Builder[Any, A] { type State = HashSet[A] } = new HashSetBuilder
+  implicit override def Builder[A : ClassTag]
+    : Builder[Any, A] { type State = HashSet[A] } =
+    new HashSetBuilder
   
   override def toString: String = "HashSet"
   
@@ -382,6 +386,8 @@ private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
     set += elem
     this
   }
+  
+  override def ++= (elems: Enumerator[A]): this.type = Predef.???
   
   override def expect(count: Int): this.type = this
   

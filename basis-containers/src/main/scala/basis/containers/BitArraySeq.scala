@@ -22,12 +22,6 @@ private[containers] final class BitArraySeq
     ((words(index >> 5) >>> (31 - (index & 0x1F))) & 1) == 1
   }
   
-  override def update(index: Int, value: Boolean) {
-    val mask = 1 << (31 - (index & 0x1F))
-    if (value) words(index >> 5) |=  mask
-    else       words(index >> 5) &= ~mask
-  }
-  
   override def iterator: Iterator[Boolean] = new BitArraySeqIterator(words, length)
 }
 
@@ -93,6 +87,8 @@ private[containers] final class BitArraySeqBuilder extends Builder[Any, Boolean]
     length += 1
     this
   }
+  
+  override def ++= (values: Enumerator[Boolean]): this.type = Predef.???
   
   override def expect(count: Int): this.type = {
     if (words == null || length + count > capacity) {

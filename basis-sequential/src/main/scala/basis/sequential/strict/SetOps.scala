@@ -135,11 +135,11 @@ final class SetOps[+A, +From] {
   
   /** Returns the concatenation of this and another set.
     * 
-    * @param  those     the set to append to these elements.
+    * @param  those     the elements to append to these elements.
     * @param  builder   the accumulator for concatenated elements.
     * @return the accumulated elements of both set.
     * @group  Combining
     */
-  def ++ [B >: A](those: Set[B])(implicit builder: Builder[From, B]): builder.State =
-    macro ContainerOps.++[B]
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+    macro EnumeratorOps.++[B]
 }

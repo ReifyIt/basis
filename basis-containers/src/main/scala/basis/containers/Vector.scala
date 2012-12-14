@@ -141,9 +141,13 @@ private[containers] final class Vector6[+A](
 }
 
 object Vector extends SeqFactory[Vector] {
+  import scala.reflect.ClassTag
+  
   val empty: Vector[Nothing] = new Vector0
   
-  implicit override def Builder[A]: Builder[Any, A] { type State = Vector[A] } = new VectorBuilder
+  implicit override def Builder[A : ClassTag]
+    : Builder[Any, A] { type State = Vector[A] } =
+    new VectorBuilder
   
   private[containers] def foreach1[A, U](array: Array[AnyRef])(f: A => U) {
     var i = 0
@@ -334,6 +338,8 @@ private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
     length += 1
     this
   }
+  
+  override def ++= (elems: Enumerator[A]): this.type = Predef.???
   
   override def expect(count: Int): this.type = this
   

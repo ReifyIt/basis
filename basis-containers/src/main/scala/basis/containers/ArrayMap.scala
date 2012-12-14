@@ -106,6 +106,8 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
 }
 
 object ArrayMap extends MapFactory[ArrayMap] {
+  import scala.reflect.ClassTag
+  
   val empty: ArrayMap[Nothing, Nothing] = new ArrayMap(new Array[AnyRef](0))
   
   def apply[A, T](key: A, value: T): ArrayMap[A, T] = {
@@ -124,7 +126,9 @@ object ArrayMap extends MapFactory[ArrayMap] {
     new ArrayMap(slots)
   }
   
-  implicit override def Builder[A, T]: Builder[Any, (A, T)] { type State = ArrayMap[A, T] } = new ArrayMapBuilder
+  implicit override def Builder[A : ClassTag, T : ClassTag]
+    : Builder[Any, (A, T)] { type State = ArrayMap[A, T] } =
+    new ArrayMapBuilder
   
   override def toString: String = "ArrayMap"
 }
@@ -198,6 +202,8 @@ private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T
     }
     this
   }
+  
+  override def ++= (elems: Enumerator[(A, T)]): this.type = Predef.???
   
   override def expect(count: Int): this.type = {
     if (slots == null || size + count > capacity) {

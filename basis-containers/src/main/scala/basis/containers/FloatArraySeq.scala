@@ -17,16 +17,23 @@ private[containers] final class FloatArraySeq(array: Array[Float]) extends Array
   
   override def apply(index: Int): Float = array(index)
   
-  override def update(index: Int, value: Float): Unit = array(index) = value
+  override def copyToArray[B >: Float](xs: Array[B], start: Int, count: Int) {
+    if (xs.isInstanceOf[Array[Float]])
+      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+    else super.copyToArray(xs, start, count)
+  }
   
-  override def copyToArray(xs: Array[Float], start: Int, count: Int): Unit =
-    java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+  override def copyToArray[B >: Float](xs: Array[B], start: Int) {
+    if (xs.isInstanceOf[Array[Float]])
+      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
+    else super.copyToArray(xs, start)
+  }
   
-  override def copyToArray(xs: Array[Float], start: Int): Unit =
-    java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
-  
-  override def copyToArray(xs: Array[Float]): Unit =
-    java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+  override def copyToArray[B >: Float](xs: Array[B]) {
+    if (xs.isInstanceOf[Array[Float]])
+      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+    else super.copyToArray(xs)
+  }
   
   override def iterator: Iterator[Float] = new FloatArraySeqIterator(array)
 }
@@ -93,7 +100,7 @@ private[containers] final class FloatArraySeqBuilder extends Builder[Any, Float]
       xs.copyToArray(array, length)
       length += xs.length
       this
-    case _ => super.++=(xs)
+    case _ => Predef.???
   }
   
   override def expect(count: Int): this.type = {

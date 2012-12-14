@@ -7,8 +7,13 @@
 
 package basis.collections
 
+import scala.reflect.ClassTag
+
 trait MapFactory[CC[_, _]] {
-  implicit def Builder[A, T]: Builder[Any, (A, T)] { type State = CC[A, T] }
+  implicit def Builder[A, T]
+      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],
+                T: ClassTag[T] = ClassTag.Any.asInstanceOf[ClassTag[T]])
+    : Builder[Any, (A, T)] { type State = CC[A, T] }
   
   def apply[A, T](xs: (A, T)*): CC[A, T] =
     macro MapFactory.apply[CC, A, T]
@@ -23,12 +28,12 @@ private[collections] object MapFactory {
       (xs: c.Expr[(A, T)]*)
       (implicit CCTag: c.WeakTypeTag[CC[_, _]], ATag: c.WeakTypeTag[A], TTag: c.WeakTypeTag[T])
     : c.Expr[CC[A, T]] = {
-    import c.{Expr, prefix, WeakTypeTag}
+    import c.{Expr, prefix, Tree, WeakTypeTag}
     import c.universe._
-    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: TypeTree(TTag.tpe) :: Nil)
-    var b = Apply(Select(builder, "expect"), Literal(Constant(xs.length)) :: Nil)
+    var builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: TypeTree(TTag.tpe) :: Nil): Tree
+    builder = Apply(Select(builder, "expect"), Literal(Constant(xs.length)) :: Nil)
     val iter = xs.iterator
-    while (iter.hasNext) b = Apply(Select(b, "$plus$eq"), iter.next().tree :: Nil)
-    Expr(Select(b, "state"))(WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: TTag.tpe :: Nil)))
+    while (iter.hasNext) builder = Apply(Select(builder, "$plus$eq"), iter.next().tree :: Nil)
+    Expr(Select(builder, "state"))(WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: TTag.tpe :: Nil)))
   }
 }

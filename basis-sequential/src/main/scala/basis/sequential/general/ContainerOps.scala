@@ -143,23 +143,21 @@ private[general] object ContainerOps {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, container :: Nil) = prefix.tree
-    val ContainerTag =
-      WeakTypeTag[Container[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Container").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(c.typeCheck(container, ContainerTag.tpe))(ContainerTag)
+    val ContainerType =
+      appliedType(
+        mirror.staticClass("basis.collections.Container").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(container, ContainerType))(WeakTypeTag(ContainerType))
   }
   
   private def iterator[A : c.WeakTypeTag](c: Context)(container: c.Expr[Container[A]]): c.Expr[Iterator[A]] = {
-    import c.{Expr, mirror, typeCheck, weakTypeOf, WeakTypeTag}
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val IteratorTag =
-      WeakTypeTag[Iterator[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Iterator").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(Select(container.tree, "iterator"))(IteratorTag)
+    val IteratorType =
+      appliedType(
+        mirror.staticClass("basis.collections.Iterator").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(Select(container.tree, "iterator"))(WeakTypeTag(IteratorType))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]

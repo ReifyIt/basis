@@ -17,16 +17,23 @@ private[containers] final class LongArraySeq(array: Array[Long]) extends ArraySe
   
   override def apply(index: Int): Long = array(index)
   
-  override def update(index: Int, value: Long): Unit = array(index) = value
+  override def copyToArray[B >: Long](xs: Array[B], start: Int, count: Int) {
+    if (xs.isInstanceOf[Array[Long]])
+      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+    else super.copyToArray(xs, start, count)
+  }
   
-  override def copyToArray(xs: Array[Long], start: Int, count: Int): Unit =
-    java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+  override def copyToArray[B >: Long](xs: Array[B], start: Int) {
+    if (xs.isInstanceOf[Array[Long]])
+      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
+    else super.copyToArray(xs, start)
+  }
   
-  override def copyToArray(xs: Array[Long], start: Int): Unit =
-    java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
-  
-  override def copyToArray(xs: Array[Long]): Unit =
-    java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+  override def copyToArray[B >: Long](xs: Array[B]) {
+    if (xs.isInstanceOf[Array[Long]])
+      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+    else super.copyToArray(xs)
+  }
   
   override def iterator: Iterator[Long] = new LongArraySeqIterator(array)
 }
@@ -93,7 +100,7 @@ private[containers] final class LongArraySeqBuilder extends Builder[Any, Long] {
       xs.copyToArray(array, length)
       length += xs.length
       this
-    case _ => super.++=(xs)
+    case _ => Predef.???
   }
   
   override def expect(count: Int): this.type = {

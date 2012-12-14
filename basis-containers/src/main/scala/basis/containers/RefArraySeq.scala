@@ -10,28 +10,26 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-private[containers] final class RefArraySeq[A](array: Array[AnyRef]) extends ArraySeq[A] {
+private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends ArraySeq[A] {
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
   
   override def apply(index: Int): A = array(index).asInstanceOf[A]
   
-  override def update(index: Int, value: A): Unit = array(index) = value.asInstanceOf[AnyRef]
-  
-  override def copyToArray(xs: Array[A], start: Int, count: Int) {
+  override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
     if (xs.isInstanceOf[Array[AnyRef]])
       java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
     else super.copyToArray(xs, start, count)
   }
   
-  override def copyToArray(xs: Array[A], start: Int) {
+  override def copyToArray[B >: A](xs: Array[B], start: Int) {
     if (xs.isInstanceOf[Array[AnyRef]])
       java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
     else super.copyToArray(xs, start)
   }
   
-  override def copyToArray(xs: Array[A]) {
+  override def copyToArray[B >: A](xs: Array[B]) {
     if (xs.isInstanceOf[Array[AnyRef]])
       java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
     else super.copyToArray(xs)
@@ -102,7 +100,7 @@ private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
       xs.copyToArray(array.asInstanceOf[Array[A]], length)
       length += xs.length
       this
-    case _ => super.++=(xs)
+    case _ => Predef.???
   }
   
   override def expect(count: Int): this.type = {

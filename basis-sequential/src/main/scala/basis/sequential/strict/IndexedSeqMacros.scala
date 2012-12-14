@@ -411,26 +411,6 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
     } (StateTag(builder))
   }
   
-  def ++ [A]
-      (these: Expr[IndexedSeq[A]], those: Expr[IndexedSeq[A]])
-      (builder: Expr[Builder[_, A]])
-    : Expr[builder.value.State] = {
-    val xs = newTermName(fresh("xs$"))
-    val ys = newTermName(fresh("ys$"))
-    val b  = newTermName(fresh("builder$"))
-    Expr {
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, ys, TypeTree(), those.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)),
-          Apply(Select(builder.tree, "expect"),
-            Apply(Select(Select(Ident(xs), "length"), "$plus"), Select(Ident(ys), "length") :: Nil) :: Nil)) ::
-        Apply(Select(Ident(b), "$plus$plus$eq"), Ident(xs) :: Nil) ::
-        Apply(Select(Ident(b), "$plus$plus$eq"), Ident(ys) :: Nil) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
-  }
-  
   private def max(x: Tree, y: Tree): Tree =
     Apply(Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "max"), x :: y :: Nil)
   

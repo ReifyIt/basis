@@ -19,7 +19,9 @@ package basis.collections
   * 
   * @define collection  buffer
   */
-trait Buffer[A] extends Equals with Family[Buffer[A]] with Seq[A] {
+trait Buffer[@specialized(Specializable.Primitives) A]
+  extends Equals with Family[Buffer[A]] with Seq[A] {
+  
   /** Returns the element at `index`.
     * @group Examining */
   def apply(index: Int): A
@@ -34,7 +36,10 @@ trait Buffer[A] extends Equals with Family[Buffer[A]] with Seq[A] {
   
   /** Appends multiple elements to this $collection.
     * @group Inserting */
-  def ++= (elems: Enumerator[A]): this.type
+  def ++= (elems: Enumerator[A]): this.type = {
+    traverse(elems)(new Buffer.Insert(this, length))
+    this
+  }
   
   /** Prepends a single element to this $collection.
     * @group Inserting */
@@ -42,11 +47,26 @@ trait Buffer[A] extends Equals with Family[Buffer[A]] with Seq[A] {
   
   /** Prepends multiple elements to this $collection.
     * @group Inserting */
-  def ++=: (elems: Enumerator[A]): this.type
+  def ++=: (elems: Enumerator[A]): this.type = {
+    traverse(elems)(new Buffer.Insert(this, 0))
+    this
+  }
   
   /** Removes the first occurrence of an element from this $collection.
     * @group Removing */
-  def -= (elem: A): this.type
+  def -= (elem: A): this.type = {
+    val xs = iterator
+    var i = 0
+    while (!xs.isEmpty) {
+      if (elem == xs.head) {
+        remove(i)
+        return this
+      }
+      xs.step()
+      i += 1
+    }
+    this
+  }
   
   /** Inserts a single element into this $collection at `index`.
     * @group Inserting */
@@ -54,7 +74,11 @@ trait Buffer[A] extends Equals with Family[Buffer[A]] with Seq[A] {
   
   /** Inserts multiple elements into this $collection, starting at `index`.
     * @group Inserting */
-  def insertAll(index: Int, elems: Enumerator[A]): Unit
+  def insertAll(index: Int, elems: Enumerator[A]) {
+    if (index < 0 || index > length)
+      throw new IndexOutOfBoundsException(index.toString)
+    traverse(elems)(new Buffer.Insert(this, index))
+  }
   
   /** Removes and returns the element of this $collection at `index`.
     * @group Removing */
@@ -62,5 +86,30 @@ trait Buffer[A] extends Equals with Family[Buffer[A]] with Seq[A] {
   
   /** Removes multiple elements from this $collection, starting at `index`.
     * @group Removing */
-  def remove(index: Int, count: Int): Unit
+  def remove(index: Int, count: Int) {
+    if (count < 0) throw new IllegalArgumentException("negative count")
+    if (index < 0) throw new IndexOutOfBoundsException(index.toString)
+    var i = index + count - 1
+    if (i >= length) throw new IndexOutOfBoundsException(i.toString)
+    while (i >= index) {
+      remove(i)
+      i -= 1
+    }
+  }
+  
+  /** Removes all elements from this $collection.
+    * @group Removing */
+  def clear(): Unit
+}
+
+private[collections] object Buffer {
+  import scala.runtime.AbstractFunction1
+  
+  final class Insert[-A](b: Buffer[A], private[this] var i: Int)
+    extends AbstractFunction1[A, Unit] {
+    override def apply(x: A) {
+      b.insert(i, x)
+      i += 1
+    }
+  }
 }

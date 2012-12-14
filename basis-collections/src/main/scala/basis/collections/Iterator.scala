@@ -34,7 +34,7 @@ package basis.collections
   * 
   * @define collection  iterator
   */
-trait Iterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+trait Iterator[@specialized(Specializable.Primitives) +A]
   extends Any with Family[Iterator[A]] with Enumerator[A] {
   
   /** Returns `true` when this $collection has reached a sentinel element.

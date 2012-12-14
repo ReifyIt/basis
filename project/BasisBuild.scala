@@ -52,7 +52,6 @@ object BasisBuild extends Build {
     dependencies =
       Seq(BasisCollections % "compile->compile;test->test",
           BasisSequential % "test->test",
-          BasisMemory,
           BasisUtil)
   )
   
@@ -128,7 +127,7 @@ object BasisBuild extends Build {
   )
   
   lazy val scalaSettings = Seq(
-    scalaVersion   := "2.10.0-RC3",
+    scalaVersion   := "2.10.0-RC5",
     scalacOptions ++= Seq("-language:_", "-Yno-predef")
   )
   
@@ -144,8 +143,8 @@ object BasisBuild extends Build {
   
   lazy val compileSettings = Seq(
     scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC3" % "provided",
-    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC3" % "1.8-B1" % "test"
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC5" % "provided",
+    libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC5" % "1.8-B1" % "test"
   )
   
   lazy val publishSettings = Seq(

@@ -47,10 +47,7 @@ sealed abstract class List[+A] extends Equals with Family[List[A]] with LinearSe
   
   final def :: [B >: A](elem: B): List[B] = new ::[B](elem, this)
   
-  final def :+ [B >: A](elem: B): List[B] =
-    (new ListBuilder[B] ++= this += elem).state
-  
-  final def +: [B >: A](elem: B): List[B] = new ::[B](elem, this)
+  final override def iterator: Iterator[A] = new ListIterator(this)
   
   @tailrec protected final override def foreach[U](f: A => U) =
     if (!isEmpty) { f(head); tail.foreach[U](f) }
@@ -58,12 +55,20 @@ sealed abstract class List[+A] extends Equals with Family[List[A]] with LinearSe
   protected override def stringPrefix: String = "List"
 }
 
-final class ::[A](override val head: A, private[this] var next: List[A]) extends List[A] {
+final class ::[A](private[this] var x: A, private[this] var xs: List[A]) extends List[A] {
   override def isEmpty: Boolean = false
   
-  override def tail: List[A] = next
+  override def head: A = x
   
-  private[containers] def tail_=(tail: List[A]): Unit = next = tail
+  private[containers] def head_=(head: A): Unit = x = head
+  
+  override def tail: List[A] = xs
+  
+  private[containers] def tail_=(tail: List[A]): Unit = xs = tail
+}
+
+object :: {
+  def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
 }
 
 object Nil extends List[Nothing] {
@@ -76,15 +81,15 @@ object Nil extends List[Nothing] {
     throw new UnsupportedOperationException("Tail of empty list.")
 }
 
-object :: {
-  def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
-}
-
 object List extends SeqFactory[List] {
+  import scala.reflect.ClassTag
+  
   // FIXME: don't hurt the compiler!
   //override def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   
-  implicit override def Builder[A]: Builder[Any, A] { type State = List[A] } = new ListBuilder
+  implicit override def Builder[A : ClassTag]
+    : Builder[Any, A] { type State = List[A] } =
+    new ListBuilder
   
   override def toString: String = "List"
 }
@@ -92,7 +97,7 @@ object List extends SeqFactory[List] {
 private[containers] object ListMacros {
   import scala.reflect.macros.Context
   
-  def apply[A](c: Context)(xs: c.Expr[A]*): c.Expr[List[A]] = {
+  def apply[A : c.WeakTypeTag](c: Context)(xs: c.Expr[A]*): c.Expr[List[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
     val ListType =
@@ -106,90 +111,28 @@ private[containers] object ListMacros {
   }
 }
 
-private[containers] final class ListBuilder[A] extends Builder[Any, A] {
+private[containers] final class ListIterator[+A](private[this] var xs: List[A]) extends Iterator[A] {
+  override def isEmpty: Boolean = xs.isEmpty
+  
+  override def head: A = {
+    if (xs.isEmpty) throw new NoSuchElementException("Head of empty iterator.")
+    else xs.head
+  }
+  
+  override def step() {
+    if (xs.isEmpty) throw new UnsupportedOperationException("Empty iterator step.")
+    else xs = xs.tail
+  }
+  
+  override def dup: Iterator[A] = new ListIterator(xs)
+}
+
+private[containers] final class ListBuilder[A] extends ListBuffer[A] with Builder[Any, A] {
   override type State = List[A]
-  
-  private[this] var last: ::[A] = _
-  
-  private[this] var first: List[A] = Nil
-  
-  private[this] var length: Int = 0
-  
-  private[this] var aliased: Int = -1 // index of the first aliased cons cell
-  
-  private[this] def prepare() {
-    var xs = first
-    if (aliased == 0) {
-      last = new ::(xs.head, Nil)
-      first = last
-      xs = xs.tail
-    }
-    else if (aliased > 0) {
-      var i = 0
-      while (i < aliased) {
-        last = xs.asInstanceOf[::[A]]
-        xs = xs.tail
-        i += 1
-      }
-    }
-    if (aliased >= 0) {
-      while (!xs.isEmpty) {
-        val next = new ::(xs.head, Nil)
-        last.tail = next
-        last = next
-        xs = xs.tail
-      }
-    }
-    aliased = -1
-  }
-  
-  override def += (element: A): this.type = {
-    if (first.isEmpty) {
-      last = new ::(element, Nil)
-      first = last
-    }
-    else {
-      prepare()
-      val next = new ::(element, Nil)
-      last.tail = next
-      last = next
-    }
-    length += 1
-    this
-  }
-  
-  override def ++= (xs: Enumerator[A]): this.type = xs match {
-    case Nil => this
-    case xs: ::[A] =>
-      if (first.isEmpty) {
-        last = xs
-        first = last
-        aliased = 0
-      }
-      else {
-        prepare()
-        last.tail = xs
-        aliased = length + 1
-      }
-      while (!last.tail.isEmpty) {
-        last = last.tail.asInstanceOf[::[A]]
-        length += 1
-      }
-      this
-    case _ => super.++=(xs)
-  }
   
   override def expect(count: Int): this.type = this
   
-  override def state: List[A] = {
-    if (length > 0) aliased = 0
-    first
-  }
+  override def state: List[A] = toList
   
-  override def clear() {
-    last = null
-    first = Nil
-    length = 0
-    aliased = -1
-  }
+  protected override def stringPrefix: String = "List.Builder"
 }

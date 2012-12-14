@@ -7,6 +7,8 @@
 
 package basis.collections
 
+import scala.reflect.ClassTag
+
 trait SeqFactory[CC[_]] extends BuilderFactory[CC] {
   def fill[A](count: Int)(elem: => A): CC[A] =
     macro SeqFactory.fill[CC, A]
@@ -26,18 +28,20 @@ private[collections] object SeqFactory {
       (c: Context { type PrefixType <: SeqFactory[CC] })
       (count: c.Expr[Int])
       (elem: c.Expr[A])
-      (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
+      (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
     import c.{Expr, fresh, prefix, WeakTypeTag}
     import c.universe._
     val i    = newTermName(fresh("i$"))
     val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
-    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(builder, "expect"), Ident(i) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(),
+          Apply(
+            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil), "expect"),
+            Ident(i) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$greater"), Literal(Constant(0)) :: Nil),
@@ -54,7 +58,7 @@ private[collections] object SeqFactory {
       (c: Context { type PrefixType <: SeqFactory[CC] })
       (count: c.Expr[Int])
       (f: c.Expr[Int => A])
-      (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
+      (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
     import c.{Expr, fresh, prefix, WeakTypeTag}
     import c.universe._
@@ -62,12 +66,14 @@ private[collections] object SeqFactory {
     val n    = newTermName(fresh("n$"))
     val b    = newTermName(fresh("builder$"))
     val loop = newTermName(fresh("loop$"))
-    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(builder, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(),
+          Apply(
+            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil), "expect"),
+            Ident(n) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -84,7 +90,7 @@ private[collections] object SeqFactory {
       (c: Context { type PrefixType <: SeqFactory[CC] })
       (start: c.Expr[A], count: c.Expr[Int])
       (f: c.Expr[A => A])
-      (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
+      (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
     import c.{Expr, fresh, prefix, WeakTypeTag}
     import c.universe._
@@ -93,11 +99,13 @@ private[collections] object SeqFactory {
     val a    = newTermName(fresh("a$"))
     val i    = newTermName(fresh("i$"))
     val loop = newTermName(fresh("loop$"))
-    val builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil)
     Expr {
       Block(
         ValDef(NoMods, n, TypeTree(), count.tree) ::
-        ValDef(NoMods, b, TypeTree(), Apply(Select(builder, "expect"), Ident(n) :: Nil)) ::
+        ValDef(NoMods, b, TypeTree(),
+          Apply(
+            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil), "expect"),
+            Ident(n) :: Nil)) ::
         If(
           Apply(Select(Ident(n), "$greater"), Literal(Constant(0)) :: Nil),
           Block(

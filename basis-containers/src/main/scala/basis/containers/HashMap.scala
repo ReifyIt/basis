@@ -313,9 +313,13 @@ final class HashMap[+A, +T] private[containers] (
 }
 
 object HashMap extends MapFactory[HashMap] {
+  import scala.reflect.ClassTag
+  
   val empty: HashMap[Nothing, Nothing] = new HashMap(0, 0, new Array[AnyRef](0))
   
-  implicit override def Builder[A, T]: Builder[Any, (A, T)] { type State = HashMap[A, T] } = new HashMapBuilder
+  implicit override def Builder[A : ClassTag, T : ClassTag]
+    : Builder[Any, (A, T)] { type State = HashMap[A, T] } =
+    new HashMapBuilder
   
   override def toString: String = "HashMap"
   
@@ -465,6 +469,8 @@ private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)
     map += (entry._1, entry._2)
     this
   }
+  
+  override def ++= (elems: Enumerator[(A, T)]): this.type = Predef.???
   
   override def expect(count: Int): this.type = this
   

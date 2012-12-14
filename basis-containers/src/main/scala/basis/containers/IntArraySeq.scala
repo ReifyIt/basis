@@ -17,18 +17,27 @@ private[containers] final class IntArraySeq(array: Array[Int]) extends ArraySeq[
   
   override def apply(index: Int): Int = array(index)
   
-  override def update(index: Int, value: Int): Unit = array(index) = value
+  override def copyToArray[B >: Int](xs: Array[B], start: Int, count: Int) {
+    if (xs.isInstanceOf[Array[Int]])
+      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+    else super.copyToArray(xs, start, count)
+  }
   
-  override def copyToArray(xs: Array[Int], start: Int, count: Int): Unit =
-    java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
+  override def copyToArray[B >: Int](xs: Array[B], start: Int) {
+    if (xs.isInstanceOf[Array[Int]])
+      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
+    else super.copyToArray(xs, start)
+  }
   
-  override def copyToArray(xs: Array[Int], start: Int): Unit =
-    java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
-  
-  override def copyToArray(xs: Array[Int]): Unit =
-    java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+  override def copyToArray[B >: Int](xs: Array[B]) {
+    if (xs.isInstanceOf[Array[Int]])
+      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
+    else super.copyToArray(xs)
+  }
   
   override def iterator: Iterator[Int] = new IntArraySeqIterator(array)
+  
+  protected override def stringPrefix: String = "ArraySeq[Int]"
 }
 
 private[containers] final class IntArraySeqIterator
@@ -40,79 +49,26 @@ private[containers] final class IntArraySeqIterator
   override def isEmpty: Boolean = i >= n
   
   override def head: Int = {
-    if (i < n) array(i)
-    else throw new NoSuchElementException("Head of empty iterator.")
+    if (i >= n) throw new NoSuchElementException("Head of empty iterator.")
+    array(i)
   }
   
   override def step() {
-    if (i < n) i += 1
-    else throw new UnsupportedOperationException("Empty iterator step.")
+    if (i >= n) throw new UnsupportedOperationException("Empty iterator step.")
+    i += 1
   }
   
   override def dup: Iterator[Int] = new IntArraySeqIterator(array, i, n)
 }
 
-private[containers] final class IntArraySeqBuilder extends Builder[Any, Int] {
+private[containers] final class IntArraySeqBuilder
+  extends IntArrayBuffer with Builder[Any, Int] {
+  
   override type State = ArraySeq[Int]
   
-  private[this] var array: Array[Int] = _
+  override def expect(count: Int): this.type = this
   
-  private[this] var aliased: Boolean = true
+  override def state: ArraySeq[Int] = toArraySeq
   
-  private[this] var length: Int = 0
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    val newArray = new Array[Int](size)
-    if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
-    array = newArray
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > array.length) {
-      resize(expand(16, size))
-      aliased = false
-    }
-  }
-  
-  override def += (value: Int): this.type = {
-    prepare(length + 1)
-    array(length) = value
-    length += 1
-    this
-  }
-  
-  override def ++= (xs: Enumerator[Int]): this.type = xs match {
-    case xs: IntArraySeq =>
-      prepare(length + xs.length)
-      xs.copyToArray(array, length)
-      length += xs.length
-      this
-    case _ => super.++=(xs)
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (array == null || length + count > array.length) {
-      resize(length + count)
-      aliased = false
-    }
-    this
-  }
-  
-  override def state: ArraySeq[Int] = {
-    if (array == null || length != array.length) resize(length)
-    aliased = true
-    new IntArraySeq(array)
-  }
-  
-  override def clear() {
-    array = null
-    aliased = true
-    length = 0
-  }
+  protected override def stringPrefix: String = "ArraySeq.Builder[Int]"
 }

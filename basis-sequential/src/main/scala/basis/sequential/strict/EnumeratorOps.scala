@@ -159,17 +159,33 @@ final class EnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
     * @return the accumulated elements of both enumerators.
     * @group  Combining
     */
-  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State = {
-    val f = new EnumeratorOps.Append(builder)
-    traverse(these)(f)
-    traverse(those)(f)
-    builder.state
-  }
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+    (builder ++= these ++= those).state
 }
 
 private[strict] object EnumeratorOps {
+  import scala.collection.immutable.{::, Nil}
+  import scala.reflect.macros.Context
   import scala.runtime.AbstractFunction1
   import basis.util.IntOps
+  
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Enumerator[A]] = {
+    import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val Apply(_, enumerator :: Nil) = prefix.tree
+    val EnumeratorType =
+      appliedType(
+        mirror.staticClass("basis.collections.Enumerator").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(enumerator, EnumeratorType))(WeakTypeTag(EnumeratorType))
+  }
+  
+  def ++ [A : c.WeakTypeTag]
+      (c: Context)
+      (those: c.Expr[Enumerator[A]])
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new EnumeratorMacros[c.type](c).++[A](unApply[A](c), those)(builder)
   
   final class CollectInto[-A, B]
       (q: PartialFunction[A, B])
@@ -196,10 +212,8 @@ private[strict] object EnumeratorOps {
       (builder: Builder[_, B])
     extends AbstractFunction1[A, Unit] {
     
-    private[this] val append = new Append(builder)
-    
     override def apply(x: A) {
-      traverse(f(x))(append)
+      builder ++= f(x)
     }
   }
   
@@ -294,9 +308,5 @@ private[strict] object EnumeratorOps {
       }
       else flow.break()
     }
-  }
-  
-  final class Append[-A](builder: Builder[_, A]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = builder += x
   }
 }

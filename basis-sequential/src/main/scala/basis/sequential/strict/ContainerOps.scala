@@ -143,15 +143,15 @@ final class ContainerOps[+A, +From] {
   def zip[B](those: Container[B])(implicit builder: Builder[From, (A, B)]): builder.State =
     macro ContainerOps.zip[A, B]
   
-  /** Returns the concatenation of this and another container.
+  /** Returns the concatenation of this and another collection.
     * 
-    * @param  those     the container to append to these elements.
+    * @param  those     the elements to append to these elements.
     * @param  builder   the accumulator for concatenated elements.
-    * @return the accumulated elements of both containers.
+    * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Container[B])(implicit builder: Builder[From, B]): builder.State =
-    macro ContainerOps.++[B]
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+    macro EnumeratorOps.++[B]
 }
 
 private[strict] object ContainerOps {
@@ -162,23 +162,21 @@ private[strict] object ContainerOps {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, container :: Nil) = prefix.tree
-    val ContainerTag =
-      WeakTypeTag[Container[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Container").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(c.typeCheck(container, ContainerTag.tpe))(ContainerTag)
+    val ContainerType =
+      appliedType(
+        mirror.staticClass("basis.collections.Container").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(container, ContainerType))(WeakTypeTag(ContainerType))
   }
   
   private def iterator[A : c.WeakTypeTag](c: Context)(container: c.Expr[Container[A]]): c.Expr[Iterator[A]] = {
-    import c.{Expr, mirror, typeCheck, weakTypeOf, WeakTypeTag}
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val IteratorTag =
-      WeakTypeTag[Iterator[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Iterator").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(Select(container.tree, "iterator"))(IteratorTag)
+    val IteratorType =
+      appliedType(
+        mirror.staticClass("basis.collections.Iterator").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(Select(container.tree, "iterator"))(WeakTypeTag(IteratorType))
   }
   
   def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]
@@ -257,11 +255,4 @@ private[strict] object ContainerOps {
       (builder: c.Expr[Builder[_, (A, B)]])
     : c.Expr[builder.value.State] =
     new IteratorMacros[c.type](c).zip[A, B](iterator(c)(unApply[A](c)), iterator(c)(those))(builder)
-  
-  def ++ [A : c.WeakTypeTag]
-      (c: Context)
-      (those: c.Expr[Container[A]])
-      (builder: c.Expr[Builder[_, A]])
-    : c.Expr[builder.value.State] =
-    new IteratorMacros[c.type](c).++[A](iterator(c)(unApply[A](c)), iterator(c)(those))(builder)
 }

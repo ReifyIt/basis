@@ -143,12 +143,11 @@ private[general] object IteratorOps {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, iterator :: Nil) = prefix.tree
-    val IteratorTag =
-      WeakTypeTag[Iterator[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Iterator").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(typeCheck(iterator, IteratorTag.tpe))(IteratorTag)
+    val IteratorType =
+      appliedType(
+        mirror.staticClass("basis.collections.Iterator").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(iterator, IteratorType))(WeakTypeTag(IteratorType))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]

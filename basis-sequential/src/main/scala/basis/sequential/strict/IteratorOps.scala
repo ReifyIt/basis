@@ -143,15 +143,15 @@ final class IteratorOps[+A, +From] {
   def zip[B](those: Iterator[B])(implicit builder: Builder[From, (A, B)]): builder.State =
     macro IteratorOps.zip[A, B]
   
-  /** Returns the concatenation of this and another iterator.
+  /** Returns the concatenation of this and another collection.
     * 
-    * @param  those     the iterator to append to these elements.
+    * @param  those     the elements to append to these elements.
     * @param  builder   the accumulator for concatenated elements.
-    * @return the accumulated elements of both iterators.
+    * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Iterator[B])(implicit builder: Builder[From, B]): builder.State =
-    macro IteratorOps.++[B]
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+    macro EnumeratorOps.++[B]
 }
 
 private[strict] object IteratorOps {
@@ -245,11 +245,4 @@ private[strict] object IteratorOps {
       (builder: c.Expr[Builder[_, (A, B)]])
     : c.Expr[builder.value.State] =
     new IteratorMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
-  
-  def ++ [A : c.WeakTypeTag]
-      (c: Context)
-      (those: c.Expr[Iterator[A]])
-      (builder: c.Expr[Builder[_, A]])
-    : c.Expr[builder.value.State] =
-    new IteratorMacros[c.type](c).++[A](unApply[A](c), those)(builder)
 }

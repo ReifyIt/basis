@@ -134,12 +134,12 @@ final class CollectionOps[+A, +From](val these: Collection[A]) extends AnyVal {
   
   /** Returns the concatenation of this and another collection.
     * 
-    * @param  those     the collection to append to these elements.
+    * @param  those     the elements to append to these elements.
     * @param  builder   the accumulator for concatenated elements.
     * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Collection[B])(implicit builder: Builder[From, B]): builder.State =
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
     new EnumeratorOps[B, From](these).++[B](those)(builder)
   //new EnumeratorOps[A, From](these).++[B](those)(builder) // SI-6482
 }

@@ -10,20 +10,21 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-/** A contiguous array.
+/** A mutable contiguous array.
   * 
-  * @groupprio  Examining     -5
-  * @groupprio  Copying       -4
+  * @groupprio  Examining     -8
+  * @groupprio  Mutating      -7
+  * @groupprio  Copying       -6
+  * @groupprio  Inserting     -5
+  * @groupprio  Removing      -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   * 
-  * @define collection  array sequence
+  * @define collection  array buffer
   */
-abstract class ArraySeq[@specialized(Specializable.Primitives) +A]
-  extends Equals with Family[ArraySeq[A]] with IndexedSeq[A] {
-  
-  override def apply(index: Int): A
+abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
+  extends Equals with Family[ArrayBuffer[A]] with IndexedSeq[A] with Buffer[A] {
   
   /** Copies elementes from this $collection to an array slice.
     * 
@@ -74,23 +75,16 @@ abstract class ArraySeq[@specialized(Specializable.Primitives) +A]
     }
   }
   
-  protected override def stringPrefix: String = "ArraySeq"
+  protected override def stringPrefix: String = "ArrayBuffer"
 }
 
-object ArraySeq extends SeqFactory[ArraySeq] {
+object ArrayBuffer extends SeqFactory[ArrayBuffer] {
   import scala.reflect.ClassTag
   
   implicit override def Builder[A](implicit A: ClassTag[A])
-    : Builder[Any, A] { type State = ArraySeq[A] } = (A match {
-    case ClassTag.Byte    => new ByteArraySeqBuilder
-    case ClassTag.Short   => new ShortArraySeqBuilder
-    case ClassTag.Int     => new IntArraySeqBuilder
-    case ClassTag.Long    => new LongArraySeqBuilder
-    case ClassTag.Float   => new FloatArraySeqBuilder
-    case ClassTag.Double  => new DoubleArraySeqBuilder
-    case ClassTag.Boolean => new BitArraySeqBuilder
-    case _                => new RefArraySeqBuilder[A]
-  }).asInstanceOf[Builder[Any, A] { type State = ArraySeq[A] }]
+    : Builder[Any, A] { type State = ArrayBuffer[A] } = (A match {
+    case ClassTag.Int     => new IntArrayBufferBuilder
+  }).asInstanceOf[Builder[Any, A] { type State = ArrayBuffer[A] }]
   
-  override def toString: String = "ArraySeq"
+  override def toString: String = "ArrayBuffer"
 }

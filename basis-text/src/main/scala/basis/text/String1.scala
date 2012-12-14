@@ -283,6 +283,8 @@ private[text] final class String1Builder extends StringBuilder[Any] {
     this
   }
   
+  override def ++= (cs: Enumerator[Int]): this.type = Predef.???
+  
   override def expect(count: Int): this.type = {
     if (codeUnits == null || size + count > codeUnits.length) {
       resize(size + count)

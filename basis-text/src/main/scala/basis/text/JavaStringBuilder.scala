@@ -7,6 +7,7 @@
 
 package basis.text
 
+import basis.collections._
 import basis.util._
 
 private[text] final class JavaStringBuilder extends StringBuilder[Any] {
@@ -55,6 +56,8 @@ private[text] final class JavaStringBuilder extends StringBuilder[Any] {
     }
     this
   }
+  
+  override def ++= (elems: Enumerator[Int]): this.type = Predef.???
   
   override def expect(count: Int): this.type = {
     if (codeUnits == null || size + count > codeUnits.length) resize(size + count)

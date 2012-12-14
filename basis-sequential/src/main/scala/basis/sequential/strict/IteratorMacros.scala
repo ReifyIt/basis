@@ -385,20 +385,6 @@ private[strict] final class IteratorMacros[C <: Context](val context: C) {
     } (StateTag(builder))
   }
   
-  def ++ [A]
-      (these: Expr[Iterator[A]], those: Expr[Iterator[A]])
-      (builder: Expr[Builder[_, A]])
-    : Expr[builder.value.State] = {
-    val b = newTermName(fresh("builder$"))
-    Expr {
-      Block(
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
-        Apply(Select(Ident(b), "$plus$plus$eq"), these.tree :: Nil) ::
-        Apply(Select(Ident(b), "$plus$plus$eq"), those.tree :: Nil) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
-  }
-  
   private def BuilderType(builder: Expr[Builder[_, _]]): Type = builder.tree.symbol match {
     case symbol: TermSymbol if symbol.isStable => singleType(NoPrefix, symbol)
     case _ => builder.actualType

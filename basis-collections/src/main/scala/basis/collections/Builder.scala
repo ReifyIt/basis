@@ -11,7 +11,7 @@ package basis.collections
   * 
   * @define builder   builder
   */
-trait Builder[-From, @specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A] {
+trait Builder[-From, @specialized(Specializable.Primitives) -A] {
   /** The type of state maintained by this $builder. */
   type State
   
@@ -19,10 +19,7 @@ trait Builder[-From, @specialized(Byte, Short, Int, Long, Float, Double, Boolean
   def += (x: A): this.type
   
   /** Adds multiple elements to this $builder. */
-  def ++= (xs: Enumerator[A]): this.type = {
-    traverse(xs)(new Builder.Append[A](this))
-    this
-  }
+  def ++= (xs: Enumerator[A]): this.type
   
   /** Resets this $builder to its initial state. */
   def clear(): Unit
@@ -32,13 +29,4 @@ trait Builder[-From, @specialized(Byte, Short, Int, Long, Float, Double, Boolean
   
   /** Returns the current state of this $builder. */
   def state: State
-}
-
-private[collections] object Builder {
-  final class Append[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A]
-      (builder: Builder[_, A])
-    extends (A => Unit) {
-    
-    override def apply(x: A): Unit = builder += x
-  }
 }

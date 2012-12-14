@@ -385,20 +385,6 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     } (StateTag(builder))
   }
   
-  def ++ [A]
-      (these: Expr[LinearSeq[A]], those: Expr[LinearSeq[A]])
-      (builder: Expr[Builder[_, A]])
-    : Expr[builder.value.State] = {
-    val b = newTermName(fresh("builder$"))
-    Expr {
-      Block(
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
-        Apply(Select(Ident(b), "$plus$plus$eq"), these.tree :: Nil) ::
-        Apply(Select(Ident(b), "$plus$plus$eq"), those.tree :: Nil) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
-  }
-  
   private def LinearSeqType[A : WeakTypeTag]: Type = {
     val LinearSeqTpc = mirror.staticClass("basis.collections.LinearSeq").toType
     appliedType(LinearSeqTpc, weakTypeOf[A] :: Nil)

@@ -1,0 +1,42 @@
+/*      ____              ___                                           *\
+**     / __ | ___  ____  /__/___      A library of building blocks      **
+**    / __  / __ |/ ___|/  / ___|                                       **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
+\*                                                                      */
+
+package basis.containers
+
+import basis.collections._
+import basis.sequential
+
+import org.scalatest.FunSpec
+import org.scalatest.matchers.ShouldMatchers
+
+class ArraySeqSpec
+  extends FunSpec
+    with ShouldMatchers
+    with SeqFactoryBehaviors
+    with IndexedSeqBehaviors
+    with sequential.general.IndexedSeqOpsBehaviors
+    with sequential.strict.IndexedSeqOpsBehaviors {
+  
+  override def suiteName = "ArraySeq specification"
+  
+  it should behave like GenericSeqFactory(ArraySeq)
+  
+  it should behave like TraversableCollection(ArraySeq)
+  it should behave like TraversableContainer(ArraySeq)
+  it should behave like TraversableSeq(ArraySeq)
+  it should behave like TraversableIndexedSeq(ArraySeq)
+  
+  it should behave like SequentialGeneralCollectionOps(ArraySeq)
+  it should behave like SequentialGeneralContainerOps(ArraySeq)
+  it should behave like SequentialGeneralSeqOps(ArraySeq)
+  it should behave like SequentialGeneralIndexedSeqOps(ArraySeq)
+  
+  it should behave like SequentialStrictCollectionOps(ArraySeq)
+  it should behave like SequentialStrictContainerOps(ArraySeq)
+  it should behave like SequentialStrictSeqOps(ArraySeq)
+  it should behave like SequentialStrictIndexedSeqOps(ArraySeq)
+}

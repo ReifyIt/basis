@@ -174,12 +174,11 @@ private[general] object IndexedSeqOps {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, sequence :: Nil) = prefix.tree
-    val IndexedSeqTag =
-      WeakTypeTag[IndexedSeq[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.IndexedSeq").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(typeCheck(sequence, IndexedSeqTag.tpe))(IndexedSeqTag)
+    val IndexedSeqType =
+      appliedType(
+        mirror.staticClass("basis.collections.IndexedSeq").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(sequence, IndexedSeqType))(WeakTypeTag(IndexedSeqType))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]

@@ -143,15 +143,15 @@ final class LinearSeqOps[+A, +From] {
   def zip[B](those: LinearSeq[B])(implicit builder: Builder[From, (A, B)]): builder.State =
     macro LinearSeqOps.zip[A, B]
   
-  /** Returns the concatenation of this and another sequence.
+  /** Returns the concatenation of this and another collection.
     * 
-    * @param  those     the sequence to append to these elements.
+    * @param  those     the elements to append to these elements.
     * @param  builder   the accumulator for concatenated elements.
-    * @return the accumulated elements of both sequences.
+    * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: LinearSeq[B])(implicit builder: Builder[From, B]): builder.State =
-    macro LinearSeqOps.++[B]
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+    macro EnumeratorOps.++[B]
 }
 
 private[strict] object LinearSeqOps {
@@ -162,12 +162,11 @@ private[strict] object LinearSeqOps {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, sequence :: Nil) = prefix.tree
-    val LinearSeqTag =
-      WeakTypeTag[LinearSeq[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.LinearSeq").toType,
-          weakTypeOf[A] :: Nil))
-    Expr(typeCheck(sequence, LinearSeqTag.tpe))(LinearSeqTag)
+    val LinearSeqType =
+      appliedType(
+        mirror.staticClass("basis.collections.LinearSeq").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(sequence, LinearSeqType))(WeakTypeTag(LinearSeqType))
   }
   
   def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]
@@ -246,11 +245,4 @@ private[strict] object LinearSeqOps {
       (builder: c.Expr[Builder[_, (A, B)]])
     : c.Expr[builder.value.State] =
     new LinearSeqMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
-  
-  def ++ [A : c.WeakTypeTag]
-      (c: Context)
-      (those: c.Expr[LinearSeq[A]])
-      (builder: c.Expr[Builder[_, A]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).++[A](unApply[A](c), those)(builder)
 }

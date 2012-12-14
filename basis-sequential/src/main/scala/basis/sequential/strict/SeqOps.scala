@@ -143,13 +143,13 @@ final class SeqOps[+A, +From] {
   def zip[B](those: Container[B])(implicit builder: Builder[From, (A, B)]): builder.State =
     macro ContainerOps.zip[A, B]
   
-  /** Returns the concatenation of this and another sequence.
+  /** Returns the concatenation of this and another collection.
     * 
-    * @param  those     the sequence to append to these elements.
+    * @param  those     the elements to append to these elements.
     * @param  builder   the accumulator for concatenated elements.
-    * @return the accumulated elements of both sequences.
+    * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Seq[B])(implicit builder: Builder[From, B]): builder.State =
-    macro ContainerOps.++[B]
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+    macro EnumeratorOps.++[B]
 }

@@ -79,6 +79,8 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
 }
 
 object ArraySet extends SetFactory[ArraySet] {
+  import scala.reflect.ClassTag
+  
   val empty: ArraySet[Nothing] = new ArraySet(new Array[AnyRef](0))
   
   def apply[A](elem: A): ArraySet[A] = {
@@ -97,7 +99,9 @@ object ArraySet extends SetFactory[ArraySet] {
     }
   }
   
-  implicit override def Builder[A]: Builder[Any, A] { type State = ArraySet[A] } = new ArraySetBuilder
+  implicit override def Builder[A : ClassTag]
+    : Builder[Any, A] { type State = ArraySet[A] } =
+    new ArraySetBuilder
   
   override def toString: String = "ArraySet"
 }
@@ -160,6 +164,8 @@ private[containers] final class ArraySetBuilder[A] extends Builder[Any, A] {
     }
     this
   }
+  
+  override def ++= (elems: Enumerator[A]): this.type = Predef.???
   
   override def expect(count: Int): this.type = {
     if (slots == null || size + count > slots.length) {
