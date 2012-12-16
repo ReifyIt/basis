@@ -18,8 +18,8 @@ class ListBufferSpec
     with ShouldMatchers
     with SeqFactoryBehaviors
     with SeqBehaviors
-    with sequential.general.SeqOpsBehaviors
-    with sequential.strict.SeqOpsBehaviors {
+    with sequential.GeneralSeqOpsBehaviors
+    with sequential.StrictSeqOpsBehaviors {
   
   override def suiteName = "ListBuffer specification"
   

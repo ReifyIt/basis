@@ -18,8 +18,8 @@ class ArraySetSpec
     with ShouldMatchers
     with SetFactoryBehaviors
     with SetBehaviors
-    with sequential.general.SetOpsBehaviors
-    with sequential.strict.SetOpsBehaviors {
+    with sequential.GeneralSetOpsBehaviors
+    with sequential.StrictSetOpsBehaviors {
   
   override def suiteName = "ArraySet specification"
   

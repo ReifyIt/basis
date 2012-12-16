@@ -18,8 +18,8 @@ class ArraySeqSpec
     with ShouldMatchers
     with SeqFactoryBehaviors
     with IndexBehaviors
-    with sequential.general.IndexOpsBehaviors
-    with sequential.strict.IndexOpsBehaviors {
+    with sequential.GeneralIndexOpsBehaviors
+    with sequential.StrictIndexOpsBehaviors {
   
   override def suiteName = "ArraySeq specification"
   

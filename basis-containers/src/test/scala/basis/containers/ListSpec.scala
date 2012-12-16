@@ -18,8 +18,8 @@ class ListSpec
     with ShouldMatchers
     with SeqFactoryBehaviors
     with StackBehaviors
-    with sequential.general.StackOpsBehaviors
-    with sequential.strict.StackOpsBehaviors {
+    with sequential.GeneralStackOpsBehaviors
+    with sequential.StrictStackOpsBehaviors {
   
   override def suiteName = "List specification"
   

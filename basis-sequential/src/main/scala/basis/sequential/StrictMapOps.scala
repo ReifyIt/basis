@@ -5,14 +5,14 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.sequential
 
-package object sequential {
-  val general = new General
-  
-  val nonstrict = new NonStrict
-  
-  val strict = new Strict
-  
-  private[sequential] val flow = new basis.control.Flow
-}
+import basis.collections._
+
+/** Strictly evaluated map operations.
+  * 
+  * @groupprio  Mapping     -3
+  * @groupprio  Filtering   -2
+  * @groupprio  Combining   -1
+  */
+final class StrictMapOps[+A, +T, +From]
