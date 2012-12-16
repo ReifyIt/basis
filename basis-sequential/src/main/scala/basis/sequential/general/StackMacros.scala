@@ -13,21 +13,21 @@ import basis.collections._
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
-private[general] final class LinearSeqMacros[C <: Context](val context: C) {
+private[general] final class StackMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
   val universe: context.universe.type = context.universe
   
   def foreach[A : WeakTypeTag, U]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (f: Expr[A => U])
     : Expr[Unit] = {
     val xs   = newTermName(fresh("xs$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) :: Nil,
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) :: Nil,
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -40,7 +40,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def foldLeft[A : WeakTypeTag, B : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (z: Expr[B])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
@@ -49,7 +49,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -64,7 +64,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def reduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
@@ -72,7 +72,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         If(
           Select(Ident(xs), "isEmpty"),
           Throw(
@@ -95,7 +95,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def reduceLeftOption[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (op: Expr[(B, A) => B])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -103,7 +103,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) :: Nil,
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) :: Nil,
         If(
           Select(Ident(xs), "isEmpty"),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None"),
@@ -125,7 +125,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def find[A : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Option[A]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -134,7 +134,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[A].tpe),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
         LabelDef(loop, Nil,
@@ -158,7 +158,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def forall[A : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -166,7 +166,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
         LabelDef(loop, Nil,
           If(
@@ -183,7 +183,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def exists[A : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -191,7 +191,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
         LabelDef(loop, Nil,
           If(
@@ -208,7 +208,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def count[A : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Int] = {
     val xs   = newTermName(fresh("xs$"))
@@ -216,7 +216,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
         LabelDef(loop, Nil,
           If(
@@ -234,7 +234,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def choose[A : WeakTypeTag, B : WeakTypeTag]
-      (self: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -243,7 +243,7 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), self.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[B].tpe),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
         LabelDef(loop, Nil,
@@ -266,8 +266,8 @@ private[general] final class LinearSeqMacros[C <: Context](val context: C) {
     } (OptionTag[B])
   }
   
-  private def LinearSeqType[A : WeakTypeTag]: Type =
-    appliedType(mirror.staticClass("basis.collections.LinearSeq").toType, weakTypeOf[A] :: Nil)
+  private def StackType[A : WeakTypeTag]: Type =
+    appliedType(mirror.staticClass("basis.collections.Stack").toType, weakTypeOf[A] :: Nil)
   
   implicit private def OptionTag[A : WeakTypeTag]: WeakTypeTag[Option[A]] =
     WeakTypeTag(appliedType(mirror.staticClass("scala.Option").toType, weakTypeOf[A] :: Nil))

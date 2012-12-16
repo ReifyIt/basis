@@ -100,7 +100,7 @@ private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
       xs.copyToArray(array.asInstanceOf[Array[A]], length)
       length += xs.length
       this
-    case _ => Predef.???
+    case _ => super.++=(xs)
   }
   
   override def expect(count: Int): this.type = {

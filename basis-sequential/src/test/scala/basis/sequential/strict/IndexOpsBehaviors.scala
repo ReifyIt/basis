@@ -13,13 +13,13 @@ import basis.collections._
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait IndexedSeqOpsBehaviors extends SeqOpsBehaviors { this: FunSpec =>
+trait IndexOpsBehaviors extends SeqOpsBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def SequentialStrictIndexedSeqOps[CC[A] <: IndexedSeq[A]](CC: BuilderFactory[CC]) {
+  def SequentialStrictIndexOps[CC[A] <: Index[A]](CC: BuilderFactory[CC]) {
     import CC.Builder
     
-    describe(s"A strict indexed $CC sequence") {
+    describe(s"A strict $CC index") {
       it("should collect all elements defined by a partial function") {
         val xs = CC(2, 3, 4, 5, 6, 7)
         val ys = xs.collect { case x if x % 2 != 0 => x.toDouble }

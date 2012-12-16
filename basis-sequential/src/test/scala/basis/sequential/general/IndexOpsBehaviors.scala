@@ -13,11 +13,11 @@ import basis.collections._
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait IndexedSeqOpsBehaviors extends SeqOpsBehaviors { this: FunSpec =>
+trait IndexOpsBehaviors extends SeqOpsBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def SequentialGeneralIndexedSeqOps[CC[A] <: IndexedSeq[A]](CC: BuilderFactory[CC]) {
-    describe(s"A general indexed $CC sequence") {
+  def SequentialGeneralIndexOps[CC[A] <: Index[A]](CC: BuilderFactory[CC]) {
+    describe(s"A general $CC index") {
       it("should traverse its elements once each with foreach") {
         val xs = CC(2, 3, 5, 7)
         var n = 0

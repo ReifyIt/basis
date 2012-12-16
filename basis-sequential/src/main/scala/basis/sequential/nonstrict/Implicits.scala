@@ -26,11 +26,11 @@ private[sequential] trait Implicits {
   implicit final def NonStrictSeqOps[A](these: Seq[A]): SeqOps[A] =
     macro Implicits.NonStrictSeqOps[A]
   
-  implicit final def NonStrictLinearSeqOps[A](these: LinearSeq[A]): LinearSeqOps[A] =
-    macro Implicits.NonStrictLinearSeqOps[A]
+  implicit final def NonStrictIndexOps[A](these: Index[A]): IndexOps[A] =
+    macro Implicits.NonStrictIndexOps[A]
   
-  implicit final def NonStrictIndexedSeqOps[A](these: IndexedSeq[A]): IndexedSeqOps[A] =
-    macro Implicits.NonStrictIndexedSeqOps[A]
+  implicit final def NonStrictStackOps[A](these: Stack[A]): StackOps[A] =
+    macro Implicits.NonStrictStackOps[A]
   
   implicit final def NonStrictSetOps[A](these: Set[A]): SetOps[A] =
     macro Implicits.NonStrictSetOps[A]
@@ -113,32 +113,32 @@ private[sequential] object Implicits {
     Expr(New(SeqOpsTag.tpe, these.tree))(SeqOpsTag)
   }
   
-  def NonStrictLinearSeqOps[A : c.WeakTypeTag]
+  def NonStrictStackOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[LinearSeq[A]])
-    : c.Expr[LinearSeqOps[A]] = {
+      (these: c.Expr[Stack[A]])
+    : c.Expr[StackOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val LinearSeqOpsTag =
-      WeakTypeTag[LinearSeqOps[A]](
+    val StackOpsTag =
+      WeakTypeTag[StackOps[A]](
         appliedType(
-          mirror.staticClass("basis.sequential.nonstrict.LinearSeqOps").toType,
+          mirror.staticClass("basis.sequential.nonstrict.StackOps").toType,
           weakTypeOf[A] :: Nil))
-    Expr(New(LinearSeqOpsTag.tpe, these.tree))(LinearSeqOpsTag)
+    Expr(New(StackOpsTag.tpe, these.tree))(StackOpsTag)
   }
   
-  def NonStrictIndexedSeqOps[A : c.WeakTypeTag]
+  def NonStrictIndexOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[IndexedSeq[A]])
-    : c.Expr[IndexedSeqOps[A]] = {
+      (these: c.Expr[Index[A]])
+    : c.Expr[IndexOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val IndexedSeqOpsTag =
-      WeakTypeTag[IndexedSeqOps[A]](
+    val IndexOpsTag =
+      WeakTypeTag[IndexOps[A]](
         appliedType(
-          mirror.staticClass("basis.sequential.nonstrict.IndexedSeqOps").toType,
+          mirror.staticClass("basis.sequential.nonstrict.IndexOps").toType,
           weakTypeOf[A] :: Nil))
-    Expr(New(IndexedSeqOpsTag.tpe, these.tree))(IndexedSeqOpsTag)
+    Expr(New(IndexOpsTag.tpe, these.tree))(IndexOpsTag)
   }
   
   def NonStrictSetOps[A : c.WeakTypeTag]

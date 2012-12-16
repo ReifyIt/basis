@@ -13,14 +13,14 @@ import basis.collections._
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
-private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
+private[strict] final class IndexMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
   val universe: context.universe.type = context.universe
   
   def collect[A, B]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (q: Expr[PartialFunction[A, B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -53,7 +53,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def map[A, B]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (f: Expr[A => B])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -81,7 +81,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def flatMap[A, B]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (f: Expr[A => Enumerator[B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -109,7 +109,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def filter[A]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -142,7 +142,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def dropWhile[A]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -183,7 +183,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def takeWhile[A]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -217,7 +217,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def span[A]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (p: Expr[A => Boolean])
       (builder1: Expr[Builder[_, A]], builder2: Expr[Builder[_, A]])
     : Expr[(builder1.value.State, builder2.value.State)] = {
@@ -264,7 +264,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def drop[A]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (lower: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -294,7 +294,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def take[A]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -322,7 +322,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def slice[A]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (lower: Expr[Int], upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -353,7 +353,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def reverse[A]
-      (these: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
@@ -379,7 +379,7 @@ private[strict] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def zip[A, B]
-      (these: Expr[IndexedSeq[A]], those: Expr[IndexedSeq[B]])
+      (these: Expr[Index[A]], those: Expr[Index[B]])
       (builder: Expr[Builder[_, (A, B)]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))

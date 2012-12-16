@@ -13,13 +13,13 @@ import basis.collections._
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait LinearSeqOpsBehaviors extends SeqOpsBehaviors { this: FunSpec =>
+trait StackOpsBehaviors extends SeqOpsBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def SequentialStrictLinearSeqOps[CC[A] <: LinearSeq[A]](CC: BuilderFactory[CC]) {
+  def SequentialStrictStackOps[CC[A] <: Stack[A]](CC: BuilderFactory[CC]) {
     import CC.Builder
     
-    describe(s"A strict linear $CC sequence") {
+    describe(s"A strict $CC stack") {
       it("should collect all elements defined by a partial function") {
         val xs = CC(2, 3, 4, 5, 6, 7)
         val ys = xs.collect { case x if x % 2 != 0 => x.toDouble }

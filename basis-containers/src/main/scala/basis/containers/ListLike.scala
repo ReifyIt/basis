@@ -5,15 +5,17 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis
+package basis.containers
 
-/** General purpose collections interfaces.
+/** A list-convertible collection.
   * 
-  * @contentDiagram hideNodes "*Factory" "*Family"
+  * @groupprio  Converting  -1
+  * 
+  * @define collection  collection
   */
-package object collections {
-  /** Applies a function to each element of an enumerator by invoking its
-    * protected `foreach` method. */
-  def traverse[A, U](xs: Enumerator[A])(f: A => U): Unit =
-    Enumerator.traverse[A, U](xs)(f)
+trait ListLike[+A] extends Any {
+  /** Returns a list containing the elements of this $collection.
+    * @group Converting
+    */
+  def toList: List[A]
 }

@@ -20,14 +20,14 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   val universe: context.universe.type = context.universe
   
   def foreach[A, U]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (f: Expr[A => U])
     : Expr[Unit] = {
     val xs   = newTermName(fresh("xs$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) :: Nil,
+        ValDef(NoMods, xs, TypeTree(), these.tree) :: Nil,
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -40,7 +40,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   }
   
   def foldLeft[A, B : WeakTypeTag]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (z: Expr[B])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
@@ -49,7 +49,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -64,7 +64,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   }
   
   def reduceLeft[A, B >: A : WeakTypeTag]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
@@ -72,7 +72,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         If(
           Select(Ident(xs), "isEmpty"),
           Throw(
@@ -95,7 +95,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   }
   
   def reduceLeftOption[A, B >: A : WeakTypeTag]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (op: Expr[(B, A) => B])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -103,7 +103,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) :: Nil,
+        ValDef(NoMods, xs, TypeTree(), these.tree) :: Nil,
         If(
           Select(Ident(xs), "isEmpty"),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None"),
@@ -125,7 +125,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   }
   
   def find[A : WeakTypeTag]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (p: Expr[A => Boolean])
     : Expr[Option[A]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -134,7 +134,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[A].tpe),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
         LabelDef(loop, Nil,
@@ -158,7 +158,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   }
   
   def forall[A]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -166,7 +166,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
         LabelDef(loop, Nil,
           If(
@@ -183,7 +183,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   }
   
   def exists[A]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -191,7 +191,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
         LabelDef(loop, Nil,
           If(
@@ -208,7 +208,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   }
   
   def count[A]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (p: Expr[A => Boolean])
     : Expr[Int] = {
     val xs   = newTermName(fresh("xs$"))
@@ -216,7 +216,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
         LabelDef(loop, Nil,
           If(
@@ -234,7 +234,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
   }
   
   def choose[A, B : WeakTypeTag]
-      (self: Expr[Iterator[A]])
+      (these: Expr[Iterator[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -243,7 +243,7 @@ private[general] final class IteratorMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[B].tpe),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
         LabelDef(loop, Nil,

@@ -100,7 +100,7 @@ private[containers] final class DoubleArraySeqBuilder extends Builder[Any, Doubl
       xs.copyToArray(array, length)
       length += xs.length
       this
-    case _ => Predef.???
+    case _ => super.++=(xs)
   }
   
   override def expect(count: Int): this.type = {

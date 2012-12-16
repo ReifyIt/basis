@@ -387,8 +387,6 @@ private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
     this
   }
   
-  override def ++= (elems: Enumerator[A]): this.type = Predef.???
-  
   override def expect(count: Int): this.type = this
   
   override def state: HashSet[A] = set

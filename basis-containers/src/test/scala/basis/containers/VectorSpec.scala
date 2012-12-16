@@ -17,9 +17,9 @@ class VectorSpec
   extends FunSpec
     with ShouldMatchers
     with SeqFactoryBehaviors
-    with IndexedSeqBehaviors
-    with sequential.general.IndexedSeqOpsBehaviors
-    with sequential.strict.IndexedSeqOpsBehaviors {
+    with IndexBehaviors
+    with sequential.general.IndexOpsBehaviors
+    with sequential.strict.IndexOpsBehaviors {
   
   override def suiteName = "Vector specification"
   
@@ -28,15 +28,15 @@ class VectorSpec
   it should behave like TraversableCollection(Vector)
   it should behave like TraversableContainer(Vector)
   it should behave like TraversableSeq(Vector)
-  it should behave like TraversableIndexedSeq(Vector)
+  it should behave like TraversableIndex(Vector)
   
   it should behave like SequentialGeneralCollectionOps(Vector)
   it should behave like SequentialGeneralContainerOps(Vector)
   it should behave like SequentialGeneralSeqOps(Vector)
-  it should behave like SequentialGeneralIndexedSeqOps(Vector)
+  it should behave like SequentialGeneralIndexOps(Vector)
   
   it should behave like SequentialStrictCollectionOps(Vector)
   it should behave like SequentialStrictContainerOps(Vector)
   it should behave like SequentialStrictSeqOps(Vector)
-  it should behave like SequentialStrictIndexedSeqOps(Vector)
+  it should behave like SequentialStrictIndexOps(Vector)
 }

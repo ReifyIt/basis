@@ -16,7 +16,7 @@ import basis.collections._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
+final class IndexOps[+A](val these: Index[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this
     * sequence for which the function is defined.
     * 
@@ -24,8 +24,8 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     * @return a non-strict view of the filtered and mapped elements.
     * @group  Mapping
     */
-  def collect[B](q: PartialFunction[A, B]): IndexedSeq[B] =
-    new IndexedSeqOps.Collect(these, q)
+  def collect[B](q: PartialFunction[A, B]): Index[B] =
+    new IndexOps.Collect(these, q)
   
   /** Returns a view that applies a function to each element in this sequence.
     * 
@@ -33,8 +33,8 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     * @return a non-strict view of the mapped elements.
     * @group  Mapping
     */
-  def map[B](f: A => B): IndexedSeq[B] =
-    new IndexedSeqOps.Map(these, f)
+  def map[B](f: A => B): Index[B] =
+    new IndexOps.Map(these, f)
   
   /** Returns a view of all elements in this sequence that satisfy a predicate.
     * 
@@ -42,8 +42,8 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     * @return a non-strict view of the filtered elements.
     * @group  Filtering
     */
-  def filter(p: A => Boolean): IndexedSeq[A] =
-    new IndexedSeqOps.Filter(these, p)
+  def filter(p: A => Boolean): Index[A] =
+    new IndexOps.Filter(these, p)
   
   /** Returns a view of all elements following the longest prefix of this
     * sequence for which each element satisfies a predicate.
@@ -53,8 +53,8 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     *         with the first element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile(p: A => Boolean): IndexedSeq[A] =
-    new IndexedSeqOps.DropWhile(these, p)
+  def dropWhile(p: A => Boolean): Index[A] =
+    new IndexOps.DropWhile(these, p)
   
   /** Returns a view of the longest prefix of this sequence for which each
     * element satisfies a predicate.
@@ -64,8 +64,8 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     *         the first element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile(p: A => Boolean): IndexedSeq[A] =
-    new IndexedSeqOps.TakeWhile(these, p)
+  def takeWhile(p: A => Boolean): Index[A] =
+    new IndexOps.TakeWhile(these, p)
   
   /** Returns a (prefix, suffix) pair of views with the prefix being the
     * longest one for which each element satisfies a predicate, and the suffix
@@ -75,7 +75,7 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     * @return the (predix, suffix) pair of non-strict views.
     * @group  Filtering
     */
-  def span(p: A => Boolean): (IndexedSeq[A], IndexedSeq[A]) =
+  def span(p: A => Boolean): (Index[A], Index[A]) =
     (takeWhile(p), dropWhile(p))
   
   /** Returns a view of all elements in this sequence following a prefix
@@ -86,8 +86,8 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     * @return a non-strict view of all but the first `lower` elements.
     * @group  Filtering
     */
-  def drop(lower: Int): IndexedSeq[A] =
-    new IndexedSeqOps.Drop(these, lower)
+  def drop(lower: Int): Index[A] =
+    new IndexOps.Drop(these, lower)
   
   /** Returns a view of a prefix of this sequence up to some length.
     * 
@@ -96,8 +96,8 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     * @return a non-strict view of up to the first `upper` elements.
     * @group  Filtering
     */
-  def take(upper: Int): IndexedSeq[A] =
-    new IndexedSeqOps.Take(these, upper)
+  def take(upper: Int): Index[A] =
+    new IndexOps.Take(these, upper)
   
   /** Returns a view of an interval of elements in this sequence.
     * 
@@ -107,16 +107,16 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     *         equal to `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice(lower: Int, upper: Int): IndexedSeq[A] =
-    new IndexedSeqOps.Slice(these, lower, upper)
+  def slice(lower: Int, upper: Int): Index[A] =
+    new IndexOps.Slice(these, lower, upper)
   
   /** Returns a view of the reverse of this sequence.
     * 
     * @return a non-strict view of the elements in this sequence in reverse order.
     * @group  Combining
     */
-  def reverse: IndexedSeq[A] =
-    new IndexedSeqOps.Reverse(these)
+  def reverse: Index[A] =
+    new IndexOps.Reverse(these)
   
   /** Returns a view of pairs of elemnts from this and another sequence.
     * 
@@ -124,8 +124,8 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     * @return a non-strict view of the pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B](those: IndexedSeq[B]): IndexedSeq[(A, B)] =
-    new IndexedSeqOps.Zip(these, those)
+  def zip[B](those: Index[B]): Index[(A, B)] =
+    new IndexOps.Zip(these, those)
   
   /** Returns a view concatenating this and another sequence.
     * 
@@ -133,15 +133,15 @@ final class IndexedSeqOps[+A](val these: IndexedSeq[A]) extends AnyVal {
     * @return a non-strict view of the concatenated elements.
     * @group Combining
     */
-  def ++ [B >: A](those: IndexedSeq[B]): IndexedSeq[B] =
-    new IndexedSeqOps.++(these, those)
+  def ++ [B >: A](those: Index[B]): Index[B] =
+    new IndexOps.++(these, those)
 }
 
-private[nonstrict] object IndexedSeqOps {
+private[nonstrict] object IndexOps {
   import scala.annotation.tailrec
   import basis.util.IntOps
   
-  final class Collect[-A, +B](base: IndexedSeq[A], q: PartialFunction[A, B]) extends IndexedSeq[B] {
+  final class Collect[-A, +B](base: Index[A], q: PartialFunction[A, B]) extends Index[B] {
     private[this] var table: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
       if (table == null) {
@@ -170,13 +170,13 @@ private[nonstrict] object IndexedSeqOps {
     override def apply(index: Int): B = q(base(lookup(index)))
   }
   
-  final class Map[-A, +B](base: IndexedSeq[A], f: A => B) extends IndexedSeq[B] {
+  final class Map[-A, +B](base: Index[A], f: A => B) extends Index[B] {
     override def length: Int = base.length
     
     override def apply(index: Int): B = f(base(index))
   }
   
-  final class Filter[+A](base: IndexedSeq[A], p: A => Boolean) extends IndexedSeq[A] {
+  final class Filter[+A](base: Index[A], p: A => Boolean) extends Index[A] {
     private[this] var table: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
       if (table == null) {
@@ -205,7 +205,7 @@ private[nonstrict] object IndexedSeqOps {
     override def apply(index: Int): A = base(lookup(index))
   }
   
-  final class DropWhile[+A](base: IndexedSeq[A], p: A => Boolean) extends IndexedSeq[A] {
+  final class DropWhile[+A](base: Index[A], p: A => Boolean) extends Index[A] {
     private[this] var lower: Int = -1
     private[this] def offset: Int = synchronized {
       if (lower < 0) {
@@ -225,7 +225,7 @@ private[nonstrict] object IndexedSeqOps {
     }
   }
   
-  final class TakeWhile[+A](base: IndexedSeq[A], p: A => Boolean) extends IndexedSeq[A] {
+  final class TakeWhile[+A](base: Index[A], p: A => Boolean) extends Index[A] {
     private[this] var upper: Int = -1
     
     override def length: Int = synchronized {
@@ -243,7 +243,7 @@ private[nonstrict] object IndexedSeqOps {
     }
   }
   
-  final class Drop[+A](base: IndexedSeq[A], lower: Int) extends IndexedSeq[A] {
+  final class Drop[+A](base: Index[A], lower: Int) extends Index[A] {
     private[this] val offset: Int = 0 max lower min base.length
     
     override def length: Int = base.length - offset
@@ -255,7 +255,7 @@ private[nonstrict] object IndexedSeqOps {
     }
   }
   
-  final class Take[+A](base: IndexedSeq[A], upper: Int) extends IndexedSeq[A] {
+  final class Take[+A](base: Index[A], upper: Int) extends Index[A] {
     override val length: Int = 0 max upper min base.length
     
     override def apply(index: Int): A = {
@@ -264,7 +264,7 @@ private[nonstrict] object IndexedSeqOps {
     }
   }
   
-  final class Slice[+A](base: IndexedSeq[A], lower: Int, upper: Int) extends IndexedSeq[A] {
+  final class Slice[+A](base: Index[A], lower: Int, upper: Int) extends Index[A] {
     private[this] val offset: Int = 0 max lower min base.length
     
     override val length: Int = (offset max upper min base.length) - offset
@@ -275,7 +275,7 @@ private[nonstrict] object IndexedSeqOps {
     }
   }
   
-  final class Reverse[+A](base: IndexedSeq[A]) extends IndexedSeq[A] {
+  final class Reverse[+A](base: Index[A]) extends Index[A] {
     override def length: Int = base.length
     
     override def apply(index: Int): A = {
@@ -285,13 +285,13 @@ private[nonstrict] object IndexedSeqOps {
     }
   }
   
-  final class Zip[+A, +B](xs: IndexedSeq[A], ys: IndexedSeq[B]) extends IndexedSeq[(A, B)] {
+  final class Zip[+A, +B](xs: Index[A], ys: Index[B]) extends Index[(A, B)] {
     override val length: Int = xs.length min ys.length
     
     override def apply(index: Int): (A, B) = (xs(index), ys(index))
   }
   
-  final class ++[+A](xs: IndexedSeq[A], ys: IndexedSeq[A]) extends IndexedSeq[A] {
+  final class ++[+A](xs: Index[A], ys: Index[A]) extends Index[A] {
     override val length: Int = xs.length + ys.length
     
     override def apply(index: Int): A = {

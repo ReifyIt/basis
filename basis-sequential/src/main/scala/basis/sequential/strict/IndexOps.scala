@@ -10,13 +10,13 @@ package strict
 
 import basis.collections._
 
-/** Strictly evaluated linear sequence operations.
+/** Strictly evaluated indexed sequence operations.
   * 
   * @groupprio  Mapping     -3
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class LinearSeqOps[+A, +From] {
+final class IndexOps[+A, +From] {
   /** Returns the applications of a partial function to each element in this
     * sequence for which the function is defined.
     * 
@@ -26,7 +26,7 @@ final class LinearSeqOps[+A, +From] {
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State =
-    macro LinearSeqOps.collect[A, B]
+    macro IndexOps.collect[A, B]
   
   /** Returns the applications of a function to each element in this sequence.
     * 
@@ -36,7 +36,7 @@ final class LinearSeqOps[+A, +From] {
     * @group  Mapping
     */
   def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State =
-    macro LinearSeqOps.map[A, B]
+    macro IndexOps.map[A, B]
   
   /** Returns the concatenation of all elements returned by a function applied
     * to each element in this sequence.
@@ -47,7 +47,7 @@ final class LinearSeqOps[+A, +From] {
     * @group  Mapping
     */
   def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
-    macro LinearSeqOps.flatMap[A, B]
+    macro IndexOps.flatMap[A, B]
   
   /** Returns all elements in this sequence that satisfy a predicate.
     * 
@@ -57,7 +57,7 @@ final class LinearSeqOps[+A, +From] {
     * @group  Filtering
     */
   def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
-    macro LinearSeqOps.filter[A]
+    macro IndexOps.filter[A]
   
   /** Returns all elements following the longest prefix of this sequence
     * for which each element satisfies a predicate.
@@ -69,7 +69,7 @@ final class LinearSeqOps[+A, +From] {
     * @group  Filtering
     */
   def dropWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
-    macro LinearSeqOps.dropWhile[A]
+    macro IndexOps.dropWhile[A]
   
   /** Returns the longest prefix of this sequence for which each element
     * satisfies a predicate.
@@ -81,7 +81,7 @@ final class LinearSeqOps[+A, +From] {
     * @group  Filtering
     */
   def takeWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
-    macro LinearSeqOps.takeWhile[A]
+    macro IndexOps.takeWhile[A]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
     * which each element satisfies a predicate, and the suffix beginning with
@@ -95,9 +95,9 @@ final class LinearSeqOps[+A, +From] {
     */
   //FIXME: SI-6447
   //def span(p: A => Boolean)
-  //    (implicit builder1: Builder[From, A, To], builder2: Builder[From, A])
+  //    (implicit builder1: Builder[From, A], builder2: Builder[From, A])
   //  : (builder1.State, builder2.State) =
-  //  macro LinearSeqOps.span[A]
+  //  macro IndexOps.span[A]
   
   /** Returns all elements in this sequence following a prefix up to some length.
     * 
@@ -108,7 +108,7 @@ final class LinearSeqOps[+A, +From] {
     * @group  Filtering
     */
   def drop(lower: Int)(implicit builder: Builder[From, A]): builder.State =
-    macro LinearSeqOps.drop[A]
+    macro IndexOps.drop[A]
   
   /** Returns a prefix of this sequence up to some length.
     * 
@@ -119,7 +119,7 @@ final class LinearSeqOps[+A, +From] {
     * @group  Filtering
     */
   def take(upper: Int)(implicit builder: Builder[From, A]): builder.State =
-    macro LinearSeqOps.take[A]
+    macro IndexOps.take[A]
   
   /** Returns an interval of elements in this sequence.
     * 
@@ -131,7 +131,16 @@ final class LinearSeqOps[+A, +From] {
     * @group  Filtering
     */
   def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State =
-    macro LinearSeqOps.slice[A]
+    macro IndexOps.slice[A]
+  
+  /** Returns the reverse of this sequence.
+    * 
+    * @param  builder   the accumulator for reversed elements.
+    * @return the elements in this sequence in reverse order.
+    * @group  Combining
+    */
+  def reverse(implicit builder: Builder[From, A]): builder.State =
+    macro IndexOps.reverse[A]
   
   /** Returns pairs of elements from this and another sequence.
     * 
@@ -140,8 +149,8 @@ final class LinearSeqOps[+A, +From] {
     * @return the accumulated pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B](those: LinearSeq[B])(implicit builder: Builder[From, (A, B)]): builder.State =
-    macro LinearSeqOps.zip[A, B]
+  def zip[B](those: Index[B])(implicit builder: Builder[From, (A, B)]): builder.State =
+    macro IndexOps.zip[A, B]
   
   /** Returns the concatenation of this and another collection.
     * 
@@ -154,19 +163,20 @@ final class LinearSeqOps[+A, +From] {
     macro EnumeratorOps.++[B]
 }
 
-private[strict] object LinearSeqOps {
+private[strict] object IndexOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
+  import basis.util.IntOps
   
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[LinearSeq[A]] = {
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Index[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, sequence :: Nil) = prefix.tree
-    val LinearSeqType =
+    val IndexType =
       appliedType(
-        mirror.staticClass("basis.collections.LinearSeq").toType,
+        mirror.staticClass("basis.collections.Index").toType,
         weakTypeOf[A] :: Nil)
-    Expr(typeCheck(sequence, LinearSeqType))(WeakTypeTag(LinearSeqType))
+    Expr(typeCheck(sequence, IndexType))(WeakTypeTag(IndexType))
   }
   
   def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]
@@ -174,75 +184,81 @@ private[strict] object LinearSeqOps {
       (q: c.Expr[PartialFunction[A, B]])
       (builder: c.Expr[Builder[_, B]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).collect[A, B](unApply[A](c))(q)(builder)
+    new IndexMacros[c.type](c).collect[A, B](unApply[A](c))(q)(builder)
   
   def map[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => B])
       (builder: c.Expr[Builder[_, B]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).map[A, B](unApply[A](c))(f)(builder)
+    new IndexMacros[c.type](c).map[A, B](unApply[A](c))(f)(builder)
   
   def flatMap[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => Enumerator[B]])
       (builder: c.Expr[Builder[_, B]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).flatMap[A, B](unApply[A](c))(f)(builder)
+    new IndexMacros[c.type](c).flatMap[A, B](unApply[A](c))(f)(builder)
   
   def filter[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (builder: c.Expr[Builder[_, A]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).filter[A](unApply[A](c))(p)(builder)
+    new IndexMacros[c.type](c).filter[A](unApply[A](c))(p)(builder)
   
   def dropWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (builder: c.Expr[Builder[_, A]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).dropWhile[A](unApply[A](c))(p)(builder)
+    new IndexMacros[c.type](c).dropWhile[A](unApply[A](c))(p)(builder)
   
   def takeWhile[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (builder: c.Expr[Builder[_, A]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).takeWhile[A](unApply[A](c))(p)(builder)
+    new IndexMacros[c.type](c).takeWhile[A](unApply[A](c))(p)(builder)
   
   def span[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
       (builder1: c.Expr[Builder[_, A]], builder2: c.Expr[Builder[_, A]])
     : c.Expr[(builder1.value.State, builder2.value.State)] =
-    new LinearSeqMacros[c.type](c).span[A](unApply[A](c))(p)(builder1, builder2)
+    new IndexMacros[c.type](c).span[A](unApply[A](c))(p)(builder1, builder2)
   
   def drop[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int])
       (builder: c.Expr[Builder[_, A]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).drop[A](unApply[A](c))(lower)(builder)
+    new IndexMacros[c.type](c).drop[A](unApply[A](c))(lower)(builder)
   
   def take[A : c.WeakTypeTag]
       (c: Context)
       (upper: c.Expr[Int])
       (builder: c.Expr[Builder[_, A]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).take[A](unApply[A](c))(upper)(builder)
+    new IndexMacros[c.type](c).take[A](unApply[A](c))(upper)(builder)
   
   def slice[A : c.WeakTypeTag]
       (c: Context)
       (lower: c.Expr[Int], upper: c.Expr[Int])
       (builder: c.Expr[Builder[_, A]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).slice[A](unApply[A](c))(lower, upper)(builder)
+    new IndexMacros[c.type](c).slice[A](unApply[A](c))(lower, upper)(builder)
+  
+  def reverse[A : c.WeakTypeTag]
+      (c: Context)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new IndexMacros[c.type](c).reverse[A](unApply[A](c))(builder)
   
   def zip[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
-      (those: c.Expr[LinearSeq[B]])
+      (those: c.Expr[Index[B]])
       (builder: c.Expr[Builder[_, (A, B)]])
     : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
+    new IndexMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
 }

@@ -14,7 +14,7 @@ import basis.util._
   * 
   * @define collection  string
   */
-final class String4(codeUnits: Array[Int]) extends Equals with Family[String4] with IndexedSeq[Int] {
+final class String4(codeUnits: Array[Int]) extends Equals with Family[String4] with Index[Int] {
   override def isEmpty: Boolean = codeUnits.length == 0
   
   /** Returns the number of code points in this string. */
@@ -134,8 +134,6 @@ private[text] final class String4Builder extends StringBuilder[Any] {
     }
     this
   }
-  
-  override def ++= (cs: Enumerator[Int]): this.type = Predef.???
   
   override def expect(count: Int): this.type = {
     if (codeUnits == null || size + count > codeUnits.length) {

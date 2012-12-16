@@ -9,7 +9,7 @@ package basis.containers
 
 import basis.collections._
 
-sealed abstract class Vector[+A] extends Equals with Family[Vector[A]] with IndexedSeq[A] {
+sealed abstract class Vector[+A] extends Equals with Family[Vector[A]] with Index[A] {
   protected override def stringPrefix: String = "Vector"
 }
 
@@ -338,8 +338,6 @@ private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
     length += 1
     this
   }
-  
-  override def ++= (elems: Enumerator[A]): this.type = Predef.???
   
   override def expect(count: Int): this.type = this
   

@@ -10,12 +10,27 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-/** An immutable singly linked list.
+import scala.annotation.tailrec
+import scala.reflect.ClassTag
+
+/** A singly linked list.
+  * 
+  * @groupprio  Examining     -8
+  * @groupprio  Mutating      -7
+  * @groupprio  Inserting     -6
+  * @groupprio  Removing      -5
+  * @groupprio  Iterating     -4
+  * @groupprio  Traversing    -3
+  * @groupprio  Converting    -2
+  * @groupprio  Classifying   -1
   * 
   * @define collection  list
   */
-sealed abstract class List[+A] extends Equals with Family[List[A]] with LinearSeq[A] {
-  import scala.annotation.tailrec
+sealed abstract class List[+A]
+  extends Equals
+    with Family[List[A]]
+    with Stack[A]
+    with ListLike[A] {
   
   override def tail: List[A]
   
@@ -46,6 +61,8 @@ sealed abstract class List[+A] extends Equals with Family[List[A]] with LinearSe
     if (xs.isEmpty) sx else reverse(xs.head :: sx, xs.tail)
   
   final def :: [B >: A](elem: B): List[B] = new ::[B](elem, this)
+  
+  final override def toList: this.type = this
   
   final override def iterator: Iterator[A] = new ListIterator(this)
   
@@ -82,8 +99,6 @@ object Nil extends List[Nothing] {
 }
 
 object List extends SeqFactory[List] {
-  import scala.reflect.ClassTag
-  
   // FIXME: don't hurt the compiler!
   //override def apply[A](xs: A*): List[A] = macro ListMacros.apply[A]
   

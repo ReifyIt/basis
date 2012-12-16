@@ -165,8 +165,6 @@ private[containers] final class ArraySetBuilder[A] extends Builder[Any, A] {
     this
   }
   
-  override def ++= (elems: Enumerator[A]): this.type = Predef.???
-  
   override def expect(count: Int): this.type = {
     if (slots == null || size + count > slots.length) {
       resize(size + count)

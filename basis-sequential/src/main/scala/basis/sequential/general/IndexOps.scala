@@ -10,20 +10,20 @@ package general
 
 import basis.collections._
 
-/** General linear sequence operations.
+/** General indexed sequence operations.
   * 
   * @groupprio  Traversing  -3
   * @groupprio  Reducing    -2
   * @groupprio  Querying    -1
   */
-final class LinearSeqOps[+A] {
+final class IndexOps[+A] {
   /** Sequentially applies a function to each element of this sequence.
     * 
     * @param  f   the function to apply to each element.
     * @group  Traversing
     */
   def foreach[U](f: A => U): Unit =
-    macro LinearSeqOps.foreach[A, U]
+    macro IndexOps.foreach[A, U]
   
   /** Returns the repeated application of an associative binary operator
     * between an identity value and all elements of this sequence.
@@ -34,7 +34,7 @@ final class LinearSeqOps[+A] {
     * @group  Reducing
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B =
-    macro LinearSeqOps.foldLeft[A, B]
+    macro IndexOps.foldLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this non-empty sequence.
@@ -44,7 +44,7 @@ final class LinearSeqOps[+A] {
     * @group  Reducing
     */
   def reduce[B >: A](op: (B, B) => B): B =
-    macro LinearSeqOps.reduceLeft[A, B]
+    macro IndexOps.reduceLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this sequence.
@@ -54,7 +54,7 @@ final class LinearSeqOps[+A] {
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] =
-    macro LinearSeqOps.reduceLeftOption[A, B]
+    macro IndexOps.reduceLeftOption[A, B]
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this sequence.
@@ -65,7 +65,7 @@ final class LinearSeqOps[+A] {
     * @group  Reducing
     */
   def foldLeft[B](z: B)(op: (B, A) => B): B =
-    macro LinearSeqOps.foldLeft[A, B]
+    macro IndexOps.foldLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this non-empty sequence.
@@ -75,7 +75,7 @@ final class LinearSeqOps[+A] {
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B =
-    macro LinearSeqOps.reduceLeft[A, B]
+    macro IndexOps.reduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this sequence.
@@ -85,7 +85,38 @@ final class LinearSeqOps[+A] {
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
-    macro LinearSeqOps.reduceLeftOption[A, B]
+    macro IndexOps.reduceLeftOption[A, B]
+  
+  /** Returns the right-to-left application of a binary operator between a
+    * start value and all elements in this sequence.
+    * 
+    * @param  z   the starting value.
+    * @param  op  the binary operator to apply left-recursively.
+    * @return the folded value.
+    * @group  Reducing
+    */
+  def foldRight[B](z: B)(op: (A, B) => B): B =
+    macro IndexOps.foldRight[A, B]
+  
+  /** Returns the right-to-left application of a binary operator between
+    * all elements in this non-empty sequence.
+    * 
+    * @param  op  the binary operator to apply left-recursively.
+    * @return the reduced value.
+    * @group  Reducing
+    */
+  def reduceRight[B >: A](op: (A, B) => B): B =
+    macro IndexOps.reduceRight[A, B]
+  
+  /** Returns the right-to-left application of a binary operator between
+    * all elements in this sequence.
+    * 
+    * @param  op  the binary operator to apply left-recursively.
+    * @return some reduced value, or none if this sequence is empty.
+    * @group  Reducing
+    */
+  def reduceRightOption[B >: A](op: (A, B) => B): Option[B] =
+    macro IndexOps.reduceRightOption[A, B]
   
   /** Returns the first element of this sequence that satisfies a predicate.
     * 
@@ -94,7 +125,7 @@ final class LinearSeqOps[+A] {
     * @group  Querying
     */
   def find(p: A => Boolean): Option[A] =
-    macro LinearSeqOps.find[A]
+    macro IndexOps.find[A]
   
   /** Returns `true` if a predicate holds for all elements of this sequence.
     * 
@@ -103,7 +134,7 @@ final class LinearSeqOps[+A] {
     * @group  Querying
     */
   def forall(p: A => Boolean): Boolean =
-    macro LinearSeqOps.forall[A]
+    macro IndexOps.forall[A]
   
   /** Returns `true` if a predicate holds for some element of this sequence.
     * 
@@ -112,7 +143,7 @@ final class LinearSeqOps[+A] {
     * @group  Querying
     */
   def exists(p: A => Boolean): Boolean =
-    macro LinearSeqOps.exists[A]
+    macro IndexOps.exists[A]
   
   /** Returns the number of elements in this sequence that satisfy a predicate.
     * 
@@ -121,7 +152,7 @@ final class LinearSeqOps[+A] {
     * @group  Querying
     */
   def count(p: A => Boolean): Int =
-    macro LinearSeqOps.count[A]
+    macro IndexOps.count[A]
   
   /** Returns the application of a partial function to the first element
     * of this sequence for which the function is defined.
@@ -132,76 +163,95 @@ final class LinearSeqOps[+A] {
     * @group  Querying
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
-    macro LinearSeqOps.choose[A, B]
+    macro IndexOps.choose[A, B]
 }
 
-private[general] object LinearSeqOps {
+private[general] object IndexOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[LinearSeq[A]] = {
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Index[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, sequence :: Nil) = prefix.tree
-    val LinearSeqType =
+    val IndexType =
       appliedType(
-        mirror.staticClass("basis.collections.LinearSeq").toType,
+        mirror.staticClass("basis.collections.Index").toType,
         weakTypeOf[A] :: Nil)
-    Expr(typeCheck(sequence, LinearSeqType))(WeakTypeTag(LinearSeqType))
+    Expr(typeCheck(sequence, IndexType))(WeakTypeTag(IndexType))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => U])
     : c.Expr[Unit] =
-    new LinearSeqMacros[c.type](c).foreach[A, U](unApply[A](c))(f)
+    new IndexMacros[c.type](c).foreach[A, U](unApply[A](c))(f)
   
   def foldLeft[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (z: c.Expr[B])
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    new LinearSeqMacros[c.type](c).foldLeft[A, B](unApply[A](c))(z)(op)
+    new IndexMacros[c.type](c).foldLeft[A, B](unApply[A](c))(z)(op)
   
   def reduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    new LinearSeqMacros[c.type](c).reduceLeft[A, B](unApply[A](c))(op)
+    new IndexMacros[c.type](c).reduceLeft[A, B](unApply[A](c))(op)
   
   def reduceLeftOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[Option[B]] =
-    new LinearSeqMacros[c.type](c).reduceLeftOption[A, B](unApply[A](c))(op)
+    new IndexMacros[c.type](c).reduceLeftOption[A, B](unApply[A](c))(op)
+  
+  def foldRight[A : c.WeakTypeTag, B : c.WeakTypeTag]
+      (c: Context)
+      (z: c.Expr[B])
+      (op: c.Expr[(A, B) => B])
+    : c.Expr[B] =
+    new IndexMacros[c.type](c).foldRight[A, B](unApply[A](c))(z)(op)
+  
+  def reduceRight[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
+      (c: Context)
+      (op: c.Expr[(A, B) => B])
+    : c.Expr[B] =
+    new IndexMacros[c.type](c).reduceRight[A, B](unApply[A](c))(op)
+  
+  def reduceRightOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
+      (c: Context)
+      (op: c.Expr[(A, B) => B])
+    : c.Expr[Option[B]] =
+    new IndexMacros[c.type](c).reduceRightOption[A, B](unApply[A](c))(op)
   
   def find[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Option[A]] =
-    new LinearSeqMacros[c.type](c).find[A](unApply[A](c))(p)
+    new IndexMacros[c.type](c).find[A](unApply[A](c))(p)
   
   def forall[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    new LinearSeqMacros[c.type](c).forall[A](unApply[A](c))(p)
+    new IndexMacros[c.type](c).forall[A](unApply[A](c))(p)
   
   def exists[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    new LinearSeqMacros[c.type](c).exists[A](unApply[A](c))(p)
+    new IndexMacros[c.type](c).exists[A](unApply[A](c))(p)
   
   def count[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Int] =
-    new LinearSeqMacros[c.type](c).count[A](unApply[A](c))(p)
+    new IndexMacros[c.type](c).count[A](unApply[A](c))(p)
   
   def choose[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
-    new LinearSeqMacros[c.type](c).choose[A, B](unApply[A](c))(q)
+    new IndexMacros[c.type](c).choose[A, B](unApply[A](c))(q)
 }

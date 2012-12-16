@@ -16,7 +16,7 @@ import basis.collections._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
+final class StackOps[+A](val these: Stack[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this
     * sequence for which the function is defined.
     * 
@@ -24,8 +24,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return a non-strict view of the filtered and mapped elements.
     * @group  Mapping
     */
-  def collect[B](q: PartialFunction[A, B]): LinearSeq[B] =
-    new LinearSeqOps.Collect(these, q)
+  def collect[B](q: PartialFunction[A, B]): Stack[B] =
+    new StackOps.Collect(these, q)
   
   /** Returns a view that applies a function to each element in this sequence.
     * 
@@ -33,8 +33,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return a non-strict view of the mapped elements.
     * @group  Mapping
     */
-  def map[B](f: A => B): LinearSeq[B] =
-    new LinearSeqOps.Map(these, f)
+  def map[B](f: A => B): Stack[B] =
+    new StackOps.Map(these, f)
   
   /** Returns a view concatenating all elements returned by a function
     * applied to each element in this sequence.
@@ -43,8 +43,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return a non-strict view concatenating all elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B](f: A => LinearSeq[B]): LinearSeq[B] =
-    new LinearSeqOps.FlatMap(these, f)
+  def flatMap[B](f: A => Stack[B]): Stack[B] =
+    new StackOps.FlatMap(these, f)
   
   /** Returns a view of all elements in this sequence that satisfy a predicate.
     * 
@@ -52,8 +52,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return a non-strict view of the filtered elements.
     * @group  Filtering
     */
-  def filter(p: A => Boolean): LinearSeq[A] =
-    new LinearSeqOps.Filter(these, p)
+  def filter(p: A => Boolean): Stack[A] =
+    new StackOps.Filter(these, p)
   
   /** Returns a view of all elements following the longest prefix of this
     * sequence for which each element satisfies a predicate.
@@ -63,8 +63,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     *         with the first element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile(p: A => Boolean): LinearSeq[A] =
-    new LinearSeqOps.DropWhile(these, p)
+  def dropWhile(p: A => Boolean): Stack[A] =
+    new StackOps.DropWhile(these, p)
   
   /** Returns a view of the longest prefix of this sequence for which each
     * element satisfies a predicate.
@@ -74,8 +74,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     *         the first element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile(p: A => Boolean): LinearSeq[A] =
-    new LinearSeqOps.TakeWhile(these, p)
+  def takeWhile(p: A => Boolean): Stack[A] =
+    new StackOps.TakeWhile(these, p)
   
   /** Returns a (prefix, suffix) pair of views with the prefix being the
     * longest one for which each element satisfies a predicate, and the suffix
@@ -85,7 +85,7 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return the (predix, suffix) pair of non-strict views.
     * @group  Filtering
     */
-  def span(p: A => Boolean): (LinearSeq[A], LinearSeq[A]) =
+  def span(p: A => Boolean): (Stack[A], Stack[A]) =
     (takeWhile(p), dropWhile(p))
   
   /** Returns a view of all elements in this sequence following a prefix
@@ -96,8 +96,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return a non-strict view of all but the first `lower` elements.
     * @group  Filtering
     */
-  def drop(lower: Int): LinearSeq[A] =
-    new LinearSeqOps.Drop(these, lower)
+  def drop(lower: Int): Stack[A] =
+    new StackOps.Drop(these, lower)
   
   /** Returns a view of a prefix of this sequence up to some length.
     * 
@@ -106,8 +106,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return a non-strict view of up to the first `upper` elements.
     * @group  Filtering
     */
-  def take(upper: Int): LinearSeq[A] =
-    new LinearSeqOps.Take(these, upper)
+  def take(upper: Int): Stack[A] =
+    new StackOps.Take(these, upper)
   
   /** Returns a view of an interval of elements in this sequence.
     * 
@@ -117,8 +117,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     *         equal to `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice(lower: Int, upper: Int): LinearSeq[A] =
-    new LinearSeqOps.Slice(these, lower, upper)
+  def slice(lower: Int, upper: Int): Stack[A] =
+    new StackOps.Slice(these, lower, upper)
   
   /** Returns a view of pairs of elemnts from this and another sequence.
     * 
@@ -126,8 +126,8 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return a non-strict view of the pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B](those: LinearSeq[B]): LinearSeq[(A, B)] =
-    new LinearSeqOps.Zip(these, those)
+  def zip[B](those: Stack[B]): Stack[(A, B)] =
+    new StackOps.Zip(these, those)
   
   /** Returns a view concatenating this and another sequence.
     * 
@@ -135,26 +135,26 @@ final class LinearSeqOps[+A](val these: LinearSeq[A]) extends AnyVal {
     * @return a non-strict view of the concatenated elements.
     * @group Combining
     */
-  def ++ [B >: A](those: LinearSeq[B]): LinearSeq[B] =
-    new LinearSeqOps.++(these, those)
+  def ++ [B >: A](those: Stack[B]): Stack[B] =
+    new StackOps.++(these, those)
 }
 
-private[nonstrict] object LinearSeqOps {
+private[nonstrict] object StackOps {
   import scala.annotation.tailrec
   import basis.util.IntOps
   
-  object Empty extends LinearSeq[Nothing] {
+  object Empty extends Stack[Nothing] {
     override def isEmpty: Boolean = true
     
     override def head: Nothing = throw new NoSuchElementException
     
-    override def tail: LinearSeq[Nothing] = throw new UnsupportedOperationException
+    override def tail: Stack[Nothing] = throw new UnsupportedOperationException
   }
   
   final class Collect[-A, +B](
-      private[this] var base: LinearSeq[A],
+      private[this] var base: Stack[A],
       private[this] val q: PartialFunction[A, B])
-    extends LinearSeq[B] {
+    extends Stack[B] {
     
     @tailrec override def isEmpty: Boolean =
       base.isEmpty || !q.isDefinedAt(base.head) && { base = base.tail; isEmpty }
@@ -165,31 +165,31 @@ private[nonstrict] object LinearSeqOps {
       else { base = base.tail; head }
     }
     
-    @tailrec override def tail: LinearSeq[B] = {
+    @tailrec override def tail: Stack[B] = {
       if (!base.isEmpty && q.isDefinedAt(base.head)) new Collect(base.tail, q)
       else { base = base.tail; tail }
     }
   }
   
   final class Map[-A, +B](
-      private[this] val base: LinearSeq[A],
+      private[this] val base: Stack[A],
       private[this] val f: A => B)
-    extends LinearSeq[B] {
+    extends Stack[B] {
     
     override def isEmpty: Boolean = base.isEmpty
     
     override def head: B = f(base.head)
     
-    override def tail: LinearSeq[B] = new Map(base.tail, f)
+    override def tail: Stack[B] = new Map(base.tail, f)
   }
   
   final class FlatMap[-A, +B] private (
-      private[this] var base: LinearSeq[A],
-      private[this] val f: A => LinearSeq[B],
-      private[this] var inner: LinearSeq[B])
-    extends LinearSeq[B] {
+      private[this] var base: Stack[A],
+      private[this] val f: A => Stack[B],
+      private[this] var inner: Stack[B])
+    extends Stack[B] {
     
-    def this(base: LinearSeq[A], f: A => LinearSeq[B]) = this(base, f, Empty)
+    def this(base: Stack[A], f: A => Stack[B]) = this(base, f, Empty)
     
     @tailrec override def isEmpty: Boolean =
       inner.isEmpty && (base.isEmpty || { inner = f(base.head); base = base.tail; isEmpty })
@@ -200,7 +200,7 @@ private[nonstrict] object LinearSeqOps {
       else Empty.head
     }
     
-    override def tail: LinearSeq[B] = {
+    override def tail: Stack[B] = {
       if (!inner.isEmpty) new FlatMap(base, f, inner.tail)
       else if (!base.isEmpty) new FlatMap(base.tail, f, f(base.head))
       else Empty.tail
@@ -208,9 +208,9 @@ private[nonstrict] object LinearSeqOps {
   }
   
   final class Filter[+A](
-      private[this] var base: LinearSeq[A],
+      private[this] var base: Stack[A],
       private[this] val p: A => Boolean)
-    extends LinearSeq[A] {
+    extends Stack[A] {
     
     @tailrec override def isEmpty: Boolean =
       base.isEmpty || !p(base.head) && { base = base.tail; isEmpty }
@@ -220,16 +220,16 @@ private[nonstrict] object LinearSeqOps {
       if (p(x)) x else { base = base.tail; head }
     }
     
-    @tailrec override def tail: LinearSeq[A] = {
+    @tailrec override def tail: Stack[A] = {
       if (!base.isEmpty && p(base.head)) new Filter(base.tail, p)
       else { base = base.tail; tail }
     }
   }
   
   final class DropWhile[+A](
-      private[this] var base: LinearSeq[A],
+      private[this] var base: Stack[A],
       private[this] val p: A => Boolean)
-    extends LinearSeq[A] {
+    extends Stack[A] {
     
     private[this] var dropped: Boolean = false
     
@@ -244,7 +244,7 @@ private[nonstrict] object LinearSeqOps {
       }
     }
     
-    @tailrec override def tail: LinearSeq[A] = {
+    @tailrec override def tail: Stack[A] = {
       if (dropped) base.tail
       else if (!p(base.head)) { dropped = true; tail }
       else { base = base.tail; tail }
@@ -252,9 +252,9 @@ private[nonstrict] object LinearSeqOps {
   }
   
   final class TakeWhile[+A](
-      private[this] val base: LinearSeq[A],
+      private[this] val base: Stack[A],
       private[this] val p: A => Boolean)
-    extends LinearSeq[A] {
+    extends Stack[A] {
     
     private[this] lazy val taking: Boolean = !base.isEmpty && p(base.head)
     
@@ -265,19 +265,19 @@ private[nonstrict] object LinearSeqOps {
       else Empty.head
     }
     
-    override def tail: LinearSeq[A] = {
+    override def tail: Stack[A] = {
       if (taking) new TakeWhile(base.tail, p)
       else Empty.tail
     }
   }
   
   final class Drop[+A] private (
-      private[this] var base: LinearSeq[A],
+      private[this] var base: Stack[A],
       private[this] val lower: Int,
       private[this] var index: Int)
-    extends LinearSeq[A] {
+    extends Stack[A] {
     
-    def this(base: LinearSeq[A], lower: Int) = this(base, lower, 0)
+    def this(base: Stack[A], lower: Int) = this(base, lower, 0)
     
     @tailrec override def isEmpty: Boolean =
       base.isEmpty || index < lower && { base = base.tail; index += 1; isEmpty }
@@ -287,19 +287,19 @@ private[nonstrict] object LinearSeqOps {
       else { base = base.tail; index += 1; head }
     }
     
-    @tailrec override def tail: LinearSeq[A] = {
+    @tailrec override def tail: Stack[A] = {
       if (index >= lower) base.tail
       else { base = base.tail; index += 1; tail }
     }
   }
   
   final class Take[+A] private (
-      private[this] val base: LinearSeq[A],
+      private[this] val base: Stack[A],
       private[this] val upper: Int,
       private[this] val index: Int)
-    extends LinearSeq[A] {
+    extends Stack[A] {
     
-    def this(base: LinearSeq[A], upper: Int) = this(base, upper, 0)
+    def this(base: Stack[A], upper: Int) = this(base, upper, 0)
     
     override def isEmpty: Boolean =
       index >= upper || base.isEmpty
@@ -309,20 +309,20 @@ private[nonstrict] object LinearSeqOps {
       else Empty.head
     }
     
-    override def tail: LinearSeq[A] = {
+    override def tail: Stack[A] = {
       if (index < upper) new Take(base.tail, upper, index + 1)
       else Empty.tail
     }
   }
   
   final class Slice[+A] private (
-      private[this] var base: LinearSeq[A],
+      private[this] var base: Stack[A],
       private[this] val lower: Int,
       private[this] val upper: Int,
       private[this] var index: Int)
-    extends LinearSeq[A] {
+    extends Stack[A] {
     
-    def this(base: LinearSeq[A], lower: Int, upper: Int) =
+    def this(base: Stack[A], lower: Int, upper: Int) =
       this(base,0 max lower, 0 max lower max upper, 0)
     
     @tailrec override def isEmpty: Boolean =
@@ -334,7 +334,7 @@ private[nonstrict] object LinearSeqOps {
       else Empty.head
     }
     
-    @tailrec override def tail: LinearSeq[A] = {
+    @tailrec override def tail: Stack[A] = {
       if (index < lower) { base = base.tail; index += 1; tail }
       else if (index < upper) new Slice(base.tail, lower, upper, index + 1)
       else Empty.tail
@@ -342,24 +342,24 @@ private[nonstrict] object LinearSeqOps {
   }
   
   final class Zip[+A, +B](
-      private[this] val xs: LinearSeq[A],
-      private[this] val ys: LinearSeq[B])
-    extends LinearSeq[(A, B)] {
+      private[this] val xs: Stack[A],
+      private[this] val ys: Stack[B])
+    extends Stack[(A, B)] {
     
     override def isEmpty: Boolean = xs.isEmpty || ys.isEmpty
     
     override def head: (A, B) = (xs.head, ys.head)
     
-    override def tail: LinearSeq[(A, B)] = new Zip(xs.tail, ys.tail)
+    override def tail: Stack[(A, B)] = new Zip(xs.tail, ys.tail)
   }
   
   final class ++[+A] private (
-      private[this] val xs: LinearSeq[A],
-      private[this] val ys: LinearSeq[A],
+      private[this] val xs: Stack[A],
+      private[this] val ys: Stack[A],
       private[this] var segment: Int)
-    extends LinearSeq[A] {
+    extends Stack[A] {
     
-    def this(xs: LinearSeq[A], ys: LinearSeq[A]) = this(xs, ys, 0)
+    def this(xs: Stack[A], ys: Stack[A]) = this(xs, ys, 0)
     
     @tailrec override def isEmpty: Boolean = segment match {
       case 0 => xs.isEmpty && { segment = 1; isEmpty }
@@ -371,7 +371,7 @@ private[nonstrict] object LinearSeqOps {
       case 1 => ys.head
     }
     
-    override def tail: LinearSeq[A] = segment match {
+    override def tail: Stack[A] = segment match {
       case 0 if !xs.isEmpty => new ++(xs.tail, ys, 0)
       case _ => ys.tail
     }

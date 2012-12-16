@@ -14,14 +14,14 @@ package basis.collections
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   */
-trait IndexedSeq[+A] extends Any with Family[IndexedSeq[A]] with Seq[A] {
-  /** Returns the element at `index`.
+trait Index[+A] extends Any with Family[Index[A]] with Seq[A] {
+  /** Returns the element at the given index.
     * @group Examining */
   def apply(index: Int): A
   
   override def isEmpty: Boolean = length == 0
   
-  override def iterator: Iterator[A] = new IndexedSeqIterator(this)
+  override def iterator: Iterator[A] = new IndexIterator(this)
   
   protected override def foreach[U](f: A => U) {
     var i = 0
@@ -33,11 +33,11 @@ trait IndexedSeq[+A] extends Any with Family[IndexedSeq[A]] with Seq[A] {
   }
 }
 
-private[collections] final class IndexedSeqIterator[+A]
-    (xs: IndexedSeq[A], private[this] var i: Int, n: Int)
+private[collections] final class IndexIterator[+A]
+    (xs: Index[A], private[this] var i: Int, n: Int)
   extends Iterator[A] {
   
-  def this(xs: IndexedSeq[A]) = this(xs, 0, xs.length)
+  def this(xs: Index[A]) = this(xs, 0, xs.length)
   
   override def isEmpty: Boolean = i >= n
   
@@ -51,5 +51,5 @@ private[collections] final class IndexedSeqIterator[+A]
     else throw new UnsupportedOperationException("Empty iterator step.")
   }
   
-  override def dup: Iterator[A] = new IndexedSeqIterator(xs, i, n)
+  override def dup: Iterator[A] = new IndexIterator(xs, i, n)
 }

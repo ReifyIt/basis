@@ -11,10 +11,10 @@ import basis.collections._
 
 /** A builder for Unicode® character strings.
   * 
-  * @define builder  string builder
+  * @define collection  string builder
   */
 abstract class StringBuilder[-From] extends Builder[From, Int] {
-  /** Prepares this $builder to receive a certain number of characters. */
+  /** Prepares this $collection to receive a certain number of characters. */
   override def expect(count: Int): this.type
   
   def append(chars: java.lang.CharSequence): this.type = {

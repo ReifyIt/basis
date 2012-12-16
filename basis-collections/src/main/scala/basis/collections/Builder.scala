@@ -7,26 +7,20 @@
 
 package basis.collections
 
-/** An element accumulator.
+/** A stateful element accumulator.
   * 
-  * @define builder   builder
+  * @define collection  builder
   */
-trait Builder[-From, @specialized(Specializable.Primitives) -A] {
-  /** The type of state maintained by this $builder. */
+trait Builder[-From, -A] extends Accumulator[A] {
+  /** The type of state maintained by this $collection. */
   type State
   
-  /** Adds a single element to this $builder. */
-  def += (x: A): this.type
-  
-  /** Adds multiple elements to this $builder. */
-  def ++= (xs: Enumerator[A]): this.type
-  
-  /** Resets this $builder to its initial state. */
+  /** Resets this $collection to its initial state. */
   def clear(): Unit
   
-  /** Prepares this $builder to receive a certain number of elements. */
+  /** Prepares this $collection to receive a certain number of elements. */
   def expect(count: Int): this.type
   
-  /** Returns the current state of this $builder. */
+  /** Returns the current state of this $collection. */
   def state: State
 }

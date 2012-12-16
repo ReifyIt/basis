@@ -88,8 +88,6 @@ private[containers] final class BitArraySeqBuilder extends Builder[Any, Boolean]
     this
   }
   
-  override def ++= (values: Enumerator[Boolean]): this.type = Predef.???
-  
   override def expect(count: Int): this.type = {
     if (words == null || length + count > capacity) {
       resize(length + count)

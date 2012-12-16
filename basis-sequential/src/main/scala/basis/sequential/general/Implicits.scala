@@ -26,10 +26,10 @@ private[sequential] trait Implicits {
   implicit final def GeneralSeqOps[A](these: Seq[A]): SeqOps[A] =
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit final def GeneralLinearSeqOps[A](these: LinearSeq[A]): LinearSeqOps[A] =
+  implicit final def GeneralIndexOps[A](these: Index[A]): IndexOps[A] =
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
-  implicit final def GeneralIndexedSeqOps[A](these: IndexedSeq[A]): IndexedSeqOps[A] =
+  implicit final def GeneralStackOps[A](these: Stack[A]): StackOps[A] =
     throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
   
   implicit final def GeneralSetOps[A](these: Set[A]): SetOps[A] =

@@ -10,6 +10,8 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.reflect.ClassTag
+
 private[containers] final class IntArraySeq(array: Array[Int]) extends ArraySeq[Int] {
   override def isEmpty: Boolean = array.length == 0
   
@@ -33,6 +35,15 @@ private[containers] final class IntArraySeq(array: Array[Int]) extends ArraySeq[
     if (xs.isInstanceOf[Array[Int]])
       java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
     else super.copyToArray(xs)
+  }
+  
+  override def toArray[B >: Int](implicit B: ClassTag[B]): Array[B] = {
+    if (B == ClassTag.Int) {
+      val xs = new Array[Int](length)
+      java.lang.System.arraycopy(array, 0, xs, 0, length)
+      xs.asInstanceOf[Array[B]]
+    }
+    else super.toArray[B]
   }
   
   override def iterator: Iterator[Int] = new IntArraySeqIterator(array)
@@ -65,8 +76,6 @@ private[containers] final class IntArraySeqBuilder
   extends IntArrayBuffer with Builder[Any, Int] {
   
   override type State = ArraySeq[Int]
-  
-  override def expect(count: Int): this.type = this
   
   override def state: ArraySeq[Int] = toArraySeq
   

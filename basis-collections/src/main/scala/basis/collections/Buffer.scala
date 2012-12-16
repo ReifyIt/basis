@@ -20,26 +20,18 @@ package basis.collections
   * @define collection  buffer
   */
 trait Buffer[@specialized(Specializable.Primitives) A]
-  extends Equals with Family[Buffer[A]] with Seq[A] {
+  extends Equals
+    with Family[Buffer[A]]
+    with Seq[A]
+    with Accumulator[A] {
   
-  /** Returns the element at `index`.
+  /** Returns the element at the given index.
     * @group Examining */
   def apply(index: Int): A
   
   /** Replaces the element at `index` with the given one.
     * @group Mutating */
   def update(index: Int, elem: A): Unit
-  
-  /** Appends a single element to this $collection.
-    * @group Inserting */
-  def += (elem: A): this.type
-  
-  /** Appends multiple elements to this $collection.
-    * @group Inserting */
-  def ++= (elems: Enumerator[A]): this.type = {
-    traverse(elems)(new Buffer.Insert(this, length))
-    this
-  }
   
   /** Prepends a single element to this $collection.
     * @group Inserting */

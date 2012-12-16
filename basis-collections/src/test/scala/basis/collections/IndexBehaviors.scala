@@ -10,18 +10,18 @@ package basis.collections
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait IndexedSeqBehaviors extends SeqBehaviors { this: FunSpec =>
+trait IndexBehaviors extends SeqBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def TraversableIndexedSeq[CC[X] <: IndexedSeq[X]](CC: BuilderFactory[CC]) {
-    describe(s"An empty indexed $CC sequence") {
+  def TraversableIndex[CC[X] <: Index[X]](CC: BuilderFactory[CC]) {
+    describe(s"An empty $CC index") {
       it("should have length zero") {
         val xs = CC[Any]()
         xs.length should equal (0)
       }
     }
     
-    describe(s"A non-empty indexed $CC sequence") {
+    describe(s"A non-empty $CC index") {
       it("should have the correct length") {
         val xs = CC(1, 2, 3, 4)
         xs.length should equal (4)

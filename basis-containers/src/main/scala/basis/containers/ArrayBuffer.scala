@@ -10,30 +10,30 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.reflect.ClassTag
+
 /** A mutable contiguous array.
   * 
-  * @groupprio  Examining     -8
-  * @groupprio  Mutating      -7
-  * @groupprio  Copying       -6
-  * @groupprio  Inserting     -5
-  * @groupprio  Removing      -4
-  * @groupprio  Iterating     -3
-  * @groupprio  Traversing    -2
+  * @groupprio  Examining     -9
+  * @groupprio  Mutating      -8
+  * @groupprio  Inserting     -7
+  * @groupprio  Removing      -6
+  * @groupprio  Copying       -5
+  * @groupprio  Iterating     -4
+  * @groupprio  Traversing    -3
+  * @groupprio  Converting    -2
   * @groupprio  Classifying   -1
   * 
   * @define collection  array buffer
   */
 abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
-  extends Equals with Family[ArrayBuffer[A]] with IndexedSeq[A] with Buffer[A] {
+  extends Equals
+    with Family[ArrayBuffer[A]]
+    with Index[A]
+    with Buffer[A]
+    with ArrayLike[A] {
   
-  /** Copies elementes from this $collection to an array slice.
-    * 
-    * @param  xs      the destination array.
-    * @param  start   the offset to copy to in the destination array.
-    * @param  count   the maximum number of elements to copy.
-    * @group  Copying
-    */
-  def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
+  override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
     var i = 0
     var j = start
     val n = count min (xs.length - start) min length
@@ -44,13 +44,7 @@ abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
     }
   }
   
-  /** Copies elementes from this $collection to an array offset.
-    * 
-    * @param  xs      the destination array.
-    * @param  start   the offset to copy to in the destination array.
-    * @group  Copying
-    */
-  def copyToArray[B >: A](xs: Array[B], start: Int) {
+  override def copyToArray[B >: A](xs: Array[B], start: Int) {
     var i = 0
     var j = start
     val n = (xs.length - start) min length
@@ -61,18 +55,24 @@ abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
     }
   }
   
-  /** Copies elementes from this $collection to an array.
-    * 
-    * @param  xs  the destination array.
-    * @group  Copying
-    */
-  def copyToArray[B >: A](xs: Array[B]) {
+  override def copyToArray[B >: A](xs: Array[B]) {
     var i = 0
     val n = xs.length min length
     while (i < n) {
       xs(i) = this(i)
       i += 1
     }
+  }
+  
+  override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
+    var i = 0
+    val n = length
+    val xs = B.newArray(n)
+    while (i < n) {
+      xs(i) = this(i)
+      i += 1
+    }
+    xs
   }
   
   protected override def stringPrefix: String = "ArrayBuffer"

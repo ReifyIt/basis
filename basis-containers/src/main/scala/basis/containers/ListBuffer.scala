@@ -11,6 +11,15 @@ import basis.collections._
 
 /** A mutable list of elements.
   * 
+  * @groupprio  Examining     -8
+  * @groupprio  Mutating      -7
+  * @groupprio  Inserting     -6
+  * @groupprio  Removing      -5
+  * @groupprio  Iterating     -4
+  * @groupprio  Traversing    -3
+  * @groupprio  Converting    -2
+  * @groupprio  Classifying   -1
+  * 
   * @param  first     the first list cell.
   * @param  last      the last cons cell, or `null` if the list is empty.
   * @param  size      the number of cells in the list.
@@ -21,7 +30,10 @@ class ListBuffer[A] private (
     private[this] var last: ::[A],
     private[this] var size: Int,
     private[this] var aliased: Int)
-  extends Equals with Family[ListBuffer[A]] with Buffer[A] {
+  extends Equals
+    with Family[ListBuffer[A]]
+    with Buffer[A]
+    with ListLike[A] {
   
   def this() = this(Nil, null, 0, 0)
   
@@ -70,8 +82,8 @@ class ListBuffer[A] private (
       }
       last = xs
     }
-    else if (elems.isInstanceOf[ListBuffer[_]])
-      this ++= elems.asInstanceOf[ListBuffer[A]].toList
+    else if (elems.isInstanceOf[ListLike[_]])
+      this ++= elems.asInstanceOf[ListLike[A]].toList
     else super.++=(elems)
     this
   }
@@ -218,6 +230,16 @@ class ListBuffer[A] private (
     aliased = 0
   }
   
+  final override def toList: List[A] = {
+    aliased = 0
+    first
+  }
+  
+  private[containers] final def copy: ListBuffer[A] = {
+    aliased = 0
+    new ListBuffer(first, last, size, aliased)
+  }
+  
   final override def iterator: Iterator[A] = new ListBufferIterator(first)
   
   protected final override def foreach[U](f: A => U) {
@@ -229,16 +251,6 @@ class ListBuffer[A] private (
   }
   
   protected override def stringPrefix: String = "ListBuffer"
-  
-  private[containers] final def copy: ListBuffer[A] = {
-    aliased = 0
-    new ListBuffer(first, last, size, aliased)
-  }
-  
-  private[containers] final def toList: List[A] = {
-    aliased = 0
-    first
-  }
   
   /** Returns the list cell at index `n` after privately copying all aliased
     * list cells with indexes less than or equal to `n`. */

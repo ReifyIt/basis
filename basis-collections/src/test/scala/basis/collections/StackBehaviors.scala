@@ -10,11 +10,11 @@ package basis.collections
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait LinearSeqBehaviors extends SeqBehaviors { this: FunSpec =>
+trait StackBehaviors extends SeqBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def TraversableLinearSeq[CC[X] <: LinearSeq[X]](CC: BuilderFactory[CC]) {
-    describe(s"An empty linear $CC sequence") {
+  def TraversableStack[CC[X] <: Stack[X]](CC: BuilderFactory[CC]) {
+    describe(s"An empty $CC stack") {
       it("should have no head") {
         val xs = CC[Any]()
         evaluating(xs.head) should produce [NoSuchElementException]
@@ -26,7 +26,7 @@ trait LinearSeqBehaviors extends SeqBehaviors { this: FunSpec =>
       }
     }
     
-    describe(s"A unit-length linear $CC sequence") {
+    describe(s"A unit-length $CC stack") {
       it("should have a head") {
         val xs = CC("")
         xs.head should be ("")
@@ -38,9 +38,9 @@ trait LinearSeqBehaviors extends SeqBehaviors { this: FunSpec =>
       }
     }
     
-    describe(s"A non-empty linear $CC sequence") {
+    describe(s"A non-empty $CC stack") {
       it("should list elements in-order") {
-        var xs: LinearSeq[Int] = CC(1, 2, 3, 4)
+        var xs: Stack[Int] = CC(1, 2, 3, 4)
         withClue("1st cell isEmpty") (xs.isEmpty should be (false))
         withClue("1st head") (xs.head should equal (1))
         xs = xs.tail

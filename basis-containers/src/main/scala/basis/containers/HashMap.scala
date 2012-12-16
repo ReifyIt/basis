@@ -470,8 +470,6 @@ private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)
     this
   }
   
-  override def ++= (elems: Enumerator[(A, T)]): this.type = Predef.???
-  
   override def expect(count: Int): this.type = this
   
   override def state: HashMap[A, T] = map

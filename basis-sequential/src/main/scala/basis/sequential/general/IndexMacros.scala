@@ -13,14 +13,14 @@ import basis.collections._
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
-private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
+private[general] final class IndexMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
   val universe: context.universe.type = context.universe
   
   def foreach[A, U]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (f: Expr[A => U])
     : Expr[Unit] = {
     val xs   = newTermName(fresh("xs$"))
@@ -29,7 +29,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) :: 
+        ValDef(NoMods, xs, TypeTree(), these.tree) :: 
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) :: Nil,
         LabelDef(loop, Nil,
@@ -44,7 +44,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def foldLeft[A, B : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (z: Expr[B])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
@@ -55,7 +55,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
@@ -72,7 +72,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def reduceLeft[A, B >: A : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
@@ -82,7 +82,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         If(
           Apply(Select(Ident(n), "$less$eq"), Literal(Constant(0)) :: Nil),
@@ -106,7 +106,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def reduceLeftOption[A, B >: A : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (op: Expr[(B, A) => B])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -116,7 +116,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) :: Nil,
         If(
           Apply(Select(Ident(n), "$less$eq"), Literal(Constant(0)) :: Nil),
@@ -139,7 +139,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def foldRight[A, B : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (z: Expr[B])
       (op: Expr[(A, B) => B])
     : Expr[B] = {
@@ -149,7 +149,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(),
           Apply(Select(Select(Ident(xs), "length"), "$minus"), Literal(Constant(1)) :: Nil)) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
@@ -166,7 +166,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def reduceRight[A, B >: A : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (op: Expr[(A, B) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
@@ -175,7 +175,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(),
           Apply(Select(Select(Ident(xs), "length"), "$minus"), Literal(Constant(1)) :: Nil)) ::
         If(
@@ -200,7 +200,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def reduceRightOption[A, B >: A : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (op: Expr[(A, B) => B])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -209,7 +209,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(),
           Apply(Select(Select(Ident(xs), "length"), "$minus"), Literal(Constant(1)) :: Nil)) :: Nil,
         If(
@@ -233,7 +233,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def find[A : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (p: Expr[A => Boolean])
     : Expr[Option[A]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -244,7 +244,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("x$"))
     Expr {
     Block(
-      ValDef(NoMods, xs, TypeTree(), self.tree) ::
+      ValDef(NoMods, xs, TypeTree(), these.tree) ::
       ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
       ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
       ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[A].tpe),
@@ -270,7 +270,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def forall[A]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -280,7 +280,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
@@ -299,7 +299,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def exists[A]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -309,7 +309,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
@@ -328,7 +328,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def count[A]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (p: Expr[A => Boolean])
     : Expr[Int] = {
     val xs   = newTermName(fresh("xs$"))
@@ -338,7 +338,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
@@ -358,7 +358,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
   }
   
   def choose[A, B : WeakTypeTag]
-      (self: Expr[IndexedSeq[A]])
+      (these: Expr[Index[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -369,7 +369,7 @@ private[general] final class IndexedSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("x$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), self.tree) ::
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[B].tpe),

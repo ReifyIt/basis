@@ -13,14 +13,14 @@ import basis.collections._
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
-private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
+private[strict] final class StackMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
   val universe: context.universe.type = context.universe
   
   def collect[A : WeakTypeTag, B]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (q: Expr[PartialFunction[A, B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -30,7 +30,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -49,7 +49,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def map[A : WeakTypeTag, B]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (f: Expr[A => B])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -58,7 +58,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -73,7 +73,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def flatMap[A : WeakTypeTag, B]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (f: Expr[A => Enumerator[B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -82,7 +82,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -97,7 +97,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def filter[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -107,7 +107,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -126,7 +126,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def dropWhile[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -137,7 +137,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
@@ -163,7 +163,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def takeWhile[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -173,7 +173,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -193,7 +193,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def span[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
       (builder1: Expr[Builder[_, A]], builder2: Expr[Builder[_, A]])
     : Expr[(builder1.value.State, builder2.value.State)] = {
@@ -205,7 +205,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(NoMods, a, TypeTree(BuilderType(builder1)), builder1.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder2)), builder2.tree) ::
         LabelDef(loop1, Nil,
@@ -236,7 +236,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def drop[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (lower: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -248,7 +248,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), lower.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
@@ -276,7 +276,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def take[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -287,7 +287,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), upper.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
@@ -308,7 +308,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def slice[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
+      (these: Expr[Stack[A]])
       (lower: Expr[Int], upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -320,7 +320,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(Modifiers(Flag.MUTABLE), n, TypeTree(), lower.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
@@ -353,7 +353,7 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
   }
   
   def zip[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[LinearSeq[A]], those: Expr[LinearSeq[B]])
+      (these: Expr[Stack[A]], those: Expr[Stack[B]])
       (builder: Expr[Builder[_, (A, B)]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
@@ -362,8 +362,8 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(LinearSeqType[A]), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(LinearSeqType[B]), those.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(StackType[B]), those.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -385,9 +385,9 @@ private[strict] final class LinearSeqMacros[C <: Context](val context: C) {
     } (StateTag(builder))
   }
   
-  private def LinearSeqType[A : WeakTypeTag]: Type = {
-    val LinearSeqTpc = mirror.staticClass("basis.collections.LinearSeq").toType
-    appliedType(LinearSeqTpc, weakTypeOf[A] :: Nil)
+  private def StackType[A : WeakTypeTag]: Type = {
+    val StackTpc = mirror.staticClass("basis.collections.Stack").toType
+    appliedType(StackTpc, weakTypeOf[A] :: Nil)
   }
   
   private def BuilderType(builder: Expr[Builder[_, _]]): Type = builder.tree.symbol match {
