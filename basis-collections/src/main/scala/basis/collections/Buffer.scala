@@ -7,6 +7,8 @@
 
 package basis.collections
 
+import scala.annotation.unspecialized
+
 /** A mutable buffer of elements.
   * 
   * @groupprio  Examining     -7
@@ -46,7 +48,7 @@ trait Buffer[@specialized(Specializable.Primitives) A]
   
   /** Removes the first occurrence of an element from this $collection.
     * @group Removing */
-  def -= (elem: A): this.type = {
+  @unspecialized def -= (elem: A): this.type = {
     val xs = iterator
     var i = 0
     while (!xs.isEmpty) {

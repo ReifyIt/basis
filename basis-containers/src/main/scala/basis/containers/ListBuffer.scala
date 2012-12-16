@@ -9,6 +9,8 @@ package basis.containers
 
 import basis.collections._
 
+import scala.reflect.ClassTag
+
 /** A mutable list of elements.
   * 
   * @groupprio  Examining     -8
@@ -42,8 +44,7 @@ class ListBuffer[A] private (
   final override def length: Int = size
   
   final override def apply(index: Int): A = {
-    if (index < 0 || index >= size)
-      throw new IndexOutOfBoundsException(index.toString)
+    if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     var i = 0
     var xs = first
     while (i < index) {
@@ -54,13 +55,18 @@ class ListBuffer[A] private (
   }
   
   final override def update(index: Int, x: A) {
-    if (index < 0 || index >= size)
-      throw new IndexOutOfBoundsException(index.toString)
-    dealias(index).head = x
+    if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
+    if (size == 0) first = ::(x, first.tail)
+    else {
+      val xi = dealias(index - 1)
+      val xn = ::(x, xi.tail.tail)
+      xi.tail = xn
+      if (xn.tail.isEmpty) last = xn
+    }
   }
   
   final override def += (x: A): this.type = {
-    val xn = new ::(x, Nil)
+    val xn = ::(x, Nil)
     if (size == 0) first = xn
     else dealias(size - 1).tail = xn
     last = xn
@@ -89,7 +95,7 @@ class ListBuffer[A] private (
   }
   
   final override def +=: (x: A): this.type = {
-    val x0 = new ::(x, first)
+    val x0 = ::(x, first)
     first = x0
     if (size == 0) last = x0
     size += 1
@@ -103,7 +109,7 @@ class ListBuffer[A] private (
       var x0 = null: List[A]
       var xi = null: ::[A]
       traverse(elems) { x =>
-        val xn = new ::(x, Nil)
+        val xn = ::(x, Nil)
         if (x0 == null) x0 = xn
         if (xi != null) xi.tail = xn
         xi = xn
@@ -134,27 +140,25 @@ class ListBuffer[A] private (
   }
   
   final override def insert(index: Int, elem: A) {
-    if (index < 0 || index > size)
-      throw new IndexOutOfBoundsException(index.toString)
+    if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) this += elem
     else if (index == 0) elem +=: this
     else {
       val xi = dealias(index - 1)
-      xi.tail = new ::(elem, xi.tail)
+      xi.tail = ::(elem, xi.tail)
       size += 1
       aliased += 1
     }
   }
   
   final override def insertAll(index: Int, elems: Enumerator[A]) {
-    if (index < 0 || index > size)
-      throw new IndexOutOfBoundsException(index.toString)
+    if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) this ++= elems
     else if (index == 0) elems ++=: this
     else {
       var xi = dealias(index - 1)
       traverse(elems) { x =>
-        val xn = new ::(x, xi.tail)
+        val xn = ::(x, xi.tail)
         xi.tail = xn
         xi = xn
         size += 1
@@ -164,8 +168,7 @@ class ListBuffer[A] private (
   }
   
   final override def remove(index: Int): A = {
-    if (index < 0 || index >= size)
-      throw new IndexOutOfBoundsException(index.toString)
+    if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     if (index == 0) {
       val x0 = first
       val x = x0.head
@@ -265,7 +268,7 @@ class ListBuffer[A] private (
         i += 1
       }
       while (i <= n) {
-        val xn = new ::(xs.head, xs.tail)
+        val xn = ::(xs.head, xs.tail)
         if (i == 0) first = xn
         else xi.tail = xn
         xi = xn
@@ -287,8 +290,6 @@ class ListBuffer[A] private (
 }
 
 object ListBuffer extends SeqFactory[ListBuffer] {
-  import scala.reflect.ClassTag
-  
   implicit override def Builder[A : ClassTag]
     : Builder[Any, A] { type State = ListBuffer[A] } =
     new ListBufferBuilder
@@ -311,12 +312,12 @@ private[containers] final class ListBufferIterator[+A] private (
   
   override def head: A = {
     if (empty) throw new NoSuchElementException("Head of empty iterator.")
-    else elem
+    elem
   }
   
   override def step() {
     if (empty) throw new UnsupportedOperationException("Empty iterator step.")
-    else if (!next.isEmpty) {
+    if (!next.isEmpty) {
       elem = next.head
       next = next.tail
     }

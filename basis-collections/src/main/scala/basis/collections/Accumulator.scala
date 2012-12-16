@@ -12,10 +12,12 @@ package basis.collections
   * @define collection  accumulator
   */
 trait Accumulator[@specialized(Specializable.Primitives) -A] {
-  /** Adds a single element to this $collection. */
+  /** Adds a single element to this $collection.
+    * @group Inserting */
   def += (elem: A): this.type
   
-  /** Adds multiple elements to this $collection. */
+  /** Adds multiple elements to this $collection.
+    * @group Inserting */
   def ++= (elems: Enumerator[A]): this.type = {
     traverse(elems)(new Accumulator.Append(this))
     this

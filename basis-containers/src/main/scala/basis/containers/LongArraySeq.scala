@@ -10,6 +10,8 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.reflect.ClassTag
+
 private[containers] final class LongArraySeq(array: Array[Long]) extends ArraySeq[Long] {
   override def isEmpty: Boolean = array.length == 0
   
@@ -35,7 +37,18 @@ private[containers] final class LongArraySeq(array: Array[Long]) extends ArraySe
     else super.copyToArray(xs)
   }
   
+  override def toArray[B >: Long](implicit B: ClassTag[B]): Array[B] = {
+    if (B == ClassTag.Long) {
+      val xs = new Array[Long](length)
+      java.lang.System.arraycopy(array, 0, xs, 0, length)
+      xs.asInstanceOf[Array[B]]
+    }
+    else super.toArray[B]
+  }
+  
   override def iterator: Iterator[Long] = new LongArraySeqIterator(array)
+  
+  protected override def stringPrefix: String = "ArraySeq[Long]"
 }
 
 private[containers] final class LongArraySeqIterator
@@ -47,79 +60,24 @@ private[containers] final class LongArraySeqIterator
   override def isEmpty: Boolean = i >= n
   
   override def head: Long = {
-    if (i < n) array(i)
-    else throw new NoSuchElementException("Head of empty iterator.")
+    if (i >= n) throw new NoSuchElementException("Head of empty iterator.")
+    array(i)
   }
   
   override def step() {
-    if (i < n) i += 1
-    else throw new UnsupportedOperationException("Empty iterator step.")
+    if (i >= n) throw new UnsupportedOperationException("Empty iterator step.")
+    i += 1
   }
   
   override def dup: Iterator[Long] = new LongArraySeqIterator(array, i, n)
 }
 
-private[containers] final class LongArraySeqBuilder extends Builder[Any, Long] {
+private[containers] final class LongArraySeqBuilder
+  extends LongArrayBuffer with Builder[Any, Long] {
+  
   override type State = ArraySeq[Long]
   
-  private[this] var array: Array[Long] = _
+  override def state: ArraySeq[Long] = toArraySeq
   
-  private[this] var aliased: Boolean = true
-  
-  private[this] var length: Int = 0
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    val newArray = new Array[Long](size)
-    if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
-    array = newArray
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > array.length) {
-      resize(expand(16, size))
-      aliased = false
-    }
-  }
-  
-  override def += (value: Long): this.type = {
-    prepare(length + 1)
-    array(length) = value
-    length += 1
-    this
-  }
-  
-  override def ++= (xs: Enumerator[Long]): this.type = xs match {
-    case xs: LongArraySeq =>
-      prepare(length + xs.length)
-      xs.copyToArray(array, length)
-      length += xs.length
-      this
-    case _ => super.++=(xs)
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (array == null || length + count > array.length) {
-      resize(length + count)
-      aliased = false
-    }
-    this
-  }
-  
-  override def state: ArraySeq[Long] = {
-    if (array == null || length != array.length) resize(length)
-    aliased = true
-    new LongArraySeq(array)
-  }
-  
-  override def clear() {
-    array = null
-    aliased = true
-    length = 0
-  }
+  protected override def stringPrefix: String = "ArraySeq.Builder[Long]"
 }

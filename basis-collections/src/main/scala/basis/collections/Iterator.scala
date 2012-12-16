@@ -7,6 +7,8 @@
 
 package basis.collections
 
+import scala.annotation.unspecialized
+
 /** A stateful traverser of elements. An iterator steps through each element
   * of a collection, one element per `step()`, until `isEmpty` returns `true`.
   * Backtracking algorithms can `dup` an iterator's state and resume it after
@@ -55,8 +57,8 @@ trait Iterator[@specialized(Specializable.Primitives) +A]
   
   /** Returns a duplicate $collection with identical but independent state.
     * @group Iterating */
-  def dup: Iterator[A]
+  @unspecialized def dup: Iterator[A]
   
-  protected override def foreach[U](f: A => U): Unit =
+  @unspecialized protected override def foreach[U](f: A => U): Unit =
     while (!isEmpty) { f(head); step() }
 }

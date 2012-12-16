@@ -10,6 +10,7 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.annotation.unspecialized
 import scala.reflect.ClassTag
 
 /** A mutable contiguous array.
@@ -33,7 +34,7 @@ abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
     with Buffer[A]
     with ArrayLike[A] {
   
-  override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
+  @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
     var i = 0
     var j = start
     val n = count min (xs.length - start) min length
@@ -44,7 +45,7 @@ abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
     }
   }
   
-  override def copyToArray[B >: A](xs: Array[B], start: Int) {
+  @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int) {
     var i = 0
     var j = start
     val n = (xs.length - start) min length
@@ -55,7 +56,7 @@ abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
     }
   }
   
-  override def copyToArray[B >: A](xs: Array[B]) {
+  @unspecialized override def copyToArray[B >: A](xs: Array[B]) {
     var i = 0
     val n = xs.length min length
     while (i < n) {
@@ -64,7 +65,7 @@ abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
     }
   }
   
-  override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
+  @unspecialized override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
     var i = 0
     val n = length
     val xs = B.newArray(n)
@@ -79,11 +80,10 @@ abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
 }
 
 object ArrayBuffer extends SeqFactory[ArrayBuffer] {
-  import scala.reflect.ClassTag
-  
   implicit override def Builder[A](implicit A: ClassTag[A])
     : Builder[Any, A] { type State = ArrayBuffer[A] } = (A match {
     case ClassTag.Int     => new IntArrayBufferBuilder
+    case ClassTag.Long    => new LongArrayBufferBuilder
   }).asInstanceOf[Builder[Any, A] { type State = ArrayBuffer[A] }]
   
   override def toString: String = "ArrayBuffer"

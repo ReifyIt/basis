@@ -10,6 +10,7 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.annotation.unspecialized
 import scala.reflect.ClassTag
 
 /** A contiguous array.
@@ -29,9 +30,11 @@ abstract class ArraySeq[@specialized(Specializable.Primitives) +A]
     with Index[A]
     with ArrayLike[A] {
   
+  override def length: Int
+  
   override def apply(index: Int): A
   
-  override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
+  @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
     var i = 0
     var j = start
     val n = count min (xs.length - start) min length
@@ -42,7 +45,7 @@ abstract class ArraySeq[@specialized(Specializable.Primitives) +A]
     }
   }
   
-  override def copyToArray[B >: A](xs: Array[B], start: Int) {
+  @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int) {
     var i = 0
     var j = start
     val n = (xs.length - start) min length
@@ -53,7 +56,7 @@ abstract class ArraySeq[@specialized(Specializable.Primitives) +A]
     }
   }
   
-  override def copyToArray[B >: A](xs: Array[B]) {
+  @unspecialized override def copyToArray[B >: A](xs: Array[B]) {
     var i = 0
     val n = xs.length min length
     while (i < n) {
@@ -62,7 +65,7 @@ abstract class ArraySeq[@specialized(Specializable.Primitives) +A]
     }
   }
   
-  override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
+  @unspecialized override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
     var i = 0
     val n = length
     val xs = B.newArray(n)
@@ -77,8 +80,6 @@ abstract class ArraySeq[@specialized(Specializable.Primitives) +A]
 }
 
 object ArraySeq extends SeqFactory[ArraySeq] {
-  import scala.reflect.ClassTag
-  
   implicit override def Builder[A](implicit A: ClassTag[A])
     : Builder[Any, A] { type State = ArraySeq[A] } = (A match {
     case ClassTag.Byte    => new ByteArraySeqBuilder
