@@ -10,7 +10,7 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.annotation.tailrec
+import scala.annotation.unspecialized
 import scala.reflect.ClassTag
 
 /** A singly linked list.
@@ -26,21 +26,42 @@ import scala.reflect.ClassTag
   * 
   * @define collection  list
   */
-sealed abstract class List[+A]
+sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
   extends Equals
     with Family[List[A]]
     with Stack[A]
     with ListLike[A] {
   
+  override def isEmpty: Boolean
+  
+  override def head: A
+  
   override def tail: List[A]
   
-  @tailrec final def drop(lower: Int): List[A] =
-    if (lower <= 0 || isEmpty) this else tail.drop(lower - 1)
-  
-  final def take(upper: Int): List[A] = {
+  override def length: Int = {
+    var n = 0
     var xs = this
-    val b = new ListBuilder[A]
+    while (!xs.isEmpty) {
+      n += 1
+      xs = xs.tail
+    }
+    n
+  }
+  
+  @unspecialized def drop(lower: Int): List[A] = {
     var i = 0
+    var xs = this
+    while (i < lower && !xs.isEmpty) {
+      i += 1
+      xs = xs.tail
+    }
+    xs
+  }
+  
+  @unspecialized def take(upper: Int): List[A] = {
+    var i = 0
+    val b = new ListBuilder[A]
+    var xs = this
     while (i < upper && !xs.isEmpty) {
       i += 1
       b += xs.head
@@ -49,31 +70,32 @@ sealed abstract class List[+A]
     b.state
   }
   
-  final def slice(lower: Int, upper: Int): List[A] =
-    if (lower >= upper) Nil else drop(lower).take(upper)
+  @unspecialized def slice(lower: Int, upper: Int): List[A] =
+    if (lower < upper) drop(lower).take(upper) else Nil
   
-  final override def length: Int = length(0)
-  @tailrec private final def length(count: Int): Int =
-    if (isEmpty) count else tail.length(count + 1)
-  
-  final def reverse: List[A] = reverse(Nil, this)
-  @tailrec private[this] def reverse(sx: List[A], xs: List[A]): List[A] =
-    if (xs.isEmpty) sx else reverse(xs.head :: sx, xs.tail)
-  
-  final def :: [B >: A](elem: B): List[B] = elem match {
-    case elem: Int => new IntCons(elem, this).asInstanceOf[List[B]]
-    case elem: Long => new LongCons(elem, this).asInstanceOf[List[B]]
-    case elem: Float => new FloatCons(elem, this).asInstanceOf[List[B]]
-    case elem: Double => new DoubleCons(elem, this).asInstanceOf[List[B]]
-    case _ => new RefCons(elem, this)
+  @unspecialized def reverse: List[A] = {
+    var sx = Nil: List[A]
+    var xs = this
+    while (!xs.isEmpty) {
+      sx = new RefList(xs.head, sx)
+      xs = xs.tail
+    }
+    sx
   }
   
-  final override def toList: this.type = this
+  @unspecialized def :: [B >: A](elem: B): List[B] = new RefList(elem, this)
   
-  final override def iterator: Iterator[A] = new ListIterator(this)
+  override def toList: this.type = this
   
-  @tailrec protected final override def foreach[U](f: A => U) =
-    if (!isEmpty) { f(head); tail.foreach[U](f) }
+  @unspecialized override def iterator: Iterator[A] = new RefListIterator(this)
+  
+  @unspecialized protected override def foreach[U](f: A => U) {
+    var xs = this
+    while (!xs.isEmpty) {
+      f(xs.head)
+      xs = xs.tail
+    }
+  }
   
   protected override def stringPrefix: String = "List"
 }
@@ -93,12 +115,16 @@ sealed abstract class ::[A] extends List[A] {
 }
 
 object :: {
-  def apply[A](x: A, xs: List[A]): ::[A] = x match {
-    case x: Int => new IntCons(x, xs).asInstanceOf[::[A]]
-    case x: Long => new LongCons(x, xs).asInstanceOf[::[A]]
-    case x: Float => new FloatCons(x, xs).asInstanceOf[::[A]]
-    case x: Double => new DoubleCons(x, xs).asInstanceOf[::[A]]
-    case _ => new RefCons(x, xs)
+  def apply[A](x: A, xs: List[A]): ::[A] = {
+    if (x.isInstanceOf[Int] && (xs.isInstanceOf[IntList] || xs.isInstanceOf[Nil.type]))
+      new IntList(x.asInstanceOf[Int], xs.asInstanceOf[List[Int]]).asInstanceOf[::[A]]
+    else if (x.isInstanceOf[Long] && (xs.isInstanceOf[LongList] || xs.isInstanceOf[Nil.type]))
+      new LongList(x.asInstanceOf[Long], xs.asInstanceOf[List[Long]]).asInstanceOf[::[A]]
+    else if (x.isInstanceOf[Float] && (xs.isInstanceOf[FloatList] || xs.isInstanceOf[Nil.type]))
+      new FloatList(x.asInstanceOf[Float], xs.asInstanceOf[List[Float]]).asInstanceOf[::[A]]
+    else if (x.isInstanceOf[Double] && (xs.isInstanceOf[DoubleList] || xs.isInstanceOf[Nil.type]))
+      new DoubleList(x.asInstanceOf[Double], xs.asInstanceOf[List[Double]]).asInstanceOf[::[A]]
+    else new RefList(x, xs)
   }
   
   def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
@@ -106,36 +132,194 @@ object :: {
 
 object Nil extends List[Nothing] {
   override def isEmpty: Boolean = true
+  
   override def head: Nothing = throw new NoSuchElementException("Head of empty list,")
+  
   override def tail: List[Nothing] = throw new UnsupportedOperationException("Tail of empty list.")
+  
+  override def :: [B >: Nothing](elem: B): List[B] = elem match {
+    case elem: Int => new IntList(elem, this).asInstanceOf[List[B]]
+    case elem: Long => new LongList(elem, this).asInstanceOf[List[B]]
+    case elem: Float => new FloatList(elem, this).asInstanceOf[List[B]]
+    case elem: Double => new DoubleList(elem, this).asInstanceOf[List[B]]
+    case _ => new RefList(elem, this)
+  }
 }
 
-private[containers] final class IntCons(
+private[containers] final class IntList(
     override val head: Int,
-    override var tail: List[Any])
-  extends ::[Any]
+    override var tail: List[Int])
+  extends ::[Int] {
+  
+  override def reverse: List[Int] = {
+    var sx = Nil: List[Int]
+    var xs = this: List[Int]
+    while (!xs.isEmpty) {
+      sx = new IntList(xs.asInstanceOf[IntList].head, sx)
+      xs = xs.tail
+    }
+    sx
+  }
+  
+  override def :: [B >: Int](elem: B): List[B] = {
+    if (elem.isInstanceOf[Int])
+      new IntList(elem.asInstanceOf[Int], this)
+    else new RefList(elem, this)
+  }
+  
+  override def iterator: Iterator[Int] = new IntListIterator(this)
+  
+  protected override def stringPrefix: String = "List[Int]"
+}
 
-private[containers] final class LongCons(
+private[containers] final class LongList(
     override val head: Long,
-    override var tail: List[Any])
-  extends ::[Any]
+    override var tail: List[Long])
+  extends ::[Long] {
+  
+  override def reverse: List[Long] = {
+    var sx = Nil: List[Long]
+    var xs = this: List[Long]
+    while (!xs.isEmpty) {
+      sx = new LongList(xs.asInstanceOf[LongList].head, sx)
+      xs = xs.tail
+    }
+    sx
+  }
+  
+  override def :: [B >: Long](elem: B): List[B] = {
+    if (elem.isInstanceOf[Long])
+      new LongList(elem.asInstanceOf[Long], this)
+    else new RefList(elem, this)
+  }
+  
+  override def iterator: Iterator[Long] = new LongListIterator(this)
+  
+  protected override def stringPrefix: String = "List[Long]"
+}
 
-private[containers] final class FloatCons(
+private[containers] final class FloatList(
     override val head: Float,
-    override var tail: List[Any])
-  extends ::[Any]
+    override var tail: List[Float])
+  extends ::[Float] {
+  
+  override def reverse: List[Float] = {
+    var sx = Nil: List[Float]
+    var xs = this: List[Float]
+    while (!xs.isEmpty) {
+      sx = new FloatList(xs.asInstanceOf[FloatList].head, sx)
+      xs = xs.tail
+    }
+    sx
+  }
+  
+  override def :: [B >: Float](elem: B): List[B] = {
+    if (elem.isInstanceOf[Float])
+      new FloatList(elem.asInstanceOf[Float], this)
+    else new RefList(elem, this)
+  }
+  
+  override def iterator: Iterator[Float] = new FloatListIterator(this)
+  
+  protected override def stringPrefix: String = "List[Float]"
+}
 
-private[containers] final class DoubleCons(
+private[containers] final class DoubleList(
     override val head: Double,
-    override var tail: List[Any])
-  extends ::[Any]
+    override var tail: List[Double])
+  extends ::[Double] {
+  
+  override def reverse: List[Double] = {
+    var sx = Nil: List[Double]
+    var xs = this: List[Double]
+    while (!xs.isEmpty) {
+      sx = new DoubleList(xs.asInstanceOf[DoubleList].head, sx)
+      xs = xs.tail
+    }
+    sx
+  }
+  
+  override def :: [B >: Double](elem: B): List[B] = {
+    if (elem.isInstanceOf[Double])
+      new DoubleList(elem.asInstanceOf[Double], this)
+    else new RefList(elem, this)
+  }
+  
+  override def iterator: Iterator[Double] = new DoubleListIterator(this)
+  
+  protected override def stringPrefix: String = "List[Double]"
+}
 
-private[containers] final class RefCons[A](
+private[containers] final class RefList[A](
     override val head: A,
     override var tail: List[A])
   extends ::[A]
 
-private[containers] final class ListIterator[+A](private[this] var xs: List[A]) extends Iterator[A] {
+private[containers] final class IntListIterator(private[this] var xs: List[Int]) extends Iterator[Int] {
+  override def isEmpty: Boolean = xs.isEmpty
+  
+  override def head: Int = {
+    if (xs.isEmpty) throw new NoSuchElementException("Head of empty iterator.")
+    xs.asInstanceOf[IntList].head
+  }
+  
+  override def step() {
+    if (xs.isEmpty) throw new UnsupportedOperationException("Empty iterator step.")
+    xs = xs.tail
+  }
+  
+  override def dup: Iterator[Int] = new IntListIterator(xs)
+}
+
+private[containers] final class LongListIterator(private[this] var xs: List[Long]) extends Iterator[Long] {
+  override def isEmpty: Boolean = xs.isEmpty
+  
+  override def head: Long = {
+    if (xs.isEmpty) throw new NoSuchElementException("Head of empty iterator.")
+    xs.asInstanceOf[LongList].head
+  }
+  
+  override def step() {
+    if (xs.isEmpty) throw new UnsupportedOperationException("Empty iterator step.")
+    xs = xs.tail
+  }
+  
+  override def dup: Iterator[Long] = new LongListIterator(xs)
+}
+
+private[containers] final class FloatListIterator(private[this] var xs: List[Float]) extends Iterator[Float] {
+  override def isEmpty: Boolean = xs.isEmpty
+  
+  override def head: Float = {
+    if (xs.isEmpty) throw new NoSuchElementException("Head of empty iterator.")
+    xs.asInstanceOf[FloatList].head
+  }
+  
+  override def step() {
+    if (xs.isEmpty) throw new UnsupportedOperationException("Empty iterator step.")
+    xs = xs.tail
+  }
+  
+  override def dup: Iterator[Float] = new FloatListIterator(xs)
+}
+
+private[containers] final class DoubleListIterator(private[this] var xs: List[Double]) extends Iterator[Double] {
+  override def isEmpty: Boolean = xs.isEmpty
+  
+  override def head: Double = {
+    if (xs.isEmpty) throw new NoSuchElementException("Head of empty iterator.")
+    xs.asInstanceOf[DoubleList].head
+  }
+  
+  override def step() {
+    if (xs.isEmpty) throw new UnsupportedOperationException("Empty iterator step.")
+    xs = xs.tail
+  }
+  
+  override def dup: Iterator[Double] = new DoubleListIterator(xs)
+}
+
+private[containers] final class RefListIterator[+A](private[this] var xs: List[A]) extends Iterator[A] {
   override def isEmpty: Boolean = xs.isEmpty
   
   override def head: A = {
@@ -148,7 +332,7 @@ private[containers] final class ListIterator[+A](private[this] var xs: List[A]) 
     xs = xs.tail
   }
   
-  override def dup: Iterator[A] = new ListIterator(xs)
+  override def dup: Iterator[A] = new RefListIterator(xs)
 }
 
 private[containers] final class ListBuilder[A] extends ListBuffer[A] with Builder[Any, A] {

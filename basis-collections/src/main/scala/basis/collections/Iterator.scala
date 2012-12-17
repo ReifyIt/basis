@@ -36,7 +36,7 @@ import scala.annotation.unspecialized
   * 
   * @define collection  iterator
   */
-trait Iterator[@specialized(Specializable.Primitives) +A]
+trait Iterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Any with Family[Iterator[A]] with Enumerator[A] {
   
   /** Returns `true` when this $collection has reached a sentinel element.

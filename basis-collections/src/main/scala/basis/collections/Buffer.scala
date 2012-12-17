@@ -21,7 +21,7 @@ import scala.annotation.unspecialized
   * 
   * @define collection  buffer
   */
-trait Buffer[@specialized(Specializable.Primitives) A]
+trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   extends Equals
     with Family[Buffer[A]]
     with Seq[A]

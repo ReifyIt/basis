@@ -11,7 +11,7 @@ package basis.collections
   * 
   * @define collection  accumulator
   */
-trait Accumulator[@specialized(Specializable.Primitives) -A] {
+trait Accumulator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A] {
   /** Adds a single element to this $collection.
     * @group Inserting */
   def += (elem: A): this.type

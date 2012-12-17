@@ -27,7 +27,7 @@ import scala.reflect.ClassTag
   * 
   * @define collection  array buffer
   */
-abstract class ArrayBuffer[@specialized(Specializable.Primitives) A]
+abstract class ArrayBuffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   extends Equals
     with Family[ArrayBuffer[A]]
     with Index[A]

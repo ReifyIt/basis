@@ -24,7 +24,7 @@ import scala.reflect.ClassTag
   * 
   * @define collection  array sequence
   */
-abstract class ArraySeq[@specialized(Specializable.Primitives) +A]
+abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Equals
     with Family[ArraySeq[A]]
     with Index[A]
