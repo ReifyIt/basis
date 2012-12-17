@@ -417,7 +417,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
               ValDef(NoMods, x, TypeTree(), Apply(Ident(xs), Ident(i) :: Nil)) ::
               If(
                 Apply(Select(q.tree, "isDefinedAt"), Ident(x) :: Nil),
-                Apply(Select(Ident(b), "$plus$eq"), Apply(q.tree, Ident(x) :: Nil) :: Nil),
+                Apply(Select(Ident(b), "append"), Apply(q.tree, Ident(x) :: Nil) :: Nil),
                 EmptyTree) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
@@ -446,7 +446,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Apply(f.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "append"), Apply(f.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Nil) :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
@@ -474,7 +474,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$plus$eq"), Apply(f.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "appendAll"), Apply(f.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Nil) :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
@@ -506,7 +506,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
               ValDef(NoMods, x, TypeTree(), Apply(Ident(xs), Ident(i) :: Nil)) ::
               If(
                 Apply(p.tree, Ident(x) :: Nil),
-                Apply(Select(Ident(b), "$plus$eq"), Ident(x) :: Nil),
+                Apply(Select(Ident(b), "append"), Ident(x) :: Nil),
                 EmptyTree) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
@@ -542,13 +542,13 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Apply(Ident(loop1), Nil),
-                Apply(Select(Ident(b), "$plus$eq"), Ident(x) :: Nil))),
+                Apply(Select(Ident(b), "append"), Ident(x) :: Nil))),
             EmptyTree)) ::
         LabelDef(loop2, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "append"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
@@ -582,7 +582,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Block(
-                  Apply(Select(Ident(b), "$plus$eq"), Ident(x) :: Nil) :: Nil,
+                  Apply(Select(Ident(b), "append"), Ident(x) :: Nil) :: Nil,
                   Apply(Ident(loop), Nil)),
                 EmptyTree)),
             EmptyTree)) :: Nil,
@@ -619,15 +619,15 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Block(
-                  Apply(Select(Ident(a), "$plus$eq"), Ident(x) :: Nil) :: Nil,
+                  Apply(Select(Ident(a), "append"), Ident(x) :: Nil) :: Nil,
                   Apply(Ident(loop1), Nil)),
-                Apply(Select(Ident(b), "$plus$eq"), Ident(x) :: Nil))),
+                Apply(Select(Ident(b), "append"), Ident(x) :: Nil))),
             EmptyTree)) ::
         LabelDef(loop2, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "append"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
@@ -659,7 +659,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "append"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
@@ -687,7 +687,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "append"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
@@ -718,7 +718,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "append"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
@@ -744,7 +744,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
           If(
             Apply(Select(Ident(i), "$greater$eq"), Literal(Constant(0)) :: Nil),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "append"), Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$minus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
@@ -774,7 +774,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
               Apply(
-                Select(Ident(b), "$plus$eq"),
+                Select(Ident(b), "append"),
                 ApplyConstructor(
                   Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Tuple2")),
                   Apply(Ident(xs), Ident(i) :: Nil) :: Apply(Ident(ys), Ident(i) :: Nil) :: Nil) :: Nil) ::

@@ -9,18 +9,26 @@ package basis.collections
 
 /** A stateful element accumulator.
   * 
+  * @groupprio  Examining   -3
+  * @groupprio  Inserting   -2
+  * @groupprio  Removing    -1
+  * 
   * @define collection  builder
   */
 trait Builder[-From, -A] extends Accumulator[A] {
-  /** The type of state maintained by this $collection. */
+  /** The type of state maintained by this $collection.
+    * @group Examining */
   type State
   
-  /** Resets this $collection to its initial state. */
+  /** Resets this $collection to its initial state.
+    * @group Removing */
   def clear(): Unit
   
-  /** Prepares this $collection to receive a certain number of elements. */
+  /** Prepares this $collection to receive a certain number of elements.
+    * @group Inserting */
   def expect(count: Int): this.type
   
-  /** Returns the current state of this $collection. */
+  /** Returns the current state of this $collection.
+    * @group Examining */
   def state: State
 }

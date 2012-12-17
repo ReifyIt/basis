@@ -7,8 +7,6 @@
 
 package basis.collections
 
-import scala.annotation.unspecialized
-
 /** A mutable buffer of elements.
   * 
   * @groupprio  Examining     -7
@@ -31,35 +29,18 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
     * @group Examining */
   def apply(index: Int): A
   
-  /** Replaces the element at `index` with the given one.
+  /** Replaces the element at `index` with the given element.
     * @group Mutating */
   def update(index: Int, elem: A): Unit
   
   /** Prepends a single element to this $collection.
     * @group Inserting */
-  def +=: (elem: A): this.type
+  def prepend(elem: A): Unit
   
   /** Prepends multiple elements to this $collection.
     * @group Inserting */
-  def ++=: (elems: Enumerator[A]): this.type = {
+  def prependAll(elems: Enumerator[A]) {
     traverse(elems)(new Buffer.Insert(this, 0))
-    this
-  }
-  
-  /** Removes the first occurrence of an element from this $collection.
-    * @group Removing */
-  @unspecialized def -= (elem: A): this.type = {
-    val xs = iterator
-    var i = 0
-    while (!xs.isEmpty) {
-      if (elem == xs.head) {
-        remove(i)
-        return this
-      }
-      xs.step()
-      i += 1
-    }
-    this
   }
   
   /** Inserts a single element into this $collection at `index`.
@@ -69,8 +50,7 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   /** Inserts multiple elements into this $collection, starting at `index`.
     * @group Inserting */
   def insertAll(index: Int, elems: Enumerator[A]) {
-    if (index < 0 || index > length)
-      throw new IndexOutOfBoundsException(index.toString)
+    if (index < 0 || index > length) throw new IndexOutOfBoundsException(index.toString)
     traverse(elems)(new Buffer.Insert(this, index))
   }
   
@@ -94,13 +74,26 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   /** Removes all elements from this $collection.
     * @group Removing */
   def clear(): Unit
+  
+  /** Prepends a single element to this $collection.
+    * @group Inserting */
+  def +=: (elem: A): this.type = {
+    prepend(elem)
+    this
+  }
+  
+  /** Prepends multiple elements to this $collection.
+    * @group Inserting */
+  def ++=: (elems: Enumerator[A]): this.type = {
+    prependAll(elems)
+    this
+  }
 }
 
 private[collections] object Buffer {
   import scala.runtime.AbstractFunction1
   
-  final class Insert[-A](b: Buffer[A], private[this] var i: Int)
-    extends AbstractFunction1[A, Unit] {
+  final class Insert[-A](b: Buffer[A], private[this] var i: Int) extends AbstractFunction1[A, Unit] {
     override def apply(x: A) {
       b.insert(i, x)
       i += 1

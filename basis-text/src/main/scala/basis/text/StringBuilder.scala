@@ -17,7 +17,7 @@ abstract class StringBuilder[-From] extends Builder[From, Int] {
   /** Prepares this $collection to receive a certain number of characters. */
   override def expect(count: Int): this.type
   
-  def append(chars: java.lang.CharSequence): this.type = {
+  def append(chars: java.lang.CharSequence) {
     val n = chars.length
     var i = 0
     while (i < n) this += {
@@ -34,6 +34,5 @@ abstract class StringBuilder[-From] extends Builder[From, Int] {
       }
       else 0xFFFD
     }
-    this
   }
 }

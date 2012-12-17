@@ -87,20 +87,18 @@ private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte] {
     }
   }
   
-  override def += (value: Byte): this.type = {
+  override def append(value: Byte) {
     prepare(length + 1)
     array(length) = value
     length += 1
-    this
   }
   
-  override def ++= (xs: Enumerator[Byte]): this.type = xs match {
+  override def appendAll(xs: Enumerator[Byte]): Unit = xs match {
     case xs: ByteArraySeq =>
       prepare(length + xs.length)
       xs.copyToArray(array, length)
       length += xs.length
-      this
-    case _ => super.++=(xs)
+    case _ => super.appendAll(xs)
   }
   
   override def expect(count: Int): this.type = {

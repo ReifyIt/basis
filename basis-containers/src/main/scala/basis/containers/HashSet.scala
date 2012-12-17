@@ -382,10 +382,7 @@ private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
   
   private[this] var set: HashSet[A] = HashSet.empty
   
-  override def += (elem: A): this.type = {
-    set += elem
-    this
-  }
+  override def append(elem: A): Unit = set += elem
   
   override def expect(count: Int): this.type = this
   

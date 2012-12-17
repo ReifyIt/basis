@@ -285,7 +285,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
               ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) ::
               If(
                 Apply(Select(q.tree, "isDefinedAt"), Ident(x) :: Nil),
-                Apply(Select(Ident(b), "$plus$eq"), Apply(q.tree, Ident(x) :: Nil) :: Nil),
+                Apply(Select(Ident(b), "append"), Apply(q.tree, Ident(x) :: Nil) :: Nil),
                 EmptyTree) ::
               Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
               Apply(Ident(loop), Nil)),
@@ -310,7 +310,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Apply(f.tree, Select(Ident(xs), "head") :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "append"), Apply(f.tree, Select(Ident(xs), "head") :: Nil) :: Nil) ::
               Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
@@ -334,7 +334,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
             Block(
-              Apply(Select(Ident(b), "$plus$plus$eq"), Apply(f.tree, Select(Ident(xs), "head") :: Nil) :: Nil) ::
+              Apply(Select(Ident(b), "appendAll"), Apply(f.tree, Select(Ident(xs), "head") :: Nil) :: Nil) ::
               Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
@@ -362,7 +362,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
               ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) ::
               If(
                 Apply(p.tree, Ident(x) :: Nil),
-                Apply(Select(Ident(b), "$plus$eq"), Ident(x) :: Nil),
+                Apply(Select(Ident(b), "append"), Ident(x) :: Nil),
                 EmptyTree) ::
               Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
               Apply(Ident(loop), Nil)),
@@ -394,13 +394,13 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Apply(Ident(loop1), Nil),
-                Apply(Select(Ident(b), "$plus$eq"), Ident(x) :: Nil))),
+                Apply(Select(Ident(b), "append"), Ident(x) :: Nil))),
             EmptyTree)) ::
         LabelDef(loop2, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Select(Ident(xs), "head") :: Nil) ::
+              Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
               Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
@@ -430,7 +430,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Block(
-                  Apply(Select(Ident(b), "$plus$eq"), Ident(x) :: Nil) :: Nil,
+                  Apply(Select(Ident(b), "append"), Ident(x) :: Nil) :: Nil,
                   Apply(Ident(loop), Nil)),
                 EmptyTree)),
             EmptyTree)) :: Nil,
@@ -463,15 +463,15 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Block(
-                  Apply(Select(Ident(a), "$plus$eq"), Ident(x) :: Nil) :: Nil,
+                  Apply(Select(Ident(a), "append"), Ident(x) :: Nil) :: Nil,
                   Apply(Ident(loop1), Nil)),
-                Apply(Select(Ident(b), "$plus$eq"), Ident(x) :: Nil))),
+                Apply(Select(Ident(b), "append"), Ident(x) :: Nil))),
             EmptyTree)) ::
         LabelDef(loop2, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Select(Ident(xs), "head") :: Nil) ::
+              Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
               Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
@@ -513,7 +513,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
             Block(
-              Apply(Select(Ident(b), "$plus$eq"), Select(Ident(xs), "head") :: Nil) ::
+              Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
               Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
@@ -543,7 +543,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
             If(
               Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
               Block(
-                Apply(Select(Ident(b), "$plus$eq"), Select(Ident(xs), "head") :: Nil) ::
+                Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
                 Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) ::
                 Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
                 Apply(Ident(loop), Nil)),
@@ -588,7 +588,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
             If(
               Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
               Block(
-                Apply(Select(Ident(b), "$plus$eq"), Select(Ident(xs), "head") :: Nil) ::
+                Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
                 Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) ::
                 Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
                 Apply(Ident(loop2), Nil)),
@@ -618,7 +618,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
               Select(Select(Ident(ys), "isEmpty"), "unary_$bang"),
               Block(
                 Apply(
-                  Select(Ident(b), "$plus$eq"),
+                  Select(Ident(b), "append"),
                   ApplyConstructor(
                     Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Tuple2")),
                     Select(Ident(xs), "head") :: Select(Ident(ys), "head") :: Nil) :: Nil) ::

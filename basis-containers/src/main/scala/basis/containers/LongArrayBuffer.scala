@@ -34,7 +34,7 @@ private[containers] class LongArrayBuffer private (
     buffer(index) = elem
   }
   
-  final override def += (elem: Long): this.type = {
+  final override def append(elem: Long) {
     var array = buffer
     if (aliased || size + 1 > array.length) {
       array = new Array[Long](expand(16, size + 1))
@@ -44,10 +44,9 @@ private[containers] class LongArrayBuffer private (
     }
     array(size) = elem
     size += 1
-    this
   }
   
-  final override def ++= (elems: Enumerator[Long]): this.type = {
+  final override def appendAll(elems: Enumerator[Long]) {
     if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Long]]
       val n = xs.length
@@ -61,11 +60,10 @@ private[containers] class LongArrayBuffer private (
       xs.copyToArray(array, size)
       size += n
     }
-    else super.++=(elems)
-    this
+    else super.appendAll(elems)
   }
   
-  final override def +=: (elem: Long): this.type = {
+  final override def prepend(elem: Long) {
     var array = buffer
     if (aliased || size + 1 > array.length)
       array = new Array[Long](expand(16, size + 1))
@@ -74,10 +72,9 @@ private[containers] class LongArrayBuffer private (
     buffer = array
     size += 1
     aliased = false
-    this
   }
   
-  final override def ++=: (elems: Enumerator[Long]): this.type = {
+  final override def prependAll(elems: Enumerator[Long]) {
     if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Long]]
       val n = xs.length
@@ -90,26 +87,13 @@ private[containers] class LongArrayBuffer private (
       size += n
       aliased = false
     }
-    else super.++=:(elems)
-    this
-  }
-  
-  final override def -= (elem: Long): this.type = {
-    var i = 0
-    while (i < size) {
-      if (elem == this(i)) {
-        remove(i)
-        return this
-      }
-      i += 1
-    }
-    this
+    else super.prependAll(elems)
   }
   
   final override def insert(index: Int, elem: Long) {
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
-    if (index == size) this += elem
-    else if (index == 0) elem +=: this
+    if (index == size) append(elem)
+    else if (index == 0) prepend(elem)
     else {
       var array = buffer
       if (aliased || size + 1 > array.length) {
@@ -126,8 +110,8 @@ private[containers] class LongArrayBuffer private (
   
   final override def insertAll(index: Int, elems: Enumerator[Long]) {
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
-    if (index == size) this ++= elems
-    else if (index == 0) elems ++=: this
+    if (index == size) appendAll(elems)
+    else if (index == 0) prependAll(elems)
     else if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Long]]
       val n = xs.length
@@ -149,15 +133,18 @@ private[containers] class LongArrayBuffer private (
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     var array = buffer
     val x = array(index)
-    if (aliased) {
-      array = new Array[Long](expand(16, size - 1))
-      java.lang.System.arraycopy(buffer, 0, array, 0, index)
+    if (size == 1) clear()
+    else {
+      if (aliased) {
+        array = new Array[Long](expand(16, size - 1))
+        java.lang.System.arraycopy(buffer, 0, array, 0, index)
+      }
+      java.lang.System.arraycopy(buffer, index + 1, array, index, size - index - 1)
+      if (buffer eq array) array(size - 1) = 0L
+      size -= 1
+      buffer = array
+      aliased = false
     }
-    java.lang.System.arraycopy(buffer, index + 1, array, index, size - index - 1)
-    if (buffer eq array) array(size - 1) = 0L
-    size -= 1
-    buffer = array
-    aliased = false
     x
   }
   
@@ -165,16 +152,19 @@ private[containers] class LongArrayBuffer private (
     if (count < 0) throw new IllegalArgumentException("negative count")
     if (index < 0) throw new IndexOutOfBoundsException(index.toString)
     if (index + count > size) throw new IndexOutOfBoundsException((index + count).toString)
-    var array = buffer
-    if (aliased) {
-      array = new Array[Long](expand(16, size - count))
-      java.lang.System.arraycopy(buffer, 0, array, 0, index)
+    if (size == count) clear()
+    else {
+      var array = buffer
+      if (aliased) {
+        array = new Array[Long](expand(16, size - count))
+        java.lang.System.arraycopy(buffer, 0, array, 0, index)
+      }
+      java.lang.System.arraycopy(buffer, index + count, array, index, size - index - count)
+      if (buffer eq array) java.util.Arrays.fill(array, size - count, size, 0L)
+      size -= count
+      buffer = array
+      aliased = false
     }
-    java.lang.System.arraycopy(buffer, index + count, array, index, size - index - count)
-    if (buffer eq array) java.util.Arrays.fill(array, size - count, size, 0L)
-    size -= count
-    buffer = array
-    aliased = false
   }
   
   final override def clear() {
@@ -210,7 +200,7 @@ private[containers] class LongArrayBuffer private (
     else super.toArray[B]
   }
   
-  private[containers] final def toArraySeq: ArraySeq[Long] = {
+  final override def toArraySeq: ArraySeq[Long] = {
     if (buffer == null || buffer.length != size) {
       var array = new Array[Long](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -246,29 +236,29 @@ private[containers] class LongArrayBuffer private (
 }
 
 private[containers] final class LongArrayBufferIterator private (
-    private[this] val xs: LongArrayBuffer,
+    private[this] val b: LongArrayBuffer,
     private[this] var i: Int,
     private[this] var n: Int,
-    private[this] var elem: Long)
+    private[this] var x: Long)
   extends Iterator[Long] {
   
-  def this(xs: LongArrayBuffer) = this(xs, 0, xs.length, if (!xs.isEmpty) xs(0) else 0L)
+  def this(b: LongArrayBuffer) = this(b, 0, b.length, if (!b.isEmpty) b(0) else 0L)
   
   override def isEmpty: Boolean = i >= n
   
   override def head: Long = {
     if (i >= n) throw new NoSuchElementException("Head of empty iterator.")
-    elem
+    x
   }
   
   override def step() {
     if (i >= n) throw new UnsupportedOperationException("Empty iterator step.")
     i += 1
-    n = xs.length
-    elem = if (i < n) xs(i) else 0L
+    n = b.length
+    x = if (i < n) b(i) else 0L
   }
   
-  override def dup: Iterator[Long] = new LongArrayBufferIterator(xs, i, n, elem)
+  override def dup: Iterator[Long] = new LongArrayBufferIterator(b, i, n, x)
 }
 
 private[containers] final class LongArrayBufferBuilder

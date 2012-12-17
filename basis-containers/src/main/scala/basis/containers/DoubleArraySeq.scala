@@ -10,6 +10,8 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.reflect.ClassTag
+
 private[containers] final class DoubleArraySeq(array: Array[Double]) extends ArraySeq[Double] {
   override def isEmpty: Boolean = array.length == 0
   
@@ -35,7 +37,18 @@ private[containers] final class DoubleArraySeq(array: Array[Double]) extends Arr
     else super.copyToArray(xs)
   }
   
+  override def toArray[B >: Double](implicit B: ClassTag[B]): Array[B] = {
+    if (B == ClassTag.Double) {
+      val xs = new Array[Double](length)
+      java.lang.System.arraycopy(array, 0, xs, 0, length)
+      xs.asInstanceOf[Array[B]]
+    }
+    else super.toArray[B]
+  }
+  
   override def iterator: Iterator[Double] = new DoubleArraySeqIterator(array)
+  
+  protected override def stringPrefix: String = "ArraySeq[Double]"
 }
 
 private[containers] final class DoubleArraySeqIterator
@@ -47,79 +60,24 @@ private[containers] final class DoubleArraySeqIterator
   override def isEmpty: Boolean = i >= n
   
   override def head: Double = {
-    if (i < n) array(i)
-    else throw new NoSuchElementException("Head of empty iterator.")
+    if (i >= n) throw new NoSuchElementException("Head of empty iterator.")
+    array(i)
   }
   
   override def step() {
-    if (i < n) i += 1
-    else throw new UnsupportedOperationException("Empty iterator step.")
+    if (i >= n) throw new UnsupportedOperationException("Empty iterator step.")
+    i += 1
   }
   
   override def dup: Iterator[Double] = new DoubleArraySeqIterator(array, i, n)
 }
 
-private[containers] final class DoubleArraySeqBuilder extends Builder[Any, Double] {
+private[containers] final class DoubleArraySeqBuilder
+  extends DoubleArrayBuffer with Builder[Any, Double] {
+  
   override type State = ArraySeq[Double]
   
-  private[this] var array: Array[Double] = _
+  override def state: ArraySeq[Double] = toArraySeq
   
-  private[this] var aliased: Boolean = true
-  
-  private[this] var length: Int = 0
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    val newArray = new Array[Double](size)
-    if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
-    array = newArray
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > array.length) {
-      resize(expand(16, size))
-      aliased = false
-    }
-  }
-  
-  override def += (value: Double): this.type = {
-    prepare(length + 1)
-    array(length) = value
-    length += 1
-    this
-  }
-  
-  override def ++= (xs: Enumerator[Double]): this.type = xs match {
-    case xs: DoubleArraySeq =>
-      prepare(length + xs.length)
-      xs.copyToArray(array, length)
-      length += xs.length
-      this
-    case _ => super.++=(xs)
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (array == null || length + count > array.length) {
-      resize(length + count)
-      aliased = false
-    }
-    this
-  }
-  
-  override def state: ArraySeq[Double] = {
-    if (array == null || length != array.length) resize(length)
-    aliased = true
-    new DoubleArraySeq(array)
-  }
-  
-  override def clear() {
-    array = null
-    aliased = true
-    length = 0
-  }
+  protected override def stringPrefix: String = "ArraySeq.Builder[Double]"
 }

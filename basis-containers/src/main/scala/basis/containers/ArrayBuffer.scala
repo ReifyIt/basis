@@ -25,7 +25,7 @@ import scala.reflect.ClassTag
   * @groupprio  Converting    -2
   * @groupprio  Classifying   -1
   * 
-  * @define collection  array buffer
+  * @define collection  buffer
   */
 abstract class ArrayBuffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   extends Equals
@@ -76,6 +76,10 @@ abstract class ArrayBuffer[@specialized(Byte, Short, Int, Long, Float, Double, B
     xs
   }
   
+  /** Returns this $collection converted to an array sequence.
+    * @group Converting */
+  def toArraySeq: ArraySeq[A]
+  
   protected override def stringPrefix: String = "ArrayBuffer"
 }
 
@@ -84,6 +88,8 @@ object ArrayBuffer extends SeqFactory[ArrayBuffer] {
     : Builder[Any, A] { type State = ArrayBuffer[A] } = (A match {
     case ClassTag.Int     => new IntArrayBufferBuilder
     case ClassTag.Long    => new LongArrayBufferBuilder
+    case ClassTag.Float   => new FloatArrayBufferBuilder
+    case ClassTag.Double  => new DoubleArrayBufferBuilder
     case _                => new RefArrayBufferBuilder[A]
   }).asInstanceOf[Builder[Any, A] { type State = ArrayBuffer[A] }]
   

@@ -9,17 +9,32 @@ package basis.collections
 
 /** An element accumulator.
   * 
+  * @groupprio  Inserting   -1
+  * 
   * @define collection  accumulator
   */
 trait Accumulator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A] {
-  /** Adds a single element to this $collection.
+  /** Appends a single element to this $collection.
     * @group Inserting */
-  def += (elem: A): this.type
+  def append(elem: A): Unit
   
-  /** Adds multiple elements to this $collection.
+  /** Appends multiple elements to this $collection.
+    * @group Inserting */
+  def appendAll(elems: Enumerator[A]) {
+    traverse(elems)(new Accumulator.Append(this))
+  }
+  
+  /** Appends a single element to this $collection.
+    * @group Inserting */
+  def += (elem: A): this.type = {
+    append(elem)
+    this
+  }
+  
+  /** Appends multiple elements to this $collection.
     * @group Inserting */
   def ++= (elems: Enumerator[A]): this.type = {
-    traverse(elems)(new Accumulator.Append(this))
+    appendAll(elems)
     this
   }
 }

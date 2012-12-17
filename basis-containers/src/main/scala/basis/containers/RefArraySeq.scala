@@ -46,6 +46,8 @@ private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends Ar
   }
   
   override def iterator: Iterator[A] = new RefArraySeqIterator(array)
+  
+  protected override def stringPrefix: String = "ArraySeq"
 }
 
 private[containers] final class RefArraySeqIterator[A]

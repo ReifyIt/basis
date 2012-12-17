@@ -22,7 +22,7 @@ import scala.reflect.ClassTag
   * @groupprio  Converting    -2
   * @groupprio  Classifying   -1
   * 
-  * @define collection  array sequence
+  * @define collection  sequence
   */
 abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Equals

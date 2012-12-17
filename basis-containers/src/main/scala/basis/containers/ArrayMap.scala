@@ -190,7 +190,7 @@ private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T
   private[this] def setValue(index: Int, value: T): Unit =
     slots((index << 1) + 1) = value.asInstanceOf[AnyRef]
   
-  override def += (entry: (A, T)): this.type = {
+  override def append(entry: (A, T)) {
     val (key, value) = entry
     if (seen.contains(key)) setValue(seen(key), value)
     else {
@@ -200,7 +200,6 @@ private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T
       setValue(size, value)
       size += 1
     }
-    this
   }
   
   override def expect(count: Int): this.type = {

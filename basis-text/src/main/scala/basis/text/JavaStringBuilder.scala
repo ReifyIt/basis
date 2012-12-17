@@ -34,7 +34,7 @@ private[text] final class JavaStringBuilder extends StringBuilder[Any] {
     if (codeUnits == null || size > codeUnits.length) resize(expand(16, size))
   }
   
-  override def += (c: Int): this.type = {
+  override def append(c: Int) {
     val n = size
     if ((c >= 0x0000 && c <= 0xD7FF) ||
         (c >= 0xE000 && c <= 0xFFFF)) { // U+0000..U+D7FF | U+E000..U+FFFF
@@ -54,7 +54,6 @@ private[text] final class JavaStringBuilder extends StringBuilder[Any] {
       codeUnits(n) = 0xFFFD.toChar
       size = n + 1
     }
-    this
   }
   
   override def expect(count: Int): this.type = {

@@ -87,20 +87,18 @@ private[containers] final class ShortArraySeqBuilder extends Builder[Any, Short]
     }
   }
   
-  override def += (value: Short): this.type = {
+  override def append(value: Short) {
     prepare(length + 1)
     array(length) = value
     length += 1
-    this
   }
   
-  override def ++= (xs: Enumerator[Short]): this.type = xs match {
+  override def appendAll(xs: Enumerator[Short]): Unit = xs match {
     case xs: ShortArraySeq =>
       prepare(length + xs.length)
       xs.copyToArray(array, length)
       length += xs.length
-      this
-    case _ => super.++=(xs)
+    case _ => super.appendAll(xs)
   }
   
   override def expect(count: Int): this.type = {

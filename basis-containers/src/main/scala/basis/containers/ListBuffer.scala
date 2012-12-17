@@ -54,28 +54,27 @@ class ListBuffer[A] private (
     xs.head
   }
   
-  final override def update(index: Int, x: A) {
+  final override def update(index: Int, elem: A) {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
-    if (size == 0) first = ::(x, first.tail)
+    if (index == 0) first = ::(elem, first.tail)
     else {
       val xi = dealias(index - 1)
-      val xn = ::(x, xi.tail.tail)
+      val xn = ::(elem, xi.tail.tail)
       xi.tail = xn
       if (xn.tail.isEmpty) last = xn
     }
   }
   
-  final override def += (x: A): this.type = {
-    val xn = ::(x, Nil)
+  final override def append(elem: A) {
+    val xn = ::(elem, Nil)
     if (size == 0) first = xn
     else dealias(size - 1).tail = xn
     last = xn
     size += 1
     aliased += 1
-    this
   }
   
-  final override def ++= (elems: Enumerator[A]): this.type = {
+  final override def appendAll(elems: Enumerator[A]) {
     if (elems.isInstanceOf[Nil.type]) ()
     else if (elems.isInstanceOf[::[_]]) {
       var xs = elems.asInstanceOf[::[A]]
@@ -89,22 +88,20 @@ class ListBuffer[A] private (
       last = xs
     }
     else if (elems.isInstanceOf[ListLike[_]])
-      this ++= elems.asInstanceOf[ListLike[A]].toList
-    else super.++=(elems)
-    this
+      appendAll(elems.asInstanceOf[ListLike[A]].toList)
+    else super.appendAll(elems)
   }
   
-  final override def +=: (x: A): this.type = {
-    val x0 = ::(x, first)
+  final override def prepend(elem: A) {
+    val x0 = ::(elem, first)
     first = x0
     if (size == 0) last = x0
     size += 1
     aliased += 1
-    this
   }
   
-  final override def ++=: (elems: Enumerator[A]): this.type = {
-    if (size == 0) this ++= elems
+  final override def prependAll(elems: Enumerator[A]) {
+    if (size == 0) appendAll(elems)
     else {
       var x0 = null: List[A]
       var xi = null: ::[A]
@@ -122,27 +119,12 @@ class ListBuffer[A] private (
         if (xi.tail.isEmpty) last = xi
       }
     }
-    this
-  }
-  
-  final override def -= (elem: A): this.type = {
-    var xs = first
-    var i = 0
-    if (!xs.isEmpty) {
-      if (elem == xs.head) {
-        remove(i)
-        return this
-      }
-      xs = xs.tail
-      i += 1
-    }
-    this
   }
   
   final override def insert(index: Int, elem: A) {
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
-    if (index == size) this += elem
-    else if (index == 0) elem +=: this
+    if (index == size) append(elem)
+    else if (index == 0) prepend(elem)
     else {
       val xi = dealias(index - 1)
       xi.tail = ::(elem, xi.tail)
@@ -153,8 +135,8 @@ class ListBuffer[A] private (
   
   final override def insertAll(index: Int, elems: Enumerator[A]) {
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
-    if (index == size) this ++= elems
-    else if (index == 0) elems ++=: this
+    if (index == size) appendAll(elems)
+    else if (index == 0) prependAll(elems)
     else {
       var xi = dealias(index - 1)
       traverse(elems) { x =>
@@ -201,7 +183,7 @@ class ListBuffer[A] private (
     if (count < 0) throw new IllegalArgumentException("negative count")
     if (index < 0) throw new IndexOutOfBoundsException(index.toString)
     if (index + count > size) throw new IndexOutOfBoundsException((index + count).toString)
-    if (index == 0 && count == size) clear()
+    if (size == count) clear()
     else if (index == 0) {
       var xs = first
       var i = 0

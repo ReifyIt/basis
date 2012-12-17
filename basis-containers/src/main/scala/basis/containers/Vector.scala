@@ -290,7 +290,7 @@ private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
   
   private[this] var length: Int = 0
   
-  override def += (x: A): this.type = {
+  override def append(x: A) {
     if (length == 0) node1 = new Array[AnyRef](32)
     else {
       if ((length & 0x1FFFFFF) == 0) {
@@ -336,7 +336,6 @@ private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
     }
     node1(length & 0x1F) = x.asInstanceOf[AnyRef]
     length += 1
-    this
   }
   
   override def expect(count: Int): this.type = this

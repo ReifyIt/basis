@@ -15,7 +15,6 @@ package basis.containers
   */
 trait ListLike[+A] extends Any {
   /** Returns a list containing the elements of this $collection.
-    * @group Converting
-    */
+    * @group Converting */
   def toList: List[A]
 }

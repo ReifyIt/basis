@@ -465,10 +465,7 @@ private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)
   
   private[this] var map: HashMap[A, T] = HashMap.empty
   
-  override def += (entry: (A, T)): this.type = {
-    map += (entry._1, entry._2)
-    this
-  }
+  override def append(entry: (A, T)): Unit = map += (entry._1, entry._2)
   
   override def expect(count: Int): this.type = this
   

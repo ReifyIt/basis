@@ -79,13 +79,12 @@ private[containers] final class BitArraySeqBuilder extends Builder[Any, Boolean]
     }
   }
   
-  override def += (value: Boolean): this.type = {
+  override def append(value: Boolean) {
     prepare(length + 1)
     val mask = 1 << (31 - (length & 0x1F))
     if (value) words(length >> 5) |=  mask
     //else     words(length >> 5) &= ~mask
     length += 1
-    this
   }
   
   override def expect(count: Int): this.type = {

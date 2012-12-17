@@ -155,14 +155,13 @@ private[containers] final class ArraySetBuilder[A] extends Builder[Any, A] {
     }
   }
   
-  override def += (elem: A): this.type = {
+  override def append(elem: A) {
     if (!seen.contains(elem)) {
       seen += elem
       prepare(size + 1)
       slots(size) = elem.asInstanceOf[AnyRef]
       size += 1
     }
-    this
   }
   
   override def expect(count: Int): this.type = {

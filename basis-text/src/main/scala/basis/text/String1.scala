@@ -244,7 +244,7 @@ private[text] final class String1Builder extends StringBuilder[Any] {
     }
   }
   
-  override def += (c: Int): this.type = {
+  override def append(c: Int) {
     val n = size
     if (c >= 0x0000 && c <= 0x007F) { // U+0000..U+007F
       prepare(n + 1)
@@ -280,7 +280,6 @@ private[text] final class String1Builder extends StringBuilder[Any] {
       codeUnits(n + 2) = 0xBD.toByte
       size = n + 3
     }
-    this
   }
   
   override def expect(count: Int): this.type = {
