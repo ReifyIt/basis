@@ -137,12 +137,16 @@ object Nil extends List[Nothing] {
   
   override def tail: List[Nothing] = throw new UnsupportedOperationException("Tail of empty list.")
   
-  override def :: [B >: Nothing](elem: B): List[B] = elem match {
-    case elem: Int => new IntList(elem, this).asInstanceOf[List[B]]
-    case elem: Long => new LongList(elem, this).asInstanceOf[List[B]]
-    case elem: Float => new FloatList(elem, this).asInstanceOf[List[B]]
-    case elem: Double => new DoubleList(elem, this).asInstanceOf[List[B]]
-    case _ => new RefList(elem, this)
+  override def :: [B >: Nothing](elem: B): List[B] = {
+    if (elem.isInstanceOf[Int])
+      new IntList(elem.asInstanceOf[Int], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Long])
+      new LongList(elem.asInstanceOf[Long], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Float])
+      new FloatList(elem.asInstanceOf[Float], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Double])
+      new DoubleList(elem.asInstanceOf[Double], this).asInstanceOf[List[B]]
+    else new RefList(elem, this)
   }
 }
 

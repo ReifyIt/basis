@@ -10,6 +10,8 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.reflect.ClassTag
+
 private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends ArraySeq[A] {
   override def isEmpty: Boolean = array.length == 0
   
@@ -35,6 +37,14 @@ private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends Ar
     else super.copyToArray(xs)
   }
   
+  override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
+    val xs = B.newArray(length)
+    if (xs.isInstanceOf[Array[AnyRef]])
+      java.lang.System.arraycopy(array, 0, xs, 0, length)
+    else super.copyToArray(xs)
+    xs
+  }
+  
   override def iterator: Iterator[A] = new RefArraySeqIterator(array)
 }
 
@@ -47,79 +57,24 @@ private[containers] final class RefArraySeqIterator[A]
   override def isEmpty: Boolean = i >= n
   
   override def head: A = {
-    if (i < n) array(i).asInstanceOf[A]
-    else throw new NoSuchElementException("Head of empty iterator.")
+    if (i >= n) throw new NoSuchElementException("Head of empty iterator.")
+    array(i).asInstanceOf[A]
   }
   
   override def step() {
-    if (i < n) i += 1
-    else throw new UnsupportedOperationException("Empty iterator step.")
+    if (i >= n) throw new UnsupportedOperationException("Empty iterator step.")
+    i += 1
   }
   
   override def dup: Iterator[A] = new RefArraySeqIterator(array, i, n)
 }
 
-private[containers] final class RefArraySeqBuilder[A] extends Builder[Any, A] {
+private[containers] final class RefArraySeqBuilder[A]
+  extends RefArrayBuffer[A] with Builder[Any, A] {
+  
   override type State = ArraySeq[A]
   
-  private[this] var array: Array[AnyRef] = _
+  override def state: ArraySeq[A] = toArraySeq
   
-  private[this] var aliased: Boolean = true
-  
-  private[this] var length: Int = 0
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    val newArray = new Array[AnyRef](size)
-    if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
-    array = newArray
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > array.length) {
-      resize(expand(16, size))
-      aliased = false
-    }
-  }
-  
-  override def += (value: A): this.type = {
-    prepare(length + 1)
-    array(length) = value.asInstanceOf[AnyRef]
-    length += 1
-    this
-  }
-  
-  override def ++= (xs: Enumerator[A]): this.type = xs match {
-    case xs: RefArraySeq[A] =>
-      prepare(length + xs.length)
-      xs.copyToArray(array.asInstanceOf[Array[A]], length)
-      length += xs.length
-      this
-    case _ => super.++=(xs)
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (array == null || length + count > array.length) {
-      resize(length + count)
-      aliased = false
-    }
-    this
-  }
-  
-  override def state: ArraySeq[A] = {
-    if (array == null || length != array.length) resize(length)
-    aliased = true
-    new RefArraySeq(array)
-  }
-  
-  override def clear() {
-    array = null
-    aliased = true
-    length = 0
-  }
+  protected override def stringPrefix: String = "ArraySeq.Builder"
 }

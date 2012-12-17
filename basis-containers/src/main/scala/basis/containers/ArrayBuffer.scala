@@ -84,6 +84,7 @@ object ArrayBuffer extends SeqFactory[ArrayBuffer] {
     : Builder[Any, A] { type State = ArrayBuffer[A] } = (A match {
     case ClassTag.Int     => new IntArrayBufferBuilder
     case ClassTag.Long    => new LongArrayBufferBuilder
+    case _                => new RefArrayBufferBuilder[A]
   }).asInstanceOf[Builder[Any, A] { type State = ArrayBuffer[A] }]
   
   override def toString: String = "ArrayBuffer"

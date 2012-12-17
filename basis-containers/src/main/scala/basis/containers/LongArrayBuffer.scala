@@ -67,14 +67,13 @@ private[containers] class LongArrayBuffer private (
   
   final override def +=: (elem: Long): this.type = {
     var array = buffer
-    if (aliased || size + 1 > array.length) {
+    if (aliased || size + 1 > array.length)
       array = new Array[Long](expand(16, size + 1))
-      aliased = false
-    }
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
     array(0) = elem
     buffer = array
     size += 1
+    aliased = false
     this
   }
   
@@ -83,14 +82,13 @@ private[containers] class LongArrayBuffer private (
       val xs = elems.asInstanceOf[ArrayLike[Long]]
       val n = xs.length
       var array = buffer
-      if (aliased || size + n > array.length) {
+      if (aliased || size + n > array.length)
         array = new Array[Long](expand(16, size + n))
-        aliased = false
-      }
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
       xs.copyToArray(array, 0)
       buffer = array
       size += n
+      aliased = false
     }
     else super.++=:(elems)
     this
@@ -117,12 +115,12 @@ private[containers] class LongArrayBuffer private (
       if (aliased || size + 1 > array.length) {
         array = new Array[Long](expand(16, size + 1))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
-        aliased = false
       }
       java.lang.System.arraycopy(buffer, index, array, index + 1, size - index)
       array(index) = elem
       buffer = array
       size += 1
+      aliased = false
     }
   }
   
@@ -137,12 +135,12 @@ private[containers] class LongArrayBuffer private (
       if (aliased || size + n > array.length) {
         array = new Array[Long](expand(16, size + n))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
-        aliased = false
       }
       java.lang.System.arraycopy(buffer, index, array, index + n, size - index)
       xs.copyToArray(array, index)
       buffer = array
       size += n
+      aliased = false
     }
     else super.insertAll(index, elems)
   }
@@ -154,12 +152,12 @@ private[containers] class LongArrayBuffer private (
     if (aliased) {
       array = new Array[Long](expand(16, size - 1))
       java.lang.System.arraycopy(buffer, 0, array, 0, index)
-      aliased = false
     }
     java.lang.System.arraycopy(buffer, index + 1, array, index, size - index - 1)
     if (buffer eq array) array(size - 1) = 0L
     size -= 1
     buffer = array
+    aliased = false
     x
   }
   
@@ -171,12 +169,12 @@ private[containers] class LongArrayBuffer private (
     if (aliased) {
       array = new Array[Long](expand(16, size - count))
       java.lang.System.arraycopy(buffer, 0, array, 0, index)
-      aliased = false
     }
     java.lang.System.arraycopy(buffer, index + count, array, index, size - index - count)
     if (buffer eq array) java.util.Arrays.fill(array, size - count, size, 0L)
     size -= count
     buffer = array
+    aliased = false
   }
   
   final override def clear() {
