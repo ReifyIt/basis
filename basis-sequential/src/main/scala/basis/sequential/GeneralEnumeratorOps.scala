@@ -11,9 +11,10 @@ import basis.collections._
 
 /** General enumerator operations.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Traversing    -4
+  * @groupprio  Reducing      -3
+  * @groupprio  Querying      -2
+  * @groupprio  Transforming  -1
   */
 final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   /** Sequentially applies a function to each element of this enumerator.
@@ -170,6 +171,16 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     flow(traverse(these)(f))
     f.state
   }
+  
+  /** Returns a strict operations interface to this enumerator.
+    * @group Transforming */
+  def eagerly: StrictEnumeratorOps[A, Enumerator[A]] =
+    new StrictEnumeratorOps[A, Enumerator[A]](these)
+  
+  /** Returns a non-strict operations interface to this enumerator.
+    * @group Transforming */
+  def lazily: NonStrictEnumeratorOps[A] =
+    new NonStrictEnumeratorOps[A](these)
 }
 
 private[sequential] object GeneralEnumeratorOps {

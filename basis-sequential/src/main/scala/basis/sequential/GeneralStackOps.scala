@@ -11,11 +11,12 @@ import basis.collections._
 
 /** General linear sequence operations.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Traversing    -4
+  * @groupprio  Reducing      -3
+  * @groupprio  Querying      -2
+  * @groupprio  Transforming  -1
   */
-final class GeneralStackOps[+A] {
+final class GeneralStackOps[+A](these: Stack[A]) {
   /** Sequentially applies a function to each element of this sequence.
     * 
     * @param  f   the function to apply to each element.
@@ -132,6 +133,16 @@ final class GeneralStackOps[+A] {
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralStackOps.choose[A, B]
+  
+  /** Returns a strict operations interface for this sequence.
+    * @group Transforming */
+  def eagerly: StrictStackOps[A, Stack[A]] =
+    macro GeneralStackOps.eagerly[A]
+  
+  /** Returns a non-strict operations interface for this sequence.
+    * @group Transforming */
+  def lazily: NonStrictStackOps[A] =
+    macro GeneralStackOps.lazily[A]
 }
 
 private[sequential] object GeneralStackOps {
@@ -203,4 +214,10 @@ private[sequential] object GeneralStackOps {
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
     new StackMacros[c.type](c).choose[A, B](unApply[A](c))(q)
+  
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictStackOps[A, Stack[A]]] =
+    Strict.StrictStackOps[A](c)(unApply[A](c))
+  
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictStackOps[A]] =
+    NonStrict.NonStrictStackOps[A](c)(unApply[A](c))
 }

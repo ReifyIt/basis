@@ -11,11 +11,12 @@ import basis.collections._
 
 /** General set operations.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Traversing    -4
+  * @groupprio  Reducing      -3
+  * @groupprio  Querying      -2
+  * @groupprio  Transforming  -1
   */
-final class GeneralSetOps[+A] {
+final class GeneralSetOps[+A](these: Set[A]) {
   /** Sequentially applies a function to each element of this set.
     * 
     * @param  f   the function to apply to each element.
@@ -132,4 +133,36 @@ final class GeneralSetOps[+A] {
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralContainerOps.choose[A, B]
+  
+  /** Returns a strict operations interface to this set.
+    * @group Transforming */
+  def eagerly: StrictSetOps[A, Set[A]] =
+    macro GeneralSetOps.eagerly[A]
+  
+  /** Returns a non-strict operations interface to this set.
+    * @group Transforming */
+  def lazily: NonStrictSetOps[A] =
+    macro GeneralSetOps.lazily[A]
+}
+
+private[sequential] object GeneralSetOps {
+  import scala.collection.immutable.{::, Nil}
+  import scala.reflect.macros.Context
+  
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Set[A]] = {
+    import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val Apply(_, set :: Nil) = prefix.tree
+    val SetType =
+      appliedType(
+        mirror.staticClass("basis.collections.Set").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(set, SetType))(WeakTypeTag(SetType))
+  }
+  
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSetOps[A, Set[A]]] =
+    Strict.StrictSetOps[A](c)(unApply[A](c))
+  
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictSetOps[A]] =
+    NonStrict.NonStrictSetOps[A](c)(unApply[A](c))
 }

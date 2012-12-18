@@ -11,11 +11,12 @@ import basis.collections._
 
 /** General container operations.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Traversing    -4
+  * @groupprio  Reducing      -3
+  * @groupprio  Querying      -2
+  * @groupprio  Transforming  -1
   */
-final class GeneralContainerOps[+A] {
+final class GeneralContainerOps[+A](these: Container[A]) {
   /** Sequentially applies a function to each element of this container.
     * 
     * @param  f   the function to apply to each element.
@@ -132,6 +133,16 @@ final class GeneralContainerOps[+A] {
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralContainerOps.choose[A, B]
+  
+  /** Returns a strict operations interface to this container.
+    * @group Transforming */
+  def eagerly: StrictContainerOps[A, Container[A]] =
+    macro GeneralContainerOps.eagerly[A]
+  
+  /** Returns a non-strict operations interface to this container.
+    * @group Transforming */
+  def lazily: NonStrictContainerOps[A] =
+    macro GeneralContainerOps.lazily[A]
 }
 
 private[sequential] object GeneralContainerOps {
@@ -213,4 +224,10 @@ private[sequential] object GeneralContainerOps {
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
     new IteratorMacros[c.type](c).choose[A, B](iterator(c)(unApply[A](c)))(q)
+  
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictContainerOps[A, Container[A]]] =
+    Strict.StrictContainerOps[A](c)(unApply[A](c))
+  
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictContainerOps[A]] =
+    NonStrict.NonStrictContainerOps[A](c)(unApply[A](c))
 }

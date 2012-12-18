@@ -15,4 +15,4 @@ import basis.collections._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class StrictMapOps[+A, +T, +From]
+final class StrictMapOps[+A, +T, +From](these: Map[A, T])

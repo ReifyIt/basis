@@ -11,11 +11,12 @@ import basis.collections._
 
 /** General iterator operations.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Traversing    -4
+  * @groupprio  Reducing      -3
+  * @groupprio  Querying      -2
+  * @groupprio  Transforming  -1
   */
-final class GeneralIteratorOps[+A] {
+final class GeneralIteratorOps[+A](these: Iterator[A]) {
   /** Sequentially applies a function to each element of this iterator.
     * 
     * @param  f   the function to apply to each element.
@@ -132,6 +133,16 @@ final class GeneralIteratorOps[+A] {
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralIteratorOps.choose[A, B]
+  
+  /** Returns a strict operations interface to this iterator.
+    * @group Transforming */
+  def eagerly: StrictIteratorOps[A, Iterator[A]] =
+    macro GeneralIteratorOps.eagerly[A]
+  
+  /** Returns a non-strict operations interface to this iterator.
+    * @group Transforming */
+  def lazily: NonStrictIteratorOps[A] =
+    macro GeneralIteratorOps.lazily[A]
 }
 
 private[sequential] object GeneralIteratorOps {
@@ -203,4 +214,10 @@ private[sequential] object GeneralIteratorOps {
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
     new IteratorMacros[c.type](c).choose[A, B](unApply[A](c))(q)
+  
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictIteratorOps[A, Iterator[A]]] =
+    Strict.StrictIteratorOps[A](c)(unApply[A](c))
+  
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictIteratorOps[A]] =
+    NonStrict.NonStrictIteratorOps[A](c)(unApply[A](c))
 }

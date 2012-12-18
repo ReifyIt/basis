@@ -11,11 +11,12 @@ import basis.collections._
 
 /** General sequence operations.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Traversing    -4
+  * @groupprio  Reducing      -3
+  * @groupprio  Querying      -2
+  * @groupprio  Transforming  -1
   */
-final class GeneralSeqOps[+A] {
+final class GeneralSeqOps[+A](these: Seq[A]) {
   /** Sequentially applies a function to each element of this sequence.
     * 
     * @param  f   the function to apply to each element.
@@ -132,4 +133,36 @@ final class GeneralSeqOps[+A] {
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralContainerOps.choose[A, B]
+  
+  /** Returns a strict operations interface to this sequence.
+    * @group Transforming */
+  def eagerly: StrictSeqOps[A, Seq[A]] =
+    macro GeneralSeqOps.eagerly[A]
+  
+  /** Returns a non-strict operations interface to this sequence.
+    * @group Transforming */
+  def lazily: NonStrictSeqOps[A] =
+    macro GeneralSeqOps.lazily[A]
+}
+
+private[sequential] object GeneralSeqOps {
+  import scala.collection.immutable.{::, Nil}
+  import scala.reflect.macros.Context
+  
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Seq[A]] = {
+    import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val Apply(_, sequence :: Nil) = prefix.tree
+    val SeqType =
+      appliedType(
+        mirror.staticClass("basis.collections.Seq").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(typeCheck(sequence, SeqType))(WeakTypeTag(SeqType))
+  }
+  
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSeqOps[A, Seq[A]]] =
+    Strict.StrictSeqOps[A](c)(unApply[A](c))
+  
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictSeqOps[A]] =
+    NonStrict.NonStrictSeqOps[A](c)(unApply[A](c))
 }

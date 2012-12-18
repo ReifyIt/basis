@@ -15,7 +15,7 @@ import basis.collections._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class StrictIndexOps[+A, +From] {
+final class StrictIndexOps[+A, +From](these: Index[A]) {
   /** Returns the applications of a partial function to each element in this
     * sequence for which the function is defined.
     * 

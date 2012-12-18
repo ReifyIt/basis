@@ -15,7 +15,7 @@ import basis.collections._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class StrictSetOps[+A, +From] {
+final class StrictSetOps[+A, +From](these: Set[A]) {
   /** Returns the applications of a partial function to each element in this
     * set for which the function is defined.
     * 

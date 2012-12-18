@@ -15,7 +15,7 @@ import basis.collections._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class StrictSeqOps[+A, +From] {
+final class StrictSeqOps[+A, +From](these: Seq[A]) {
   /** Returns the applications of a partial function to each element in this
     * sequence for which the function is defined.
     * 

@@ -15,7 +15,7 @@ import basis.collections._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class StrictIteratorOps[+A, +From] {
+final class StrictIteratorOps[+A, +From](these: Iterator[A]) {
   /** Returns the applications of a partial function to each element in this
     * iterator for which the function is defined.
     * 

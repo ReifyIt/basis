@@ -15,7 +15,7 @@ import basis.collections._
   * @groupprio  Filtering   -2
   * @groupprio  Combining   -1
   */
-final class StrictContainerOps[+A, +From] {
+final class StrictContainerOps[+A, +From](these: Container[A]) {
   /** Returns the applications of a partial function to each element in this
     * container for which the function is defined.
     * 

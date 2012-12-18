@@ -11,11 +11,12 @@ import basis.collections._
 
 /** General indexed sequence operations.
   * 
-  * @groupprio  Traversing  -3
-  * @groupprio  Reducing    -2
-  * @groupprio  Querying    -1
+  * @groupprio  Traversing    -4
+  * @groupprio  Reducing      -3
+  * @groupprio  Querying      -2
+  * @groupprio  Transforming  -1
   */
-final class GeneralIndexOps[+A] {
+final class GeneralIndexOps[+A](these: Index[A]) {
   /** Sequentially applies a function to each element of this sequence.
     * 
     * @param  f   the function to apply to each element.
@@ -163,6 +164,16 @@ final class GeneralIndexOps[+A] {
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralIndexOps.choose[A, B]
+  
+  /** Returns a strict operations interface to this sequence.
+    * @group Transforming */
+  def eagerly: StrictIndexOps[A, Index[A]] =
+    macro GeneralIndexOps.eagerly[A]
+  
+  /** Returns a non-strict operations interface to this sequence.
+    * @group Transforming */
+  def lazily: NonStrictIndexOps[A] =
+    macro GeneralIndexOps.lazily[A]
 }
 
 private[sequential] object GeneralIndexOps {
@@ -253,4 +264,10 @@ private[sequential] object GeneralIndexOps {
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
     new IndexMacros[c.type](c).choose[A, B](unApply[A](c))(q)
+  
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictIndexOps[A, Index[A]]] =
+    Strict.StrictIndexOps[A](c)(unApply[A](c))
+  
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictIndexOps[A]] =
+    NonStrict.NonStrictIndexOps[A](c)(unApply[A](c))
 }
