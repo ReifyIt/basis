@@ -19,9 +19,9 @@ final class StrictSetOps[+A, +From](these: Set[A]) {
   /** Returns the applications of a partial function to each element in this
     * set for which the function is defined.
     * 
-    * @param  q         the partial function to filter and map elements.
-    * @param  builder   the implicit accumulator for mapped elements.
-    * @return the accumulated elements filtered and mapped by `q`.
+    * @param  q         the partial function to filter and transform elements.
+    * @param  builder   the implicit accumulator for collected elements.
+    * @return the accumulated elements filtered and transformed by `q`.
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State =
@@ -30,8 +30,8 @@ final class StrictSetOps[+A, +From](these: Set[A]) {
   /** Returns the applications of a function to each element in this set.
     * 
     * @param  f         the function to apply to each element.
-    * @param  builder   the implicit accumulator for mapped elements.
-    * @return the accumulated elements mapped by `f`.
+    * @param  builder   the implicit accumulator for transformed elements.
+    * @return the accumulated elements transformed by `f`.
     * @group  Mapping
     */
   def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State =
@@ -113,7 +113,7 @@ final class StrictSetOps[+A, +From](these: Set[A]) {
     * 
     * @param  upper     the length of the prefix to take; also the exclusive
     *                   upper bound for indexes of elements to keep.
-    * @param  builder   the accumulator for taken elements.
+    * @param  builder   the implicit accumulator for taken elements.
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
@@ -124,7 +124,7 @@ final class StrictSetOps[+A, +From](these: Set[A]) {
     * 
     * @param  lower     the inclusive lower bound for indexes of elements to keep.
     * @param  upper     the exclusive upper bound for indexes of elements to keep.
-    * @param  builder   the accumulator for kept elements.
+    * @param  builder   the implicit accumulator for kept elements.
     * @return the accumulated elements with indexes greater than or equal to
     *         `lower` and less than `upper`.
     * @group  Filtering
@@ -132,11 +132,11 @@ final class StrictSetOps[+A, +From](these: Set[A]) {
   def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State =
     macro StrictContainerOps.slice[A]
   
-  /** Returns the concatenation of this and another set.
+  /** Returns the concatenation of this and another collection.
     * 
     * @param  those     the elements to append to these elements.
-    * @param  builder   the accumulator for concatenated elements.
-    * @return the accumulated elements of both set.
+    * @param  builder   the implicit accumulator for concatenated elements.
+    * @return the accumulated elements of both collections.
     * @group  Combining
     */
   def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =

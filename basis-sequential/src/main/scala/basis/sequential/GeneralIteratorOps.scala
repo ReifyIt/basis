@@ -99,7 +99,7 @@ final class GeneralIteratorOps[+A](these: Iterator[A]) {
   /** Returns `true` if a predicate holds for all elements of this iterator.
     * 
     * @param  p   the predicate to test elements against.
-    * @return `true` if all elements satisfy `p`, else `false`.
+    * @return `true` if all elements satisfy `p`, otherwise `false`.
     * @group  Querying
     */
   def forall(p: A => Boolean): Boolean =
@@ -108,7 +108,7 @@ final class GeneralIteratorOps[+A](these: Iterator[A]) {
   /** Returns `true` if a predicate holds for some element of this iterator.
     * 
     * @param  p   the predicate to test elements against.
-    * @return `true` if any element satisfies `p`, else `false`.
+    * @return `true` if any element satisfies `p`, otherwise `false`.
     * @group  Querying
     */
   def exists(p: A => Boolean): Boolean =

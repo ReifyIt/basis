@@ -17,6 +17,123 @@ import basis.collections._
   * @groupprio  Transforming  -1
   */
 final class GeneralMapOps[+A, +T](these: Map[A, T]) {
+  /** Sequentially applies a function to each entry of this map.
+    * 
+    * @param  f   the function to apply to each entry.
+    * @group  Traversing
+    */
+  def foreach[U](f: ((A, T)) => U): Unit =
+    macro GeneralContainerOps.foreach[(A, T), U]
+  
+  /** Returns the repeated application of an associative binary operator
+    * between an identity entry and all entries of this map.
+    * 
+    * @param  z   the operator's identity element.
+    * @param  op  the associative binary operator to apply.
+    * @return the folded value.
+    * @group  Reducing
+    */
+  def fold[B >: (A, T)](z: B)(op: (B, B) => B): B =
+    macro GeneralContainerOps.foldLeft[(A, T), B]
+  
+  /** Returns the repeated application of an associative binary operator
+    * between all entries of this non-empty map.
+    * 
+    * @param  op  the associative binary operator to apply.
+    * @return the reduced value.
+    * @group  Reducing
+    */
+  def reduce[B >: (A, T)](op: (B, B) => B): B =
+    macro GeneralContainerOps.reduceLeft[(A, T), B]
+  
+  /** Returns the repeated application of an associative binary operator
+    * between all entries of this map.
+    * 
+    * @param  op  the associative binary operator to apply.
+    * @return some reduced value, or none if this map is empty.
+    * @group  Reducing
+    */
+  def reduceOption[B >: (A, T)](op: (B, B) => B): Option[B] =
+    macro GeneralContainerOps.reduceLeftOption[(A, T), B]
+  
+  /** Returns the left-to-right application of a binary operator between a
+    * start value and all entries of this map.
+    * 
+    * @param  z   the starting value.
+    * @param  op  the binary operator to apply right-recursively.
+    * @return the folded value.
+    * @group  Reducing
+    */
+  def foldLeft[B](z: B)(op: (B, (A, T)) => B): B =
+    macro GeneralContainerOps.foldLeft[(A, T), B]
+  
+  /** Returns the left-to-right application of a binary operator between
+    * all entries of this non-empty map.
+    * 
+    * @param  op  the binary operator to apply right-recursively.
+    * @return the reduced value.
+    * @group  Reducing
+    */
+  def reduceLeft[B >: (A, T)](op: (B, (A, T)) => B): B =
+    macro GeneralContainerOps.reduceLeft[(A, T), B]
+  
+  /** Returns the left-to-right application of a binary operator between
+    * all entries of this map.
+    * 
+    * @param  op  the binary operator to apply right-recursively.
+    * @return some reduced value, or none if this map is empty.
+    * @group  Reducing
+    */
+  def reduceLeftOption[B >: (A, T)](op: (B, (A, T)) => B): Option[B] =
+    macro GeneralContainerOps.reduceLeftOption[(A, T), B]
+  
+  /** Returns the first entry of this map that satisfies a predicate.
+    * 
+    * @param  p   the predicate to test entries against.
+    * @return some found entry, or none if no entry satisfies `p`.
+    * @group  Querying
+    */
+  def find(p: ((A, T)) => Boolean): Option[(A, T)] =
+    macro GeneralContainerOps.find[(A, T)]
+  
+  /** Returns `true` if a predicate holds for all entries of this map.
+    * 
+    * @param  p   the predicate to test entries against.
+    * @return `true` if all entries satisfy `p`, otherwise `false`.
+    * @group  Querying
+    */
+  def forall(p: ((A, T)) => Boolean): Boolean =
+    macro GeneralContainerOps.forall[(A, T)]
+  
+  /** Returns `true` if a predicate holds for some entry of this map.
+    * 
+    * @param  p   the predicate to test entries against.
+    * @return `true` if any entry satisfies `p`, otherwise `false`.
+    * @group  Querying
+    */
+  def exists(p: ((A, T)) => Boolean): Boolean =
+    macro GeneralContainerOps.exists[(A, T)]
+  
+  /** Returns the number of entries in this map that satisfy a predicate.
+    * 
+    * @param  p   the predicate to test entries against.
+    * @return the number of entries satisfying `p`.
+    * @group  Querying
+    */
+  def count(p: ((A, T)) => Boolean): Int =
+    macro GeneralContainerOps.count[(A, T)]
+  
+  /** Returns the application of a partial function to the first entry
+    * of this map for which the function is defined.
+    * 
+    * @param  q   the partial function to test entries against and to apply
+    *             to the first found entry.
+    * @return some found and mapped entry, or none if no entry applies to `q`.
+    * @group  Querying
+    */
+  def choose[B](q: PartialFunction[(A, T), B]): Option[B] =
+    macro GeneralContainerOps.choose[(A, T), B]
+  
   /** Returns a strict operations interface to this map.
     * @group Transforming */
   def eagerly: StrictMapOps[A, T, Map[A, T]] =

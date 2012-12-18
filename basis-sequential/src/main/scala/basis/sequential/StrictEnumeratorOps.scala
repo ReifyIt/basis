@@ -19,9 +19,9 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
   /** Returns the applications of a partial function to each element in this
     * enumerator for which the function is defined.
     * 
-    * @param  q         the partial function to filter and map elements.
-    * @param  builder   the implicit accumulator for mapped elements.
-    * @return the accumulated elements filtered and mapped by `q`.
+    * @param  q         the partial function to filter and transform elements.
+    * @param  builder   the implicit accumulator for collected elements.
+    * @return the accumulated elements filtered and transformed by `q`.
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State = {
@@ -32,8 +32,8 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
   /** Returns the applications of a function to each element in this enumerator.
     * 
     * @param  f         the function to apply to each element.
-    * @param  builder   the implicit accumulator for mapped elements.
-    * @return the accumulated elements mapped by `f`.
+    * @param  builder   the implicit accumulator for transformed elements.
+    * @return the accumulated elements transformed by `f`.
     * @group  Mapping
     */
   def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State = {
@@ -115,7 +115,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * 
     * @param  lower     the length of the prefix to drop; also the inclusive
     *                   lower bound for indexes of elements to keep.
-    * @param  builder   the accumulator for non-dropped elements.
+    * @param  builder   the implicit accumulator for non-dropped elements.
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
@@ -128,7 +128,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * 
     * @param  upper     the length of the prefix to take; also the exclusive
     *                   upper bound for indexes of elements to keep.
-    * @param  builder   the accumulator for taken elements.
+    * @param  builder   the implicit accumulator for taken elements.
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
@@ -141,7 +141,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * 
     * @param  lower     the inclusive lower bound for indexes of elements to keep.
     * @param  upper     the exclusive upper bound for indexes of elements to keep.
-    * @param  builder   the accumulator for kept elements.
+    * @param  builder   the implicit accumulator for kept elements.
     * @return the accumulated elements with indexes greater than or equal to
     *         `lower` and less than `upper`.
     * @group  Filtering
@@ -154,7 +154,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
   /** Returns the concatenation of this and another enumerator.
     * 
     * @param  those     the enumerator to append to these elements.
-    * @param  builder   the accumulator for concatenated elements.
+    * @param  builder   the implicit accumulator for concatenated elements.
     * @return the accumulated elements of both enumerators.
     * @group  Combining
     */
