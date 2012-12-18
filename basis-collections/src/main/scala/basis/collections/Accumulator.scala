@@ -37,6 +37,10 @@ trait Accumulator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) -
     appendAll(elems)
     this
   }
+  
+  /** Prepares this $collection to receive a certain number of elements.
+    * @group Inserting */
+  def expect(count: Int): this.type
 }
 
 private[collections] object Accumulator {

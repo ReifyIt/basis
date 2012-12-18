@@ -47,8 +47,6 @@ private[containers] final class LongArraySeq(array: Array[Long]) extends ArraySe
   }
   
   override def iterator: Iterator[Long] = new LongArraySeqIterator(array)
-  
-  protected override def stringPrefix: String = "ArraySeq[Long]"
 }
 
 private[containers] final class LongArraySeqIterator
@@ -74,10 +72,6 @@ private[containers] final class LongArraySeqIterator
 
 private[containers] final class LongArraySeqBuilder
   extends LongArrayBuffer with Builder[Any, Long] {
-  
   override type State = ArraySeq[Long]
-  
   override def state: ArraySeq[Long] = toArraySeq
-  
-  protected override def stringPrefix: String = "ArraySeq.Builder[Long]"
 }

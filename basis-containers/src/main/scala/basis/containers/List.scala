@@ -172,8 +172,6 @@ private[containers] final class IntList(
   }
   
   override def iterator: Iterator[Int] = new IntListIterator(this)
-  
-  protected override def stringPrefix: String = "List[Int]"
 }
 
 private[containers] final class LongList(
@@ -198,8 +196,6 @@ private[containers] final class LongList(
   }
   
   override def iterator: Iterator[Long] = new LongListIterator(this)
-  
-  protected override def stringPrefix: String = "List[Long]"
 }
 
 private[containers] final class FloatList(
@@ -224,8 +220,6 @@ private[containers] final class FloatList(
   }
   
   override def iterator: Iterator[Float] = new FloatListIterator(this)
-  
-  protected override def stringPrefix: String = "List[Float]"
 }
 
 private[containers] final class DoubleList(
@@ -250,8 +244,6 @@ private[containers] final class DoubleList(
   }
   
   override def iterator: Iterator[Double] = new DoubleListIterator(this)
-  
-  protected override def stringPrefix: String = "List[Double]"
 }
 
 private[containers] final class RefList[A](
@@ -341,10 +333,6 @@ private[containers] final class RefListIterator[+A](private[this] var xs: List[A
 
 private[containers] final class ListBuilder[A] extends ListBuffer[A] with Builder[Any, A] {
   override type State = List[A]
-  
-  override def expect(count: Int): this.type = this
-  
   override def state: List[A] = toList
-  
   protected override def stringPrefix: String = "List.Builder"
 }

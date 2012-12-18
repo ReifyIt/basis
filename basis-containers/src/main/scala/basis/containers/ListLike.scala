@@ -7,13 +7,15 @@
 
 package basis.containers
 
+import basis.collections._
+
 /** A list-convertible collection.
   * 
   * @groupprio  Converting  -1
   * 
   * @define collection  collection
   */
-trait ListLike[+A] extends Any {
+trait ListLike[+A] extends Any { this: Enumerator[A] =>
   /** Returns a list containing the elements of this $collection.
     * @group Converting */
   def toList: List[A]

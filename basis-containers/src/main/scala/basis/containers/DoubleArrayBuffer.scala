@@ -37,7 +37,7 @@ private[containers] class DoubleArrayBuffer private (
   final override def append(elem: Double) {
     var array = buffer
     if (aliased || size + 1 > array.length) {
-      array = new Array[Double](expand(16, size + 1))
+      array = new Array[Double](expand(size + 1))
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
       aliased = false
@@ -52,7 +52,7 @@ private[containers] class DoubleArrayBuffer private (
       val n = xs.length
       var array = buffer
       if (aliased || size + n > array.length) {
-        array = new Array[Double](expand(16, size + n))
+        array = new Array[Double](expand(size + n))
         if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
         buffer = array
         aliased = false
@@ -66,7 +66,7 @@ private[containers] class DoubleArrayBuffer private (
   final override def prepend(elem: Double) {
     var array = buffer
     if (aliased || size + 1 > array.length)
-      array = new Array[Double](expand(16, size + 1))
+      array = new Array[Double](expand(size + 1))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
     array(0) = elem
     buffer = array
@@ -80,7 +80,7 @@ private[containers] class DoubleArrayBuffer private (
       val n = xs.length
       var array = buffer
       if (aliased || size + n > array.length)
-        array = new Array[Double](expand(16, size + n))
+        array = new Array[Double](expand(size + n))
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
       xs.copyToArray(array, 0)
       buffer = array
@@ -97,7 +97,7 @@ private[containers] class DoubleArrayBuffer private (
     else {
       var array = buffer
       if (aliased || size + 1 > array.length) {
-        array = new Array[Double](expand(16, size + 1))
+        array = new Array[Double](expand(size + 1))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index, array, index + 1, size - index)
@@ -117,7 +117,7 @@ private[containers] class DoubleArrayBuffer private (
       val n = xs.length
       var array = buffer
       if (aliased || size + n > array.length) {
-        array = new Array[Double](expand(16, size + n))
+        array = new Array[Double](expand(size + n))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index, array, index + n, size - index)
@@ -136,7 +136,7 @@ private[containers] class DoubleArrayBuffer private (
     if (size == 1) clear()
     else {
       if (aliased) {
-        array = new Array[Double](expand(16, size - 1))
+        array = new Array[Double](expand(size - 1))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index + 1, array, index, size - index - 1)
@@ -156,7 +156,7 @@ private[containers] class DoubleArrayBuffer private (
     else {
       var array = buffer
       if (aliased) {
-        array = new Array[Double](expand(16, size - count))
+        array = new Array[Double](expand(size - count))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index + count, array, index, size - index - count)
@@ -201,7 +201,7 @@ private[containers] class DoubleArrayBuffer private (
   }
   
   final override def toArraySeq: ArraySeq[Double] = {
-    if (buffer == null || buffer.length != size) {
+    if (buffer == null || size != buffer.length) {
       var array = new Array[Double](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
@@ -215,7 +215,7 @@ private[containers] class DoubleArrayBuffer private (
     new DoubleArrayBuffer(buffer, size, aliased)
   }
   
-  final def expect(count: Int): this.type = {
+  override def expect(count: Int): this.type = {
     if (buffer == null || size + count > buffer.length) {
       var array = new Array[Double](size + count)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -224,12 +224,12 @@ private[containers] class DoubleArrayBuffer private (
     this
   }
   
+  protected def defaultSize: Int = 16
+  
   final override def iterator: Iterator[Double] = new DoubleArrayBufferIterator(this)
   
-  protected override def stringPrefix: String = "ArrayBuffer[Double]"
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
+  private[this] def expand(size: Int): Int = {
+    var n = (defaultSize max size) - 1
     n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
     n + 1
   }
@@ -263,10 +263,6 @@ private[containers] final class DoubleArrayBufferIterator private (
 
 private[containers] final class DoubleArrayBufferBuilder
   extends DoubleArrayBuffer with Builder[Any, Double] {
-  
   override type State = ArrayBuffer[Double]
-  
   override def state: ArrayBuffer[Double] = copy
-  
-  protected override def stringPrefix: String = "ArrayBuffer.Builder[Double]"
 }

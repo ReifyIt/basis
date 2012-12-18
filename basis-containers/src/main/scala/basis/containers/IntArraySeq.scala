@@ -47,8 +47,6 @@ private[containers] final class IntArraySeq(array: Array[Int]) extends ArraySeq[
   }
   
   override def iterator: Iterator[Int] = new IntArraySeqIterator(array)
-  
-  protected override def stringPrefix: String = "ArraySeq[Int]"
 }
 
 private[containers] final class IntArraySeqIterator
@@ -74,10 +72,6 @@ private[containers] final class IntArraySeqIterator
 
 private[containers] final class IntArraySeqBuilder
   extends IntArrayBuffer with Builder[Any, Int] {
-  
   override type State = ArraySeq[Int]
-  
   override def state: ArraySeq[Int] = toArraySeq
-  
-  protected override def stringPrefix: String = "ArraySeq.Builder[Int]"
 }

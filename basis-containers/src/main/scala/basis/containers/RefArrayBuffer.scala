@@ -37,7 +37,7 @@ private[containers] class RefArrayBuffer[A] private (
   final override def append(elem: A) {
     var array = buffer
     if (aliased || size + 1 > array.length) {
-      array = new Array[AnyRef](expand(16, size + 1))
+      array = new Array[AnyRef](expand(size + 1))
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
       aliased = false
@@ -52,7 +52,7 @@ private[containers] class RefArrayBuffer[A] private (
       val n = xs.length
       var array = buffer
       if (aliased || size + n > array.length) {
-        array = new Array[AnyRef](expand(16, size + n))
+        array = new Array[AnyRef](expand(size + n))
         if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
         buffer = array
         aliased = false
@@ -66,7 +66,7 @@ private[containers] class RefArrayBuffer[A] private (
   final override def prepend(elem: A) {
     var array = buffer
     if (aliased || size + 1 > array.length)
-      array = new Array[AnyRef](expand(16, size + 1))
+      array = new Array[AnyRef](expand(size + 1))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
     array(0) = elem.asInstanceOf[AnyRef]
     buffer = array
@@ -80,7 +80,7 @@ private[containers] class RefArrayBuffer[A] private (
       val n = xs.length
       var array = buffer
       if (aliased || size + n > array.length)
-        array = new Array[AnyRef](expand(16, size + n))
+        array = new Array[AnyRef](expand(size + n))
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
       xs.copyToArray(array.asInstanceOf[Array[Any]], 0)
       buffer = array
@@ -97,7 +97,7 @@ private[containers] class RefArrayBuffer[A] private (
     else {
       var array = buffer
       if (aliased || size + 1 > array.length) {
-        array = new Array[AnyRef](expand(16, size + 1))
+        array = new Array[AnyRef](expand(size + 1))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index, array, index + 1, size - index)
@@ -117,7 +117,7 @@ private[containers] class RefArrayBuffer[A] private (
       val n = xs.length
       var array = buffer
       if (aliased || size + n > array.length) {
-        array = new Array[AnyRef](expand(16, size + n))
+        array = new Array[AnyRef](expand(size + n))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index, array, index + n, size - index)
@@ -136,7 +136,7 @@ private[containers] class RefArrayBuffer[A] private (
     if (size == 1) clear()
     else {
       if (aliased) {
-        array = new Array[AnyRef](expand(16, size - 1))
+        array = new Array[AnyRef](expand(size - 1))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index + 1, array, index, size - index - 1)
@@ -156,7 +156,7 @@ private[containers] class RefArrayBuffer[A] private (
     else {
       var array = buffer
       if (aliased) {
-        array = new Array[AnyRef](expand(16, size - count))
+        array = new Array[AnyRef](expand(size - count))
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index + count, array, index, size - index - count)
@@ -200,7 +200,7 @@ private[containers] class RefArrayBuffer[A] private (
   }
   
   final override def toArraySeq: ArraySeq[A] = {
-    if (buffer == null || buffer.length != size) {
+    if (buffer == null || size != buffer.length) {
       var array = new Array[AnyRef](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
@@ -214,7 +214,7 @@ private[containers] class RefArrayBuffer[A] private (
     new RefArrayBuffer(buffer, size, aliased)
   }
   
-  final def expect(count: Int): this.type = {
+  override def expect(count: Int): this.type = {
     if (buffer == null || size + count > buffer.length) {
       var array = new Array[AnyRef](size + count)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -223,12 +223,12 @@ private[containers] class RefArrayBuffer[A] private (
     this
   }
   
+  protected def defaultSize: Int = 16
+  
   final override def iterator: Iterator[A] = new RefArrayBufferIterator(this)
   
-  protected override def stringPrefix: String = "ArrayBuffer"
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
+  private[this] def expand(size: Int): Int = {
+    var n = (defaultSize max size) - 1
     n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
     n + 1
   }
@@ -262,10 +262,6 @@ private[containers] final class RefArrayBufferIterator[+A] private (
 
 private[containers] final class RefArrayBufferBuilder[A]
   extends RefArrayBuffer[A] with Builder[Any, A] {
-  
   override type State = ArrayBuffer[A]
-  
   override def state: ArrayBuffer[A] = copy
-  
-  protected override def stringPrefix: String = "ArrayBuffer.Builder"
 }

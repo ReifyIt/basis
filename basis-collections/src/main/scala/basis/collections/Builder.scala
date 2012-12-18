@@ -20,15 +20,11 @@ trait Builder[-From, -A] extends Accumulator[A] {
     * @group Examining */
   type State
   
-  /** Resets this $collection to its initial state.
-    * @group Removing */
-  def clear(): Unit
-  
-  /** Prepares this $collection to receive a certain number of elements.
-    * @group Inserting */
-  def expect(count: Int): this.type
-  
   /** Returns the current state of this $collection.
     * @group Examining */
   def state: State
+  
+  /** Removes all elements from this $collection.
+    * @group Removing */
+  def clear(): Unit
 }

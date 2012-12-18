@@ -7,6 +7,8 @@
 
 package basis.containers
 
+import basis.collections._
+
 import scala.reflect.ClassTag
 
 /** An array-convertible collection.
@@ -16,7 +18,7 @@ import scala.reflect.ClassTag
   * 
   * @define collection  collection
   */
-trait ArrayLike[+A] extends Any {
+trait ArrayLike[+A] extends Any { this: Enumerator[A] =>
   /** Returns the number of elements in this $collection.
     * @group Examining */
   def length: Int

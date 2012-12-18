@@ -225,6 +225,8 @@ class ListBuffer[A] private (
     new ListBuffer(first, last, size, aliased)
   }
   
+  override def expect(count: Int): this.type = this
+  
   final override def iterator: Iterator[A] = new ListBufferIterator(first)
   
   protected final override def foreach[U](f: A => U) {
@@ -315,12 +317,6 @@ private[containers] final class ListBufferIterator[+A] private (
 
 private[containers] final class ListBufferBuilder[A]
   extends ListBuffer[A] with Builder[Any, A] {
-  
   override type State = ListBuffer[A]
-  
-  override def expect(count: Int): this.type = this
-  
   override def state: ListBuffer[A] = copy
-  
-  protected override def stringPrefix: String = "ListBuffer.Builder"
 }

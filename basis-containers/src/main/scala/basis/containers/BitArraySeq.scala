@@ -17,8 +17,7 @@ private[containers] final class BitArraySeq
   override def isEmpty: Boolean = length == 0
   
   override def apply(index: Int): Boolean = {
-    if (index < 0 || index >= length)
-      throw new IndexOutOfBoundsException(index.toString)
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     ((words(index >> 5) >>> (31 - (index & 0x1F))) & 1) == 1
   }
   
@@ -34,13 +33,13 @@ private[containers] final class BitArraySeqIterator
   override def isEmpty: Boolean = i >= n
   
   override def head: Boolean = {
-    if (i < n) ((words(i >> 5) >>> (31 - (i & 0x1F))) & 1) == 1
-    else throw new NoSuchElementException("Head of empty iterator.")
+    if (i >= n) throw new NoSuchElementException("Head of empty iterator.")
+    ((words(i >> 5) >>> (31 - (i & 0x1F))) & 1) == 1
   }
   
   override def step() {
-    if (i < n) i += 1
-    else throw new UnsupportedOperationException("Empty iterator step.")
+    if (i >= n) throw new UnsupportedOperationException("Empty iterator step.")
+    i += 1
   }
   
   override def dup: Iterator[Boolean] = new BitArraySeqIterator(words, i, n)

@@ -86,6 +86,8 @@ abstract class ArrayBuffer[@specialized(Byte, Short, Int, Long, Float, Double, B
 object ArrayBuffer extends SeqFactory[ArrayBuffer] {
   implicit override def Builder[A](implicit A: ClassTag[A])
     : Builder[Any, A] { type State = ArrayBuffer[A] } = (A match {
+    case ClassTag.Byte    => new ByteArrayBufferBuilder
+    case ClassTag.Short   => new ShortArrayBufferBuilder
     case ClassTag.Int     => new IntArrayBufferBuilder
     case ClassTag.Long    => new LongArrayBufferBuilder
     case ClassTag.Float   => new FloatArrayBufferBuilder

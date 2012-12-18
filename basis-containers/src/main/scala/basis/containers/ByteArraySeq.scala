@@ -10,6 +10,8 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.reflect.ClassTag
+
 private[containers] final class ByteArraySeq(array: Array[Byte]) extends ArraySeq[Byte] {
   override def isEmpty: Boolean = array.length == 0
   
@@ -35,6 +37,15 @@ private[containers] final class ByteArraySeq(array: Array[Byte]) extends ArraySe
     else super.copyToArray(xs)
   }
   
+  override def toArray[B >: Byte](implicit B: ClassTag[B]): Array[B] = {
+    if (B == ClassTag.Byte) {
+      val xs = new Array[Byte](length)
+      java.lang.System.arraycopy(array, 0, xs, 0, length)
+      xs.asInstanceOf[Array[B]]
+    }
+    else super.toArray[B]
+  }
+  
   override def iterator: Iterator[Byte] = new ByteArraySeqIterator(array)
 }
 
@@ -47,77 +58,20 @@ private[containers] final class ByteArraySeqIterator
   override def isEmpty: Boolean = i >= n
   
   override def head: Byte = {
-    if (i < n) array(i)
-    else throw new NoSuchElementException("Head of empty iterator.")
+    if (i >= n) throw new NoSuchElementException("Head of empty iterator.")
+    array(i)
   }
   
   override def step() {
-    if (i < n) i += 1
-    else throw new UnsupportedOperationException("Empty iterator step.")
+    if (i >= n) throw new UnsupportedOperationException("Empty iterator step.")
+    i += 1
   }
   
   override def dup: Iterator[Byte] = new ByteArraySeqIterator(array, i, n)
 }
 
-private[containers] final class ByteArraySeqBuilder extends Builder[Any, Byte] {
+private[containers] final class ByteArraySeqBuilder
+  extends ByteArrayBuffer with Builder[Any, Byte] {
   override type State = ArraySeq[Byte]
-  
-  private[this] var array: Array[Byte] = _
-  
-  private[this] var aliased: Boolean = true
-  
-  private[this] var length: Int = 0
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    val newArray = new Array[Byte](size)
-    if (array != null) java.lang.System.arraycopy(array, 0, newArray, 0, array.length min size)
-    array = newArray
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > array.length) {
-      resize(expand(16, size))
-      aliased = false
-    }
-  }
-  
-  override def append(value: Byte) {
-    prepare(length + 1)
-    array(length) = value
-    length += 1
-  }
-  
-  override def appendAll(xs: Enumerator[Byte]): Unit = xs match {
-    case xs: ByteArraySeq =>
-      prepare(length + xs.length)
-      xs.copyToArray(array, length)
-      length += xs.length
-    case _ => super.appendAll(xs)
-  }
-  
-  override def expect(count: Int): this.type = {
-    if (array == null || length + count > array.length) {
-      resize(length + count)
-      aliased = false
-    }
-    this
-  }
-  
-  override def state: ArraySeq[Byte] = {
-    if (array == null || length != array.length) resize(length)
-    aliased = true
-    new ByteArraySeq(array)
-  }
-  
-  override def clear() {
-    array = null
-    aliased = true
-    length = 0
-  }
+  override def state: ArraySeq[Byte] = toArraySeq
 }

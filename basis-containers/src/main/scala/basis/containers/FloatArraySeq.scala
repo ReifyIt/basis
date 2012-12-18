@@ -47,8 +47,6 @@ private[containers] final class FloatArraySeq(array: Array[Float]) extends Array
   }
   
   override def iterator: Iterator[Float] = new FloatArraySeqIterator(array)
-  
-  protected override def stringPrefix: String = "ArraySeq[Float]"
 }
 
 private[containers] final class FloatArraySeqIterator
@@ -74,10 +72,6 @@ private[containers] final class FloatArraySeqIterator
 
 private[containers] final class FloatArraySeqBuilder
   extends FloatArrayBuffer with Builder[Any, Float] {
-  
   override type State = ArraySeq[Float]
-  
   override def state: ArraySeq[Float] = toArraySeq
-  
-  protected override def stringPrefix: String = "ArraySeq.Builder[Float]"
 }

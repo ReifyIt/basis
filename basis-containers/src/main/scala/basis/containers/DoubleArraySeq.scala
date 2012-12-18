@@ -47,8 +47,6 @@ private[containers] final class DoubleArraySeq(array: Array[Double]) extends Arr
   }
   
   override def iterator: Iterator[Double] = new DoubleArraySeqIterator(array)
-  
-  protected override def stringPrefix: String = "ArraySeq[Double]"
 }
 
 private[containers] final class DoubleArraySeqIterator
@@ -74,10 +72,6 @@ private[containers] final class DoubleArraySeqIterator
 
 private[containers] final class DoubleArraySeqBuilder
   extends DoubleArrayBuffer with Builder[Any, Double] {
-  
   override type State = ArraySeq[Double]
-  
   override def state: ArraySeq[Double] = toArraySeq
-  
-  protected override def stringPrefix: String = "ArraySeq.Builder[Double]"
 }
