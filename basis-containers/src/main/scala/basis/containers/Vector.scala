@@ -9,6 +9,8 @@ package basis.containers
 
 import basis.collections._
 
+import scala.reflect.ClassTag
+
 sealed abstract class Vector[+A] extends Equals with Family[Vector[A]] with Index[A] {
   protected override def stringPrefix: String = "Vector"
 }
@@ -141,8 +143,6 @@ private[containers] final class Vector6[+A](
 }
 
 object Vector extends SeqFactory[Vector] {
-  import scala.reflect.ClassTag
-  
   val empty: Vector[Nothing] = new Vector0
   
   implicit override def Builder[A : ClassTag]
@@ -257,21 +257,19 @@ private[containers] final class VectorIterator[+A](
   override def isEmpty: Boolean = index >= length
   
   override def head: A = {
-    if (index < length) node1(index & 0x1F).asInstanceOf[A]
-    else throw new NoSuchElementException("Head of empty iterator.")
+    if (index >= length) throw new NoSuchElementException("Head of empty iterator.")
+    node1(index & 0x1F).asInstanceOf[A]
   }
   
   override def step() {
-    if (index < length) {
-      val diff = index ^ index + 1
-      index += 1
-      if (diff >= (1 << 25)) node5 = node6(index >>> 25 & 0x1F)
-      if (diff >= (1 << 20)) node4 = node5(index >>> 20 & 0x1F)
-      if (diff >= (1 << 15)) node3 = node4(index >>> 15 & 0x1F)
-      if (diff >= (1 << 10)) node2 = node3(index >>> 10 & 0x1F)
-      if (diff >= (1 <<  5)) node1 = node2(index >>>  5 & 0x1F)
-    }
-    else throw new UnsupportedOperationException("Empty iterator step.")
+    if (index >= length) throw new UnsupportedOperationException("Empty iterator step.")
+    val diff = index ^ index + 1
+    index += 1
+    if (diff >= (1 << 25)) node5 = node6(index >>> 25 & 0x1F)
+    if (diff >= (1 << 20)) node4 = node5(index >>> 20 & 0x1F)
+    if (diff >= (1 << 15)) node3 = node4(index >>> 15 & 0x1F)
+    if (diff >= (1 << 10)) node2 = node3(index >>> 10 & 0x1F)
+    if (diff >= (1 <<  5)) node1 = node2(index >>>  5 & 0x1F)
   }
   
   override def dup: Iterator[A] =

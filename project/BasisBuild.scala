@@ -20,7 +20,7 @@ object BasisBuild extends Build {
       Seq(BasisCollections,
           BasisContainers,
           BasisControl,
-          BasisGenerative,
+          BasisGenerators,
           BasisMath,
           BasisMemory,
           BasisSequential,
@@ -30,7 +30,7 @@ object BasisBuild extends Build {
       Seq(BasisCollections,
           BasisContainers,
           BasisControl,
-          BasisGenerative,
+          BasisGenerators,
           BasisMath,
           BasisMemory,
           BasisSequential,
@@ -61,9 +61,9 @@ object BasisBuild extends Build {
     settings     = commonSettings
   )
   
-  lazy val BasisGenerative = Project(
-    id           = "basis-generative",
-    base         = file("basis-generative"),
+  lazy val BasisGenerators = Project(
+    id           = "basis-generators",
+    base         = file("basis-generators"),
     settings     = commonSettings,
     dependencies = Seq(BasisUtil)
   )

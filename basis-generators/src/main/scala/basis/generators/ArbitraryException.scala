@@ -5,6 +5,6 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.generative
+package basis.generators
 
 class ArbitraryException(message: String) extends RuntimeException(message)
