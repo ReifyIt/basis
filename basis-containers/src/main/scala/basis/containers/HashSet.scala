@@ -380,13 +380,19 @@ private[containers] final class HashSetIterator[+A](
 private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
   override type State = HashSet[A]
   
-  private[this] var set: HashSet[A] = HashSet.empty
+  private[this] var these: HashSet[A] = HashSet.empty
   
-  override def append(elem: A): Unit = set += elem
+  override def append(elem: A): Unit = these += elem
+  
+  override def appendAll(elems: Enumerator[A]) {
+    if (these.isEmpty && elems.isInstanceOf[HashSet[_]])
+      these = elems.asInstanceOf[HashSet[A]]
+    else super.appendAll(elems)
+  }
   
   override def expect(count: Int): this.type = this
   
-  override def state: HashSet[A] = set
+  override def state: HashSet[A] = these
   
-  override def clear(): Unit = set = HashSet.empty
+  override def clear(): Unit = these = HashSet.empty
 }

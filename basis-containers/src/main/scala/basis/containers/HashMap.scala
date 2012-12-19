@@ -463,13 +463,19 @@ private[containers] final class HashMapIterator[+A, +T](
 private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)] {
   override type State = HashMap[A, T]
   
-  private[this] var map: HashMap[A, T] = HashMap.empty
+  private[this] var these: HashMap[A, T] = HashMap.empty
   
-  override def append(entry: (A, T)): Unit = map += (entry._1, entry._2)
+  override def append(entry: (A, T)): Unit = these += (entry._1, entry._2)
+  
+  override def appendAll(elems: Enumerator[(A, T)]) {
+    if (these.isEmpty && elems.isInstanceOf[HashMap[_, _]])
+      these = elems.asInstanceOf[HashMap[A, T]]
+    else super.appendAll(elems)
+  }
   
   override def expect(count: Int): this.type = this
   
-  override def state: HashMap[A, T] = map
+  override def state: HashMap[A, T] = these
   
-  override def clear(): Unit = map = HashMap.empty
+  override def clear(): Unit = these = HashMap.empty
 }
