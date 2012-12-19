@@ -26,7 +26,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) :: Nil,
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) :: Nil,
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -48,7 +48,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -71,7 +71,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         If(
           Select(Ident(xs), "isEmpty"),
           Throw(
@@ -102,7 +102,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) :: Nil,
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) :: Nil,
         If(
           Select(Ident(xs), "isEmpty"),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None"),
@@ -133,7 +133,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[A].tpe),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
         LabelDef(loop, Nil,
@@ -165,7 +165,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
         LabelDef(loop, Nil,
           If(
@@ -190,7 +190,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
         LabelDef(loop, Nil,
           If(
@@ -215,7 +215,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
         LabelDef(loop, Nil,
           If(
@@ -242,7 +242,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[B].tpe),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
         LabelDef(loop, Nil,
@@ -276,7 +276,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -304,7 +304,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -328,7 +328,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -353,7 +353,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -383,7 +383,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
@@ -419,7 +419,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -451,7 +451,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(NoMods, a, TypeTree(BuilderType(builder1)), builder1.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder2)), builder2.tree) ::
         LabelDef(loop1, Nil,
@@ -494,7 +494,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), lower.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
@@ -533,7 +533,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), upper.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
@@ -566,7 +566,7 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(Modifiers(Flag.MUTABLE), n, TypeTree(), lower.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
@@ -608,8 +608,8 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(StackType[A]), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(StackType[B]), those.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(FamilyType(those)), those.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -631,8 +631,14 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     } (StateTag(builder))
   }
   
-  private def StackType[A : WeakTypeTag]: Type =
-    appliedType(mirror.staticClass("basis.collections.Stack").toType, weakTypeOf[A] :: Nil)
+  private def FamilyType(these: Expr[Family[_]]): Type = {
+    val TheseType = these.tree.symbol match {
+      case symbol: TermSymbol if symbol.isStable => singleType(NoPrefix, symbol)
+      case _ => these.actualType
+    }
+    val FamilySymbol = mirror.staticClass("basis.collections.Family").toType.member(newTypeName("Family"))
+    typeRef(TheseType, FamilySymbol, Nil)
+  }
   
   private def BuilderType(builder: Expr[Builder[_, _]]): Type = builder.tree.symbol match {
     case symbol: TermSymbol if symbol.isStable => singleType(NoPrefix, symbol)

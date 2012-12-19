@@ -21,7 +21,7 @@ trait Stack[+A] extends Any with Family[Stack[A]] with Seq[A] {
   
   /** Returns all elements except the first of this non-empty $collection.
     * @group Examining */
-  def tail: Stack[A]
+  def tail: Family
   
   override def length: Int = {
     var xs = this
