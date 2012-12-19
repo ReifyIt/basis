@@ -12,6 +12,7 @@ import basis.util._
 
 import scala.annotation.{switch, tailrec}
 import scala.annotation.unchecked.uncheckedVariance
+import scala.reflect.ClassTag
 
 final class HashSet[+A] private[containers] (
     private[containers] val treeMap: Int,
@@ -237,13 +238,12 @@ final class HashSet[+A] private[containers] (
 }
 
 object HashSet extends SetFactory[HashSet] {
-  import scala.reflect.ClassTag
-  
-  val empty: HashSet[Nothing] = new HashSet(0, 0, new Array[AnyRef](0))
-  
   implicit override def Builder[A : ClassTag]
     : Builder[Any, A] { type State = HashSet[A] } =
     new HashSetBuilder
+  
+  private[this] val empty = new HashSet[Nothing](0, 0, new Array[AnyRef](0))
+  override def empty[A : ClassTag]: HashSet[A] = empty
   
   override def toString: String = "HashSet"
   

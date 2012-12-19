@@ -20,10 +20,7 @@ package basis.collections
   * @define collection  buffer
   */
 trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
-  extends Equals
-    with Family[Buffer[A]]
-    with Seq[A]
-    with Accumulator[A] {
+  extends Equals with Family[Buffer[A]] with Seq[A] with Accumulator[A] {
   
   /** Returns the element at the given index.
     * @group Examining */

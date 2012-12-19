@@ -80,15 +80,20 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
 }
 
 object ArraySet extends SetFactory[ArraySet] {
-  val empty: ArraySet[Nothing] = new ArraySet(new Array[AnyRef](0))
+  implicit override def Builder[A : ClassTag]
+    : Builder[Any, A] { type State = ArraySet[A] } =
+    new ArraySetBuilder
   
-  def apply[A](elem: A): ArraySet[A] = {
+  private[this] val empty = new ArraySet[Nothing](new Array[AnyRef](0))
+  override def empty[A : ClassTag]: ArraySet[A] = empty
+  
+  private[containers] def apply[A](elem: A): ArraySet[A] = {
     val slots = new Array[AnyRef](1)
     slots(0) = elem.asInstanceOf[AnyRef]
     new ArraySet(slots)
   }
   
-  def apply[A](elem0: A, elem1: A): ArraySet[A] = {
+  private[containers] def apply[A](elem0: A, elem1: A): ArraySet[A] = {
     if (elem0 == elem1) apply(elem0)
     else {
       val slots = new Array[AnyRef](2)
@@ -97,10 +102,6 @@ object ArraySet extends SetFactory[ArraySet] {
       new ArraySet(slots)
     }
   }
-  
-  implicit override def Builder[A : ClassTag]
-    : Builder[Any, A] { type State = ArraySet[A] } =
-    new ArraySetBuilder
   
   override def toString: String = "ArraySet"
 }

@@ -143,11 +143,12 @@ private[containers] final class Vector6[+A](
 }
 
 object Vector extends SeqFactory[Vector] {
-  val empty: Vector[Nothing] = new Vector0
-  
   implicit override def Builder[A : ClassTag]
     : Builder[Any, A] { type State = Vector[A] } =
     new VectorBuilder
+  
+  private[this] val empty = new Vector0
+  override def empty[A : ClassTag]: Vector[A] = empty
   
   private[containers] def foreach1[A, U](array: Array[AnyRef])(f: A => U) {
     var i = 0

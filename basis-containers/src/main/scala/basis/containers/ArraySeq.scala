@@ -25,10 +25,7 @@ import scala.reflect.ClassTag
   * @define collection  sequence
   */
 abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Equals
-    with Family[ArraySeq[A]]
-    with Index[A]
-    with ArrayLike[A] {
+  extends Equals with Family[ArraySeq[A]] with Index[A] with ArrayLike[A] {
   
   override def length: Int
   

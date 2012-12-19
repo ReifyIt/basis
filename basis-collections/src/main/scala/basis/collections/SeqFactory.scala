@@ -9,7 +9,7 @@ package basis.collections
 
 import scala.reflect.ClassTag
 
-trait SeqFactory[CC[_]] extends BuilderFactory[CC] {
+trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {
   def fill[A](count: Int)(elem: => A): CC[A] =
     macro SeqFactory.fill[CC, A]
   

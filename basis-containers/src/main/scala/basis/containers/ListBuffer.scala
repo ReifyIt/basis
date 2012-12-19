@@ -32,10 +32,7 @@ class ListBuffer[A] private (
     private[this] var last: ::[A],
     private[this] var size: Int,
     private[this] var aliased: Int)
-  extends Equals
-    with Family[ListBuffer[A]]
-    with Buffer[A]
-    with ListLike[A] {
+  extends Equals with Family[ListBuffer[A]] with Buffer[A] with ListLike[A] {
   
   def this() = this(Nil, null, 0, 0)
   
@@ -277,6 +274,8 @@ object ListBuffer extends SeqFactory[ListBuffer] {
   implicit override def Builder[A : ClassTag]
     : Builder[Any, A] { type State = ListBuffer[A] } =
     new ListBufferBuilder
+  
+  override def empty[A : ClassTag]: ListBuffer[A] = new ListBuffer
   
   override def toString: String = "ListBuffer"
 }

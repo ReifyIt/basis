@@ -107,16 +107,21 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
 }
 
 object ArrayMap extends MapFactory[ArrayMap] {
-  val empty: ArrayMap[Nothing, Nothing] = new ArrayMap(new Array[AnyRef](0))
+  implicit override def Builder[A : ClassTag, T : ClassTag]
+    : Builder[Any, (A, T)] { type State = ArrayMap[A, T] } =
+    new ArrayMapBuilder
   
-  def apply[A, T](key: A, value: T): ArrayMap[A, T] = {
+  private[this] val empty = new ArrayMap[Nothing, Nothing](new Array[AnyRef](0))
+  override def empty[A : ClassTag, T : ClassTag]: ArrayMap[A, T] = empty
+  
+  private[containers] def apply[A, T](key: A, value: T): ArrayMap[A, T] = {
     val slots = new Array[AnyRef](2)
     slots(0) = key.asInstanceOf[AnyRef]
     slots(1) = value.asInstanceOf[AnyRef]
     new ArrayMap(slots)
   }
   
-  def apply[A, T](key0: A, value0: T, key1: A, value1: T): ArrayMap[A, T] = {
+  private[containers] def apply[A, T](key0: A, value0: T, key1: A, value1: T): ArrayMap[A, T] = {
     val slots = new Array[AnyRef](4)
     slots(0) = key0.asInstanceOf[AnyRef]
     slots(1) = value0.asInstanceOf[AnyRef]
@@ -124,10 +129,6 @@ object ArrayMap extends MapFactory[ArrayMap] {
     slots(3) = value1.asInstanceOf[AnyRef]
     new ArrayMap(slots)
   }
-  
-  implicit override def Builder[A : ClassTag, T : ClassTag]
-    : Builder[Any, (A, T)] { type State = ArrayMap[A, T] } =
-    new ArrayMapBuilder
   
   override def toString: String = "ArrayMap"
 }

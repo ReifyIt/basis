@@ -7,13 +7,21 @@
 
 package basis.collections
 
+import scala.annotation.unchecked.uncheckedVariance
 import scala.reflect.ClassTag
 
-trait MapFactory[CC[_, _]] {
+trait MapFactory[+CC[_, _]] {
+  type Product[A, T] = CC[A, T]
+  
   implicit def Builder[A, T]
       (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],
                 T: ClassTag[T] = ClassTag.Any.asInstanceOf[ClassTag[T]])
-    : Builder[Any, (A, T)] { type State = CC[A, T] }
+    : Builder[Any, (A, T)] { type State = CC[A, T] @uncheckedVariance }
+  
+  def empty[A, T]
+      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],
+                T: ClassTag[T] = ClassTag.Any.asInstanceOf[ClassTag[T]])
+    : CC[A, T] = Builder(A, T).state
   
   def apply[A, T](xs: (A, T)*): CC[A, T] =
     macro MapFactory.apply[CC, A, T]

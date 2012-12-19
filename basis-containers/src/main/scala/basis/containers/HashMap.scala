@@ -12,6 +12,7 @@ import basis.util._
 
 import scala.annotation.{switch, tailrec}
 import scala.annotation.unchecked.uncheckedVariance
+import scala.reflect.ClassTag
 
 final class HashMap[+A, +T] private[containers] (
     private[containers] val treeMap: Int,
@@ -313,13 +314,12 @@ final class HashMap[+A, +T] private[containers] (
 }
 
 object HashMap extends MapFactory[HashMap] {
-  import scala.reflect.ClassTag
-  
-  val empty: HashMap[Nothing, Nothing] = new HashMap(0, 0, new Array[AnyRef](0))
-  
   implicit override def Builder[A : ClassTag, T : ClassTag]
     : Builder[Any, (A, T)] { type State = HashMap[A, T] } =
     new HashMapBuilder
+  
+  private[this] val empty = new HashMap[Nothing, Nothing](0, 0, new Array[AnyRef](0))
+  override def empty[A : ClassTag, T : ClassTag]: HashMap[A, T] = empty
   
   override def toString: String = "HashMap"
   

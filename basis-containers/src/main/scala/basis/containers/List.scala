@@ -27,10 +27,7 @@ import scala.reflect.ClassTag
   * @define collection  list
   */
 sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
-  extends Equals
-    with Family[List[A]]
-    with Stack[A]
-    with ListLike[A] {
+  extends Equals with Family[List[A]] with Stack[A] with ListLike[A] {
   
   override def isEmpty: Boolean
   
@@ -104,6 +101,8 @@ object List extends SeqFactory[List] {
   implicit override def Builder[A : ClassTag]
     : Builder[Any, A] { type State = List[A] } =
     new ListBuilder
+  
+  override def empty[A : ClassTag]: Nil.type = Nil
   
   override def toString: String = "List"
 }

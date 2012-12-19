@@ -7,4 +7,4 @@
 
 package basis.collections
 
-trait SetFactory[CC[_]] extends BuilderFactory[CC]
+trait SetFactory[+CC[_]] extends BuilderFactory[CC]
