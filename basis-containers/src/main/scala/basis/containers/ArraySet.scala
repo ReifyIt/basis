@@ -10,10 +10,11 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
+import scala.annotation.unchecked.uncheckedVariance
+import scala.reflect.ClassTag
+
 final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
   extends Family[ArraySet[A]] with Set[A] {
-  
-  import scala.annotation.unchecked.uncheckedVariance
   
   override def isEmpty: Boolean = slots.length == 0
   
@@ -79,8 +80,6 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
 }
 
 object ArraySet extends SetFactory[ArraySet] {
-  import scala.reflect.ClassTag
-  
   val empty: ArraySet[Nothing] = new ArraySet(new Array[AnyRef](0))
   
   def apply[A](elem: A): ArraySet[A] = {

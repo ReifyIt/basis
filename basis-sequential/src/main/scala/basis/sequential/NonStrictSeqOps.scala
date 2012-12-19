@@ -54,6 +54,15 @@ final class NonStrictSeqOps[+A](val these: Seq[A]) extends AnyVal {
   def filter(p: A => Boolean): Seq[A] =
     new NonStrictSeqOps.Filter(these, p)
   
+  /** Returns a view of all elements in this sequence that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test elements against.
+    * @return a non-strict view of the filtered elements.
+    * @group  Filtering
+    */
+  def withFilter(p: A => Boolean): Seq[A] =
+    new NonStrictSeqOps.Filter(these, p)
+  
   /** Returns a view of all elements following the longest prefix of this
     * sequence for which each element satisfies a predicate.
     * 

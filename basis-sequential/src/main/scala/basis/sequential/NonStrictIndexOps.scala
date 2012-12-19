@@ -44,6 +44,15 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
   def filter(p: A => Boolean): Index[A] =
     new NonStrictIndexOps.Filter(these, p)
   
+  /** Returns a view of all elements in this sequence that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test elements against.
+    * @return a non-strict view of the filtered elements.
+    * @group  Filtering
+    */
+  def withFilter(p: A => Boolean): Index[A] =
+    new NonStrictIndexOps.Filter(these, p)
+  
   /** Returns a view of all elements following the longest prefix of this
     * sequence for which each element satisfies a predicate.
     * 
@@ -199,7 +208,7 @@ private[sequential] object NonStrictIndexOps {
       table
     }
     
-    override def length: Int = table.length
+    override def length: Int = lookup.length
     
     override def apply(index: Int): A = base(lookup(index))
   }

@@ -10,32 +10,32 @@ package basis.sequential
 import basis.collections._
 
 class General {
-  implicit final def GeneralEnumeratorOps[A](these: Enumerator[A]): GeneralEnumeratorOps[A] =
+  implicit def GeneralEnumeratorOps[A](these: Enumerator[A]): GeneralEnumeratorOps[A] =
     macro General.GeneralEnumeratorOps[A]
   
-  implicit final def GeneralIteratorOps[A](these: Iterator[A]): GeneralIteratorOps[A] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def GeneralIteratorOps[A](these: Iterator[A]): GeneralIteratorOps[A] =
+    macro General.GeneralIteratorOps[A]
   
-  implicit final def GeneralCollectionOps[A](these: Collection[A]): GeneralCollectionOps[A] =
+  implicit def GeneralCollectionOps[A](these: Collection[A]): GeneralCollectionOps[A] =
     macro General.GeneralCollectionOps[A]
   
-  implicit final def GeneralContainerOps[A](these: Container[A]): GeneralContainerOps[A] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def GeneralContainerOps[A](these: Container[A]): GeneralContainerOps[A] =
+    macro General.GeneralContainerOps[A]
   
-  implicit final def GeneralSeqOps[A](these: Seq[A]): GeneralSeqOps[A] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def GeneralSeqOps[A](these: Seq[A]): GeneralSeqOps[A] =
+    macro General.GeneralSeqOps[A]
   
-  implicit final def GeneralIndexOps[A](these: Index[A]): GeneralIndexOps[A] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def GeneralIndexOps[A](these: Index[A]): GeneralIndexOps[A] =
+    macro General.GeneralIndexOps[A]
   
-  implicit final def GeneralStackOps[A](these: Stack[A]): GeneralStackOps[A] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def GeneralStackOps[A](these: Stack[A]): GeneralStackOps[A] =
+    macro General.GeneralStackOps[A]
   
-  implicit final def GeneralSetOps[A](these: Set[A]): GeneralSetOps[A] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def GeneralSetOps[A](these: Set[A]): GeneralSetOps[A] =
+    macro General.GeneralSetOps[A]
   
-  implicit final def GeneralMapOps[A, T](these: Map[A, T]): GeneralMapOps[A, T] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def GeneralMapOps[A, T](these: Map[A, T]): GeneralMapOps[A, T] =
+    macro General.GeneralMapOps[A, T]
 }
 
 private[sequential] object General {
@@ -55,6 +55,19 @@ private[sequential] object General {
     Expr(New(GeneralEnumeratorOpsType, these.tree))(WeakTypeTag(GeneralEnumeratorOpsType))
   }
   
+  def GeneralIteratorOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Iterator[A]])
+    : c.Expr[GeneralIteratorOps[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val GeneralIteratorOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.GeneralIteratorOps").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(New(GeneralIteratorOpsType, these.tree))(WeakTypeTag(GeneralIteratorOpsType))
+  }
+  
   def GeneralCollectionOps[A : c.WeakTypeTag]
       (c: Context)
       (these: c.Expr[Collection[A]])
@@ -66,5 +79,83 @@ private[sequential] object General {
         mirror.staticClass("basis.sequential.GeneralCollectionOps").toType,
         weakTypeOf[A] :: Nil)
     Expr(New(GeneralCollectionOpsType, these.tree))(WeakTypeTag(GeneralCollectionOpsType))
+  }
+  
+  def GeneralContainerOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Container[A]])
+    : c.Expr[GeneralContainerOps[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val GeneralContainerOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.GeneralContainerOps").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(New(GeneralContainerOpsType, these.tree))(WeakTypeTag(GeneralContainerOpsType))
+  }
+  
+  def GeneralSeqOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Seq[A]])
+    : c.Expr[GeneralSeqOps[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val GeneralSeqOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.GeneralSeqOps").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(New(GeneralSeqOpsType, these.tree))(WeakTypeTag(GeneralSeqOpsType))
+  }
+  
+  def GeneralIndexOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Index[A]])
+    : c.Expr[GeneralIndexOps[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val GeneralIndexOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.GeneralIndexOps").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(New(GeneralIndexOpsType, these.tree))(WeakTypeTag(GeneralIndexOpsType))
+  }
+  
+  def GeneralStackOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Stack[A]])
+    : c.Expr[GeneralStackOps[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val GeneralStackOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.GeneralStackOps").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(New(GeneralStackOpsType, these.tree))(WeakTypeTag(GeneralStackOpsType))
+  }
+  
+  def GeneralSetOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Set[A]])
+    : c.Expr[GeneralSetOps[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val GeneralSetOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.GeneralSetOps").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(New(GeneralSetOpsType, these.tree))(WeakTypeTag(GeneralSetOpsType))
+  }
+  
+  def GeneralMapOps[A : c.WeakTypeTag, T : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Map[A, T]])
+    : c.Expr[GeneralMapOps[A, T]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val GeneralMapOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.GeneralMapOps").toType,
+        weakTypeOf[A] :: weakTypeOf[T] :: Nil)
+    Expr(New(GeneralMapOpsType, these.tree))(WeakTypeTag(GeneralMapOpsType))
   }
 }

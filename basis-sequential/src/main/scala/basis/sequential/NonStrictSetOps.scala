@@ -24,6 +24,15 @@ final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
   def filter(p: A => Boolean): Set[A] =
     new NonStrictSetOps.Filter(these, p)
   
+  /** Returns a view of all elements in this set that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test elements against.
+    * @return a non-strict view of the filtered elements.
+    * @group  Filtering
+    */
+  def withFilter(p: A => Boolean): Set[A] =
+    new NonStrictSetOps.Filter(these, p)
+  
   /** Returns a view of all elements following the longest prefix of this
     * set for which each element satisfies a predicate.
     * 

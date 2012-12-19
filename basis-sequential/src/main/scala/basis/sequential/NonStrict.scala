@@ -10,31 +10,31 @@ package basis.sequential
 import basis.collections._
 
 class NonStrict extends General {
-  implicit final def NonStrictEnumeratorOps[A](these: Enumerator[A]): NonStrictEnumeratorOps[A] =
+  implicit def NonStrictEnumeratorOps[A](these: Enumerator[A]): NonStrictEnumeratorOps[A] =
     macro NonStrict.NonStrictEnumeratorOps[A]
   
-  implicit final def NonStrictIteratorOps[A](these: Iterator[A]): NonStrictIteratorOps[A] =
+  implicit def NonStrictIteratorOps[A](these: Iterator[A]): NonStrictIteratorOps[A] =
     macro NonStrict.NonStrictIteratorOps[A]
   
-  implicit final def NonStrictCollectionOps[A](these: Collection[A]): NonStrictCollectionOps[A] =
+  implicit def NonStrictCollectionOps[A](these: Collection[A]): NonStrictCollectionOps[A] =
     macro NonStrict.NonStrictCollectionOps[A]
   
-  implicit final def NonStrictContainerOps[A](these: Container[A]): NonStrictContainerOps[A] =
+  implicit def NonStrictContainerOps[A](these: Container[A]): NonStrictContainerOps[A] =
     macro NonStrict.NonStrictContainerOps[A]
   
-  implicit final def NonStrictSeqOps[A](these: Seq[A]): NonStrictSeqOps[A] =
+  implicit def NonStrictSeqOps[A](these: Seq[A]): NonStrictSeqOps[A] =
     macro NonStrict.NonStrictSeqOps[A]
   
-  implicit final def NonStrictIndexOps[A](these: Index[A]): NonStrictIndexOps[A] =
+  implicit def NonStrictIndexOps[A](these: Index[A]): NonStrictIndexOps[A] =
     macro NonStrict.NonStrictIndexOps[A]
   
-  implicit final def NonStrictStackOps[A](these: Stack[A]): NonStrictStackOps[A] =
+  implicit def NonStrictStackOps[A](these: Stack[A]): NonStrictStackOps[A] =
     macro NonStrict.NonStrictStackOps[A]
   
-  implicit final def NonStrictSetOps[A](these: Set[A]): NonStrictSetOps[A] =
+  implicit def NonStrictSetOps[A](these: Set[A]): NonStrictSetOps[A] =
     macro NonStrict.NonStrictSetOps[A]
   
-  implicit final def NonStrictMapOps[A, T](these: Map[A, T]): NonStrictMapOps[A, T] =
+  implicit def NonStrictMapOps[A, T](these: Map[A, T]): NonStrictMapOps[A, T] =
     macro NonStrict.NonStrictMapOps[A, T]
 }
 

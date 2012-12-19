@@ -54,6 +54,15 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   def filter(p: A => Boolean): Iterator[A] =
     new NonStrictIteratorOps.Filter(these.dup, p)
   
+  /** Returns a view of all elements in this iterator that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test elements against.
+    * @return a non-strict view of the filtered elements.
+    * @group  Filtering
+    */
+  def withFilter(p: A => Boolean): Iterator[A] =
+    new NonStrictIteratorOps.Filter(these.dup, p)
+  
   /** Returns a view of all elements following the longest prefix of this
     * iterator for which each element satisfies a predicate.
     * 

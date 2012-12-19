@@ -10,32 +10,32 @@ package basis.sequential
 import basis.collections._
 
 class Strict extends General {
-  implicit final def StrictEnumeratorOps[A](these: Enumerator[A]): StrictEnumeratorOps[A, these.Family] =
+  implicit def StrictEnumeratorOps[A](these: Enumerator[A]): StrictEnumeratorOps[A, these.Family] =
     macro Strict.StrictEnumeratorOps[A]
   
-  implicit final def StrictIteratorOps[A](these: Iterator[A]): StrictIteratorOps[A, these.Family] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def StrictIteratorOps[A](these: Iterator[A]): StrictIteratorOps[A, these.Family] =
+    macro Strict.StrictIteratorOps[A]
   
-  implicit final def StrictCollectionOps[A](these: Collection[A]): StrictCollectionOps[A, these.Family] =
+  implicit def StrictCollectionOps[A](these: Collection[A]): StrictCollectionOps[A, these.Family] =
     macro Strict.StrictCollectionOps[A]
   
-  implicit final def StrictContainerOps[A](these: Container[A]): StrictContainerOps[A, these.Family] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def StrictContainerOps[A](these: Container[A]): StrictContainerOps[A, these.Family] =
+    macro Strict.StrictContainerOps[A]
   
-  implicit final def StrictSeqOps[A](these: Seq[A]): StrictSeqOps[A, these.Family] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def StrictSeqOps[A](these: Seq[A]): StrictSeqOps[A, these.Family] =
+    macro Strict.StrictSeqOps[A]
   
-  implicit final def StrictIndexOps[A](these: Index[A]): StrictIndexOps[A, these.Family] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def StrictIndexOps[A](these: Index[A]): StrictIndexOps[A, these.Family] =
+    macro Strict.StrictIndexOps[A]
   
-  implicit final def StrictStackOps[A](these: Stack[A]): StrictStackOps[A, these.Family] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def StrictStackOps[A](these: Stack[A]): StrictStackOps[A, these.Family] =
+    macro Strict.StrictStackOps[A]
   
-  implicit final def StrictSetOps[A](these: Set[A]): StrictSetOps[A, these.Family] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def StrictSetOps[A](these: Set[A]): StrictSetOps[A, these.Family] =
+    macro Strict.StrictSetOps[A]
   
-  implicit final def StrictMapOps[A, T](these: Map[A, T]): StrictMapOps[A, T, these.Family] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  implicit def StrictMapOps[A, T](these: Map[A, T]): StrictMapOps[A, T, these.Family] =
+    macro Strict.StrictMapOps[A, T]
 }
 
 private[sequential] object Strict {

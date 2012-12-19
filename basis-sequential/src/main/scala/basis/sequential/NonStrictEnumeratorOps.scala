@@ -54,6 +54,15 @@ final class NonStrictEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal 
   def filter(p: A => Boolean): Enumerator[A] =
     new NonStrictEnumeratorOps.Filter(these, p)
   
+  /** Returns a view of all elements in this enumerator that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test elements against.
+    * @return a non-strict view of the filtered elements.
+    * @group  Filtering
+    */
+  def withFilter(p: A => Boolean): Enumerator[A] =
+    new NonStrictEnumeratorOps.Filter(these, p)
+  
   /** Returns a view of all elements following the longest prefix of this
     * enumerator for which each element satisfies a predicate.
     * 

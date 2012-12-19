@@ -58,6 +58,15 @@ final class StrictContainerOps[+A, +From](these: Container[A]) {
   def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
     macro StrictContainerOps.filter[A]
   
+  /** Returns a view of all elements in this container that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test elements against.
+    * @return a non-strict view of the filtered elements.
+    * @group  Filtering
+    */
+  def withFilter(p: A => Boolean): Container[A] =
+    new NonStrictContainerOps.Filter(these, p)
+  
   /** Returns all elements following the longest prefix of this container
     * for which each element satisfies a predicate.
     * 

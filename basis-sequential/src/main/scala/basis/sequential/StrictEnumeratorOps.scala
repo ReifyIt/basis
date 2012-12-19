@@ -66,6 +66,15 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     builder.state
   }
   
+  /** Returns a view of all elements in this enumerator that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test elements against.
+    * @return a non-strict view of the filtered elements.
+    * @group  Filtering
+    */
+  def withFilter(p: A => Boolean): Enumerator[A] =
+    new NonStrictEnumeratorOps.Filter(these, p)
+  
   /** Returns all elements following the longest prefix of this enumerator
     * for which each element satisfies a predicate.
     * 

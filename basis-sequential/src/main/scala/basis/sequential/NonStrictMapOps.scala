@@ -24,6 +24,15 @@ final class NonStrictMapOps[+A, +T](val these: Map[A, T]) extends AnyVal {
   def filter(p: ((A, T)) => Boolean): Map[A, T] =
     new NonStrictMapOps.Filter(these, p)
   
+  /** Returns a view of all entries in this map that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test entries against.
+    * @return a non-strict view of the filtered entries.
+    * @group  Filtering
+    */
+  def withFilter(p: ((A, T)) => Boolean): Map[A, T] =
+    new NonStrictMapOps.Filter(these, p)
+  
   /** Returns a view of all entries following the longest prefix of this
     * map for which each entry satisfies a predicate.
     * 

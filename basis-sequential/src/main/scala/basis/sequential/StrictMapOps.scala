@@ -58,6 +58,15 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   def filter(p: ((A, T)) => Boolean)(implicit builder: Builder[From, (A, T)]): builder.State =
     macro StrictContainerOps.filter[(A, T)]
   
+  /** Returns a view of all entries in this map that satisfy a predicate.
+    * 
+    * @param  p   the predicate to lazily test entries against.
+    * @return a non-strict view of the filtered entries.
+    * @group  Filtering
+    */
+  def withFilter(p: ((A, T)) => Boolean): Map[A, T] =
+    new NonStrictMapOps.Filter(these, p)
+  
   /** Returns all entries following the longest prefix of this map
     * for which each entry satisfies a predicate.
     * 
