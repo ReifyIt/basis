@@ -173,6 +173,11 @@ private[containers] class ByteArrayBuffer private (
     buffer = null
   }
   
+  final override def copy: ArrayBuffer[Byte] = {
+    aliased = true
+    new ByteArrayBuffer(buffer, size, aliased)
+  }
+  
   final override def copyToArray[B >: Byte](xs: Array[B], start: Int, count: Int) {
     if (xs.isInstanceOf[Array[Byte]])
       java.lang.System.arraycopy(buffer, 0, xs, start, count min (xs.length - start) min size)
@@ -208,11 +213,6 @@ private[containers] class ByteArrayBuffer private (
     }
     aliased = true
     new ByteArraySeq(buffer)
-  }
-  
-  private[containers] final def copy: ArrayBuffer[Byte] = {
-    aliased = true
-    new ByteArrayBuffer(buffer, size, aliased)
   }
   
   override def expect(count: Int): this.type = {

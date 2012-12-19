@@ -173,6 +173,11 @@ private[containers] class ShortArrayBuffer private (
     buffer = null
   }
   
+  final override def copy: ArrayBuffer[Short] = {
+    aliased = true
+    new ShortArrayBuffer(buffer, size, aliased)
+  }
+  
   final override def copyToArray[B >: Short](xs: Array[B], start: Int, count: Int) {
     if (xs.isInstanceOf[Array[Short]])
       java.lang.System.arraycopy(buffer, 0, xs, start, count min (xs.length - start) min size)
@@ -208,11 +213,6 @@ private[containers] class ShortArrayBuffer private (
     }
     aliased = true
     new ShortArraySeq(buffer)
-  }
-  
-  private[containers] final def copy: ArrayBuffer[Short] = {
-    aliased = true
-    new ShortArrayBuffer(buffer, size, aliased)
   }
   
   override def expect(count: Int): this.type = {

@@ -91,19 +91,19 @@ final class MersenneTwister64 private (
     x
   }
   
-  override def toByte(): Byte = apply().toByte
+  override def nextByte(): Byte = apply().toByte
   
-  override def toShort(): Short = apply().toShort
+  override def nextShort(): Short = apply().toShort
   
-  override def toInt(): Int = apply().toInt
+  override def nextInt(): Int = apply().toInt
   
-  override def toLong(): Long = apply()
+  override def nextLong(): Long = apply()
   
-  override def toFloat(): Float = (toInt() >>> 8).toFloat / (1 << 24).toFloat
+  override def nextFloat(): Float = (nextInt() >>> 8).toFloat / (1 << 24).toFloat
   
-  override def toDouble(): Double = (toLong() >>> 11).toDouble / (1L << 53).toDouble
+  override def nextDouble(): Double = (nextLong() >>> 11).toDouble / (1L << 53).toDouble
   
-  override def toBoolean(): Boolean = (apply() >>> 63) != 0
+  override def nextBoolean(): Boolean = (apply() >>> 63) != 0
   
   override def toString: String = "MersenneTwister64"
 }

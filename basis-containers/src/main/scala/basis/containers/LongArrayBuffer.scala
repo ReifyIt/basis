@@ -173,6 +173,11 @@ private[containers] class LongArrayBuffer private (
     buffer = null
   }
   
+  final override def copy: ArrayBuffer[Long] = {
+    aliased = true
+    new LongArrayBuffer(buffer, size, aliased)
+  }
+  
   final override def copyToArray[B >: Long](xs: Array[B], start: Int, count: Int) {
     if (xs.isInstanceOf[Array[Long]])
       java.lang.System.arraycopy(buffer, 0, xs, start, count min (xs.length - start) min size)
@@ -208,11 +213,6 @@ private[containers] class LongArrayBuffer private (
     }
     aliased = true
     new LongArraySeq(buffer)
-  }
-  
-  private[containers] final def copy: ArrayBuffer[Long] = {
-    aliased = true
-    new LongArrayBuffer(buffer, size, aliased)
   }
   
   override def expect(count: Int): this.type = {

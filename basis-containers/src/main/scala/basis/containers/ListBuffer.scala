@@ -212,14 +212,14 @@ class ListBuffer[A] private (
     aliased = 0
   }
   
+  final override def copy: ListBuffer[A] = {
+    aliased = 0
+    new ListBuffer(first, last, size, aliased)
+  }
+  
   final override def toList: List[A] = {
     aliased = 0
     first
-  }
-  
-  private[containers] final def copy: ListBuffer[A] = {
-    aliased = 0
-    new ListBuffer(first, last, size, aliased)
   }
   
   override def expect(count: Int): this.type = this

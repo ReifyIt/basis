@@ -5,9 +5,8 @@
 **  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
 \*                                                                      */
 
-package basis.collections
+package basis
 
-import scala.annotation.implicitNotFound
-
-@implicitNotFound("No set factory available for ${CC}.")
-trait SetFactory[+CC[_]] extends BuilderFactory[CC]
+package object generators {
+  implicit def Randomness: Randomness = new MersenneTwister32
+}

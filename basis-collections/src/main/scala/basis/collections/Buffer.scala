@@ -9,12 +9,13 @@ package basis.collections
 
 /** A mutable buffer of elements.
   * 
-  * @groupprio  Examining     -7
-  * @groupprio  Mutating      -6
-  * @groupprio  Inserting     -5
-  * @groupprio  Removing      -4
-  * @groupprio  Iterating     -3
-  * @groupprio  Traversing    -2
+  * @groupprio  Examining     -8
+  * @groupprio  Mutating      -7
+  * @groupprio  Inserting     -6
+  * @groupprio  Removing      -5
+  * @groupprio  Iterating     -4
+  * @groupprio  Traversing    -3
+  * @groupprio  Converting    -2
   * @groupprio  Classifying   -1
   * 
   * @define collection  buffer
@@ -71,6 +72,10 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   /** Removes all elements from this $collection.
     * @group Removing */
   def clear(): Unit
+  
+  /** Returns a distinct copy of this $collection.
+    * @group Converting */
+  def copy: Family
   
   /** Prepends a single element to this $collection.
     * @group Inserting */

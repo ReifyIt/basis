@@ -289,7 +289,7 @@ private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
   
   private[this] var length: Int = 0
   
-  override def append(x: A) {
+  override def append(elem: A) {
     if (length == 0) node1 = new Array[AnyRef](32)
     else {
       if ((length & 0x1FFFFFF) == 0) {
@@ -333,7 +333,7 @@ private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
         node2(length >>> 5 & 0x1F) = node1
       }
     }
-    node1(length & 0x1F) = x.asInstanceOf[AnyRef]
+    node1(length & 0x1F) = elem.asInstanceOf[AnyRef]
     length += 1
   }
   

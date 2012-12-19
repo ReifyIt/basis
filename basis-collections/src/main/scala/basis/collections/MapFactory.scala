@@ -7,11 +7,15 @@
 
 package basis.collections
 
+import scala.annotation.implicitNotFound
 import scala.annotation.unchecked.uncheckedVariance
 import scala.reflect.ClassTag
 
+@implicitNotFound("No map factory available for ${CC}.")
 trait MapFactory[+CC[_, _]] {
   type Product[A, T] = CC[A, T]
+  
+  implicit def Factory: this.type = this
   
   implicit def Builder[A, T]
       (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],

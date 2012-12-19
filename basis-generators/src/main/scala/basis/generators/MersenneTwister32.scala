@@ -91,19 +91,19 @@ final class MersenneTwister32 private (
     x
   }
   
-  override def toByte(): Byte = apply().toByte
+  override def nextByte(): Byte = apply().toByte
   
-  override def toShort(): Short = apply().toShort
+  override def nextShort(): Short = apply().toShort
   
-  override def toInt(): Int = apply()
+  override def nextInt(): Int = apply()
   
-  override def toLong(): Long = (apply().toLong << 32) | apply().toLong
+  override def nextLong(): Long = (apply().toLong << 32) | apply().toLong
   
-  override def toFloat(): Float = (toInt() >>> 8).toFloat / (1 << 24).toFloat
+  override def nextFloat(): Float = (nextInt() >>> 8).toFloat / (1 << 24).toFloat
   
-  override def toDouble(): Double = (toLong() >>> 11).toDouble / (1L << 53).toDouble
+  override def nextDouble(): Double = (nextLong() >>> 11).toDouble / (1L << 53).toDouble
   
-  override def toBoolean(): Boolean = (apply() >>> 31) != 0
+  override def nextBoolean(): Boolean = (apply() >>> 31) != 0
   
   override def toString: String = "MersenneTwister32"
 }

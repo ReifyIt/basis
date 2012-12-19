@@ -173,6 +173,11 @@ private[containers] class RefArrayBuffer[A] private (
     buffer = null
   }
   
+  final override def copy: ArrayBuffer[A] = {
+    aliased = true
+    new RefArrayBuffer(buffer, size, aliased)
+  }
+  
   final override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
     if (xs.isInstanceOf[Array[AnyRef]])
       java.lang.System.arraycopy(buffer, 0, xs, start, count min (xs.length - start) min size)
@@ -207,11 +212,6 @@ private[containers] class RefArrayBuffer[A] private (
     }
     aliased = true
     new RefArraySeq(buffer)
-  }
-  
-  private[containers] final def copy: ArrayBuffer[A] = {
-    aliased = true
-    new RefArrayBuffer(buffer, size, aliased)
   }
   
   override def expect(count: Int): this.type = {

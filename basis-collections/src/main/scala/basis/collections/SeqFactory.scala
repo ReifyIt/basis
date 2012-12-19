@@ -7,8 +7,10 @@
 
 package basis.collections
 
+import scala.annotation.implicitNotFound
 import scala.reflect.ClassTag
 
+@implicitNotFound("No sequence factory available for ${CC}.")
 trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {
   def fill[A](count: Int)(elem: => A): CC[A] =
     macro SeqFactory.fill[CC, A]

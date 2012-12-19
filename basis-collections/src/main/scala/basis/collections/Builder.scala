@@ -7,6 +7,8 @@
 
 package basis.collections
 
+import scala.annotation.implicitNotFound
+
 /** A stateful element accumulator.
   * 
   * @groupprio  Examining   -3
@@ -15,6 +17,7 @@ package basis.collections
   * 
   * @define collection  builder
   */
+@implicitNotFound("No builder available from ${From} for element type ${A}.")
 trait Builder[-From, -A] extends Accumulator[A] {
   /** The type of state maintained by this $collection.
     * @group Examining */

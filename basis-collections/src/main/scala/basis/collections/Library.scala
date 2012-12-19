@@ -29,6 +29,8 @@ trait Library extends Library1 {
 }
 
 private[collections] trait Library1 extends Library2 { this: Library =>
+  implicit def EnumeratorFactory: Enumerator.type = Enumerator
+  
   implicit def IndexBuilder[A]
       (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
     : Builder[Index[_], A] { type State = Index.Product[A] } =
@@ -41,6 +43,8 @@ private[collections] trait Library1 extends Library2 { this: Library =>
 }
 
 private[collections] trait Library2 extends Library3 { this: Library =>
+  implicit def CollectionFactory: Collection.type = Collection
+  
   implicit def SeqBuilder[A]
       (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
     : Builder[Seq[_], A] { type State = Seq.Product[A] } =
@@ -59,6 +63,8 @@ private[collections] trait Library2 extends Library3 { this: Library =>
 }
 
 private[collections] trait Library3 extends Library4 { this: Library =>
+  implicit def ContainerFactory: Container.type = Container
+  
   implicit def ContainerBuilder[A]
       (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
     : Builder[Container[_], A] { type State = Container.Product[A] } =
@@ -66,6 +72,12 @@ private[collections] trait Library3 extends Library4 { this: Library =>
 }
 
 private[collections] trait Library4 extends Library5 { this: Library =>
+  implicit def SeqFactory: Seq.type = Seq
+  
+  implicit def SetFactory: Set.type = Set
+  
+  implicit def MapFactory: Map.type = Map
+  
   implicit def CollectionBuilder[A]
       (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
     : Builder[Collection[_], A] { type State = Collection.Product[A] } =
@@ -73,6 +85,10 @@ private[collections] trait Library4 extends Library5 { this: Library =>
 }
 
 private[collections] trait Library5 { this: Library =>
+  implicit def IndexFactory: Index.type = Index
+  
+  implicit def StackFactory: Stack.type = Stack
+  
   implicit def EnumeratorBuilder[A]
       (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
     : Builder[Enumerator[_], A] { type State = Enumerator.Product[A] } =
