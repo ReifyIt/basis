@@ -50,38 +50,27 @@ trait Arbitrary[@specialized(Specializable.Primitives) +R] extends (() => R) {
 object Arbitrary {
   def apply[R](implicit R: Arbitrary[R]): R.type = R
   
-  implicit def Byte: Arbitrary[Byte] =
-    new MersenneTwister32().asByte
+  implicit def Byte(implicit rand: Randomness): Arbitrary[Byte] = rand.asByte
   
-  def PositiveByte: Arbitrary[Byte] =
-    new MersenneTwister32().asPositiveByte
+  def PositiveByte(implicit rand: Randomness): Arbitrary[Byte] = rand.asPositiveByte
   
-  implicit def Short: Arbitrary[Short] =
-    new MersenneTwister32().asShort
+  implicit def Short(implicit rand: Randomness): Arbitrary[Short] = rand.asShort
   
-  def PositiveShort: Arbitrary[Short] =
-    new MersenneTwister32().asPositiveShort
+  def PositiveShort(implicit rand: Randomness): Arbitrary[Short] = rand.asPositiveShort
   
-  implicit def Int: Arbitrary[Int] =
-    new MersenneTwister32()
+  implicit def Int(implicit rand: Randomness): Arbitrary[Int] = rand.asInt
   
-  def PositiveInt: Arbitrary[Int] =
-    new MersenneTwister32().asPositiveInt
+  def PositiveInt(implicit rand: Randomness): Arbitrary[Int] = rand.asPositiveInt
   
-  implicit def Long: Arbitrary[Long] =
-    new MersenneTwister64()
+  implicit def Long(implicit rand: Randomness): Arbitrary[Long] = rand.asLong
   
-  def PositiveLong: Arbitrary[Long] =
-    new MersenneTwister64().asPositiveLong
+  def PositiveLong(implicit rand: Randomness): Arbitrary[Long] = rand.asPositiveLong
   
-  implicit def Float: Arbitrary[Float] =
-    new MersenneTwister32().asFloat
+  implicit def Float(implicit rand: Randomness): Arbitrary[Float] = rand.asFloat
   
-  implicit def Double: Arbitrary[Double] =
-    new MersenneTwister64().asDouble
+  implicit def Double(implicit rand: Randomness): Arbitrary[Double] = rand.asDouble
   
-  implicit def Boolean: Arbitrary[Boolean] =
-    new MersenneTwister32().asBoolean
+  implicit def Boolean(implicit rand: Randomness): Arbitrary[Boolean] = rand.asBoolean
   
   private object Void extends Arbitrary[Unit] {
     override def apply(): Unit = ()
@@ -98,36 +87,48 @@ object Arbitrary {
   def Constant[@specialized(Specializable.Primitives) R](value: R): Arbitrary[R] = new Constant(value)
   
   private final class Tuple2[+T1, +T2]
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2])
     extends Arbitrary[(T1, T2)] {
     override def apply() = (T1(), T2())
     override def toString: String = s"($T1, $T2)"
   }
   
   implicit def Tuple2[T1, T2]
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2])
     : Arbitrary[(T1, T2)] = new Tuple2
   
   private final class Tuple3[+T1, +T2, +T3]
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2],
+                T3: Arbitrary[T3])
     extends Arbitrary[(T1, T2, T3)] {
     override def apply() = (T1(), T2(), T3())
     override def toString: String = s"($T1, $T2, $T3)"
   }
   
   implicit def Tuple3[T1, T2, T3]
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2],
+                T3: Arbitrary[T3])
     : Arbitrary[(T1, T2, T3)] = new Tuple3
   
   private final class Tuple4[+T1, +T2, +T3, +T4]
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3], T4: Arbitrary[T4])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2],
+                T3: Arbitrary[T3],
+                T4: Arbitrary[T4])
     extends Arbitrary[(T1, T2, T3, T4)] {
     override def apply() = (T1(), T2(), T3(), T4())
     override def toString: String = s"($T1, $T2, $T3, $T4)"
   }
   
   implicit def Tuple4[T1, T2, T3, T4]
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3], T4: Arbitrary[T4])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2],
+                T3: Arbitrary[T3],
+                T4: Arbitrary[T4])
     : Arbitrary[(T1, T2, T3, T4)] = new Tuple4
   
   private final class Function1[-T1, +R]
@@ -145,7 +146,8 @@ object Arbitrary {
   
   private final class Function2[-T1, -T2, +R]
       (f: (T1, T2) => R)
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2])
     extends Arbitrary[R] {
     override def apply(): R = f(T1(), T2())
     override def toString: String = "<arbitrary2>"
@@ -153,12 +155,15 @@ object Arbitrary {
   
   def apply[T1, T2, R]
       (f: (T1, T2) => R)
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2])
     : Arbitrary[R] = new Function2(f)
   
   private final class Function3[-T1, -T2, -T3, +R]
       (f: (T1, T2, T3) => R)
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2],
+                T3: Arbitrary[T3])
     extends Arbitrary[R] {
     override def apply(): R = f(T1(), T2(), T3())
     override def toString: String = "<arbitrary3>"
@@ -166,12 +171,17 @@ object Arbitrary {
   
   def apply[T1, T2, T3, R]
       (f: (T1, T2, T3) => R)
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2],
+                T3: Arbitrary[T3])
     : Arbitrary[R] = new Function3(f)
   
   private final class Function4[-T1, -T2, -T3, -T4, +R]
       (f: (T1, T2, T3, T4) => R)
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3], T4: Arbitrary[T4])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2],
+                T3: Arbitrary[T3],
+                T4: Arbitrary[T4])
     extends Arbitrary[R] {
     override def apply(): R = f(T1(), T2(), T3(), T4())
     override def toString: String = "<arbitrary4>"
@@ -179,120 +189,118 @@ object Arbitrary {
   
   def apply[T1, T2, T3, T4, R]
       (f: (T1, T2, T3, T4) => R)
-      (implicit T1: Arbitrary[T1], T2: Arbitrary[T2], T3: Arbitrary[T3], T4: Arbitrary[T4])
+      (implicit T1: Arbitrary[T1],
+                T2: Arbitrary[T2],
+                T3: Arbitrary[T3],
+                T4: Arbitrary[T4])
     : Arbitrary[R] = new Function4(f)
   
-  private final class Pick[+R](elems: Index[R])(implicit rnd: Randomness) extends Arbitrary[R] {
+  private final class Pick[+A](elems: Index[A])(implicit rand: Randomness) extends Arbitrary[A] {
     if (elems.isEmpty) throw new IllegalArgumentException("empty pick")
     
-    private[this] val gen = rnd.below(elems.length)
+    private[this] val index = rand.below(elems.length)
     
-    def this(elems: Enumerator[R])(implicit rnd: Randomness) =
-      this((ArraySeq.Builder[R] ++= elems).state)(rnd)
+    def this(elems: Enumerator[A])(implicit rand: Randomness) =
+      this((ArraySeq.Builder[A] ++= elems).state)(rand)
     
-    override def apply(): R = elems(gen())
+    override def apply(): A = elems(index())
     
     override def toString: String = "<pick>"
   }
   
-  def pick[R](elems: Enumerator[R]): Arbitrary[R] = new Pick(elems)
+  def pick[A](elems: Enumerator[A])(implicit rand: Randomness): Arbitrary[A] = new Pick(elems)(rand)
   
-  private final class Choose[+R]
-      (count: Int, elems: ListBuffer[R])
-      (implicit gen: Randomness)
-    extends Arbitrary[List[R]] {
+  private final class Choose[+A]
+      (count: Int, elems: ListBuffer[A])
+      (implicit rand: Randomness)
+    extends Arbitrary[List[A]] {
     
     if (count < 0) throw new IllegalArgumentException("negative count")
     if (count > elems.length) throw new IllegalArgumentException("count > length")
     
-    def this(count: Int, elems: Enumerator[R])(implicit gen: Randomness) =
-      this(count, new ListBuffer[R] ++= elems)(gen)
+    def this(count: Int, elems: Enumerator[A])(implicit rand: Randomness) =
+      this(count, new ListBuffer[A] ++= elems)(rand)
     
-    override def apply(): List[R] = {
+    override def apply(): List[A] = {
       val xs = elems.copy
-      while (xs.length > count) xs.remove(gen.nextBelow(xs.length))
+      while (xs.length > count) xs.remove(rand.nextBelow(xs.length))
       xs.toList
     }
     
     override def toString: String = "<choose>"
   }
   
-  def choose[R](count: Int, elems: Enumerator[R]): Arbitrary[List[R]] = new Choose(count, elems)
+  def choose[A](count: Int, elems: Enumerator[A])(implicit rand: Randomness): Arbitrary[List[A]] =
+    new Choose(count, elems)(rand)
   
-  def between(lower: Byte, upper: Byte): Arbitrary[Byte] =
-    new MersenneTwister32().between(lower, upper)
+  def between(lower: Byte, upper: Byte)(implicit rand: Randomness): Arbitrary[Byte] =
+    rand.between(lower, upper)
   
-  def between(lower: Short, upper: Short): Arbitrary[Short] =
-    new MersenneTwister32().between(lower, upper)
+  def between(lower: Short, upper: Short)(implicit rand: Randomness): Arbitrary[Short] =
+    rand.between(lower, upper)
   
-  def between(lower: Int, upper: Int): Arbitrary[Int] =
-    new MersenneTwister32().between(lower, upper)
+  def between(lower: Int, upper: Int)(implicit rand: Randomness): Arbitrary[Int] =
+    rand.between(lower, upper)
   
-  def between(lower: Long, upper: Long): Arbitrary[Long] =
-    new MersenneTwister64().between(lower, upper)
+  def between(lower: Long, upper: Long)(implicit rand: Randomness): Arbitrary[Long] =
+    rand.between(lower, upper)
   
-  def between(lower: Float, upper: Float): Arbitrary[Float] =
-    new MersenneTwister32().between(lower, upper)
+  def between(lower: Float, upper: Float)(implicit rand: Randomness): Arbitrary[Float] =
+    rand.between(lower, upper)
   
-  def between(lower: Double, upper: Double): Arbitrary[Double] =
-    new MersenneTwister64().between(lower, upper)
+  def between(lower: Double, upper: Double)(implicit rand: Randomness): Arbitrary[Double] =
+    rand.between(lower, upper)
   
-  def below(upper: Byte): Arbitrary[Byte] =
-    new MersenneTwister32().below(upper)
+  def below(upper: Byte)(implicit rand: Randomness): Arbitrary[Byte] = rand.below(upper)
   
-  def below(upper: Short): Arbitrary[Short] =
-    new MersenneTwister32().below(upper)
+  def below(upper: Short)(implicit rand: Randomness): Arbitrary[Short] = rand.below(upper)
   
-  def below(upper: Int): Arbitrary[Int] =
-    new MersenneTwister32().below(upper)
+  def below(upper: Int)(implicit rand: Randomness): Arbitrary[Int] = rand.below(upper)
   
-  def below(upper: Long): Arbitrary[Long] =
-    new MersenneTwister32().below(upper)
+  def below(upper: Long)(implicit rand: Randomness): Arbitrary[Long] = rand.below(upper)
   
-  def below(upper: Float): Arbitrary[Float] =
-    new MersenneTwister32().below(upper)
+  def below(upper: Float)(implicit rand: Randomness): Arbitrary[Float] = rand.below(upper)
   
-  def below(upper: Double): Arbitrary[Double] =
-    new MersenneTwister32().below(upper)
+  def below(upper: Double)(implicit rand: Randomness): Arbitrary[Double] = rand.below(upper)
   
-  private final class Digit(implicit rnd: Randomness) extends Arbitrary[Char] {
-    private[this] val gen = rnd.between(48, 57)
+  private final class Digit(implicit rand: Randomness) extends Arbitrary[Char] {
+    private[this] val gen = rand.between(48, 57)
     override def apply(): Char = gen().toChar
     override def toString: String = "Digit"
   }
   
   def Digit: Arbitrary[Char] = new Digit
   
-  private final class Uppercase(implicit rnd: Randomness) extends Arbitrary[Char] {
-    private[this] val gen = rnd.between(65, 90)
+  private final class Uppercase(implicit rand: Randomness) extends Arbitrary[Char] {
+    private[this] val gen = rand.between(65, 90)
     override def apply(): Char = gen().toChar
     override def toString: String = "Uppercase"
   }
   
   def Uppercase: Arbitrary[Char] = new Uppercase
   
-  private final class Lowercase(implicit rnd: Randomness) extends Arbitrary[Char] {
-    private[this] val gen = rnd.between(97, 122)
+  private final class Lowercase(implicit rand: Randomness) extends Arbitrary[Char] {
+    private[this] val gen = rand.between(97, 122)
     override def apply(): Char = gen().toChar
     override def toString: String = "Lowercase"
   }
   
   def Lowercase: Arbitrary[Char] = new Lowercase
   
-  private final class Alpha(implicit rnd: Randomness) extends Arbitrary[Char] {
-    private[this] val gen = rnd.below(10)
-    private[this] val lowercase = new Lowercase()(rnd)
-    private[this] val uppercase = new Uppercase()(rnd)
+  private final class Alpha(implicit rand: Randomness) extends Arbitrary[Char] {
+    private[this] val gen = rand.below(10)
+    private[this] val lowercase = new Lowercase()(rand)
+    private[this] val uppercase = new Uppercase()(rand)
     override def apply(): Char = if (gen() != 0) lowercase() else uppercase()
     override def toString: String = "Alpha"
   }
   
   def Alpha: Arbitrary[Char] = new Alpha
   
-  private final class AlphaDigit(implicit rnd: Randomness) extends Arbitrary[Char] {
-    private[this] val gen = rnd.below(10)
-    private[this] val alpha = new Alpha()(rnd)
-    private[this] val digit = new Digit()(rnd)
+  private final class AlphaDigit(implicit rand: Randomness) extends Arbitrary[Char] {
+    private[this] val gen = rand.below(10)
+    private[this] val alpha = new Alpha()(rand)
+    private[this] val digit = new Digit()(rand)
     override def apply(): Char = if (gen() != 0) alpha() else digit()
     override def toString: String = "AlphaDigit"
   }

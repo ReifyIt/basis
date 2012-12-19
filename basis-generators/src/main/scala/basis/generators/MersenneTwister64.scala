@@ -91,6 +91,8 @@ final class MersenneTwister64 private (
     x
   }
   
+  override def asLong: Arbitrary[Long] = this
+  
   override def nextByte(): Byte = apply().toByte
   
   override def nextShort(): Short = apply().toShort
