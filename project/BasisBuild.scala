@@ -2,7 +2,7 @@
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
 **   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
-**  |_____/\_____\____/__/\____/      http://www.scalabasis.com/        **
+**  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis
@@ -122,9 +122,9 @@ object BasisBuild extends Build {
   
   lazy val projectSettings = Seq(
     version      := "0.0-SNAPSHOT",
-    organization := "com.scalabasis",
-    description  := "A library of building blocks",
-    homepage     := Some(url("http://www.scalabasis.com/")),
+    organization := "it.reify",
+    description  := "An experimental foundation library for Scala focussed on efficiency and clean design.",
+    homepage     := Some(url("http://basis.reify.it")),
     licenses     := Seq("MIT" -> url("http://www.opensource.org/licenses/mit-license.php")),
     resolvers    += Resolver.sonatypeRepo("snapshots")
   )
@@ -134,20 +134,20 @@ object BasisBuild extends Build {
     scalacOptions ++= Seq("-language:_", "-Yno-predef")
   )
   
-  lazy val docSettings = Seq(
-    scalacOptions in doc <++= (version, baseDirectory in LocalProject("basis")) map { (version, baseDirectory) =>
-      val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
-      val docSourceUrl = "https://github.com/scalabasis/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-      Seq("-groups", "-implicits", "-diagrams",
-          "-sourcepath", baseDirectory.getAbsolutePath,
-          "-doc-source-url", docSourceUrl)
-    }
-  )
-  
   lazy val compileSettings = Seq(
     scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
     libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.10.0-RC5" % "provided",
     libraryDependencies += "org.scalatest" % "scalatest_2.10.0-RC5" % "1.8-B1" % "test"
+  )
+  
+  lazy val docSettings = Seq(
+    scalacOptions in doc <++= (version, baseDirectory in LocalProject("basis")) map { (version, baseDirectory) =>
+      val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
+      val docSourceUrl = "https://github.com/reifyit/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
+      Seq("-groups", "-implicits", "-diagrams",
+          "-sourcepath", baseDirectory.getAbsolutePath,
+          "-doc-source-url", docSourceUrl)
+    }
   )
   
   lazy val publishSettings = Seq(
@@ -160,14 +160,14 @@ object BasisBuild extends Build {
     pomIncludeRepository := (_ => false),
     pomExtra := {
       <scm>
-        <url>git@github.com:scalabasis/basis.git</url>
-        <connection>scm:git:git@github.com:scalabasis/basis.git</connection>
+        <url>git@github.com:reifyit/basis.git</url>
+        <connection>scm:git:git@github.com:reifyit/basis.git</connection>
       </scm>
       <developers>
         <developer>
           <id>c9r</id>
           <name>Chris Sachs</name>
-          <email>chris@scalabasis.com</email>
+          <email>chris@reify.it</email>
         </developer>
       </developers>
     }
