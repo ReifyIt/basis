@@ -10,58 +10,21 @@ package basis.text
 import basis.collections._
 import basis.util._
 
-/** A 32-bit Unicode string comprised of a UTF-32 code unit sequence.
+/** A UTF-32 string.
   * 
   * @define collection  string
   */
-final class String4(codeUnits: Array[Int]) extends Equals with Family[String4] with Index[Int] {
-  override def isEmpty: Boolean = codeUnits.length == 0
-  
-  /** Returns the number of code points in this string. */
+final class String4(codeUnits: Array[Int]) extends UTF32 {
   override def length: Int = codeUnits.length
   
-  /** Returns the character at `index`. Substitutes the replacement character
-    * U+FFFD in lieu of invalid characters. */
-  override def apply(index: Int): Int = {
-    val n = codeUnits.length
-    if (index < 0 || index >= n)
-      throw new java.lang.IndexOutOfBoundsException(index.toString)
-    val c = codeUnits(index)
-    if (c >= 0x0000 && c <= 0xD7FF ||
-        c >= 0xE000 && c <= 0x10FFFF) c // U+0000..U+D7FF | U+E000..U+10FFFF
-    else 0xFFFD
-  }
-  
-  override def iterator: Iterator[Int] = new String4Iterator(this, 0)
-  
-  /** Sequentially applies a function to each code point in this string.
-    * Applies the replacement character U+FFFD in lieu of invalid characters. */
-  protected override def foreach[U](f: Int => U) {
-    var i = 0
-    val n = length
-    while (i < n) {
-      f(this(i))
-      i += 1
-    }
-  }
-  
-  override def toString: String = {
-    val s = new java.lang.StringBuilder
-    var i = 0
-    val n = length
-    while (i < n) {
-      s.appendCodePoint(this(i))
-      i += 1
-    }
-    s.toString
-  }
+  override def get(index: Int): Int = codeUnits(index)
 }
 
-/** A factory for 32-bit Unicode strings. */
+/** A factory for UTF-32 strings. */
 object String4 {
   val empty: String4 = new String4(new Array[Int](0))
   
-  def apply(chars: java.lang.CharSequence): String4 = {
+  def apply(chars: CharSequence): String4 = {
     val s = new String4Builder
     s.append(chars)
     s.state
@@ -70,6 +33,8 @@ object String4 {
   implicit def Builder: StringBuilder[Any] { type State = String4 } = new String4Builder
 }
 
+/** A builder for 32-bit Unicode strings in the UTF-32 encoding form.
+  * Produces only well-formed code unit sequences. */
 private[text] final class String4Iterator
     (string: String4, private[this] var index: Int)
   extends Iterator[Int] {
@@ -77,13 +42,13 @@ private[text] final class String4Iterator
   override def isEmpty: Boolean = index >= string.length
   
   override def head: Int = {
-    if (!isEmpty) string(index)
-    else throw new NoSuchElementException("Head of empty iterator.")
+    if (index >= string.length) throw new NoSuchElementException("Head of empty iterator.")
+    string(index)
   }
   
   override def step() {
-    if (!isEmpty) index += 1
-    else throw new UnsupportedOperationException("Empty iterator step.")
+    if (index >= string.length) throw new UnsupportedOperationException("Empty iterator step.")
+    index += 1
   }
   
   override def dup: Iterator[Int] = new String4Iterator(string, index)

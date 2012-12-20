@@ -9,7 +9,6 @@ package basis.collections
 
 /** An iterable container of elements.
   * 
-  * @groupprio  Examining     -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1

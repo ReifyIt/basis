@@ -9,8 +9,8 @@ package basis.collections
 
 /** A mutable buffer of elements.
   * 
-  * @groupprio  Examining     -8
-  * @groupprio  Mutating      -7
+  * @groupprio  Quantifying   -8
+  * @groupprio  Indexing      -7
   * @groupprio  Inserting     -6
   * @groupprio  Removing      -5
   * @groupprio  Iterating     -4
@@ -24,11 +24,11 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   extends Equals with Family[Buffer[A]] with Seq[A] with Accumulator[A] {
   
   /** Returns the element at the given index.
-    * @group Examining */
+    * @group Indexing */
   def apply(index: Int): A
   
   /** Replaces the element at `index` with the given element.
-    * @group Mutating */
+    * @group Indexing */
   def update(index: Int, elem: A): Unit
   
   /** Prepends a single element to this $collection.

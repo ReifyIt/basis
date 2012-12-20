@@ -11,7 +11,8 @@ import scala.annotation.unchecked.uncheckedVariance
 
 /** An associated set of (key, value) pairs with unique keys.
   * 
-  * @groupprio  Examining     -4
+  * @groupprio  Quantifying   -5
+  * @groupprio  Querying      -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
@@ -20,11 +21,11 @@ import scala.annotation.unchecked.uncheckedVariance
   */
 trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
   /** Returns `true` if this $collection doesn't contain any associations.
-    * @group Examining */
+    * @group Quantifying */
   def isEmpty: Boolean = iterator.isEmpty
   
   /** Returns the number of associations in this $collection.
-    * @group Examining */
+    * @group Quantifying */
   def size: Int = {
     var count = 0
     val entries = iterator
@@ -36,7 +37,7 @@ trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
   }
   
   /** Returns `true` if this $collection has a value associated with the given key.
-    * @group Examining */
+    * @group Querying */
   def contains(key: A @uncheckedVariance): Boolean = {
     val entries = iterator
     while (!entries.isEmpty) {
@@ -47,7 +48,7 @@ trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
   }
   
   /** Returns the value associated with the given key.
-    * @group Examining */
+    * @group Querying */
   def apply(key: A @uncheckedVariance): T = {
     val entries = iterator
     while (!entries.isEmpty) {
@@ -59,7 +60,7 @@ trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
   }
   
   /** Returns some value associated with the given key, or none if no association exists.
-    * @group Examining */
+    * @group Querying */
   def get(key: A @uncheckedVariance): Option[T] = {
     val entries = iterator
     while (!entries.isEmpty) {

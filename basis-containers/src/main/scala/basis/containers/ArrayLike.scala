@@ -13,14 +13,14 @@ import scala.reflect.ClassTag
 
 /** An array-convertible collection.
   * 
-  * @groupprio  Examining   -2
-  * @groupprio  Converting  -1
+  * @groupprio  Quantifying   -2
+  * @groupprio  Converting    -1
   * 
   * @define collection  collection
   */
 trait ArrayLike[+A] extends Any { this: Enumerator[A] =>
   /** Returns the number of elements in this $collection.
-    * @group Examining */
+    * @group Quantifying */
   def length: Int
   
   /** Copies elements from this $collection to an array slice.

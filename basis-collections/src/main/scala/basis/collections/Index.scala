@@ -9,14 +9,15 @@ package basis.collections
 
 /** An indexed sequence of elements.
   * 
-  * @groupprio  Examining     -4
+  * @groupprio  Quantifying   -5
+  * @groupprio  Indexing      -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   */
 trait Index[+A] extends Any with Family[Index[A]] with Seq[A] {
   /** Returns the element at the given index.
-    * @group Examining */
+    * @group Indexing */
   def apply(index: Int): A
   
   override def isEmpty: Boolean = length == 0

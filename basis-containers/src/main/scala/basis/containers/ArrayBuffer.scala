@@ -15,11 +15,10 @@ import scala.reflect.ClassTag
 
 /** A mutable contiguous array.
   * 
-  * @groupprio  Examining     -9
-  * @groupprio  Mutating      -8
-  * @groupprio  Inserting     -7
-  * @groupprio  Removing      -6
-  * @groupprio  Copying       -5
+  * @groupprio  Quantifying   -8
+  * @groupprio  Indexing      -7
+  * @groupprio  Inserting     -6
+  * @groupprio  Removing      -5
   * @groupprio  Iterating     -4
   * @groupprio  Traversing    -3
   * @groupprio  Converting    -2

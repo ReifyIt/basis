@@ -10,208 +10,27 @@ package basis.text
 import basis.collections._
 import basis.util._
 
-/** An 8-bit Unicode string comprised of a UTF-8 code unit sequence.
+/** A UTF-8 string.
   * 
   * @define collection  string
   */
-final class String1(codeUnits: Array[Byte]) extends Equals with Family[String1] with Seq[Int] {
-  override def isEmpty: Boolean = codeUnits.length == 0
+final class String1(codeUnits: Array[Byte]) extends UTF8 {
+  override def size: Int = codeUnits.length
   
-  /** Counts the number of code points in this string. */
-  override def length: Int = {
-    var i = 0
-    var l = 0
-    val n = size
-    while (i < n) {
-      i = nextIndex(i)
-      l += 1
-    }
-    l
-  }
-  
-  /** Returns the number of unsigned 8-bit code units in this string. */
-  def size: Int = codeUnits.length
-  
-  /** Returns a decoded character beginning at `index`. Substitutes the
-    * replacement character U+FFFD at invalid indexes. */
-  def apply(index: Int): Int = {
-    val n = codeUnits.length
-    if (index < 0 || index >= n)
-      throw new java.lang.IndexOutOfBoundsException(index.toString)
-    val c1 = codeUnits(index) & 0xFF
-    if (c1 <= 0x7F) c1 // U+0000..U+007F
-    else if (c1 >= 0xC2 && c1 <= 0xF4 && index + 1 < n) {
-      val c2 = codeUnits(index + 1) & 0xFF
-      if (c1 <= 0xDF && c2 >= 0x80 && c2 <= 0xBF) // U+0080..U+07FF
-        ((c1 & 0x1F) << 6) | (c2 & 0x3F)
-      else if (index + 2 < n) {
-        val c3 = codeUnits(index + 2) & 0xFF
-        if ((c1 == 0xE0 &&
-             c2 >= 0xA0 && c2 <= 0xBF
-          || c1 == 0xED &&
-             c2 >= 0x80 && c2 <= 0x9F
-          || c1 >= 0xE1 && c1 <= 0xEF &&
-             c2 >= 0x80 && c2 <= 0xBF)
-          && c3 >= 0x80 && c3 <= 0xBF) // U+0800..U+FFFF
-          ((c1 & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F)
-        else if (index + 3 < n) {
-          val c4 = codeUnits(index + 3) & 0xFF
-          if ((c1 == 0xF0 &&
-               c2 >= 0x90 && c2 <= 0xBF
-            || c1 >= 0xF1 && c1 <= 0xF3 &&
-               c2 >= 0x80 && c2 <= 0xBF
-            || c1 == 0xF4 &&
-               c2 >= 0x80 && c2 <= 0x8F)
-            && c3 >= 0x80 && c3 <= 0xBF
-            && c4 >= 0x80 && c4 <= 0xBF) // U+10000..U+10FFFF
-            ((c1 & 0x07) << 18) | ((c2 & 0x3F) << 12) | ((c3 & 0x3F) << 6) | (c4 & 0x3F)
-          else 0xFFFD
-        }
-        else 0xFFFD
-      }
-      else 0xFFFD
-    }
-    else 0xFFFD
-  }
-  
-  def nextIndex(index: Int): Int = {
-    val n = codeUnits.length
-    if (index < 0 || index >= n)
-      throw new java.lang.IndexOutOfBoundsException(index.toString)
-    val c1 = codeUnits(index) & 0xFF
-    if (c1 <= 0x7F) // U+0000..U+007F
-      index + 1
-    else if (c1 >= 0xC2 && c1 <= 0xF4 && index + 1 < n) {
-      val c2 = codeUnits(index + 1) & 0xFF
-      if (c1 <= 0xDF && c2 >= 0x80 && c2 <= 0xBF) // U+0080..U+07FF
-        index + 2
-      else if (index + 2 < n) {
-        val c3 = codeUnits(index + 2) & 0xFF
-        if ((c1 == 0xE0 &&
-             c2 >= 0xA0 && c2 <= 0xBF
-          || c1 == 0xED &&
-             c2 >= 0x80 && c2 <= 0x9F
-          || c1 >= 0xE1 && c1 <= 0xEF &&
-             c2 >= 0x80 && c2 <= 0xBF)
-          && c3 >= 0x80 && c3 <= 0xBF) // U+0800..U+FFFF
-          index + 3
-        else if (index + 3 < n) {
-          val c4 = codeUnits(index + 3) & 0xFF
-          if ((c1 == 0xF0 &&
-               c2 >= 0x90 && c2 <= 0xBF
-            || c1 >= 0xF1 && c1 <= 0xF3 &&
-               c2 >= 0x80 && c2 <= 0xBF
-            || c1 == 0xF4 &&
-               c2 >= 0x80 && c2 <= 0x8F)
-            && c3 >= 0x80 && c3 <= 0xBF
-            && c4 >= 0x80 && c4 <= 0xBF) // U+10000..U+10FFFF
-            index + 4
-          else index + 3
-        }
-        else index + 2
-      }
-      else index + 1
-    }
-    else index + 1
-  }
-  
-  override def iterator: Iterator[Int] = new String1Iterator(this, 0)
-  
-  /** Sequentially applies a function to each code point in this string.
-    * Applies the replacement character U+FFFD in lieu of the maximal subpart
-    * of any ill-formed subsequences. */
-  protected override def foreach[U](f: Int => U) {
-    var i = 0
-    var n = codeUnits.length
-    while (i < n) f({
-      val c1 = codeUnits(i) & 0xFF
-      i += 1
-      if (c1 <= 0x7F) c1 // U+0000..U+007F
-      else if (c1 >= 0xC2 && c1 <= 0xF4 && i < n) {
-        val c2 = codeUnits(i) & 0xFF
-        if (c1 <= 0xDF && c2 >= 0x80 && c2 <= 0xBF) { // U+0080..U+07FF
-          i += 1
-          ((c1 & 0x1F) << 6) | (c2 & 0x3F)
-        }
-        else if (i < n) {
-          i += 1
-          val c3 = codeUnits(i) & 0xFF
-          if ((c1 == 0xE0 &&
-               c2 >= 0xA0 && c2 <= 0xBF
-            || c1 == 0xED &&
-               c2 >= 0x80 && c2 <= 0x9F
-            || c1 >= 0xE1 && c1 <= 0xEF &&
-               c2 >= 0x80 && c2 <= 0xBF)
-            && c3 >= 0x80 && c3 <= 0xBF) { // U+0800..U+FFFF
-            i += 1
-            ((c1 & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F)
-          }
-          else if (i < n) {
-            i += 1
-            val c4 = codeUnits(i) & 0xFF
-            if ((c1 == 0xF0 &&
-                 c2 >= 0x90 && c2 <= 0xBF
-              || c1 >= 0xF1 && c1 <= 0xF3 &&
-                 c2 >= 0x80 && c2 <= 0xBF
-              || c1 == 0xF4 &&
-                 c2 >= 0x80 && c2 <= 0x8F)
-              && c3 >= 0x80 && c3 <= 0xBF
-              && c4 >= 0x80 && c4 <= 0xBF) { // U+10000..U+10FFFF
-              i += 1
-              ((c1 & 0x07) << 18) | ((c2 & 0x3F) << 12) | ((c3 & 0x3F) << 6) | (c4 & 0x3F)
-            }
-            else 0xFFFD
-          }
-          else 0xFFFD
-        }
-        else 0xFFFD
-      }
-      else 0xFFFD
-    }: Int)
-  }
-  
-  override def toString: String = {
-    val s = new java.lang.StringBuilder
-    var i = 0
-    val n = size
-    while (i < n) {
-      s.appendCodePoint(this(i))
-      i = nextIndex(i)
-    }
-    s.toString
-  }
+  override def get(index: Int): Int = codeUnits(index) & 0xFF
 }
 
-/** A factory for 8-bit Unicode strings. */
+/** A factory for UTF-8 strings. */
 object String1 {
   val empty: String1 = new String1(new Array[Byte](0))
   
-  def apply(chars: java.lang.CharSequence): String1 = {
+  def apply(chars: CharSequence): String1 = {
     val s = new String1Builder
     s.append(chars)
     s.state
   }
   
   implicit def Builder: StringBuilder[Any] { type State = String1 } = new String1Builder
-}
-
-private[text] final class String1Iterator
-    (string: String1, private[this] var index: Int)
-  extends Iterator[Int] {
-  
-  override def isEmpty: Boolean = index >= string.size
-  
-  override def head: Int = {
-    if (!isEmpty) string(index)
-    else throw new NoSuchElementException("Head of empty iterator.")
-  }
-  
-  override def step() {
-    if (!isEmpty) index = string.nextIndex(index)
-    else throw new UnsupportedOperationException("Empty iterator step.")
-  }
-  
-  override def dup: Iterator[Int] = new String1Iterator(string, index)
 }
 
 /** A builder for 8-bit Unicode strings in the UTF-8 encoding form.

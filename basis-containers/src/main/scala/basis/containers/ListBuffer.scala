@@ -13,8 +13,8 @@ import scala.reflect.ClassTag
 
 /** A mutable list of elements.
   * 
-  * @groupprio  Examining     -8
-  * @groupprio  Mutating      -7
+  * @groupprio  Quantifying   -8
+  * @groupprio  Indexing      -7
   * @groupprio  Inserting     -6
   * @groupprio  Removing      -5
   * @groupprio  Iterating     -4

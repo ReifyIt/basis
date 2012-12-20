@@ -9,7 +9,7 @@ package basis.collections
 
 /** An iterable sequence of elements.
   * 
-  * @groupprio  Examining     -4
+  * @groupprio  Quantifying   -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
@@ -18,11 +18,11 @@ package basis.collections
   */
 trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.
-    * @group Examining */
+    * @group Quantifying */
   def isEmpty: Boolean = iterator.isEmpty
   
   /** Returns the number of elements in this $collection.
-    * @group Examining */
+    * @group Quantifying */
   def length: Int = {
     var n = 0
     var xs = iterator

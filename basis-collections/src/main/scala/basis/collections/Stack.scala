@@ -9,18 +9,19 @@ package basis.collections
 
 /** A linear sequence of elements.
   * 
-  * @groupprio  Examining     -4
+  * @groupprio  Quantifying   -5
+  * @groupprio  Decomposing   -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   */
 trait Stack[+A] extends Any with Family[Stack[A]] with Seq[A] {
   /** Returns the first element of this non-empty $collection.
-    * @group Examining */
+    * @group Decomposing */
   def head: A
   
   /** Returns all elements except the first of this non-empty $collection.
-    * @group Examining */
+    * @group Decomposing */
   def tail: Family
   
   override def length: Int = {

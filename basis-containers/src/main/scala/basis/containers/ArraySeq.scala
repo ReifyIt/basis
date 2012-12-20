@@ -15,14 +15,12 @@ import scala.reflect.ClassTag
 
 /** A contiguous array.
   * 
-  * @groupprio  Examining     -6
-  * @groupprio  Copying       -5
+  * @groupprio  Quantifying   -6
+  * @groupprio  Indexing      -5
   * @groupprio  Iterating     -4
   * @groupprio  Traversing    -3
   * @groupprio  Converting    -2
   * @groupprio  Classifying   -1
-  * 
-  * @define collection  sequence
   */
 abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Equals with Family[ArraySeq[A]] with Index[A] with ArrayLike[A] {

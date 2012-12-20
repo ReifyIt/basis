@@ -15,10 +15,10 @@ import scala.reflect.ClassTag
 
 /** A singly linked list.
   * 
-  * @groupprio  Examining     -8
-  * @groupprio  Mutating      -7
-  * @groupprio  Inserting     -6
-  * @groupprio  Removing      -5
+  * @groupprio  Quantifying   -8
+  * @groupprio  Decomposing   -7
+  * @groupprio  Composing     -6
+  * @groupprio  Slicing       -5
   * @groupprio  Iterating     -4
   * @groupprio  Traversing    -3
   * @groupprio  Converting    -2
@@ -45,6 +45,8 @@ sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
     n
   }
   
+  /** Returns the `lower` tail of this $collection.
+    * @group Slicing */
   @unspecialized def drop(lower: Int): List[A] = {
     var i = 0
     var xs = this
@@ -55,6 +57,8 @@ sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
     xs
   }
   
+  /** Returns the `upper` heads of this $collection.
+    * @group Slicing */
   @unspecialized def take(upper: Int): List[A] = {
     var i = 0
     val b = new ListBuilder[A]
@@ -67,9 +71,13 @@ sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
     b.state
   }
   
+  /** Returns the [`lower`, `upper`) bounded elements of this $collection.
+    * @group Slicing */
   @unspecialized def slice(lower: Int, upper: Int): List[A] =
     if (lower < upper) drop(lower).take(upper) else Nil
   
+  /** Returns the reverse of this $collection.
+    * @group Composing */
   @unspecialized def reverse: List[A] = {
     var sx = Nil: List[A]
     var xs = this
@@ -80,6 +88,8 @@ sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
     sx
   }
   
+  /** Returns this $collection with the given element prepended.
+    * @group Composing */
   @unspecialized def :: [B >: A](elem: B): List[B] = new RefList(elem, this)
   
   override def toList: this.type = this

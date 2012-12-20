@@ -10,101 +10,21 @@ package basis.text
 import basis.collections._
 import basis.util._
 
-/** A 16-bit Unicode string comprised of a UTF-16 code unit sequence.
+/** A UTF-16 string.
   * 
   * @define collection  string
   */
-final class String2(codeUnits: Array[scala.Char]) extends Equals with Family[String2] with Seq[Int] {
-  override def isEmpty: Boolean = codeUnits.length == 0
+final class String2(codeUnits: Array[Char]) extends UTF16 {
+  override def size: Int = codeUnits.length
   
-  /** Counts the number of code points in this string. */
-  override def length: Int = {
-    var i = 0
-    var l = 0
-    val n = size
-    while (i < n) {
-      i = nextIndex(i)
-      l += 1
-    }
-    l
-  }
-  
-  /** Returns the number of unsigned 16-bit code units in this string. */
-  def size: Int = codeUnits.length
-  
-  /** Returns a decoded character beginning at `index`. Substitutes the
-    * replacement character U+FFFD at invalid indexes. */
-  def apply(index: Int): Int = {
-    val n = codeUnits.length
-    if (index < 0 || index >= n)
-      throw new java.lang.IndexOutOfBoundsException(index.toString)
-    val c1 = codeUnits(index)
-    if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
-    else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
-      val c2 = codeUnits(index + 1)
-      if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
-        (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
-      else 0xFFFD
-    }
-    else 0xFFFD
-  }
-  
-  def nextIndex(index: Int): Int = {
-    val n = codeUnits.length
-    if (index < 0 || index >= n)
-      throw new java.lang.IndexOutOfBoundsException(index.toString)
-    val c1 = codeUnits(index)
-    if (c1 <= 0xD7FF || c1 >= 0xE000) // U+0000..U+D7FF | U+E000..U+FFFF
-      index + 1
-    else if (c1 <= 0xDBFF && index + 1 < n) { // c1 >= 0xD800
-      val c2 = codeUnits(index + 1)
-      if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
-        index + 2
-      else index + 1
-    }
-    else index + 1
-  }
-  
-  override def iterator: Iterator[Int] = new String2Iterator(this, 0)
-  
-  /** Sequentially applies a function to each code point in this string.
-    * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
-  protected override def foreach[U](f: Int => U) {
-    var i = 0
-    val n = codeUnits.length
-    while (i < n) f({
-      val c1 = codeUnits(i).toInt
-      i += 1
-      if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
-      else if (c1 <= 0xDBFF && i < n) { // c1 >= 0xD800
-        val c2 = codeUnits(i).toInt
-        if (c2 >= 0xDC00 && c2 <= 0xDFFF) { // U+10000..U+10FFFF
-          i += 1
-          (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
-        }
-        else 0xFFFD
-      }
-      else 0xFFFD
-    }: Int)
-  }
-  
-  override def toString: String = {
-    val s = new java.lang.StringBuilder
-    var i = 0
-    val n = size
-    while (i < n) {
-      s.appendCodePoint(this(i))
-      i = nextIndex(i)
-    }
-    s.toString
-  }
+  override def get(index: Int): Int = codeUnits(index)
 }
 
-/** A factory for 16-bit Unicode strings. */
+/** A factory for UTF-16 strings. */
 object String2 {
-  val empty: String2 = new String2(new Array[scala.Char](0))
+  val empty: String2 = new String2(new Array[Char](0))
   
-  def apply(chars: java.lang.CharSequence): String2 = {
+  def apply(chars: CharSequence): String2 = {
     val s = new String2Builder
     s.append(chars)
     s.state
@@ -113,31 +33,12 @@ object String2 {
   implicit def Builder: StringBuilder[Any] { type State = String2 } = new String2Builder
 }
 
-private[text] final class String2Iterator
-    (string: String2, private[this] var index: Int)
-  extends Iterator[Int] {
-  
-  override def isEmpty: Boolean = index >= string.size
-  
-  override def head: Int = {
-    if (!isEmpty) string(index)
-    else throw new NoSuchElementException("Head of empty iterator.")
-  }
-  
-  override def step() {
-    if (!isEmpty) index = string.nextIndex(index)
-    else throw new UnsupportedOperationException("Empty iterator step.")
-  }
-  
-  override def dup: Iterator[Int] = new String2Iterator(string, index)
-}
-
 /** A builder for 16-bit Unicode strings in the UTF-16 encoding form.
   * Produces only well-formed code unit sequences. */
 private[text] final class String2Builder extends StringBuilder[Any] {
   override type State = String2
   
-  private[this] var codeUnits: Array[scala.Char] = _
+  private[this] var codeUnits: Array[Char] = _
   
   private[this] var aliased: Boolean = true
   
@@ -150,7 +51,7 @@ private[text] final class String2Builder extends StringBuilder[Any] {
   }
   
   private[this] def resize(size: Int) {
-    val newCodeUnits = new Array[scala.Char](size)
+    val newCodeUnits = new Array[Char](size)
     if (codeUnits != null) java.lang.System.arraycopy(codeUnits, 0, newCodeUnits, 0, codeUnits.length min size)
     codeUnits = newCodeUnits
   }

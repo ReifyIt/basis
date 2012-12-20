@@ -11,7 +11,8 @@ import scala.annotation.unchecked.uncheckedVariance
 
 /** A unique set of elements.
   * 
-  * @groupprio  Examining     -4
+  * @groupprio  Quantifying   -5
+  * @groupprio  Querying      -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
@@ -20,11 +21,11 @@ import scala.annotation.unchecked.uncheckedVariance
   */
 trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.
-    * @group Examining */
+    * @group Quantifying */
   def isEmpty: Boolean = iterator.isEmpty
   
   /** Returns the number of elements in this $collection.
-    * @group Examining */
+    * @group Quantifying */
   def size: Int = {
     var count = 0
     val these = iterator
@@ -36,7 +37,7 @@ trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
   }
   
   /** Returns `true` if this $collection contains the given element.
-    * @group Examining */
+    * @group Querying */
   def contains(element: A @uncheckedVariance): Boolean = {
     val these = iterator
     while (!these.isEmpty) {
