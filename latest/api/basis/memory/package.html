@@ -1,0 +1,355 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>memory - basis.memory</title>
+          <meta name="description" content="memory - basis.memory" />
+          <meta name="keywords" content="memory basis.memory" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.memory.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a></p>
+        <h1>memory</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">memory</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Low-level memory operations.</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">Content Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph36" viewBox="0.00 0.00 519.00 96.00" height="96pt" width="519pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 92)" class="graph" id="graph1"><polygon points="-4,5 -4,-92 516,-92 516,5 -4,5" stroke="white" fill="white"></polygon><!-- node0 --><g class="node class" id="graph36_0"><a xlink:title="basis.memory.ValType" xlink:href="ValType.html#inheritance-diagram"><polygon points="90.25,-26 -0.25,-26 -0.25,-0 90.25,-0 90.25,-26" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-21" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="32" text-anchor="start">ValType[T]</text></a></g><!-- node1 --><g class="node class" id="graph36_1"><a xlink:title="basis.memory.RefType" xlink:href="RefType.html#inheritance-diagram"><polygon points="201.25,-26 108.75,-26 108.75,-0 201.25,-0 201.25,-26" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-21" x="119" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="141" text-anchor="start">RefType[T]</text></a></g><!-- node2 --><g class="node class" id="graph36_2"><a xlink:title="basis.memory.DataType" xlink:href="DataType.html#inheritance-diagram"><polygon points="143.25,-88 44.75,-88 44.75,-62 143.25,-62 143.25,-88" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-83" x="55" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="77" text-anchor="start">DataType[T]</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph36_2_0"><a xlink:title="ValType[T] is a subtype of DataType[T]"><path d="M80.7379,-57.7607C72.5943,-47.7889 62.336,-35.2278 54.9011,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="79.566,-59.0924 84.0841,-61.8581 82.2768,-56.8785 79.566,-59.0924" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2&#45;&gt;node1 --><g class="edge inheritance" id="graph36_2_1"><a xlink:title="RefType[T] is a subtype of DataType[T]"><path d="M109.969,-58.2924C120.191,-48.2386 133.253,-35.3904 142.674,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="108.682,-57.1042 106.344,-61.8581 111.136,-59.5995 108.682,-57.1042" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node3 --><g class="node object" id="graph36_3"><a xlink:title="basis.memory.Data" xlink:href="Data$.html#inheritance-diagram"><polygon points="284.25,-26 219.75,-26 219.75,-0 284.25,-0 284.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="230" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="252" text-anchor="start">Data</text></a></g><!-- node4 --><g class="node object" id="graph36_4"><a xlink:title="basis.memory.LittleEndian" xlink:href="LittleEndian$.html#inheritance-diagram"><polygon points="402.25,-26 305.75,-26 305.75,-0 402.25,-0 402.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="316" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="338" text-anchor="start">LittleEndian</text></a></g><!-- node5 --><g class="node object" id="graph36_5"><a xlink:title="basis.memory.BigEndian" xlink:href="BigEndian$.html#inheritance-diagram"><polygon points="511,-26 421,-26 421,-0 511,-0 511,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="431" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="453" text-anchor="start">BigEndian</text></a></g><!-- node6 --><g class="node class" id="graph36_6"><a xlink:title="basis.memory.ByteOrder" xlink:href="ByteOrder.html#inheritance-diagram"><polygon points="402,-88 312,-88 312,-62 402,-62 402,-88" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-83" x="322" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="344" text-anchor="start">ByteOrder</text></a></g><!-- node6&#45;&gt;node4 --><g class="edge inheritance" id="graph36_6_4"><a xlink:title="LittleEndian is a subtype of ByteOrder"><path d="M356.134,-56.6826C355.645,-46.8961 355.045,-34.9026 354.606,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="354.395,-56.9518 356.393,-61.8581 357.891,-56.7769 354.395,-56.9518" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node6&#45;&gt;node5 --><g class="edge inheritance" id="graph36_6_5"><a xlink:title="BigEndian is a subtype of ByteOrder"><path d="M383.632,-59.34C402.154,-49.1447 426.55,-35.7155 443.975,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="382.594,-57.9138 379.058,-61.8581 384.282,-60.98 382.594,-57.9138" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node7 --><g class="node class" id="graph36_7"><a xlink:title="basis.memory.Allocator" xlink:href="Allocator.html#inheritance-diagram"><polygon points="293.25,-88 210.75,-88 210.75,-62 293.25,-62 293.25,-88" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-83" x="221" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="243" text-anchor="start">Allocator</text></a></g><!-- node7&#45;&gt;node3 --><g class="edge inheritance" id="graph36_7_3"><a xlink:title="Data is a subtype of Allocator"><path d="M252,-56.6826C252,-46.8961 252,-34.9026 252,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="250.25,-56.8581 252,-61.8581 253.75,-56.8581 250.25,-56.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.memory"><span>memory</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.memory.Allocator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AllocatorextendsAbstractFunction1[Long,basis.memory.Data]"></a>
+      <a id="Allocator:Allocator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Allocator.html"><span class="name">Allocator</span></a><span class="result"> extends <span class="extype" name="scala.runtime.AbstractFunction1">AbstractFunction1</span>[<span class="extype" name="scala.Long">Long</span>, <a href="Data.html" class="extype" name="basis.memory.Data">Data</a>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A <code>Data</code> allocator.</p>
+    </li><li name="basis.memory.ByteOrder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ByteOrderextendsObject"></a>
+      <a id="ByteOrder:ByteOrder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ByteOrder.html"><span class="name">ByteOrder</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The ordering of bytes in multi-byte words.</p>
+    </li><li name="basis.memory.Data" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DataextendsObject"></a>
+      <a id="Data:Data"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Data.html"><span class="name">Data</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A mutable byte sequence with supporting low-level memory operations.</p>
+    </li><li name="basis.memory.DataType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DataType[T]extendsObject"></a>
+      <a id="DataType[T]:DataType[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DataType.html"><span class="name">DataType</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A data storage strategy.</p>
+    </li><li name="basis.memory.RefType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="RefType[T]extendsDataType[T]"></a>
+      <a id="RefType[T]:RefType[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RefType.html"><span class="name">RefType</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="DataType.html" class="extype" name="basis.memory.DataType">DataType</a>[<span class="extype" name="basis.memory.RefType.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A by-reference data storage strategy.</p>
+    </li><li name="basis.memory.ValType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ValType[T]extendsDataType[T]"></a>
+      <a id="ValType[T]:ValType[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ValType.html"><span class="name">ValType</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="DataType.html" class="extype" name="basis.memory.DataType">DataType</a>[<span class="extype" name="basis.memory.ValType.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A by-value data storage strategy.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="basis.memory.Allocator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Allocator"></a>
+      <a id="Allocator:Allocator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Allocator$.html"><span class="name">Allocator</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">Provides an implicit default <code>Data</code> allocator.</p>
+    </li><li name="basis.memory.BigEndian" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BigEndian"></a>
+      <a id="BigEndian:BigEndian"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BigEndian$.html"><span class="name">BigEndian</span></a><span class="result"> extends <a href="ByteOrder.html" class="extype" name="basis.memory.ByteOrder">ByteOrder</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The byte order where more significant bytes come first.</p>
+    </li><li name="basis.memory.Data" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Data"></a>
+      <a id="Data:Data"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Data$.html"><span class="name">Data</span></a><span class="result"> extends <a href="Allocator.html" class="extype" name="basis.memory.Allocator">Allocator</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">An allocator for native-endian data backed by a primitive array.</p>
+    </li><li name="basis.memory.DataType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DataType"></a>
+      <a id="DataType:DataType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DataType$.html"><span class="name">DataType</span></a><span class="result"> extends <span class="extype" name="basis.memory.ValTypes">ValTypes</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Fundamental data types.</p>
+    </li><li name="basis.memory.LittleEndian" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LittleEndian"></a>
+      <a id="LittleEndian:LittleEndian"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LittleEndian$.html"><span class="name">LittleEndian</span></a><span class="result"> extends <a href="ByteOrder.html" class="extype" name="basis.memory.ByteOrder">ByteOrder</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The byte order where less significant bytes come first.</p>
+    </li><li name="basis.memory.package#NativeEndian" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NativeEndian:basis.memory.ByteOrder"></a>
+      <a id="NativeEndian:ByteOrder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NativeEndian</span><span class="result">: <a href="ByteOrder.html" class="extype" name="basis.memory.ByteOrder">ByteOrder</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the native byte order of the virtual machine.</p>
+    </li><li name="basis.memory.RefType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RefType"></a>
+      <a id="RefType:RefType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RefType$.html"><span class="name">RefType</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">Reference types.</p>
+    </li><li name="basis.memory.ValType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ValType"></a>
+      <a id="ValType:ValType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ValType$.html"><span class="name">ValType</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">Fundamental value types.</p>
+    </li><li name="basis.memory.package#align" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="align(base:Long,alignment:Long):Long"></a>
+      <a id="align(Long,Long):Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">align</span><span class="params">(<span name="base">base: <span class="extype" name="scala.Long">Long</span></span>, <span name="alignment">alignment: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a given address advanced to a power-of-two alignment.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a given address advanced to a power-of-two alignment.
+</p></div><dl class="paramcmts block"><dt class="param">alignment</dt><dd class="cmt"><p>the required alignment.</p></dd><dt>returns</dt><dd class="cmt"><p>the aligned address.
+</p></dd></dl></div>
+    </li><li name="basis.memory.package#alignOf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="alignOf[T](implicitstruct:basis.memory.ValType[T]):Long"></a>
+      <a id="alignOf[T](ValType[T]):Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">alignOf</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="struct">struct: <a href="ValType.html" class="extype" name="basis.memory.ValType">ValType</a>[<span class="extype" name="basis.memory.alignOf.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the alignment of type's implicit <code>ValType</code>.</p>
+    </li><li name="basis.memory.package#sizeOf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sizeOf[T](implicitstruct:basis.memory.ValType[T]):Long"></a>
+      <a id="sizeOf[T](ValType[T]):Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sizeOf</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="struct">struct: <a href="ValType.html" class="extype" name="basis.memory.ValType">ValType</a>[<span class="extype" name="basis.memory.sizeOf.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the size of a type's implicit <code>ValType</code>.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

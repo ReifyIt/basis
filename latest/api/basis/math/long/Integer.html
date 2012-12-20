@@ -1,0 +1,540 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>Integer - basis.math.long.Integer</title>
+          <meta name="description" content="Integer - basis.math.long.Integer" />
+          <meta name="keywords" content="Integer basis.math.long.Integer" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'basis.math.long.Integer';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="Integer$.html" title="Go to companion"><img src="../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="basis">basis</a>.<a href="../package.html" class="extype" name="basis.math">math</a>.<a href="package.html" class="extype" name="basis.math.long">long</a></p>
+        <h1><a href="Integer$.html" title="Go to companion">Integer</a></h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Integer</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <a href="Integer$$Value.html" class="extype" name="basis.math.long.Integer.Value">Value</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A 64-bit two's complement integer value.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-math/src/main/scala/basis/math/long/Integer.scala" target="_blank">Integer.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="Integer$$Value.html" class="extype" name="basis.math.long.Integer.Value">Value</a>, <span class="extype" name="basis.math.long.ZN.Value">Integer.Value</span>, <span class="extype" name="basis.math.FN.Value">Integer.Value</span>, <span class="extype" name="basis.math.VectorSpace.Value">Integer.Value</span>, <span class="extype" name="basis.math.AffineSpace.Value">Integer.Value</span>, <span class="extype" name="basis.math.OrderedRing.Value">Integer.Value</span>, <span class="extype" name="basis.math.Ring.Value">Integer.Value</span>, <span class="extype" name="scala.AnyVal">AnyVal</span>, <span class="extype" name="scala.NotNull">NotNull</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph54" viewBox="0.00 0.00 169.00 120.00" height="120pt" width="169pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 166,-116 166,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph54_0"><a xlink:title="basis.math.long.Integer (this class)" xlink:href="#inheritance-diagram"><polygon points="119.25,-50 44.75,-50 44.75,-24 119.25,-24 119.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-45" x="55" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="77" text-anchor="start">Integer</text></a></g><!-- node1 --><g class="node class" id="graph54_1"><a xlink:title="scala.AnyVal"><polygon points="74.25,-112 -0.25,-112 -0.25,-86 74.25,-86 74.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-107" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="32" text-anchor="start">AnyVal</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph54_1_0"><a xlink:title="Integer is a subtype of AnyVal"><path d="M49.1795,-81.7607C56.6583,-71.7889 66.0792,-59.2278 72.9071,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="47.7065,-80.8081 46.1064,-85.8581 50.5065,-82.9081 47.7065,-80.8081" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph54_2"><a xlink:title="basis.math.long.Integer.Value" xlink:href="Integer$$Value.html#inheritance-diagram"><polygon points="161.25,-112 92.75,-112 92.75,-86 161.25,-86 161.25,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../../lib/trait_diagram.png" y="-107" x="103" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="125" text-anchor="start">Value</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph54_2_0"><a xlink:title="Integer is a subtype of Value"><path d="M114.82,-81.7607C107.342,-71.7889 97.9208,-59.2278 91.0929,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="113.494,-82.9081 117.894,-85.8581 116.294,-80.8081 113.494,-82.9081" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.math.long.Integer"><span>Integer</span></li><li class="in" name="basis.math.long.Integer.Value"><span>Value</span></li><li class="in" name="basis.math.long.ZN.Value"><span>Value</span></li><li class="in" name="basis.math.FN.Value"><span>Value</span></li><li class="in" name="basis.math.VectorSpace.Value"><span>Value</span></li><li class="in" name="basis.math.AffineSpace.Value"><span>Value</span></li><li class="in" name="basis.math.OrderedRing.Value"><span>Value</span></li><li class="in" name="basis.math.Ring.Value"><span>Value</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.NotNull"><span>NotNull</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="basis.math.long.Integer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(value:Long):basis.math.long.Integer"></a>
+      <a id="&lt;init&gt;:Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Integer</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Long">Long</span></span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.math.long.Integer#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id="*(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the product of this value times another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the product of this value times another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a> → <a href="../Ring$Value.html" class="extype" name="basis.math.Ring.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#*:" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*:(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id="*:(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times$colon" class="name">*:</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the product of this value times a value on the left.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the product of this value times a value on the left.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="ZN$Value.html" class="extype" name="basis.math.long.ZN.Value">Value</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a> → <a href="../VectorSpace$Value.html" class="extype" name="basis.math.VectorSpace.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id="+(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns sum of this value and another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns sum of this value and another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="ZN$Value.html" class="extype" name="basis.math.long.ZN.Value">Value</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a> → <a href="../VectorSpace$Value.html" class="extype" name="basis.math.VectorSpace.Value">Value</a> → <a href="../AffineSpace$Value.html" class="extype" name="basis.math.AffineSpace.Value">Value</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a> → <a href="../Ring$Value.html" class="extype" name="basis.math.Ring.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#-" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="-(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id="-(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $minus" class="name">-</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the difference between this value and another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the difference between this value and another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="ZN$Value.html" class="extype" name="basis.math.long.ZN.Value">Value</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a> → <a href="../VectorSpace$Value.html" class="extype" name="basis.math.VectorSpace.Value">Value</a> → <a href="../AffineSpace$Value.html" class="extype" name="basis.math.AffineSpace.Value">Value</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a> → <a href="../Ring$Value.html" class="extype" name="basis.math.Ring.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#:*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id=":*(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id=":*(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $colon$times" class="name">:*</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the product of this value times a value on the right.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the product of this value times a value on the right.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="ZN$Value.html" class="extype" name="basis.math.long.ZN.Value">Value</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a> → <a href="../VectorSpace$Value.html" class="extype" name="basis.math.VectorSpace.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#&lt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;(that:basis.math.long.Integer):Boolean"></a>
+      <a id="&lt;(Integer):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less" class="name">&lt;</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if and only if this value is strictly less than another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if and only if this value is strictly less than another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#&lt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;=(that:basis.math.long.Integer):Boolean"></a>
+      <a id="&lt;=(Integer):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less$eq" class="name">&lt;=</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if and only if this value is less than or equal to another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if and only if this value is less than or equal to another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a></dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.math.long.Integer#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;(that:basis.math.long.Integer):Boolean"></a>
+      <a id="&gt;(Integer):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if and only if this value is strictly greater than another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if and only if this value is strictly greater than another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#&gt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;=(that:basis.math.long.Integer):Boolean"></a>
+      <a id="&gt;=(Integer):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater$eq" class="name">&gt;=</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if and only if this value is greater than or equal to another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if and only if this value is greater than or equal to another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#abs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="abs:basis.math.long.Integer"></a>
+      <a id="abs:Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">abs</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the absolute value of this value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the absolute value of this value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(i:Int):basis.math.long.Integer"></a>
+      <a id="apply(Int):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the coordinate at the given index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the coordinate at the given index.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="ZN$Value.html" class="extype" name="basis.math.long.ZN.Value">Value</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.math.long.Integer#dim" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dim:Int"></a>
+      <a id="dim:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dim</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the number of coordinates in this value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the number of coordinates in this value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#gcd" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="gcd(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id="gcd(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gcd</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.AnyVal#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_&lt;:AnyVal]"></a>
+      <a id="getClass():Class[_&lt;:AnyVal]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="scala.AnyVal">AnyVal</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.math.long.Integer#max" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="max(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id="max(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">max</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the greater of this value and another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the greater of this value and another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#min" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="min(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id="min(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">min</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the lesser of this value and another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the lesser of this value and another value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#toDouble" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toDouble:Double"></a>
+      <a id="toDouble:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toDouble</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.math.long.Integer#toFloat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toFloat:Float"></a>
+      <a id="toFloat:Float"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFloat</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.math.long.Integer#toInt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toInt:Int"></a>
+      <a id="toInt:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toInt</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.math.long.Integer#toLong" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toLong:Long"></a>
+      <a id="toLong:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toLong</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.math.long.Integer#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a> → Any</dd></dl></div>
+    </li><li name="basis.math.long.Integer#unary_-" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unary_-:basis.math.long.Integer"></a>
+      <a id="unary_-:Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: unary_$minus" class="name">unary_-</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the additive inverse of this value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the additive inverse of this value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="ZN$Value.html" class="extype" name="basis.math.long.ZN.Value">Value</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a> → <a href="../VectorSpace$Value.html" class="extype" name="basis.math.VectorSpace.Value">Value</a> → <a href="../OrderedRing$Value.html" class="extype" name="basis.math.OrderedRing.Value">Value</a> → <a href="../Ring$Value.html" class="extype" name="basis.math.Ring.Value">Value</a></dd></dl></div>
+    </li><li name="basis.math.long.Integer#value" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="value:Long"></a>
+      <a id="value:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">value</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.math.long.Integer#⋅" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="⋅(that:basis.math.long.Integer):basis.math.long.Integer"></a>
+      <a id="⋅(Integer):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $u22C5" class="name">⋅</span><span class="params">(<span name="that">that: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>)</span><span class="result">: <a href="" class="extype" name="basis.math.long.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the dot product of this value and another value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the dot product of this value and another value.
+The name of this method contains the unicode dot operator (U+22C5).</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.long.Integer">Integer</a> → <a href="ZN$Value.html" class="extype" name="basis.math.long.ZN.Value">Value</a> → <a href="../FN$Value.html" class="extype" name="basis.math.FN.Value">Value</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.math.long.Integer.Value">
+              <h3>Inherited from <a href="Integer$$Value.html" class="extype" name="basis.math.long.Integer.Value">Value</a></h3>
+            </div><div class="parent" name="basis.math.long.ZN.Value">
+              <h3>Inherited from <span class="extype" name="basis.math.long.ZN.Value">Integer.Value</span></h3>
+            </div><div class="parent" name="basis.math.FN.Value">
+              <h3>Inherited from <span class="extype" name="basis.math.FN.Value">Integer.Value</span></h3>
+            </div><div class="parent" name="basis.math.VectorSpace.Value">
+              <h3>Inherited from <span class="extype" name="basis.math.VectorSpace.Value">Integer.Value</span></h3>
+            </div><div class="parent" name="basis.math.AffineSpace.Value">
+              <h3>Inherited from <span class="extype" name="basis.math.AffineSpace.Value">Integer.Value</span></h3>
+            </div><div class="parent" name="basis.math.OrderedRing.Value">
+              <h3>Inherited from <span class="extype" name="basis.math.OrderedRing.Value">Integer.Value</span></h3>
+            </div><div class="parent" name="basis.math.Ring.Value">
+              <h3>Inherited from <span class="extype" name="basis.math.Ring.Value">Integer.Value</span></h3>
+            </div><div class="parent" name="scala.AnyVal">
+              <h3>Inherited from <span class="extype" name="scala.AnyVal">AnyVal</span></h3>
+            </div><div class="parent" name="scala.NotNull">
+              <h3>Inherited from <span class="extype" name="scala.NotNull">NotNull</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

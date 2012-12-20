@@ -1,0 +1,745 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>R4x4 - basis.math.double.R4x4</title>
+          <meta name="description" content="R4x4 - basis.math.double.R4x4" />
+          <meta name="keywords" content="R4x4 basis.math.double.R4x4" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'basis.math.double.R4x4$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/object_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="basis">basis</a>.<a href="../package.html" class="extype" name="basis.math">math</a>.<a href="package.html" class="extype" name="basis.math.double">double</a></p>
+        <h1>R4x4</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">R4x4</span><span class="result"> extends <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> with <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A 4 by 4 double-precision floating-point real matrix space.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-math/src/main/scala/basis/math/double/R4x4.scala" target="_blank">R4x4.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a>, <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a>, <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a>, <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a>, <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.math.double.R4x4"><span>R4x4</span></li><li class="in" name="basis.math.double.RMxN"><span>RMxN</span></li><li class="in" name="basis.math.F4x4"><span>F4x4</span></li><li class="in" name="basis.math.FMxN"><span>FMxN</span></li><li class="in" name="basis.math.VectorSpace"><span>VectorSpace</span></li><li class="in" name="basis.math.Ring"><span>Ring</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.math.FMxN.Col" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Col=FMxN.this.Col.Vector"></a>
+      <a id="Col:Col"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Col</span><span class="result"> = <a href="R4$.html#Vector=basis.math.double.R4.Value" class="extmbr" name="basis.math.double.R4.Vector">R4.Vector</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of vectors in the column space.</p><div class="fullcomment"><div class="comment cmt"><p>The type of vectors in the column space.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.F4x4.Element" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Element=F4x4.this.Matrix"></a>
+      <a id="Element:Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Element</span><span class="result"> = <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of elements in this matrix space; equivalent to the type of matrices.</p><div class="fullcomment"><div class="comment cmt"><p>The type of elements in this matrix space; equivalent to the type of matrices.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4.Matrix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Matrix=basis.math.double.R4x4.Value"></a>
+      <a id="Matrix:Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Matrix</span><span class="result"> = <a href="R4x4$$Value.html" class="extype" name="basis.math.double.R4x4.Value">Value</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of matrices in this matrix space.</p><div class="fullcomment"><div class="comment cmt"><p>The type of matrices in this matrix space.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.FMxN.Row" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Row=FMxN.this.Row.Vector"></a>
+      <a id="Row:Row"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Row</span><span class="result"> = <a href="R4$.html#Vector=basis.math.double.R4.Value" class="extmbr" name="basis.math.double.R4.Vector">R4.Vector</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of vectors in the row space.</p><div class="fullcomment"><div class="comment cmt"><p>The type of vectors in the row space.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.RMxN.Scalar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Scalar=basis.math.double.Real"></a>
+      <a id="Scalar:Scalar"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Scalar</span><span class="result"> = <a href="Real.html" class="extype" name="basis.math.double.Real">Real</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of scalars in this matrix space.</p><div class="fullcomment"><div class="comment cmt"><p>The type of scalars in this matrix space.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a></dd></dl></div>
+    </li><li name="basis.math.FMxN.Transpose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Transpose=FMxN.this.Transpose.Matrix"></a>
+      <a id="Transpose:Transpose"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Transpose</span><span class="result"> = <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4.Value" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Valueextendsdouble.R4x4.ValuewithR4x4.Value"></a>
+      <a id="Value:Value"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="R4x4$$Value.html"><span class="name">Value</span></a><span class="result"> extends <span class="extype" name="basis.math.F4x4.Value">R4x4.Value</span> with <span class="extype" name="basis.math.double.RMxN.Value">R4x4.Value</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A matrix in this matrix space.</p>
+    </li><li name="basis.math.FMxN.Vector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Vector=FMxN.this.Matrix"></a>
+      <a id="Vector:Vector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Vector</span><span class="result"> = <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of vectors in this matrix space; equivalent to the type of matrices.</p><div class="fullcomment"><div class="comment cmt"><p>The type of vectors in this matrix space; equivalent to the type of matrices.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a> → <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.math.double.R4x4#Col" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Col:basis.math.double.R4.type"></a>
+      <a id="Col:R4.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Col</span><span class="result">: <a href="R4$.html" class="extype" name="basis.math.double.R4">R4</a>.type</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4#Row" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Row:basis.math.double.R4.type"></a>
+      <a id="Row:R4.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Row</span><span class="result">: <a href="R4$.html" class="extype" name="basis.math.double.R4">R4</a>.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the row space.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the row space.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4#Scalar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Scalar:basis.math.double.Real.type"></a>
+      <a id="Scalar:Real.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Scalar</span><span class="result">: <a href="Real$.html" class="extype" name="basis.math.double.Real">Real</a>.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the scalar set of this matrix space.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the scalar set of this matrix space.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a></dd></dl></div>
+    </li><li name="basis.math.double.RMxN#ScalarTag" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ScalarTag:scala.reflect.ClassTag[basis.math.double.Real]"></a>
+      <a id="ScalarTag:ClassTag[Real]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ScalarTag</span><span class="result">: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<a href="Real.html" class="extype" name="basis.math.double.Real">Real</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4#Transpose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Transpose:basis.math.double.R4x4.type"></a>
+      <a id="Transpose:R4x4.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Transpose</span><span class="result">: <a href="" class="extype" name="basis.math.double.R4x4">R4x4</a>.this.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the transpose of this matrix space.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the transpose of this matrix space.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(entries:Array[Double]):basis.math.double.R4x4.Matrix"></a>
+      <a id="apply(Array[Double]):Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="entries">entries: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(_1_1:basis.math.double.R4x4.Scalar,_1_2:basis.math.double.R4x4.Scalar,_1_3:basis.math.double.R4x4.Scalar,_1_4:basis.math.double.R4x4.Scalar,_2_1:basis.math.double.R4x4.Scalar,_2_2:basis.math.double.R4x4.Scalar,_2_3:basis.math.double.R4x4.Scalar,_2_4:basis.math.double.R4x4.Scalar,_3_1:basis.math.double.R4x4.Scalar,_3_2:basis.math.double.R4x4.Scalar,_3_3:basis.math.double.R4x4.Scalar,_3_4:basis.math.double.R4x4.Scalar,_4_1:basis.math.double.R4x4.Scalar,_4_2:basis.math.double.R4x4.Scalar,_4_3:basis.math.double.R4x4.Scalar,_4_4:basis.math.double.R4x4.Scalar):basis.math.double.R4x4.Matrix"></a>
+      <a id="apply(Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar,Scalar):Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="_1_1">_1_1: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_1_2">_1_2: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_1_3">_1_3: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_1_4">_1_4: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_2_1">_2_1: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_2_2">_2_2: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_2_3">_2_3: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_2_4">_2_4: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_3_1">_3_1: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_3_2">_3_2: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_3_3">_3_3: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_3_4">_3_4: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_4_1">_4_1: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_4_2">_4_2: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_4_3">_4_3: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>, <span name="_4_4">_4_4: <a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a></span>)</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a></dd></dl></div>
+    </li><li name="basis.math.double.RMxN#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(entries:Array[RMxN.this.Scalar]):RMxN.this.Matrix"></a>
+      <a id="apply(Array[Scalar]):Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="entries">entries: <span class="extype" name="scala.Array">Array</span>[<a href="#Scalar=basis.math.double.Real" class="extmbr" name="basis.math.double.R4x4.Scalar">Scalar</a>]</span>)</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a new matrix with the given row-major entries.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new matrix with the given row-major entries.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.math.double.R4x4#cols" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cols(col1:basis.math.double.R4x4.Col,col2:basis.math.double.R4x4.Col,col3:basis.math.double.R4x4.Col,col4:basis.math.double.R4x4.Col):basis.math.double.R4x4.Matrix"></a>
+      <a id="cols(Col,Col,Col,Col):Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cols</span><span class="params">(<span name="col1">col1: <a href="#Col=FMxN.this.Col.Vector" class="extmbr" name="basis.math.double.R4x4.Col">Col</a></span>, <span name="col2">col2: <a href="#Col=FMxN.this.Col.Vector" class="extmbr" name="basis.math.double.R4x4.Col">Col</a></span>, <span name="col3">col3: <a href="#Col=FMxN.this.Col.Vector" class="extmbr" name="basis.math.double.R4x4.Col">Col</a></span>, <span name="col4">col4: <a href="#Col=FMxN.this.Col.Vector" class="extmbr" name="basis.math.double.R4x4.Col">Col</a></span>)</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a></dd></dl></div>
+    </li><li name="basis.math.double.RMxN#cols" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cols(cols:RMxN.this.Col*):RMxN.this.Matrix"></a>
+      <a id="cols(Col*):Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cols</span><span class="params">(<span name="cols">cols: <a href="#Col=FMxN.this.Col.Vector" class="extmbr" name="basis.math.double.R4x4.Col">Col</a>*</span>)</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a new matrix with the given columns.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new matrix with the given columns.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4#dim" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dim:Int"></a>
+      <a id="dim:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dim</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.math.double.RMxN#product" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="product[A&lt;:basis.math.FMxN{valScalar:basis.math.double.Real.type},B&lt;:basis.math.FMxN{valScalar:basis.math.double.Real.type}](matrixA:A#Value,matrixB:B#Value):RMxN.this.Matrix"></a>
+      <a id="product[A&lt;:FMxN{valScalar:basis.math.double.Real.type},B&lt;:FMxN{valScalar:basis.math.double.Real.type}](RMxN.product.A.Value,RMxN.product.B.Value):Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">product</span><span class="tparams">[<span name="A">A &lt;: <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a> { val Scalar: basis.math.double.Real.type }</span>, <span name="B">B &lt;: <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a> { val Scalar: basis.math.double.Real.type }</span>]</span><span class="params">(<span name="matrixA">matrixA: <span class="extype" name="basis.math.FMxN.Value">RMxN.product.A.Value</span></span>, <span name="matrixB">matrixB: <span class="extype" name="basis.math.FMxN.Value">RMxN.product.B.Value</span></span>)</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the real matrix product of the first real matrix, whose column
+space equals this column space, times the second real matrix, whose row
+space equals this row space, where the row space of the first matrix
+equals the column space of the second matrix.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the real matrix product of the first real matrix, whose column
+space equals this column space, times the second real matrix, whose row
+space equals this row space, where the row space of the first matrix
+equals the column space of the second matrix.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="basis.math.double.R4x4#rows" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rows(row1:basis.math.double.R4x4.Row,row2:basis.math.double.R4x4.Row,row3:basis.math.double.R4x4.Row,row4:basis.math.double.R4x4.Row):basis.math.double.R4x4.Matrix"></a>
+      <a id="rows(Row,Row,Row,Row):Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rows</span><span class="params">(<span name="row1">row1: <a href="#Row=FMxN.this.Row.Vector" class="extmbr" name="basis.math.double.R4x4.Row">Row</a></span>, <span name="row2">row2: <a href="#Row=FMxN.this.Row.Vector" class="extmbr" name="basis.math.double.R4x4.Row">Row</a></span>, <span name="row3">row3: <a href="#Row=FMxN.this.Row.Vector" class="extmbr" name="basis.math.double.R4x4.Row">Row</a></span>, <span name="row4">row4: <a href="#Row=FMxN.this.Row.Vector" class="extmbr" name="basis.math.double.R4x4.Row">Row</a></span>)</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a></dd></dl></div>
+    </li><li name="basis.math.double.RMxN#rows" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rows(rows:RMxN.this.Row*):RMxN.this.Matrix"></a>
+      <a id="rows(Row*):Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rows</span><span class="params">(<span name="rows">rows: <a href="#Row=FMxN.this.Row.Vector" class="extmbr" name="basis.math.double.R4x4.Row">Row</a>*</span>)</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a new matrix with the given rows.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new matrix with the given rows.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.math.double.R4x4#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="basis.math.double.R4x4#unit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unit:basis.math.double.R4x4.Matrix"></a>
+      <a id="unit:Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unit</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the identity matrix of this matrix space, if one exists.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the identity matrix of this matrix space, if one exists.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a> → <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.math.double.R4x4#zero" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="zero:basis.math.double.R4x4.Matrix"></a>
+      <a id="zero:Matrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zero</span><span class="result">: <a href="#Matrix=basis.math.double.R4x4.Value" class="extmbr" name="basis.math.double.R4x4.Matrix">Matrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the additive identity of this matrix space.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the additive identity of this matrix space.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.double.R4x4">R4x4</a> → <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a> → <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a> → <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a> → <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a> → <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.math.double.RMxN">
+              <h3>Inherited from <a href="RMxN.html" class="extype" name="basis.math.double.RMxN">RMxN</a></h3>
+            </div><div class="parent" name="basis.math.F4x4">
+              <h3>Inherited from <a href="../F4x4.html" class="extype" name="basis.math.F4x4">F4x4</a></h3>
+            </div><div class="parent" name="basis.math.FMxN">
+              <h3>Inherited from <a href="../FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></h3>
+            </div><div class="parent" name="basis.math.VectorSpace">
+              <h3>Inherited from <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a></h3>
+            </div><div class="parent" name="basis.math.Ring">
+              <h3>Inherited from <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

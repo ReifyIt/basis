@@ -1,0 +1,462 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>NonStrictStackOps - basis.sequential.NonStrictStackOps</title>
+          <meta name="description" content="NonStrictStackOps - basis.sequential.NonStrictStackOps" />
+          <meta name="keywords" content="NonStrictStackOps basis.sequential.NonStrictStackOps" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.sequential.NonStrictStackOps';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../lib/class_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.sequential">sequential</a></p>
+        <h1>NonStrictStackOps</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NonStrictStackOps</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Non-strictly evaluated linear sequence operations.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-sequential/src/main/scala/basis/sequential/NonStrictStackOps.scala" target="_blank">NonStrictStackOps.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyVal">AnyVal</span>, <span class="extype" name="scala.NotNull">NotNull</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph16" viewBox="0.00 0.00 198.00 120.00" height="120pt" width="198pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 195,-116 195,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph16_0"><a xlink:title="basis.sequential.NonStrictStackOps (this class)" xlink:href="#inheritance-diagram"><polygon points="165.25,-50 24.75,-50 24.75,-24 165.25,-24 165.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">NonStrictStackOps[A]</text></a></g><!-- node1 --><g class="node class" id="graph16_1"><a xlink:title="scala.AnyVal"><polygon points="132.25,-112 57.75,-112 57.75,-86 132.25,-86 132.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="68" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="90" text-anchor="start">AnyVal</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph16_1_0"><a xlink:title="NonStrictStackOps[A] is a subtype of AnyVal"><path d="M95,-80.6826C95,-70.8961 95,-58.9026 95,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="93.2501,-80.8581 95,-85.8581 96.7501,-80.8581 93.2501,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                <li class="group out"><span>Grouped</span></li>
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.sequential.NonStrictStackOps"><span>NonStrictStackOps</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.NotNull"><span>NotNull</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="basis.sequential.NonStrictStackOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(these:basis.collections.Stack[A]):basis.sequential.NonStrictStackOps[A]"></a>
+      <a id="&lt;init&gt;:NonStrictStackOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NonStrictStackOps</span><span class="params">(<span name="these">these: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#++" visbl="pub" data-isabs="false" fullComment="yes" group="Combining">
+      <a id="++[B&gt;:A](those:basis.collections.Stack[B]):basis.collections.Stack[B]"></a>
+      <a id="++[B&gt;:A](Stack[B]):Stack[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus" class="name">++</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span></span>]</span><span class="params">(<span name="those">those: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.++.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.++.B">B</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view concatenating this and another sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view concatenating this and another sequence.
+</p></div><dl class="paramcmts block"><dt class="param">those</dt><dd class="cmt"><p>the elements to append to these elements.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the concatenated elements.</p></dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#collect" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
+      <a id="collect[B](q:PartialFunction[A,B]):basis.collections.Stack[B]"></a>
+      <a id="collect[B](PartialFunction[A,B]):Stack[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>, <span class="extype" name="basis.sequential.NonStrictStackOps.collect.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.collect.B">B</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view that applies a partial function to each element in this
+sequence for which the function is defined.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view that applies a partial function to each element in this
+sequence for which the function is defined.
+</p></div><dl class="paramcmts block"><dt class="param">q</dt><dd class="cmt"><p>the partial function to lazily filter and map elements.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the filtered and mapped elements.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
+      <a id="drop(lower:Int):basis.collections.Stack[A]"></a>
+      <a id="drop(Int):Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view of all elements in this sequence following a prefix
+up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of all elements in this sequence following a prefix
+up to some length.
+</p></div><dl class="paramcmts block"><dt class="param">lower</dt><dd class="cmt"><p>the length of the prefix to drop; also the inclusive
+                lower bound for indexes of included elements.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of all but the first <code>lower</code> elements.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#dropWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
+      <a id="dropWhile(p:A=&gt;Boolean):basis.collections.Stack[A]"></a>
+      <a id="dropWhile((A)⇒Boolean):Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dropWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view of all elements following the longest prefix of this
+sequence for which each element satisfies a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of all elements following the longest prefix of this
+sequence for which each element satisfies a predicate.
+</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the suffix of accumulated elements beginning
+        with the first element to not satisfy <code>p</code>.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
+      <a id="filter(p:A=&gt;Boolean):basis.collections.Stack[A]"></a>
+      <a id="filter((A)⇒Boolean):Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view of all elements in this sequence that satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of all elements in this sequence that satisfy a predicate.
+</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to lazily test elements against.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the filtered elements.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
+      <a id="flatMap[B](f:A=&gt;basis.collections.Stack[B]):basis.collections.Stack[B]"></a>
+      <a id="flatMap[B]((A)⇒Stack[B]):Stack[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>) ⇒ <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.flatMap.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.flatMap.B">B</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view concatenating all elements returned by a function
+applied to each element in this sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view concatenating all elements returned by a function
+applied to each element in this sequence.
+</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the sequence-yielding function to apply to each element.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view concatenating all elements produced by <code>f</code>.</p></dd></dl></div>
+    </li><li name="scala.AnyVal#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_&lt;:AnyVal]"></a>
+      <a id="getClass():Class[_&lt;:AnyVal]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="scala.AnyVal">AnyVal</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
+      <a id="map[B](f:A=&gt;B):basis.collections.Stack[B]"></a>
+      <a id="map[B]((A)⇒B):Stack[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>) ⇒ <span class="extype" name="basis.sequential.NonStrictStackOps.map.B">B</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.map.B">B</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view that applies a function to each element in this sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view that applies a function to each element in this sequence.
+</p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the function to lazily apply to each element.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the mapped elements.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
+      <a id="slice(lower:Int,upper:Int):basis.collections.Stack[A]"></a>
+      <a id="slice(Int,Int):Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view of an interval of elements in this sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of an interval of elements in this sequence.
+</p></div><dl class="paramcmts block"><dt class="param">lower</dt><dd class="cmt"><p>the inclusive lower bound for indexes of included elements.</p></dd><dt class="param">upper</dt><dd class="cmt"><p>the exclusive upper bound for indexes of included elements.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the elements with indexes greater than or
+        equal to <code>lower</code> and less than <code>upper</code>.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#span" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
+      <a id="span(p:A=&gt;Boolean):(basis.collections.Stack[A],basis.collections.Stack[A])"></a>
+      <a id="span((A)⇒Boolean):(Stack[A],Stack[A])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">span</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: (<a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>], <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>])</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a (prefix, suffix) pair of views with the prefix being the
+longest one for which each element satisfies a predicate, and the suffix
+beginning with the first element to not satisfy the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a (prefix, suffix) pair of views with the prefix being the
+longest one for which each element satisfies a predicate, and the suffix
+beginning with the first element to not satisfy the predicate.
+</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt>returns</dt><dd class="cmt"><p>the (predix, suffix) pair of non-strict views.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#take" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
+      <a id="take(upper:Int):basis.collections.Stack[A]"></a>
+      <a id="take(Int):Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view of a prefix of this sequence up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of a prefix of this sequence up to some length.
+</p></div><dl class="paramcmts block"><dt class="param">upper</dt><dd class="cmt"><p>the length of the prefix to take; also the exclusive
+                upper bound for indexes of included elements.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of up to the first <code>upper</code> elements.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#takeWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
+      <a id="takeWhile(p:A=&gt;Boolean):basis.collections.Stack[A]"></a>
+      <a id="takeWhile((A)⇒Boolean):Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">takeWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view of the longest prefix of this sequence for which each
+element satisfies a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of the longest prefix of this sequence for which each
+element satisfies a predicate.
+</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the longest prefix of elements preceding
+        the first element to not satisfy <code>p</code>.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#these" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="these:basis.collections.Stack[A]"></a>
+      <a id="these:Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">these</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#withFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
+      <a id="withFilter(p:A=&gt;Boolean):basis.collections.Stack[A]"></a>
+      <a id="withFilter((A)⇒Boolean):Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view of all elements in this sequence that satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of all elements in this sequence that satisfy a predicate.
+</p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to lazily test elements against.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the filtered elements.</p></dd></dl></div>
+    </li><li name="basis.sequential.NonStrictStackOps#zip" visbl="pub" data-isabs="false" fullComment="yes" group="Combining">
+      <a id="zip[B](those:basis.collections.Stack[B]):basis.collections.Stack[(A,B)]"></a>
+      <a id="zip[B](Stack[B]):Stack[(A,B)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zip</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="those">those: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.NonStrictStackOps.zip.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[(<span class="extype" name="basis.sequential.NonStrictStackOps.A">A</span>, <span class="extype" name="basis.sequential.NonStrictStackOps.zip.B">B</span>)]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a view of pairs of elemnts from this and another sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of pairs of elemnts from this and another sequence.
+</p></div><dl class="paramcmts block"><dt class="param">those</dt><dd class="cmt"><p>the sequence whose elements to lazily pair with these elements.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the pairs of corresponding elements.</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyVal">
+              <h3>Inherited from <span class="extype" name="scala.AnyVal">AnyVal</span></h3>
+            </div><div class="parent" name="scala.NotNull">
+              <h3>Inherited from <span class="extype" name="scala.NotNull">NotNull</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Mapping">
+              <h3>Mapping</h3>
+              
+            </div><div class="group" name="Filtering">
+              <h3>Filtering</h3>
+              
+            </div><div class="group" name="Combining">
+              <h3>Combining</h3>
+              
+            </div><div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
