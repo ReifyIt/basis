@@ -27,7 +27,7 @@ import scala.reflect.ClassTag
   * @define collection  list
   */
 sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
-  extends Equals with Family[List[A]] with Stack[A] with ListLike[A] {
+  extends Equals with Immutable with Family[List[A]] with Stack[A] with ListLike[A] {
   
   override def isEmpty: Boolean
   

@@ -27,7 +27,7 @@ import scala.reflect.ClassTag
   * @define collection  buffer
   */
 abstract class ArrayBuffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
-  extends Equals with Family[ArrayBuffer[A]] with Index[A] with Buffer[A] with ArrayLike[A] {
+  extends Equals with Mutable with Family[ArrayBuffer[A]] with Index[A] with Buffer[A] with ArrayLike[A] {
   
   @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
     var i = 0

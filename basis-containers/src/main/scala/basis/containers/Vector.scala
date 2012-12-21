@@ -11,7 +11,7 @@ import basis.collections._
 
 import scala.reflect.ClassTag
 
-sealed abstract class Vector[+A] extends Equals with Family[Vector[A]] with Index[A] {
+sealed abstract class Vector[+A] extends Equals with Immutable with Family[Vector[A]] with Index[A] {
   protected override def stringPrefix: String = "Vector"
 }
 

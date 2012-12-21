@@ -23,7 +23,7 @@ import scala.reflect.ClassTag
   * @groupprio  Classifying   -1
   */
 abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Equals with Family[ArraySeq[A]] with Index[A] with ArrayLike[A] {
+  extends Equals with Immutable with Family[ArraySeq[A]] with Index[A] with ArrayLike[A] {
   
   override def length: Int
   
