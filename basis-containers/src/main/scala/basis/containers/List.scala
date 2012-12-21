@@ -10,7 +10,6 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.annotation.unspecialized
 import scala.reflect.ClassTag
 
 /** A singly linked list.
@@ -26,14 +25,12 @@ import scala.reflect.ClassTag
   * 
   * @define collection  list
   */
-sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
-  extends Equals with Immutable with Family[List[A]] with Stack[A] with ListLike[A] {
-  
-  override def isEmpty: Boolean
-  
-  override def head: A
-  
-  override def tail: List[A]
+sealed abstract class List[+A]
+  extends Equals
+    with Immutable
+    with Family[List[A]]
+    with Stack[A]
+    with ListLike[A] {
   
   override def length: Int = {
     var n = 0
@@ -47,7 +44,7 @@ sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
   
   /** Returns the `lower` tail of this $collection.
     * @group Slicing */
-  @unspecialized def drop(lower: Int): List[A] = {
+  def drop(lower: Int): List[A] = {
     var i = 0
     var xs = this
     while (i < lower && !xs.isEmpty) {
@@ -59,7 +56,7 @@ sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
   
   /** Returns the `upper` heads of this $collection.
     * @group Slicing */
-  @unspecialized def take(upper: Int): List[A] = {
+  def take(upper: Int): List[A] = {
     var i = 0
     val b = new ListBuilder[A]
     var xs = this
@@ -73,12 +70,12 @@ sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
   
   /** Returns the [`lower`, `upper`) bounded elements of this $collection.
     * @group Slicing */
-  @unspecialized def slice(lower: Int, upper: Int): List[A] =
+  def slice(lower: Int, upper: Int): List[A] =
     if (lower < upper) drop(lower).take(upper) else Nil
   
   /** Returns the reverse of this $collection.
     * @group Composing */
-  @unspecialized def reverse: List[A] = {
+  def reverse: List[A] = {
     var sx = Nil: List[A]
     var xs = this
     while (!xs.isEmpty) {
@@ -90,13 +87,13 @@ sealed abstract class List[@specialized(Int, Long, Float, Double) +A]
   
   /** Returns this $collection with the given element prepended.
     * @group Composing */
-  @unspecialized def :: [B >: A](elem: B): List[B] = new RefList(elem, this)
+  def :: [B >: A](elem: B): List[B] = new RefList(elem, this)
   
   override def toList: this.type = this
   
-  @unspecialized override def iterator: Iterator[A] = new RefListIterator(this)
+  override def iterator: Iterator[A] = new RefListIterator(this)
   
-  @unspecialized protected override def foreach[U](f: A => U) {
+  protected override def foreach[U](f: A => U) {
     var xs = this
     while (!xs.isEmpty) {
       f(xs.head)

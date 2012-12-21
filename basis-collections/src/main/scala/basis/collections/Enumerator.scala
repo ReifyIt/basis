@@ -10,7 +10,8 @@ package basis.collections
 /** A once traversable enumeration of elements. Enumerator declares only a
   * protected `foreach` method; it has no public methods.
   * 
-  * @groupprio  Traversing    -1
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
   * 
   * @define collection  enumerator
   */

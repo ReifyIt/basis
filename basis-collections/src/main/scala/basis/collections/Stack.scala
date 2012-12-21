@@ -7,6 +7,8 @@
 
 package basis.collections
 
+import scala.annotation.unspecialized
+
 /** A linear sequence of elements.
   * 
   * @groupprio  Quantifying   -5
@@ -15,7 +17,9 @@ package basis.collections
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   */
-trait Stack[+A] extends Any with Family[Stack[A]] with Seq[A] {
+trait Stack[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Stack[A]] with Seq[A] {
+  
   /** Returns the first element of this non-empty $collection.
     * @group Decomposing */
   def head: A
@@ -34,9 +38,9 @@ trait Stack[+A] extends Any with Family[Stack[A]] with Seq[A] {
     count
   }
   
-  override def iterator: Iterator[A] = new StackIterator(this)
+  @unspecialized override def iterator: Iterator[A] = new StackIterator(this)
   
-  protected override def foreach[U](f: A => U) {
+  @unspecialized protected override def foreach[U](f: A => U) {
     var xs = this
     while (!xs.isEmpty) {
       f(xs.head)

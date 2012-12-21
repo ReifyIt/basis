@@ -10,7 +10,6 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.annotation.unspecialized
 import scala.reflect.ClassTag
 
 /** A mutable contiguous array.
@@ -26,50 +25,13 @@ import scala.reflect.ClassTag
   * 
   * @define collection  buffer
   */
-abstract class ArrayBuffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
-  extends Equals with Mutable with Family[ArrayBuffer[A]] with Index[A] with Buffer[A] with ArrayLike[A] {
-  
-  @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
-    var i = 0
-    var j = start
-    val n = count min (xs.length - start) min length
-    while (i < n) {
-      xs(j) = this(i)
-      i += 1
-      j += 1
-    }
-  }
-  
-  @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int) {
-    var i = 0
-    var j = start
-    val n = (xs.length - start) min length
-    while (i < n) {
-      xs(j) = this(i)
-      i += 1
-      j += 1
-    }
-  }
-  
-  @unspecialized override def copyToArray[B >: A](xs: Array[B]) {
-    var i = 0
-    val n = xs.length min length
-    while (i < n) {
-      xs(i) = this(i)
-      i += 1
-    }
-  }
-  
-  @unspecialized override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
-    var i = 0
-    val n = length
-    val xs = B.newArray(n)
-    while (i < n) {
-      xs(i) = this(i)
-      i += 1
-    }
-    xs
-  }
+abstract class ArrayBuffer[A]
+  extends Equals
+    with Mutable
+    with Family[ArrayBuffer[A]]
+    with Index[A]
+    with Buffer[A]
+    with ArrayLike[A] {
   
   /** Returns this $collection converted to an array sequence.
     * @group Converting */

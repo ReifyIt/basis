@@ -7,6 +7,8 @@
 
 package basis.collections
 
+import scala.annotation.unspecialized
+
 /** An indexed sequence of elements.
   * 
   * @groupprio  Quantifying   -5
@@ -15,16 +17,18 @@ package basis.collections
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   */
-trait Index[+A] extends Any with Family[Index[A]] with Seq[A] {
+trait Index[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Index[A]] with Seq[A] {
+  
   /** Returns the element at the given index.
     * @group Indexing */
   def apply(index: Int): A
   
   override def isEmpty: Boolean = length == 0
   
-  override def iterator: Iterator[A] = new IndexIterator(this)
+  @unspecialized override def iterator: Iterator[A] = new IndexIterator(this)
   
-  protected override def foreach[U](f: A => U) {
+  @unspecialized protected override def foreach[U](f: A => U) {
     var i = 0
     val n = length
     while (i < n) {

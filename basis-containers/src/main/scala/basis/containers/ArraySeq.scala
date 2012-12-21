@@ -10,7 +10,6 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.annotation.unspecialized
 import scala.reflect.ClassTag
 
 /** A contiguous array.
@@ -22,54 +21,12 @@ import scala.reflect.ClassTag
   * @groupprio  Converting    -2
   * @groupprio  Classifying   -1
   */
-abstract class ArraySeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Equals with Immutable with Family[ArraySeq[A]] with Index[A] with ArrayLike[A] {
-  
-  override def length: Int
-  
-  override def apply(index: Int): A
-  
-  @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
-    var i = 0
-    var j = start
-    val n = count min (xs.length - start) min length
-    while (i < n) {
-      xs(j) = this(i)
-      i += 1
-      j += 1
-    }
-  }
-  
-  @unspecialized override def copyToArray[B >: A](xs: Array[B], start: Int) {
-    var i = 0
-    var j = start
-    val n = (xs.length - start) min length
-    while (i < n) {
-      xs(j) = this(i)
-      i += 1
-      j += 1
-    }
-  }
-  
-  @unspecialized override def copyToArray[B >: A](xs: Array[B]) {
-    var i = 0
-    val n = xs.length min length
-    while (i < n) {
-      xs(i) = this(i)
-      i += 1
-    }
-  }
-  
-  @unspecialized override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
-    var i = 0
-    val n = length
-    val xs = B.newArray(n)
-    while (i < n) {
-      xs(i) = this(i)
-      i += 1
-    }
-    xs
-  }
+abstract class ArraySeq[+A]
+  extends Equals
+    with Immutable
+    with Family[ArraySeq[A]]
+    with Index[A]
+    with ArrayLike[A] {
   
   protected override def stringPrefix: String = "ArraySeq"
 }
