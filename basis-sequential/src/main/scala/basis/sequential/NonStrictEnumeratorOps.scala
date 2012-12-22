@@ -198,7 +198,7 @@ private[sequential] object NonStrictEnumeratorOps {
     extends Enumerator[A] {
     
     protected override def foreach[U](f: A => U) {
-      flow(traverse(base)(x => if (p(x)) f(x) else flow.break()))
+      begin(traverse(base)(x => if (p(x)) f(x) else begin.break()))
     }
   }
   
@@ -220,7 +220,7 @@ private[sequential] object NonStrictEnumeratorOps {
     
     protected override def foreach[U](f: A => U) {
       var i = 0
-      flow(traverse(base)(x => if (i < upper) { f(x); i += 1 } else flow.break()))
+      begin(traverse(base)(x => if (i < upper) { f(x); i += 1 } else begin.break()))
     }
   }
   
@@ -234,7 +234,7 @@ private[sequential] object NonStrictEnumeratorOps {
       var l = 0 max lower
       val u = l max upper
       var i = 0
-      if (l < u) flow(traverse(base)(x => if (i < u) { if (i >= l) f(x); i += 1 } else flow.break()))
+      if (l < u) begin(traverse(base)(x => if (i < u) { if (i >= l) f(x); i += 1 } else begin.break()))
     }
   }
   

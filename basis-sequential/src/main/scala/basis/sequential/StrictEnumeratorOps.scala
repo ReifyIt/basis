@@ -99,7 +99,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def takeWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State = {
-    flow(traverse(these)(new StrictEnumeratorOps.TakeWhileInto(p)(builder)))
+    begin(traverse(these)(new StrictEnumeratorOps.TakeWhileInto(p)(builder)))
     builder.state
   }
   
@@ -142,7 +142,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def take(upper: Int)(implicit builder: Builder[From, A]): builder.State = {
-    flow(traverse(these)(new StrictEnumeratorOps.TakeInto(upper)(builder)))
+    begin(traverse(these)(new StrictEnumeratorOps.TakeInto(upper)(builder)))
     builder.state
   }
   
@@ -156,7 +156,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State = {
-    flow(traverse(these)(new StrictEnumeratorOps.SliceInto(lower, upper)(builder)))
+    begin(traverse(these)(new StrictEnumeratorOps.SliceInto(lower, upper)(builder)))
     builder.state
   }
   
@@ -254,7 +254,7 @@ private[sequential] object StrictEnumeratorOps {
     
     override def apply(x: A) {
       if (p(x)) builder += x
-      else flow.break()
+      else begin.break()
     }
   }
   
@@ -296,7 +296,7 @@ private[sequential] object StrictEnumeratorOps {
         builder += x
         i += 1
       }
-      else flow.break()
+      else begin.break()
     }
   }
   
@@ -314,7 +314,7 @@ private[sequential] object StrictEnumeratorOps {
         if (i >= l) builder += x
         i += 1
       }
-      else flow.break()
+      else begin.break()
     }
   }
 }

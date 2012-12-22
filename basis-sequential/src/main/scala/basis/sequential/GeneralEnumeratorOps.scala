@@ -118,7 +118,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def find(p: A => Boolean): Option[A] = {
     val f = new GeneralEnumeratorOps.Find(p)
-    flow(traverse(these)(f))
+    begin(traverse(these)(f))
     f.state
   }
   
@@ -130,7 +130,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def forall(p: A => Boolean): Boolean = {
     val f = new GeneralEnumeratorOps.Forall(p)
-    flow(traverse(these)(f))
+    begin(traverse(these)(f))
     f.state
   }
   
@@ -142,7 +142,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def exists(p: A => Boolean): Boolean = {
     val f = new GeneralEnumeratorOps.Exists(p)
-    flow(traverse(these)(f))
+    begin(traverse(these)(f))
     f.state
   }
   
@@ -168,7 +168,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] = {
     val f = new GeneralEnumeratorOps.Choose(q)
-    flow(traverse(these)(f))
+    begin(traverse(these)(f))
     f.state
   }
   
@@ -202,19 +202,19 @@ private[sequential] object GeneralEnumeratorOps {
   
   final class Find[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
     private[this] var r: Option[A] = None
-    override def apply(x: A): Unit = if (p(x)) { r = Some(x); flow.break() }
+    override def apply(x: A): Unit = if (p(x)) { r = Some(x); begin.break() }
     def state: Option[A] = r
   }
   
   final class Forall[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
     private[this] var r: Boolean = true
-    override def apply(x: A): Unit = if (!p(x)) { r = false; flow.break() }
+    override def apply(x: A): Unit = if (!p(x)) { r = false; begin.break() }
     def state: Boolean = r
   }
   
   final class Exists[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
     private[this] var r: Boolean = false
-    override def apply(x: A): Unit = if (p(x)) { r = true; flow.break() }
+    override def apply(x: A): Unit = if (p(x)) { r = true; begin.break() }
     def state: Boolean = r
   }
   
@@ -226,7 +226,7 @@ private[sequential] object GeneralEnumeratorOps {
   
   final class Choose[-A, +B](q: scala.PartialFunction[A, B]) extends AbstractFunction1[A, Unit] {
     private[this] var r: Option[B] = None
-    override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Some(q(x)); flow.break() }
+    override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Some(q(x)); begin.break() }
     def state: Option[B] = r
   }
 }

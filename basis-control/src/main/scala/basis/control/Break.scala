@@ -5,14 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis
+package basis.control
 
-package object sequential {
-  val general = new General
-  
-  val nonstrict = new NonStrict
-  
-  val strict = new Strict
-  
-  private[sequential] val begin = new basis.control.Begin
+/** An exception signalling a break in control flow. */
+class Break extends Throwable {
+  override def fillInStackTrace(): Throwable = this
 }
