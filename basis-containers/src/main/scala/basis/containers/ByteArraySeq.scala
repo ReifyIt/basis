@@ -8,7 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.util._
 
 import scala.reflect.ClassTag
 
@@ -19,31 +18,29 @@ private[containers] final class ByteArraySeq(array: Array[Byte]) extends ArraySe
   
   override def apply(index: Int): Byte = array(index)
   
-  override def copyToArray[B >: Byte](xs: Array[B], start: Int, count: Int) {
-    if (xs.isInstanceOf[Array[Byte]])
-      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
-    else super.copyToArray(xs, start, count)
+  override def update[B >: Byte](index: Int, elem: B): ArraySeq[B] = {
+    if (elem.isInstanceOf[Byte]) {
+      val n = array.length
+      val newArray = new Array[Byte](n)
+      java.lang.System.arraycopy(array, 0, newArray, 0, n)
+      newArray(index) = elem.asInstanceOf[Byte]
+      new ByteArraySeq(newArray).asInstanceOf[ArraySeq[B]]
+    }
+    else super.update(index, elem)
   }
   
-  override def copyToArray[B >: Byte](xs: Array[B], start: Int) {
-    if (xs.isInstanceOf[Array[Byte]])
-      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
-    else super.copyToArray(xs, start)
-  }
-  
-  override def copyToArray[B >: Byte](xs: Array[B]) {
-    if (xs.isInstanceOf[Array[Byte]])
-      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
-    else super.copyToArray(xs)
+  override def copyToArray[B >: Byte](index: Int, to: Array[B], offset: Int, count: Int) {
+    if (to.isInstanceOf[Array[Byte]]) java.lang.System.arraycopy(array, index, to, offset, count)
+    else super.copyToArray(index, to, offset, count)
   }
   
   override def toArray[B >: Byte](implicit B: ClassTag[B]): Array[B] = {
     if (B == ClassTag.Byte) {
-      val xs = new Array[Byte](length)
-      java.lang.System.arraycopy(array, 0, xs, 0, length)
-      xs.asInstanceOf[Array[B]]
+      val newArray = new Array[Byte](length)
+      java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
+      newArray.asInstanceOf[Array[B]]
     }
-    else super.toArray[B]
+    else super.toArray
   }
   
   override def iterator: Iterator[Byte] = new ByteArraySeqIterator(array)

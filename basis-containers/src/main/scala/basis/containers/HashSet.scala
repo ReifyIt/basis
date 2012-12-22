@@ -44,11 +44,11 @@ final class HashSet[+A] private[containers] (
   
   override def contains(elem: A @uncheckedVariance): Boolean = contains(elem, elem.##, 0)
   
-  /** Returns a copy of this $collection containing the given element.
+  /** Returns a copy of this $collection that contains the given element.
     * @group Updating */
   def + [B >: A](elem: B): HashSet[B] = update(elem, elem.##, 0)
   
-  /** Returns a copy of this $collection, excluding the given element.
+  /** Returns a copy of this $collection that excludes the given element.
     * @group Updating */
   def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
   

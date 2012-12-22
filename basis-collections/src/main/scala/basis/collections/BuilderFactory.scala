@@ -17,16 +17,16 @@ trait BuilderFactory[+CC[_]] {
   
   implicit def Factory: this.type = this
   
-  implicit def Builder[A]
-      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
+  implicit def Builder[A](implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
     : Builder[Any, A] { type State = CC[A] @uncheckedVariance }
   
-  def empty[A]
-      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
-    : CC[A] = Builder(A).state
+  def empty[A](implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]]): CC[A] =
+    Builder(A).state
   
-  def apply[A](xs: A*): CC[A] =
-    macro BuilderFactory.apply[CC, A]
+  def coerce[A](elems: Enumerator[A])(implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]]): CC[A] =
+    (Builder(A) ++= elems).state
+  
+  def apply[A](elems: A*): CC[A] = macro BuilderFactory.apply[CC, A]
 }
 
 private[collections] object BuilderFactory {
@@ -35,15 +35,15 @@ private[collections] object BuilderFactory {
   
   def apply[CC[_], A]
       (c: Context { type PrefixType <: BuilderFactory[CC] })
-      (xs: c.Expr[A]*)
+      (elems: c.Expr[A]*)
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
     import c.{Expr, prefix, Tree, WeakTypeTag}
     import c.universe._
     var builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil): Tree
-    builder = Apply(Select(builder, "expect"), Literal(Constant(xs.length)) :: Nil)
-    val iter = xs.iterator
-    while (iter.hasNext) builder = Apply(Select(builder, "$plus$eq"), iter.next().tree :: Nil)
+    builder = Apply(Select(builder, "expect"), Literal(Constant(elems.length)) :: Nil)
+    val xs = elems.iterator
+    while (xs.hasNext) builder = Apply(Select(builder, "$plus$eq"), xs.next().tree :: Nil)
     Expr(Select(builder, "state"))(WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
   }
 }

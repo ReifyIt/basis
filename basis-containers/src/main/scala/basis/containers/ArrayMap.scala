@@ -50,7 +50,7 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
     None
   }
   
-  /** Returns a copy of this $collection with the given value associated with the given key.
+  /** Returns a copy of this $collection that associates the given value with the given key.
     * @group Updating */
   def + [B >: A, U >: T](key: B, value: U): ArrayMap[B, U] = {
     var i = 0
@@ -66,7 +66,7 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
     }
   }
   
-  /** Returns a copy of this $collection without any value associated with the given key.
+  /** Returns a copy of this $collection that associates nothing with the given key.
     * @group Updating */
   def - (key: A @uncheckedVariance): ArrayMap[A, T] = {
     var i = 0

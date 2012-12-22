@@ -57,16 +57,15 @@ private[containers] class FloatArrayBuffer private (
         buffer = array
         aliased = false
       }
-      xs.copyToArray(array, size)
+      xs.copyToArray(0, array, size, n)
       size += n
     }
-    else super.appendAll(elems)
+    else appendAll(ArrayBuffer.coerce(elems))
   }
   
   final override def prepend(elem: Float) {
     var array = buffer
-    if (aliased || size + 1 > array.length)
-      array = new Array[Float](expand(size + 1))
+    if (aliased || size + 1 > array.length) array = new Array[Float](expand(size + 1))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
     array(0) = elem
     buffer = array
@@ -79,15 +78,14 @@ private[containers] class FloatArrayBuffer private (
       val xs = elems.asInstanceOf[ArrayLike[Float]]
       val n = xs.length
       var array = buffer
-      if (aliased || size + n > array.length)
-        array = new Array[Float](expand(size + n))
+      if (aliased || size + n > array.length) array = new Array[Float](expand(size + n))
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
-      xs.copyToArray(array, 0)
+      xs.copyToArray(0, array, 0, n)
       buffer = array
       size += n
       aliased = false
     }
-    else super.prependAll(elems)
+    else prependAll(ArrayBuffer.coerce(elems))
   }
   
   final override def insert(index: Int, elem: Float) {
@@ -121,12 +119,12 @@ private[containers] class FloatArrayBuffer private (
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index, array, index + n, size - index)
-      xs.copyToArray(array, index)
+      xs.copyToArray(0, array, index, n)
       buffer = array
       size += n
       aliased = false
     }
-    else super.insertAll(index, elems)
+    else insertAll(index, ArrayBuffer.coerce(elems))
   }
   
   final override def remove(index: Int): Float = {
@@ -178,31 +176,18 @@ private[containers] class FloatArrayBuffer private (
     new FloatArrayBuffer(buffer, size, aliased)
   }
   
-  final override def copyToArray[B >: Float](xs: Array[B], start: Int, count: Int) {
-    if (xs.isInstanceOf[Array[Float]])
-      java.lang.System.arraycopy(buffer, 0, xs, start, count min (xs.length - start) min size)
-    else super.copyToArray(xs, start, count)
-  }
-  
-  final override def copyToArray[B >: Float](xs: Array[B], start: Int) {
-    if (xs.isInstanceOf[Array[Float]])
-      java.lang.System.arraycopy(buffer, 0, xs, start, (xs.length - start) min size)
-    else super.copyToArray(xs, start)
-  }
-  
-  final override def copyToArray[B >: Float](xs: Array[B]) {
-    if (xs.isInstanceOf[Array[Float]])
-      java.lang.System.arraycopy(buffer, 0, xs, 0, xs.length min size)
-    else super.copyToArray(xs)
+  final override def copyToArray[B >: Float](index: Int, to: Array[B], offset: Int, count: Int) {
+    if (to.isInstanceOf[Array[Float]]) java.lang.System.arraycopy(buffer, index, to, offset, count)
+    else super.copyToArray(index, to, offset, count)
   }
   
   final override def toArray[B >: Float](implicit B: ClassTag[B]): Array[B] = {
     if (B == ClassTag.Float) {
-      val xs = new Array[Float](size)
-      java.lang.System.arraycopy(buffer, 0, xs, 0, size)
-      xs.asInstanceOf[Array[B]]
+      val array = new Array[Float](size)
+      java.lang.System.arraycopy(buffer, 0, array, 0, size)
+      array.asInstanceOf[Array[B]]
     }
-    else super.toArray[B]
+    else super.toArray
   }
   
   final override def toArraySeq: ArraySeq[Float] = {

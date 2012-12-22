@@ -10,6 +10,7 @@ package basis.containers
 import basis.collections._
 
 import scala.reflect.ClassTag
+import scala.runtime.AbstractFunction1
 
 /** A mutable list of elements.
   * 
@@ -21,6 +22,8 @@ import scala.reflect.ClassTag
   * @groupprio  Traversing    -3
   * @groupprio  Converting    -2
   * @groupprio  Classifying   -1
+  * 
+  * @define collection  list buffer
   * 
   * @param  first     the first list cell.
   * @param  last      the last cons cell, or `null` if the list is empty.
@@ -88,8 +91,7 @@ class ListBuffer[A] private (
       }
       last = xs
     }
-    else if (elems.isInstanceOf[ListLike[_]])
-      appendAll(elems.asInstanceOf[ListLike[A]].toList)
+    else if (elems.isInstanceOf[ListLike[_]]) appendAll(elems.asInstanceOf[ListLike[A]].toList)
     else super.appendAll(elems)
   }
   
@@ -104,21 +106,27 @@ class ListBuffer[A] private (
   final override def prependAll(elems: Enumerator[A]) {
     if (size == 0) appendAll(elems)
     else {
-      var x0 = null: List[A]
-      var xi = null: ::[A]
-      traverse(elems) { x =>
-        val xn = ::(x, Nil)
-        if (x0 == null) x0 = xn
-        if (xi != null) xi.tail = xn
-        xi = xn
-        size += 1
-        aliased += 1
-      }
-      if (x0 != null) {
-        xi.tail = first
-        first = x0
-        if (xi.tail.isEmpty) last = xi
-      }
+      val f = new Prepend
+      traverse(elems)(f)
+      f.splice()
+    }
+  }
+  
+  private final class Prepend extends AbstractFunction1[A, Unit] {
+    private[this] var x0: List[A] = _
+    private[this] var xi: ::[A] = _
+    override def apply(elem: A) {
+      val xn = ::(elem, Nil)
+      if (x0 == null) x0 = xn
+      if (xi != null) xi.tail = xn
+      xi = xn
+      size += 1
+      aliased += 1
+    }
+    def splice(): Unit = if (x0 != null) {
+      xi.tail = first
+      first = x0
+      if (xi.tail.isEmpty) last = xi
     }
   }
   
@@ -138,15 +146,17 @@ class ListBuffer[A] private (
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
-    else {
-      var xi = dealias(index - 1)
-      traverse(elems) { x =>
-        val xn = ::(x, xi.tail)
-        xi.tail = xn
-        xi = xn
-        size += 1
-        aliased += 1
-      }
+    else traverse(elems)(new Insert(index))
+  }
+  
+  private final class Insert(index: Int) extends AbstractFunction1[A, Unit] {
+    private[this] var xi = dealias(index - 1)
+    override def apply(elem: A) {
+      val xn = ::(elem, xi.tail)
+      xi.tail = xn
+      xi = xn
+      size += 1
+      aliased += 1
     }
   }
   

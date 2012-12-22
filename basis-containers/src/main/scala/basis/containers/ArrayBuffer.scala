@@ -23,7 +23,7 @@ import scala.reflect.ClassTag
   * @groupprio  Converting    -2
   * @groupprio  Classifying   -1
   * 
-  * @define collection  buffer
+  * @define collection  array buffer
   */
 abstract class ArrayBuffer[A]
   extends Equals

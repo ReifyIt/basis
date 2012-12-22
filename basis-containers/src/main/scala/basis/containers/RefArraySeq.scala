@@ -8,7 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.util._
 
 import scala.reflect.ClassTag
 
@@ -19,30 +18,25 @@ private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends Ar
   
   override def apply(index: Int): A = array(index).asInstanceOf[A]
   
-  override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
-    else super.copyToArray(xs, start, count)
+  override def update[B >: A](index: Int, elem: B): ArraySeq[B] = {
+    val newArray = new Array[AnyRef](array.length)
+    java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
+    newArray(index) = elem.asInstanceOf[AnyRef]
+    new RefArraySeq(newArray)
   }
   
-  override def copyToArray[B >: A](xs: Array[B], start: Int) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
-    else super.copyToArray(xs, start)
-  }
-  
-  override def copyToArray[B >: A](xs: Array[B]) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
-    else super.copyToArray(xs)
+  override def copyToArray[B >: A](index: Int, to: Array[B], offset: Int, count: Int) {
+    if (to.isInstanceOf[Array[AnyRef]]) java.lang.System.arraycopy(array, index, to, offset, count)
+    else super.copyToArray(index, to, offset, count)
   }
   
   override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
-    val xs = B.newArray(length)
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(array, 0, xs, 0, length)
-    else super.copyToArray(xs)
-    xs
+    if (!B.runtimeClass.isPrimitive) {
+      val newArray = B.newArray(length)
+      java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
+      newArray
+    }
+    else super.toArray
   }
   
   override def iterator: Iterator[A] = new RefArraySeqIterator(array)

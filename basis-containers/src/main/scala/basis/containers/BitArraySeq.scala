@@ -10,15 +10,25 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-private[containers] final class BitArraySeq
-    (words: Array[Int], override val length: Int)
-  extends ArraySeq[Boolean] {
-  
+private[containers] final class BitArraySeq(words: Array[Int], override val length: Int) extends ArraySeq[Boolean] {
   override def isEmpty: Boolean = length == 0
   
   override def apply(index: Int): Boolean = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     ((words(index >> 5) >>> (31 - (index & 0x1F))) & 1) == 1
+  }
+  
+  override def update[B >: Boolean](index: Int, elem: B): ArraySeq[B] = {
+    if (elem.isInstanceOf[Boolean]) {
+      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+      val newWords = new Array[Int](words.length)
+      java.lang.System.arraycopy(words, 0, newWords, 0, newWords.length)
+      val mask = 1 << (31 - (index & 0x1F))
+      if (elem.asInstanceOf[Boolean]) newWords(index >> 5) |=  mask
+      else                            newWords(index >> 5) &= ~mask
+      new BitArraySeq(newWords, length).asInstanceOf[ArraySeq[B]]
+    }
+    else super.update(index, elem)
   }
   
   override def iterator: Iterator[Boolean] = new BitArraySeqIterator(words, length)

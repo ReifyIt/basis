@@ -57,16 +57,15 @@ private[containers] class RefArrayBuffer[A] private (
         buffer = array
         aliased = false
       }
-      xs.copyToArray(array.asInstanceOf[Array[Any]], size)
+      xs.copyToArray(0, array.asInstanceOf[Array[Any]], size, n)
       size += n
     }
-    else super.appendAll(elems)
+    else appendAll(ArrayBuffer.coerce(elems))
   }
   
   final override def prepend(elem: A) {
     var array = buffer
-    if (aliased || size + 1 > array.length)
-      array = new Array[AnyRef](expand(size + 1))
+    if (aliased || size + 1 > array.length) array = new Array[AnyRef](expand(size + 1))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
     array(0) = elem.asInstanceOf[AnyRef]
     buffer = array
@@ -79,15 +78,14 @@ private[containers] class RefArrayBuffer[A] private (
       val xs = elems.asInstanceOf[ArrayLike[A]]
       val n = xs.length
       var array = buffer
-      if (aliased || size + n > array.length)
-        array = new Array[AnyRef](expand(size + n))
+      if (aliased || size + n > array.length) array = new Array[AnyRef](expand(size + n))
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
-      xs.copyToArray(array.asInstanceOf[Array[Any]], 0)
+      xs.copyToArray(0, array.asInstanceOf[Array[Any]], 0, n)
       buffer = array
       size += n
       aliased = false
     }
-    else super.prependAll(elems)
+    else prependAll(ArrayBuffer.coerce(elems))
   }
   
   final override def insert(index: Int, elem: A) {
@@ -121,12 +119,12 @@ private[containers] class RefArrayBuffer[A] private (
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index, array, index + n, size - index)
-      xs.copyToArray(array.asInstanceOf[Array[Any]], index)
+      xs.copyToArray(0, array.asInstanceOf[Array[Any]], index, n)
       buffer = array
       size += n
       aliased = false
     }
-    else super.insertAll(index, elems)
+    else insertAll(index, ArrayBuffer.coerce(elems))
   }
   
   final override def remove(index: Int): A = {
@@ -178,30 +176,18 @@ private[containers] class RefArrayBuffer[A] private (
     new RefArrayBuffer(buffer, size, aliased)
   }
   
-  final override def copyToArray[B >: A](xs: Array[B], start: Int, count: Int) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(buffer, 0, xs, start, count min (xs.length - start) min size)
-    else super.copyToArray(xs, start, count)
-  }
-  
-  final override def copyToArray[B >: A](xs: Array[B], start: Int) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(buffer, 0, xs, start, (xs.length - start) min size)
-    else super.copyToArray(xs, start)
-  }
-  
-  final override def copyToArray[B >: A](xs: Array[B]) {
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(buffer, 0, xs, 0, xs.length min size)
-    else super.copyToArray(xs)
+  final override def copyToArray[B >: A](index: Int, to: Array[B], offset: Int, count: Int) {
+    if (to.isInstanceOf[Array[AnyRef]]) java.lang.System.arraycopy(buffer, index, to, offset, count)
+    else super.copyToArray(index, to, offset, count)
   }
   
   final override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
-    val xs = B.newArray(size)
-    if (xs.isInstanceOf[Array[AnyRef]])
-      java.lang.System.arraycopy(buffer, 0, xs, 0, size)
-    else super.copyToArray(xs)
-    xs
+    if (!B.runtimeClass.isPrimitive) {
+      val array = B.newArray(size)
+      java.lang.System.arraycopy(buffer, 0, array, 0, size)
+      array
+    }
+    else super.toArray
   }
   
   final override def toArraySeq: ArraySeq[A] = {

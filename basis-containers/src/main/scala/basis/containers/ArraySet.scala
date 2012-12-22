@@ -30,7 +30,7 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
     false
   }
   
-  /** Returns a copy of this $collection containing the given element.
+  /** Returns a copy of this $collection that contains the given element.
     * @group Updating */
   def + [B >: A](elem: B): ArraySet[B] = {
     var i = 0
@@ -45,7 +45,7 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
     }
   }
   
-  /** Returns a copy of this $collection, excluding the given element.
+  /** Returns a copy of this $collection that excludes the given element.
     * @group Updating */
   def - (elem: A @uncheckedVariance): ArraySet[A] = {
     var i = 0

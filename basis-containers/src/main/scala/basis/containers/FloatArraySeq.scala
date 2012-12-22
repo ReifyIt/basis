@@ -8,7 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.util._
 
 import scala.reflect.ClassTag
 
@@ -19,31 +18,28 @@ private[containers] final class FloatArraySeq(array: Array[Float]) extends Array
   
   override def apply(index: Int): Float = array(index)
   
-  override def copyToArray[B >: Float](xs: Array[B], start: Int, count: Int) {
-    if (xs.isInstanceOf[Array[Float]])
-      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
-    else super.copyToArray(xs, start, count)
+  override def update[B >: Float](index: Int, elem: B): ArraySeq[B] = {
+    if (elem.isInstanceOf[Float]) {
+      val newArray = new Array[Float](array.length)
+      java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
+      newArray(index) = elem.asInstanceOf[Float]
+      new FloatArraySeq(newArray).asInstanceOf[ArraySeq[B]]
+    }
+    else super.update(index, elem)
   }
   
-  override def copyToArray[B >: Float](xs: Array[B], start: Int) {
-    if (xs.isInstanceOf[Array[Float]])
-      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
-    else super.copyToArray(xs, start)
-  }
-  
-  override def copyToArray[B >: Float](xs: Array[B]) {
-    if (xs.isInstanceOf[Array[Float]])
-      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
-    else super.copyToArray(xs)
+  override def copyToArray[B >: Float](index: Int, to: Array[B], offset: Int, count: Int) {
+    if (to.isInstanceOf[Array[Float]]) java.lang.System.arraycopy(array, index, to, offset, count)
+    else super.copyToArray(index, to, offset, count)
   }
   
   override def toArray[B >: Float](implicit B: ClassTag[B]): Array[B] = {
     if (B == ClassTag.Float) {
-      val xs = new Array[Float](length)
-      java.lang.System.arraycopy(array, 0, xs, 0, length)
-      xs.asInstanceOf[Array[B]]
+      val newArray = new Array[Float](length)
+      java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
+      newArray.asInstanceOf[Array[B]]
     }
-    else super.toArray[B]
+    else super.toArray
   }
   
   override def iterator: Iterator[Float] = new FloatArraySeqIterator(array)

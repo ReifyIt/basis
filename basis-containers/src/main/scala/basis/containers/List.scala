@@ -111,6 +111,11 @@ object List extends SeqFactory[List] {
   
   override def empty[A : ClassTag]: Nil.type = Nil
   
+  override def coerce[A : ClassTag](elems: Enumerator[A]): List[A] = elems match {
+    case xs: ListLike[A] => xs.toList
+    case _ => super.coerce(elems)
+  }
+  
   override def toString: String = "List"
 }
 

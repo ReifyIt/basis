@@ -8,7 +8,6 @@
 package basis.containers
 
 import basis.collections._
-import basis.util._
 
 import scala.reflect.ClassTag
 
@@ -19,31 +18,28 @@ private[containers] final class LongArraySeq(array: Array[Long]) extends ArraySe
   
   override def apply(index: Int): Long = array(index)
   
-  override def copyToArray[B >: Long](xs: Array[B], start: Int, count: Int) {
-    if (xs.isInstanceOf[Array[Long]])
-      java.lang.System.arraycopy(array, 0, xs, start, count min (xs.length - start) min length)
-    else super.copyToArray(xs, start, count)
+  override def update[B >: Long](index: Int, elem: B): ArraySeq[B] = {
+    if (elem.isInstanceOf[Long]) {
+      val newArray = new Array[Long](array.length)
+      java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
+      newArray(index) = elem.asInstanceOf[Long]
+      new LongArraySeq(newArray).asInstanceOf[ArraySeq[B]]
+    }
+    else super.update(index, elem)
   }
   
-  override def copyToArray[B >: Long](xs: Array[B], start: Int) {
-    if (xs.isInstanceOf[Array[Long]])
-      java.lang.System.arraycopy(array, 0, xs, start, (xs.length - start) min length)
-    else super.copyToArray(xs, start)
-  }
-  
-  override def copyToArray[B >: Long](xs: Array[B]) {
-    if (xs.isInstanceOf[Array[Long]])
-      java.lang.System.arraycopy(array, 0, xs, 0, xs.length min length)
-    else super.copyToArray(xs)
+  override def copyToArray[B >: Long](index: Int, to: Array[B], offset: Int, count: Int) {
+    if (to.isInstanceOf[Array[Long]]) java.lang.System.arraycopy(array, index, to, offset, count)
+    else super.copyToArray(index, to, offset, count)
   }
   
   override def toArray[B >: Long](implicit B: ClassTag[B]): Array[B] = {
     if (B == ClassTag.Long) {
-      val xs = new Array[Long](length)
-      java.lang.System.arraycopy(array, 0, xs, 0, length)
-      xs.asInstanceOf[Array[B]]
+      val newArray = new Array[Long](length)
+      java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
+      newArray.asInstanceOf[Array[B]]
     }
-    else super.toArray[B]
+    else super.toArray
   }
   
   override def iterator: Iterator[Long] = new LongArraySeqIterator(array)
