@@ -15,7 +15,7 @@ object BasisBuild extends Build {
   lazy val Basis = Project(
     id           = "basis",
     base         = file("."),
-    settings     = basicSettings,
+    settings     = baseSettings,
     dependencies =
       Seq(BasisCollections,
           BasisContainers,
@@ -23,6 +23,7 @@ object BasisBuild extends Build {
           BasisGenerators,
           BasisMath,
           BasisMemory,
+          BasisRuntime,
           BasisSequential,
           BasisText,
           BasisUtil),
@@ -33,6 +34,7 @@ object BasisBuild extends Build {
           BasisGenerators,
           BasisMath,
           BasisMemory,
+          BasisRuntime,
           BasisSequential,
           BasisText,
           BasisUtil)
@@ -83,6 +85,12 @@ object BasisBuild extends Build {
     settings     = commonSettings
   )
   
+  lazy val BasisRuntime = Project(
+    id           = "basis-runtime",
+    base         = file("basis-runtime"),
+    settings     = commonSettings
+  )
+  
   lazy val BasisSequential = Project(
     id           = "basis-sequential",
     base         = file("basis-sequential"),
@@ -108,7 +116,7 @@ object BasisBuild extends Build {
     settings     = commonSettings
   )
   
-  lazy val basicSettings =
+  lazy val baseSettings =
     defaultSettings ++
     Unidoc.settings ++
     projectSettings ++
@@ -116,7 +124,7 @@ object BasisBuild extends Build {
     docSettings
   
   lazy val commonSettings =
-    basicSettings   ++
+    baseSettings    ++
     compileSettings ++
     publishSettings
   
