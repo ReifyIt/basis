@@ -8,9 +8,15 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 import basis.util._
 
-private[containers] final class BitArraySeq(words: Array[Int], override val length: Int) extends ArraySeq[Boolean] {
+private[containers] final class BitArraySeq
+    (words: Array[Int], override val length: Int)
+  extends ArraySeq[Boolean] with Reified {
+  
+  protected override def T: TypeHint[Boolean] = TypeHint.Boolean
+  
   override def isEmpty: Boolean = length == 0
   
   override def apply(index: Int): Boolean = {

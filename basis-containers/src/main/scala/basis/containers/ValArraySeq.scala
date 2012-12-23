@@ -9,11 +9,17 @@ package basis.containers
 
 import basis.collections._
 import basis.memory._
+import basis.runtime._
 import basis.util._
 
-private[containers] final class ValArraySeq[+A](data: Data)(implicit A: Struct[A]) extends ArraySeq[A] {
+private[containers] final class ValArraySeq[+A]
+    (data: Data)(implicit A: Struct[A])
+  extends ArraySeq[A] with Reified {
+  
   if (data.size % A.size != 0L) throw new IllegalArgumentException("Data size not a multiple of struct size.")
   if (data.size / A.size > Int.MaxValue) throw new IllegalArgumentException("length > Int.MaxValue")
+  
+  protected override def T: TypeHint[_ <: A] = A
   
   override val length: Int = (data.size / A.size).toInt
   
@@ -26,9 +32,10 @@ private[containers] final class ValArraySeq[+A](data: Data)(implicit A: Struct[A
   
   override def update[B >: A](index: Int, elem: B): ArraySeq[B] = {
     if (A.runtimeClass.isInstance(elem)) {
+      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
       val newData = data.copy()
       A.store(data, A.size * index, elem.asInstanceOf[A])
-      new ValArraySeq(newData)
+      new ValArraySeq[A](newData)
     }
     else super.update(index, elem)
   }
@@ -38,9 +45,27 @@ private[containers] final class ValArraySeq[+A](data: Data)(implicit A: Struct[A
       val newData = Data.alloc[A](length + 1)
       Data.copy(data, 0L, newData, 0L, data.size)
       A.store(data, data.size, elem.asInstanceOf[A])
-      new ValArraySeq(newData)
+      new ValArraySeq[A](newData)
     }
     else super.append(elem)
+  }
+  
+  override def appendAll[B >: A](elems: Enumerator[B]): ArraySeq[B] = {
+    if (elems.isInstanceOf[ArrayLike[_]] && Reified[A](elems)) {
+      val xs = elems.asInstanceOf[ArrayLike[A]]
+      val n = xs.length
+      val newData = Data.alloc[A](length + n)
+      var p = data.size
+      Data.copy(data, 0L, newData, 0L, p)
+      var i = 0
+      while (i < n) {
+        A.store(data, p, xs(i))
+        p += A.size
+        i += 1
+      }
+      new ValArraySeq[A](newData)
+    }
+    else super.appendAll(elems)
   }
   
   override def prepend[B >: A](elem: B): ArraySeq[B] = {
@@ -48,31 +73,81 @@ private[containers] final class ValArraySeq[+A](data: Data)(implicit A: Struct[A
       val newData = Data.alloc[A](length + 1)
       A.store(data, 0L, elem.asInstanceOf[A])
       Data.copy(data, 0L, newData, A.size, data.size)
-      new ValArraySeq(newData)
+      new ValArraySeq[A](newData)
     }
     else super.prepend(elem)
+  }
+  
+  override def prependAll[B >: A](elems: Enumerator[B]): ArraySeq[B] = {
+    if (elems.isInstanceOf[ArrayLike[_]] && Reified[A](elems)) {
+      val xs = elems.asInstanceOf[ArrayLike[A]]
+      val n = xs.length
+      val newData = Data.alloc[A](n + length)
+      var p = 0L
+      var i = 0
+      while (i < n) {
+        A.store(data, p, xs(i))
+        p += A.size
+        i += 1
+      }
+      Data.copy(data, 0L, newData, p, data.size)
+      new ValArraySeq[A](newData)
+    }
+    else super.prependAll(elems)
   }
   
   override def insert[B >: A](index: Int, elem: B): ArraySeq[B] = {
     if (A.runtimeClass.isInstance(elem)) {
       if (index < 0 || index > length) throw new IndexOutOfBoundsException(index.toString)
-      val offset = A.size * index
       val newData = Data.alloc[A](length + 1)
-      Data.copy(data, 0L, newData, 0L, offset)
-      A.store(data, offset, elem.asInstanceOf[A])
-      Data.copy(data, offset, newData, offset + A.size, data.size - offset)
-      new ValArraySeq(newData)
+      val p = A.size * index
+      Data.copy(data, 0L, newData, 0L, p)
+      A.store(data, p, elem.asInstanceOf[A])
+      Data.copy(data, p, newData, p + A.size, data.size - p)
+      new ValArraySeq[A](newData)
     }
     else super.insert(index, elem)
   }
   
+  override def insertAll[B >: A](index: Int, elems: Enumerator[B]): ArraySeq[B] = {
+    if (elems.isInstanceOf[ArrayLike[_]] && Reified[A](elems)) {
+      val xs = elems.asInstanceOf[ArrayLike[A]]
+      val n = xs.length
+      if (index < 0 || index > length) throw new IndexOutOfBoundsException(index.toString)
+      val newData = Data.alloc[A](length + n)
+      val p = A.size * index
+      Data.copy(data, 0L, newData, 0L, p)
+      var q = p
+      var i = 0
+      while (i < n) {
+        A.store(data, q, xs(i))
+        q += A.size
+        i += 1
+      }
+      Data.copy(data, p, newData, q, data.size - p)
+      new ValArraySeq[A](newData)
+    }
+    else super.insertAll(index, elems)
+  }
+  
   override def remove(index: Int): ArraySeq[A] = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    val offset = A.size * index
     val newData = Data.alloc[A](length - 1)
-    Data.copy(data, 0L, newData, 0L, offset)
-    Data.copy(data, offset + A.size, newData, offset, newData.size - offset)
-    new ValArraySeq(newData)
+    val p = A.size * index
+    Data.copy(data, 0L, newData, 0L, p)
+    Data.copy(data, p + A.size, newData, p, newData.size - p)
+    new ValArraySeq[A](newData)
+  }
+  
+  override def remove(index: Int, count: Int): ArraySeq[A] = {
+    if (count < 0) throw new IllegalArgumentException("negative count")
+    if (index < 0) throw new IndexOutOfBoundsException(index.toString)
+    if (index + count > length) throw new IndexOutOfBoundsException((index + count).toString)
+    val newData = Data.alloc[A](length - count)
+    val p = A.size * index
+    Data.copy(data, 0L, newData, 0L, p)
+    Data.copy(data, p + A.size * count, newData, p, newData.size - p)
+    new ValArraySeq[A](newData)
   }
 }
 

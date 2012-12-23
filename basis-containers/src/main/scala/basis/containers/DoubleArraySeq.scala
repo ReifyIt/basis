@@ -8,8 +8,11 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 
-private[containers] final class DoubleArraySeq(array: Array[Double]) extends ArraySeq[Double] {
+private[containers] final class DoubleArraySeq(array: Array[Double]) extends ArraySeq[Double] with Reified {
+  protected override def T: TypeHint[Double] = TypeHint.Double
+  
   override def isEmpty: Boolean = array.length == 0
   
   override def length: Int = array.length
@@ -18,12 +21,101 @@ private[containers] final class DoubleArraySeq(array: Array[Double]) extends Arr
   
   override def update[B >: Double](index: Int, elem: B): ArraySeq[B] = {
     if (elem.isInstanceOf[Double]) {
-      val newArray = new Array[Double](array.length)
+      if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+      val newArray = new Array[Double](length)
       java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
       newArray(index) = elem.asInstanceOf[Double]
       new DoubleArraySeq(newArray).asInstanceOf[ArraySeq[B]]
     }
     else super.update(index, elem)
+  }
+  
+  override def append[B >: Double](elem: B): ArraySeq[B] = {
+    if (elem.isInstanceOf[Double]) {
+      val newArray = new Array[Double](length + 1)
+      java.lang.System.arraycopy(array, 0, newArray, 0, length)
+      newArray(newArray.length) = elem.asInstanceOf[Double]
+      new DoubleArraySeq(newArray)
+    }
+    else super.append(elem)
+  }
+  
+  override def appendAll[B >: Double](elems: Enumerator[B]): ArraySeq[B] = {
+    if (elems.isInstanceOf[ArrayLike[_]] && Reified[Double](elems)) {
+      val xs = elems.asInstanceOf[ArrayLike[Double]]
+      val n = xs.length
+      val newArray = new Array[Double](length + n)
+      java.lang.System.arraycopy(array, 0, newArray, 0, length)
+      xs.copyToArray(0, newArray, length, n)
+      new DoubleArraySeq(newArray)
+    }
+    else super.appendAll(elems)
+  }
+  
+  override def prepend[B >: Double](elem: B): ArraySeq[B] = {
+    if (elem.isInstanceOf[Double]) {
+      val newArray = new Array[Double](1 + length)
+      newArray(0) = elem.asInstanceOf[Double]
+      java.lang.System.arraycopy(array, 0, newArray, 1, length)
+      new DoubleArraySeq(newArray)
+    }
+    else super.prepend(elem)
+  }
+  
+  override def prependAll[B >: Double](elems: Enumerator[B]): ArraySeq[B] = {
+    if (elems.isInstanceOf[ArrayLike[_]] && Reified[Double](elems)) {
+      val xs = elems.asInstanceOf[ArrayLike[Double]]
+      val n = xs.length
+      val newArray = new Array[Double](n + length)
+      xs.copyToArray(0, newArray, 0, n)
+      java.lang.System.arraycopy(array, 0, newArray, n, length)
+      new DoubleArraySeq(newArray)
+    }
+    else super.prependAll(elems)
+  }
+  
+  override def insert[B >: Double](index: Int, elem: B): ArraySeq[B] = {
+    if (elem.isInstanceOf[Double]) {
+      if (index < 0 || index > length) throw new IndexOutOfBoundsException(index.toString)
+      val newArray = new Array[Double](length + 1)
+      java.lang.System.arraycopy(array, 0, newArray, 0, index)
+      newArray(index) = elem.asInstanceOf[Double]
+      java.lang.System.arraycopy(array, index, newArray, index + 1, length - index)
+      new DoubleArraySeq(newArray)
+    }
+    else super.insert(index, elem)
+  }
+  
+  override def insertAll[B >: Double](index: Int, elems: Enumerator[B]): ArraySeq[B] = {
+    if (elems.isInstanceOf[ArrayLike[_]] && Reified[Double](elems)) {
+      val xs = elems.asInstanceOf[ArrayLike[Double]]
+      val n = xs.length
+      if (index < 0 || index > length) throw new IndexOutOfBoundsException(index.toString)
+      val newArray = new Array[Double](length + n)
+      java.lang.System.arraycopy(array, 0, newArray, 0, index)
+      xs.copyToArray(0, newArray, index, n)
+      java.lang.System.arraycopy(array, index, newArray, index + n, length - index)
+      new DoubleArraySeq(newArray)
+    }
+    else super.insertAll(index, elems)
+  }
+  
+  override def remove(index: Int): ArraySeq[Double] = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newArray = new Array[Double](length - 1)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    java.lang.System.arraycopy(array, index + 1, newArray, index, newArray.length - index)
+    new DoubleArraySeq(newArray)
+  }
+  
+  override def remove(index: Int, count: Int): ArraySeq[Double] = {
+    if (count < 0) throw new IllegalArgumentException("negative count")
+    if (index < 0) throw new IndexOutOfBoundsException(index.toString)
+    if (index + count > length) throw new IndexOutOfBoundsException((index + count).toString)
+    val newArray = new Array[Double](length - count)
+    java.lang.System.arraycopy(array, 0, newArray, 0, index)
+    java.lang.System.arraycopy(array, index + count, newArray, index, newArray.length - index)
+    new DoubleArraySeq(newArray)
   }
   
   override def copyToArray[B >: Double](index: Int, to: Array[B], offset: Int, count: Int) {

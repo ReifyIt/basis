@@ -8,15 +8,18 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 import basis.util._
 
 private[containers] class ShortArrayBuffer private (
     private[this] var buffer: Array[Short],
     private[this] var size: Int,
     private[this] var aliased: Boolean)
-  extends ArrayBuffer[Short] {
+  extends ArrayBuffer[Short] with Reified {
   
   def this() = this(null, 0, true)
+  
+  protected override def T: TypeHint[Short] = TypeHint.Short
   
   final override def isEmpty: Boolean = size == 0
   
@@ -63,7 +66,7 @@ private[containers] class ShortArrayBuffer private (
   
   final override def prepend(elem: Short) {
     var array = buffer
-    if (aliased || size + 1 > array.length) array = new Array[Short](expand(size + 1))
+    if (aliased || size + 1 > array.length) array = new Array[Short](expand(1 + size))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
     array(0) = elem
     buffer = array
@@ -76,7 +79,7 @@ private[containers] class ShortArrayBuffer private (
       val xs = elems.asInstanceOf[ArrayLike[Short]]
       val n = xs.length
       var array = buffer
-      if (aliased || size + n > array.length) array = new Array[Short](expand(size + n))
+      if (aliased || size + n > array.length) array = new Array[Short](expand(n + size))
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
       xs.copyToArray(0, array, 0, n)
       buffer = array
@@ -87,10 +90,10 @@ private[containers] class ShortArrayBuffer private (
   }
   
   final override def insert(index: Int, elem: Short) {
-    if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) append(elem)
     else if (index == 0) prepend(elem)
     else {
+      if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
       var array = buffer
       if (aliased || size + 1 > array.length) {
         array = new Array[Short](expand(size + 1))
@@ -105,12 +108,12 @@ private[containers] class ShortArrayBuffer private (
   }
   
   final override def insertAll(index: Int, elems: Enumerator[Short]) {
-    if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
     else if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Short]]
       val n = xs.length
+      if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
       var array = buffer
       if (aliased || size + n > array.length) {
         array = new Array[Short](expand(size + n))

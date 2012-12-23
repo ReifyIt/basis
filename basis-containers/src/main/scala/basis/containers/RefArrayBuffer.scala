@@ -63,7 +63,7 @@ private[containers] class RefArrayBuffer[A] private (
   
   final override def prepend(elem: A) {
     var array = buffer
-    if (aliased || size + 1 > array.length) array = new Array[AnyRef](expand(size + 1))
+    if (aliased || size + 1 > array.length) array = new Array[AnyRef](expand(1 + size))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
     array(0) = elem.asInstanceOf[AnyRef]
     buffer = array
@@ -76,7 +76,7 @@ private[containers] class RefArrayBuffer[A] private (
       val xs = elems.asInstanceOf[ArrayLike[A]]
       val n = xs.length
       var array = buffer
-      if (aliased || size + n > array.length) array = new Array[AnyRef](expand(size + n))
+      if (aliased || size + n > array.length) array = new Array[AnyRef](expand(n + size))
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
       xs.copyToArray(0, array.asInstanceOf[Array[Any]], 0, n)
       buffer = array
@@ -87,10 +87,10 @@ private[containers] class RefArrayBuffer[A] private (
   }
   
   final override def insert(index: Int, elem: A) {
-    if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) append(elem)
     else if (index == 0) prepend(elem)
     else {
+      if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
       var array = buffer
       if (aliased || size + 1 > array.length) {
         array = new Array[AnyRef](expand(size + 1))
@@ -105,10 +105,10 @@ private[containers] class RefArrayBuffer[A] private (
   }
   
   final override def insertAll(index: Int, elems: Enumerator[A]) {
-    if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
     else if (elems.isInstanceOf[ArrayLike[_]]) {
+      if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
       val xs = elems.asInstanceOf[ArrayLike[A]]
       val n = xs.length
       var array = buffer
