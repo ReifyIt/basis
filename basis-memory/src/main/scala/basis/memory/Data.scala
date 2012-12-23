@@ -466,15 +466,14 @@ abstract class Data {
     * @param  address   the aligned address to load.
     * @param  count     the number of values to load.
     * @param  T         the implicit struct type to load.
-    * @param  tag       the reflective type of the array to load.
     * @return the loaded array of instance values.
     * @group  Aggregate
     */
   def loadArray[T]
       (address: Long, count: Int)
-      (implicit T: Struct[T], tag: scala.reflect.ClassTag[T])
+      (implicit T: Struct[T])
     : Array[T] = {
-    val array = tag.newArray(count)
+    val array = T.newArray(count)
     copyToArray[T](address, array, 0, count)
     array
   }

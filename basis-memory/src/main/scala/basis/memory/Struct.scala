@@ -14,16 +14,15 @@ import scala.annotation.implicitNotFound
 
 /** A typeclass for binary data structures.
   * 
-  * ==Frames==
   * A struct's `alignment`, `offset` and `size` constitute its ''frame''; the
   * alignment must evenly divide the offset and size. Structs must never access
   * more than `size - 1` bytes beyond a given address, and should assume proper
   * alignment of provided addresses.
   * 
-  * @tparam T   the struct instance type.
+  * @tparam T   This struct's instance type.
   */
 @implicitNotFound("No available Struct for type ${T}.")
-abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) T] extends TypeHint[T] {
+abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) T] extends ClassTypeHint[T] {
   /** Returns the power-of-two alignment of this struct's frame. This alignment
     * must evenly divide all storage addresses used for values of this type. */
   def alignment: Long
@@ -51,14 +50,23 @@ abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolea
 
 /** A factory for builtin implicit structs.
   * 
-  * @groupprio  Generic     -4
+  * @groupname  Implicit    Implicit struct selection
+  * @groupprio  Implicit    -4
+  * 
+  * @groupname  Aligned     Aligned primitive structs
   * @groupprio  Aligned     -3
+  * 
+  * @groupname  Unaligned   Unaligned primitive structs
   * @groupprio  Unaligned   -2
+  * 
+  * @groupname  Composite   Composite structs
   * @groupprio  Composite   -1
   */
 object Struct {
+  import Predef.classOf
+  
   /** Returns the implicit struct for a given instance type.
-    * @group Generic */
+    * @group Implicit */
   def apply[T](implicit T: Struct[T]): T.type = T
   
   /** A `Byte` struct.
@@ -68,6 +76,8 @@ object Struct {
     override def size: Long = 1L
     override def load(data: Data, address: Long): Byte = data.loadByte(address)
     override def store(data: Data, address: Long, value: Byte): Unit = data.storeByte(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Byte.TYPE
+    override def newArray(length: Int): Array[Byte] = new Array[Byte](length)
     override def toString: String = "PackedByte"
   }
   
@@ -78,6 +88,8 @@ object Struct {
     override def size: Long = 2L
     override def load(data: Data, address: Long): Short = data.loadUnalignedShort(address)
     override def store(data: Data, address: Long, value: Short): Unit = data.storeUnalignedShort(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Short.TYPE
+    override def newArray(length: Int): Array[Short] = new Array[Short](length)
     override def toString: String = "PackedShort"
   }
   
@@ -88,6 +100,8 @@ object Struct {
     override def size: Long = 4L
     override def load(data: Data, address: Long): Int = data.loadUnalignedInt(address)
     override def store(data: Data, address: Long, value: Int): Unit = data.storeUnalignedInt(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Integer.TYPE
+    override def newArray(length: Int): Array[Int] = new Array[Int](length)
     override def toString: String = "PackedInt"
   }
   
@@ -98,6 +112,8 @@ object Struct {
     override def size: Long = 8L
     override def load(data: Data, address: Long): Long = data.loadUnalignedLong(address)
     override def store(data: Data, address: Long, value: Long): Unit = data.storeUnalignedLong(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Long.TYPE
+    override def newArray(length: Int): Array[Long] = new Array[Long](length)
     override def toString: String = "PackedLong"
   }
   
@@ -108,6 +124,8 @@ object Struct {
     override def size: Long = 4L
     override def load(data: Data, address: Long): Float = data.loadUnalignedFloat(address)
     override def store(data: Data, address: Long, value: Float): Unit = data.storeUnalignedFloat(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Float.TYPE
+    override def newArray(length: Int): Array[Float] = new Array[Float](length)
     override def toString: String = "PackedFloat"
   }
   
@@ -118,6 +136,8 @@ object Struct {
     override def size: Long = 8L
     override def load(data: Data, address: Long): Double = data.loadUnalignedDouble(address)
     override def store(data: Data, address: Long, value: Double): Unit = data.storeUnalignedDouble(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Double.TYPE
+    override def newArray(length: Int): Array[Double] = new Array[Double](length)
     override def toString: String = "PackedDouble"
   }
   
@@ -130,6 +150,8 @@ object Struct {
     override def store(data: Data, address: Long, value: Boolean): Unit = data.storeByte(address, encode(value))
     @inline private[this] def decode(value: Byte): Boolean = value == 0
     @inline private[this] def encode(value: Boolean): Byte = if (value) 0.toByte else -1.toByte
+    override def runtimeClass: java.lang.Class[_] = java.lang.Boolean.TYPE
+    override def newArray(length: Int): Array[Boolean] = new Array[Boolean](length)
     override def toString: String = "PackedBoolean"
   }
   
@@ -140,6 +162,8 @@ object Struct {
     override def size: Long = 2L
     override def load(data: Data, address: Long): Short = data.loadShort(address)
     override def store(data: Data, address: Long, value: Short): Unit = data.storeShort(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Short.TYPE
+    override def newArray(length: Int): Array[Short] = new Array[Short](length)
     override def toString: String = "PaddedShort"
   }
   
@@ -150,6 +174,8 @@ object Struct {
     override def size: Long = 4L
     override def load(data: Data, address: Long): Int = data.loadInt(address)
     override def store(data: Data, address: Long, value: Int): Unit = data.storeInt(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Integer.TYPE
+    override def newArray(length: Int): Array[Int] = new Array[Int](length)
     override def toString: String = "PaddedInt"
   }
   
@@ -160,6 +186,8 @@ object Struct {
     override def size: Long = 8L
     override def load(data: Data, address: Long): Long = data.loadLong(address)
     override def store(data: Data, address: Long, value: Long): Unit = data.storeLong(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Long.TYPE
+    override def newArray(length: Int): Array[Long] = new Array[Long](length)
     override def toString: String = "PaddedLong"
   }
   
@@ -170,6 +198,8 @@ object Struct {
     override def size: Long = 4L
     override def load(data: Data, address: Long): Float = data.loadFloat(address)
     override def store(data: Data, address: Long, value: Float): Unit = data.storeFloat(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Float.TYPE
+    override def newArray(length: Int): Array[Float] = new Array[Float](length)
     override def toString: String = "PaddedFloat"
   }
   
@@ -180,6 +210,8 @@ object Struct {
     override def size: Long = 8L
     override def load(data: Data, address: Long): Double = data.loadDouble(address)
     override def store(data: Data, address: Long, value: Double): Unit = data.storeDouble(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Double.TYPE
+    override def newArray(length: Int): Array[Double] = new Array[Double](length)
     override def toString: String = "PaddedDouble"
   }
   
@@ -200,6 +232,8 @@ object Struct {
       T1.store(data, address,           tuple._1)
       T2.store(data, address + offset2, tuple._2)
     }
+    override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2)]
+    override def newArray(length: Int): Array[(T1, T2)] = new Array[(T1, T2)](length)
     override def toString: String = "("+ T1 +", "+ T2 +")"
   }
   
@@ -229,6 +263,8 @@ object Struct {
       T2.store(data, address + offset2, tuple._2)
       T3.store(data, address + offset3, tuple._3)
     }
+    override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2, T3)]
+    override def newArray(length: Int): Array[(T1, T2, T3)] = new Array[(T1, T2, T3)](length)
     override def toString: String = "("+ T1 +", "+ T2 +", "+ T3 +")"
   }
   
@@ -260,6 +296,8 @@ object Struct {
       T3.store(data, address + offset3, tuple._3)
       T4.store(data, address + offset4, tuple._4)
     }
+    override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2, T3, T4)]
+    override def newArray(length: Int): Array[(T1, T2, T3, T4)] = new Array[(T1, T2, T3, T4)](length)
     override def toString: String = "("+ T1 +", "+ T2 +", "+ T3 +", "+ T4 +")"
   }
   
