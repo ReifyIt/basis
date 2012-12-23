@@ -13,7 +13,7 @@ import java.lang.Double.longBitsToDouble
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait DataBehaviors extends ValTypeBehaviors { this: FunSpec =>
+trait DataBehaviors extends StructBehaviors { this: FunSpec =>
   import ShouldMatchers._
   import HexMatchers._
   
@@ -410,7 +410,7 @@ trait DataBehaviors extends ValTypeBehaviors { this: FunSpec =>
   }
   
   def StructuredData(implicit allocator: Allocator) {
-    import ValType._
+    import Struct._
     
     describe("Packed Byte data") {
       val struct = PackedByte

@@ -7,23 +7,23 @@
 
 package basis.memory
 
-/** A `Data` allocator. */
-abstract class Allocator extends scala.runtime.AbstractFunction1[Long, Data] {
-  /** Returns the maximum size in bytes this allocator can allocate. */
+/** A memory allocator. */
+abstract class Allocator extends (Long => Data) {
+  /** Returns the maximum allocation size supported by this allocator. */
   def MaxSize: Long
   
-  /** Returns newly allocated `Data` for a number of unit sized values.
-    * Allocates `unit.size * count` bytes of data. May return a `Data` class
-    * optimized for the given unit type.
+  /** Returns newly allocated memory for a certain number of struct values.
+    * Allocates `sizeOf[T] * count` bytes of data. Implementations may
+    * return a `Data` class optimized for the given struct.
     * 
-    * @tparam T       the unit value type.
-    * @param  count   the number of units to allocate.
-    * @param  unit    the implicit unit value type.
+    * @tparam T       the struct instance type.
+    * @param  count   the number of struct values to allocate.
+    * @param  T       the implicit struct.
     * @return the allocated, zero-filled data.
     */
-  def alloc[T](count: Long)(implicit unit: ValType[T]): Data
+  def alloc[T](count: Long)(implicit T: Struct[T]): Data
   
-  /** Returns a number of bytes of newly allocated `Data`.
+  /** Returns a certain number of bytes of newly allocated memory.
     * 
     * @param  size  the number of bytes to allocate.
     * @return the allocated, zero-filled data.
@@ -31,8 +31,8 @@ abstract class Allocator extends scala.runtime.AbstractFunction1[Long, Data] {
   def apply(size: Long): Data
 }
 
-/** Provides an implicit default `Data` allocator. */
+/** An implicit factory for the default memory allocator. */
 object Allocator {
-  /** Returns the default `Data` allocator. */
+  /** Returns the default memory allocator. */
   implicit def default: Allocator = Data
 }

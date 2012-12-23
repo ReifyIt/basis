@@ -64,20 +64,20 @@ private[memory] trait DataLE extends Data {
 private[memory] object DataLE extends Allocator with (Long => DataLE) {
   override def MaxSize: Long = Int.MaxValue << 3
   
-  override def alloc[T](count: Long)(implicit unit: ValType[T]): DataLE = {
-    val size = unit.size * count
-    if (size <= Int.MaxValue.toLong) unit.alignment match {
+  override def alloc[T](count: Long)(implicit T: Struct[T]): DataLE = {
+    val size = T.size * count
+    if (size <= Int.MaxValue.toLong) T.alignment match {
       case 1L => Data1LE(size)
       case 2L => Data2LE(size)
       case 4L => Data4LE(size)
       case _  => Data8LE(size)
     }
-    else if (size <= (Int.MaxValue.toLong << 1)) unit.alignment match {
+    else if (size <= (Int.MaxValue.toLong << 1)) T.alignment match {
       case 1L | 2L => Data2LE(size)
       case 4L      => Data4LE(size)
       case _       => Data8LE(size)
     }
-    else if (size <= (Int.MaxValue.toLong << 2)) unit.alignment match {
+    else if (size <= (Int.MaxValue.toLong << 2)) T.alignment match {
       case 1L | 2L | 4L => Data4LE(size)
       case _            => Data8LE(size)
     }

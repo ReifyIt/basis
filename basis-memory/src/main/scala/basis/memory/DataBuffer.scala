@@ -13,7 +13,7 @@ private[memory] final class DataBuffer(val buffer: java.nio.ByteBuffer) extends 
   
   override def unit: Int = 1
   
-  override def endian: ByteOrder = {
+  override def endian: Endianness = {
     if (buffer.order eq java.nio.ByteOrder.BIG_ENDIAN) BigEndian
     else if (buffer.order eq java.nio.ByteOrder.LITTLE_ENDIAN) LittleEndian
     else throw new MatchError(buffer.order)
@@ -135,8 +135,7 @@ private[memory] final class DataBuffer(val buffer: java.nio.ByteBuffer) extends 
 private[memory] object DataBuffer extends Allocator with (Long => DataBuffer) {
   override def MaxSize: Long = Int.MaxValue.toLong
   
-  override def alloc[T](count: Long)(implicit unit: ValType[T]): DataBuffer =
-    apply(unit.size * count)
+  override def alloc[T](count: Long)(implicit T: Struct[T]): DataBuffer = apply(T.size * count)
   
   override def apply(size: Long): DataBuffer = {
     Predef.require(0L <= size && size <= MaxSize)

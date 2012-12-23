@@ -10,7 +10,7 @@ package basis.runtime
 /** A typeclass for optional runtime type information. */
 trait TypeHint[T]
 
-/** A factory for default implicit type hints. */
+/** A factory for builtin implicit type hints. */
 object TypeHint {
   import Predef.classOf
   

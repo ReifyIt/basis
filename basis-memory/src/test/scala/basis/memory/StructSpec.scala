@@ -10,10 +10,10 @@ package basis.memory
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class ValTypeSpec extends FunSpec with ShouldMatchers {
-  import ValType._
+class StructSpec extends FunSpec with ShouldMatchers {
+  import Struct._
   
-  override def suiteName = "Value type specification"
+  override def suiteName = "Struct specification"
   
   describe("Packed Byte") {
     val struct = PackedByte

@@ -64,9 +64,9 @@ private[memory] abstract class Data2 extends Data {
 private[memory] object Data2 extends Allocator with (Long => Data2) {
   override def MaxSize: Long = Int.MaxValue.toLong << 1
   
-  override def alloc[T](count: Long)(implicit unit: ValType[T]): Data2 = NativeEndian match {
-    case BigEndian    => Data2BE.alloc[T](count)(unit)
-    case LittleEndian => Data2LE.alloc[T](count)(unit)
+  override def alloc[T](count: Long)(implicit T: Struct[T]): Data2 = NativeEndian match {
+    case BigEndian    => Data2BE.alloc[T](count)(T)
+    case LittleEndian => Data2LE.alloc[T](count)(T)
   }
   
   override def apply(size: Long): Data2 = NativeEndian match {

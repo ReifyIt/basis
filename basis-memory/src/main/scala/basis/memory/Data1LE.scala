@@ -83,8 +83,7 @@ private[memory] final class Data1LE(override val words: Array[Byte]) extends Dat
 private[memory] object Data1LE extends Allocator with (Long => Data1LE) {
   override def MaxSize: Long = Int.MaxValue.toLong
   
-  override def alloc[T](count: Long)(implicit unit: ValType[T]): Data1LE =
-    apply(unit.size * count)
+  override def alloc[T](count: Long)(implicit T: Struct[T]): Data1LE = apply(T.size * count)
   
   override def apply(size: Long): Data1LE = {
     Predef.require(0L <= size && size <= MaxSize)

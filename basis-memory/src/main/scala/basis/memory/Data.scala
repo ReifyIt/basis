@@ -7,9 +7,11 @@
 
 package basis.memory
 
-/** A mutable byte sequence with supporting low-level memory operations.
+import basis.util._
+
+/** A byte-addressed memory region.
   * 
-  * ==Address space==
+  * ==Address Space==
   * 
   * `Data` objects have a 64-bit ''address space'' ranging from `0` until `size`.
   * Each ''address'' in the space identifies a unique storage location for a
@@ -17,38 +19,29 @@ package basis.memory
   * thus have multiple addresses–one address per byte. The lowest address of a
   * multi-byte sequence canonically refers to the whole byte sequence.
   * 
-  * ==Value types==
-  * 
-  * `Data` objects store structured value types. In this context, ''Value type''
-  * means an isomorphism between Scala values and fixed-length byte sequences,
-  * with a possible restriction on address alignment.
-  * 
-  * ===Primitive value types===
-  * 
-  * Primitive value types have dedicated `load` and `store` methods. Multi-byte
-  * primitives have ''aligned'' and ''unaligned'' variants. The data's
-  * `endian` property determines the byte order of multi-byte values.
-  * 
-  * ===Derived value types===
-  * 
-  * [[ValType]] instances abstract over value types. Generic `load` and `store`
-  * methods delegate to implicitly supplied `ValType` instances.
-  * 
-  * ==Address alignment==
-  * 
   * N-byte divisible addresses are said to be N-byte ''aligned''. Using aligned
-  * addresses reduces some multi-byte data accesses to single array operations,
-  * which can improve performance. Alignment sensitive allocators such as the
-  * default `Data` allocator try to allocate data backed by a primitive array
-  * whose element size matches the alignment of an implicitly supplied unit
-  * struct. This allocation strategy combined with proper address alignment
-  * enables optimal code paths.
+  * addresses reduces some multi-byte memory accesses to single array operations,
+  * which can improve performance. Alignment sensitive allocators, such as the
+  * default [[Data$ Data]] allocator, try to allocate memory backed by a primitive
+  * array whose element size matches the alignment of the struct values it will
+  * store. This allocation strategy, combined with proper address alignment,
+  * enables an optimal code path when serializaing many values.
   * 
-  * Aligned data accesses truncate unaligned addresses to the required alignment.
+  * Aligned memory accesses truncate unaligned addresses to their required alignment.
+  * 
+  * ==Value Types==
+  * 
+  * `Data` objects store structured value types. [[Struct Structs]] model
+  * value types as transformations between instance types and fixed-length
+  * byte sequences, with a restriction on address alignment.
+  * 
+  * Primitive types have dedicated `load` and `store` methods, with multi-byte
+  * primitives declaring ''aligned'' and ''unaligned'' variants. A `Data` object's
+  * `endian` property specifies the byte order used to interpret multi-byte values.
   * 
   * @example {{{
   * scala> val data = Data.alloc[Int](1L) // allocate data for a single Int value.
-  * data: basis.memory.Data = Data4LE(4) // Data class will vary by architecture.
+  * data: basis.memory.Data = Data4LE(4) // the runtime Data class may vary.
   * 
   * scala> data.storeInt(0L, 0xCAFEBABE) // store an Int value to address 0.
   * 
@@ -68,45 +61,42 @@ package basis.memory
   * res5: String = fffffeba
   * }}}
   * 
-  * @groupname  general     Memory properties
-  * @groupprio  general     -10
+  * @groupname  General     General properties
+  * @groupprio  General     -6
   * 
-  * @groupname  aligned     Loading and storing aligned primitive values
-  * @groupprio  aligned     -9
+  * @groupname  Aligned     Loading and storing aligned primitive values
+  * @groupprio  Aligned     -5
   * 
-  * @groupname  unaligned   Loading and storing unaligned primitive values
-  * @groupprio  unaligned   -8
+  * @groupname  Unaligned   Loading and storing unaligned primitive values
+  * @groupprio  Unaligned   -4
   * 
-  * @groupname  compound    Loading and storing compound values
-  * @groupprio  compound    -7
+  * @groupname  Compound    Loading and storing compound values
+  * @groupprio  Compound    -3
   * 
-  * @groupname  array       Loading and storing arrays of values
-  * @groupprio  array       -6
+  * @groupname  Aggregate   Loading and storing arrays of values
+  * @groupprio  Aggregate   -2
   * 
-  * @groupname  bulk        Bulk transfer operations
-  * @groupprio  bulk        -5
+  * @groupname  Bulk        Bulk transfer operations
+  * @groupprio  Bulk        -1
   */
 abstract class Data {
-  import java.lang.Float.{floatToRawIntBits, intBitsToFloat}
-  import java.lang.Double.{doubleToRawLongBits, longBitsToDouble}
-  
-  /** Returns the number of bytes in this data's address space.
-    * @group general */
+  /** Returns the size in bytes of the address space.
+    * @group General */
   def size: Long
   
-  /** Returns this data's internal word size.
-    * @group general */
+  /** Returns the internal word size.
+    * @group General */
   def unit: Int
   
-  /** Returns this data's internal byte order.
-    * @group general */
-  def endian: ByteOrder
+  /** Returns the internal byte order.
+    * @group General */
+  def endian: Endianness
   
   /** Returns a resized copy of this data.
     * 
     * @param  size  the number of bytes to copy.
     * @return the copied data.
-    * @group  bulk
+    * @group  Bulk
     */
   def copy(size: Long = this.size): Data
   
@@ -114,7 +104,7 @@ abstract class Data {
     * 
     * @param  address   the address to load.
     * @return the loaded `Byte` value.
-    * @group  aligned
+    * @group  Aligned
     */
   def loadByte(address: Long): Byte
   
@@ -122,7 +112,7 @@ abstract class Data {
     * 
     * @param  address   the storage address.
     * @param  value     the `Byte` value to store.
-    * @group  aligned
+    * @group  Aligned
     */
   def storeByte(address: Long, value: Byte): Unit
   
@@ -131,7 +121,7 @@ abstract class Data {
     * 
     * @param  address   the 2-byte aligned address to load.
     * @return the loaded `Short` value.
-    * @group  aligned
+    * @group  Aligned
     */
   def loadShort(address: Long): Short =
     loadUnalignedShort(address & -2L)
@@ -141,7 +131,7 @@ abstract class Data {
     * 
     * @param  address   the 2-byte aligned storage address.
     * @param  value     the `Short` value to store.
-    * @group  aligned
+    * @group  Aligned
     */
   def storeShort(address: Long, value: Short): Unit =
     storeUnalignedShort(address & -2L, value)
@@ -151,7 +141,7 @@ abstract class Data {
     * 
     * @param  address   the 4-byte aligned address to load.
     * @return the loaded `Int` value.
-    * @group  aligned
+    * @group  Aligned
     */
   def loadInt(address: Long): Int =
     loadUnalignedInt(address & -4L)
@@ -161,7 +151,7 @@ abstract class Data {
     * 
     * @param  address   the 4-byte aligned storage address.
     * @param  value     the `Int` value to store.
-    * @group  aligned
+    * @group  Aligned
     */
   def storeInt(address: Long, value: Int): Unit =
     storeUnalignedInt(address & -4L, value)
@@ -171,7 +161,7 @@ abstract class Data {
     * 
     * @param  address   the 8-byte aligned address to load.
     * @return the loaded `Long` value.
-    * @group  aligned
+    * @group  Aligned
     */ 
   def loadLong(address: Long): Long =
     loadUnalignedLong(address & -8L)
@@ -181,7 +171,7 @@ abstract class Data {
     * 
     * @param  address   the 8-byte aligned storage address.
     * @param  value     the `Long` value to store.
-    * @group  aligned
+    * @group  Aligned
     */
   def storeLong(address: Long, value: Long): Unit =
     storeUnalignedLong(address & -8L, value)
@@ -191,46 +181,46 @@ abstract class Data {
     * 
     * @param  address   the 4-byte aligned address to load.
     * @return the loaded `Float` value.
-    * @group  aligned
+    * @group  Aligned
     */
   def loadFloat(address: Long): Float =
-    intBitsToFloat(loadInt(address))
+    loadInt(address).toFloatBits
   
   /** Stores a native-endian `Float` value as a 4-byte `endian` ordered word.
     * Truncates `address` to 4-byte alignment.
     * 
     * @param  address   the 4-byte aligned storage address.
     * @param  value     the `Float` value to store.
-    * @group  aligned
+    * @group  Aligned
     */
   def storeFloat(address: Long, value: Float): Unit =
-    storeInt(address, floatToRawIntBits(value))
+    storeInt(address, value.toIntBits)
   
   /** Loads an 8-byte `endian` ordered word as a native-endian `Double` value.
     * Truncates `address` to 8-byte alignment.
     * 
     * @param  address   the 8-byte aligned address to load.
     * @return the loaded `Double` value.
-    * @group  aligned
+    * @group  Aligned
     */
   def loadDouble(address: Long): Double =
-    longBitsToDouble(loadLong(address))
+    loadLong(address).toDoubleBits
   
   /** Stores a native-endian `Double` value as an 8-byte `endian` ordered word.
     * Truncates `address` to 8-byte alignment.
     * 
     * @param  address   the 8-byte aligned storage address.
     * @param  value     the `Double` value to store.
-    * @group  aligned
+    * @group  Aligned
     */
   def storeDouble(address: Long, value: Double): Unit =
-    storeLong(address, doubleToRawLongBits(value))
+    storeLong(address, value.toLongBits)
   
   /** Loads a 2-byte `endian` ordered word as a native-endian `Short` value.
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Short` value.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def loadUnalignedShort(address: Long): Short = {
     if (endian eq BigEndian) {
@@ -248,7 +238,7 @@ abstract class Data {
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Short` value to store.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def storeUnalignedShort(address: Long, value: Short) {
     if (endian eq BigEndian) {
@@ -266,7 +256,7 @@ abstract class Data {
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Int` value.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def loadUnalignedInt(address: Long): Int = {
     if (endian eq BigEndian) {
@@ -288,7 +278,7 @@ abstract class Data {
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Int` value to store.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def storeUnalignedInt(address: Long, value: Int) {
     if (endian eq BigEndian) {
@@ -310,7 +300,7 @@ abstract class Data {
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Long` value.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def loadUnalignedLong(address: Long): Long = {
     if (endian eq BigEndian) {
@@ -340,7 +330,7 @@ abstract class Data {
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Long` value to store.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def storeUnalignedLong(address: Long, value: Long) {
     if (endian eq BigEndian) {
@@ -370,167 +360,167 @@ abstract class Data {
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Float` value.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def loadUnalignedFloat(address: Long): Float =
-    intBitsToFloat(loadUnalignedInt(address))
+    loadUnalignedInt(address).toFloatBits
   
   /** Stores a native-endian `Float` value as a 4-byte `endian` ordered word.
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Float` value to store.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def storeUnalignedFloat(address: Long, value: Float): Unit =
-    storeUnalignedInt(address, floatToRawIntBits(value))
+    storeUnalignedInt(address, value.toIntBits)
   
   /** Loads an 8-byte `endian` ordered word as a native-endian `Double` value.
     * 
     * @param  address   the unaligned address to load.
     * @return the loaded `Double` value.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def loadUnalignedDouble(address: Long): Double =
-    longBitsToDouble(loadUnalignedLong(address))
+    loadUnalignedLong(address).toDoubleBits
   
   /** Stores a native-endian `Double` value as an 8-byte `endian` ordered word.
     * 
     * @param  address   the unaligned storage address.
     * @param  value     the `Double` value to store.
-    * @group  unaligned
+    * @group  Unaligned
     */
   def storeUnalignedDouble(address: Long, value: Double): Unit =
-    storeUnalignedLong(address, doubleToRawLongBits(value))
+    storeUnalignedLong(address, value.toLongBits)
   
-  /** Loads an instance from a data value.
+  /** Loads an instance from a struct value.
     * 
     * @tparam T         the instance type to load.
     * @param  address   the aligned address to load.
-    * @param  field     the implicit value type to load.
+    * @param  T         the implicit struct type to load.
     * @return the loaded instance.
-    * @group  compound
+    * @group  Compound
     */
-  def load[T](address: Long)(implicit field: ValType[T]): T =
-    macro DataMacros.load[T]
+  def load[T](address: Long)(implicit T: Struct[T]): T = macro DataMacros.load[T]
   
-  /** Stores an instance as a data value.
+  /** Stores an instance as a struct value.
     * 
     * @tparam T         the instance type to store.
     * @param  address   the aligned storage address.
     * @param  value     the instance to store.
-    * @param  field     the implicit value type to store.
-    * @group  compound
+    * @param  T         the implicit struct type to store.
+    * @group  Compound
     */
-  def store[T](address: Long, value: T)(implicit field: ValType[T]): Unit =
-    macro DataMacros.store[T]
+  def store[T](address: Long, value: T)(implicit T: Struct[T]): Unit = macro DataMacros.store[T]
   
   /** Loads and unpacks a struct as two values.
-    * @group compound */
-  def load2[T1, T2, R](address: Long)
+    * @group Compound */
+  def load2[T1, T2, R]
+      (address: Long)
       (f: (T1, T2) => R)
-      (implicit field1: ValType[T1], field2: ValType[T2]): R =
-    macro DataMacros.load2[T1, T2, R]
+      (implicit T1: Struct[T1], T2: Struct[T2])
+    : R = macro DataMacros.load2[T1, T2, R]
   
   /** Packs and stores two values as a struct.
-    * @group compound */
-  def store2[T1, T2](address: Long)
+    * @group Compound */
+  def store2[T1, T2]
+      (address: Long)
       (value1: T1, value2: T2)
-      (implicit field1: ValType[T1], field2: ValType[T2]): Unit =
-    macro DataMacros.store2[T1, T2]
+      (implicit T1: Struct[T1], T2: Struct[T2])
+    : Unit = macro DataMacros.store2[T1, T2]
   
   /** Loads and unpacks a struct as three values.
-    * @group compound */
-  def load3[T1, T2, T3, R](address: Long)
+    * @group Compound */
+  def load3[T1, T2, T3, R]
+      (address: Long)
       (f: (T1, T2, T3) => R)
-      (implicit field1: ValType[T1], field2: ValType[T2],
-                field3: ValType[T3]): R =
-    macro DataMacros.load3[T1, T2, T3, R]
+      (implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3])
+    : R = macro DataMacros.load3[T1, T2, T3, R]
   
   /** Packs and stores three values as a struct.
-    * @group compound */
-  def store3[T1, T2, T3](address: Long)
+    * @group Compound */
+  def store3[T1, T2, T3]
+      (address: Long)
       (value1: T1, value2: T2, value3: T3)
-      (implicit field1: ValType[T1], field2: ValType[T2],
-                field3: ValType[T3]): Unit =
-    macro DataMacros.store3[T1, T2, T3]
+      (implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3])
+    : Unit = macro DataMacros.store3[T1, T2, T3]
   
   /** Loads and unpacks a struct as four values.
-    * @group compound */
-  def load4[T1, T2, T3, T4, R](address: Long)
+    * @group Compound */
+  def load4[T1, T2, T3, T4, R]
+      (address: Long)
       (f: (T1, T2, T3, T4) => R)
-      (implicit field1: ValType[T1], field2: ValType[T2],
-                field3: ValType[T3], field4: ValType[T4]): R =
-    macro DataMacros.load4[T1, T2, T3, T4, R]
+      (implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3], T4: Struct[T4])
+    : R = macro DataMacros.load4[T1, T2, T3, T4, R]
   
   /** Packs and stores four values as a struct.
-    * @group compound */
-  def store4[T1, T2, T3, T4](address: Long)
+    * @group Compound */
+  def store4[T1, T2, T3, T4]
+      (address: Long)
       (value1: T1, value2: T2, value3: T3, value4: T4)
-      (implicit field1: ValType[T1], field2: ValType[T2],
-                field3: ValType[T3], field4: ValType[T4]): Unit =
-    macro DataMacros.store4[T1, T2, T3, T4]
+      (implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3], T4: Struct[T4])
+    : Unit = macro DataMacros.store4[T1, T2, T3, T4]
   
-  /** Loads a sequence of data values into a new array.
+  /** Loads a sequence of struct values into a new array.
     * 
     * @tparam T         the instance type to load.
     * @param  address   the aligned address to load.
     * @param  count     the number of values to load.
-    * @param  field     the implicit value type to load.
+    * @param  T         the implicit struct type to load.
     * @param  tag       the reflective type of the array to load.
     * @return the loaded array of instance values.
-    * @group  array
+    * @group  Aggregate
     */
   def loadArray[T]
       (address: Long, count: Int)
-      (implicit field: ValType[T], tag: scala.reflect.ClassTag[T])
+      (implicit T: Struct[T], tag: scala.reflect.ClassTag[T])
     : Array[T] = {
     val array = tag.newArray(count)
     copyToArray[T](address, array, 0, count)
     array
   }
   
-  /** Copies a sequence of loaded data values to an array slice.
+  /** Copies a sequence of loaded struct values to an array slice.
     * 
     * @tparam T         the instance type to load.
     * @param  address   the aligned address to load.
     * @param  array     the array to copy to.
-    * @param  start     the lower bound of the array slice to copy to.
+    * @param  start     the offset to copy to in the array.
     * @param  count     the number of values to copy.
-    * @param  field     the implicit value type to load.
-    * @group  array
+    * @param  T         the implicit struct type to load.
+    * @group  Aggregate
     */
   def copyToArray[T]
       (address: Long, array: Array[T], start: Int, count: Int)
-      (implicit field: ValType[T]) {
+      (implicit T: Struct[T]) {
     val end = start + count
     var p = address
     var i = start
     while (i < end) {
-      array(i) = field.load(this, p)
-      p += field.size
+      array(i) = T.load(this, p)
+      p += T.size
       i += 1
     }
   }
   
-  /** Stores an array slice as a sequence of data values.
+  /** Stores an array slice as a sequence of struct values.
     * 
     * @tparam T         the instance type to store.
     * @param  address   the aligned storage address.
     * @param  array     the array to store from.
-    * @param  start     the lower bound of the array slice to store from.
+    * @param  start     the offset to store from in the array.
     * @param  count     the number of values to store.
-    * @param  field     the implicit value type to store.
-    * @group  array
+    * @param  T         the implicit struct type to store.
+    * @group  Aggregate
     */
   def storeArray[T]
       (address: Long, array: Array[T], start: Int, count: Int)
-      (implicit field: ValType[T]) {
+      (implicit T: Struct[T]) {
     val end = start + count
     var p = address
     var i = start
     while (i < end) {
-      field.store(this, p, array(i))
-      p += field.size
+      T.store(this, p, array(i))
+      p += T.size
       i += 1
     }
   }
@@ -540,7 +530,7 @@ abstract class Data {
     * @param  fromAddress   the address to copy from.
     * @param  toAddress     the address to copy to.
     * @param  size          the number of bytes to copy.
-    * @group  bulk
+    * @group  Bulk
     */
   def move(fromAddress: Long, toAddress: Long, size: Long) {
     val fromLimit = fromAddress + size
@@ -616,7 +606,7 @@ abstract class Data {
     * 
     * @param  fromAddress   the lower bound of the address range.
     * @param  untilAddress  the excluded upper bound of the address range.
-    * @group  bulk
+    * @group  Bulk
     */
   def clear(fromAddress: Long, untilAddress: Long) {
     var p = fromAddress
@@ -651,20 +641,20 @@ abstract class Data {
 object Data extends Allocator {
   override def MaxSize: Long = Int.MaxValue.toLong << 3
   
-  override def alloc[T](count: Long)(implicit unit: ValType[T]): Data = {
-    val size = unit.size * count
-    if (size <= Int.MaxValue.toLong) unit.alignment match {
+  override def alloc[T](count: Long)(implicit T: Struct[T]): Data = {
+    val size = T.size * count
+    if (size <= Int.MaxValue.toLong) T.alignment match {
       case 1L => Data1(size)
       case 2L => Data2(size)
       case 4L => Data4(size)
       case _  => Data8(size)
     }
-    else if (size <= (Int.MaxValue.toLong << 1)) unit.alignment match {
+    else if (size <= (Int.MaxValue.toLong << 1)) T.alignment match {
       case 1L | 2L => Data2(size)
       case 4L      => Data4(size)
       case _       => Data8(size)
     }
-    else if (size <= (Int.MaxValue.toLong << 2)) unit.alignment match {
+    else if (size <= (Int.MaxValue.toLong << 2)) T.alignment match {
       case 1L | 2L | 4L => Data4(size)
       case _            => Data8(size)
     }

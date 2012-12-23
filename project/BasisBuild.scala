@@ -82,7 +82,10 @@ object BasisBuild extends Build {
   lazy val BasisMemory = Project(
     id           = "basis-memory",
     base         = file("basis-memory"),
-    settings     = commonSettings
+    settings     = commonSettings,
+    dependencies =
+      Seq(BasisRuntime,
+          BasisUtil)
   )
   
   lazy val BasisRuntime = Project(

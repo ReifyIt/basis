@@ -10,10 +10,10 @@ package basis.memory
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait ValTypeBehaviors { this: FunSpec =>
+trait StructBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def ValueType[T](value: T)(implicit allocator: Allocator, struct: ValType[T]) {
+  def ValueType[T](value: T)(implicit allocator: Allocator, struct: Struct[T]) {
     import allocator.alloc
     
     it("should store values") {
