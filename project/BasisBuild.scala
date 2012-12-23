@@ -56,6 +56,7 @@ object BasisBuild extends Build {
     dependencies =
       Seq(BasisCollections % "compile->compile;test->test",
           BasisSequential % "test->test",
+          BasisMemory,
           BasisUtil)
   )
   

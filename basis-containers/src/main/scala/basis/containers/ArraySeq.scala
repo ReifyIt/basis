@@ -8,6 +8,7 @@
 package basis.containers
 
 import basis.collections._
+import basis.memory._
 import basis.runtime._
 import basis.util._
 
@@ -170,14 +171,15 @@ abstract class ArraySeq[+A]
 object ArraySeq extends SeqFactory[ArraySeq] {
   implicit override def Builder[A](implicit A: TypeHint[A])
     : Builder[Any, A] { type State = ArraySeq[A] } = (A match {
-    case TypeHint.Byte    => new ByteArraySeqBuilder
-    case TypeHint.Short   => new ShortArraySeqBuilder
-    case TypeHint.Int     => new IntArraySeqBuilder
-    case TypeHint.Long    => new LongArraySeqBuilder
-    case TypeHint.Float   => new FloatArraySeqBuilder
-    case TypeHint.Double  => new DoubleArraySeqBuilder
-    case TypeHint.Boolean => new BitArraySeqBuilder
-    case _                => new RefArraySeqBuilder[A]
+    case TypeHint.Byte     => new ByteArraySeqBuilder
+    case TypeHint.Short    => new ShortArraySeqBuilder
+    case TypeHint.Int      => new IntArraySeqBuilder
+    case TypeHint.Long     => new LongArraySeqBuilder
+    case TypeHint.Float    => new FloatArraySeqBuilder
+    case TypeHint.Double   => new DoubleArraySeqBuilder
+    case TypeHint.Boolean  => new BitArraySeqBuilder
+    case struct: Struct[A] => new ValArraySeqBuilder()(struct)
+    case _                 => new RefArraySeqBuilder[A]
   }).asInstanceOf[Builder[Any, A] { type State = ArraySeq[A] }]
   
   override def toString: String = "ArraySeq"
