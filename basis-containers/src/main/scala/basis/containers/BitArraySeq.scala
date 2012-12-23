@@ -31,6 +31,55 @@ private[containers] final class BitArraySeq(words: Array[Int], override val leng
     else super.update(index, elem)
   }
   
+  override def append[B >: Boolean](elem: B): ArraySeq[B] = insert(length, elem)
+  
+  override def prepend[B >: Boolean](elem: B): ArraySeq[B] = insert(0, elem)
+  
+  override def insert[B >: Boolean](index: Int, elem: B): ArraySeq[B] = {
+    if (elem.isInstanceOf[Boolean]) {
+      if (index < 0 || index > length) throw new IndexOutOfBoundsException(index.toString)
+      val newWords = new Array[Int](((length + 32) & ~31) >> 5)
+      var i = index >> 5
+      java.lang.System.arraycopy(words, 0, newWords, 0, i)
+      var w = if (i < words.length) words(i) else 0
+      val l = 0xFFFFFFFF >>> (index & 0x1F)
+      val h = ~l
+      val b = (if (elem.asInstanceOf[Boolean]) 1 else 0) << (31 - (index & 0x1F))
+      newWords(i) = (w & h) | b | ((w & l) >>> 1)
+      var t = w & 1
+      i += 1
+      while (i < words.length) {
+        w = words(i)
+        newWords(i) = (t << 31) | (w >>> 1)
+        t = w & 1
+        i += 1
+      }
+      if (i < newWords.length) newWords(i) = t << 31
+      new BitArraySeq(newWords, length + 1)
+    }
+    else super.insert(index, elem)
+  }
+  
+  override def remove(index: Int): ArraySeq[Boolean] = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newWords = new Array[Int](((length - 30) & ~31) >> 5)
+    var i = index >> 5
+    java.lang.System.arraycopy(words, 0, newWords, 0, i)
+    var w = words(i)
+    val l = 0xFFFFFFFF >>> (index & 0x1F)
+    val h = ~l
+    if (i < newWords.length) newWords(i) = (w & h) | ((w & (l >>> 1)) << 1)
+    i += 1
+    while (i < newWords.length) {
+      w = words(i)
+      newWords(i - 1) |= w >>> 31
+      newWords(i) = w << 1
+      i += 1
+    }
+    if (i < words.length) newWords(i - 1) |= words(i) >>> 31
+    new BitArraySeq(newWords, length - 1)
+  }
+  
   override def iterator: Iterator[Boolean] = new BitArraySeqIterator(words, length)
 }
 
