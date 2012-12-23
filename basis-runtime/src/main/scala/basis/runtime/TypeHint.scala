@@ -35,7 +35,7 @@ object TypeHint {
     else new RuntimeClassTypeHint(runtimeClass)
   }
   
-  implicit def omit[T]: TypeHint[T] = NoTypeHint.asInstanceOf[TypeHint[T]]
+  implicit def Undefined[T]: TypeHint[T] = NoTypeHint.asInstanceOf[TypeHint[T]]
   
   implicit object Any extends ClassTypeHint[Any] {
     override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
