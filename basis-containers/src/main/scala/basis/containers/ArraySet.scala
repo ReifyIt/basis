@@ -8,10 +8,10 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 import basis.util._
 
 import scala.annotation.unchecked.uncheckedVariance
-import scala.reflect.ClassTag
 
 final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
   extends Immutable with Family[ArraySet[A]] with Set[A] {
@@ -52,7 +52,7 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
     val n = slots.length
     while (i < n && elem != slots(i)) i += 1
     if (i == n) this
-    else if (n == 1) ArraySet.empty
+    else if (n == 1) ArraySet.empty[A]
     else {
       val newSlots = new Array[AnyRef](n - 1)
       java.lang.System.arraycopy(slots, 0, newSlots, 0, i)
@@ -80,12 +80,12 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
 }
 
 object ArraySet extends SetFactory[ArraySet] {
-  implicit override def Builder[A : ClassTag]
+  implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = ArraySet[A] } =
     new ArraySetBuilder
   
   private[this] val empty = new ArraySet[Nothing](new Array[AnyRef](0))
-  override def empty[A : ClassTag]: ArraySet[A] = empty
+  override def empty[A : TypeHint]: ArraySet[A] = empty
   
   private[containers] def apply[A](elem: A): ArraySet[A] = {
     val slots = new Array[AnyRef](1)
@@ -128,7 +128,7 @@ private[containers] final class ArraySetIterator[+A]
 private[containers] final class ArraySetBuilder[A] extends Builder[Any, A] {
   override type State = ArraySet[A]
   
-  private[this] var seen: HashSet[A] = HashSet.empty
+  private[this] var seen: HashSet[A] = HashSet.empty[A]
   
   private[this] var slots: Array[AnyRef] = _
   
@@ -179,7 +179,7 @@ private[containers] final class ArraySetBuilder[A] extends Builder[Any, A] {
   }
   
   override def clear() {
-    seen = HashSet.empty
+    seen = HashSet.empty[A]
     slots = null
     aliased = true
     size = 0

@@ -8,9 +8,7 @@
 package basis.containers
 
 import basis.collections._
-
-import scala.reflect.ClassTag
-import scala.runtime.AbstractFunction1
+import basis.runtime._
 
 /** A mutable list of elements.
   * 
@@ -112,7 +110,7 @@ class ListBuffer[A] private (
     }
   }
   
-  private final class Prepend extends AbstractFunction1[A, Unit] {
+  private final class Prepend extends scala.runtime.AbstractFunction1[A, Unit] {
     private[this] var x0: List[A] = _
     private[this] var xi: ::[A] = _
     override def apply(elem: A) {
@@ -149,7 +147,7 @@ class ListBuffer[A] private (
     else traverse(elems)(new Insert(index))
   }
   
-  private final class Insert(index: Int) extends AbstractFunction1[A, Unit] {
+  private final class Insert(index: Int) extends scala.runtime.AbstractFunction1[A, Unit] {
     private[this] var xi = dealias(index - 1)
     override def apply(elem: A) {
       val xn = ::(elem, xi.tail)
@@ -285,11 +283,11 @@ class ListBuffer[A] private (
 }
 
 object ListBuffer extends SeqFactory[ListBuffer] {
-  implicit override def Builder[A : ClassTag]
+  implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = ListBuffer[A] } =
     new ListBufferBuilder
   
-  override def empty[A : ClassTag]: ListBuffer[A] = new ListBuffer
+  override def empty[A : TypeHint]: ListBuffer[A] = new ListBuffer
   
   override def toString: String = "ListBuffer"
 }

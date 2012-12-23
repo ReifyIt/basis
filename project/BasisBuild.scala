@@ -44,7 +44,9 @@ object BasisBuild extends Build {
     id           = "basis-collections",
     base         = file("basis-collections"),
     settings     = commonSettings,
-    dependencies = Seq(BasisUtil)
+    dependencies =
+      Seq(BasisRuntime,
+          BasisUtil)
   )
   
   lazy val BasisContainers = Project(

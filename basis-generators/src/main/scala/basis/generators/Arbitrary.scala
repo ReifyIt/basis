@@ -9,10 +9,10 @@ package basis.generators
 
 import basis.collections._
 import basis.containers._
+import basis.runtime._
 import basis.util._
 
 import scala.annotation.{implicitNotFound, tailrec, unspecialized}
-import scala.reflect.ClassTag
 
 @implicitNotFound("No arbitrary generator available for type ${R}.")
 trait Arbitrary[@specialized(Specializable.Primitives) +R] extends (() => R) {
@@ -96,36 +96,36 @@ object Arbitrary {
   implicit def Container[CC[_], A]
       (implicit CC: BuilderFactory[CC],
                 A: Arbitrary[A],
-                ATag: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
+                HintA: TypeHint[A])
     : Arbitrary[CC[A]] =
-    new RandomContainer(below(64))(CC, A, ATag)
+    new RandomContainer(below(64))(CC, A, HintA)
   
   def Container[CC[_], A]
       (length: Arbitrary[Int])
       (implicit CC: BuilderFactory[CC],
                 A: Arbitrary[A],
-                ATag: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
+                HintA: TypeHint[A])
     : Arbitrary[CC[A]] =
-    new RandomContainer(length)(CC, A, ATag)
+    new RandomContainer(length)(CC, A, HintA)
   
   implicit def Map[CC[_, _], A, T]
       (implicit CC: MapFactory[CC],
                 A: Arbitrary[A],
                 T: Arbitrary[T],
-                ATag: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],
-                TTag: ClassTag[T] = ClassTag.Any.asInstanceOf[ClassTag[T]])
+                HintA: TypeHint[A],
+                HintT: TypeHint[T])
     : Arbitrary[CC[A, T]] =
-    new RandomMap(below(64))(CC, A, T, ATag, TTag)
+    new RandomMap(below(64))(CC, A, T, HintA, HintT)
   
   def Map[CC[_, _], A, T]
       (length: Arbitrary[Int])
       (implicit CC: MapFactory[CC],
                 A: Arbitrary[A],
                 T: Arbitrary[T],
-                ATag: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],
-                TTag: ClassTag[T] = ClassTag.Any.asInstanceOf[ClassTag[T]])
+                HintA: TypeHint[A],
+                HintT: TypeHint[T])
     : Arbitrary[CC[A, T]] =
-    new RandomMap(length)(CC, A, T, ATag, TTag)
+    new RandomMap(length)(CC, A, T, HintA, HintT)
   
   implicit def Tuple2[T1, T2]
       (implicit T1: Arbitrary[T1],
@@ -405,13 +405,13 @@ object Arbitrary {
       (length: Arbitrary[Int])
       (implicit CC: BuilderFactory[CC],
                 A: Arbitrary[A],
-                ATag: ClassTag[A])
+                HintA: TypeHint[A])
     extends Arbitrary[CC[A]] {
     
     override def apply(): CC[A] = {
       var i = 0
       val n = length()
-      val b = CC.Builder(ATag).expect(n)
+      val b = CC.Builder(HintA).expect(n)
       while (i < n) {
         b.append(A())
         i += 1
@@ -427,14 +427,14 @@ object Arbitrary {
       (implicit CC: MapFactory[CC],
                 A: Arbitrary[A],
                 T: Arbitrary[T],
-                ATag: ClassTag[A],
-                TTag: ClassTag[T])
+                HintA: TypeHint[A],
+                HintT: TypeHint[T])
     extends Arbitrary[CC[A, T]] {
     
     override def apply(): CC[A, T] = {
       var i = 0
       val n = length()
-      val b = CC.Builder(ATag, TTag).expect(n)
+      val b = CC.Builder(HintA, HintT).expect(n)
       while (i < n) {
         b.append((A(), T()))
         i += 1

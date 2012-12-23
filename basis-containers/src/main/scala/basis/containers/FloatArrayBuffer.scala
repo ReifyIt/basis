@@ -10,8 +10,6 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.reflect.ClassTag
-
 private[containers] class FloatArrayBuffer private (
     private[this] var buffer: Array[Float],
     private[this] var size: Int,
@@ -181,8 +179,8 @@ private[containers] class FloatArrayBuffer private (
     else super.copyToArray(index, to, offset, count)
   }
   
-  final override def toArray[B >: Float](implicit B: ClassTag[B]): Array[B] = {
-    if (B == ClassTag.Float) {
+  final override def toArray[B >: Float](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
+    if (B == scala.reflect.ClassTag.Float) {
       val array = new Array[Float](size)
       java.lang.System.arraycopy(buffer, 0, array, 0, size)
       array.asInstanceOf[Array[B]]

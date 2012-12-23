@@ -8,7 +8,6 @@
 package basis.collections
 
 import scala.annotation.implicitNotFound
-import scala.reflect.ClassTag
 
 @implicitNotFound("No sequence factory available for ${CC}.")
 trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {

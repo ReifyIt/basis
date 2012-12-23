@@ -10,8 +10,6 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.reflect.ClassTag
-
 private[containers] class RefArrayBuffer[A] private (
     private[this] var buffer: Array[AnyRef],
     private[this] var size: Int,
@@ -181,7 +179,7 @@ private[containers] class RefArrayBuffer[A] private (
     else super.copyToArray(index, to, offset, count)
   }
   
-  final override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
+  final override def toArray[B >: A](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
     if (!B.runtimeClass.isPrimitive) {
       val array = B.newArray(size)
       java.lang.System.arraycopy(buffer, 0, array, 0, size)

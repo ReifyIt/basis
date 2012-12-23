@@ -10,8 +10,6 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.reflect.ClassTag
-
 private[containers] class ShortArrayBuffer private (
     private[this] var buffer: Array[Short],
     private[this] var size: Int,
@@ -181,8 +179,8 @@ private[containers] class ShortArrayBuffer private (
     else super.copyToArray(index, to, offset, count)
   }
   
-  final override def toArray[B >: Short](implicit B: ClassTag[B]): Array[B] = {
-    if (B == ClassTag.Short) {
+  final override def toArray[B >: Short](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
+    if (B == scala.reflect.ClassTag.Short) {
       val array = new Array[Short](size)
       java.lang.System.arraycopy(buffer, 0, array, 0, size)
       array.asInstanceOf[Array[B]]

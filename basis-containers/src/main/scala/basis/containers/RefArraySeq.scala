@@ -9,8 +9,6 @@ package basis.containers
 
 import basis.collections._
 
-import scala.reflect.ClassTag
-
 private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends ArraySeq[A] {
   override def isEmpty: Boolean = array.length == 0
   
@@ -30,7 +28,7 @@ private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends Ar
     else super.copyToArray(index, to, offset, count)
   }
   
-  override def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
+  override def toArray[B >: A](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
     if (!B.runtimeClass.isPrimitive) {
       val newArray = B.newArray(length)
       java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)

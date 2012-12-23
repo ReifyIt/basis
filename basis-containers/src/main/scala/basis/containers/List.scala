@@ -8,9 +8,7 @@
 package basis.containers
 
 import basis.collections._
-import basis.util._
-
-import scala.reflect.ClassTag
+import basis.runtime._
 
 /** A singly linked list.
   * 
@@ -105,13 +103,13 @@ sealed abstract class List[+A]
 }
 
 object List extends SeqFactory[List] {
-  implicit override def Builder[A : ClassTag]
+  implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = List[A] } =
     new ListBuilder
   
-  override def empty[A : ClassTag]: Nil.type = Nil
+  override def empty[A : TypeHint]: Nil.type = Nil
   
-  override def coerce[A : ClassTag](elems: Enumerator[A]): List[A] = elems match {
+  override def coerce[A : TypeHint](elems: Enumerator[A]): List[A] = elems match {
     case xs: ListLike[A] => xs.toList
     case _ => super.coerce(elems)
   }
@@ -149,14 +147,10 @@ object Nil extends List[Nothing] {
   override def tail: List[Nothing] = throw new UnsupportedOperationException("Tail of empty list.")
   
   override def :: [B >: Nothing](elem: B): List[B] = {
-    if (elem.isInstanceOf[Int])
-      new IntList(elem.asInstanceOf[Int], this).asInstanceOf[List[B]]
-    else if (elem.isInstanceOf[Long])
-      new LongList(elem.asInstanceOf[Long], this).asInstanceOf[List[B]]
-    else if (elem.isInstanceOf[Float])
-      new FloatList(elem.asInstanceOf[Float], this).asInstanceOf[List[B]]
-    else if (elem.isInstanceOf[Double])
-      new DoubleList(elem.asInstanceOf[Double], this).asInstanceOf[List[B]]
+    if (elem.isInstanceOf[Int]) new IntList(elem.asInstanceOf[Int], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Long]) new LongList(elem.asInstanceOf[Long], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Float]) new FloatList(elem.asInstanceOf[Float], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Double]) new DoubleList(elem.asInstanceOf[Double], this).asInstanceOf[List[B]]
     else new RefList(elem, this)
   }
 }
@@ -177,8 +171,7 @@ private[containers] final class IntList(
   }
   
   override def :: [B >: Int](elem: B): List[B] = {
-    if (elem.isInstanceOf[Int])
-      new IntList(elem.asInstanceOf[Int], this)
+    if (elem.isInstanceOf[Int]) new IntList(elem.asInstanceOf[Int], this)
     else new RefList(elem, this)
   }
   
@@ -201,8 +194,7 @@ private[containers] final class LongList(
   }
   
   override def :: [B >: Long](elem: B): List[B] = {
-    if (elem.isInstanceOf[Long])
-      new LongList(elem.asInstanceOf[Long], this)
+    if (elem.isInstanceOf[Long]) new LongList(elem.asInstanceOf[Long], this)
     else new RefList(elem, this)
   }
   
@@ -225,8 +217,7 @@ private[containers] final class FloatList(
   }
   
   override def :: [B >: Float](elem: B): List[B] = {
-    if (elem.isInstanceOf[Float])
-      new FloatList(elem.asInstanceOf[Float], this)
+    if (elem.isInstanceOf[Float]) new FloatList(elem.asInstanceOf[Float], this)
     else new RefList(elem, this)
   }
   
@@ -249,8 +240,7 @@ private[containers] final class DoubleList(
   }
   
   override def :: [B >: Double](elem: B): List[B] = {
-    if (elem.isInstanceOf[Double])
-      new DoubleList(elem.asInstanceOf[Double], this)
+    if (elem.isInstanceOf[Double]) new DoubleList(elem.asInstanceOf[Double], this)
     else new RefList(elem, this)
   }
   

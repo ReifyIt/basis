@@ -7,9 +7,10 @@
 
 package basis.collections
 
+import basis.runtime._
+
 import scala.annotation.implicitNotFound
 import scala.annotation.unchecked.uncheckedVariance
-import scala.reflect.ClassTag
 
 @implicitNotFound("No builder factory available for ${CC}.")
 trait BuilderFactory[+CC[_]] {
@@ -17,14 +18,11 @@ trait BuilderFactory[+CC[_]] {
   
   implicit def Factory: this.type = this
   
-  implicit def Builder[A](implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
-    : Builder[Any, A] { type State = CC[A] @uncheckedVariance }
+  implicit def Builder[A](implicit A: TypeHint[A]): Builder[Any, A] { type State = CC[A] @uncheckedVariance }
   
-  def empty[A](implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]]): CC[A] =
-    Builder(A).state
+  def empty[A](implicit A: TypeHint[A]): CC[A] = Builder(A).state
   
-  def coerce[A](elems: Enumerator[A])(implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]]): CC[A] =
-    (Builder(A) ++= elems).state
+  def coerce[A](elems: Enumerator[A])(implicit A: TypeHint[A]): CC[A] = (Builder(A) ++= elems).state
   
   def apply[A](elems: A*): CC[A] = macro BuilderFactory.apply[CC, A]
 }

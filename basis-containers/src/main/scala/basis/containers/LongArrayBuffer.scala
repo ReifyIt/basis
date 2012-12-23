@@ -10,8 +10,6 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.reflect.ClassTag
-
 private[containers] class LongArrayBuffer private (
     private[this] var buffer: Array[Long],
     private[this] var size: Int,
@@ -181,8 +179,8 @@ private[containers] class LongArrayBuffer private (
     else super.copyToArray(index, to, offset, count)
   }
   
-  final override def toArray[B >: Long](implicit B: ClassTag[B]): Array[B] = {
-    if (B == ClassTag.Long) {
+  final override def toArray[B >: Long](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
+    if (B == scala.reflect.ClassTag.Long) {
       val array = new Array[Long](size)
       java.lang.System.arraycopy(buffer, 0, array, 0, size)
       array.asInstanceOf[Array[B]]

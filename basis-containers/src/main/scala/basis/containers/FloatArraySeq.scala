@@ -9,8 +9,6 @@ package basis.containers
 
 import basis.collections._
 
-import scala.reflect.ClassTag
-
 private[containers] final class FloatArraySeq(array: Array[Float]) extends ArraySeq[Float] {
   override def isEmpty: Boolean = array.length == 0
   
@@ -33,8 +31,8 @@ private[containers] final class FloatArraySeq(array: Array[Float]) extends Array
     else super.copyToArray(index, to, offset, count)
   }
   
-  override def toArray[B >: Float](implicit B: ClassTag[B]): Array[B] = {
-    if (B == ClassTag.Float) {
+  override def toArray[B >: Float](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
+    if (B == scala.reflect.ClassTag.Float) {
       val newArray = new Array[Float](length)
       java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
       newArray.asInstanceOf[Array[B]]

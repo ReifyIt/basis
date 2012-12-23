@@ -8,9 +8,8 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 import basis.util._
-
-import scala.reflect.ClassTag
 
 /** A contiguous array.
   * 
@@ -169,15 +168,15 @@ abstract class ArraySeq[+A]
 }
 
 object ArraySeq extends SeqFactory[ArraySeq] {
-  implicit override def Builder[A](implicit A: ClassTag[A])
+  implicit override def Builder[A](implicit A: TypeHint[A])
     : Builder[Any, A] { type State = ArraySeq[A] } = (A match {
-    case ClassTag.Byte    => new ByteArraySeqBuilder
-    case ClassTag.Short   => new ShortArraySeqBuilder
-    case ClassTag.Int     => new IntArraySeqBuilder
-    case ClassTag.Long    => new LongArraySeqBuilder
-    case ClassTag.Float   => new FloatArraySeqBuilder
-    case ClassTag.Double  => new DoubleArraySeqBuilder
-    case ClassTag.Boolean => new BitArraySeqBuilder
+    case TypeHint.Byte    => new ByteArraySeqBuilder
+    case TypeHint.Short   => new ShortArraySeqBuilder
+    case TypeHint.Int     => new IntArraySeqBuilder
+    case TypeHint.Long    => new LongArraySeqBuilder
+    case TypeHint.Float   => new FloatArraySeqBuilder
+    case TypeHint.Double  => new DoubleArraySeqBuilder
+    case TypeHint.Boolean => new BitArraySeqBuilder
     case _                => new RefArraySeqBuilder[A]
   }).asInstanceOf[Builder[Any, A] { type State = ArraySeq[A] }]
   

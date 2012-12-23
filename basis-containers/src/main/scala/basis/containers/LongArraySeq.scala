@@ -9,8 +9,6 @@ package basis.containers
 
 import basis.collections._
 
-import scala.reflect.ClassTag
-
 private[containers] final class LongArraySeq(array: Array[Long]) extends ArraySeq[Long] {
   override def isEmpty: Boolean = array.length == 0
   
@@ -33,8 +31,8 @@ private[containers] final class LongArraySeq(array: Array[Long]) extends ArraySe
     else super.copyToArray(index, to, offset, count)
   }
   
-  override def toArray[B >: Long](implicit B: ClassTag[B]): Array[B] = {
-    if (B == ClassTag.Long) {
+  override def toArray[B >: Long](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
+    if (B == scala.reflect.ClassTag.Long) {
       val newArray = new Array[Long](length)
       java.lang.System.arraycopy(array, 0, newArray, 0, newArray.length)
       newArray.asInstanceOf[Array[B]]

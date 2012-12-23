@@ -7,9 +7,10 @@
 
 package basis.collections
 
+import basis.runtime._
+
 import scala.annotation.implicitNotFound
 import scala.annotation.unchecked.uncheckedVariance
-import scala.reflect.ClassTag
 
 @implicitNotFound("No map factory available for ${CC}.")
 trait MapFactory[+CC[_, _]] {
@@ -17,19 +18,13 @@ trait MapFactory[+CC[_, _]] {
   
   implicit def Factory: this.type = this
   
-  implicit def Builder[A, T]
-      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],
-                T: ClassTag[T] = ClassTag.Any.asInstanceOf[ClassTag[T]])
+  implicit def Builder[A, T](implicit A: TypeHint[A], T: TypeHint[T])
     : Builder[Any, (A, T)] { type State = CC[A, T] @uncheckedVariance }
   
-  def empty[A, T]
-      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],
-                T: ClassTag[T] = ClassTag.Any.asInstanceOf[ClassTag[T]])
+  def empty[A, T](implicit A: TypeHint[A], T: TypeHint[T])
     : CC[A, T] = Builder(A, T).state
   
-  def coerce[A, T](entries: Map[A, T])
-      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]],
-                T: ClassTag[T] = ClassTag.Any.asInstanceOf[ClassTag[T]])
+  def coerce[A, T](entries: Map[A, T])(implicit A: TypeHint[A], T: TypeHint[T])
     : CC[A, T] = (Builder(A, T) ++= entries).state
   
   def apply[A, T](entries: (A, T)*): CC[A, T] = macro MapFactory.apply[CC, A, T]

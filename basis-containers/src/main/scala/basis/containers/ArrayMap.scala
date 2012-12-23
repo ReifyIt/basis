@@ -8,10 +8,10 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 import basis.util._
 
 import scala.annotation.unchecked.uncheckedVariance
-import scala.reflect.ClassTag
 
 final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
   extends Immutable with Family[ArrayMap[A, T]] with Map[A, T] {
@@ -73,7 +73,7 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
     val n = slots.length
     while (i < n && key != slots(i)) i += 2
     if (i == n) this
-    else if (n == 2) ArrayMap.empty
+    else if (n == 2) ArrayMap.empty[A, T]
     else {
       val newSlots = new Array[AnyRef](n - 2)
       java.lang.System.arraycopy(slots, 0, newSlots, 0, i)
@@ -88,11 +88,9 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
   
   private[containers] def unaryValue: T = slots(1).asInstanceOf[T]
   
-  private[containers] def keyAt(index: Int): A =
-    slots(index >> 1).asInstanceOf[A]
+  private[containers] def keyAt(index: Int): A = slots(index >> 1).asInstanceOf[A]
   
-  private[containers] def valueAt(index: Int): T =
-    slots((index >> 1) + 1).asInstanceOf[T]
+  private[containers] def valueAt(index: Int): T = slots((index >> 1) + 1).asInstanceOf[T]
   
   override def iterator: Iterator[(A, T)] = new ArrayMapIterator(slots, 0)
   
@@ -107,12 +105,12 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
 }
 
 object ArrayMap extends MapFactory[ArrayMap] {
-  implicit override def Builder[A : ClassTag, T : ClassTag]
+  implicit override def Builder[A : TypeHint, T : TypeHint]
     : Builder[Any, (A, T)] { type State = ArrayMap[A, T] } =
     new ArrayMapBuilder
   
   private[this] val empty = new ArrayMap[Nothing, Nothing](new Array[AnyRef](0))
-  override def empty[A : ClassTag, T : ClassTag]: ArrayMap[A, T] = empty
+  override def empty[A : TypeHint, T : TypeHint]: ArrayMap[A, T] = empty
   
   private[containers] def apply[A, T](key: A, value: T): ArrayMap[A, T] = {
     val slots = new Array[AnyRef](2)
@@ -155,7 +153,7 @@ private[containers] final class ArrayMapIterator[+A, +T]
 private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T)] {
   override type State = ArrayMap[A, T]
   
-  private[this] var seen: HashMap[A, Int] = HashMap.empty
+  private[this] var seen: HashMap[A, Int] = HashMap.empty[A, Int]
   
   private[this] var slots: Array[AnyRef] = _
   
@@ -217,7 +215,7 @@ private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T
   }
   
   override def clear() {
-    seen = HashMap.empty
+    seen = HashMap.empty[A, Int]
     slots = null
     aliased = true
     size = 0

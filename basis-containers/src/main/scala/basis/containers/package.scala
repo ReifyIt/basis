@@ -8,8 +8,7 @@
 package basis
 
 import basis.collections._
-
-import scala.reflect.ClassTag
+import basis.runtime._
 
 package object containers extends Library {
   override val Enumerator = List
@@ -28,13 +27,11 @@ package object containers extends Library {
   
   override val Stack = List
   
-  implicit def ArraySeqBuilder[A]
-      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
+  implicit def ArraySeqBuilder[A](implicit A: TypeHint[A])
     : Builder[ArraySeq[_], A] { type State = ArraySeq[A] } =
     ArraySeq.Builder(A)
   
-  implicit def ArrayBufferBuilder[A]
-      (implicit A: ClassTag[A] = ClassTag.Any.asInstanceOf[ClassTag[A]])
+  implicit def ArrayBufferBuilder[A](implicit A: TypeHint[A])
     : Builder[ArrayBuffer[_], A] { type State = ArrayBuffer[A] } =
     ArrayBuffer.Builder(A)
   

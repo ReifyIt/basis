@@ -8,9 +8,8 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 import basis.util._
-
-import scala.reflect.ClassTag
 
 /** A mutable contiguous array.
   * 
@@ -41,14 +40,14 @@ abstract class ArrayBuffer[A]
 }
 
 object ArrayBuffer extends SeqFactory[ArrayBuffer] {
-  implicit override def Builder[A](implicit A: ClassTag[A])
+  implicit override def Builder[A](implicit A: TypeHint[A])
     : Builder[Any, A] { type State = ArrayBuffer[A] } = (A match {
-    case ClassTag.Byte    => new ByteArrayBufferBuilder
-    case ClassTag.Short   => new ShortArrayBufferBuilder
-    case ClassTag.Int     => new IntArrayBufferBuilder
-    case ClassTag.Long    => new LongArrayBufferBuilder
-    case ClassTag.Float   => new FloatArrayBufferBuilder
-    case ClassTag.Double  => new DoubleArrayBufferBuilder
+    case TypeHint.Byte    => new ByteArrayBufferBuilder
+    case TypeHint.Short   => new ShortArrayBufferBuilder
+    case TypeHint.Int     => new IntArrayBufferBuilder
+    case TypeHint.Long    => new LongArrayBufferBuilder
+    case TypeHint.Float   => new FloatArrayBufferBuilder
+    case TypeHint.Double  => new DoubleArrayBufferBuilder
     case _                => new RefArrayBufferBuilder[A]
   }).asInstanceOf[Builder[Any, A] { type State = ArrayBuffer[A] }]
   

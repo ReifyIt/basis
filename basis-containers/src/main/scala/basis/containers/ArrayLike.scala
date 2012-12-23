@@ -10,8 +10,6 @@ package basis.containers
 import basis.collections._
 import basis.util._
 
-import scala.reflect.ClassTag
-
 /** An array-convertible collection.
   * 
   * @groupprio  Quantifying   -3
@@ -55,7 +53,7 @@ trait ArrayLike[+A] extends Any { this: Enumerator[A] =>
     * @usecase def toArray: Array[A]
     * @inheritdoc
     */
-  def toArray[B >: A](implicit B: ClassTag[B]): Array[B] = {
+  def toArray[B >: A](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
     var i = 0
     val n = length
     val newArray = B.newArray(n)

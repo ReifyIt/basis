@@ -8,11 +8,11 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 import basis.util._
 
 import scala.annotation.{switch, tailrec}
 import scala.annotation.unchecked.uncheckedVariance
-import scala.reflect.ClassTag
 
 final class HashMap[+A, +T] private[containers] (
     private[containers] val treeMap: Int,
@@ -314,12 +314,12 @@ final class HashMap[+A, +T] private[containers] (
 }
 
 object HashMap extends MapFactory[HashMap] {
-  implicit override def Builder[A : ClassTag, T : ClassTag]
+  implicit override def Builder[A : TypeHint, T : TypeHint]
     : Builder[Any, (A, T)] { type State = HashMap[A, T] } =
     new HashMapBuilder
   
   private[this] val empty = new HashMap[Nothing, Nothing](0, 0, new Array[AnyRef](0))
-  override def empty[A : ClassTag, T : ClassTag]: HashMap[A, T] = empty
+  override def empty[A : TypeHint, T : TypeHint]: HashMap[A, T] = empty
   
   override def toString: String = "HashMap"
   
@@ -463,7 +463,7 @@ private[containers] final class HashMapIterator[+A, +T](
 private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)] {
   override type State = HashMap[A, T]
   
-  private[this] var these: HashMap[A, T] = HashMap.empty
+  private[this] var these: HashMap[A, T] = HashMap.empty[A, T]
   
   override def append(entry: (A, T)): Unit = these += (entry._1, entry._2)
   
@@ -477,5 +477,5 @@ private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)
   
   override def state: HashMap[A, T] = these
   
-  override def clear(): Unit = these = HashMap.empty
+  override def clear(): Unit = these = HashMap.empty[A, T]
 }

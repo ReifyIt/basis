@@ -8,11 +8,11 @@
 package basis.containers
 
 import basis.collections._
+import basis.runtime._
 import basis.util._
 
 import scala.annotation.{switch, tailrec}
 import scala.annotation.unchecked.uncheckedVariance
-import scala.reflect.ClassTag
 
 final class HashSet[+A] private[containers] (
     private[containers] val treeMap: Int,
@@ -238,12 +238,12 @@ final class HashSet[+A] private[containers] (
 }
 
 object HashSet extends SetFactory[HashSet] {
-  implicit override def Builder[A : ClassTag]
+  implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = HashSet[A] } =
     new HashSetBuilder
   
   private[this] val empty = new HashSet[Nothing](0, 0, new Array[AnyRef](0))
-  override def empty[A : ClassTag]: HashSet[A] = empty
+  override def empty[A : TypeHint]: HashSet[A] = empty
   
   override def toString: String = "HashSet"
   
@@ -380,7 +380,7 @@ private[containers] final class HashSetIterator[+A](
 private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
   override type State = HashSet[A]
   
-  private[this] var these: HashSet[A] = HashSet.empty
+  private[this] var these: HashSet[A] = HashSet.empty[A]
   
   override def append(elem: A): Unit = these += elem
   
@@ -394,5 +394,5 @@ private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
   
   override def state: HashSet[A] = these
   
-  override def clear(): Unit = these = HashSet.empty
+  override def clear(): Unit = these = HashSet.empty[A]
 }

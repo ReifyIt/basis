@@ -8,8 +8,7 @@
 package basis.containers
 
 import basis.collections._
-
-import scala.reflect.ClassTag
+import basis.runtime._
 
 sealed abstract class Vector[+A] extends Equals with Immutable with Family[Vector[A]] with Index[A] {
   protected override def stringPrefix: String = "Vector"
@@ -143,12 +142,12 @@ private[containers] final class Vector6[+A](
 }
 
 object Vector extends SeqFactory[Vector] {
-  implicit override def Builder[A : ClassTag]
+  implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = Vector[A] } =
     new VectorBuilder
   
   private[this] val empty = new Vector0
-  override def empty[A : ClassTag]: Vector[A] = empty
+  override def empty[A : TypeHint]: Vector[A] = empty
   
   private[containers] def foreach1[A, U](array: Array[AnyRef])(f: A => U) {
     var i = 0
@@ -340,7 +339,7 @@ private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
   override def expect(count: Int): this.type = this
   
   override def state: Vector[A] = {
-    if (length == 0) Vector.empty
+    if (length == 0) Vector.empty[A]
     else {
       val last = length - 1
       val node1 = new Array[AnyRef]((last & 0x1F) + 1)
