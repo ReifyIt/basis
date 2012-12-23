@@ -64,6 +64,7 @@ abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolea
   */
 object Struct {
   import Predef.classOf
+  import MurmurHash3._
   
   /** Returns the implicit struct for a given instance type.
     * @group Implicit */
@@ -219,7 +220,7 @@ object Struct {
     * @group Composite */
   final class Record2
       [@specialized(Int, Long, Double, Boolean) T1, @specialized(Int, Long, Double, Boolean) T2]
-      (implicit T1: Struct[T1], T2: Struct[T2])
+      (implicit private val T1: Struct[T1], private val T2: Struct[T2])
     extends Struct[(T1, T2)] {
     private[this] val offset2: Long = align(T1.size, T2.alignment)
     override val alignment: Long = T1.alignment max T2.alignment
@@ -234,6 +235,12 @@ object Struct {
     }
     override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2)]
     override def newArray(length: Int): Array[(T1, T2)] = new Array[(T1, T2)](length)
+    override def canEqual(other: Any): Boolean = other.isInstanceOf[Record2[_, _]]
+    override def equals(other: Any): Boolean = other match {
+      case that: Record2[_, _] => T1.equals(that.T1) && T2.equals(that.T2)
+      case _ => false
+    }
+    override def hashCode: Int = mash(mix(mix(-1547717151, T1.hashCode), T2.hashCode))
     override def toString: String = "("+ T1 +", "+ T2 +")"
   }
   
@@ -247,7 +254,7 @@ object Struct {
   /** A struct for 3-tuples of struct instances.
     * @group Composite */
   final class Record3[T1, T2, T3]
-      (implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3])
+      (implicit private val T1: Struct[T1], private val T2: Struct[T2], private val T3: Struct[T3])
     extends Struct[(T1, T2, T3)] {
     private[this] val offset2: Long = align(T1.size, T2.alignment)
     private[this] val offset3: Long = align(offset2 + T2.size, T3.alignment)
@@ -265,6 +272,12 @@ object Struct {
     }
     override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2, T3)]
     override def newArray(length: Int): Array[(T1, T2, T3)] = new Array[(T1, T2, T3)](length)
+    override def canEqual(other: Any): Boolean = other.isInstanceOf[Record3[_, _, _]]
+    override def equals(other: Any): Boolean = other match {
+      case that: Record3[_, _, _] => T1.equals(that.T1) && T2.equals(that.T2) && T3.equals(that.T3)
+      case _ => false
+    }
+    override def hashCode: Int = mash(mix(mix(mix(-1547717150, T1.hashCode), T2.hashCode), T3.hashCode))
     override def toString: String = "("+ T1 +", "+ T2 +", "+ T3 +")"
   }
   
@@ -277,7 +290,8 @@ object Struct {
   /** A struct for 4-tuples of struct instances.
     * @group Composite */
   final class Record4[T1, T2, T3, T4]
-      (implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3], T4: Struct[T4])
+      (implicit private val T1: Struct[T1], private val T2: Struct[T2],
+                private val T3: Struct[T3], private val T4: Struct[T4])
     extends Struct[(T1, T2, T3, T4)] {
     private[this] val offset2: Long = align(T1.size, T2.alignment)
     private[this] val offset3: Long = align(offset2 + T2.size, T3.alignment)
@@ -298,6 +312,14 @@ object Struct {
     }
     override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2, T3, T4)]
     override def newArray(length: Int): Array[(T1, T2, T3, T4)] = new Array[(T1, T2, T3, T4)](length)
+    override def canEqual(other: Any): Boolean = other.isInstanceOf[Record4[_, _, _, _]]
+    override def equals(other: Any): Boolean = other match {
+      case that: Record4[_, _, _, _] =>
+        T1.equals(that.T1) && T2.equals(that.T2) && T3.equals(that.T3) && T4.equals(that.T4)
+      case _ => false
+    }
+    override def hashCode: Int =
+      mash(mix(mix(mix(mix(-1547717149, T1.hashCode), T2.hashCode), T3.hashCode), T4.hashCode))
     override def toString: String = "("+ T1 +", "+ T2 +", "+ T3 +", "+ T4 +")"
   }
   
