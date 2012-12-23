@@ -220,8 +220,8 @@ object Struct {
     * @group Composite */
   final class Record2
       [@specialized(Int, Long, Double, Boolean) T1, @specialized(Int, Long, Double, Boolean) T2]
-      (implicit private val T1: Struct[T1], private val T2: Struct[T2])
-    extends Struct[(T1, T2)] {
+      (implicit protected override val T1: Struct[T1], protected override val T2: Struct[T2])
+    extends Struct[(T1, T2)] with Reified2 {
     private[this] val offset2: Long = align(T1.size, T2.alignment)
     override val alignment: Long = T1.alignment max T2.alignment
     override val size: Long = align(offset2 + T2.size, alignment)
@@ -254,8 +254,9 @@ object Struct {
   /** A struct for 3-tuples of struct instances.
     * @group Composite */
   final class Record3[T1, T2, T3]
-      (implicit private val T1: Struct[T1], private val T2: Struct[T2], private val T3: Struct[T3])
-    extends Struct[(T1, T2, T3)] {
+      (implicit protected override val T1: Struct[T1], protected override val T2: Struct[T2],
+                protected override val T3: Struct[T3])
+    extends Struct[(T1, T2, T3)] with Reified3 {
     private[this] val offset2: Long = align(T1.size, T2.alignment)
     private[this] val offset3: Long = align(offset2 + T2.size, T3.alignment)
     override val alignment: Long = T1.alignment max T2.alignment max T3.alignment
@@ -290,9 +291,9 @@ object Struct {
   /** A struct for 4-tuples of struct instances.
     * @group Composite */
   final class Record4[T1, T2, T3, T4]
-      (implicit private val T1: Struct[T1], private val T2: Struct[T2],
-                private val T3: Struct[T3], private val T4: Struct[T4])
-    extends Struct[(T1, T2, T3, T4)] {
+      (implicit protected override val T1: Struct[T1], protected override val T2: Struct[T2],
+                protected override val T3: Struct[T3], protected override val T4: Struct[T4])
+    extends Struct[(T1, T2, T3, T4)] with Reified4 {
     private[this] val offset2: Long = align(T1.size, T2.alignment)
     private[this] val offset3: Long = align(offset2 + T2.size, T3.alignment)
     private[this] val offset4: Long = align(offset3 + T3.size, T4.alignment)
