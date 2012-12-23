@@ -21,6 +21,14 @@ trait Reified2[T1, T2] extends Any {
 
 /** An extractor for binary reified types. */
 object Reified2 {
+  /** Returns `true` if an instance has matching reified type parameters. */
+  def apply[T1, T2](any: Any)(implicit T1: TypeHint[T1], T2: TypeHint[T2]): Boolean =
+    any.isInstanceOf[Reified2[_, _]] && {
+      val its = any.asInstanceOf[Reified2[_, _]]
+      its.T1 == T1 && its.T2 == T2
+    }
+  
   /** Extracts the type hints from a binary reified type. */
-  def unapply[T1, T2](x: Reified2[T1, T2]): Some[(TypeHint[T1], TypeHint[T2])] = Some((x.T1, x.T2))
+  def unapply[T1, T2](any: Reified2[T1, T2]): Some[(TypeHint[T1], TypeHint[T2])] =
+     Some((any.T1, any.T2))
 }

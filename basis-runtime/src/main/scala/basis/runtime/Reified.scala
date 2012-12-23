@@ -18,6 +18,10 @@ trait Reified[T] extends Any {
 
 /** An extractor for unary reified types. */
 object Reified {
+  /** Returns `true` if an instance has a matching reified type parameter. */
+  def apply[T](any: Any)(implicit T: TypeHint[T]): Boolean =
+    any.isInstanceOf[Reified[_]] && any.asInstanceOf[Reified[_]].T == T
+  
   /** Extracts the type hint from a unary reified type. */
-  def unapply[T](x: Reified[T]): Some[TypeHint[T]] = Some(x.T)
+  def unapply[T](any: Reified[T]): Some[TypeHint[T]] = Some(any.T)
 }
