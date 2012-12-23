@@ -11,18 +11,18 @@ package basis.runtime
   * `Reified4` protects its type hints so as not to clutter implementation
   * classes' APIs. Pattern match against [[Reified4$ Reified4]] to access
   * an instance's type hints. */
-trait Reified4[T1, T2, T3, T4] extends Any {
+trait Reified4 extends Any {
   /** Returns a hint about this instance's first type parameter. */
-  protected def T1: TypeHint[T1]
+  protected def T1: TypeHint[_]
   
   /** Returns a hint about this instance's second type parameter. */
-  protected def T2: TypeHint[T2]
+  protected def T2: TypeHint[_]
   
   /** Returns a hint about this instance's third type parameter. */
-  protected def T3: TypeHint[T3]
+  protected def T3: TypeHint[_]
   
   /** Returns a hint about this instance's fourth type parameter. */
-  protected def T4: TypeHint[T4]
+  protected def T4: TypeHint[_]
 }
 
 /** An extractor for quaternary reified types. */
@@ -31,13 +31,12 @@ object Reified4 {
   def apply[T1, T2, T3, T4](any: Any)
     (implicit T1: TypeHint[T1], T2: TypeHint[T2],
               T3: TypeHint[T3], T4: TypeHint[T4])
-    : Boolean = any.isInstanceOf[Reified4[_, _, _, _]] && {
-      val its = any.asInstanceOf[Reified4[_, _, _, _]]
+    : Boolean = any.isInstanceOf[Reified4] && {
+      val its = any.asInstanceOf[Reified4]
       its.T1 == T1 && its.T2 == T2 && its.T3 == T3 && its.T4 == T4
     }
   
   /** Extracts the type hints from a quaternary reified type. */
-  def unapply[T1, T2, T3, T4](any: Reified4[T1, T2, T3, T4])
-    : Some[(TypeHint[T1], TypeHint[T2], TypeHint[T3], TypeHint[T4])] =
+  def unapply(any: Reified4): Some[(TypeHint[_], TypeHint[_], TypeHint[_], TypeHint[_])] =
     Some((any.T1, any.T2, any.T3, any.T4))
 }

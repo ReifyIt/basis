@@ -19,24 +19,6 @@ object TypeHint {
   
   def apply[T](implicit T: TypeHint[T]): T.type = T
   
-  def apply[T](runtimeClass: java.lang.Class[_]): ClassTypeHint[T] = {
-    if      (runtimeClass eq java.lang.Byte.TYPE)             TypeHint.Byte.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq java.lang.Short.TYPE)            TypeHint.Short.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq java.lang.Character.TYPE)        TypeHint.Char.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq java.lang.Integer.TYPE)          TypeHint.Int.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq java.lang.Long.TYPE)             TypeHint.Long.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq java.lang.Float.TYPE)            TypeHint.Float.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq java.lang.Double.TYPE)           TypeHint.Double.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq java.lang.Boolean.TYPE)          TypeHint.Boolean.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq java.lang.Void.TYPE)             TypeHint.Unit.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq classOf[java.lang.Object])       TypeHint.Any.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq classOf[scala.runtime.Null$])    TypeHint.Null.asInstanceOf[ClassTypeHint[T]]
-    else if (runtimeClass eq classOf[scala.runtime.Nothing$]) TypeHint.Nothing.asInstanceOf[ClassTypeHint[T]]
-    else new RuntimeClassTypeHint(runtimeClass)
-  }
-  
-  implicit def Undefined[T]: TypeHint[T] = NoTypeHint.asInstanceOf[TypeHint[T]]
-  
   implicit object Any extends ClassTypeHint[Any] {
     override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
     override def toString: String = "Any"
@@ -107,20 +89,15 @@ object TypeHint {
     override def toString: String = "AnyRef"
   }
   
-  implicit object Null extends ClassTypeHint[Null] {
-    override def runtimeClass: java.lang.Class[_] = classOf[scala.runtime.Null$]
-    override def newArray(length: Int): Array[Null] = new Array[Null](length)
-    override def toString: String = "Null"
-  }
-  
   implicit object Nothing extends ClassTypeHint[Nothing] {
     override def runtimeClass: java.lang.Class[_] = classOf[scala.runtime.Nothing$]
     override def newArray(length: Int): Array[Nothing] = new Array[Nothing](length)
     override def toString: String = "Nothing"
   }
   
-  implicit def Array[T](implicit T: ClassTypeHint[T]): ClassTypeHint[Array[T]] =
-    new RuntimeClassTypeHint(T.newArray(0).getClass)
+  implicit def Array[T](implicit T: ClassTypeHint[T]): ClassTypeHint[Array[T]] = ClassTypeHint.Array(T)
+  
+  implicit def Undefined[T]: TypeHint[T] = NoTypeHint.asInstanceOf[TypeHint[T]]
 }
 
 private[runtime] object NoTypeHint extends TypeHint[Any] {

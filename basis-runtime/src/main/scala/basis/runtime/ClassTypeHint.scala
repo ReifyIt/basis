@@ -39,8 +39,30 @@ trait ClassTypeHint[T] extends Equals with TypeHint[T] {
   
   override def toString: String = {
     if (!runtimeClass.isArray) runtimeClass.getName
-    else "Array"+"["+ TypeHint(runtimeClass.getComponentType) +"]"
+    else "Array"+"["+ ClassTypeHint(runtimeClass.getComponentType) +"]"
   }
+}
+
+object ClassTypeHint {
+  import Predef.classOf
+  
+  def apply[T](runtimeClass: java.lang.Class[_]): ClassTypeHint[T] = {
+    if      (runtimeClass eq java.lang.Byte.TYPE)             TypeHint.Byte.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq java.lang.Short.TYPE)            TypeHint.Short.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq java.lang.Character.TYPE)        TypeHint.Char.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq java.lang.Integer.TYPE)          TypeHint.Int.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq java.lang.Long.TYPE)             TypeHint.Long.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq java.lang.Float.TYPE)            TypeHint.Float.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq java.lang.Double.TYPE)           TypeHint.Double.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq java.lang.Boolean.TYPE)          TypeHint.Boolean.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq java.lang.Void.TYPE)             TypeHint.Unit.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq classOf[scala.runtime.Nothing$]) TypeHint.Nothing.asInstanceOf[ClassTypeHint[T]]
+    else if (runtimeClass eq classOf[java.lang.Object])       TypeHint.Any.asInstanceOf[ClassTypeHint[T]]
+    else new RuntimeClassTypeHint(runtimeClass)
+  }
+  
+  def Array[T](implicit T: ClassTypeHint[T]): ClassTypeHint[Array[T]] =
+    new RuntimeClassTypeHint(T.newArray(0).getClass)
 }
 
 private[runtime] final class RuntimeClassTypeHint[T]
