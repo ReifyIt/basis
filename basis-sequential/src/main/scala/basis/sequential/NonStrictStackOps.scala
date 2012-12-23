@@ -160,228 +160,228 @@ private[sequential] object NonStrictStackOps {
   }
   
   final class Collect[-A, +B](
-      private[this] var base: Stack[A],
+      private[this] var these: Stack[A],
       private[this] val q: PartialFunction[A, B])
     extends Stack[B] {
     
     @tailrec override def isEmpty: Boolean =
-      base.isEmpty || !q.isDefinedAt(base.head) && { base = base.tail; isEmpty }
+      these.isEmpty || !q.isDefinedAt(these.head) && { these = these.tail; isEmpty }
     
     @tailrec override def head: B = {
-      val x = base.head
+      val x = these.head
       if (q.isDefinedAt(x)) q(x)
-      else { base = base.tail; head }
+      else { these = these.tail; head }
     }
     
     @tailrec override def tail: Stack[B] = {
-      if (!base.isEmpty && q.isDefinedAt(base.head)) new Collect(base.tail, q)
-      else { base = base.tail; tail }
+      if (!these.isEmpty && q.isDefinedAt(these.head)) new Collect(these.tail, q)
+      else { these = these.tail; tail }
     }
   }
   
   final class Map[-A, +B](
-      private[this] val base: Stack[A],
+      private[this] val these: Stack[A],
       private[this] val f: A => B)
     extends Stack[B] {
     
-    override def isEmpty: Boolean = base.isEmpty
+    override def isEmpty: Boolean = these.isEmpty
     
-    override def head: B = f(base.head)
+    override def head: B = f(these.head)
     
-    override def tail: Stack[B] = new Map(base.tail, f)
+    override def tail: Stack[B] = new Map(these.tail, f)
   }
   
   final class FlatMap[-A, +B] private (
-      private[this] var base: Stack[A],
+      private[this] var these: Stack[A],
       private[this] val f: A => Stack[B],
       private[this] var inner: Stack[B])
     extends Stack[B] {
     
-    def this(base: Stack[A], f: A => Stack[B]) = this(base, f, Empty)
+    def this(these: Stack[A], f: A => Stack[B]) = this(these, f, Empty)
     
     @tailrec override def isEmpty: Boolean =
-      inner.isEmpty && (base.isEmpty || { inner = f(base.head); base = base.tail; isEmpty })
+      inner.isEmpty && (these.isEmpty || { inner = f(these.head); these = these.tail; isEmpty })
     
     @tailrec override def head: B = {
       if (!inner.isEmpty) inner.head
-      else if (!base.isEmpty) { inner = f(base.head); base = base.tail; head }
+      else if (!these.isEmpty) { inner = f(these.head); these = these.tail; head }
       else Empty.head
     }
     
     override def tail: Stack[B] = {
-      if (!inner.isEmpty) new FlatMap(base, f, inner.tail)
-      else if (!base.isEmpty) new FlatMap(base.tail, f, f(base.head))
+      if (!inner.isEmpty) new FlatMap(these, f, inner.tail)
+      else if (!these.isEmpty) new FlatMap(these.tail, f, f(these.head))
       else Empty.tail
     }
   }
   
   final class Filter[+A](
-      private[this] var base: Stack[A],
+      private[this] var these: Stack[A],
       private[this] val p: A => Boolean)
     extends Stack[A] {
     
     @tailrec override def isEmpty: Boolean =
-      base.isEmpty || !p(base.head) && { base = base.tail; isEmpty }
+      these.isEmpty || !p(these.head) && { these = these.tail; isEmpty }
     
     @tailrec override def head: A = {
-      val x = base.head
-      if (p(x)) x else { base = base.tail; head }
+      val x = these.head
+      if (p(x)) x else { these = these.tail; head }
     }
     
     @tailrec override def tail: Stack[A] = {
-      if (!base.isEmpty && p(base.head)) new Filter(base.tail, p)
-      else { base = base.tail; tail }
+      if (!these.isEmpty && p(these.head)) new Filter(these.tail, p)
+      else { these = these.tail; tail }
     }
   }
   
   final class DropWhile[+A](
-      private[this] var base: Stack[A],
+      private[this] var these: Stack[A],
       private[this] val p: A => Boolean)
     extends Stack[A] {
     
     private[this] var dropped: Boolean = false
     
     @tailrec override def isEmpty: Boolean =
-      base.isEmpty || (!dropped && (if (p(base.head)) { base = base.tail; isEmpty } else { dropped = true; false }))
+      these.isEmpty || (!dropped && (if (p(these.head)) { these = these.tail; isEmpty } else { dropped = true; false }))
     
     @tailrec override def head: A = {
-      if (dropped) base.head
+      if (dropped) these.head
       else {
-        val x = base.head
-        if (!p(x)) { dropped = true; x } else { base = base.tail; head }
+        val x = these.head
+        if (!p(x)) { dropped = true; x } else { these = these.tail; head }
       }
     }
     
     @tailrec override def tail: Stack[A] = {
-      if (dropped) base.tail
-      else if (!p(base.head)) { dropped = true; tail }
-      else { base = base.tail; tail }
+      if (dropped) these.tail
+      else if (!p(these.head)) { dropped = true; tail }
+      else { these = these.tail; tail }
     }
   }
   
   final class TakeWhile[+A](
-      private[this] val base: Stack[A],
+      private[this] val these: Stack[A],
       private[this] val p: A => Boolean)
     extends Stack[A] {
     
-    private[this] lazy val taking: Boolean = !base.isEmpty && p(base.head)
+    private[this] lazy val taking: Boolean = !these.isEmpty && p(these.head)
     
     override def isEmpty: Boolean = !taking
     
     override def head: A = {
-      if (taking) base.head
+      if (taking) these.head
       else Empty.head
     }
     
     override def tail: Stack[A] = {
-      if (taking) new TakeWhile(base.tail, p)
+      if (taking) new TakeWhile(these.tail, p)
       else Empty.tail
     }
   }
   
   final class Drop[+A] private (
-      private[this] var base: Stack[A],
+      private[this] var these: Stack[A],
       private[this] val lower: Int,
       private[this] var index: Int)
     extends Stack[A] {
     
-    def this(base: Stack[A], lower: Int) = this(base, lower, 0)
+    def this(these: Stack[A], lower: Int) = this(these, lower, 0)
     
     @tailrec override def isEmpty: Boolean =
-      base.isEmpty || index < lower && { base = base.tail; index += 1; isEmpty }
+      these.isEmpty || index < lower && { these = these.tail; index += 1; isEmpty }
     
     @tailrec override def head: A = {
-      if (index >= lower) base.head
-      else { base = base.tail; index += 1; head }
+      if (index >= lower) these.head
+      else { these = these.tail; index += 1; head }
     }
     
     @tailrec override def tail: Stack[A] = {
-      if (index >= lower) base.tail
-      else { base = base.tail; index += 1; tail }
+      if (index >= lower) these.tail
+      else { these = these.tail; index += 1; tail }
     }
   }
   
   final class Take[+A] private (
-      private[this] val base: Stack[A],
+      private[this] val these: Stack[A],
       private[this] val upper: Int,
       private[this] val index: Int)
     extends Stack[A] {
     
-    def this(base: Stack[A], upper: Int) = this(base, upper, 0)
+    def this(these: Stack[A], upper: Int) = this(these, upper, 0)
     
     override def isEmpty: Boolean =
-      index >= upper || base.isEmpty
+      index >= upper || these.isEmpty
     
     override def head: A = {
-      if (index < upper) base.head
+      if (index < upper) these.head
       else Empty.head
     }
     
     override def tail: Stack[A] = {
-      if (index < upper) new Take(base.tail, upper, index + 1)
+      if (index < upper) new Take(these.tail, upper, index + 1)
       else Empty.tail
     }
   }
   
   final class Slice[+A] private (
-      private[this] var base: Stack[A],
+      private[this] var these: Stack[A],
       private[this] val lower: Int,
       private[this] val upper: Int,
       private[this] var index: Int)
     extends Stack[A] {
     
-    def this(base: Stack[A], lower: Int, upper: Int) =
-      this(base,0 max lower, 0 max lower max upper, 0)
+    def this(these: Stack[A], lower: Int, upper: Int) =
+      this(these,0 max lower, 0 max lower max upper, 0)
     
     @tailrec override def isEmpty: Boolean =
-      index >= upper || base.isEmpty || index < lower && { base = base.tail; index += 1; isEmpty }
+      index >= upper || these.isEmpty || index < lower && { these = these.tail; index += 1; isEmpty }
     
     @tailrec override def head: A = {
-      if (index < lower) { base = base.tail; index += 1; head }
-      else if (index < upper) base.head
+      if (index < lower) { these = these.tail; index += 1; head }
+      else if (index < upper) these.head
       else Empty.head
     }
     
     @tailrec override def tail: Stack[A] = {
-      if (index < lower) { base = base.tail; index += 1; tail }
-      else if (index < upper) new Slice(base.tail, lower, upper, index + 1)
+      if (index < lower) { these = these.tail; index += 1; tail }
+      else if (index < upper) new Slice(these.tail, lower, upper, index + 1)
       else Empty.tail
     }
   }
   
   final class Zip[+A, +B](
-      private[this] val xs: Stack[A],
-      private[this] val ys: Stack[B])
+      private[this] val these: Stack[A],
+      private[this] val those: Stack[B])
     extends Stack[(A, B)] {
     
-    override def isEmpty: Boolean = xs.isEmpty || ys.isEmpty
+    override def isEmpty: Boolean = these.isEmpty || those.isEmpty
     
-    override def head: (A, B) = (xs.head, ys.head)
+    override def head: (A, B) = (these.head, those.head)
     
-    override def tail: Stack[(A, B)] = new Zip(xs.tail, ys.tail)
+    override def tail: Stack[(A, B)] = new Zip(these.tail, those.tail)
   }
   
   final class ++[+A] private (
-      private[this] val xs: Stack[A],
-      private[this] val ys: Stack[A],
+      private[this] val these: Stack[A],
+      private[this] val those: Stack[A],
       private[this] var segment: Int)
     extends Stack[A] {
     
-    def this(xs: Stack[A], ys: Stack[A]) = this(xs, ys, 0)
+    def this(these: Stack[A], those: Stack[A]) = this(these, those, 0)
     
     @tailrec override def isEmpty: Boolean = segment match {
-      case 0 => xs.isEmpty && { segment = 1; isEmpty }
-      case 1 => ys.isEmpty
+      case 0 => these.isEmpty && { segment = 1; isEmpty }
+      case 1 => those.isEmpty
     }
     
     @tailrec override def head: A = segment match {
-      case 0 => if (!xs.isEmpty) xs.head else { segment = 1; head }
-      case 1 => ys.head
+      case 0 => if (!these.isEmpty) these.head else { segment = 1; head }
+      case 1 => those.head
     }
     
     override def tail: Stack[A] = segment match {
-      case 0 if !xs.isEmpty => new ++(xs.tail, ys, 0)
-      case _ => ys.tail
+      case 0 if !these.isEmpty => new ++(these.tail, those, 0)
+      case _ => those.tail
     }
   }
 }

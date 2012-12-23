@@ -142,90 +142,90 @@ private[sequential] object NonStrictEnumeratorOps {
   import basis.util.IntOps
   
   class Collect[-A, +B](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val q: PartialFunction[A, B])
     extends Enumerator[B] {
     
     protected override def foreach[U](f: B => U) {
-      traverse(base)(x => if (q.isDefinedAt(x)) f(q(x)))
+      traverse(these)(x => if (q.isDefinedAt(x)) f(q(x)))
     }
   }
   
   class Map[-A, +B](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val f: A => B)
     extends Enumerator[B] {
     
     protected override def foreach[U](g: B => U) {
-      traverse(base)(f andThen g)
+      traverse(these)(f andThen g)
     }
   }
   
   class FlatMap[-A, +B](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val f: A => Enumerator[B])
     extends Enumerator[B] {
     
     protected override def foreach[U](g: B => U) {
-      traverse(base)(x => traverse(f(x))(g))
+      traverse(these)(x => traverse(f(x))(g))
     }
   }
   
   class Filter[+A](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val p: A => Boolean)
     extends Enumerator[A] {
     
     protected override def foreach[U](f: A => U) {
-      traverse(base)(x => if (p(x)) f(x))
+      traverse(these)(x => if (p(x)) f(x))
     }
   }
   
   class DropWhile[+A](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val p: A => Boolean)
     extends Enumerator[A] {
     
     protected override def foreach[U](f: A => U) {
       var split = false
-      traverse(base)(x => if (split || (!p(x) && { split = true; true })) f(x))
+      traverse(these)(x => if (split || (!p(x) && { split = true; true })) f(x))
     }
   }
   
   class TakeWhile[+A](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val p: A => Boolean)
     extends Enumerator[A] {
     
     protected override def foreach[U](f: A => U) {
-      begin(traverse(base)(x => if (p(x)) f(x) else begin.break()))
+      begin(traverse(these)(x => if (p(x)) f(x) else begin.break()))
     }
   }
   
   class Drop[+A](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val lower: Int)
     extends Enumerator[A] {
     
     protected override def foreach[U](f: A => U) {
       var i = 0
-      traverse(base)(x => if (i >= lower) f(x) else i += 1)
+      traverse(these)(x => if (i >= lower) f(x) else i += 1)
     }
   }
   
   class Take[+A](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val upper: Int)
     extends Enumerator[A] {
     
     protected override def foreach[U](f: A => U) {
       var i = 0
-      begin(traverse(base)(x => if (i < upper) { f(x); i += 1 } else begin.break()))
+      begin(traverse(these)(x => if (i < upper) { f(x); i += 1 } else begin.break()))
     }
   }
   
   class Slice[+A](
-      protected[this] val base: Enumerator[A],
+      protected[this] val these: Enumerator[A],
       protected[this] val lower: Int,
       protected[this] val upper: Int)
     extends Enumerator[A] {
@@ -234,18 +234,18 @@ private[sequential] object NonStrictEnumeratorOps {
       var l = 0 max lower
       val u = l max upper
       var i = 0
-      if (l < u) begin(traverse(base)(x => if (i < u) { if (i >= l) f(x); i += 1 } else begin.break()))
+      if (l < u) begin(traverse(these)(x => if (i < u) { if (i >= l) f(x); i += 1 } else begin.break()))
     }
   }
   
   class ++[+A](
-      protected[this] val xs: Enumerator[A],
-      protected[this] val ys: Enumerator[A])
+      protected[this] val these: Enumerator[A],
+      protected[this] val those: Enumerator[A])
     extends Enumerator[A] {
     
     protected override def foreach[U](f: A => U) {
-      traverse(xs)(f)
-      traverse(ys)(f)
+      traverse(these)(f)
+      traverse(those)(f)
     }
   }
 }

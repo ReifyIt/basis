@@ -139,33 +139,33 @@ final class NonStrictCollectionOps[+A](val these: Collection[A]) extends AnyVal 
 }
 
 private[sequential] object NonStrictCollectionOps {
-  class Collect[-A, +B](base: Collection[A], q: PartialFunction[A, B])
-    extends NonStrictEnumeratorOps.Collect[A, B](base, q) with Collection[B]
+  class Collect[-A, +B](these: Collection[A], q: PartialFunction[A, B])
+    extends NonStrictEnumeratorOps.Collect[A, B](these, q) with Collection[B]
   
-  class Map[-A, +B](base: Collection[A], f: A => B)
-    extends NonStrictEnumeratorOps.Map[A, B](base, f) with Collection[B]
+  class Map[-A, +B](these: Collection[A], f: A => B)
+    extends NonStrictEnumeratorOps.Map[A, B](these, f) with Collection[B]
   
-  class FlatMap[-A, +B](base: Collection[A], f: A => Collection[B])
-    extends NonStrictEnumeratorOps.FlatMap[A, B](base, f) with Collection[B]
+  class FlatMap[-A, +B](these: Collection[A], f: A => Collection[B])
+    extends NonStrictEnumeratorOps.FlatMap[A, B](these, f) with Collection[B]
   
-  class Filter[+A](base: Collection[A], p: A => Boolean)
-    extends NonStrictEnumeratorOps.Filter[A](base, p) with Collection[A]
+  class Filter[+A](these: Collection[A], p: A => Boolean)
+    extends NonStrictEnumeratorOps.Filter[A](these, p) with Collection[A]
   
-  class DropWhile[+A](base: Collection[A], p: A => Boolean)
-    extends NonStrictEnumeratorOps.DropWhile[A](base, p) with Collection[A]
+  class DropWhile[+A](these: Collection[A], p: A => Boolean)
+    extends NonStrictEnumeratorOps.DropWhile[A](these, p) with Collection[A]
   
-  class TakeWhile[+A](base: Collection[A], p: A => Boolean)
-    extends NonStrictEnumeratorOps.TakeWhile[A](base, p) with Collection[A]
+  class TakeWhile[+A](these: Collection[A], p: A => Boolean)
+    extends NonStrictEnumeratorOps.TakeWhile[A](these, p) with Collection[A]
   
-  class Drop[+A](base: Collection[A], lower: Int)
-    extends NonStrictEnumeratorOps.Drop[A](base, lower) with Collection[A]
+  class Drop[+A](these: Collection[A], lower: Int)
+    extends NonStrictEnumeratorOps.Drop[A](these, lower) with Collection[A]
   
-  class Take[+A](base: Collection[A], upper: Int)
-    extends NonStrictEnumeratorOps.Take[A](base, upper) with Collection[A]
+  class Take[+A](these: Collection[A], upper: Int)
+    extends NonStrictEnumeratorOps.Take[A](these, upper) with Collection[A]
   
-  class Slice[+A](base: Collection[A], lower: Int, upper: Int)
-    extends NonStrictEnumeratorOps.Slice[A](base, lower, upper) with Collection[A]
+  class Slice[+A](these: Collection[A], lower: Int, upper: Int)
+    extends NonStrictEnumeratorOps.Slice[A](these, lower, upper) with Collection[A]
   
-  class ++[+A](xs: Collection[A], ys: Collection[A])
-    extends NonStrictEnumeratorOps.++[A](xs, ys) with Collection[A]
+  class ++[+A](these: Collection[A], those: Collection[A])
+    extends NonStrictEnumeratorOps.++[A](these, those) with Collection[A]
 }

@@ -168,150 +168,150 @@ private[sequential] object NonStrictIteratorOps {
   }
   
   final class Collect[-A, +B](
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val q: PartialFunction[A, B])
-    extends NonStrictEnumeratorOps.Collect[A, B](base, q) with Iterator[B] {
+    extends NonStrictEnumeratorOps.Collect[A, B](these, q) with Iterator[B] {
     
     @tailrec override def isEmpty: Boolean =
-      base.isEmpty || !q.isDefinedAt(base.head) && { base.step(); isEmpty }
+      these.isEmpty || !q.isDefinedAt(these.head) && { these.step(); isEmpty }
     
     @tailrec override def head: B = {
-      val x = base.head
+      val x = these.head
       if (q.isDefinedAt(x)) q(x)
-      else { base.step(); head }
+      else { these.step(); head }
     }
     
-    override def step(): Unit = base.step()
+    override def step(): Unit = these.step()
     
-    override def dup: Iterator[B] = new Collect(base.dup, q)
+    override def dup: Iterator[B] = new Collect(these.dup, q)
   }
   
   final class Map[-A, +B](
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val f: A => B)
-    extends NonStrictEnumeratorOps.Map[A, B](base, f) with Iterator[B] {
+    extends NonStrictEnumeratorOps.Map[A, B](these, f) with Iterator[B] {
     
-    override def isEmpty: Boolean = base.isEmpty
+    override def isEmpty: Boolean = these.isEmpty
     
-    override def head: B = f(base.head)
+    override def head: B = f(these.head)
     
-    override def step(): Unit = base.step()
+    override def step(): Unit = these.step()
     
-    override def dup: Iterator[B] = new Map(base.dup, f)
+    override def dup: Iterator[B] = new Map(these.dup, f)
   }
   
   final class FlatMap[-A, +B] private (
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val f: A => Iterator[B],
       private[this] var inner: Iterator[B])
-    extends NonStrictEnumeratorOps.FlatMap[A, B](base, f) with Iterator[B] {
+    extends NonStrictEnumeratorOps.FlatMap[A, B](these, f) with Iterator[B] {
     
-    def this(base: Iterator[A], f: A => Iterator[B]) = this(base, f, Done)
+    def this(these: Iterator[A], f: A => Iterator[B]) = this(these, f, Done)
     
     @tailrec override def isEmpty: Boolean =
-      inner.isEmpty && (base.isEmpty || { inner = f(base.head); base.step(); isEmpty })
+      inner.isEmpty && (these.isEmpty || { inner = f(these.head); these.step(); isEmpty })
     
     @tailrec override def head: B = {
       if (!inner.isEmpty) inner.head
-      else if (!base.isEmpty) { inner = f(base.head); base.step(); head }
+      else if (!these.isEmpty) { inner = f(these.head); these.step(); head }
       else Done.head
     }
     
     @tailrec override def step() {
       if (!inner.isEmpty) inner.step()
-      else if (!base.isEmpty) { inner = f(base.head); base.step(); step() }
+      else if (!these.isEmpty) { inner = f(these.head); these.step(); step() }
       else Done.step()
     }
     
-    override def dup: Iterator[B] = new FlatMap(base.dup, f, inner.dup)
+    override def dup: Iterator[B] = new FlatMap(these.dup, f, inner.dup)
   }
   
   final class FlatMapContainer[-A, +B] private (
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val f: A => Container[B],
       protected[this] var inner: Iterator[B])
-    extends NonStrictEnumeratorOps.FlatMap[A, B](base, f) with Iterator[B] {
+    extends NonStrictEnumeratorOps.FlatMap[A, B](these, f) with Iterator[B] {
     
-    def this(base: Iterator[A], f: A => Container[B]) = this(base, f, Done)
+    def this(these: Iterator[A], f: A => Container[B]) = this(these, f, Done)
     
     @tailrec override def isEmpty: Boolean =
-      inner.isEmpty && (base.isEmpty || { inner = f(base.head).iterator; base.step(); isEmpty })
+      inner.isEmpty && (these.isEmpty || { inner = f(these.head).iterator; these.step(); isEmpty })
     
     @tailrec override def head: B = {
       if (!inner.isEmpty) inner.head
-      else if (!base.isEmpty) { inner = f(base.head).iterator; base.step(); head }
+      else if (!these.isEmpty) { inner = f(these.head).iterator; these.step(); head }
       else Done.head
     }
     
     @tailrec override def step() {
       if (!inner.isEmpty) inner.step()
-      else if (!base.isEmpty) { inner = f(base.head).iterator; base.step(); step() }
+      else if (!these.isEmpty) { inner = f(these.head).iterator; these.step(); step() }
       else Done.step()
     }
     
-    override def dup: Iterator[B] = new FlatMapContainer(base.dup, f, inner.dup)
+    override def dup: Iterator[B] = new FlatMapContainer(these.dup, f, inner.dup)
   }
   
   final class Filter[+A](
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val p: A => Boolean)
-    extends NonStrictEnumeratorOps.Filter[A](base, p) with Iterator[A] {
+    extends NonStrictEnumeratorOps.Filter[A](these, p) with Iterator[A] {
     
     @tailrec override def isEmpty: Boolean =
-      base.isEmpty || !p(base.head) && { base.step(); isEmpty }
+      these.isEmpty || !p(these.head) && { these.step(); isEmpty }
     
     @tailrec override def head: A = {
-      val x = base.head
-      if (p(x)) x else { base.step(); head }
+      val x = these.head
+      if (p(x)) x else { these.step(); head }
     }
     
-    override def step(): Unit = base.step()
+    override def step(): Unit = these.step()
     
-    override def dup: Iterator[A] = new Filter(base.dup, p)
+    override def dup: Iterator[A] = new Filter(these.dup, p)
   }
   
   final class DropWhile[+A] private (
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val p: A => Boolean,
       private[this] var dropped: Boolean)
-    extends NonStrictEnumeratorOps.DropWhile[A](base, p) with Iterator[A] {
+    extends NonStrictEnumeratorOps.DropWhile[A](these, p) with Iterator[A] {
     
-    def this(base: Iterator[A], p: A => Boolean) = this(base, p, false)
+    def this(these: Iterator[A], p: A => Boolean) = this(these, p, false)
     
     @tailrec override def isEmpty: Boolean =
-      base.isEmpty || (!dropped && (if (p(base.head)) { base.step(); isEmpty } else { dropped = true; false }))
+      these.isEmpty || (!dropped && (if (p(these.head)) { these.step(); isEmpty } else { dropped = true; false }))
     
     @tailrec override def head: A = {
-      if (dropped) base.head
+      if (dropped) these.head
       else {
-        val x = base.head
-        if (!p(x)) { dropped = true; x } else { base.step(); head }
+        val x = these.head
+        if (!p(x)) { dropped = true; x } else { these.step(); head }
       }
     }
     
     @tailrec override def step() {
-      if (dropped) base.step()
-      else if (!p(base.head)) { dropped = true; base.step() }
-      else { base.step(); step() }
+      if (dropped) these.step()
+      else if (!p(these.head)) { dropped = true; these.step() }
+      else { these.step(); step() }
     }
     
-    override def dup: Iterator[A] = new DropWhile(base.dup, p, dropped)
+    override def dup: Iterator[A] = new DropWhile(these.dup, p, dropped)
   }
   
   final class TakeWhile[+A] private (
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val p: A => Boolean,
       private[this] var taking: Boolean)
-    extends NonStrictEnumeratorOps.TakeWhile[A](base, p) with Iterator[A] {
+    extends NonStrictEnumeratorOps.TakeWhile[A](these, p) with Iterator[A] {
     
-    def this(base: Iterator[A], p: A => Boolean) = this(base, p, true)
+    def this(these: Iterator[A], p: A => Boolean) = this(these, p, true)
     
     override def isEmpty: Boolean =
-      !taking && (base.isEmpty || !p(base.head) && { taking = false; true })
+      !taking && (these.isEmpty || !p(these.head) && { taking = false; true })
     
     @tailrec override def head: A = {
       if (taking) {
-        val x = base.head
+        val x = these.head
         if (p(x)) x else { taking = false; head }
       }
       else Done.head
@@ -319,130 +319,130 @@ private[sequential] object NonStrictIteratorOps {
     
     @tailrec override def step() {
       if (taking) {
-        if (p(base.head)) base.step()
+        if (p(these.head)) these.step()
         else { taking = false; step() }
       }
       else Done.step()
     }
     
-    override def dup: Iterator[A] = new TakeWhile(base.dup, p, taking)
+    override def dup: Iterator[A] = new TakeWhile(these.dup, p, taking)
   }
   
   final class Drop[+A] private (
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val lower: Int,
       private[this] var index: Int)
-    extends NonStrictEnumeratorOps.Drop[A](base, lower) with Iterator[A] {
+    extends NonStrictEnumeratorOps.Drop[A](these, lower) with Iterator[A] {
     
-    def this(base: Iterator[A], lower: Int) = this(base, lower, 0)
+    def this(these: Iterator[A], lower: Int) = this(these, lower, 0)
     
     @tailrec override def isEmpty: Boolean =
-      base.isEmpty || index < lower && { base.step(); index += 1; isEmpty }
+      these.isEmpty || index < lower && { these.step(); index += 1; isEmpty }
     
     @tailrec override def head: A = {
-      if (index >= lower) base.head
-      else { base.step(); index += 1; head }
+      if (index >= lower) these.head
+      else { these.step(); index += 1; head }
     }
     
     @tailrec override def step() {
-      if (index >= lower) base.step()
-      else { base.step(); index += 1; step() }
+      if (index >= lower) these.step()
+      else { these.step(); index += 1; step() }
     }
     
-    override def dup: Iterator[A] = new Drop(base.dup, lower, index)
+    override def dup: Iterator[A] = new Drop(these.dup, lower, index)
   }
   
   final class Take[+A] private (
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val upper: Int,
       private[this] var index: Int)
-    extends NonStrictEnumeratorOps.Take[A](base, upper) with Iterator[A] {
+    extends NonStrictEnumeratorOps.Take[A](these, upper) with Iterator[A] {
     
-    def this(base: Iterator[A], upper: Int) = this(base, upper, 0)
+    def this(these: Iterator[A], upper: Int) = this(these, upper, 0)
     
     override def isEmpty: Boolean =
-      index >= upper || base.isEmpty
+      index >= upper || these.isEmpty
     
     override def head: A = {
-      if (index < upper) base.head
+      if (index < upper) these.head
       else Done.head
     }
     
     override def step() {
-      if (index < upper) { base.step(); index += 1 }
+      if (index < upper) { these.step(); index += 1 }
       else Done.step()
     }
     
-    override def dup: Iterator[A] = new Take(base.dup, upper, index)
+    override def dup: Iterator[A] = new Take(these.dup, upper, index)
   }
   
   final class Slice[+A] private (
-      protected[this] override val base: Iterator[A],
+      protected[this] override val these: Iterator[A],
       protected[this] override val lower: Int,
       protected[this] override val upper: Int,
       private[this] var index: Int)
-    extends NonStrictEnumeratorOps.Slice[A](base, lower, upper) with Iterator[A] {
+    extends NonStrictEnumeratorOps.Slice[A](these, lower, upper) with Iterator[A] {
     
-    def this(base: Iterator[A], lower: Int, upper: Int) =
-      this(base, 0 max lower, 0 max lower max upper, 0)
+    def this(these: Iterator[A], lower: Int, upper: Int) =
+      this(these, 0 max lower, 0 max lower max upper, 0)
     
     @tailrec override def isEmpty: Boolean =
-      index >= upper || base.isEmpty || index < lower && { base.step(); index += 1; isEmpty }
+      index >= upper || these.isEmpty || index < lower && { these.step(); index += 1; isEmpty }
     
     @tailrec override def head: A = {
-      if (index < lower) { base.step(); index += 1; head }
-      else if (index < upper) base.head
+      if (index < lower) { these.step(); index += 1; head }
+      else if (index < upper) these.head
       else Done.head
     }
     
     @tailrec override def step() {
-      if (index < lower) { base.step(); index += 1; step() }
-      else if (index < upper) base.step()
+      if (index < lower) { these.step(); index += 1; step() }
+      else if (index < upper) these.step()
       else Done.step()
     }
     
-    override def dup: Iterator[A] = new Slice(base.dup, lower, upper, index)
+    override def dup: Iterator[A] = new Slice(these.dup, lower, upper, index)
   }
   
-  final class Zip[+A, +B](xs: Iterator[A], ys: Iterator[B]) extends Iterator[(A, B)] {
-    override def isEmpty: Boolean = xs.isEmpty || ys.isEmpty
+  final class Zip[+A, +B](these: Iterator[A], those: Iterator[B]) extends Iterator[(A, B)] {
+    override def isEmpty: Boolean = these.isEmpty || those.isEmpty
     
-    override def head: (A, B) = (xs.head, ys.head)
+    override def head: (A, B) = (these.head, those.head)
     
     override def step() {
-      xs.step()
-      ys.step()
+      these.step()
+      those.step()
     }
     
-    override def dup: Iterator[(A, B)] = new Zip(xs.dup, ys.dup)
+    override def dup: Iterator[(A, B)] = new Zip(these.dup, those.dup)
   }
   
   final class ++[+A] private (
-      protected[this] override val xs: Iterator[A],
-      protected[this] override val ys: Iterator[A],
+      protected[this] override val these: Iterator[A],
+      protected[this] override val those: Iterator[A],
       private[this] var segment: Int)
-    extends NonStrictEnumeratorOps.++[A](xs, ys) with Iterator[A] {
+    extends NonStrictEnumeratorOps.++[A](these, those) with Iterator[A] {
     
-    def this(xs: Iterator[A], ys: Iterator[A]) = this(xs, ys, 0)
+    def this(these: Iterator[A], those: Iterator[A]) = this(these, those, 0)
     
     @tailrec override def isEmpty: Boolean = segment match {
-      case 0 => xs.isEmpty && { segment = 1; isEmpty }
-      case 1 => ys.isEmpty
+      case 0 => these.isEmpty && { segment = 1; isEmpty }
+      case 1 => those.isEmpty
     }
     
     @tailrec override def head: A = segment match {
-      case 0 => if (!xs.isEmpty) xs.head else { segment = 1; head }
-      case 1 => ys.head
+      case 0 => if (!these.isEmpty) these.head else { segment = 1; head }
+      case 1 => those.head
     }
     
     @tailrec override def step(): Unit = segment match {
-      case 0 => if (!xs.isEmpty) xs.step() else { segment = 1; step() }
-      case 1 => ys.step()
+      case 0 => if (!these.isEmpty) these.step() else { segment = 1; step() }
+      case 1 => those.step()
     }
     
     override def dup: Iterator[A] = segment match {
-      case 0 if !xs.isEmpty => new ++(xs.dup, ys.dup, 0)
-      case _ => ys.dup
+      case 0 if !these.isEmpty => new ++(these.dup, those.dup, 0)
+      case _ => those.dup
     }
   }
 }

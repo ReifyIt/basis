@@ -103,33 +103,33 @@ private[sequential] object NonStrictMapOps {
   import scala.annotation.unchecked.uncheckedVariance
   
   class Filter[+A, +T](
-      protected[this] override val base: Map[A, T],
+      protected[this] override val these: Map[A, T],
       protected[this] override val p: ((A, T)) => Boolean)
-    extends NonStrictContainerOps.Filter[(A, T)](base, p) with Map[A, T]
+    extends NonStrictContainerOps.Filter[(A, T)](these, p) with Map[A, T]
   
   class DropWhile[+A, +T](
-      protected[this] override val base: Map[A, T],
+      protected[this] override val these: Map[A, T],
       protected[this] override val p: ((A, T)) => Boolean)
-    extends NonStrictContainerOps.DropWhile[(A, T)](base, p) with Map[A, T]
+    extends NonStrictContainerOps.DropWhile[(A, T)](these, p) with Map[A, T]
   
   class TakeWhile[+A, +T](
-      protected[this] override val base: Map[A, T],
+      protected[this] override val these: Map[A, T],
       protected[this] override val p: ((A, T)) => Boolean)
-    extends NonStrictContainerOps.TakeWhile[(A, T)](base, p) with Map[A, T]
+    extends NonStrictContainerOps.TakeWhile[(A, T)](these, p) with Map[A, T]
   
   class Drop[+A, +T](
-      protected[this] override val base: Map[A, T],
+      protected[this] override val these: Map[A, T],
       protected[this] override val lower: Int)
-    extends NonStrictContainerOps.Drop[(A, T)](base, lower) with Map[A, T]
+    extends NonStrictContainerOps.Drop[(A, T)](these, lower) with Map[A, T]
   
   class Take[+A, +T](
-      protected[this] override val base: Map[A, T],
+      protected[this] override val these: Map[A, T],
       protected[this] override val upper: Int)
-    extends NonStrictContainerOps.Take[(A, T)](base, upper) with Map[A, T]
+    extends NonStrictContainerOps.Take[(A, T)](these, upper) with Map[A, T]
   
   class Slice[+A, +T](
-      protected[this] override val base: Map[A, T],
+      protected[this] override val these: Map[A, T],
       protected[this] override val lower: Int,
       protected[this] override val upper: Int)
-    extends NonStrictContainerOps.Slice[(A, T)](base, lower, upper) with Map[A, T]
+    extends NonStrictContainerOps.Slice[(A, T)](these, lower, upper) with Map[A, T]
 }

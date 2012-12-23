@@ -149,102 +149,102 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
 
 private[sequential] object NonStrictContainerOps {
   class Collect[-A, +B](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val q: PartialFunction[A, B])
-    extends NonStrictCollectionOps.Collect[A, B](base, q) with Container[B] {
+    extends NonStrictCollectionOps.Collect[A, B](these, q) with Container[B] {
     
     override def iterator: Iterator[B] =
-      new NonStrictIteratorOps.Collect(base.iterator, q)
+      new NonStrictIteratorOps.Collect(these.iterator, q)
   }
   
   class Map[-A, +B](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val f: A => B)
-    extends NonStrictCollectionOps.Map[A, B](base, f) with Container[B] {
+    extends NonStrictCollectionOps.Map[A, B](these, f) with Container[B] {
     
     override def iterator: Iterator[B] =
-      new NonStrictIteratorOps.Map(base.iterator, f)
+      new NonStrictIteratorOps.Map(these.iterator, f)
   }
   
   class FlatMap[-A, +B](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val f: A => Container[B])
-    extends NonStrictCollectionOps.FlatMap[A, B](base, f) with Container[B] {
+    extends NonStrictCollectionOps.FlatMap[A, B](these, f) with Container[B] {
     
     override def iterator: Iterator[B] =
-      new NonStrictIteratorOps.FlatMapContainer(base.iterator, f)
+      new NonStrictIteratorOps.FlatMapContainer(these.iterator, f)
   }
   
   class Filter[+A](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val p: A => Boolean)
-    extends NonStrictCollectionOps.Filter[A](base, p) with Container[A] {
+    extends NonStrictCollectionOps.Filter[A](these, p) with Container[A] {
     
     override def iterator: Iterator[A] =
-      new NonStrictIteratorOps.Filter(base.iterator, p)
+      new NonStrictIteratorOps.Filter(these.iterator, p)
   }
   
   class DropWhile[+A](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val p: A => Boolean)
-    extends NonStrictCollectionOps.DropWhile[A](base, p) with Container[A] {
+    extends NonStrictCollectionOps.DropWhile[A](these, p) with Container[A] {
     
     override def iterator: Iterator[A] =
-      new NonStrictIteratorOps.DropWhile(base.iterator, p)
+      new NonStrictIteratorOps.DropWhile(these.iterator, p)
   }
   
   class TakeWhile[+A](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val p: A => Boolean)
-    extends NonStrictCollectionOps.TakeWhile[A](base, p) with Container[A] {
+    extends NonStrictCollectionOps.TakeWhile[A](these, p) with Container[A] {
     
     override def iterator: Iterator[A] =
-      new NonStrictIteratorOps.TakeWhile(base.iterator, p)
+      new NonStrictIteratorOps.TakeWhile(these.iterator, p)
   }
   
   class Drop[+A](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val lower: Int)
-    extends NonStrictCollectionOps.Drop[A](base, lower) with Container[A] {
+    extends NonStrictCollectionOps.Drop[A](these, lower) with Container[A] {
     
     override def iterator: Iterator[A] =
-      new NonStrictIteratorOps.Drop(base.iterator, lower)
+      new NonStrictIteratorOps.Drop(these.iterator, lower)
   }
   
   class Take[+A](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val upper: Int)
-    extends NonStrictCollectionOps.Take[A](base, upper) with Container[A] {
+    extends NonStrictCollectionOps.Take[A](these, upper) with Container[A] {
     
     override def iterator: Iterator[A] =
-      new NonStrictIteratorOps.Take(base.iterator, upper)
+      new NonStrictIteratorOps.Take(these.iterator, upper)
   }
   
   class Slice[+A](
-      protected[this] override val base: Container[A],
+      protected[this] override val these: Container[A],
       protected[this] override val lower: Int,
       protected[this] override val upper: Int)
-    extends NonStrictCollectionOps.Slice[A](base, lower, upper) with Container[A] {
+    extends NonStrictCollectionOps.Slice[A](these, lower, upper) with Container[A] {
     
     override def iterator: Iterator[A] =
-      new NonStrictIteratorOps.Slice(base.iterator, lower, upper)
+      new NonStrictIteratorOps.Slice(these.iterator, lower, upper)
   }
   
   class Zip[+A, +B](
-      protected[this] val xs: Container[A],
-      protected[this] val ys: Container[B])
+      protected[this] val these: Container[A],
+      protected[this] val those: Container[B])
     extends Container[(A, B)] {
     
     override def iterator: Iterator[(A, B)] =
-      new NonStrictIteratorOps.Zip(xs.iterator, ys.iterator)
+      new NonStrictIteratorOps.Zip(these.iterator, those.iterator)
   }
   
   class ++[+A](
-      protected[this] override val xs: Container[A],
-      protected[this] override val ys: Container[A])
-    extends NonStrictCollectionOps.++[A](xs, ys) with Container[A] {
+      protected[this] override val these: Container[A],
+      protected[this] override val those: Container[A])
+    extends NonStrictCollectionOps.++[A](these, those) with Container[A] {
     
     override def iterator: Iterator[A] =
-      new NonStrictIteratorOps.++(xs.iterator, ys.iterator)
+      new NonStrictIteratorOps.++(these.iterator, those.iterator)
   }
 }

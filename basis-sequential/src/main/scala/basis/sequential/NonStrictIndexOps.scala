@@ -149,16 +149,16 @@ private[sequential] object NonStrictIndexOps {
   import scala.annotation.tailrec
   import basis.util.IntOps
   
-  final class Collect[-A, +B](base: Index[A], q: PartialFunction[A, B]) extends Index[B] {
+  final class Collect[-A, +B](these: Index[A], q: PartialFunction[A, B]) extends Index[B] {
     private[this] var table: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
       if (table == null) {
-        val n = base.length
+        val n = these.length
         var i = 0
         var j = 0
         table = new Array[Int](n)
         while (j < n) {
-          if (q.isDefinedAt(base(j))) {
+          if (q.isDefinedAt(these(j))) {
             table(i) = j
             i += 1
           }
@@ -175,25 +175,25 @@ private[sequential] object NonStrictIndexOps {
     
     override def length: Int = lookup.length
     
-    override def apply(index: Int): B = q(base(lookup(index)))
+    override def apply(index: Int): B = q(these(lookup(index)))
   }
   
-  final class Map[-A, +B](base: Index[A], f: A => B) extends Index[B] {
-    override def length: Int = base.length
+  final class Map[-A, +B](these: Index[A], f: A => B) extends Index[B] {
+    override def length: Int = these.length
     
-    override def apply(index: Int): B = f(base(index))
+    override def apply(index: Int): B = f(these(index))
   }
   
-  final class Filter[+A](base: Index[A], p: A => Boolean) extends Index[A] {
+  final class Filter[+A](these: Index[A], p: A => Boolean) extends Index[A] {
     private[this] var table: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
       if (table == null) {
-        val n = base.length
+        val n = these.length
         var i = 0
         var j = 0
         table = new Array[Int](n)
         while (j < n) {
-          if (p(base(j))) {
+          if (p(these(j))) {
             table(i) = j
             i += 1
           }
@@ -210,102 +210,102 @@ private[sequential] object NonStrictIndexOps {
     
     override def length: Int = lookup.length
     
-    override def apply(index: Int): A = base(lookup(index))
+    override def apply(index: Int): A = these(lookup(index))
   }
   
-  final class DropWhile[+A](base: Index[A], p: A => Boolean) extends Index[A] {
+  final class DropWhile[+A](these: Index[A], p: A => Boolean) extends Index[A] {
     private[this] var lower: Int = -1
     private[this] def offset: Int = synchronized {
       if (lower < 0) {
-        val n = base.length
+        val n = these.length
         lower = 0
-        while (lower < n && p(base(lower))) lower += 1
+        while (lower < n && p(these(lower))) lower += 1
       }
       lower
     }
     
-    override def length: Int = base.length - offset
+    override def length: Int = these.length - offset
     
     override def apply(index: Int): A = {
       val i = offset + index
       if (i < 0 || i >= length) throw new IndexOutOfBoundsException(index.toString)
-      base(i)
+      these(i)
     }
   }
   
-  final class TakeWhile[+A](base: Index[A], p: A => Boolean) extends Index[A] {
+  final class TakeWhile[+A](these: Index[A], p: A => Boolean) extends Index[A] {
     private[this] var upper: Int = -1
     
     override def length: Int = synchronized {
       if (upper < 0) {
-        val n = base.length
+        val n = these.length
         upper = 0
-        while (upper < n && p(base(upper))) upper += 1
+        while (upper < n && p(these(upper))) upper += 1
       }
       upper
     }
     
     override def apply(index: Int): A = {
       if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      base(index)
+      these(index)
     }
   }
   
-  final class Drop[+A](base: Index[A], lower: Int) extends Index[A] {
-    private[this] val offset: Int = 0 max lower min base.length
+  final class Drop[+A](these: Index[A], lower: Int) extends Index[A] {
+    private[this] val offset: Int = 0 max lower min these.length
     
-    override def length: Int = base.length - offset
+    override def length: Int = these.length - offset
     
     override def apply(index: Int): A = {
       val i = offset + index
       if (i < 0 || i >= length) throw new IndexOutOfBoundsException(index.toString)
-      base(i)
+      these(i)
     }
   }
   
-  final class Take[+A](base: Index[A], upper: Int) extends Index[A] {
-    override val length: Int = 0 max upper min base.length
+  final class Take[+A](these: Index[A], upper: Int) extends Index[A] {
+    override val length: Int = 0 max upper min these.length
     
     override def apply(index: Int): A = {
       if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      base(index)
+      these(index)
     }
   }
   
-  final class Slice[+A](base: Index[A], lower: Int, upper: Int) extends Index[A] {
-    private[this] val offset: Int = 0 max lower min base.length
+  final class Slice[+A](these: Index[A], lower: Int, upper: Int) extends Index[A] {
+    private[this] val offset: Int = 0 max lower min these.length
     
-    override val length: Int = (offset max upper min base.length) - offset
+    override val length: Int = (offset max upper min these.length) - offset
     
     override def apply(index: Int): A = {
       if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      base(offset + index)
+      these(offset + index)
     }
   }
   
-  final class Reverse[+A](base: Index[A]) extends Index[A] {
-    override def length: Int = base.length
+  final class Reverse[+A](these: Index[A]) extends Index[A] {
+    override def length: Int = these.length
     
     override def apply(index: Int): A = {
-      val n = base.length
+      val n = these.length
       if (index < 0 || index >= n) throw new IndexOutOfBoundsException(index.toString)
-      base(n - index - 1)
+      these(n - index - 1)
     }
   }
   
-  final class Zip[+A, +B](xs: Index[A], ys: Index[B]) extends Index[(A, B)] {
-    override val length: Int = xs.length min ys.length
+  final class Zip[+A, +B](these: Index[A], those: Index[B]) extends Index[(A, B)] {
+    override val length: Int = these.length min those.length
     
-    override def apply(index: Int): (A, B) = (xs(index), ys(index))
+    override def apply(index: Int): (A, B) = (these(index), those(index))
   }
   
-  final class ++[+A](xs: Index[A], ys: Index[A]) extends Index[A] {
-    override val length: Int = xs.length + ys.length
+  final class ++[+A](these: Index[A], those: Index[A]) extends Index[A] {
+    override val length: Int = these.length + those.length
     
     override def apply(index: Int): A = {
       if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-      val n = xs.length
-      if (index < n) xs(index) else ys(index - n)
+      val n = these.length
+      if (index < n) these(index) else those(index - n)
     }
   }
 }
