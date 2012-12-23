@@ -10,7 +10,21 @@ package basis.containers
 import basis.collections._
 import basis.runtime._
 
+/** A bitmapped vector trie.
+  * 
+  * @groupprio  Quantifying   -5
+  * @groupprio  Indexing      -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
+  * 
+  * @define collection  vector
+  */
 sealed abstract class Vector[+A] extends Equals with Immutable with Family[Vector[A]] with Index[A] {
+  /** Returns a copy of this $collection with the given element at the given index.
+    * @group Indexing */
+  def update[B >: A](index: Int, elem: B): Vector[B]
+  
   protected override def stringPrefix: String = "Vector"
 }
 
@@ -19,13 +33,17 @@ private[containers] final class Vector0 extends Vector[Nothing] {
   
   override def length: Int = 0
   
-  override def apply(index: Int): Nothing = throw new IndexOutOfBoundsException(index.toString)
+  override def apply(index: Int): Nothing =
+    throw new IndexOutOfBoundsException(index.toString)
+  
+  override def update[B >: Nothing](index: Int, elem: B): Vector[B] =
+    throw new IndexOutOfBoundsException(index.toString)
   
   override protected def foreach[U](f: Nothing => U): Unit = ()
 }
 
 private[containers] final class Vector1[+A](
-    trie: Array[AnyRef],
+    node1: Array[AnyRef],
     override val length: Int)
   extends Vector[A] {
   
@@ -33,16 +51,24 @@ private[containers] final class Vector1[+A](
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    trie(index).asInstanceOf[A]
+    node1(index).asInstanceOf[A]
   }
   
-  override def iterator: Iterator[A] = new VectorIterator(trie, length)
+  override def update[B >: A](index: Int, elem: B): Vector[B] = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newNode1 = new Array[AnyRef](node1.length)
+    java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
+    newNode1(index) = elem.asInstanceOf[AnyRef]
+    new Vector1(newNode1, length)
+  }
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach1(trie)(f)
+  override def iterator: Iterator[A] = new VectorIterator(node1, length)
+  
+  protected override def foreach[U](f: A => U): Unit = Vector.foreach1(node1)(f)
 }
 
 private[containers] final class Vector2[+A](
-    trie: Array[Array[AnyRef]],
+    node2: Array[Array[AnyRef]],
     override val length: Int)
   extends Vector[A] {
   
@@ -50,17 +76,31 @@ private[containers] final class Vector2[+A](
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    (trie(index >>> 5 & 0x1F)
-         (index       & 0x1F).asInstanceOf[A])
+    (node2(index >>> 5 & 0x1F)
+          (index       & 0x1F).asInstanceOf[A])
   }
   
-  override def iterator: Iterator[A] = new VectorIterator(trie, length)
+  override def update[B >: A](index: Int, elem: B): Vector[B] = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newNode2 = new Array[Array[AnyRef]](node2.length)
+    java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
+    
+    val node1 = newNode2((index >>> 5) & 0x1F)
+    val newNode1 = new Array[AnyRef](node1.length)
+    newNode2((index >>> 5) & 0x1F) = newNode1
+    java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
+    
+    newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
+    new Vector2(newNode2, length)
+  }
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach2(trie)(f)
+  override def iterator: Iterator[A] = new VectorIterator(node2, length)
+  
+  protected override def foreach[U](f: A => U): Unit = Vector.foreach2(node2)(f)
 }
 
 private[containers] final class Vector3[+A](
-    trie: Array[Array[Array[AnyRef]]],
+    node3: Array[Array[Array[AnyRef]]],
     override val length: Int)
   extends Vector[A] {
   
@@ -68,18 +108,37 @@ private[containers] final class Vector3[+A](
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    (trie(index >>> 10 & 0x1F)
-         (index >>>  5 & 0x1F)
-         (index        & 0x1F).asInstanceOf[A])
+    (node3(index >>> 10 & 0x1F)
+          (index >>>  5 & 0x1F)
+          (index        & 0x1F).asInstanceOf[A])
   }
   
-  override def iterator: Iterator[A] = new VectorIterator(trie, length)
+  override def update[B >: A](index: Int, elem: B): Vector[B] = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
+    java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
+    
+    val node2 = newNode3((index >>> 10) & 0x1F)
+    val newNode2 = new Array[Array[AnyRef]](node2.length)
+    newNode3((index >>> 10) & 0x1F) = newNode2
+    java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
+    
+    val node1 = newNode2((index >>>  5) & 0x1F)
+    val newNode1 = new Array[AnyRef](node1.length)
+    newNode2((index >>>  5) & 0x1F) = newNode1
+    java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
+    
+    newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
+    new Vector3(newNode3, length)
+  }
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach3(trie)(f)
+  override def iterator: Iterator[A] = new VectorIterator(node3, length)
+  
+  protected override def foreach[U](f: A => U): Unit = Vector.foreach3(node3)(f)
 }
 
 private[containers] final class Vector4[+A](
-    trie: Array[Array[Array[Array[AnyRef]]]],
+    node4: Array[Array[Array[Array[AnyRef]]]],
     override val length: Int)
   extends Vector[A] {
   
@@ -87,19 +146,43 @@ private[containers] final class Vector4[+A](
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    (trie(index >>> 15 & 0x1F)
-         (index >>> 10 & 0x1F)
-         (index >>>  5 & 0x1F)
-         (index        & 0x1F).asInstanceOf[A])
+    (node4(index >>> 15 & 0x1F)
+          (index >>> 10 & 0x1F)
+          (index >>>  5 & 0x1F)
+          (index        & 0x1F).asInstanceOf[A])
   }
   
-  override def iterator: Iterator[A] = new VectorIterator(trie, length)
+  override def update[B >: A](index: Int, elem: B): Vector[B] = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newNode4 = new Array[Array[Array[Array[AnyRef]]]](node4.length)
+    java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
+    
+    val node3 = newNode4((index >>> 15) & 0x1F)
+    val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
+    newNode4((index >>> 15) & 0x1F) = newNode3
+    java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
+    
+    val node2 = newNode3((index >>> 10) & 0x1F)
+    val newNode2 = new Array[Array[AnyRef]](node2.length)
+    newNode3((index >>> 10) & 0x1F) = newNode2
+    java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
+    
+    val node1 = newNode2((index >>>  5) & 0x1F)
+    val newNode1 = new Array[AnyRef](node1.length)
+    newNode2((index >>>  5) & 0x1F) = newNode1
+    java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
+    
+    newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
+    new Vector4(newNode4, length)
+  }
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach4(trie)(f)
+  override def iterator: Iterator[A] = new VectorIterator(node4, length)
+  
+  protected override def foreach[U](f: A => U): Unit = Vector.foreach4(node4)(f)
 }
 
 private[containers] final class Vector5[+A](
-    trie: Array[Array[Array[Array[Array[AnyRef]]]]],
+    node5: Array[Array[Array[Array[Array[AnyRef]]]]],
     override val length: Int)
   extends Vector[A] {
   
@@ -107,20 +190,49 @@ private[containers] final class Vector5[+A](
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    (trie(index >>> 20 & 0x1F)
-         (index >>> 15 & 0x1F)
-         (index >>> 10 & 0x1F)
-         (index >>>  5 & 0x1F)
-         (index        & 0x1F).asInstanceOf[A])
+    (node5(index >>> 20 & 0x1F)
+          (index >>> 15 & 0x1F)
+          (index >>> 10 & 0x1F)
+          (index >>>  5 & 0x1F)
+          (index        & 0x1F).asInstanceOf[A])
   }
   
-  override def iterator: Iterator[A] = new VectorIterator(trie, length)
+  override def update[B >: A](index: Int, elem: B): Vector[B] = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](node5.length)
+    java.lang.System.arraycopy(node5, 0, newNode5, 0, node5.length)
+    
+    val node4 = newNode5((index >>> 20) & 0x1F)
+    val newNode4 = new Array[Array[Array[Array[AnyRef]]]](node4.length)
+    newNode5((index >>> 20) & 0x1F) = newNode4
+    java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
+    
+    val node3 = newNode4((index >>> 15) & 0x1F)
+    val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
+    newNode4((index >>> 15) & 0x1F) = newNode3
+    java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
+    
+    val node2 = newNode3((index >>> 10) & 0x1F)
+    val newNode2 = new Array[Array[AnyRef]](node2.length)
+    newNode3((index >>> 10) & 0x1F) = newNode2
+    java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
+    
+    val node1 = newNode2((index >>>  5) & 0x1F)
+    val newNode1 = new Array[AnyRef](node1.length)
+    newNode2((index >>>  5) & 0x1F) = newNode1
+    java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
+    
+    newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
+    new Vector5(newNode5, length)
+  }
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach5(trie)(f)
+  override def iterator: Iterator[A] = new VectorIterator(node5, length)
+  
+  protected override def foreach[U](f: A => U): Unit = Vector.foreach5(node5)(f)
 }
 
 private[containers] final class Vector6[+A](
-    trie: Array[Array[Array[Array[Array[Array[AnyRef]]]]]],
+    node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]],
     override val length: Int)
   extends Vector[A] {
   
@@ -128,17 +240,45 @@ private[containers] final class Vector6[+A](
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
-    (trie(index >>> 25 & 0x1F)
-         (index >>> 20 & 0x1F)
-         (index >>> 15 & 0x1F)
-         (index >>> 10 & 0x1F)
-         (index >>>  5 & 0x1F)
-         (index        & 0x1F).asInstanceOf[A])
+    (node6(index >>> 25 & 0x1F)
+          (index >>> 20 & 0x1F)
+          (index >>> 15 & 0x1F)
+          (index >>> 10 & 0x1F)
+          (index >>>  5 & 0x1F)
+          (index        & 0x1F).asInstanceOf[A])
   }
   
-  override def iterator: Iterator[A] = new VectorIterator(trie, length)
+  override def update[B >: A](index: Int, elem: B): Vector[B] = {
+    if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
+    val newNode6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](node6.length)
+    java.lang.System.arraycopy(node6, 0, newNode6, 0, node6.length)
+    val node5 = newNode6((index >>> 25) & 0x1F)
+    val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](node5.length)
+    java.lang.System.arraycopy(node5, 0, newNode5, 0, node5.length)
+    val node4 = newNode5((index >>> 20) & 0x1F)
+    val newNode4 = new Array[Array[Array[Array[AnyRef]]]](node4.length)
+    java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
+    val node3 = newNode4((index >>> 15) & 0x1F)
+    val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
+    java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
+    val node2 = newNode3((index >>> 10) & 0x1F)
+    val newNode2 = new Array[Array[AnyRef]](node2.length)
+    java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
+    val node1 = newNode2((index >>>  5) & 0x1F)
+    val newNode1 = new Array[AnyRef](node1.length)
+    java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
+    newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
+    newNode2((index >>>  5) & 0x1F) = newNode1
+    newNode3((index >>> 10) & 0x1F) = newNode2
+    newNode4((index >>> 15) & 0x1F) = newNode3
+    newNode5((index >>> 20) & 0x1F) = newNode4
+    newNode6((index >>> 25) & 0x1F) = newNode5
+    new Vector4(newNode4, length)
+  }
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach6(trie)(f)
+  override def iterator: Iterator[A] = new VectorIterator(node6, length)
+  
+  protected override def foreach[U](f: A => U): Unit = Vector.foreach6(node6)(f)
 }
 
 object Vector extends SeqFactory[Vector] {
@@ -149,56 +289,56 @@ object Vector extends SeqFactory[Vector] {
   private[this] val empty = new Vector0
   override def empty[A : TypeHint]: Vector[A] = empty
   
-  private[containers] def foreach1[A, U](array: Array[AnyRef])(f: A => U) {
+  private[containers] def foreach1[A, U](node1: Array[AnyRef])(f: A => U) {
     var i = 0
-    val n = array.length
+    val n = node1.length
     while (i < n) {
-      f(array(i).asInstanceOf[A])
+      f(node1(i).asInstanceOf[A])
       i += 1
     }
   }
   
-  private[containers] def foreach2[A, U](array: Array[Array[AnyRef]])(f: A => U) {
+  private[containers] def foreach2[A, U](node2: Array[Array[AnyRef]])(f: A => U) {
     var i = 0
-    val n = array.length
+    val n = node2.length
     while (i < n) {
-      foreach1(array(i))(f)
+      foreach1(node2(i))(f)
       i += 1
     }
   }
   
-  private[containers] def foreach3[A, U](array: Array[Array[Array[AnyRef]]])(f: A => U) {
+  private[containers] def foreach3[A, U](node3: Array[Array[Array[AnyRef]]])(f: A => U) {
     var i = 0
-    val n = array.length
+    val n = node3.length
     while (i < n) {
-      foreach2(array(i))(f)
+      foreach2(node3(i))(f)
       i += 1
     }
   }
   
-  private[containers] def foreach4[A, U](array: Array[Array[Array[Array[AnyRef]]]])(f: A => U) {
+  private[containers] def foreach4[A, U](node4: Array[Array[Array[Array[AnyRef]]]])(f: A => U) {
     var i = 0
-    val n = array.length
+    val n = node4.length
     while (i < n) {
-      foreach3(array(i))(f)
+      foreach3(node4(i))(f)
       i += 1
     }
   }
   
-  private[containers] def foreach5[A, U](array: Array[Array[Array[Array[Array[AnyRef]]]]])(f: A => U) {
+  private[containers] def foreach5[A, U](node5: Array[Array[Array[Array[Array[AnyRef]]]]])(f: A => U) {
     var i = 0
-    val n = array.length
+    val n = node5.length
     while (i < n) {
-      foreach4(array(i))(f)
+      foreach4(node5(i))(f)
       i += 1
     }
   }
   
-  private[containers] def foreach6[A, U](array: Array[Array[Array[Array[Array[Array[AnyRef]]]]]])(f: A => U) {
+  private[containers] def foreach6[A, U](node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]])(f: A => U) {
     var i = 0
-    val n = array.length
+    val n = node6.length
     while (i < n) {
-      foreach5(array(i))(f)
+      foreach5(node6(i))(f)
       i += 1
     }
   }
@@ -252,6 +392,7 @@ private[containers] final class VectorIterator[+A](
     else if (length > 0) {
       node1 = trie.asInstanceOf[Array[AnyRef]]
     }
+    else throw new AssertionError
   }
   
   override def isEmpty: Boolean = index >= length
@@ -263,13 +404,15 @@ private[containers] final class VectorIterator[+A](
   
   override def step() {
     if (index >= length) throw new UnsupportedOperationException("Empty iterator step.")
-    val diff = index ^ index + 1
+    val diff = index ^ (index + 1)
     index += 1
-    if (diff >= (1 << 25)) node5 = node6(index >>> 25 & 0x1F)
-    if (diff >= (1 << 20)) node4 = node5(index >>> 20 & 0x1F)
-    if (diff >= (1 << 15)) node3 = node4(index >>> 15 & 0x1F)
-    if (diff >= (1 << 10)) node2 = node3(index >>> 10 & 0x1F)
-    if (diff >= (1 <<  5)) node1 = node2(index >>>  5 & 0x1F)
+    if (diff < length) {
+      if (diff >= (1 << 25)) node5 = node6(index >>> 25 & 0x1F)
+      if (diff >= (1 << 20)) node4 = node5(index >>> 20 & 0x1F)
+      if (diff >= (1 << 15)) node3 = node4(index >>> 15 & 0x1F)
+      if (diff >= (1 << 10)) node2 = node3(index >>> 10 & 0x1F)
+      if (diff >= (1 <<  5)) node1 = node2(index >>>  5 & 0x1F)
+    }
   }
   
   override def dup: Iterator[A] =
