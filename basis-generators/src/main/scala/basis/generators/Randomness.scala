@@ -11,6 +11,7 @@ import basis.util._
 
 import scala.annotation.implicitNotFound
 
+/** A source of pseudorandom primitive values. */
 @implicitNotFound("No source of randomness available.")
 abstract class Randomness {
   def nextByte(): Byte
@@ -100,6 +101,7 @@ abstract class Randomness {
   }
 }
 
+/** A synchronized source of [[Randomness]]. */
 object Randomness extends Randomness {
   private[this] val rand = new MersenneTwister32
   

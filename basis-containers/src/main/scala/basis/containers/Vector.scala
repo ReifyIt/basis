@@ -10,7 +10,7 @@ package basis.containers
 import basis.collections._
 import basis.runtime._
 
-/** A bitmapped vector trie.
+/** An index arrap-bitmapped trie sequence.
   * 
   * @groupprio  Quantifying   -5
   * @groupprio  Indexing      -4
@@ -281,6 +281,7 @@ private[containers] final class Vector6[+A](
   protected override def foreach[U](f: A => U): Unit = Vector.foreach6(node6)(f)
 }
 
+/** A factory for [[Vector vectors]]. */
 object Vector extends SeqFactory[Vector] {
   implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = Vector[A] } =

@@ -9,7 +9,7 @@ package basis.runtime
 
 import scala.annotation.implicitNotFound
 
-/** Runtime type information about a class. */
+/** Run-time type information about a class. */
 @implicitNotFound("No available ClassTypeHint for ${T}.")
 trait ClassTypeHint[T] extends Equals with TypeHint[T] {
   def runtimeClass: java.lang.Class[_]
@@ -43,6 +43,7 @@ trait ClassTypeHint[T] extends Equals with TypeHint[T] {
   }
 }
 
+/** A factory for [[ClassTypeHint class hints]]. */
 object ClassTypeHint {
   import Predef.classOf
   

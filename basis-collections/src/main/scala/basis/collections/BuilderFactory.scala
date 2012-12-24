@@ -12,6 +12,7 @@ import basis.runtime._
 import scala.annotation.implicitNotFound
 import scala.annotation.unchecked.uncheckedVariance
 
+/** A factory for buildable collections. */
 @implicitNotFound("No builder factory available for ${CC}.")
 trait BuilderFactory[+CC[_]] {
   type Product[A] = CC[A]

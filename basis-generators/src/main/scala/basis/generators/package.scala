@@ -7,8 +7,5 @@
 
 package basis
 
-/** Unicode® string implementations. */
-package object text {
-  /** Implicitly returns a new String builder. */
-  implicit def StringBuilder: StringBuilder[Any] { type State = String } = new JavaStringBuilder
-}
+/** Arbitrary data generation. */
+package object generators

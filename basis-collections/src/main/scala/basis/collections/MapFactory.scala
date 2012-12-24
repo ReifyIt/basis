@@ -12,6 +12,7 @@ import basis.runtime._
 import scala.annotation.implicitNotFound
 import scala.annotation.unchecked.uncheckedVariance
 
+/** A factory for buildable maps. */
 @implicitNotFound("No map factory available for ${CC}.")
 trait MapFactory[+CC[_, _]] {
   type Product[A, T] = CC[A, T]

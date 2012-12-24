@@ -14,6 +14,17 @@ import basis.util._
 import scala.annotation.{switch, tailrec}
 import scala.annotation.unchecked.uncheckedVariance
 
+/** A hash array-mapped trie map.
+  * 
+  * @groupprio  Quantifying   -6
+  * @groupprio  Querying      -5
+  * @groupprio  Updating      -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
+  * 
+  * @define collection  hash map
+  */
 final class HashMap[+A, +T] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
@@ -313,6 +324,7 @@ final class HashMap[+A, +T] private[containers] (
   }
 }
 
+/** A factory for [[HashMap hash maps]]. */
 object HashMap extends MapFactory[HashMap] {
   implicit override def Builder[A : TypeHint, T : TypeHint]
     : Builder[Any, (A, T)] { type State = HashMap[A, T] } =

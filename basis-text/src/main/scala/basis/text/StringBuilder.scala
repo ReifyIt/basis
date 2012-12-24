@@ -9,7 +9,7 @@ package basis.text
 
 import basis.collections._
 
-/** A builder for Unicode® character strings.
+/** A builder for Unicode® strings.
   * 
   * @define collection  string builder
   */

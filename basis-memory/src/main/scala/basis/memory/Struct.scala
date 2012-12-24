@@ -48,7 +48,7 @@ abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolea
   def store(data: Data, address: Long, value: T): Unit
 }
 
-/** A factory for builtin implicit structs.
+/** A factory for builtin [[Struct structs]].
   * 
   * @groupname  Implicit    Implicit struct selection
   * @groupprio  Implicit    -4

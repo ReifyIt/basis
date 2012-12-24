@@ -24,7 +24,7 @@ package object memory {
   /** Returns the size of a struct type. */
   def sizeOf[T](implicit T: Struct[T]): Long = T.size
   
-  /** Returns the native byte order of the virtual machine. */
+  /** The native byte order of the virtual machine. */
   implicit val NativeEndian: Endianness = {
     if (java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.BIG_ENDIAN) BigEndian
     else if (java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.LITTLE_ENDIAN) LittleEndian

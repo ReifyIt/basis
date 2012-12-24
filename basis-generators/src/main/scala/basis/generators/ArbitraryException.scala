@@ -7,4 +7,5 @@
 
 package basis.generators
 
+/** An exception indicating arbitrary value generation failure. */
 class ArbitraryException(message: String) extends RuntimeException(message)

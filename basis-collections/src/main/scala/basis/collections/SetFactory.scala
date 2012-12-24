@@ -9,5 +9,6 @@ package basis.collections
 
 import scala.annotation.implicitNotFound
 
+/** A factory for buildable sets. */
 @implicitNotFound("No set factory available for ${CC}.")
 trait SetFactory[+CC[_]] extends BuilderFactory[CC]

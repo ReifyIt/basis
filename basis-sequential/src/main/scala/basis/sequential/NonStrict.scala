@@ -9,6 +9,7 @@ package basis.sequential
 
 import basis.collections._
 
+/** Implicit conversions that add general and non-strictly-evaluated operations to collections. */
 class NonStrict extends General {
   implicit def NonStrictEnumeratorOps[A](these: Enumerator[A]): NonStrictEnumeratorOps[A] =
     macro NonStrict.NonStrictEnumeratorOps[A]

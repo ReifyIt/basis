@@ -13,7 +13,18 @@ import basis.util._
 
 import scala.annotation.unchecked.uncheckedVariance
 
-final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
+/** An array-backed set.
+  * 
+  * @groupprio  Quantifying   -6
+  * @groupprio  Querying      -5
+  * @groupprio  Updating      -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
+  * 
+  * @define collection  array set
+  */
+private[containers] final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
   extends Immutable with Family[ArraySet[A]] with Set[A] {
   
   override def isEmpty: Boolean = slots.length == 0
@@ -79,7 +90,7 @@ final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
   }
 }
 
-object ArraySet extends SetFactory[ArraySet] {
+private[containers] object ArraySet extends SetFactory[ArraySet] {
   implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = ArraySet[A] } =
     new ArraySetBuilder

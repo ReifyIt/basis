@@ -9,6 +9,7 @@ package basis.sequential
 
 import basis.collections._
 
+/** Implicit conversions that add general and strictly-evaluated operations to collections. */
 class Strict extends General {
   implicit def StrictEnumeratorOps[A](these: Enumerator[A]): StrictEnumeratorOps[A, these.Family] =
     macro Strict.StrictEnumeratorOps[A]

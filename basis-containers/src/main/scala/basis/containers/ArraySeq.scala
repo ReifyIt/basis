@@ -12,7 +12,7 @@ import basis.memory._
 import basis.runtime._
 import basis.util._
 
-/** A contiguous array.
+/** An immutable contiguous array.
   * 
   * @groupprio  Quantifying   -8
   * @groupprio  Indexing      -7
@@ -168,6 +168,7 @@ abstract class ArraySeq[+A]
   protected override def stringPrefix: String = "ArraySeq"
 }
 
+/** A factory for specialized [[ArraySeq array sequences]]. */
 object ArraySeq extends SeqFactory[ArraySeq] {
   implicit override def Builder[A](implicit A: TypeHint[A])
     : Builder[Any, A] { type State = ArraySeq[A] } = (A match {

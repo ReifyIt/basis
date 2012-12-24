@@ -14,6 +14,7 @@ import basis.util._
 
 import scala.annotation.{implicitNotFound, tailrec, unspecialized}
 
+/** An arbitrary value generator. */
 @implicitNotFound("No arbitrary generator available for type ${R}.")
 trait Arbitrary[@specialized(Specializable.Primitives) +R] extends (() => R) {
   @unspecialized def map[T](f: R => T): Arbitrary[T] = new Map(f)
@@ -48,6 +49,7 @@ trait Arbitrary[@specialized(Specializable.Primitives) +R] extends (() => R) {
   }
 }
 
+/** A factory for [[Arbitrary]] value generators. */
 object Arbitrary {
   def apply[R](implicit R: Arbitrary[R]): R.type = R
   

@@ -20,7 +20,7 @@ final class String1(codeUnits: Array[Byte]) extends UTF8 {
   override def get(index: Int): Int = codeUnits(index) & 0xFF
 }
 
-/** A factory for UTF-8 strings. */
+/** A factory for [[String1 UTF-8 strings]]. */
 object String1 {
   val empty: String1 = new String1(new Array[Byte](0))
   

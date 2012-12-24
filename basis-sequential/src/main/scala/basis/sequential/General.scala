@@ -9,6 +9,7 @@ package basis.sequential
 
 import basis.collections._
 
+/** Implicit conversions that add general operations to collections. */
 class General {
   implicit def GeneralEnumeratorOps[A](these: Enumerator[A]): GeneralEnumeratorOps[A] =
     macro General.GeneralEnumeratorOps[A]

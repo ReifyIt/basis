@@ -13,7 +13,18 @@ import basis.util._
 
 import scala.annotation.unchecked.uncheckedVariance
 
-final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
+/** An array-backed map.
+  * 
+  * @groupprio  Quantifying   -6
+  * @groupprio  Querying      -5
+  * @groupprio  Updating      -4
+  * @groupprio  Iterating     -3
+  * @groupprio  Traversing    -2
+  * @groupprio  Classifying   -1
+  * 
+  * @define collection  array map
+  */
+private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
   extends Immutable with Family[ArrayMap[A, T]] with Map[A, T] {
   
   override def isEmpty: Boolean = slots.length == 0
@@ -104,7 +115,7 @@ final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
   }
 }
 
-object ArrayMap extends MapFactory[ArrayMap] {
+private[containers] object ArrayMap extends MapFactory[ArrayMap] {
   implicit override def Builder[A : TypeHint, T : TypeHint]
     : Builder[Any, (A, T)] { type State = ArrayMap[A, T] } =
     new ArrayMapBuilder

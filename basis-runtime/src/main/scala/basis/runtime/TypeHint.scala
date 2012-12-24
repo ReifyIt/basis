@@ -9,11 +9,11 @@ package basis.runtime
 
 import scala.annotation.implicitNotFound
 
-/** A typeclass for optional runtime type information. */
+/** A typeclass for optional run-time type information. */
 @implicitNotFound("No available TypeHint for ${T}.")
 trait TypeHint[T]
 
-/** A factory for builtin implicit type hints. */
+/** A factory for builtin [[TypeHint type hints]]. */
 object TypeHint {
   import Predef.classOf
   

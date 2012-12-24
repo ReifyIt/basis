@@ -7,6 +7,7 @@
 
 package basis
 
+/** General utility macros. */
 package object util {
   /** Implicitly adds arrow (-> and →) associators to all values. */
   implicit def ArrowOps[A](left: A): ArrowOps[A] =

@@ -20,7 +20,7 @@ final class String4(codeUnits: Array[Int]) extends UTF32 {
   override def get(index: Int): Int = codeUnits(index)
 }
 
-/** A factory for UTF-32 strings. */
+/** A factory for [[String4 UTF-32 strings]]. */
 object String4 {
   val empty: String4 = new String4(new Array[Int](0))
   

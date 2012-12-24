@@ -9,6 +9,7 @@ package basis.collections
 
 import scala.annotation.implicitNotFound
 
+/** A factory for buildable sequences. */
 @implicitNotFound("No sequence factory available for ${CC}.")
 trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {
   def fill[A](count: Int)(elem: => A): CC[A] =

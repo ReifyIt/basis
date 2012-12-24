@@ -39,6 +39,7 @@ abstract class ArrayBuffer[A]
   protected override def stringPrefix: String = "ArrayBuffer"
 }
 
+/** A factory for specialized [[ArrayBuffer array buffers]]. */
 object ArrayBuffer extends SeqFactory[ArrayBuffer] {
   implicit override def Builder[A](implicit A: TypeHint[A])
     : Builder[Any, A] { type State = ArrayBuffer[A] } = (A match {

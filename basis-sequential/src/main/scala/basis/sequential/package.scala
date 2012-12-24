@@ -7,11 +7,15 @@
 
 package basis
 
+/** Sequential collection operations. */
 package object sequential {
+  /** Implicit conversions to add general operations to collections. */
   val general = new General
   
+  /** Implicit conversions to add general and non-strictly-evaluated operations to collections. */
   val nonstrict = new NonStrict
   
+  /** Implicit conversions to add general and strictly-evaluated operations to collections. */
   val strict = new Strict
   
   private[sequential] val begin = new basis.control.Begin

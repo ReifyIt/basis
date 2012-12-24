@@ -282,6 +282,7 @@ class ListBuffer[A] private (
   }
 }
 
+/** A factory for [[ListBuffer list buffers]]. */
 object ListBuffer extends SeqFactory[ListBuffer] {
   implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = ListBuffer[A] } =

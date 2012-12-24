@@ -10,7 +10,7 @@ package basis.containers
 import basis.collections._
 import basis.runtime._
 
-/** A singly linked list.
+/** An immutable singly-linked list.
   * 
   * @groupprio  Quantifying   -8
   * @groupprio  Decomposing   -7
@@ -102,6 +102,7 @@ sealed abstract class List[+A]
   protected override def stringPrefix: String = "List"
 }
 
+/** A factory for [[List singly-linked lists]]. */
 object List extends SeqFactory[List] {
   implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = List[A] } =
@@ -117,12 +118,14 @@ object List extends SeqFactory[List] {
   override def toString: String = "List"
 }
 
+/** A [[List]] cons cell. */
 sealed abstract class ::[A] extends List[A] {
   final override def isEmpty: Boolean = false
   
   private[containers] def tail_=(tail: List[A]): Unit
 }
 
+/** An extractor for [[List]] cons cells. */
 object :: {
   def apply[A](x: A, xs: List[A]): ::[A] = {
     if (x.isInstanceOf[Int] && (xs.isInstanceOf[IntList] || xs.isInstanceOf[Nil.type]))
@@ -139,6 +142,7 @@ object :: {
   def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
 }
 
+/** The empty [[List]]. */
 object Nil extends List[Nothing] {
   override def isEmpty: Boolean = true
   
