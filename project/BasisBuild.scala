@@ -135,7 +135,7 @@ object BasisBuild extends Build {
     compileSettings
   
   lazy val projectSettings = Seq(
-    version      := "0.0",
+    version      := "0.1-SNAPSHOT",
     organization := "it.reify",
     description  := "An experimental foundation library for Scala focussed on efficiency and clean design.",
     homepage     := Some(url("http://basis.reify.it")),
