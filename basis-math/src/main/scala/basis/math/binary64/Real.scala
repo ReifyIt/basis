@@ -6,11 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package double
+package binary64
 
 /** A double-precision floating-point value.
-  * 
-  * @author Chris Sachs
   * 
   * @define element   value
   * @define point     value

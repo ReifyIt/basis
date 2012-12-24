@@ -6,11 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package long
+package binary64
 
 /** A 64-bit two's complement integer value.
-  * 
-  * @author Chris Sachs
   * 
   * @define element   value
   * @define point     value

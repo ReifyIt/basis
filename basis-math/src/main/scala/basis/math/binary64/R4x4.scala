@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package double
+package binary64
 
-/** A 4 by 4 double-precision floating-point real matrix space.
-  * 
-  * @author Chris Sachs
-  */
+/** A 4 by 4 double-precision floating-point real matrix space. */
 object R4x4 extends F4x4 with RMxN {
   final class Value(
       override val _1_1: Scalar, override val _1_2: Scalar, override val _1_3: Scalar, override val _1_4: Scalar,

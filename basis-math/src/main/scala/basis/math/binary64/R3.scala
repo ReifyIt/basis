@@ -6,54 +6,54 @@
 \*                                                                      */
 
 package basis.math
-package double
+package binary64
 
-/** A 4-dimensional double-precision floating-point vector space.
-  * 
-  * @author Chris Sachs
-  */
-object R4 extends AffineSpace with F4 with RN {
+/** A 3-dimensional double-precision floating-point vector space. */
+object R3 extends AffineSpace with F3 with RN {
   final class Value(
       override val x: Scalar,
       override val y: Scalar,
-      override val z: Scalar,
-      override val w: Scalar)
+      override val z: Scalar)
     extends super[AffineSpace].Value
-       with super[F4].Value
+       with super[F3].Value
        with super[RN].Value {
     
-    override def dim: Int = 4
+    override def dim: Int = 3
     
     override def apply(i: Int): Scalar = i match {
       case 0 => x
       case 1 => y
       case 2 => z
-      case 3 => w
       case _ => throw new java.lang.IndexOutOfBoundsException(i.toString)
     }
     
     override def + (that: Vector): Vector =
-      new Vector(x + that.x, y + that.y, z + that.z, w + that.w)
+      new Vector(x + that.x, y + that.y, z + that.z)
     
     override def unary_- : Vector =
-      new Vector(-x, -y, -z, -w)
+      new Vector(-x, -y, -z)
     
     override def - (that: Vector): Vector =
-      new Vector(x - that.x, y - that.y, z - that.z, w - that.w)
+      new Vector(x - that.x, y - that.y, z - that.z)
     
     override def :* (scalar: Scalar): Vector =
-      new Vector(x * scalar, y * scalar, z * scalar, w * scalar)
+      new Vector(x * scalar, y * scalar, z * scalar)
     
     override def *: (scalar: Scalar): Vector = this :* scalar
     
     override def / (scalar: Scalar): Vector =
-      new Vector(x / scalar, y / scalar, z / scalar, w / scalar)
+      new Vector(x / scalar, y / scalar, z / scalar)
     
     override def ⋅ (that: Vector): Scalar =
-      x * that.x + y * that.y + z * that.z + w * that.w
+      x * that.x + y * that.y + z * that.z
+    
+    override def ⨯ (that: Vector): Vector =
+      new Vector(y * that.z + z * that.y,
+                 z * that.x + x * that.z,
+                 x * that.y + y * that.x)
     
     override def norm: Scalar =
-      (x * x + y * y + z * z + w * w).sqrt
+      (x * x + y * y + z * z).sqrt
     
     override def normalized: Vector = this / norm
   }
@@ -62,26 +62,26 @@ object R4 extends AffineSpace with F4 with RN {
   
   override type Vector = Value
   
-  override val Vector: R4.type = R4
+  override val Vector: R3.type = R3
   
   override type Scalar = Real
   
   override val Scalar: Real.type = Real
   
-  override def dim: Int = 4
+  override def dim: Int = 3
   
   override def origin: Vector = zero
   
   override val zero: Vector =
-    new Vector(0.0, 0.0, 0.0, 0.0)
+    new Vector(0.0, 0.0, 0.0)
   
-  override def apply(x: Scalar, y: Scalar, z: Scalar, w: Scalar): Vector =
-    new Vector(x, y, z, w)
+  override def apply(x: Scalar, y: Scalar, z: Scalar): Vector =
+    new Vector(x, y, z)
   
   override def apply(coords: Array[Double]): Vector = {
-    if (coords.length != 4) throw new DimensionException
-    new Vector(coords(0), coords(1), coords(2), coords(3))
+    if (coords.length != 3) throw new DimensionException
+    new Vector(coords(0), coords(1), coords(2))
   }
   
-  override def toString: String = "R4"
+  override def toString: String = "R3"
 }

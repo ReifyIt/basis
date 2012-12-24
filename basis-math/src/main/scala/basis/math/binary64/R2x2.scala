@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package double
+package binary64
 
-/** A 2 by 2 double-precision floating-point matrix space.
-  * 
-  * @author Chris Sachs
-  */
+/** A 2 by 2 double-precision floating-point matrix space. */
 object R2x2 extends F2x2 with RMxN {
   final class Value(
       override val _1_1: Scalar, override val _1_2: Scalar,

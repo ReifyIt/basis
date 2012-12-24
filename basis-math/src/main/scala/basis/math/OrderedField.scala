@@ -36,8 +36,6 @@ package basis.math
   *   - if 𝑎 <= 𝑏 and 𝑏 <= 𝑐 then 𝑎 <= 𝑐 for all elements 𝑎, 𝑏, 𝑐 in `this`.
   *   - 𝑎 <= 𝑏 or 𝑏 <= 𝑎 for all elements 𝑎, 𝑏 in `this`.
   * 
-  * @author Chris Sachs
-  * 
   * @example {{{
   * // You can abstract over ordered fields by parameterizing a class or
   * // function with a subtype of OrderedField with Singleton. Type elements

@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package double
+package binary64
 
-/** An abstract double-precision floating-point vector space.
-  * 
-  * @author Chris Sachs
-  */
+/** An abstract double-precision floating-point vector space. */
 trait RN extends FN {
   trait Value extends Any with super.Value {
     override def apply(i: Int): Scalar

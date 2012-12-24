@@ -7,10 +7,7 @@
 
 package basis.math
 
-/** An asbtract 3 by 3 matrix space over a field.
-  * 
-  * @author Chris Sachs
-  */
+/** An asbtract 3 by 3 matrix space over a field. */
 trait F3x3 extends Ring with FMxN {
   trait Value extends Any with super[Ring].Value with super[FMxN].Value {
     override def Row: F3x3.this.Row.type = F3x3.this.Row

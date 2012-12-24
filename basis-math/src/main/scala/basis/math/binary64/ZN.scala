@@ -6,11 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package long
+package binary64
 
 /** An abstract 64-bit two's complement integer module.
-  * 
-  * @author Chris Sachs
   * 
   * @define space   module
   */

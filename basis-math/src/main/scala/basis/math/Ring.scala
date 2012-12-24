@@ -28,8 +28,6 @@ package basis.math
   * '''The distributive law''':
   *   - 𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in `this`.
   * 
-  * @author Chris Sachs
-  * 
   * @example {{{
   * // You can abstract over rings by parameterizing a class or
   * // function with a subtype of Ring with Singleton. Type elements

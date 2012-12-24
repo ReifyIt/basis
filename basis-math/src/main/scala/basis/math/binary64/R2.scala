@@ -6,77 +6,75 @@
 \*                                                                      */
 
 package basis.math
-package long
+package binary64
 
-/** A 3-dimensional 64-bit two's complement integer module.
-  * 
-  * @author Chris Sachs
-  */
-object Z3 extends AffineSpace with F3 with ZN {
+/** A 2-dimensional double-precision floating-point vector space. */
+object R2 extends AffineSpace with F2 with RN {
   final class Value(
       override val x: Scalar,
-      override val y: Scalar,
-      override val z: Scalar)
+      override val y: Scalar)
     extends super[AffineSpace].Value
-       with super[F3].Value
-       with super[ZN].Value {
+       with super[F2].Value
+       with super[RN].Value {
     
-    override def dim: Int = 3
+    override def dim: Int = 2
     
     override def apply(i: Int): Scalar = i match {
       case 0 => x
       case 1 => y
-      case 2 => z
       case _ => throw new java.lang.IndexOutOfBoundsException(i.toString)
     }
     
     override def + (that: Vector): Vector =
-      new Vector(x + that.x, y + that.y, z + that.z)
+      new Vector(x + that.x, y + that.y)
     
     override def unary_- : Vector =
-      new Vector(-x, -y, -z)
+      new Vector(-x, -y)
     
     override def - (that: Vector): Vector =
-      new Vector(x - that.x, y - that.y, z - that.z)
+      new Vector(x - that.x, y - that.y)
     
     override def :* (scalar: Scalar): Vector =
-      new Vector(x * scalar, y * scalar, z * scalar)
+      new Vector(x * scalar, y * scalar)
     
     override def *: (scalar: Scalar): Vector = this :* scalar
     
-    override def ⋅ (that: Vector): Scalar =
-      x * that.x + y * that.y + z * that.z
+    override def / (scalar: Scalar): Vector =
+      new Vector(x / scalar, y / scalar)
     
-    override def ⨯ (that: Vector): Vector =
-      new Vector(y * that.z + z * that.y,
-                 z * that.x + x * that.z,
-                 x * that.y + y * that.x)
+    override def ⋅ (that: Vector): Scalar =
+      x * that.x + y * that.y
+    
+    override def norm: Scalar =
+      (x * x + y * y).sqrt
+    
+    override def normalized: Vector = this / norm
   }
   
   override type Point = Value
   
   override type Vector = Value
   
-  override val Vector: Z3.type = Z3
+  override val Vector: R2.type = R2
   
-  override type Scalar = Integer
+  override type Scalar = Real
   
-  override val Scalar: Integer.type = Integer
+  override val Scalar: Real.type = Real
   
-  override def dim: Int = 3
+  override def dim: Int = 2
   
   override def origin: Vector = zero
   
   override val zero: Vector =
-    new Vector(0L, 0L, 0L)
+    new Vector(0.0, 0.0)
   
-  override def apply(x: Scalar, y: Scalar, z: Scalar): Vector =
-    new Vector(x, y, z)
+  override def apply(x: Scalar, y: Scalar): Vector =
+    new Vector(x, y)
   
-  override def apply(coords: Array[Long]): Vector = {
-    if (coords.length != 3) throw new DimensionException
-    new Vector(coords(0), coords(1), coords(2))
+  override def apply(coords: Array[Double]): Vector = {
+    if (coords.length != 2) throw new DimensionException
+    new Vector(coords(0), coords(1))
   }
   
-  override def toString: String = "Z3"
+  override def toString: String = "R2"
 }

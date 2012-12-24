@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package long
+package binary64
 
-/** A 2-dimensional 64-bit two's complement integer module.
-  * 
-  * @author Chris Sachs
-  */
+/** A 2-dimensional 64-bit two's complement integer module. */
 object Z2 extends AffineSpace with F2 with ZN {
   final class Value(
       override val x: Scalar,

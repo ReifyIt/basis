@@ -34,8 +34,6 @@ package basis.math
   * '''Completeness axiom''':
   *   - every non-empty subset of `this` with an upper bound has a least upper bound.
   * 
-  * @author Chris Sachs
-  * 
   * @example {{{
   * // You can abstract over complete fields by parameterizing a class or
   * // function with a subtype of CompleteField with Singleton. Type elements

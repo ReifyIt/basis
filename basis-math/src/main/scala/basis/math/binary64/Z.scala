@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package long
+package binary64
 
-/** A general 64-bit two's complement integer module.
-  * 
-  * @author Chris Sachs
-  */
+/** A general 64-bit two's complement integer module. */
 private[math] final class Z
     (override val dim: Int)
   extends AffineSpace with ZN {

@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package double
+package binary64
 
-/** An abstract double-precision floating-point matrix space.
-  * 
-  * @author Chris Sachs
-  */
+/** An abstract double-precision floating-point matrix space. */
 trait RMxN extends FMxN {
   trait Value extends Any with super.Value {
     override def Row: RMxN.this.Row.type = RMxN.this.Row

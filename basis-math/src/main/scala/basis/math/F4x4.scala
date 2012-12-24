@@ -7,10 +7,7 @@
 
 package basis.math
 
-/** An asbtract 4 by 4 matrix space over a field.
-  * 
-  * @author Chris Sachs
-  */
+/** An asbtract 4 by 4 matrix space over a field. */
 trait F4x4 extends Ring with FMxN {
   trait Value extends Any with super[Ring].Value with super[FMxN].Value {
     override def Row: F4x4.this.Row.type = F4x4.this.Row

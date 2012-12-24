@@ -5,9 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis.math
+package basis
 
-/** An exception indicating a dimension mismatch. */
-class DimensionException(message: String) extends java.lang.RuntimeException(message) {
-  def this() = this(null)
-}
+/** Abstract algebraic structures. */
+package object math

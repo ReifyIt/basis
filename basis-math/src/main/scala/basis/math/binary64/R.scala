@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package double
+package binary64
 
-/** A general double-precision floating-point matrix space.
-  * 
-  * @author Chris Sachs
-  */
+/** A general double-precision floating-point matrix space. */
 private[math] final class R
     (override val dim: Int, RowSpace: RN, ColSpace: RN, TransposeSpace: RMxN)
   extends AffineSpace with RN with RMxN {

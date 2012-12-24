@@ -7,7 +7,5 @@
 
 package basis.math
 
-/** An exception indicating a dimension mismatch. */
-class DimensionException(message: String) extends java.lang.RuntimeException(message) {
-  def this() = this(null)
-}
+/** 64-bit binary based algebraic structures. */
+package object binary64

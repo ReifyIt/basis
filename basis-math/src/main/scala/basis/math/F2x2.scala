@@ -7,10 +7,7 @@
 
 package basis.math
 
-/** An asbtract 2 by 2 matrix space over a field.
-  * 
-  * @author Chris Sachs
-  */
+/** An asbtract 2 by 2 matrix space over a field. */
 trait F2x2 extends Ring with FMxN {
   trait Value extends Any with super[Ring].Value with super[FMxN].Value {
     override def Row: F2x2.this.Row.type = F2x2.this.Row

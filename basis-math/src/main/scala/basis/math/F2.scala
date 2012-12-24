@@ -7,10 +7,7 @@
 
 package basis.math
 
-/** An abstract 2-dimensional vector space over a ring.
-  * 
-  * @author Chris Sachs
-  */
+/** An abstract 2-dimensional vector space over a ring. */
 trait F2 extends FN {
   trait Value extends Any with super.Value {
     /** Returns the 𝑥-coordinate of this $vector. */

@@ -7,10 +7,7 @@
 
 package basis.math
 
-/** An abstract 3-dimensional vector space over a ring.
-  * 
-  * @author Chris Sachs
-  */
+/** An abstract 3-dimensional vector space over a ring. */
 trait F3 extends FN {
   trait Value extends Any with super.Value {
     /** Returns the 𝑥-coordinate of this $vector. */

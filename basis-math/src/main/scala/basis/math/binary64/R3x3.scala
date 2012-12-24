@@ -6,12 +6,9 @@
 \*                                                                      */
 
 package basis.math
-package double
+package binary64
 
-/** A 3 by 3 double-precision floating-point matrix space.
-  * 
-  * @author Chris Sachs
-  */
+/** A 3 by 3 double-precision floating-point matrix space. */
 object R3x3 extends F3x3 with RMxN {
   final class Value(
       override val _1_1: Scalar, override val _1_2: Scalar, override val _1_3: Scalar,

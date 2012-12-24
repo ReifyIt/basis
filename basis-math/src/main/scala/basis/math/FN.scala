@@ -30,8 +30,6 @@ package basis.math
   *   - 𝑎 *: (𝐮 + 𝐯) == (𝑎 *: 𝐮) + (𝑎 *: 𝐯) for every scalar 𝑎 and all vectors 𝐮, 𝐯 in `this`.
   *   - (𝑎 + 𝑏) *: 𝐯 == (𝑎 *: 𝐯) + (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in `this`.
   * 
-  * @author Chris Sachs
-  * 
   * @example {{{
   * // You can abstract over vector spaces by parameterizing a class or
   * // function with a subtype of FN with Singleton. Type elements with

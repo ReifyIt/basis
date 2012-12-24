@@ -16,8 +16,6 @@ package basis.math
   *   - (𝓅 + 𝐮) + 𝐯 == 𝓅 + (𝐮 + 𝐯) for every point 𝓅 and all vectors 𝐮, 𝐯 in `this`.
   *   - (𝐯: Vector) => 𝓅 + 𝐯 is a bijection for every point 𝓅 in `this`.
   * 
-  * @author Chris Sachs
-  * 
   * @example {{{
   * // You can abstract over affine spaces by parameterizing a class or
   * // function with a subtype of AffineSpace with Singleton. Type elements

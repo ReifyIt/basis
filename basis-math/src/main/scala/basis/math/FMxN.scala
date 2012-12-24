@@ -56,8 +56,6 @@ package basis.math
   *   - (𝐀 + 𝐁) ⋅ 𝐂 == (𝐀 ⋅ 𝐂) + (𝐁 ⋅ 𝐂) for all matrices 𝐀, 𝐁 in the same matrix space, and every
   *     matrix 𝐂 whose column space equals the row space of 𝐀 and 𝐁.
   * 
-  * @author Chris Sachs
-  * 
   * @define space   matrix space
   */
 trait FMxN extends VectorSpace {
