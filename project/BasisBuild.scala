@@ -127,15 +127,15 @@ object BasisBuild extends Build {
     Unidoc.settings ++
     projectSettings ++
     scalaSettings   ++
-    docSettings
+    docSettings     ++
+    publishSettings
   
   lazy val commonSettings =
     baseSettings    ++
-    compileSettings ++
-    publishSettings
+    compileSettings
   
   lazy val projectSettings = Seq(
-    version      := "0.0-SNAPSHOT",
+    version      := "0.0",
     organization := "it.reify",
     description  := "An experimental foundation library for Scala focussed on efficiency and clean design.",
     homepage     := Some(url("http://basis.reify.it")),
