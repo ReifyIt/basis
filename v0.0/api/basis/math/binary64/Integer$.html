@@ -1,0 +1,627 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>Integer - basis.math.binary64.Integer</title>
+          <meta name="description" content="Integer - basis.math.binary64.Integer" />
+          <meta name="keywords" content="Integer basis.math.binary64.Integer" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'basis.math.binary64.Integer$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <a href="Integer.html" title="Go to companion"><img src="../../../lib/object_to_class_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="basis">basis</a>.<a href="../package.html" class="extype" name="basis.math">math</a>.<a href="package.html" class="extype" name="basis.math.binary64">binary64</a></p>
+        <h1><a href="Integer.html" title="Go to companion">Integer</a></h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Integer</span><span class="result"> extends <a href="../OrderedRing.html" class="extype" name="basis.math.OrderedRing">OrderedRing</a> with <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a> with <a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An ordered ring of 64-bit two's complement integer values.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/v0.0/basis-math/src/main/scala/basis/math/binary64/Integer.scala" target="_blank">Integer.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a>, <a href="../FN.html" class="extype" name="basis.math.FN">FN</a>, <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a>, <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a>, <a href="../OrderedRing.html" class="extype" name="basis.math.OrderedRing">OrderedRing</a>, <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">Content Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph59" viewBox="0.00 0.00 267.00 96.00" height="96pt" width="267pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 92)" class="graph" id="graph1"><polygon points="-4,5 -4,-92 264,-92 264,5 -4,5" stroke="white" fill="white"></polygon><!-- node0 --><g class="node default" id="graph59_0"><a xlink:title="basis.math.binary64.Integer.Scalar"><polygon points="50.25,-25.5 -0.25,-25.5 -0.25,-0.5 50.25,-0.5 50.25,-25.5" stroke="#ababab" fill="#e1e1e1"></polygon><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-8.5" x="11.5" text-anchor="start">Scalar</text></a></g><!-- node1 --><g class="node default" id="graph59_1"><a xlink:title="basis.math.binary64.Integer.Vector"><polygon points="119.25,-25.5 68.75,-25.5 68.75,-0.5 119.25,-0.5 119.25,-25.5" stroke="#ababab" fill="#e1e1e1"></polygon><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-8.5" x="80.5" text-anchor="start">Vector</text></a></g><!-- node2 --><g class="node default" id="graph59_2"><a xlink:title="basis.math.binary64.Integer.Point"><polygon points="182.25,-25.5 137.75,-25.5 137.75,-0.5 182.25,-0.5 182.25,-25.5" stroke="#ababab" fill="#e1e1e1"></polygon><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-8.5" x="149.5" text-anchor="start">Point</text></a></g><!-- node3 --><g class="node default" id="graph59_3"><a xlink:title="basis.math.binary64.Integer.Element"><polygon points="259.25,-25.5 200.75,-25.5 200.75,-0.5 259.25,-0.5 259.25,-25.5" stroke="#ababab" fill="#e1e1e1"></polygon><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-8.5" x="212.5" text-anchor="start">Element</text></a></g><!-- node4 --><g class="node trait" id="graph59_4"><a xlink:title="basis.math.binary64.Integer.Value" xlink:href="Integer$$Value.html#inheritance-diagram"><polygon points="161.25,-88 92.75,-88 92.75,-62 161.25,-62 161.25,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../../lib/trait_diagram.png" y="-83" x="103" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="125" text-anchor="start">Value</text></a></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph59_4_0"><a xlink:title="Scalar is a subtype of Value"><path d="M101.991,-59.2889C84.2981,-48.8813 60.9095,-35.1232 44.5723,-25.5131" stroke="#d4d4d4" fill="none"></path><polygon points="101.162,-60.8313 106.359,-61.8581 102.936,-57.8146 101.162,-60.8313" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node4&#45;&gt;node1 --><g class="edge inheritance" id="graph59_4_1"><a xlink:title="Vector is a subtype of Value"><path d="M117.888,-57.4329C112.35,-47.3641 105.413,-34.7511 100.444,-25.7155" stroke="#d4d4d4" fill="none"></path><polygon points="116.379,-58.3204 120.322,-61.8581 119.446,-56.6336 116.379,-58.3204" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node4&#45;&gt;node2 --><g class="edge inheritance" id="graph59_4_2"><a xlink:title="Point is a subtype of Value"><path d="M136.112,-57.4329C141.65,-47.3641 148.587,-34.7511 153.556,-25.7155" stroke="#d4d4d4" fill="none"></path><polygon points="134.554,-56.6336 133.678,-61.8581 137.621,-58.3204 134.554,-56.6336" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node4&#45;&gt;node3 --><g class="edge inheritance" id="graph59_4_3"><a xlink:title="Element is a subtype of Value"><path d="M152.254,-59.2889C170.121,-48.8813 193.738,-35.1232 210.236,-25.5131" stroke="#d4d4d4" fill="none"></path><polygon points="151.283,-57.8292 147.844,-61.8581 153.045,-60.8535 151.283,-57.8292" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.math.binary64.Integer"><span>Integer</span></li><li class="in" name="basis.math.binary64.ZN"><span>ZN</span></li><li class="in" name="basis.math.FN"><span>FN</span></li><li class="in" name="basis.math.VectorSpace"><span>VectorSpace</span></li><li class="in" name="basis.math.AffineSpace"><span>AffineSpace</span></li><li class="in" name="basis.math.OrderedRing"><span>OrderedRing</span></li><li class="in" name="basis.math.Ring"><span>Ring</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.math.binary64.Integer.Element" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Element=basis.math.binary64.Integer"></a>
+      <a id="Element:Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Element</span><span class="result"> = <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of elements in this module.</p><div class="fullcomment"><div class="comment cmt"><p>The type of elements in this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="../OrderedRing.html" class="extype" name="basis.math.OrderedRing">OrderedRing</a> → <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a></dd></dl></div>
+    </li><li name="basis.math.binary64.Integer.Point" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Point=basis.math.binary64.Integer"></a>
+      <a id="Point:Point"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Point</span><span class="result"> = <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of points in this module.</p><div class="fullcomment"><div class="comment cmt"><p>The type of points in this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a></dd></dl></div>
+    </li><li name="basis.math.binary64.Integer.Scalar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Scalar=basis.math.binary64.Integer"></a>
+      <a id="Scalar:Scalar"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Scalar</span><span class="result"> = <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of scalars in this module.</p><div class="fullcomment"><div class="comment cmt"><p>The type of scalars in this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a> → <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a> → <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a></dd></dl></div>
+    </li><li name="basis.math.binary64.Integer.Value" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ValueextendsAnywithbinary64.Integer.Valuewithbinary64.Integer.ValuewithInteger.Value"></a>
+      <a id="Value:Value"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Integer$$Value.html"><span class="name">Value</span></a><span class="result"> extends <span class="extype" name="basis.math.OrderedRing.Value">Integer.Value</span> with <span class="extype" name="basis.math.AffineSpace.Value">Integer.Value</span> with <span class="extype" name="basis.math.binary64.ZN.Value">Integer.Value</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A vector in this module.</p>
+    </li><li name="basis.math.binary64.Integer.Vector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Vector=basis.math.binary64.Integer"></a>
+      <a id="Vector:Vector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Vector</span><span class="result"> = <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of vectors in this module.</p><div class="fullcomment"><div class="comment cmt"><p>The type of vectors in this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a> → <a href="../FN.html" class="extype" name="basis.math.FN">FN</a> → <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a> → <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#Scalar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Scalar:basis.math.binary64.Integer.type"></a>
+      <a id="Scalar:Integer.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Scalar</span><span class="result">: <a href="" class="extype" name="basis.math.binary64.Integer">Integer</a>.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the scalar set of this module.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the scalar set of this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a> → <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a> → <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a></dd></dl></div>
+    </li><li name="basis.math.binary64.ZN#ScalarTag" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ScalarTag:scala.reflect.ClassTag[basis.math.binary64.Integer]"></a>
+      <a id="ScalarTag:ClassTag[Integer]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ScalarTag</span><span class="result">: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a> → <a href="../FN.html" class="extype" name="basis.math.FN">FN</a></dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#Vector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Vector:basis.math.binary64.Integer.type"></a>
+      <a id="Vector:Integer.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Vector</span><span class="result">: <a href="" class="extype" name="basis.math.binary64.Integer">Integer</a>.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the vector space underlying this module.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the vector space underlying this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a></dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(coords:Array[basis.math.binary64.Integer]):basis.math.binary64.Integer"></a>
+      <a id="apply(Array[Integer]):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="coords">coords: <span class="extype" name="scala.Array">Array</span>[<a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a>]</span>)</span><span class="result">: <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a new vector with the given coordinates.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new vector with the given coordinates.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a> → <a href="../FN.html" class="extype" name="basis.math.FN">FN</a></dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(coords:Array[Long]):basis.math.binary64.Integer"></a>
+      <a id="apply(Array[Long]):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="coords">coords: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Long">Long</span>]</span>)</span><span class="result">: <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a new vector with the given <code>Long</code> coordinates.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new vector with the given <code>Long</code> coordinates.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a></dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply(value:Long):basis.math.binary64.Integer"></a>
+      <a id="apply(Long):Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#dim" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dim:Int"></a>
+      <a id="dim:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dim</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the dimension of this module.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the dimension of this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="../FN.html" class="extype" name="basis.math.FN">FN</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#origin" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="origin:basis.math.binary64.Integer"></a>
+      <a id="origin:Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">origin</span><span class="result">: <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the origin of this module.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the origin of this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#unit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unit:basis.math.binary64.Integer"></a>
+      <a id="unit:Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unit</span><span class="result">: <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the multiplicative identity of this module.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the multiplicative identity of this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="../OrderedRing.html" class="extype" name="basis.math.OrderedRing">OrderedRing</a> → <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.math.binary64.Integer#zero" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="zero:basis.math.binary64.Integer"></a>
+      <a id="zero:Integer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zero</span><span class="result">: <a href="Integer.html" class="extype" name="basis.math.binary64.Integer">Integer</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the additive identity of this module.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the additive identity of this module.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.binary64.Integer">Integer</a> → <a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a> → <a href="../FN.html" class="extype" name="basis.math.FN">FN</a> → <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a> → <a href="../OrderedRing.html" class="extype" name="basis.math.OrderedRing">OrderedRing</a> → <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.math.binary64.ZN">
+              <h3>Inherited from <a href="ZN.html" class="extype" name="basis.math.binary64.ZN">ZN</a></h3>
+            </div><div class="parent" name="basis.math.FN">
+              <h3>Inherited from <a href="../FN.html" class="extype" name="basis.math.FN">FN</a></h3>
+            </div><div class="parent" name="basis.math.VectorSpace">
+              <h3>Inherited from <a href="../VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a></h3>
+            </div><div class="parent" name="basis.math.AffineSpace">
+              <h3>Inherited from <a href="../AffineSpace.html" class="extype" name="basis.math.AffineSpace">AffineSpace</a></h3>
+            </div><div class="parent" name="basis.math.OrderedRing">
+              <h3>Inherited from <a href="../OrderedRing.html" class="extype" name="basis.math.OrderedRing">OrderedRing</a></h3>
+            </div><div class="parent" name="basis.math.Ring">
+              <h3>Inherited from <a href="../Ring.html" class="extype" name="basis.math.Ring">Ring</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
