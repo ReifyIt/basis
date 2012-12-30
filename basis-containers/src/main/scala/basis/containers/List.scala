@@ -27,8 +27,8 @@ sealed abstract class List[+A]
   extends Equals
     with Immutable
     with Family[List[A]]
-    with Stack[A]
-    with ListLike[A] {
+    with ListLike[A]
+    with Stack[A] {
   
   override def length: Int = {
     var n = 0

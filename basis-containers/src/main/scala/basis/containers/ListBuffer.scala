@@ -36,8 +36,8 @@ class ListBuffer[A] private (
   extends Equals
     with Mutable
     with Family[ListBuffer[A]]
-    with Buffer[A]
-    with ListLike[A] {
+    with ListLike[A]
+    with Buffer[A] {
   
   def this() = this(Nil, null, 0, 0)
   
