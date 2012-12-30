@@ -28,9 +28,9 @@ abstract class ArrayBuffer[A]
   extends Equals
     with Mutable
     with Family[ArrayBuffer[A]]
+    with ArrayLike[A]
     with Index[A]
-    with Buffer[A]
-    with ArrayLike[A] {
+    with Buffer[A] {
   
   /** Returns this $collection converted to an array sequence.
     * @group Converting */

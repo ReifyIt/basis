@@ -29,8 +29,8 @@ abstract class ArraySeq[+A]
   extends Equals
     with Immutable
     with Family[ArraySeq[A]]
-    with Index[A]
-    with ArrayLike[A] {
+    with ArrayLike[A]
+    with Index[A] {
   
   /** Returns a copy of this $collection with the given element at the given index.
     * @group Indexing */
