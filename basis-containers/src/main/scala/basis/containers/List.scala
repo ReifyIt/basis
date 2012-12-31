@@ -12,6 +12,10 @@ import basis.runtime._
 
 /** An immutable singly-linked list.
   * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
+  * 
   * @groupprio  Quantifying   -8
   * @groupprio  Decomposing   -7
   * @groupprio  Composing     -6

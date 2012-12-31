@@ -14,6 +14,10 @@ import basis.util._
 
 /** An immutable contiguous array.
   * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
+  * 
   * @groupprio  Quantifying   -8
   * @groupprio  Indexing      -7
   * @groupprio  Inserting     -6

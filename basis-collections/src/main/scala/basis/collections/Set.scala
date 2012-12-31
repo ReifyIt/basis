@@ -9,7 +9,11 @@ package basis.collections
 
 import scala.annotation.unchecked.uncheckedVariance
 
-/** A unique set of elements.
+/** A unique set. Sets contain no more than one of each element.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Quantifying   -5
   * @groupprio  Querying      -4
@@ -18,6 +22,15 @@ import scala.annotation.unchecked.uncheckedVariance
   * @groupprio  Classifying   -1
   * 
   * @define collection  set
+  * @define SequentialOps
+  * The following classes implement the extensions to this interface:
+  * 
+  *  - [[basis.sequential.GeneralSetOps GeneralSetOps]]
+  *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - [[basis.sequential.StrictSetOps StrictSetOps]]
+  *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - [[basis.sequential.NonStrictSetOps NonStrictSetOps]]
+  *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.

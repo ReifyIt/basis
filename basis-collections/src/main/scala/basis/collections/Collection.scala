@@ -7,13 +7,29 @@
 
 package basis.collections
 
-/** A traversable collection of elements. Collection declares only a protected
-  * `foreach` method; it has no public methods.
+/** A traversable collection. `Collection` declares a protected `foreach`
+  * method that traverses its elements. To traverse a collection, invoke
+  * [[basis.collections#traverse basis.collections.traverse]], or add
+  * a public `foreach` implementation by importing
+  * [[basis.sequential.General `basis.sequential.general`]]`._`.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   * 
   * @define collection  collection
+  * @define SequentialOps
+  * The following classes implement the extensions to this interface:
+  * 
+  *  - [[basis.sequential.GeneralCollectionOps GeneralCollectionOps]]
+  *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - [[basis.sequential.StrictCollectionOps StrictCollectionOps]]
+  *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - [[basis.sequential.NonStrictCollectionOps NonStrictCollectionOps]]
+  *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Collection[+A] extends Any with Family[Collection[A]] with Enumerator[A] {
   /** Returns a string representation of this $collection.

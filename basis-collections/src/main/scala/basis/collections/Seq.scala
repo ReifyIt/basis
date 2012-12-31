@@ -7,7 +7,11 @@
 
 package basis.collections
 
-/** An iterable sequence of elements.
+/** An iterable sequence. Sequences traverse their elements in a definite order.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Quantifying   -4
   * @groupprio  Iterating     -3
@@ -15,6 +19,15 @@ package basis.collections
   * @groupprio  Classifying   -1
   * 
   * @define collection  sequence
+  * @define SequentialOps
+  * The following classes implement the extensions to this interface:
+  * 
+  *  - [[basis.sequential.GeneralSeqOps GeneralSeqOps]]
+  *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - [[basis.sequential.StrictSeqOps StrictSeqOps]]
+  *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - [[basis.sequential.NonStrictSeqOps NonStrictSeqOps]]
+  *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.

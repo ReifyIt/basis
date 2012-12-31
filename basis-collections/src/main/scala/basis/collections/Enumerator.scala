@@ -7,13 +7,43 @@
 
 package basis.collections
 
-/** A once traversable enumeration of elements. Enumerator declares only a
-  * protected `foreach` method; it has no public methods.
+/** A stateful traversable collection. `Enumerator` declares a protected
+  * `foreach` method that traverses its elements. To traverse an enumerator,
+  * invoke [[basis.collections#traverse basis.collections.traverse]], or add
+  * a public `foreach` implementation by importing
+  * [[basis.sequential.General `basis.sequential.general`]]`._`. Traversing
+  * an enumerator may alter its state, causing subsequent traversals to yield
+  * different results.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   * 
   * @define collection  enumerator
+  * @define Extensions
+  * Add operations to this interface by importing one of these use cases:
+  * 
+  *  - `import `[[basis.sequential.General `basis.sequential.general`]]`._`
+  *   - adds reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - `import `[[basis.sequential.Strict `basis.sequential.strict`]]`._`
+  *   - adds reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *   - adds eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - `import `[[basis.sequential.NonStrict `basis.sequential.nonstrict`]]`._`
+  *   - adds reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *   - adds lazy transformations (`map`, `flatMap`, `filter`, etc.).
+  * 
+  * @define SequentialOps
+  * The following classes implement the extensions to this interface:
+  * 
+  *  - [[basis.sequential.GeneralEnumeratorOps GeneralEnumeratorOps]]
+  *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - [[basis.sequential.StrictEnumeratorOps StrictEnumeratorOps]]
+  *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - [[basis.sequential.NonStrictEnumeratorOps NonStrictEnumeratorOps]]
+  *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Enumerator[+A] extends Any with Family[Enumerator[A]] {
   /** Applies a function to each element of this $collection. The protected

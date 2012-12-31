@@ -10,7 +10,11 @@ package basis.containers
 import basis.collections._
 import basis.runtime._
 
-/** A mutable list of elements.
+/** A mutable singly-linked list.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Quantifying   -8
   * @groupprio  Indexing      -7

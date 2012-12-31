@@ -9,12 +9,12 @@ package basis.collections
 
 import scala.annotation.unspecialized
 
-/** A stateful traverser of elements. An iterator steps through each element
+/** A stateful collection traverser. An iterator steps through each element
   * of a collection, one element per `step()`, until `isEmpty` returns `true`.
   * Backtracking algorithms can `dup` an iterator's state and resume it after
-  * mutating the original iterator.
+  * advancing the original iterator.
   * 
-  * == Iterator states ==
+  * ==Iterator states==
   *
   * Each `step()` forwards the iterator into one of three states:
   * ''buffered'', ''empty'', or ''done''.
@@ -29,12 +29,25 @@ import scala.annotation.unspecialized
   * The distinct ''empty'' and ''done'' states facilitate low-overhead
   * "chunked" iterator applications such as iteratees.
   * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
+  * 
   * @groupprio  Examining     -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
   * 
   * @define collection  iterator
+  * @define SequentialOps
+  * The following classes implement the extensions to this interface:
+  * 
+  *  - [[basis.sequential.GeneralEnumeratorOps GeneralIteratorOps]]
+  *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - [[basis.sequential.StrictEnumeratorOps StrictIteratorOps]]
+  *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - [[basis.sequential.NonStrictEnumeratorOps NonStrictIteratorOps]]
+  *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Iterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Any with Family[Iterator[A]] with Enumerator[A] {

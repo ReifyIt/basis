@@ -9,13 +9,28 @@ package basis.collections
 
 import scala.annotation.unspecialized
 
-/** An indexed sequence of elements.
+/** An indexed sequence. Indexes can randomly access their elements.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Quantifying   -5
   * @groupprio  Indexing      -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
+  * 
+  * @define collection  index
+  * @define SequentialOps
+  * The following classes implement the extensions to this interface:
+  * 
+  *  - [[basis.sequential.GeneralIndexOps GeneralIndexOps]]
+  *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - [[basis.sequential.StrictIndexOps StrictIndexOps]]
+  *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - [[basis.sequential.NonStrictIndexOps NonStrictIndexOps]]
+  *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Index[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Any with Family[Index[A]] with Seq[A] {

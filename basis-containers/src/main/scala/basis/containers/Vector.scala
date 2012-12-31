@@ -10,7 +10,11 @@ package basis.containers
 import basis.collections._
 import basis.runtime._
 
-/** An index arrap-bitmapped trie sequence.
+/** An indexed array-bitmapped trie.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Quantifying   -5
   * @groupprio  Indexing      -4

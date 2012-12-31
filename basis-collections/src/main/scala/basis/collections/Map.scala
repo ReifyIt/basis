@@ -9,7 +9,11 @@ package basis.collections
 
 import scala.annotation.unchecked.uncheckedVariance
 
-/** An associated set of (key, value) pairs with unique keys.
+/** An associative map. Maps consist of (key, value) pairs with unique keys.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Quantifying   -5
   * @groupprio  Querying      -4
@@ -18,6 +22,15 @@ import scala.annotation.unchecked.uncheckedVariance
   * @groupprio  Classifying   -1
   * 
   * @define collection  map
+  * @define SequentialOps
+  * The following classes implement the extensions to this interface:
+  * 
+  *  - [[basis.sequential.GeneralMapOps GeneralMapOps]]
+  *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - [[basis.sequential.StrictMapOps StrictMapOps]]
+  *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - [[basis.sequential.NonStrictMapOps NonStrictMapOps]]
+  *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
   /** Returns `true` if this $collection doesn't contain any associations.

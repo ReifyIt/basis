@@ -9,13 +9,28 @@ package basis.collections
 
 import scala.annotation.unspecialized
 
-/** A linear sequence of elements.
+/** A linear sequence. Stacks decompose into a `head` element and a `tail` stack.
+  * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
   * 
   * @groupprio  Quantifying   -5
   * @groupprio  Decomposing   -4
   * @groupprio  Iterating     -3
   * @groupprio  Traversing    -2
   * @groupprio  Classifying   -1
+  * 
+  * @define collection  stack
+  * @define SequentialOps
+  * The following classes implement the extensions to this interface:
+  * 
+  *  - [[basis.sequential.GeneralStackOps GeneralStackOps]]
+  *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
+  *  - [[basis.sequential.StrictStackOps StrictStackOps]]
+  *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
+  *  - [[basis.sequential.NonStrictStackOps NonStrictStackOps]]
+  *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Stack[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Any with Family[Stack[A]] with Seq[A] {

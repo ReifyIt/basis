@@ -16,6 +16,10 @@ import scala.annotation.unchecked.uncheckedVariance
 
 /** A hash array-mapped trie map.
   * 
+  * ==Extensions==
+  * $Extensions
+  * $SequentialOps
+  * 
   * @groupprio  Quantifying   -6
   * @groupprio  Querying      -5
   * @groupprio  Updating      -4
