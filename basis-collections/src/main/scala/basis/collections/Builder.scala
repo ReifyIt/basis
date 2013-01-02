@@ -11,9 +11,9 @@ import scala.annotation.implicitNotFound
 
 /** A stateful element accumulator.
   * 
-  * @groupprio  Examining   -3
-  * @groupprio  Inserting   -2
-  * @groupprio  Removing    -1
+  * @groupprio  Examining   1
+  * @groupprio  Inserting   2
+  * @groupprio  Removing    3
   * 
   * @define collection  builder
   */

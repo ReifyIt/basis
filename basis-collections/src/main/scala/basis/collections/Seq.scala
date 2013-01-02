@@ -13,10 +13,10 @@ package basis.collections
   * $Extensions
   * $SequentialOps
   * 
-  * @groupprio  Quantifying   -4
-  * @groupprio  Iterating     -3
-  * @groupprio  Traversing    -2
-  * @groupprio  Classifying   -1
+  * @groupprio  Quantifying   1
+  * @groupprio  Iterating     2
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  sequence
   * @define SequentialOps

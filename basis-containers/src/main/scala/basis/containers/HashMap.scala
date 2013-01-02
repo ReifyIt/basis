@@ -20,12 +20,12 @@ import scala.annotation.unchecked.uncheckedVariance
   * $Extensions
   * $SequentialOps
   * 
-  * @groupprio  Quantifying   -6
-  * @groupprio  Querying      -5
-  * @groupprio  Updating      -4
-  * @groupprio  Iterating     -3
-  * @groupprio  Traversing    -2
-  * @groupprio  Classifying   -1
+  * @groupprio  Quantifying   1
+  * @groupprio  Querying      2
+  * @groupprio  Updating      3
+  * @groupprio  Iterating     4
+  * @groupprio  Traversing    5
+  * @groupprio  Classifying   6
   * 
   * @define collection  hash map
   */

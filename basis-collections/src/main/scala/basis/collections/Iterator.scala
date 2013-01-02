@@ -33,10 +33,10 @@ import scala.annotation.unspecialized
   * $Extensions
   * $SequentialOps
   * 
-  * @groupprio  Examining     -4
-  * @groupprio  Iterating     -3
-  * @groupprio  Traversing    -2
-  * @groupprio  Classifying   -1
+  * @groupprio  Examining     1
+  * @groupprio  Iterating     2
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  iterator
   * @define SequentialOps

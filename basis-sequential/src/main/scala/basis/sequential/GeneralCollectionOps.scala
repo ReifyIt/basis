@@ -11,10 +11,10 @@ import basis.collections._
 
 /** General collection operations.
   * 
-  * @groupprio  Traversing    -4
-  * @groupprio  Reducing      -3
-  * @groupprio  Querying      -2
-  * @groupprio  Transforming  -1
+  * @groupprio  Traversing    1
+  * @groupprio  Reducing      2
+  * @groupprio  Querying      3
+  * @groupprio  Transforming  4
   */
 final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   /** Sequentially applies a function to each element of this collection.

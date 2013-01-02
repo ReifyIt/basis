@@ -17,8 +17,8 @@ package basis.collections
   * $Extensions
   * $SequentialOps
   * 
-  * @groupprio  Traversing    -2
-  * @groupprio  Classifying   -1
+  * @groupprio  Traversing    1
+  * @groupprio  Classifying   2
   * 
   * @define collection  collection
   * @define SequentialOps

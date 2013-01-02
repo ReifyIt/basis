@@ -11,10 +11,10 @@ import basis.collections._
 
 /** General map operations.
   * 
-  * @groupprio  Traversing    -4
-  * @groupprio  Reducing      -3
-  * @groupprio  Querying      -2
-  * @groupprio  Transforming  -1
+  * @groupprio  Traversing    1
+  * @groupprio  Reducing      2
+  * @groupprio  Querying      3
+  * @groupprio  Transforming  4
   */
 final class GeneralMapOps[+A, +T](these: Map[A, T]) {
   /** Sequentially applies a function to each entry of this map.

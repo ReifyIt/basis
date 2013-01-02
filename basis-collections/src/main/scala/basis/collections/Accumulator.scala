@@ -9,7 +9,7 @@ package basis.collections
 
 /** An element accumulator.
   * 
-  * @groupprio  Inserting   -1
+  * @groupprio  Inserting   1
   * 
   * @define collection  accumulator
   */

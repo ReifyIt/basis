@@ -11,9 +11,9 @@ import basis.collections._
 
 /** Strictly evaluated iterator operations.
   * 
-  * @groupprio  Mapping     -3
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
+  * @groupprio  Mapping     1
+  * @groupprio  Filtering   2
+  * @groupprio  Combining   3
   */
 final class StrictIteratorOps[+A, +From](these: Iterator[A]) {
   /** Returns the applications of a partial function to each element in this

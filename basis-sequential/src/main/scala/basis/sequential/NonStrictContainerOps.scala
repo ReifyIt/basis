@@ -11,9 +11,9 @@ import basis.collections._
 
 /** Non-strictly evaluated container operations.
   * 
-  * @groupprio  Mapping     -3
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
+  * @groupprio  Mapping     1
+  * @groupprio  Filtering   2
+  * @groupprio  Combining   3
   */
 final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this

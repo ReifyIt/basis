@@ -11,7 +11,7 @@ import basis.collections._
 
 /** A list-convertible collection.
   * 
-  * @groupprio  Converting  -1
+  * @groupprio  Converting  1
   * 
   * @define collection  collection
   */

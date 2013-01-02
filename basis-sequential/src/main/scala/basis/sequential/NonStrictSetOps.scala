@@ -11,8 +11,8 @@ import basis.collections._
 
 /** Non-strictly evaluated set operations.
   * 
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
+  * @groupprio  Filtering   1
+  * @groupprio  Combining   2
   */
 final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
   /** Returns a view of all elements in this set that satisfy a predicate.

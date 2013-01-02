@@ -51,16 +51,16 @@ abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolea
 /** A factory for builtin [[Struct structs]].
   * 
   * @groupname  Implicit    Implicit struct selection
-  * @groupprio  Implicit    -4
+  * @groupprio  Implicit    1
   * 
   * @groupname  Aligned     Aligned primitive structs
-  * @groupprio  Aligned     -3
+  * @groupprio  Aligned     2
   * 
   * @groupname  Unaligned   Unaligned primitive structs
-  * @groupprio  Unaligned   -2
+  * @groupprio  Unaligned   3
   * 
   * @groupname  Composite   Composite structs
-  * @groupprio  Composite   -1
+  * @groupprio  Composite   4
   */
 object Struct {
   import Predef.classOf

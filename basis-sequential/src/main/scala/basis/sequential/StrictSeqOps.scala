@@ -11,9 +11,9 @@ import basis.collections._
 
 /** Strictly evaluated sequence operations.
   * 
-  * @groupprio  Mapping     -3
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
+  * @groupprio  Mapping     1
+  * @groupprio  Filtering   2
+  * @groupprio  Combining   3
   */
 final class StrictSeqOps[+A, +From](these: Seq[A]) {
   /** Returns the applications of a partial function to each element in this

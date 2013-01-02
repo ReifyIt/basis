@@ -11,9 +11,9 @@ import basis.collections._
 
 /** Non-strictly evaluated collection operations.
   * 
-  * @groupprio  Mapping     -3
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
+  * @groupprio  Mapping     1
+  * @groupprio  Filtering   2
+  * @groupprio  Combining   3
   */
 final class NonStrictCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this

@@ -16,11 +16,11 @@ import basis.runtime._
   * $Extensions
   * $SequentialOps
   * 
-  * @groupprio  Quantifying   -5
-  * @groupprio  Indexing      -4
-  * @groupprio  Iterating     -3
-  * @groupprio  Traversing    -2
-  * @groupprio  Classifying   -1
+  * @groupprio  Quantifying   1
+  * @groupprio  Indexing      2
+  * @groupprio  Iterating     3
+  * @groupprio  Traversing    4
+  * @groupprio  Classifying   5
   * 
   * @define collection  vector
   */

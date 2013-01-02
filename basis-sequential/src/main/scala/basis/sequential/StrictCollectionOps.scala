@@ -11,9 +11,9 @@ import basis.collections._
 
 /** Strictly evaluated collection operations.
   * 
-  * @groupprio  Mapping     -3
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
+  * @groupprio  Mapping     1
+  * @groupprio  Filtering   2
+  * @groupprio  Combining   3
   */
 final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends AnyVal {
   /** Returns the applications of a partial function to each element in this

@@ -62,22 +62,22 @@ import basis.util._
   * }}}
   * 
   * @groupname  General     General properties
-  * @groupprio  General     -6
+  * @groupprio  General     1
   * 
   * @groupname  Aligned     Loading and storing aligned primitive values
-  * @groupprio  Aligned     -5
+  * @groupprio  Aligned     2
   * 
   * @groupname  Unaligned   Loading and storing unaligned primitive values
-  * @groupprio  Unaligned   -4
+  * @groupprio  Unaligned   3
   * 
   * @groupname  Compound    Loading and storing compound values
-  * @groupprio  Compound    -3
+  * @groupprio  Compound    4
   * 
   * @groupname  Aggregate   Loading and storing arrays of values
-  * @groupprio  Aggregate   -2
+  * @groupprio  Aggregate   5
   * 
   * @groupname  Bulk        Bulk transfer operations
-  * @groupprio  Bulk        -1
+  * @groupprio  Bulk        6
   */
 abstract class Data {
   /** Returns the size in bytes of the address space.

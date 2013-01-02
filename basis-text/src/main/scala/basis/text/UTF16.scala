@@ -12,11 +12,11 @@ import basis.util._
 
 /** A UTF-16 code unit sequence.
   * 
-  * @groupprio  Quantifying   -5
-  * @groupprio  Indexing      -4
-  * @groupprio  Iterating     -3
-  * @groupprio  Traversing    -2
-  * @groupprio  Classifying   -1
+  * @groupprio  Quantifying   1
+  * @groupprio  Indexing      2
+  * @groupprio  Iterating     3
+  * @groupprio  Traversing    4
+  * @groupprio  Classifying   5
   * 
   * @define collection  text
   */

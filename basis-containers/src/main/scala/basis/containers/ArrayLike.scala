@@ -12,9 +12,9 @@ import basis.util._
 
 /** An array-convertible collection.
   * 
-  * @groupprio  Quantifying   -3
-  * @groupprio  Indexing      -2
-  * @groupprio  Converting    -1
+  * @groupprio  Quantifying   1
+  * @groupprio  Indexing      2
+  * @groupprio  Converting    3
   * 
   * @define collection  collection
   */

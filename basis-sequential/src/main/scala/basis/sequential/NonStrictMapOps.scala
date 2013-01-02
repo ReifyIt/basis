@@ -11,8 +11,8 @@ import basis.collections._
 
 /** Non-strictly evaluated map operations.
   * 
-  * @groupprio  Filtering   -2
-  * @groupprio  Combining   -1
+  * @groupprio  Filtering   1
+  * @groupprio  Combining   2
   */
 final class NonStrictMapOps[+A, +T](val these: Map[A, T]) extends AnyVal {
   /** Returns a view of all entries in this map that satisfy a predicate.

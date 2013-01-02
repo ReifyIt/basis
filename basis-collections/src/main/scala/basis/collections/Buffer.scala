@@ -9,14 +9,14 @@ package basis.collections
 
 /** A mutable buffer of elements.
   * 
-  * @groupprio  Quantifying   -8
-  * @groupprio  Indexing      -7
-  * @groupprio  Inserting     -6
-  * @groupprio  Removing      -5
-  * @groupprio  Iterating     -4
-  * @groupprio  Traversing    -3
-  * @groupprio  Converting    -2
-  * @groupprio  Classifying   -1
+  * @groupprio  Quantifying   1
+  * @groupprio  Indexing      2
+  * @groupprio  Inserting     3
+  * @groupprio  Removing      4
+  * @groupprio  Iterating     5
+  * @groupprio  Traversing    6
+  * @groupprio  Converting    7
+  * @groupprio  Classifying   8
   * 
   * @define collection  buffer
   */
