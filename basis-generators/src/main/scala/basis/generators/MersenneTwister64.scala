@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -13,6 +13,9 @@ import basis.util._
   * Takuji Nishimura's MT19937-64 algorithm.
   * 
   * @see  [[http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt64.html MT19937-64]]
+  * 
+  * @author Chris Sachs
+  * @since  0.0
   */
 final class MersenneTwister64 private (
     private[this] val state: Array[Long],

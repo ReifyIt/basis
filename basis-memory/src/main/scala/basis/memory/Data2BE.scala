@@ -1,13 +1,17 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.memory
 
-/** Big-endian data backed by a `Short` array. */
+/** Big-endian data backed by a `Short` array.
+  * 
+  * @author Chris Sachs
+  * @since  0.0
+  */
 private[memory] final class Data2BE(override val words: Array[Short]) extends Data2 with DataBE {
   override def endian: BigEndian.type = BigEndian
   

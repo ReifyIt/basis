@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -14,7 +14,12 @@ import basis.util._
 
 import scala.annotation.{implicitNotFound, tailrec, unspecialized}
 
-/** An arbitrary value generator. */
+/** An arbitrary value generator.
+  * 
+  * @author   Chris Sachs
+  * @version  0.0
+  * @since    0.0
+  */
 @implicitNotFound("No arbitrary generator available for type ${R}.")
 trait Arbitrary[@specialized(Specializable.Primitives) +R] extends (() => R) {
   @unspecialized def map[T](f: R => T): Arbitrary[T] = new Map(f)

@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -55,6 +55,10 @@ package basis.math
   *     matrix 𝐀 whose row space equals the colum space of 𝐁 and 𝐂.
   *   - (𝐀 + 𝐁) ⋅ 𝐂 == (𝐀 ⋅ 𝐂) + (𝐁 ⋅ 𝐂) for all matrices 𝐀, 𝐁 in the same matrix space, and every
   *     matrix 𝐂 whose column space equals the row space of 𝐀 and 𝐁.
+  * 
+  * @author   Chris Sachs
+  * @version  0.0
+  * @since    0.0
   * 
   * @define space   matrix space
   */

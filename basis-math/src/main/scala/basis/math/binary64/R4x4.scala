@@ -1,14 +1,18 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.math
 package binary64
 
-/** A 4 by 4 double-precision floating-point real matrix space. */
+/** A 4 by 4 double-precision floating-point real matrix space.
+  * 
+  * @author Chris Sachs
+  * @since  0.0
+  */
 object R4x4 extends F4x4 with RMxN {
   final class Value(
       override val _1_1: Scalar, override val _1_2: Scalar, override val _1_3: Scalar, override val _1_4: Scalar,

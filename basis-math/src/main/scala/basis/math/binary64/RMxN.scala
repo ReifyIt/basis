@@ -1,14 +1,19 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.math
 package binary64
 
-/** An abstract double-precision floating-point matrix space. */
+/** An abstract double-precision floating-point matrix space.
+  * 
+  * @author   Chris Sachs
+  * @version  0.0
+  * @since    0.0
+  */
 trait RMxN extends FMxN {
   trait Value extends Any with super.Value {
     override def Row: RMxN.this.Row.type = RMxN.this.Row

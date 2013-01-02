@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -10,6 +10,11 @@ package basis.containers
 import basis.collections._
 import basis.runtime._
 
+/** An immutable contiguous `Byte` array.
+  * 
+  * @author Chris Sachs
+  * @since  0.0
+  */
 private[containers] final class ByteArraySeq(array: Array[Byte]) extends ArraySeq[Byte] with Reified {
   protected override def T: TypeHint[Byte] = TypeHint.Byte
   

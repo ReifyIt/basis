@@ -1,13 +1,17 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.memory
 
-/** A significance ordering. */
+/** A significance ordering.
+  * 
+  * @author Chris Sachs
+  * @since  0.0
+  */
 sealed abstract class Endianness {
   /** Returns `true` if this is the native ordering of the virtual machine. */
   def isNative: Boolean

@@ -1,13 +1,18 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.memory
 
-/** A memory allocator. */
+/** A memory allocator.
+  * 
+  * @author   Chris Sachs
+  * @version  0.0
+  * @since    0.0
+  */
 abstract class Allocator extends (Long => Data) {
   /** Returns the maximum allocation size supported by this allocator. */
   def MaxSize: Long

@@ -1,14 +1,18 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.math
 package binary64
 
-/** A 2-dimensional double-precision floating-point vector space. */
+/** A 2-dimensional double-precision floating-point vector space.
+  * 
+  * @author Chris Sachs
+  * @since  0.0
+  */
 object R2 extends AffineSpace with F2 with RN {
   final class Value(
       override val x: Scalar,

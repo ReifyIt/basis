@@ -1,14 +1,18 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.math
 package binary64
 
-/** A 3 by 3 double-precision floating-point matrix space. */
+/** A 3 by 3 double-precision floating-point matrix space.
+  * 
+  * @author Chris Sachs
+  * @since  0.0
+  */
 object R3x3 extends F3x3 with RMxN {
   final class Value(
       override val _1_1: Scalar, override val _1_2: Scalar, override val _1_3: Scalar,

@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -12,6 +12,10 @@ import basis.collections._
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
+/** Index operations macro implementations.
+  * 
+  * @author Chris Sachs
+  */
 private[sequential] final class IndexMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._

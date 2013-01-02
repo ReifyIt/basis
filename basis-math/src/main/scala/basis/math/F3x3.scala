@@ -1,13 +1,18 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.math
 
-/** An asbtract 3 by 3 matrix space over a field. */
+/** An asbtract 3 by 3 matrix space over a field.
+  * 
+  * @author   Chris Sachs
+  * @version  0.0
+  * @since    0.0
+  */
 trait F3x3 extends Ring with FMxN {
   trait Value extends Any with super[Ring].Value with super[FMxN].Value {
     override def Row: F3x3.this.Row.type = F3x3.this.Row

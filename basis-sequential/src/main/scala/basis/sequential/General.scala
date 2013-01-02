@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -9,7 +9,12 @@ package basis.sequential
 
 import basis.collections._
 
-/** Implicit conversions that add general operations to collections. */
+/** Implicit conversions that add general operations to collections.
+  * 
+  * @author   Chris Sachs
+  * @version  0.0
+  * @since    0.0
+  */
 class General {
   implicit def GeneralEnumeratorOps[A](these: Enumerator[A]): GeneralEnumeratorOps[A] =
     macro General.GeneralEnumeratorOps[A]

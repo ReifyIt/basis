@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -9,7 +9,12 @@ package basis.runtime
 
 import scala.annotation.implicitNotFound
 
-/** Run-time type information about a class. */
+/** Run-time type information about a class.
+  * 
+  * @author   Chris Sachs
+  * @version  0.0
+  * @since    0.0
+  */
 @implicitNotFound("No available ClassTypeHint for ${T}.")
 trait ClassTypeHint[T] extends Equals with TypeHint[T] {
   def runtimeClass: java.lang.Class[_]

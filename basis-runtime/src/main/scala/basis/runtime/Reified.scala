@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -10,7 +10,12 @@ package basis.runtime
 /** A unary parametric type with a hint about its type parameter.
   * `Reified` protects its type hint so as not to clutter implementation
   * classes' APIs. Pattern match against [[Reified$ Reified]] to access
-  * an instance's type hint. */
+  * an instance's type hint.
+  * 
+  * @author   Chris Sachs
+  * @version  0.0
+  * @since    0.0
+  */
 trait Reified extends Any {
   /** Returns a hint about this instance's type parameter. */
   protected def T: TypeHint[_]

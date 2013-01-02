@@ -1,7 +1,7 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
@@ -12,6 +12,11 @@ import basis.memory._
 import basis.runtime._
 import basis.util._
 
+/** An immutable contiguous value array.
+  * 
+  * @author Chris Sachs
+  * @since  0.0
+  */
 private[containers] final class ValArraySeq[+A]
     (data: Data)(implicit A: Struct[A])
   extends ArraySeq[A] with Reified {

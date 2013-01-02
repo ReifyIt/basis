@@ -1,14 +1,18 @@
 /*      ____              ___                                           *\
 **     / __ | ___  ____  /__/___      A library of building blocks      **
 **    / __  / __ |/ ___|/  / ___|                                       **
-**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012 Chris Sachs              **
+**   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2013 Reify It            **
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
 package basis.math
 package binary64
 
-/** A general double-precision floating-point matrix space. */
+/** A general double-precision floating-point matrix space.
+  * 
+  * @author Chris Sachs
+  * @since  0.0
+  */
 private[math] final class R
     (override val dim: Int, RowSpace: RN, ColSpace: RN, TransposeSpace: RMxN)
   extends AffineSpace with RN with RMxN {
