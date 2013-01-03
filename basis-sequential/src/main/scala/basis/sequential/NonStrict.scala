@@ -14,32 +14,57 @@ import basis.collections._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    NonStrict
+  * 
+  * @groupname  General     General collection extensions
+  * @groupprio  General     1
+  * 
+  * @groupname  NonStrict   Non-strict collection extensions
+  * @groupprio  NonStrict   2
   */
 class NonStrict extends General {
+  /** Implicitly provides non-strictly evaluated operations for enumerators.
+    * @group NonStrict */
   implicit def NonStrictEnumeratorOps[A](these: Enumerator[A]): NonStrictEnumeratorOps[A] =
     macro NonStrict.NonStrictEnumeratorOps[A]
   
+  /** Implicitly provides non-strictly evaluated operations for iterators.
+    * @group NonStrict */
   implicit def NonStrictIteratorOps[A](these: Iterator[A]): NonStrictIteratorOps[A] =
     macro NonStrict.NonStrictIteratorOps[A]
   
+  /** Implicitly provides non-strictly evaluated operations for collections.
+    * @group NonStrict */
   implicit def NonStrictCollectionOps[A](these: Collection[A]): NonStrictCollectionOps[A] =
     macro NonStrict.NonStrictCollectionOps[A]
   
+  /** Implicitly provides non-strictly evaluated operations for containers.
+    * @group NonStrict */
   implicit def NonStrictContainerOps[A](these: Container[A]): NonStrictContainerOps[A] =
     macro NonStrict.NonStrictContainerOps[A]
   
+  /** Implicitly provides non-strictly evaluated operations for sequences.
+    * @group NonStrict */
   implicit def NonStrictSeqOps[A](these: Seq[A]): NonStrictSeqOps[A] =
     macro NonStrict.NonStrictSeqOps[A]
   
+  /** Implicitly provides non-strictly evaluated operations for indexes.
+    * @group NonStrict */
   implicit def NonStrictIndexOps[A](these: Index[A]): NonStrictIndexOps[A] =
     macro NonStrict.NonStrictIndexOps[A]
   
+  /** Implicitly provides non-strictly evaluated operations for stacks.
+    * @group NonStrict */
   implicit def NonStrictStackOps[A](these: Stack[A]): NonStrictStackOps[A] =
     macro NonStrict.NonStrictStackOps[A]
   
+  /** Implicitly provides non-strictly evaluated operations for sets.
+    * @group NonStrict */
   implicit def NonStrictSetOps[A](these: Set[A]): NonStrictSetOps[A] =
     macro NonStrict.NonStrictSetOps[A]
   
+  /** Implicitly provides non-strictly evaluated operations for maps.
+    * @group NonStrict */
   implicit def NonStrictMapOps[A, T](these: Map[A, T]): NonStrictMapOps[A, T] =
     macro NonStrict.NonStrictMapOps[A, T]
 }

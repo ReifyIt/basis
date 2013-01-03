@@ -14,6 +14,7 @@ import basis.collections._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    General
   * 
   * @groupprio  Traversing    1
   * @groupprio  Reducing      2

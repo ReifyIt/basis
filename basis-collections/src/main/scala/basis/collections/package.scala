@@ -7,7 +7,7 @@
 
 package basis
 
-/** General collection interfaces.
+/** General collections interfaces.
   * 
   * @contentDiagram hideNodes "*Factory" "*Family"
   * 

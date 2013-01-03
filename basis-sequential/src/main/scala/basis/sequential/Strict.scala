@@ -14,32 +14,57 @@ import basis.collections._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Strict
+  * 
+  * @groupname  General   General collection extensions
+  * @groupprio  General   1
+  * 
+  * @groupname  Strict    Strict collection extensions
+  * @groupprio  Strict    2
   */
 class Strict extends General {
+  /** Implicitly provides strictly evaluated operations for enumerators.
+    * @group Strict */
   implicit def StrictEnumeratorOps[A](these: Enumerator[A]): StrictEnumeratorOps[A, these.Family] =
     macro Strict.StrictEnumeratorOps[A]
   
+  /** Implicitly provides strictly evaluated operations for iterators.
+    * @group Strict */
   implicit def StrictIteratorOps[A](these: Iterator[A]): StrictIteratorOps[A, these.Family] =
     macro Strict.StrictIteratorOps[A]
   
+  /** Implicitly provides strictly evaluated operations for collections.
+    * @group Strict */
   implicit def StrictCollectionOps[A](these: Collection[A]): StrictCollectionOps[A, these.Family] =
     macro Strict.StrictCollectionOps[A]
   
+  /** Implicitly provides strictly evaluated operations for containers.
+    * @group Strict */
   implicit def StrictContainerOps[A](these: Container[A]): StrictContainerOps[A, these.Family] =
     macro Strict.StrictContainerOps[A]
   
+  /** Implicitly provides strictly evaluated operations for sequences.
+    * @group Strict */
   implicit def StrictSeqOps[A](these: Seq[A]): StrictSeqOps[A, these.Family] =
     macro Strict.StrictSeqOps[A]
   
+  /** Implicitly provides strictly evaluated operations for indexes.
+    * @group Strict */
   implicit def StrictIndexOps[A](these: Index[A]): StrictIndexOps[A, these.Family] =
     macro Strict.StrictIndexOps[A]
   
+  /** Implicitly provides strictly evaluated operations for stacks.
+    * @group Strict */
   implicit def StrictStackOps[A](these: Stack[A]): StrictStackOps[A, these.Family] =
     macro Strict.StrictStackOps[A]
   
+  /** Implicitly provides strictly evaluated operations for sets.
+    * @group Strict */
   implicit def StrictSetOps[A](these: Set[A]): StrictSetOps[A, these.Family] =
     macro Strict.StrictSetOps[A]
   
+  /** Implicitly provides strictly evaluated operations for maps.
+    * @group Strict */
   implicit def StrictMapOps[A, T](these: Map[A, T]): StrictMapOps[A, T, these.Family] =
     macro Strict.StrictMapOps[A, T]
 }
