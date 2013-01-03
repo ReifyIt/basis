@@ -60,7 +60,7 @@
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol>
-                
+                <li class="group out"><span>Grouped</span></li>
                 <li class="alpha in"><span>Alphabetic</span></li>
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
@@ -91,7 +91,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="basis.collections.Accumulator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="basis.collections.Accumulator" visbl="pub" data-isabs="true" fullComment="no" group="Builders">
       <a id="Accumulator[-A]extendsObject"></a>
       <a id="Accumulator[-A]:Accumulator[A]"></a>
       <h4 class="signature">
@@ -104,7 +104,7 @@
       </span>
       </h4>
       <p class="comment cmt">An element accumulator.</p>
-    </li><li name="basis.collections.Buffer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="basis.collections.Buffer" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Buffer[A]extendsEqualswithFamily[basis.collections.Buffer[A]]withSeq[A]withAccumulator[A]"></a>
       <a id="Buffer[A]:Buffer[A]"></a>
       <h4 class="signature">
@@ -116,8 +116,8 @@
         <a href="Buffer.html"><span class="name">Buffer</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>[<span class="extype" name="basis.collections.Buffer.A">A</span>]] with <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Buffer.A">A</span>] with <a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a>[<span class="extype" name="basis.collections.Buffer.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">A mutable buffer of elements.</p>
-    </li><li name="basis.collections.Builder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">A mutable collection.</p>
+    </li><li name="basis.collections.Builder" visbl="pub" data-isabs="true" fullComment="no" group="Builders">
       <a id="Builder[-From,-A]extendsAccumulator[A]"></a>
       <a id="Builder[-From,-A]:Builder[From,A]"></a>
       <h4 class="signature">
@@ -129,8 +129,8 @@
         <a href="Builder.html"><span class="name">Builder</span></a><span class="tparams">[<span name="From">-From</span>, <span name="A">-A</span>]</span><span class="result"> extends <a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a>[<span class="extype" name="basis.collections.Builder.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">A stateful element accumulator.</p>
-    </li><li name="basis.collections.BuilderFactory" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">A collection builder.</p>
+    </li><li name="basis.collections.BuilderFactory" visbl="pub" data-isabs="true" fullComment="no" group="Factories">
       <a id="BuilderFactory[+CC[_]]extendsObject"></a>
       <a id="BuilderFactory[+CC[_]]:BuilderFactory[CC]"></a>
       <h4 class="signature">
@@ -143,7 +143,7 @@
       </span>
       </h4>
       <p class="comment cmt">A factory for buildable collections.</p>
-    </li><li name="basis.collections.Collection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="basis.collections.Collection" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Collection[+A]extendsAnywithFamily[basis.collections.Collection[A]]withEnumerator[A]"></a>
       <a id="Collection[+A]:Collection[A]"></a>
       <h4 class="signature">
@@ -155,8 +155,8 @@
         <a href="Collection.html"><span class="name">Collection</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Collection.A">A</span>]] with <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Collection.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">A traversable collection of elements.</p>
-    </li><li name="basis.collections.Container" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">A traversable collection.</p>
+    </li><li name="basis.collections.Container" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Container[+A]extendsAnywithFamily[basis.collections.Container[A]]withCollection[A]"></a>
       <a id="Container[+A]:Container[A]"></a>
       <h4 class="signature">
@@ -168,8 +168,8 @@
         <a href="Container.html"><span class="name">Container</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Container.A">A</span>]] with <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Container.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">An iterable container of elements.</p>
-    </li><li name="basis.collections.Enumerator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">An iterable collection.</p>
+    </li><li name="basis.collections.Enumerator" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Enumerator[+A]extendsAnywithFamily[basis.collections.Enumerator[A]]"></a>
       <a id="Enumerator[+A]:Enumerator[A]"></a>
       <h4 class="signature">
@@ -181,8 +181,8 @@
         <a href="Enumerator.html"><span class="name">Enumerator</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Enumerator.A">A</span>]]</span>
       </span>
       </h4>
-      <p class="comment cmt">A once traversable enumeration of elements.</p>
-    </li><li name="basis.collections.Family" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">A stateful traversable collection.</p>
+    </li><li name="basis.collections.Family" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Family[+Type]extendsAny"></a>
       <a id="Family[+Type]:Family[Type]"></a>
       <h4 class="signature">
@@ -195,7 +195,7 @@
       </span>
       </h4>
       <p class="comment cmt">A family of related collections.</p>
-    </li><li name="basis.collections.Index" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="basis.collections.Index" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Index[+A]extendsAnywithFamily[basis.collections.Index[A]]withSeq[A]"></a>
       <a id="Index[+A]:Index[A]"></a>
       <h4 class="signature">
@@ -207,8 +207,8 @@
         <a href="Index.html"><span class="name">Index</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Index.html" class="extype" name="basis.collections.Index">Index</a>[<span class="extype" name="basis.collections.Index.A">A</span>]] with <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Index.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">An indexed sequence of elements.</p>
-    </li><li name="basis.collections.Iterator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">An indexed sequence.</p>
+    </li><li name="basis.collections.Iterator" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Iterator[+A]extendsAnywithFamily[basis.collections.Iterator[A]]withEnumerator[A]"></a>
       <a id="Iterator[+A]:Iterator[A]"></a>
       <h4 class="signature">
@@ -220,8 +220,8 @@
         <a href="Iterator.html"><span class="name">Iterator</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]] with <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">A stateful traverser of elements.</p>
-    </li><li name="basis.collections.Library" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">A stateful collection traverser.</p>
+    </li><li name="basis.collections.Library" visbl="pub" data-isabs="true" fullComment="no" group="Factories">
       <a id="LibraryextendsLibrary1"></a>
       <a id="Library:Library"></a>
       <h4 class="signature">
@@ -234,7 +234,7 @@
       </span>
       </h4>
       <p class="comment cmt">A source of collections.</p>
-    </li><li name="basis.collections.Map" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="basis.collections.Map" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Map[+A,+T]extendsAnywithFamily[basis.collections.Map[A,T]]withContainer[(A,T)]"></a>
       <a id="Map[+A,+T]:Map[A,T]"></a>
       <h4 class="signature">
@@ -246,8 +246,8 @@
         <a href="Map.html"><span class="name">Map</span></a><span class="tparams">[<span name="A">+A</span>, <span name="T">+T</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Map.html" class="extype" name="basis.collections.Map">Map</a>[<span class="extype" name="basis.collections.Map.A">A</span>, <span class="extype" name="basis.collections.Map.T">T</span>]] with <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[(<span class="extype" name="basis.collections.Map.A">A</span>, <span class="extype" name="basis.collections.Map.T">T</span>)]</span>
       </span>
       </h4>
-      <p class="comment cmt">An associated set of (key, value) pairs with unique keys.</p>
-    </li><li name="basis.collections.MapFactory" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">An associative map.</p>
+    </li><li name="basis.collections.MapFactory" visbl="pub" data-isabs="true" fullComment="no" group="Factories">
       <a id="MapFactory[+CC[_,_]]extendsObject"></a>
       <a id="MapFactory[+CC[_,_]]:MapFactory[CC]"></a>
       <h4 class="signature">
@@ -260,7 +260,7 @@
       </span>
       </h4>
       <p class="comment cmt">A factory for buildable maps.</p>
-    </li><li name="basis.collections.Seq" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="basis.collections.Seq" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Seq[+A]extendsAnywithEqualswithFamily[basis.collections.Seq[A]]withContainer[A]"></a>
       <a id="Seq[+A]:Seq[A]"></a>
       <h4 class="signature">
@@ -272,8 +272,8 @@
         <a href="Seq.html"><span class="name">Seq</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Seq.A">A</span>]] with <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Seq.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">An iterable sequence of elements.</p>
-    </li><li name="basis.collections.SeqFactory" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">An iterable sequence.</p>
+    </li><li name="basis.collections.SeqFactory" visbl="pub" data-isabs="true" fullComment="no" group="Factories">
       <a id="SeqFactory[+CC[_]]extendsBuilderFactory[CC]"></a>
       <a id="SeqFactory[+CC[_]]:SeqFactory[CC]"></a>
       <h4 class="signature">
@@ -286,7 +286,7 @@
       </span>
       </h4>
       <p class="comment cmt">A factory for buildable sequences.</p>
-    </li><li name="basis.collections.Set" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="basis.collections.Set" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Set[+A]extendsAnywithFamily[basis.collections.Set[A]]withContainer[A]"></a>
       <a id="Set[+A]:Set[A]"></a>
       <h4 class="signature">
@@ -298,8 +298,8 @@
         <a href="Set.html"><span class="name">Set</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Set.html" class="extype" name="basis.collections.Set">Set</a>[<span class="extype" name="basis.collections.Set.A">A</span>]] with <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Set.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">A unique set of elements.</p>
-    </li><li name="basis.collections.SetFactory" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="comment cmt">A unique set.</p>
+    </li><li name="basis.collections.SetFactory" visbl="pub" data-isabs="true" fullComment="no" group="Factories">
       <a id="SetFactory[+CC[_]]extendsBuilderFactory[CC]"></a>
       <a id="SetFactory[+CC[_]]:SetFactory[CC]"></a>
       <h4 class="signature">
@@ -312,7 +312,7 @@
       </span>
       </h4>
       <p class="comment cmt">A factory for buildable sets.</p>
-    </li><li name="basis.collections.Stack" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="basis.collections.Stack" visbl="pub" data-isabs="true" fullComment="no" group="Collections">
       <a id="Stack[+A]extendsAnywithFamily[basis.collections.Stack[A]]withSeq[A]"></a>
       <a id="Stack[+A]:Stack[A]"></a>
       <h4 class="signature">
@@ -324,7 +324,7 @@
         <a href="Stack.html"><span class="name">Stack</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]] with <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">A linear sequence of elements.</p>
+      <p class="comment cmt">A linear sequence.</p>
     </li></ol>
             </div>
 
@@ -332,7 +332,7 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="basis.collections.package#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="basis.collections.package#traverse" visbl="pub" data-isabs="false" fullComment="no" group="Traversing">
       <a id="traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit"></a>
       <a id="traverse[A,U](Enumerator[A])((A)⇒U):Unit"></a>
       <h4 class="signature">
@@ -364,8 +364,17 @@ protected <code>foreach</code> method.</p>
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="Ungrouped">
-              <h3>Ungrouped</h3>
+        <div class="group" name="Traversing">
+              <h3>Traversing</h3>
+              
+            </div><div class="group" name="Collections">
+              <h3>Collections</h3>
+              
+            </div><div class="group" name="Builders">
+              <h3>Builders</h3>
+              
+            </div><div class="group" name="Factories">
+              <h3>Factories</h3>
               
             </div>
         </div>

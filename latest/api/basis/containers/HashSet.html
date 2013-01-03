@@ -44,8 +44,11 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A hash array-mapped trie set.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/v0.0/basis-containers/src/main/scala/basis/containers/HashSet.scala" target="_blank">HashSet.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A hash array-mapped trie set.</p><h4>Extensions</h4><p>Add operations to this interface by importing one of these use cases:</p><ul><li><code>import </code><a href="../sequential/General.html" class="extype" name="basis.sequential.General"><code>basis.sequential.general</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/Strict.html" class="extype" name="basis.sequential.Strict"><code>basis.sequential.strict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/NonStrict.html" class="extype" name="basis.sequential.NonStrict"><code>basis.sequential.nonstrict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li></ul><p>The following classes implement the extensions to this interface:</p><ul><li><a href="../sequential/GeneralSetOps.html" class="extype" name="basis.sequential.GeneralSetOps">GeneralSetOps</a>
+   implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><a href="../sequential/StrictSetOps.html" class="extype" name="basis.sequential.StrictSetOps">StrictSetOps</a>
+   implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><a href="../sequential/NonStrictSetOps.html" class="extype" name="basis.sequential.NonStrictSetOps">NonStrictSetOps</a>
+   implements lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/HashSet.scala" target="_blank">HashSet.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="../collections/Set.html" class="extype" name="basis.collections.Set">Set</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>], <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>], <a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>], <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>], <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.containers.HashSet">HashSet</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>]], <span class="extype" name="scala.Immutable">Immutable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
@@ -537,7 +540,10 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="Quantifying">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div><div class="group" name="Quantifying">
               <h3>Quantifying</h3>
               
             </div><div class="group" name="Querying">
@@ -554,9 +560,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
               
             </div><div class="group" name="Classifying">
               <h3>Classifying</h3>
-              
-            </div><div class="group" name="Ungrouped">
-              <h3>Ungrouped</h3>
               
             </div>
         </div>

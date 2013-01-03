@@ -49,7 +49,7 @@ commutes, and scalar multiplication associates and distributes over vector
 addition and scalar addition. Vector addition and scalar multiplication
 both have an identity element, and every vector has an additive inverse.
 To the extent practicable, the following axioms should hold.</p><p><b>Axioms for vector addition</b>:</p><ul><li>if 𝐮 and 𝐯 are vectors in <code>this</code>, then their sum 𝐮 + 𝐯 is also a vector in <code>this</code>.</li><li>𝐮 + 𝐯 == 𝐯 + 𝐮 for all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝐮 + 𝐯) + 𝐰 == 𝐮 + (𝐯 + 𝐰) for all vectors 𝐮, 𝐯, 𝐰 in <code>this</code>.</li><li><code>this</code> has a vector <code>zero</code> such that <code>zero</code> + 𝐯 == 𝐯 for every vector 𝐯 in <code>this</code>.</li><li>to every vector 𝐯 in <code>this</code> corresponds a vector -𝐯 in <code>this</code> such that 𝐯 + (-𝐯) == <code>zero</code>.</li></ul><p><b>Axioms for scalar multiplication</b>:</p><ul><li>if 𝑎 is a scalar in <code>this</code> and 𝐯 is a vector in <code>this</code>, then their product 𝑎 *: 𝐯 is also a vector in <code>this</code>.</li><li>(𝑎 * 𝑏) *: 𝐯 == 𝑎 *: (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in <code>this</code>.</li><li><code>Scalar</code> has an element <code>unit</code> such that <code>unit</code> *: 𝐯 == 𝐯 for every vector 𝐯 in <code>this</code>.</li></ul><p><b>Distributive laws</b>:</p><ul><li>𝑎 *: (𝐮 + 𝐯) == (𝑎 *: 𝐮) + (𝑎 *: 𝐯) for every scalar 𝑎 and all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝑎 + 𝑏) *: 𝐯 == (𝑎 *: 𝐯) + (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in <code>this</code>.
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/v0.0/basis-math/src/main/scala/basis/math/VectorSpace.scala" target="_blank">VectorSpace.scala</a></dd><div class="block">Example:
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-math/src/main/scala/basis/math/VectorSpace.scala" target="_blank">VectorSpace.scala</a></dd><div class="block">Example:
                 <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over vector spaces by parameterizing a class or</span>
 <span class="cmt">// function with a subtype of VectorSpace with Singleton. Type elements</span>
 <span class="cmt">// with the #Vector and #Scalar type projections of your VectorSpace</span>
@@ -70,7 +70,7 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms for
   assert(v + (-v) == zero, <span class="lit">"existence of additive inverse vector"</span>)
   assert(Scalar.unit *: v == v, <span class="lit">"existence of multiplicative identity scalar"</span>)
 }</pre></li></ol>
-              </div></dl><div class="toggleContainer block">
+              </div><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">

@@ -47,7 +47,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An abstract principal homogeneous space over the additive group of a linear
 space. Vector addition acts freely and transitively over the point set.
 To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>:</p><ul><li>𝓅 + <code>zero</code> == 𝓅 for every point 𝓅 in <code>this</code>.</li><li>(𝓅 + 𝐮) + 𝐯 == 𝓅 + (𝐮 + 𝐯) for every point 𝓅 and all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝐯: Vector) =&gt; 𝓅 + 𝐯 is a bijection for every point 𝓅 in <code>this</code>.
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/v0.0/basis-math/src/main/scala/basis/math/AffineSpace.scala" target="_blank">AffineSpace.scala</a></dd><div class="block">Example:
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-math/src/main/scala/basis/math/AffineSpace.scala" target="_blank">AffineSpace.scala</a></dd><div class="block">Example:
                 <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over affine spaces by parameterizing a class or</span>
 <span class="cmt">// function with a subtype of AffineSpace with Singleton. Type elements</span>
 <span class="cmt">// with the #Point, #Vector and #Scalar type projections of your</span>
@@ -65,7 +65,7 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
   assert(p + zero == p, <span class="lit">"existence of additive identity vector"</span>)
   <span class="kw">if</span> (p + v == q + v) assert(p == v, <span class="lit">"uniqueness of points"</span>)
 }</pre></li></ol>
-              </div></dl><div class="toggleContainer block">
+              </div><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">

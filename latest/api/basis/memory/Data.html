@@ -59,7 +59,7 @@ value types as transformations between instance types and fixed-length
 byte sequences, with a restriction on address alignment.</p><p>Primitive types have dedicated <code>load</code> and <code>store</code> methods, with multi-byte
 primitives declaring <i>aligned</i> and <i>unaligned</i> variants. A <code>Data</code> object's
 <code>endian</code> property specifies the byte order used to interpret multi-byte values.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/v0.0/basis-memory/src/main/scala/basis/memory/Data.scala" target="_blank">Data.scala</a></dd><div class="block">Example:
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-memory/src/main/scala/basis/memory/Data.scala" target="_blank">Data.scala</a></dd><div class="block">Example:
                 <ol><li class="cmt"><p></p><pre>scala&gt; <span class="kw">val</span> data = Data.alloc[<span class="std">Int</span>](<span class="num">1</span>L) <span class="cmt">// allocate data for a single Int value.</span>
 data: basis.memory.Data = Data4LE(<span class="num">4</span>) <span class="cmt">// the runtime Data class may vary.</span>
 
@@ -79,7 +79,8 @@ res4: <span class="std">String</span> = ffffbabe <span class="cmt">// the addres
 
 scala&gt; data.loadUnalignedShort(<span class="num">1</span>L).toHexString <span class="cmt">// load the unaligned middle bytes of the Int value.</span>
 res5: <span class="std">String</span> = fffffeba</pre></li></ol>
-              </div></dl><div class="toggleContainer block">
+              </div><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
@@ -1025,7 +1026,10 @@ Truncates <code>address</code> to 2-byte alignment.
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="General">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div><div class="group" name="General">
               <h3>General properties</h3>
               
             </div><div class="group" name="Aligned">
@@ -1042,9 +1046,6 @@ Truncates <code>address</code> to 2-byte alignment.
               
             </div><div class="group" name="Bulk">
               <h3>Bulk transfer operations</h3>
-              
-            </div><div class="group" name="Ungrouped">
-              <h3>Ungrouped</h3>
               
             </div>
         </div>
