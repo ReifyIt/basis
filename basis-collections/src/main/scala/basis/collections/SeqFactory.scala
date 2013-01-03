@@ -14,6 +14,7 @@ import scala.annotation.implicitNotFound
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Factories
   */
 @implicitNotFound("No sequence factory available for ${CC}.")
 trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {

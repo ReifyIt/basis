@@ -22,6 +22,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Containers
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Querying      2
@@ -98,6 +99,8 @@ private[containers] final class ArraySet[+A] private[containers] (slots: Array[A
   }
 }
 
+/** A factory for [[ArraySet array sets]].
+  * @group Containers */
 private[containers] object ArraySet extends SetFactory[ArraySet] {
   implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = ArraySet[A] } =

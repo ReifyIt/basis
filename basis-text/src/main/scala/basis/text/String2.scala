@@ -14,6 +14,7 @@ import basis.util._
   * 
   * @author Chris Sachs
   * @since  0.0
+  * @group  Strings
   * 
   * @define collection  string
   */
@@ -23,7 +24,8 @@ final class String2(codeUnits: Array[Char]) extends UTF16 {
   override def get(index: Int): Int = codeUnits(index)
 }
 
-/** A factory for [[String2 UTF-16 strings]]. */
+/** A factory for [[String2 UTF-16 strings]].
+  * @group Strings */
 object String2 {
   val empty: String2 = new String2(new Array[Char](0))
   

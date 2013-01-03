@@ -17,6 +17,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Factories
   */
 @implicitNotFound("No map factory available for ${CC}.")
 trait MapFactory[+CC[_, _]] {

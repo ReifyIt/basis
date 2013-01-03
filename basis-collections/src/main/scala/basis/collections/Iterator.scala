@@ -36,6 +36,7 @@ import scala.annotation.unspecialized
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Collections
   * 
   * @groupprio  Examining     1
   * @groupprio  Iterating     2

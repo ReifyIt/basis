@@ -12,6 +12,7 @@ package basis.collections
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Builders
   * 
   * @groupprio  Inserting   1
   * 

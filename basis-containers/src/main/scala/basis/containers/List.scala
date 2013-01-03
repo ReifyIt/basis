@@ -19,6 +19,7 @@ import basis.runtime._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Containers
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Decomposing   2
@@ -110,7 +111,8 @@ sealed abstract class List[+A]
   protected override def stringPrefix: String = "List"
 }
 
-/** A factory for [[List singly-linked lists]]. */
+/** A factory for [[List singly-linked lists]].
+  * @group Containers */
 object List extends SeqFactory[List] {
   implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = List[A] } =
@@ -126,14 +128,16 @@ object List extends SeqFactory[List] {
   override def toString: String = "List"
 }
 
-/** A [[List]] cons cell. */
+/** A [[List]] cons cell.
+  * @group Containers */
 sealed abstract class ::[A] extends List[A] {
   final override def isEmpty: Boolean = false
   
   private[containers] def tail_=(tail: List[A]): Unit
 }
 
-/** An extractor for [[List]] cons cells. */
+/** An extractor for [[List]] cons cells.
+  * @group Containers */
 object :: {
   def apply[A](x: A, xs: List[A]): ::[A] = {
     if (x.isInstanceOf[Int] && (xs.isInstanceOf[IntList] || xs.isInstanceOf[Nil.type]))
@@ -150,7 +154,8 @@ object :: {
   def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
 }
 
-/** The empty [[List]]. */
+/** The empty [[List]].
+  * @group Containers */
 object Nil extends List[Nothing] {
   override def isEmpty: Boolean = true
   

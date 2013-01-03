@@ -14,6 +14,7 @@ import scala.annotation.implicitNotFound
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Builders
   * 
   * @groupprio  Examining   1
   * @groupprio  Inserting   2

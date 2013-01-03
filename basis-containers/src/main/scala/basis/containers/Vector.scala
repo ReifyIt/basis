@@ -19,6 +19,7 @@ import basis.runtime._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Containers
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Indexing      2
@@ -289,7 +290,8 @@ private[containers] final class Vector6[+A](
   protected override def foreach[U](f: A => U): Unit = Vector.foreach6(node6)(f)
 }
 
-/** A factory for [[Vector vectors]]. */
+/** A factory for [[Vector vectors]].
+  * @group Containers */
 object Vector extends SeqFactory[Vector] {
   implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = Vector[A] } =

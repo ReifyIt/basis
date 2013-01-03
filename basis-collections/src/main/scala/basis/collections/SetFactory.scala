@@ -14,6 +14,7 @@ import scala.annotation.implicitNotFound
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Factories
   */
 @implicitNotFound("No set factory available for ${CC}.")
 trait SetFactory[+CC[_]] extends BuilderFactory[CC]

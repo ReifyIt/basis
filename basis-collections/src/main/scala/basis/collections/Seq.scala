@@ -16,6 +16,7 @@ package basis.collections
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Collections
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Iterating     2

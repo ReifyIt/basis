@@ -14,6 +14,7 @@ import basis.util._
   * 
   * @author Chris Sachs
   * @since  0.0
+  * @group  Strings
   * 
   * @define collection  string
   */
@@ -23,7 +24,8 @@ final class String4(codeUnits: Array[Int]) extends UTF32 {
   override def get(index: Int): Int = codeUnits(index)
 }
 
-/** A factory for [[String4 UTF-32 strings]]. */
+/** A factory for [[String4 UTF-32 strings]].
+  * @group Strings */
 object String4 {
   val empty: String4 = new String4(new Array[Int](0))
   

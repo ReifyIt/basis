@@ -7,8 +7,19 @@
 
 package basis
 
-/** Unicode® string implementations. */
+/** Unicode® string implementations.
+  * 
+  * @groupname  Strings   Unicode® strings
+  * @groupprio  Strings   1
+  * 
+  * @groupname  Unicode   Unicode® formats
+  * @groupprio  Unicode   2
+  * 
+  * @groupname  Builders  String builders
+  * @groupprio  Builders  3
+  */
 package object text {
-  /** Implicitly returns a new String builder. */
+  /** Implicitly returns a new String builder.
+    * @group Builders */
   implicit def StringBuilder: StringBuilder[Any] { type State = String } = new JavaStringBuilder
 }

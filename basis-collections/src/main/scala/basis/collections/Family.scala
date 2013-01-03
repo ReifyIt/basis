@@ -12,6 +12,7 @@ package basis.collections
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Collections
   */
 trait Family[+Type] extends Any {
   /** The base type of this collection's family.

@@ -14,6 +14,7 @@ import basis.collections._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Surrogates
   * 
   * @groupprio  Converting  1
   * 

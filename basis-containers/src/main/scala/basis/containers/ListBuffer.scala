@@ -19,6 +19,7 @@ import basis.runtime._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Containers
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Indexing      2
@@ -290,7 +291,8 @@ class ListBuffer[A] private (
   }
 }
 
-/** A factory for [[ListBuffer list buffers]]. */
+/** A factory for [[ListBuffer list buffers]].
+  * @group Containers */
 object ListBuffer extends SeqFactory[ListBuffer] {
   implicit override def Builder[A : TypeHint]
     : Builder[Any, A] { type State = ListBuffer[A] } =

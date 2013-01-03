@@ -20,6 +20,7 @@ package basis.collections
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Collections
   * 
   * @groupprio  Traversing    1
   * @groupprio  Classifying   2

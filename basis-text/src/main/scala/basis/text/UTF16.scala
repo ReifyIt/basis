@@ -15,6 +15,7 @@ import basis.util._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Unicode
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Indexing      2

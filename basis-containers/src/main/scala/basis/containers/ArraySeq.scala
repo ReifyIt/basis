@@ -21,6 +21,7 @@ import basis.util._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Containers
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Indexing      2
@@ -176,7 +177,8 @@ abstract class ArraySeq[+A]
   protected override def stringPrefix: String = "ArraySeq"
 }
 
-/** A factory for specialized [[ArraySeq array sequences]]. */
+/** A factory for specialized [[ArraySeq array sequences]].
+  * @group Containers */
 object ArraySeq extends SeqFactory[ArraySeq] {
   implicit override def Builder[A](implicit A: TypeHint[A])
     : Builder[Any, A] { type State = ArraySeq[A] } = (A match {

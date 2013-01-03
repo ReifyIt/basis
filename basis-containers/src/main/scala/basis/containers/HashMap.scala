@@ -23,6 +23,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Containers
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Querying      2
@@ -332,7 +333,8 @@ final class HashMap[+A, +T] private[containers] (
   }
 }
 
-/** A factory for [[HashMap hash maps]]. */
+/** A factory for [[HashMap hash maps]].
+  * @group Containers */
 object HashMap extends MapFactory[HashMap] {
   implicit override def Builder[A : TypeHint, T : TypeHint]
     : Builder[Any, (A, T)] { type State = HashMap[A, T] } =

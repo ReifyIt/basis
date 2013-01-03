@@ -14,6 +14,7 @@ import basis.util._
   * 
   * @author Chris Sachs
   * @since  0.0
+  * @group  Builders
   */
 private[text] final class JavaStringBuilder extends StringBuilder[Any] {
   override type State = String

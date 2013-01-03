@@ -10,10 +10,16 @@ package basis
 /** General collection interfaces.
   * 
   * @contentDiagram hideNodes "*Factory" "*Family"
+  * 
+  * @groupprio  Traversing    1
+  * @groupprio  Collections   2
+  * @groupprio  Builders      3
+  * @groupprio  Factories     4
   */
 package object collections {
   /** Applies a function to each element of an enumerator by invoking its
-    * protected `foreach` method. */
+    * protected `foreach` method.
+    * @group Traversing */
   def traverse[A, U](xs: Enumerator[A])(f: A => U): Unit =
     Enumerator.traverse[A, U](xs)(f)
 }

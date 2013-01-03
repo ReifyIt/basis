@@ -20,6 +20,7 @@ import basis.util._
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Containers
   * 
   * @groupprio  Quantifying   1
   * @groupprio  Indexing      2
@@ -47,7 +48,8 @@ abstract class ArrayBuffer[A]
   protected override def stringPrefix: String = "ArrayBuffer"
 }
 
-/** A factory for specialized [[ArrayBuffer array buffers]]. */
+/** A factory for specialized [[ArrayBuffer array buffers]].
+  * @group Containers */
 object ArrayBuffer extends SeqFactory[ArrayBuffer] {
   implicit override def Builder[A](implicit A: TypeHint[A])
     : Builder[Any, A] { type State = ArrayBuffer[A] } = (A match {
