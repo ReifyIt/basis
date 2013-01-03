@@ -12,6 +12,7 @@ package basis.math
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    MatrixSpaces
   */
 trait F3x3 extends Ring with FMxN {
   trait Value extends Any with super[Ring].Value with super[FMxN].Value {

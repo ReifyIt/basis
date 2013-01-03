@@ -12,6 +12,7 @@ package binary64
   * 
   * @author Chris Sachs
   * @since  0.0
+  * @group  Real
   */
 private[math] final class R
     (override val dim: Int, RowSpace: RN, ColSpace: RN, TransposeSpace: RMxN)
@@ -75,7 +76,8 @@ private[math] final class R
   }
 }
 
-/** A factory for general double-precision floating-point matrix and vector spaces. */
+/** A factory for general double-precision floating-point matrix and vector spaces.
+  * @group Real */
 object R {
   /** Returns a new double-precision floating-point vector space with the given dimension. */
   def apply(dim: Int): RN with AffineSpace = dim match {

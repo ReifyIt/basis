@@ -13,6 +13,7 @@ package binary64
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Real
   */
 trait RMxN extends FMxN {
   trait Value extends Any with super.Value {

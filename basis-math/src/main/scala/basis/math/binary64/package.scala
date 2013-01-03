@@ -7,5 +7,14 @@
 
 package basis.math
 
-/** 64-bit binary based algebraic structures. */
+/** 64-bit binary based algebraic structures.
+  * 
+  * @group  Categories
+  * 
+  * @groupname  Real      Real spaces
+  * @groupprio  Real      1
+  * 
+  * @groupname  Integral  Integer modules
+  * @groupprio  Integral  2
+  */
 package object binary64

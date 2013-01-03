@@ -59,6 +59,7 @@ package basis.math
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    MatrixSpaces
   * 
   * @define space   matrix space
   */

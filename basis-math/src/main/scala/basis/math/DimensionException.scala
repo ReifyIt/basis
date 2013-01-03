@@ -10,6 +10,7 @@ package basis.math
 /** An exception indicating a dimension mismatch.
   * 
   * @author Chris Sachs
+  * @group  Exceptions
   */
 class DimensionException(message: String) extends java.lang.RuntimeException(message) {
   def this() = this(null)

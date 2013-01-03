@@ -12,6 +12,7 @@ package basis.math
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    VectorSpaces
   */
 trait F4 extends FN {
   trait Value extends Any with super.Value {

@@ -12,6 +12,7 @@ package binary64
   * 
   * @author Chris Sachs
   * @since  0.0
+  * @group  Real
   */
 object R2 extends AffineSpace with F2 with RN {
   final class Value(

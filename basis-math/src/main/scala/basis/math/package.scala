@@ -7,5 +7,21 @@
 
 package basis
 
-/** Abstract algebraic structures. */
+/** Abstract algebraic structures.
+  * 
+  * @groupname  Categories    Categories
+  * @groupprio  Categories    1
+  * 
+  * @groupname  Structures    Structures
+  * @groupprio  Structures    2
+  * 
+  * @groupname  VectorSpaces  Vector spaces
+  * @groupprio  VectorSpaces  3
+  * 
+  * @groupname  MatrixSpaces  Matrix spaces
+  * @groupprio  MatrixSpaces  4
+  * 
+  * @groupname  Exceptions    Exceptions
+  * @groupprio  Exceptions    5
+  */
 package object math

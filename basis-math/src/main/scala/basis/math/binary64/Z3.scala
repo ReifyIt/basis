@@ -12,6 +12,7 @@ package binary64
   * 
   * @author Chris Sachs
   * @since  0.0
+  * @group  Integral
   */
 object Z3 extends AffineSpace with F3 with ZN {
   final class Value(

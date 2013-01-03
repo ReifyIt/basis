@@ -13,6 +13,7 @@ package binary64
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Real
   * 
   * @define element   value
   * @define point     value
@@ -119,7 +120,8 @@ final class Real(val value: Double) extends AnyVal with Real.Value {
   override def toString: String = java.lang.Double.toString(value)
 }
 
-/** A real field of double-precision floating-point values. */
+/** A real field of double-precision floating-point values.
+  * @group Real */
 object Real extends RealField with AffineSpace with RN with RMxN {
   trait Value
     extends Any

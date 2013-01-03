@@ -13,6 +13,7 @@ package binary64
   * @author   Chris Sachs
   * @version  0.0
   * @since    0.0
+  * @group    Integral
   * 
   * @define element   value
   * @define point     value
@@ -84,7 +85,8 @@ final class Integer(val value: Long) extends AnyVal with Integer.Value {
   override def toString: String = java.lang.Long.toString(value)
 }
 
-/** An ordered ring of 64-bit two's complement integer values. */
+/** An ordered ring of 64-bit two's complement integer values.
+  * @group Integral */
 object Integer extends OrderedRing with AffineSpace with ZN {
   trait Value
     extends Any

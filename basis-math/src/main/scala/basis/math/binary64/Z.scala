@@ -12,6 +12,7 @@ package binary64
   * 
   * @author Chris Sachs
   * @since  0.0
+  * @group  Integral
   */
 private[math] final class Z
     (override val dim: Int)
@@ -47,7 +48,8 @@ private[math] final class Z
   override def toString: String = "Z"+"("+ dim +")"
 }
 
-/** A factory for general 64-bit two's complement integer modules. */
+/** A factory for general 64-bit two's complement integer modules.
+  * @group Integral */
 object Z {
   /** Returns a new 64-bit two's complement integer module with the given dimension. */
   def apply(dim: Int): ZN with AffineSpace = dim match {

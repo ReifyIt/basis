@@ -12,6 +12,7 @@ package binary64
   * 
   * @author Chris Sachs
   * @since  0.0
+  * @group  Real
   */
 object R4x4 extends F4x4 with RMxN {
   final class Value(
