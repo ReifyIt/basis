@@ -38,7 +38,7 @@ final class HashSet[+A] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Immutable with Family[HashSet[A]] with Set[A] {
+  extends Equals with Immutable with Family[HashSet[A]] with Set[A] {
   
   import HashSet.{VOID, LEAF, TREE, KNOT}
   

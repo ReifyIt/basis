@@ -34,7 +34,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @define collection  array set
   */
 private[containers] final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
-  extends Immutable with Family[ArraySet[A]] with Set[A] {
+  extends Equals with Immutable with Family[ArraySet[A]] with Set[A] {
   
   override def isEmpty: Boolean = slots.length == 0
   
