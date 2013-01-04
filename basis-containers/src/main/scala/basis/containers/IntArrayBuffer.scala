@@ -26,8 +26,6 @@ private[containers] class IntArrayBuffer private (
   
   protected override def T: TypeHint[Int] = TypeHint.Int
   
-  final override def isEmpty: Boolean = size == 0
-  
   final override def length: Int = size
   
   final override def apply(index: Int): Int = {
@@ -233,7 +231,7 @@ private[containers] final class IntArrayBufferIterator private (
     private[this] var x: Int)
   extends Iterator[Int] {
   
-  def this(b: IntArrayBuffer) = this(b, 0, b.length, if (!b.isEmpty) b(0) else 0)
+  def this(b: IntArrayBuffer) = this(b, 0, b.length, if (b.length > 0) b(0) else 0)
   
   override def isEmpty: Boolean = i >= n
   

@@ -18,8 +18,6 @@ import basis.runtime._
 private[containers] final class ShortArraySeq(array: Array[Short]) extends ArraySeq[Short] with Reified {
   protected override def T: TypeHint[Short] = TypeHint.Short
   
-  override def isEmpty: Boolean = array.length == 0
-  
   override def length: Int = array.length
   
   override def apply(index: Int): Short = array(index)

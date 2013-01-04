@@ -18,8 +18,6 @@ import basis.runtime._
 private[containers] final class FloatArraySeq(array: Array[Float]) extends ArraySeq[Float] with Reified {
   protected override def T: TypeHint[Float] = TypeHint.Float
   
-  override def isEmpty: Boolean = array.length == 0
-  
   override def length: Int = array.length
   
   override def apply(index: Int): Float = array(index)

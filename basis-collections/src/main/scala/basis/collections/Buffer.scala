@@ -28,6 +28,10 @@ package basis.collections
 trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   extends Equals with Family[Buffer[A]] with Seq[A] with Accumulator[A] {
   
+  /** Returns the number of elements in this $collection.
+    * @group Quantifying */
+  def length: Int
+  
   /** Returns the element at the given index.
     * @group Indexing */
   def apply(index: Int): A

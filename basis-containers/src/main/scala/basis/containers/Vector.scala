@@ -38,8 +38,6 @@ sealed abstract class Vector[+A] extends Equals with Immutable with Family[Vecto
 }
 
 private[containers] final class Vector0 extends Vector[Nothing] {
-  override def isEmpty: Boolean = true
-  
   override def length: Int = 0
   
   override def apply(index: Int): Nothing =
@@ -55,8 +53,6 @@ private[containers] final class Vector1[+A](
     node1: Array[AnyRef],
     override val length: Int)
   extends Vector[A] {
-  
-  override def isEmpty: Boolean = false
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -80,8 +76,6 @@ private[containers] final class Vector2[+A](
     node2: Array[Array[AnyRef]],
     override val length: Int)
   extends Vector[A] {
-  
-  override def isEmpty: Boolean = false
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -112,8 +106,6 @@ private[containers] final class Vector3[+A](
     node3: Array[Array[Array[AnyRef]]],
     override val length: Int)
   extends Vector[A] {
-  
-  override def isEmpty: Boolean = false
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -150,8 +142,6 @@ private[containers] final class Vector4[+A](
     node4: Array[Array[Array[Array[AnyRef]]]],
     override val length: Int)
   extends Vector[A] {
-  
-  override def isEmpty: Boolean = false
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -194,8 +184,6 @@ private[containers] final class Vector5[+A](
     node5: Array[Array[Array[Array[Array[AnyRef]]]]],
     override val length: Int)
   extends Vector[A] {
-  
-  override def isEmpty: Boolean = false
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -244,8 +232,6 @@ private[containers] final class Vector6[+A](
     node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]],
     override val length: Int)
   extends Vector[A] {
-  
-  override def isEmpty: Boolean = false
   
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)

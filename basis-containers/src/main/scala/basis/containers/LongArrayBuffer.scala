@@ -26,8 +26,6 @@ private[containers] class LongArrayBuffer private (
   
   protected override def T: TypeHint[Long] = TypeHint.Long
   
-  final override def isEmpty: Boolean = size == 0
-  
   final override def length: Int = size
   
   final override def apply(index: Int): Long = {
@@ -233,7 +231,7 @@ private[containers] final class LongArrayBufferIterator private (
     private[this] var x: Long)
   extends Iterator[Long] {
   
-  def this(b: LongArrayBuffer) = this(b, 0, b.length, if (!b.isEmpty) b(0) else 0L)
+  def this(b: LongArrayBuffer) = this(b, 0, b.length, if (b.length > 0) b(0) else 0L)
   
   override def isEmpty: Boolean = i >= n
   

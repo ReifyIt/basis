@@ -39,7 +39,9 @@ sealed abstract class List[+A]
     with ListLike[A]
     with Stack[A] {
   
-  override def length: Int = {
+  /** Returns the number of elements in this $collection.
+    * @group Quantifying */
+  def length: Int = {
     var n = 0
     var xs = this
     while (!xs.isEmpty) {

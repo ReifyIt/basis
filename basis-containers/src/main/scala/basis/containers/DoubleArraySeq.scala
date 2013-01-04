@@ -18,8 +18,6 @@ import basis.runtime._
 private[containers] final class DoubleArraySeq(array: Array[Double]) extends ArraySeq[Double] with Reified {
   protected override def T: TypeHint[Double] = TypeHint.Double
   
-  override def isEmpty: Boolean = array.length == 0
-  
   override def length: Int = array.length
   
   override def apply(index: Int): Double = array(index)

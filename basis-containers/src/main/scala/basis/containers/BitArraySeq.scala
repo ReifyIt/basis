@@ -22,8 +22,6 @@ private[containers] final class BitArraySeq
   
   protected override def T: TypeHint[Boolean] = TypeHint.Boolean
   
-  override def isEmpty: Boolean = length == 0
-  
   override def apply(index: Int): Boolean = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     ((words(index >> 5) >>> (31 - (index & 0x1F))) & 1) == 1

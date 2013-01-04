@@ -26,10 +26,12 @@ import basis.util._
   * @define collection  text
   */
 abstract class UTF32 extends Equals with Family[UTF32] with Index[Int] {
-  /** Returns `true` if this $collection doesn't contain any code units. */
-  override def isEmpty: Boolean = length == 0
+  /** Returns `true` if this $collection doesn't contain any code units.
+    * @group Quantifying */
+  def isEmpty: Boolean = length == 0
   
-  /** Returns the number of code points in this $collection.g */
+  /** Returns the number of code points in this $collection.
+    * @group Quantifying */
   override def length: Int
   
   /** Returns the unsigned 32-bit code unit at `index`.

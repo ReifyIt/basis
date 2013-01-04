@@ -23,8 +23,6 @@ private[containers] class RefArrayBuffer[A] private (
   
   def this() = this(null, 0, true)
   
-  final override def isEmpty: Boolean = size == 0
-  
   final override def length: Int = size
   
   final override def apply(index: Int): A = {
@@ -230,7 +228,7 @@ private[containers] final class RefArrayBufferIterator[+A] private (
     private[this] var x: A)
   extends Iterator[A] {
   
-  def this(b: RefArrayBuffer[A]) = this(b, 0, b.length, if (!b.isEmpty) b(0) else null.asInstanceOf[A])
+  def this(b: RefArrayBuffer[A]) = this(b, 0, b.length, if (b.length > 0) b(0) else null.asInstanceOf[A])
   
   override def isEmpty: Boolean = i >= n
   

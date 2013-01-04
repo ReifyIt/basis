@@ -26,8 +26,6 @@ private[containers] class ShortArrayBuffer private (
   
   protected override def T: TypeHint[Short] = TypeHint.Short
   
-  final override def isEmpty: Boolean = size == 0
-  
   final override def length: Int = size
   
   final override def apply(index: Int): Short = {
@@ -233,7 +231,7 @@ private[containers] final class ShortArrayBufferIterator private (
     private[this] var x: Short)
   extends Iterator[Short] {
   
-  def this(b: ShortArrayBuffer) = this(b, 0, b.length, if (!b.isEmpty) b(0) else 0.toShort)
+  def this(b: ShortArrayBuffer) = this(b, 0, b.length, if (b.length > 0) b(0) else 0.toShort)
   
   override def isEmpty: Boolean = i >= n
   

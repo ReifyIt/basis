@@ -18,8 +18,6 @@ import basis.runtime._
 private[containers] final class ByteArraySeq(array: Array[Byte]) extends ArraySeq[Byte] with Reified {
   protected override def T: TypeHint[Byte] = TypeHint.Byte
   
-  override def isEmpty: Boolean = array.length == 0
-  
   override def length: Int = array.length
   
   override def apply(index: Int): Byte = array(index)

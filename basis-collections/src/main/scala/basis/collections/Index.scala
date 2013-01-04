@@ -40,11 +40,13 @@ import scala.annotation.unspecialized
 trait Index[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Any with Family[Index[A]] with Seq[A] {
   
+  /** Returns the number of elements in this $collection.
+    * @group Quantifying */
+  def length: Int
+  
   /** Returns the element at the given index.
     * @group Indexing */
   def apply(index: Int): A
-  
-  override def isEmpty: Boolean = length == 0
   
   @unspecialized override def iterator: Iterator[A] = new IndexIterator(this)
   

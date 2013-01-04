@@ -28,8 +28,6 @@ private[containers] final class ValArraySeq[+A]
   
   override val length: Int = (data.size / A.size).toInt
   
-  override def isEmpty: Boolean = length == 0
-  
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     A.load(data, A.size * index)

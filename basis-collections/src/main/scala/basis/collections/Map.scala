@@ -37,7 +37,7 @@ import scala.annotation.unchecked.uncheckedVariance
   *  - [[basis.sequential.NonStrictMapOps NonStrictMapOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
+trait Map[+A, +T] extends Any with Equals with Family[Map[A, T]] with Container[(A, T)] {
   /** Returns `true` if this $collection doesn't contain any associations.
     * @group Quantifying */
   def isEmpty: Boolean = iterator.isEmpty
@@ -54,7 +54,7 @@ trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
     count
   }
   
-  /** Returns `true` if this $collection has a value associated with the given key.
+  /** Returns `true` if this $collection has an association with the given key.
     * @group Querying */
   def contains(key: A @uncheckedVariance): Boolean = {
     val entries = iterator
@@ -92,4 +92,43 @@ trait Map[+A, +T] extends Any with Family[Map[A, T]] with Container[(A, T)] {
   /** Returns a new iterator over the (key, value) pairs of this $collection.
     * @group Iterating */
   override def iterator: Iterator[(A, T)]
+  
+  /** Returns `true` if this $collection might equal another object, otherwise `false`.
+    * @group Classifying */
+  override def canEqual(other: Any): Boolean = other.isInstanceOf[Map[_, _]]
+  
+  /** Returns `true` if this $collection contains exactly the same keys as
+    * another map, otherwise `false`.
+    * @group Classifying */
+  override def equals(other: Any): Boolean = other match {
+    case that: Map[_, _] =>
+      (this.asInstanceOf[AnyRef] eq that.asInstanceOf[AnyRef]) ||
+      (that canEqual this) && 
+      (this.size == that.size) && {
+        val entries = that.asInstanceOf[Map[A, _]].iterator
+        while (!entries.isEmpty) {
+          if (!contains(entries.head._1)) return false
+          entries.step()
+        }
+        true
+      }
+    case _ => false
+  }
+  
+  /** Returns a hash of the keys in this $collection.
+    * @group Classifying */
+  override def hashCode: Int = {
+    import basis.util.MurmurHash3._
+    var a, b = 0
+    var c = 1
+    val these = iterator
+    while (!these.isEmpty) {
+      val h = these.head._1.##
+      a ^= h
+      b += h
+      if (h != 0) c *= h
+      these.step()
+    }
+    mash(mix(mix(mix(-1628184653, a), b), c))
+  }
 }

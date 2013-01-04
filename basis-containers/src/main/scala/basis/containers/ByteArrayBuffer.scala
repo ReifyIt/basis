@@ -26,8 +26,6 @@ private[containers] class ByteArrayBuffer private (
   
   protected override def T: TypeHint[Byte] = TypeHint.Byte
   
-  final override def isEmpty: Boolean = size == 0
-  
   final override def length: Int = size
   
   final override def apply(index: Int): Byte = {
@@ -233,7 +231,7 @@ private[containers] final class ByteArrayBufferIterator private (
     private[this] var x: Byte)
   extends Iterator[Byte] {
   
-  def this(b: ByteArrayBuffer) = this(b, 0, b.length, if (!b.isEmpty) b(0) else 0.toByte)
+  def this(b: ByteArrayBuffer) = this(b, 0, b.length, if (b.length > 0) b(0) else 0.toByte)
   
   override def isEmpty: Boolean = i >= n
   

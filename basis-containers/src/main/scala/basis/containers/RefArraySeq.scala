@@ -15,8 +15,6 @@ import basis.collections._
   * @since  0.0
   */
 private[containers] final class RefArraySeq[+A](array: Array[AnyRef]) extends ArraySeq[A] {
-  override def isEmpty: Boolean = array.length == 0
-  
   override def length: Int = array.length
   
   override def apply(index: Int): A = array(index).asInstanceOf[A]

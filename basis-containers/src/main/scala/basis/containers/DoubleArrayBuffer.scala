@@ -26,8 +26,6 @@ private[containers] class DoubleArrayBuffer private (
   
   protected override def T: TypeHint[Double] = TypeHint.Double
   
-  final override def isEmpty: Boolean = size == 0
-  
   final override def length: Int = size
   
   final override def apply(index: Int): Double = {
@@ -233,7 +231,7 @@ private[containers] final class DoubleArrayBufferIterator private (
     private[this] var x: Double)
   extends Iterator[Double] {
   
-  def this(b: DoubleArrayBuffer) = this(b, 0, b.length, if (!b.isEmpty) b(0) else 0.0)
+  def this(b: DoubleArrayBuffer) = this(b, 0, b.length, if (b.length > 0) b(0) else 0.0)
   
   override def isEmpty: Boolean = i >= n
   

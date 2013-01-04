@@ -26,11 +26,13 @@ import basis.util._
   * @define collection  text
   */
 abstract class UTF16 extends Equals with Family[UTF16] with Seq[Int] {
-  /** Returns `true` if this $collection doesn't contain any code units. */
-  override def isEmpty: Boolean = size == 0
+  /** Returns `true` if this $collection doesn't contain any code units.
+    * @group Quantifying */
+  def isEmpty: Boolean = size == 0
   
-  /** Returns the number of code points in this $collection. */
-  override def length: Int = {
+  /** Returns the number of code points in this $collection.
+    * @group Quantifying */
+  def length: Int = {
     var l = 0
     var i = 0
     val n = size

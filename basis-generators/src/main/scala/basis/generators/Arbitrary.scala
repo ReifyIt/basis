@@ -538,7 +538,7 @@ object Arbitrary {
   }
   
   private final class Pick[+A](elems: Index[A])(implicit rand: Randomness) extends Arbitrary[A] {
-    if (elems.isEmpty) throw new IllegalArgumentException("empty pick")
+    if (elems.length == 0) throw new IllegalArgumentException("empty pick")
     
     private[this] val index = below(elems.length)
     

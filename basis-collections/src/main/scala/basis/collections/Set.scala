@@ -37,7 +37,7 @@ import scala.annotation.unchecked.uncheckedVariance
   *  - [[basis.sequential.NonStrictSetOps NonStrictSetOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
+trait Set[+A] extends Any with Equals with Family[Set[A]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Quantifying */
   def isEmpty: Boolean = iterator.isEmpty
@@ -63,5 +63,44 @@ trait Set[+A] extends Any with Family[Set[A]] with Container[A] {
       these.step()
     }
     false
+  }
+  
+  /** Returns `true` if this $collection might equal another object, otherwise `false`.
+    * @group Classifying */
+  override def canEqual(other: Any): Boolean = other.isInstanceOf[Set[_]]
+  
+  /** Returns `true` if this $collection contains exactly the same elements as
+    * another set, otherwise `false`.
+    * @group Classifying */
+  override def equals(other: Any): Boolean = other match {
+    case that: Set[_] =>
+      (this.asInstanceOf[AnyRef] eq that.asInstanceOf[AnyRef]) ||
+      (that canEqual this) && 
+      (this.size == that.size) && {
+        val those = that.asInstanceOf[Set[A]].iterator
+        while (!those.isEmpty) {
+          if (!contains(those.head)) return false
+          those.step()
+        }
+        true
+      }
+    case _ => false
+  }
+  
+  /** Returns a hash of the elements in this $collection.
+    * @group Classifying */
+  override def hashCode: Int = {
+    import basis.util.MurmurHash3._
+    var a, b = 0
+    var c = 1
+    val these = iterator
+    while (!these.isEmpty) {
+      val h = these.head.##
+      a ^= h
+      b += h
+      if (h != 0) c *= h
+      these.step()
+    }
+    mash(mix(mix(mix(-1628178759, a), b), c))
   }
 }

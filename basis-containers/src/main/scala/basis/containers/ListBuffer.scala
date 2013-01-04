@@ -50,7 +50,7 @@ class ListBuffer[A] private (
   
   def this() = this(Nil, null, 0, 0)
   
-  final override def isEmpty: Boolean = size == 0
+  final def isEmpty: Boolean = size == 0
   
   final override def length: Int = size
   

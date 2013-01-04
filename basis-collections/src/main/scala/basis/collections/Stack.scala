@@ -40,6 +40,10 @@ import scala.annotation.unspecialized
 trait Stack[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   extends Any with Family[Stack[A]] with Seq[A] {
   
+  /** Returns `true` if this $collection doesn't contain any elements.
+    * @group Quantifying */
+  def isEmpty: Boolean
+  
   /** Returns the first element of this non-empty $collection.
     * @group Decomposing */
   def head: A
@@ -47,16 +51,6 @@ trait Stack[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   /** Returns all elements except the first of this non-empty $collection.
     * @group Decomposing */
   def tail: Family
-  
-  override def length: Int = {
-    var xs = this
-    var count = 0
-    while (!xs.isEmpty) {
-      count += 1
-      xs = xs.tail
-    }
-    count
-  }
   
   @unspecialized override def iterator: Iterator[A] = new StackIterator(this)
   

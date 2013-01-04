@@ -26,8 +26,6 @@ private[containers] class FloatArrayBuffer private (
   
   protected override def T: TypeHint[Float] = TypeHint.Float
   
-  final override def isEmpty: Boolean = size == 0
-  
   final override def length: Int = size
   
   final override def apply(index: Int): Float = {
@@ -233,7 +231,7 @@ private[containers] final class FloatArrayBufferIterator private (
     private[this] var x: Float)
   extends Iterator[Float] {
   
-  def this(b: FloatArrayBuffer) = this(b, 0, b.length, if (!b.isEmpty) b(0) else 0.0F)
+  def this(b: FloatArrayBuffer) = this(b, 0, b.length, if (b.length > 0) b(0) else 0.0F)
   
   override def isEmpty: Boolean = i >= n
   

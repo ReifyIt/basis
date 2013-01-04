@@ -18,8 +18,6 @@ import basis.runtime._
 private[containers] final class IntArraySeq(array: Array[Int]) extends ArraySeq[Int] with Reified {
   protected override def T: TypeHint[Int] = TypeHint.Int
   
-  override def isEmpty: Boolean = array.length == 0
-  
   override def length: Int = array.length
   
   override def apply(index: Int): Int = array(index)
