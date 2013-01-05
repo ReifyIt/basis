@@ -24,83 +24,83 @@ object TypeHint {
   
   def apply[T](implicit T: TypeHint[T]): T.type = T
   
-  implicit object Any extends ClassTypeHint[Any] {
+  implicit object Any extends ClassHint[Any] {
     override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
     override def toString: String = "Any"
   }
   
-  implicit object AnyVal extends ClassTypeHint[AnyVal] {
+  implicit object AnyVal extends ClassHint[AnyVal] {
     override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
     override def toString: String = "AnyVal"
   }
   
-  implicit object Byte extends ClassTypeHint[Byte] {
+  implicit object Byte extends ClassHint[Byte] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Byte.TYPE
     override def newArray(length: Int): Array[Byte] = new Array[Byte](length)
     override def toString: String = "Byte"
   }
   
-  implicit object Short extends ClassTypeHint[Short] {
+  implicit object Short extends ClassHint[Short] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Short.TYPE
     override def newArray(length: Int): Array[Short] = new Array[Short](length)
     override def toString: String = "Short"
   }
   
-  implicit object Char extends ClassTypeHint[Char] {
+  implicit object Char extends ClassHint[Char] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Character.TYPE
     override def newArray(length: Int): Array[Char] = new Array[Char](length)
     override def toString: String = "Char"
   }
   
-  implicit object Int extends ClassTypeHint[Int] {
+  implicit object Int extends ClassHint[Int] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Integer.TYPE
     override def newArray(length: Int): Array[Int] = new Array[Int](length)
     override def toString: String = "Int"
   }
   
-  implicit object Long extends ClassTypeHint[Long] {
+  implicit object Long extends ClassHint[Long] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Long.TYPE
     override def newArray(length: Int): Array[Long] = new Array[Long](length)
     override def toString: String = "Long"
   }
   
-  implicit object Float extends ClassTypeHint[Float] {
+  implicit object Float extends ClassHint[Float] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Float.TYPE
     override def newArray(length: Int): Array[Float] = new Array[Float](length)
     override def toString: String = "Float"
   }
   
-  implicit object Double extends ClassTypeHint[Double] {
+  implicit object Double extends ClassHint[Double] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Double.TYPE
     override def newArray(length: Int): Array[Double] = new Array[Double](length)
     override def toString: String = "Double"
   }
   
-  implicit object Boolean extends ClassTypeHint[Boolean] {
+  implicit object Boolean extends ClassHint[Boolean] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Boolean.TYPE
     override def newArray(length: Int): Array[Boolean] = new Array[Boolean](length)
     override def toString: String = "Boolean"
   }
   
-  implicit object Unit extends ClassTypeHint[Unit] {
+  implicit object Unit extends ClassHint[Unit] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Void.TYPE
     override def newArray(length: Int): Array[Unit] = new Array[Unit](length)
     override def toString: String = "Unit"
   }
   
-  implicit object AnyRef extends ClassTypeHint[AnyRef] {
+  implicit object AnyRef extends ClassHint[AnyRef] {
     override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
     override def newArray(length: Int): Array[AnyRef] = new Array[AnyRef](length)
     override def toString: String = "AnyRef"
   }
   
-  implicit object Nothing extends ClassTypeHint[Nothing] {
+  implicit object Nothing extends ClassHint[Nothing] {
     override def runtimeClass: java.lang.Class[_] = classOf[scala.runtime.Nothing$]
     override def newArray(length: Int): Array[Nothing] = new Array[Nothing](length)
     override def toString: String = "Nothing"
   }
   
-  implicit def Array[T](implicit T: ClassTypeHint[T]): ClassTypeHint[Array[T]] = ClassTypeHint.Array(T)
+  implicit def Array[T](implicit T: ClassHint[T]): ClassHint[Array[T]] = ClassHint.Array(T)
   
   implicit def Undefined[T]: TypeHint[T] = NoTypeHint.asInstanceOf[TypeHint[T]]
 }

@@ -26,7 +26,7 @@ import scala.annotation.implicitNotFound
   * @tparam T   This struct's instance type.
   */
 @implicitNotFound("No available Struct for type ${T}.")
-abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) T] extends ClassTypeHint[T] {
+abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) T] extends ClassHint[T] {
   /** Returns the power-of-two alignment of this struct's frame. This alignment
     * must evenly divide all storage addresses used for values of this type. */
   def alignment: Long
