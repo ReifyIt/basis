@@ -12,7 +12,7 @@ import scala.annotation.implicitNotFound
 /** A factory for buildable sequences.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Factories
   */

@@ -11,11 +11,12 @@ import basis.runtime._
 
 import scala.annotation.implicitNotFound
 import scala.annotation.unchecked.uncheckedVariance
+import scala.collection.TraversableOnce
 
 /** A factory for buildable maps.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Factories
   */
@@ -28,13 +29,20 @@ trait MapFactory[+CC[_, _]] {
   implicit def Builder[A, T](implicit A: TypeHint[A], T: TypeHint[T])
     : Builder[Any, (A, T)] { type State = CC[A, T] @uncheckedVariance }
   
-  def empty[A, T](implicit A: TypeHint[A], T: TypeHint[T])
-    : CC[A, T] = Builder(A, T).state
+  def empty[A, T](implicit A: TypeHint[A], T: TypeHint[T]): CC[A, T] =
+    Builder(A, T).state
   
-  def coerce[A, T](entries: Map[A, T])(implicit A: TypeHint[A], T: TypeHint[T])
-    : CC[A, T] = (Builder(A, T) ++= entries).state
+  def coerce[A, T](entries: Enumerator[(A, T)])(implicit A: TypeHint[A], T: TypeHint[T]): CC[A, T] =
+    (Builder(A, T) ++= entries).state
   
-  def apply[A, T](entries: (A, T)*): CC[A, T] = macro MapFactory.apply[CC, A, T]
+  def coerce[A, T](entries: TraversableOnce[(A, T)])(implicit A: TypeHint[A], T: TypeHint[T]): CC[A, T] = {
+    val builder = Builder(A, T)
+    entries.foreach(new Accumulator.Append(builder))
+    builder.state
+  }
+  
+  def apply[A, T](entries: (A, T)*): CC[A, T] =
+    macro MapFactory.apply[CC, A, T]
 }
 
 private[collections] object MapFactory {
