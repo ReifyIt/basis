@@ -141,6 +141,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.Index#length" visbl="pub" data-isabs="true" fullComment="no" group="Quantifying">
+      <a id="length:Int"></a>
+      <a id="length:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the number of elements in this index.</p>
     </li></ol>
             </div>
 
@@ -223,7 +236,9 @@
         <span class="name">equals</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this index equals another object, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this index equals another object, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
+      <p class="shortcomment cmt">Returns <code>true</code> if this index contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this index contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
     </li><li name="basis.collections.Index#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
       <a id="foreach[U](f:A=&gt;U):Unit"></a>
       <a id="foreach[U]((A)⇒U):Unit"></a>
@@ -257,19 +272,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a hash of the elements in this index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a hash of the elements in this index.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Any</dd></dl></div>
-    </li><li name="basis.collections.Index#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
-      <a id="isEmpty:Boolean"></a>
-      <a id="isEmpty:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this index doesn't contain any elements.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this index doesn't contain any elements.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Index">Index</a> → <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -299,19 +301,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
                 <span class="name">@unspecialized</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.collections.Seq#length" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
-      <a id="length:Int"></a>
-      <a id="length:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the number of elements in this index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the number of elements in this index.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a></dd></dl></div>
     </li><li name="basis.collections.Collection#stringPrefix" visbl="prt" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>

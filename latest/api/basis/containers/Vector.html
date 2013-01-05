@@ -141,6 +141,19 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the element at the given index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the element at the given index.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Index.html" class="extype" name="basis.collections.Index">Index</a></dd></dl></div>
+    </li><li name="basis.collections.Index#length" visbl="pub" data-isabs="true" fullComment="yes" group="Quantifying">
+      <a id="length:Int"></a>
+      <a id="length:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the number of elements in this vector.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the number of elements in this vector.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Index.html" class="extype" name="basis.collections.Index">Index</a></dd></dl></div>
     </li><li name="basis.containers.Vector#update" visbl="pub" data-isabs="true" fullComment="no" group="Indexing">
       <a id="update[B&gt;:A](index:Int,elem:B):basis.containers.Vector[B]"></a>
       <a id="update[B&gt;:A](Int,B):Vector[B]"></a>
@@ -291,7 +304,9 @@
         <span class="name">equals</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this vector equals another object, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this vector equals another object, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
+      <p class="shortcomment cmt">Returns <code>true</code> if this vector contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this vector contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -354,19 +369,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a hash of the elements in this vector.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a hash of the elements in this vector.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Any</dd></dl></div>
-    </li><li name="basis.collections.Index#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
-      <a id="isEmpty:Boolean"></a>
-      <a id="isEmpty:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this vector doesn't contain any elements.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this vector doesn't contain any elements.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Index.html" class="extype" name="basis.collections.Index">Index</a> → <a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -396,19 +398,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
                 <span class="name">@unspecialized</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.collections.Seq#length" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
-      <a id="length:Int"></a>
-      <a id="length:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the number of elements in this vector.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the number of elements in this vector.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

@@ -141,6 +141,19 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the unsigned 32-bit code unit at <code>index</code>.</p>
+    </li><li name="basis.text.UTF32#length" visbl="pub" data-isabs="true" fullComment="yes" group="Quantifying">
+      <a id="length:Int"></a>
+      <a id="length:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the number of code points in this text.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the number of code points in this text.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.text.UTF32">UTF32</a> → <a href="../collections/Index.html" class="extype" name="basis.collections.Index">Index</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -292,7 +305,9 @@ U+FFFD in lieu of invalid characters.</p></div><dl class="attributes block"> <dt
         <span class="name">equals</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this text equals another object, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this text equals another object, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
+      <p class="shortcomment cmt">Returns <code>true</code> if this text contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this text contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -349,7 +364,7 @@ Applies the replacement character U+FFFD in lieu of invalid characters.</p></div
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a hash of the elements in this text.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a hash of the elements in this text.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Any</dd></dl></div>
-    </li><li name="basis.text.UTF32#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
+    </li><li name="basis.text.UTF32#isEmpty" visbl="pub" data-isabs="false" fullComment="no" group="Quantifying">
       <a id="isEmpty:Boolean"></a>
       <a id="isEmpty:Boolean"></a>
       <h4 class="signature">
@@ -361,7 +376,7 @@ Applies the replacement character U+FFFD in lieu of invalid characters.</p></div
         <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this text doesn't contain any code units.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this text doesn't contain any code units.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.text.UTF32">UTF32</a> → <a href="../collections/Index.html" class="extype" name="basis.collections.Index">Index</a> → <a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns <code>true</code> if this text doesn't contain any code units.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -388,19 +403,6 @@ Applies the replacement character U+FFFD in lieu of invalid characters.</p></div
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a new iterator over the code points of this text.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the code points of this text.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.text.UTF32">UTF32</a> → <a href="../collections/Index.html" class="extype" name="basis.collections.Index">Index</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a></dd></dl></div>
-    </li><li name="basis.collections.Seq#length" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
-      <a id="length:Int"></a>
-      <a id="length:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the number of elements in this text.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the number of elements in this text.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

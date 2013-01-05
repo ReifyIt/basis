@@ -223,7 +223,9 @@
         <span class="name">equals</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this sequence equals another object, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this sequence equals another object, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
+      <p class="shortcomment cmt">Returns <code>true</code> if this sequence contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this sequence contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
     </li><li name="basis.collections.Container#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
       <a id="foreach[U](f:A=&gt;U):Unit"></a>
       <a id="foreach[U]((A)⇒U):Unit"></a>
@@ -254,19 +256,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a hash of the elements in this sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a hash of the elements in this sequence.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Seq">Seq</a> → Any</dd></dl></div>
-    </li><li name="basis.collections.Seq#isEmpty" visbl="pub" data-isabs="false" fullComment="no" group="Quantifying">
-      <a id="isEmpty:Boolean"></a>
-      <a id="isEmpty:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this sequence doesn't contain any elements.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -280,19 +269,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Seq#length" visbl="pub" data-isabs="false" fullComment="no" group="Quantifying">
-      <a id="length:Int"></a>
-      <a id="length:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the number of elements in this sequence.</p>
     </li><li name="basis.collections.Collection#stringPrefix" visbl="prt" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>
@@ -347,9 +323,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <div id="groupedMembers">
         <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
-              
-            </div><div class="group" name="Quantifying">
-              <h3>Quantifying</h3>
               
             </div><div class="group" name="Iterating">
               <h3>Iterating</h3>
