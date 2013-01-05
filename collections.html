@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Collections – Basis</title>
+    <link href="main.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <header class="header">
+      <h1>Basis</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Design</a></li>
+          <li><a href="downloads.html">Downloads</a></li>
+          <li><a href="latest/api/basis/package.html">Documentation</a></li>
+          <li><a href="https://github.com/ReifyIt/basis">Source Code</a></li>
+        </ul>
+      </nav>
+    </header>
+    <article>
+      <header>
+        <h2>Collections</h2>
+        <aside>
+          <h3><a href="latest/api/basis/package.html">Packages</a></h3>
+          <nav>
+            <ul>
+              <li>
+                <span class="api"><a href="latest/api/basis/collections/package.html">API</a></span>
+                <a href="collections.html">Collections</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/containers/package.html">API</a></span>
+                <a href="containers.html">Containers</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/generators/package.html">API</a></span>
+                <a href="generators.html">Generators</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/sequential/package.html">API</a></span>
+                <a href="sequential.html">Sequential</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/text/package.html">API</a></span>
+                <a href="text.html">Text</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/math/package.html">API</a></span>
+                <a href="math.html">Math</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/memory/package.html">API</a></span>
+                <a href="memory.html">Memory</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/control/package.html">API</a></span>
+                <a href="control.html">Control</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/runtime/package.html">API</a></span>
+                <a href="runtime.html">Runtime</a>
+              </li>
+              <li>
+                <span class="api"><a href="latest/api/basis/util/package.html">API</a></span>
+                <a href="util.html">Utilities</a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+      </header>
+      <h3><a name="overview">Overview</a></h3>
+      <p>The <code><a href="latest/api/basis/collections/package.html">basis.collections</a></code> package defines essential collection <a href="#data-types">data types</a>, along with abstract <a href="#builders">builders</a> and <a href="#factories">factories</a> for these types. You won't find any concrete implementations here; the <a href="containers.html">containers</a> package has those. You won't find any high-level operations here either; they exist in the <a href="sequential.html">sequential</a> (and eventually parallel) package. This collections triumvirate may at first seem obtuse, but the separation of concerns greatly simplifies the interactions between these disparate and individually complex components.</p>
+      <section>
+        <h4><a name="data-types">Data Types</a></h4>
+        <p>Enumerating more than one thing shouldn't require implementing more than one thing. <dfn><code><a href="latest/api/basis/collections/Enumerator.html">Enumerator</a></code></dfn> achieves this with its <code>foreach</code> method. Though because not every collection views <code>foreach</code> as fundamental, <code>Enumerator</code> protects it. But thanks to the way Basis uniformly treats all <a href="sequential.html">collection operations</a>, you can still call <code>foreach</code> on any collection and get an optimized implementation.</p>
+        <p><code>Enumerator</code> has the purposeful caveat that you can only meaningfully invoke <code>foreach</code> on one once. This lets <code>Enumerator</code> encompass transient collections. <dfn><code><a href="latest/api/basis/collections/Iterator.html">Iterator</a></code></dfn>, the canonical transient collection, allows you to traverse elements <em>statefully</em>. <code>Iterator</code> works like a linked-list with a movable head. In-between steps (<code>step()</code> advances an <code>Iterator</code>), you can idempotently call <code>isEmpty</code> and <code>head</code>. You can even implement <code>Iterator</code>-based branching and backtracking algorithms, because <code>Iterator</code> can <code>dup</code>-licate its state.</p>
+        <p>A real <dfn><code><a href="latest/api/basis/collections/Collection.html">Collection</a></code></dfn> has a reentrant <code>foreach</code> method. That's all it needs. But if you provide an <code>Iterator</code> too, then you can make a <dfn><code><a href="latest/api/basis/collections/Container.html">Container</a></code></dfn>. Macros inline most <code>Container</code> operations, yielding comparable performance to hand-specialized code.</p>
+        <p>A <code>Container</code> whose elements have a definite order becomes a <dfn><code><a href="latest/api/basis/collections/Seq.html">Seq</a></code></dfn>-uence. A <code>Seq</code> with a known <code>length</code> and an indexed <code>apply</code> method forms an <dfn><code><a href="latest/api/basis/collections/Index.html">Index</a></code></dfn>. While a <dfn><code><a href="latest/api/basis/collections/Stack.html">Stack</a></code></dfn> recursively decomposes into a <code>head</code> element and a <code>tail</code> <code>Stack</code>.</p>
+        <p>A <code>Container</code> of unique elements defines a <dfn><code><a href="latest/api/basis/collections/Set.html">Set</a></code></dfn>. Test elements for membership in a <code>Set</code> with <code>contains</code>, and determine the arity of a <code>Set</code> with <code>size</code>.</p>
+        <p>A <dfn><code><a href="latest/api/basis/collections/Map.html">Map</a></code></dfn> associates values with keys in a <code>Container</code> of (key, value) pairs. Test a key for definition in a <code>Map</code> with <code>contains</code>, then get the key's associated value using <code>apply</code>. Or obtain an <code>Option</code> with a key's value, if that key exists, from the <code>get</code> method. Call <code>size</code> to reveal the number of associations in a <code>Map</code>.</p>
+      </section>
+      <section>
+        <h4><a name="builders">Builders</a></h4>
+        <p>You construct collections incrementally with a <dfn><code><a href="latest/api/basis/collections/Builder.html">Builder</a></code></dfn>, or sporadically with a <dfn><code><a href="latest/api/basis/collections/Buffer.html">Buffer</a></code></dfn>. Both can <code>append</code> individual elements with <code>+=</code>, and <code>appendAll</code> multiple elements with <code>++=</code>. If you can, tell a <code>Builder</code> how many marginal elements to <code>expect</code>.</p>
+        <p>A <code>Builder</code> manages the work-in-progress <code>State</code> of a collection. You can non-destructively check the current <code>state</code> of a <code>Builder</code> at any time. Methods that produce new collections often take a <code>Builder</code> as an implicit parameter, and return the <code>Builder</code> parameter's path-dependent <code>State</code> type. <code>Builder</code> has a contravariant <code>From</code> type parameter used to narrow the scope of implicit searches.</p>
+      </section>
+      <section>
+        <h4><a name="factories">Factories</a></h4>
+        <p><dfn><code><a href="latest/api/basis/collections/BuilderFactory.html">BuilderFactory</a></code></dfn> abstracts over polymorphic creation of collections typed with a single parameter (that is, type constructors with kind * → *). The <code>apply</code> macro permits efficient collection literals. You can also obtain <code>empty</code> collections as well as <code>coerce</code> other collection types.</p>
+        <p><dfn><code><a href="latest/api/basis/collections/SeqFactory.html">SeqFactory</a></code></dfn> adds some utility to <code>BuilderFactory</code>. The <code>fill</code> macro returns sequences of by-name parameter evaluations. To functionally specify an element for each index, use the <code>tabulate</code> macro. And to unfold a sequence from a start value, try the <code>iterate</code> macro.</p>
+        <p><dfn><code><a href="latest/api/basis/collections/SetFactory.html">SetFactory</a></code></dfn> exists, because it exists. It will earn its keep or disappear.</p>
+        <p><dfn><code><a href="latest/api/basis/collections/MapFactory.html">MapFactory</a></code></dfn> generalizes polymorphic creation of collections typed with two parameters (type constructors with kind * → * → *). This makes <code>MapFactory</code> incompatible with <code>BuilderFactory</code>, but it works just the same–with two type parameters in lieu of one.</p>
+        <p>Lastly, <dfn><code><a href="latest/api/basis/collections/Library.html">Library</a></code></dfn> abstracts over the entire collections apparatus. The <code><a href="latest/api/basis/containers/package.html">basis.containers</a></code> package establishes a central <code>Library</code>. And new or decorated collections implementations can benefit from the convenience that <code>Library</code> prodivides.</p>
+      </section>
+    </article>
+  </body>
+</html>
