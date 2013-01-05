@@ -22,8 +22,6 @@ import scala.collection.TraversableOnce
   */
 @implicitNotFound("No builder factory available for ${CC}.")
 trait BuilderFactory[+CC[_]] {
-  type Product[A] = CC[A]
-  
   implicit def Factory: this.type = this
   
   implicit def Builder[A](implicit A: TypeHint[A])
