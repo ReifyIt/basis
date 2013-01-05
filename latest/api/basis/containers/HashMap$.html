@@ -243,15 +243,28 @@
               
         </dd></dl></div>
     </li><li name="basis.collections.MapFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="coerce[A,T](entries:basis.collections.Map[A,T])(implicitA:basis.runtime.TypeHint[A],implicitT:basis.runtime.TypeHint[T]):CC[A,T]"></a>
-      <a id="coerce[A,T](Map[A,T])(TypeHint[A],TypeHint[T]):HashMap[A,T]"></a>
+      <a id="coerce[A,T](entries:scala.collection.TraversableOnce[(A,T)])(implicitA:basis.runtime.TypeHint[A],implicitT:basis.runtime.TypeHint[T]):CC[A,T]"></a>
+      <a id="coerce[A,T](TraversableOnce[(A,T)])(TypeHint[A],TypeHint[T]):HashMap[A,T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span name="entries">entries: <a href="../collections/Map.html" class="extype" name="basis.collections.Map">Map</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>]</span>, <span name="T">T: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>)</span><span class="result">: <a href="HashMap.html" class="extype" name="basis.containers.HashMap">HashMap</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span name="entries">entries: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[(<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>)]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>]</span>, <span name="T">T: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>)</span><span class="result">: <a href="HashMap.html" class="extype" name="basis.containers.HashMap">HashMap</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/MapFactory.html" class="extype" name="basis.collections.MapFactory">MapFactory</a></dd></dl></div>
+    </li><li name="basis.collections.MapFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coerce[A,T](entries:basis.collections.Enumerator[(A,T)])(implicitA:basis.runtime.TypeHint[A],implicitT:basis.runtime.TypeHint[T]):CC[A,T]"></a>
+      <a id="coerce[A,T](Enumerator[(A,T)])(TypeHint[A],TypeHint[T]):HashMap[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span name="entries">entries: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[(<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>)]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>]</span>, <span name="T">T: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>)</span><span class="result">: <a href="HashMap.html" class="extype" name="basis.containers.HashMap">HashMap</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/MapFactory.html" class="extype" name="basis.collections.MapFactory">MapFactory</a></dd></dl></div>

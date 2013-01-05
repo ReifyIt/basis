@@ -51,7 +51,7 @@
       <span class="defval" name="&quot;No map factory available for ${CC}.&quot;">...</span>
     </span>)</span>
               
-        </dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/MapFactory.scala" target="_blank">MapFactory.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+        </dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/MapFactory.scala" target="_blank">MapFactory.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -260,15 +260,28 @@
               
         </dd></dl></div>
     </li><li name="basis.collections.MapFactory#coerce" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="coerce[A,T](entries:basis.collections.Map[A,T])(implicitA:basis.runtime.TypeHint[A],implicitT:basis.runtime.TypeHint[T]):CC[A,T]"></a>
-      <a id="coerce[A,T](Map[A,T])(TypeHint[A],TypeHint[T]):CC[A,T]"></a>
+      <a id="coerce[A,T](entries:scala.collection.TraversableOnce[(A,T)])(implicitA:basis.runtime.TypeHint[A],implicitT:basis.runtime.TypeHint[T]):CC[A,T]"></a>
+      <a id="coerce[A,T](TraversableOnce[(A,T)])(TypeHint[A],TypeHint[T]):CC[A,T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span name="entries">entries: <a href="Map.html" class="extype" name="basis.collections.Map">Map</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>]</span>, <span name="T">T: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.MapFactory.CC">CC</span>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span name="entries">entries: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[(<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>)]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>]</span>, <span name="T">T: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.MapFactory.CC">CC</span>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.MapFactory#coerce" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="coerce[A,T](entries:basis.collections.Enumerator[(A,T)])(implicitA:basis.runtime.TypeHint[A],implicitT:basis.runtime.TypeHint[T]):CC[A,T]"></a>
+      <a id="coerce[A,T](Enumerator[(A,T)])(TypeHint[A],TypeHint[T]):CC[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span name="entries">entries: <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[(<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>)]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>]</span>, <span name="T">T: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.MapFactory.CC">CC</span>[<span class="extype" name="basis.collections.MapFactory.coerce.A">A</span>, <span class="extype" name="basis.collections.MapFactory.coerce.T">T</span>]</span>
       </span>
       </h4>
       
