@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>LongOps - basis.util.LongOps</title>
-          <meta name="description" content="LongOps - basis.util.LongOps" />
-          <meta name="keywords" content="LongOps basis.util.LongOps" />
+          <title>TryOps - basis.control.TryOps</title>
+          <meta name="description" content="TryOps - basis.control.TryOps" />
+          <meta name="keywords" content="TryOps basis.control.TryOps" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'basis.util.LongOps';
+            var hash = 'basis.control.TryOps';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,8 +30,8 @@
         <body class="type">
       <div id="definition">
         <img src="../../lib/class_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.util">util</a></p>
-        <h1>LongOps</h1>
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a></p>
+        <h1>TryOps</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -40,19 +40,19 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">LongOps</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">TryOps</span><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Supplemental operations on <code>Long</code> values.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-util/src/main/scala/basis/util/LongOps.scala" target="_blank">LongOps.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Standard <a href="Try.html" class="extype" name="basis.control.Try">Try</a> result combinators.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/TryOps.scala" target="_blank">TryOps.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.1
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph145" viewBox="0.00 0.00 349.00 128.00" height="128pt" width="349pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 124)" class="graph" id="graph1"><polygon points="-4,5 -4,-124 346,-124 346,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><g class="cluster" id="graph4"></g><!-- node2 --><g class="node implicit-outgoing class" id="graph145_2"><a xlink:title="basis.util.LongOps can be implicitly converted to ArrowOps[LongOps] by the implicit method ArrowOps in package basis.util" xlink:href="ArrowOps.html#inheritance-diagram"><polygon points="316.25,-50 181.75,-50 181.75,-24 316.25,-24 316.25,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="192" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="214" text-anchor="start">ArrowOps[LongOps]</text></a></g><!-- node0 --><g class="node this class" id="graph145_0"><a xlink:title="basis.util.LongOps (this class)" xlink:href="#inheritance-diagram"><polygon points="109.25,-50 24.75,-50 24.75,-24 109.25,-24 109.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">LongOps</text></a></g><!-- node0&#45;&gt;node2 --><g class="edge implicit-outgoing" id="0_2"><a xlink:title="LongOps can be implicitly converted to ArrowOps[LongOps]"><path d="M117.677,-37C133.361,-37 151.048,-37 168.241,-37" stroke="#d4d4d4" fill="none"></path><polygon points="168.357,-38.7501 173.357,-37 168.357,-35.2501 168.357,-38.7501" stroke="#d4d4d4" fill="#d4d4d4"></polygon></a><text fill="#aaaaaa" font-size="10.00" font-family="Arial" y="-41.499" x="145.25" text-anchor="middle">implicitly</text></g><!-- node1 --><g class="node class" id="graph145_1"><a xlink:title="scala.AnyRef"><polygon points="105.25,-120 28.75,-120 28.75,-94 105.25,-94 105.25,-120" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-115" x="39" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-103" x="61" text-anchor="start">AnyRef</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph145_1_0"><a xlink:title="LongOps is a subtype of AnyRef"><path d="M67,-88.5884C67,-76.5177 67,-60.7522 67,-50.0518" stroke="#d4d4d4" fill="none"></path><polygon points="65.2501,-88.8429 67,-93.843 68.7501,-88.843 65.2501,-88.8429" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph102" viewBox="0.00 0.00 491.00 128.00" height="128pt" width="491pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 124)" class="graph" id="graph1"><polygon points="-4,5 -4,-124 488,-124 488,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><g class="cluster" id="graph4"></g><!-- node0 --><g class="node this class" id="graph102_0"><a xlink:title="basis.control.TryOps (this class)" xlink:href="#inheritance-diagram"><polygon points="459,-50 371,-50 371,-24 459,-24 459,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="381" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="403" text-anchor="start">TryOps[T]</text></a></g><!-- node4 --><g class="node implicit-incoming class" id="graph102_4"><a xlink:title="basis.control.Failure can be implicitly converted to TryOps[Nothing] by the implicit method TryOps in package basis.control" xlink:href="Failure.html#inheritance-diagram"><polygon points="299.25,-50 224.75,-50 224.75,-24 299.25,-24 299.25,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="235" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="257" text-anchor="start">Failure</text></a></g><!-- node4&#45;&gt;node0 --><g class="edge implicit-incoming" id="4_0"><a xlink:title="Try[T], Success[T], Failure can be implicitly converted to TryOps[T]"><path d="M307.91,-37C323.595,-37 341.335,-37 357.798,-37" stroke="#d4d4d4" fill="none"></path><polygon points="358.25,-38.7501 363.25,-37 358.25,-35.2501 358.25,-38.7501" stroke="#d4d4d4" fill="#d4d4d4"></polygon></a><text fill="#aaaaaa" font-size="10.00" font-family="Arial" y="-41.499" x="335" text-anchor="middle">implicitly</text></g><!-- node3 --><g class="node implicit-incoming trait" id="graph102_3"><a xlink:title="basis.control.Success can be implicitly converted to TryOps[T] by the implicit method TryOps in package basis.control" xlink:href="Success.html#inheritance-diagram"><polygon points="206,-50 112,-50 112,-24 206,-24 206,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-45" x="122" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="144" text-anchor="start">Success[T]</text></a></g><!-- node3&#45;&gt;node4 --><!-- node2 --><g class="node implicit-incoming class" id="graph102_2"><a xlink:title="basis.control.Try can be implicitly converted to TryOps[T] by the implicit method TryOps in package basis.control" xlink:href="Try.html#inheritance-diagram"><polygon points="94,-50 24,-50 24,-24 94,-24 94,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="34" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="56" text-anchor="start">Try[T]</text></a></g><!-- node2&#45;&gt;node3 --><!-- node1 --><g class="node class" id="graph102_1"><a xlink:title="scala.AnyRef"><polygon points="453.25,-120 376.75,-120 376.75,-94 453.25,-94 453.25,-120" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-115" x="387" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-103" x="409" text-anchor="start">AnyRef</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph102_1_0"><a xlink:title="TryOps[T] is a subtype of AnyRef"><path d="M415,-88.5884C415,-76.5177 415,-60.7522 415,-50.0518" stroke="#d4d4d4" fill="none"></path><polygon points="413.25,-88.8429 415,-93.843 416.75,-88.843 413.25,-88.8429" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -61,7 +61,7 @@
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol>
-                
+                <li class="group out"><span>Grouped</span></li>
                 <li class="alpha in"><span>Alphabetic</span></li>
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
@@ -70,12 +70,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.util.LongOps"><span>LongOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-                <span class="filtertype">Implicitly<br />
-                </span>
-                <ol id="implicits"> <li class="in" name="basis.util.ArrowOps" data-hidden="false"><span>by ArrowOps</span></li>
+                  <li class="in" name="basis.control.TryOps"><span>TryOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -95,16 +90,16 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="basis.util.LongOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():basis.util.LongOps"></a>
-      <a id="&lt;init&gt;:LongOps"></a>
+              <ol><li name="basis.control.TryOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(result:basis.control.Try[T]):basis.control.TryOps[T]"></a>
+      <a id="&lt;init&gt;:TryOps[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">LongOps</span><span class="params">()</span>
+        <span class="name">TryOps</span><span class="params">(<span name="result">result: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.T">T</span>]</span>)</span>
       </span>
       </h4>
       
@@ -156,26 +151,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.util.ArrowOps#-&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="-&gt;[B](right:B):(A,B)"></a>
-      <a id="-&gt;[B](B):(LongOps,B)"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $minus$greater" class="implicit">-&gt;</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="right">right: <span class="extype" name="basis.util.ArrowOps.-&gt;.B">B</span></span>)</span><span class="result">: (<a href="" class="extype" name="basis.util.LongOps">LongOps</a>, <span class="extype" name="basis.util.ArrowOps.-&gt;.B">B</span>)</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
-            This member is added by an implicit conversion from <a href="" class="extype" name="basis.util.LongOps">LongOps</a> to
-            <a href="ArrowOps.html" class="extype" name="basis.util.ArrowOps">ArrowOps</a>[<a href="" class="extype" name="basis.util.LongOps">LongOps</a>] performed by method ArrowOps in <a href="package.html" class="extype" name="basis.util">basis.util</a>.
-            
-          </dd><dt>Definition Classes</dt><dd><a href="ArrowOps.html" class="extype" name="basis.util.ArrowOps">ArrowOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:AnyRef):Boolean"></a>
       <a id="==(AnyRef):Boolean"></a>
@@ -202,22 +177,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.util.LongOps#abs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="abs:Long"></a>
-      <a id="abs:Long"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">abs</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -247,54 +206,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.util.LongOps#countLeadingZeros" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="countLeadingZeros:Int"></a>
-      <a id="countLeadingZeros:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">countLeadingZeros</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="basis.util.LongOps#countSetBits" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="countSetBits:Int"></a>
-      <a id="countSetBits:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">countSetBits</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="basis.util.LongOps#countTrailingZeros" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="countTrailingZeros:Int"></a>
-      <a id="countTrailingZeros:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">countTrailingZeros</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -321,6 +232,24 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.control.TryOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="filter(p:T=&gt;Boolean):basis.control.Try[T]"></a>
+      <a id="filter((T)⇒Boolean):Try[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.TryOps.T">T</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> whose value satisfies the given predicate,
+otherwise returns a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> whose value satisfies the given predicate,
+otherwise returns a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -337,6 +266,40 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="basis.control.TryOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="flatMap[U](f:T=&gt;basis.control.Try[U]):basis.control.Try[U]"></a>
+      <a id="flatMap[U]((T)⇒Try[U]):Try[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMap</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.TryOps.T">T</span>) ⇒ <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.flatMap.U">U</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.flatMap.U">U</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the given function applied to a <code>Success</code> value,
+or returns <code>this</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the given function applied to a <code>Success</code> value,
+or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.TryOps#foreach" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="foreach[U](f:T=&gt;U):Unit"></a>
+      <a id="foreach[U]((T)⇒U):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.TryOps.T">T</span>) ⇒ <span class="extype" name="basis.control.TryOps.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies the given side-effecting function only to a <code>Success</code> value.</p><div class="fullcomment"><div class="comment cmt"><p>Applies the given side-effecting function only to a <code>Success</code> value.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -350,6 +313,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.control.TryOps#getOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="getOrElse[U&gt;:T](default:U):U"></a>
+      <a id="getOrElse[U&gt;:T](U):U"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrElse</span><span class="tparams">[<span name="U">U &gt;: <span class="extype" name="basis.control.TryOps.T">T</span></span>]</span><span class="params">(<span name="default">default: <span class="extype" name="basis.control.TryOps.getOrElse.U">U</span></span>)</span><span class="result">: <span class="extype" name="basis.control.TryOps.getOrElse.U">U</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the value for a <code>Success</code>, or the <code>default</code> value for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value for a <code>Success</code>, or the <code>default</code> value for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -376,35 +355,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.util.LongOps#max" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="max(b:Long):Long"></a>
-      <a id="max(Long):Long"></a>
+    </li><li name="basis.control.TryOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="map[U](f:T=&gt;U):basis.control.Try[U]"></a>
+      <a id="map[U]((T)⇒U):Try[U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">max</span><span class="params">(<span name="b">b: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+        <span class="name">map</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.TryOps.T">T</span>) ⇒ <span class="extype" name="basis.control.TryOps.map.U">U</span></span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.map.U">U</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="basis.util.LongOps#min" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="min(b:Long):Long"></a>
-      <a id="min(Long):Long"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">min</span><span class="params">(<span name="b">b: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Tries the given function applied to a <code>Success</code> value,
+or returns <code>this</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Tries the given function applied to a <code>Success</code> value,
+or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -447,19 +412,55 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.util.LongOps#signum" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="signum:Int"></a>
-      <a id="signum:Int"></a>
+    </li><li name="basis.control.TryOps#orElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="orElse[U&gt;:T](default:basis.control.Try[U]):basis.control.Try[U]"></a>
+      <a id="orElse[U&gt;:T](Try[U]):Try[U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">signum</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">orElse</span><span class="tparams">[<span name="U">U &gt;: <span class="extype" name="basis.control.TryOps.T">T</span></span>]</span><span class="params">(<span name="default">default: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.orElse.U">U</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.orElse.U">U</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code>, or the <code>default</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code>, or the <code>default</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.TryOps#recover" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
+      <a id="recover[U&gt;:T](q:PartialFunction[Throwable,U]):basis.control.Try[U]"></a>
+      <a id="recover[U&gt;:T](PartialFunction[Throwable,U]):Try[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recover</span><span class="tparams">[<span name="U">U &gt;: <span class="extype" name="basis.control.TryOps.T">T</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="basis.control.TryOps.recover.U">U</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recover.U">U</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
+tries the given function applied to a defined <code>Failure</code> cause.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
+tries the given function applied to a defined <code>Failure</code> cause.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.TryOps#recoverWith" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
+      <a id="recoverWith[U&gt;:T](q:PartialFunction[Throwable,basis.control.Try[U]]):basis.control.Try[U]"></a>
+      <a id="recoverWith[U&gt;:T](PartialFunction[Throwable,Try[U]]):Try[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recoverWith</span><span class="tparams">[<span name="U">U &gt;: <span class="extype" name="basis.control.TryOps.T">T</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recoverWith.U">U</span>]]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recoverWith.U">U</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
+returns the given function applied to a defined <code>Failure</code> cause.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
+returns the given function applied to a defined <code>Failure</code> cause.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -476,22 +477,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.util.LongOps#toDoubleBits" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toDoubleBits:Double"></a>
-      <a id="toDoubleBits:Double"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toDoubleBits</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -553,26 +538,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.util.ArrowOps#→" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="→[B](right:B):(A,B)"></a>
-      <a id="→[B](B):(LongOps,B)"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $u2192" class="implicit">→</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="right">right: <span class="extype" name="basis.util.ArrowOps.→.B">B</span></span>)</span><span class="result">: (<a href="" class="extype" name="basis.util.LongOps">LongOps</a>, <span class="extype" name="basis.util.ArrowOps.→.B">B</span>)</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
-            This member is added by an implicit conversion from <a href="" class="extype" name="basis.util.LongOps">LongOps</a> to
-            <a href="ArrowOps.html" class="extype" name="basis.util.ArrowOps">ArrowOps</a>[<a href="" class="extype" name="basis.util.LongOps">LongOps</a>] performed by method ArrowOps in <a href="package.html" class="extype" name="basis.util">basis.util</a>.
-            
-          </dd><dt>Definition Classes</dt><dd><a href="ArrowOps.html" class="extype" name="basis.util.ArrowOps">ArrowOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li></ol>
             </div>
 
@@ -587,16 +552,21 @@
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>
-        <div class="conversion" name="basis.util.ArrowOps">
-              <h3>Inherited by implicit conversion ArrowOps from
-                <a href="" class="extype" name="basis.util.LongOps">LongOps</a> to <a href="ArrowOps.html" class="extype" name="basis.util.ArrowOps">ArrowOps</a>[<a href="" class="extype" name="basis.util.LongOps">LongOps</a>]
-              </h3>
-            </div>
+        
         </div>
 
         <div id="groupedMembers">
         <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
+              
+            </div><div class="group" name="Evaluating">
+              <h3>Evaluating</h3>
+              
+            </div><div class="group" name="Composing">
+              <h3>Composing</h3>
+              
+            </div><div class="group" name="Recovering">
+              <h3>Recovering</h3>
               
             </div>
         </div>

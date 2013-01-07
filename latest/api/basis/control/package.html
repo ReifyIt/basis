@@ -47,7 +47,11 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Control-flow utilities.</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">Content Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph101" viewBox="0.00 0.00 195.00 96.00" height="96pt" width="195pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 92)" class="graph" id="graph1"><polygon points="-4,5 -4,-92 192,-92 192,5 -4,5" stroke="white" fill="white"></polygon><!-- node0 --><g class="node class" id="graph101_0"><a xlink:title="basis.control.Try" xlink:href="Try.html#inheritance-diagram"><polygon points="133,-88 63,-88 63,-62 133,-62 133,-88" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-83" x="73" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="95" text-anchor="start">Try[T]</text></a></g><!-- node1 --><g class="node trait" id="graph101_1"><a xlink:title="basis.control.Success" xlink:href="Success.html#inheritance-diagram"><polygon points="94,-26 -7.10543e-15,-26 -7.10543e-15,-0 94,-0 94,-26" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-21" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="32" text-anchor="start">Success[T]</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph101_0_1"><a xlink:title="Success[T] is a subtype of Try[T]"><path d="M84.4231,-58.0271C75.9115,-48.0135 65.1127,-35.3091 57.3053,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="83.1077,-59.1818 87.6794,-61.8581 85.7745,-56.915 83.1077,-59.1818" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node class" id="graph101_2"><a xlink:title="basis.control.Failure" xlink:href="Failure.html#inheritance-diagram"><polygon points="187.25,-26 112.75,-26 112.75,-0 187.25,-0 187.25,-26" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-21" x="123" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="145" text-anchor="start">Failure</text></a></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph101_0_2"><a xlink:title="Failure is a subtype of Try[T]"><path d="M111.843,-58.0271C120.522,-48.0135 131.532,-35.3091 139.493,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="110.475,-56.9335 108.523,-61.8581 113.12,-59.2258 110.475,-56.9335" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -112,12 +116,135 @@
       </span>
       </h4>
       <p class="comment cmt">An exception signalling a break in control flow.</p>
+    </li><li name="basis.control.Failure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FailureextendsTry[Nothing]"></a>
+      <a id="Failure:Failure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Failure.html"><span class="name">Failure</span></a><span class="result"> extends <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">An exceptional <a href="Try.html" class="extype" name="basis.control.Try">Try</a> result.</p>
+    </li><li name="basis.control.Success" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Success[+T]extendsTry[T]"></a>
+      <a id="Success[+T]:Success[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Success.html"><span class="name">Success</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.Success.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A successful <a href="Try.html" class="extype" name="basis.control.Try">Try</a> result.</p>
+    </li><li name="basis.control.Try" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Try[+T]extendsObject"></a>
+      <a id="Try[+T]:Try[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Try.html"><span class="name">Try</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A computed <a href="Success.html" class="extype" name="basis.control.Success">Success</a> value, or an exceptional <a href="Failure.html" class="extype" name="basis.control.Failure">Failure</a>.</p>
+    </li><li name="basis.control.TryOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TryOps[+T]extendsObject"></a>
+      <a id="TryOps[+T]:TryOps[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TryOps.html"><span class="name">TryOps</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Standard <a href="Try.html" class="extype" name="basis.control.Try">Try</a> result combinators.</p>
     </li></ol>
             </div>
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="basis.control.Failure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Failure"></a>
+      <a id="Failure:Failure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Failure$.html"><span class="name">Failure</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">A factory for <a href="Failure.html" class="extype" name="basis.control.Failure">Failure</a> results.</p>
+    </li><li name="basis.control.NonFatal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonFatal"></a>
+      <a id="NonFatal:NonFatal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NonFatal$.html"><span class="name">NonFatal</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">Non-fatal throwable extractor.</p>
+    </li><li name="basis.control.Success" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Success"></a>
+      <a id="Success:Success"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Success$.html"><span class="name">Success</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">A factory for <a href="Success.html" class="extype" name="basis.control.Success">Success</a> results.</p>
+    </li><li name="basis.control.Try" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Try"></a>
+      <a id="Try:Try"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Try$.html"><span class="name">Try</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">A factory for <a href="Try.html" class="extype" name="basis.control.Try">Try</a> results.</p>
+    </li><li name="basis.control.package#TryOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TryOps[T](result:basis.control.Try[T]):basis.control.TryOps[T]"></a>
+      <a id="TryOps[T](Try[T]):TryOps[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TryOps</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="result">result: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.T">T</span>]</span>)</span><span class="result">: <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="basis.control.TryOps.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Implicitly adds standard operations to <code>Try</code> results.</p><div class="fullcomment"><div class="comment cmt"><p>Implicitly adds standard operations to <code>Try</code> results.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
 
         
 

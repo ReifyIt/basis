@@ -1,0 +1,665 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>Failure - basis.control.Failure</title>
+          <meta name="description" content="Failure - basis.control.Failure" />
+          <meta name="keywords" content="Failure basis.control.Failure" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.control.Failure';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="Failure$.html" title="Go to companion"><img src="../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a></p>
+        <h1><a href="Failure$.html" title="Go to companion">Failure</a></h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Failure</span><span class="result"> extends <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An exceptional <a href="Try.html" class="extype" name="basis.control.Try">Try</a> result.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/Try.scala" target="_blank">Try.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph105" viewBox="0.00 0.00 321.00 128.00" height="128pt" width="321pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 124)" class="graph" id="graph1"><polygon points="-4,5 -4,-124 318,-124 318,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><g class="cluster" id="graph4"></g><!-- node2 --><g class="node implicit-outgoing class" id="graph105_2"><a xlink:title="basis.control.Failure can be implicitly converted to TryOps[Nothing] by the implicit method TryOps in package basis.control" xlink:href="TryOps.html#inheritance-diagram"><polygon points="288.25,-50 171.75,-50 171.75,-24 288.25,-24 288.25,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="182" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="204" text-anchor="start">TryOps[Nothing]</text></a></g><!-- node0 --><g class="node this class" id="graph105_0"><a xlink:title="basis.control.Failure (this class)" xlink:href="#inheritance-diagram"><polygon points="99.25,-50 24.75,-50 24.75,-24 99.25,-24 99.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">Failure</text></a></g><!-- node0&#45;&gt;node2 --><g class="edge implicit-outgoing" id="0_2"><a xlink:title="Failure can be implicitly converted to TryOps[Nothing]"><path d="M107.696,-37C123.284,-37 141.112,-37 158.245,-37" stroke="#d4d4d4" fill="none"></path><polygon points="158.383,-38.7501 163.383,-37 158.383,-35.2501 158.383,-38.7501" stroke="#d4d4d4" fill="#d4d4d4"></polygon></a><text fill="#aaaaaa" font-size="10.00" font-family="Arial" y="-41.499" x="135.25" text-anchor="middle">implicitly</text></g><!-- node1 --><g class="node class" id="graph105_1"><a xlink:title="basis.control.Try" xlink:href="Try.html#inheritance-diagram"><polygon points="111,-120 13,-120 13,-94 111,-94 111,-120" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-115" x="23" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-103" x="45" text-anchor="start">Try[Nothing]</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph105_1_0"><a xlink:title="Failure is a subtype of Try[Nothing]"><path d="M62,-88.5884C62,-76.5177 62,-60.7522 62,-50.0518" stroke="#d4d4d4" fill="none"></path><polygon points="60.2501,-88.8429 62,-93.843 63.7501,-88.843 60.2501,-88.8429" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                <li class="group out"><span>Grouped</span></li>
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.control.Failure"><span>Failure</span></li><li class="in" name="basis.control.Try"><span>Try</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+                <span class="filtertype">Implicitly<br />
+                </span>
+                <ol id="implicits"> <li class="in" name="basis.control.TryOps" data-hidden="false"><span>by TryOps</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.control.Failure#cause" visbl="pub" data-isabs="false" fullComment="no" group="Evaluating">
+      <a id="cause:Throwable"></a>
+      <a id="cause:Throwable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cause</span><span class="result">: <span class="extype" name="scala.Throwable">Throwable</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the exception that caused this <code>Failure</code>.</p>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.control.Try#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="equals(other:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this <code>Try</code> equals another <code>Try</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this <code>Try</code> equals another <code>Try</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Try.html" class="extype" name="basis.control.Try">Try</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="basis.control.TryOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="filter(p:T=&gt;Boolean):basis.control.Try[T]"></a>
+      <a id="filter((Nothing)⇒Boolean):Try[Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="scala.Nothing">Nothing</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> whose value satisfies the given predicate,
+otherwise returns a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> whose value satisfies the given predicate,
+otherwise returns a <code>Failure</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Failure">Failure</a> to
+            <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>] performed by method TryOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.TryOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="flatMap[U](f:T=&gt;basis.control.Try[U]):basis.control.Try[U]"></a>
+      <a id="flatMap[U]((Nothing)⇒Try[U]):Try[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">flatMap</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Nothing">Nothing</span>) ⇒ <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.flatMap.U">U</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.flatMap.U">U</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the given function applied to a <code>Success</code> value,
+or returns <code>this</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the given function applied to a <code>Success</code> value,
+or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Failure">Failure</a> to
+            <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>] performed by method TryOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.TryOps#foreach" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="foreach[U](f:T=&gt;U):Unit"></a>
+      <a id="foreach[U]((Nothing)⇒U):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Nothing">Nothing</span>) ⇒ <span class="extype" name="basis.control.TryOps.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies the given side-effecting function only to a <code>Success</code> value.</p><div class="fullcomment"><div class="comment cmt"><p>Applies the given side-effecting function only to a <code>Success</code> value.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Failure">Failure</a> to
+            <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>] performed by method TryOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.Failure#get" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="get:Nothing"></a>
+      <a id="get:Nothing"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">get</span><span class="result">: <span class="extype" name="scala.Nothing">Nothing</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the value for a <code>Success</code>, or throws the exception for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value for a <code>Success</code>, or throws the exception for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.control.Failure">Failure</a> → <a href="Try.html" class="extype" name="basis.control.Try">Try</a></dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.control.TryOps#getOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="getOrElse[U&gt;:T](default:U):U"></a>
+      <a id="getOrElse[U&gt;:T](U):U"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">getOrElse</span><span class="tparams">[<span name="U">U &gt;: <span class="extype" name="basis.control.TryOps.T">T</span></span>]</span><span class="params">(<span name="default">default: <span class="extype" name="basis.control.TryOps.getOrElse.U">U</span></span>)</span><span class="result">: <span class="extype" name="basis.control.TryOps.getOrElse.U">U</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the value for a <code>Success</code>, or the <code>default</code> value for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value for a <code>Success</code>, or the <code>default</code> value for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Failure">Failure</a> to
+            <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>] performed by method TryOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.Try#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of this <code>Try</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a hash of this <code>Try</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Try.html" class="extype" name="basis.control.Try">Try</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="basis.control.Failure#isFailure" visbl="pub" data-isabs="false" fullComment="yes" group="Determining">
+      <a id="isFailure:Boolean"></a>
+      <a id="isFailure:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isFailure</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Failure</code>, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Failure</code>, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.control.Failure">Failure</a> → <a href="Try.html" class="extype" name="basis.control.Try">Try</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.control.Failure#isSuccess" visbl="pub" data-isabs="false" fullComment="yes" group="Determining">
+      <a id="isSuccess:Boolean"></a>
+      <a id="isSuccess:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSuccess</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Success</code>, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Success</code>, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.control.Failure">Failure</a> → <a href="Try.html" class="extype" name="basis.control.Try">Try</a></dd></dl></div>
+    </li><li name="basis.control.TryOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="map[U](f:T=&gt;U):basis.control.Try[U]"></a>
+      <a id="map[U]((Nothing)⇒U):Try[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">map</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Nothing">Nothing</span>) ⇒ <span class="extype" name="basis.control.TryOps.map.U">U</span></span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.map.U">U</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Tries the given function applied to a <code>Success</code> value,
+or returns <code>this</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Tries the given function applied to a <code>Success</code> value,
+or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Failure">Failure</a> to
+            <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>] performed by method TryOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.control.TryOps#orElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="orElse[U&gt;:T](default:basis.control.Try[U]):basis.control.Try[U]"></a>
+      <a id="orElse[U&gt;:T](Try[U]):Try[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">orElse</span><span class="tparams">[<span name="U">U &gt;: <span class="extype" name="basis.control.TryOps.T">T</span></span>]</span><span class="params">(<span name="default">default: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.orElse.U">U</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.orElse.U">U</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code>, or the <code>default</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code>, or the <code>default</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Failure">Failure</a> to
+            <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>] performed by method TryOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.TryOps#recover" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
+      <a id="recover[U&gt;:T](q:PartialFunction[Throwable,U]):basis.control.Try[U]"></a>
+      <a id="recover[U&gt;:T](PartialFunction[Throwable,U]):Try[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">recover</span><span class="tparams">[<span name="U">U &gt;: <span class="extype" name="basis.control.TryOps.T">T</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="basis.control.TryOps.recover.U">U</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recover.U">U</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
+tries the given function applied to a defined <code>Failure</code> cause.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
+tries the given function applied to a defined <code>Failure</code> cause.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Failure">Failure</a> to
+            <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>] performed by method TryOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.TryOps#recoverWith" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
+      <a id="recoverWith[U&gt;:T](q:PartialFunction[Throwable,basis.control.Try[U]]):basis.control.Try[U]"></a>
+      <a id="recoverWith[U&gt;:T](PartialFunction[Throwable,Try[U]]):Try[U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">recoverWith</span><span class="tparams">[<span name="U">U &gt;: <span class="extype" name="basis.control.TryOps.T">T</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recoverWith.U">U</span>]]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recoverWith.U">U</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
+returns the given function applied to a defined <code>Failure</code> cause.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
+returns the given function applied to a defined <code>Failure</code> cause.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Failure">Failure</a> to
+            <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>] performed by method TryOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.control.Try#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a string representing the result of this <code>Try</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representing the result of this <code>Try</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Try.html" class="extype" name="basis.control.Try">Try</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.control.Try">
+              <h3>Inherited from <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        <div class="conversion" name="basis.control.TryOps">
+              <h3>Inherited by implicit conversion TryOps from
+                <a href="" class="extype" name="basis.control.Failure">Failure</a> to <a href="TryOps.html" class="extype" name="basis.control.TryOps">TryOps</a>[<span class="extype" name="scala.Nothing">Nothing</span>]
+              </h3>
+            </div>
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div><div class="group" name="Determining">
+              <h3>Determining</h3>
+              
+            </div><div class="group" name="Evaluating">
+              <h3>Evaluating</h3>
+              
+            </div><div class="group" name="Composing">
+              <h3>Composing</h3>
+              
+            </div><div class="group" name="Recovering">
+              <h3>Recovering</h3>
+              
+            </div><div class="group" name="Classifying">
+              <h3>Classifying</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
