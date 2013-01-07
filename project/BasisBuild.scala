@@ -63,7 +63,8 @@ object BasisBuild extends Build {
   lazy val BasisControl = Project(
     id           = "basis-control",
     base         = file("basis-control"),
-    settings     = commonSettings
+    settings     = commonSettings,
+    dependencies = Seq(BasisUtil)
   )
   
   lazy val BasisGenerators = Project(

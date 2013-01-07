@@ -14,10 +14,13 @@ package basis.control
   * @since    0.0
   */
 class Begin {
+  /** Returns this instance's break-signalling exception. */
   val signal: Break = new Break
   
+  /** Enters a dynamically breakable scope. */
   def apply(op: Unit): Unit = macro Begin.apply
   
+  /** Breaks from this instance's nearest dynamically enclosing scope. */
   def break(): Nothing = macro Begin.break
 }
 

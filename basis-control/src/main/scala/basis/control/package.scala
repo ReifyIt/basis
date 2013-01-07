@@ -8,4 +8,7 @@
 package basis
 
 /** Control-flow utilities. */
-package object control
+package object control {
+  /** Implicitly adds standard operations to `Try` results. */
+  implicit def TryOps[T](result: Try[T]): TryOps[T] = macro TryMacros.TryOps[T]
+}
