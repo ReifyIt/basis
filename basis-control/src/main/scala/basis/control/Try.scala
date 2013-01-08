@@ -19,7 +19,7 @@ package basis.control
   * @groupprio  Recovering    4
   * @groupprio  Classifying   5
   */
-sealed abstract class Try[@specialized(Int, Long, Float, Double, Boolean) +T] protected {
+sealed abstract class Try[@specialized(Int, Long, Float, Double, Boolean) +A] protected {
   /** Returns `true` if this is a `Success`, otherwise `false`.
     * @group Determining */
   def isSuccess: Boolean
@@ -28,18 +28,18 @@ sealed abstract class Try[@specialized(Int, Long, Float, Double, Boolean) +T] pr
     * @group Determining */
   def isFailure: Boolean
   
-  /** Returns the value for a `Success`, or throws the exception for a `Failure`.
+  /** Returns the value of a `Success`, or throws the exception of a `Failure`.
     * @group Evaluating */
-  def get: T
+  def get: A
   
   /** Returns `true` if this `Try` equals another `Try`.
     * @group Classifying */
   override def equals(other: Any): Boolean = {
-    if (isInstanceOf[Success[_]] && other.isInstanceOf[Success[_]])
-      asInstanceOf[Success[_]].get == other.asInstanceOf[Success[_]].get
-    else if (isInstanceOf[Failure] && other.isInstanceOf[Failure])
-      asInstanceOf[Failure].cause == other.asInstanceOf[Failure].cause
-    else false
+    (asInstanceOf[AnyRef] eq other.asInstanceOf[AnyRef]) ||
+    ((isInstanceOf[Success[_]] && other.isInstanceOf[Success[_]]) &&
+      asInstanceOf[Success[_]].get == other.asInstanceOf[Success[_]].get) ||
+    ((isInstanceOf[Failure] && other.isInstanceOf[Failure]) &&
+      asInstanceOf[Failure].cause == other.asInstanceOf[Failure].cause)
   }
   
   /** Returns a hash of this `Try`.
@@ -66,11 +66,11 @@ sealed abstract class Try[@specialized(Int, Long, Float, Double, Boolean) +T] pr
 object Try {
   /** Evaluates `op` returning a `Success` with its value, or a `Failure`
     * for a caught, non-fatal exception. */
-  def apply[T](op: => T): Try[T] = macro TryMacros.apply[T]
+  def apply[A](op: => A): Try[A] = macro TryMacros.apply[A]
 }
 
 /** A successful [[Try]] result. */
-sealed trait Success[+T] extends Try[T]
+sealed trait Success[+A] extends Try[A]
 
 private[control] final class IntSuccess(override val get: Int) extends Success[Int] {
   override def isSuccess: Boolean = true
@@ -97,20 +97,20 @@ private[control] final class BooleanSuccess(override val get: Boolean) extends S
   override def isFailure: Boolean = false
 }
 
-private[control] final class RefSuccess[+T](override val get: T) extends Success[T] {
+private[control] final class RefSuccess[+A](override val get: A) extends Success[A] {
   override def isSuccess: Boolean = true
   override def isFailure: Boolean = false
 }
 
 /** A factory for [[Success]] results. */
 object Success {
-  /** Returns a `Success` with the given result. */
-  def apply[T](value: T): Success[T] = {
-    if (value.isInstanceOf[Int]) new IntSuccess(value.asInstanceOf[Int]).asInstanceOf[Success[T]]
-    else if (value.isInstanceOf[Long]) new LongSuccess(value.asInstanceOf[Long]).asInstanceOf[Success[T]]
-    else if (value.isInstanceOf[Float]) new FloatSuccess(value.asInstanceOf[Float]).asInstanceOf[Success[T]]
-    else if (value.isInstanceOf[Double]) new DoubleSuccess(value.asInstanceOf[Double]).asInstanceOf[Success[T]]
-    else if (value.isInstanceOf[Boolean]) new BooleanSuccess(value.asInstanceOf[Boolean]).asInstanceOf[Success[T]]
+  /** Returns a `Success` with the given polymorphic result. */
+  def apply[A](value: A): Success[A] = {
+    if (value.isInstanceOf[Int]) new IntSuccess(value.asInstanceOf[Int]).asInstanceOf[Success[A]]
+    else if (value.isInstanceOf[Long]) new LongSuccess(value.asInstanceOf[Long]).asInstanceOf[Success[A]]
+    else if (value.isInstanceOf[Float]) new FloatSuccess(value.asInstanceOf[Float]).asInstanceOf[Success[A]]
+    else if (value.isInstanceOf[Double]) new DoubleSuccess(value.asInstanceOf[Double]).asInstanceOf[Success[A]]
+    else if (value.isInstanceOf[Boolean]) (if (value.asInstanceOf[Boolean]) True else False).asInstanceOf[Success[A]]
     else new RefSuccess(value)
   }
   
@@ -126,8 +126,14 @@ object Success {
   /** Returns a `Success` with the given `Double` result. */
   def apply(value: Double): Success[Double] = new DoubleSuccess(value)
   
+  /** Returns a `Success` with the given `Boolean` result. */
+  def apply(value: Boolean): Success[Boolean] = if (value) True else False
+  
+  private[this] val True: Success[Boolean] = new BooleanSuccess(true)
+  private[this] val False: Success[Boolean] = new BooleanSuccess(false)
+  
   /** Extracts the value from a `Success`. */
-  def unapply[T](success: Success[T]): Some[T] = Some(success.get)
+  def unapply[A](success: Success[A]): scala.Some[A] = scala.Some(success.get)
 }
 
 /** An exceptional [[Try]] result. */
@@ -150,5 +156,5 @@ object Failure {
   def apply(cause: Throwable): Failure = new Failure(cause)
   
   /** Extracts the `cause` from a `Failure`. */
-  def unapply(failure: Failure): Some[Throwable] = Some(failure.cause)
+  def unapply(failure: Failure): scala.Some[Throwable] = scala.Some(failure.cause)
 }
