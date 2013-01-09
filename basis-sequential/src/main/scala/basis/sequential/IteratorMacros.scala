@@ -242,6 +242,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
     val r    = newTermName(fresh("result$"))
+    val f    = newTermName(fresh("pf$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("head$"))
     Expr {
@@ -249,18 +250,20 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[B].tpe),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
+        ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
             Block(
               ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) :: Nil,
               If(
-                Apply(Select(q.tree, "isDefinedAt"), Ident(x) :: Nil),
+                Apply(Select(Ident(f), "isDefinedAt"), Ident(x) :: Nil),
                 Assign(
                   Ident(r),
                   ApplyConstructor(
                     Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Some")),
-                    Apply(q.tree, Ident(x) :: Nil) :: Nil)),
+                    Apply(Select(Ident(f), "applyOrElse"), Ident(x) ::
+                      Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil)),
                 Block(
                   Apply(Select(Ident(xs), "step"), Nil) :: Nil,
                   Apply(Ident(loop), Nil)))),
@@ -276,20 +279,25 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("builder$"))
+    val f    = newTermName(fresh("pf$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("head$"))
     Expr {
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
             Block(
               ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) ::
               If(
-                Apply(Select(q.tree, "isDefinedAt"), Ident(x) :: Nil),
-                Apply(Select(Ident(b), "append"), Apply(q.tree, Ident(x) :: Nil) :: Nil),
+                Apply(Select(Ident(f), "isDefinedAt"), Ident(x) :: Nil),
+                Apply(
+                  Select(Ident(b), "append"),
+                  Apply(Select(Ident(f), "applyOrElse"), Ident(x) ::
+                    Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil),
                 EmptyTree) ::
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),

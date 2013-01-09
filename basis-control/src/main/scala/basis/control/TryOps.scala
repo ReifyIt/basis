@@ -45,18 +45,6 @@ final class TryOps[+A](result: Try[A]) {
   def flatMap[B](f: A => Try[B]): Try[B] =
     macro TryMacros.flatMap[A, B]
   
-  /** Returns `this` for a `Success` whose value satisfies the given predicate,
-    * otherwise returns a `Failure`.
-    * @group Composing */
-  def filter(p: A => Boolean): Try[A] =
-    macro TryMacros.filter[A]
-  
-  /** Returns `this` for a `Success` whose value satisfies the given predicate,
-    * otherwise returns a `Failure`; equivalent to `filter`.
-    * @group Composing */
-  def withFilter(p: A => Boolean): Try[A] =
-    macro TryMacros.filter[A]
-  
   /** Returns `this` for a `Success` or an undefined `Failure`, otherwise
     * tries the given function applied to a defined `Failure` cause.
     * @group Recovering */
@@ -68,6 +56,18 @@ final class TryOps[+A](result: Try[A]) {
     * @group Recovering */
   def recoverWith[B >: A](q: PartialFunction[Throwable, Try[B]]): Try[B] =
     macro TryMacros.recoverWith[B]
+  
+  /** Returns `this` for a `Success` whose value satisfies the given predicate,
+    * otherwise returns a `Failure`.
+    * @group Composing */
+  def filter(p: A => Boolean): Try[A] =
+    macro TryMacros.filter[A]
+  
+  /** Returns `this` for a `Success` whose value satisfies the given predicate,
+    * otherwise returns a `Failure`; equivalent to `filter`.
+    * @group Composing */
+  def withFilter(p: A => Boolean): Try[A] =
+    macro TryMacros.filter[A]
 }
 
 private[control] object TryMacros {
@@ -193,28 +193,6 @@ private[control] object TryMacros {
     } (WeakTypeTag(TryType))
   }
   
-  def filter[A : c.WeakTypeTag](c: Context)(p: c.Expr[A => Boolean]): c.Expr[Try[A]] = {
-    import c.{Expr, fresh, mirror, weakTypeOf, WeakTypeTag}
-    import c.universe._
-    val r = newTermName(fresh("result$"))
-    val e = newTermName(fresh("exception$"))
-    val TryType = appliedType(mirror.staticClass("basis.control.Try").toType, weakTypeOf[A] :: Nil)
-    Expr {
-      Try(
-        Block(
-          ValDef(NoMods, r, TypeTree(), unApply[A](c).tree) :: Nil,
-          If(
-            Apply(Select(Select(Ident(r), "isFailure"), "$bar$bar"), Apply(p.tree, Select(Ident(r), "get") :: Nil) :: Nil),
-            Ident(r),
-            Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Failure"), "undefined"))),
-        CaseDef(
-          Bind(e, Ident(nme.WILDCARD)),
-          Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "NonFatal"), Ident(e) :: Nil),
-          Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Failure"), Ident(e) :: Nil)) :: Nil,
-        EmptyTree)
-    } (WeakTypeTag(TryType))
-  }
-  
   def recover[A : c.WeakTypeTag](c: Context)(q: c.Expr[PartialFunction[Throwable, A]]): c.Expr[Try[A]] = {
     import c.{Expr, fresh, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
@@ -277,6 +255,28 @@ private[control] object TryMacros {
               Select(Ident(f), "applyOrElse"),
               Select(TypeApply(Select(Ident(r), "asInstanceOf"), TypeTree(FailureType) :: Nil), "cause") ::
               Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil))),
+        CaseDef(
+          Bind(e, Ident(nme.WILDCARD)),
+          Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "NonFatal"), Ident(e) :: Nil),
+          Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Failure"), Ident(e) :: Nil)) :: Nil,
+        EmptyTree)
+    } (WeakTypeTag(TryType))
+  }
+  
+  def filter[A : c.WeakTypeTag](c: Context)(p: c.Expr[A => Boolean]): c.Expr[Try[A]] = {
+    import c.{Expr, fresh, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val r = newTermName(fresh("result$"))
+    val e = newTermName(fresh("exception$"))
+    val TryType = appliedType(mirror.staticClass("basis.control.Try").toType, weakTypeOf[A] :: Nil)
+    Expr {
+      Try(
+        Block(
+          ValDef(NoMods, r, TypeTree(), unApply[A](c).tree) :: Nil,
+          If(
+            Apply(Select(Select(Ident(r), "isFailure"), "$bar$bar"), Apply(p.tree, Select(Ident(r), "get") :: Nil) :: Nil),
+            Ident(r),
+            Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Failure"), "undefined"))),
         CaseDef(
           Bind(e, Ident(nme.WILDCARD)),
           Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "NonFatal"), Ident(e) :: Nil),

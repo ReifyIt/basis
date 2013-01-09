@@ -368,6 +368,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
     val r    = newTermName(fresh("result$"))
+    val f    = newTermName(fresh("pf$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("x$"))
     Expr {
@@ -377,18 +378,20 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[B].tpe),
           Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
+        ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
               ValDef(NoMods, x, TypeTree(), Apply(Ident(xs), Ident(i) :: Nil)) :: Nil,
               If(
-                Apply(Select(q.tree, "isDefinedAt"), Ident(x) :: Nil),
+                Apply(Select(Ident(f), "isDefinedAt"), Ident(x) :: Nil),
                 Assign(
                   Ident(r),
                   ApplyConstructor(
                     Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Some")),
-                    Apply(q.tree, Ident(x) :: Nil) :: Nil)),
+                    Apply(Select(Ident(f), "applyOrElse"), Ident(x) ::
+                      Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil)),
                 Block(
                   Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
                   Apply(Ident(loop), Nil)))),
@@ -406,6 +409,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
     val b    = newTermName(fresh("builder$"))
+    val f    = newTermName(fresh("pf$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("x$"))
     Expr {
@@ -414,14 +418,18 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
             Block(
               ValDef(NoMods, x, TypeTree(), Apply(Ident(xs), Ident(i) :: Nil)) ::
               If(
-                Apply(Select(q.tree, "isDefinedAt"), Ident(x) :: Nil),
-                Apply(Select(Ident(b), "append"), Apply(q.tree, Ident(x) :: Nil) :: Nil),
+                Apply(Select(Ident(f), "isDefinedAt"), Ident(x) :: Nil),
+                Apply(
+                  Select(Ident(b), "append"),
+                  Apply(Select(Ident(f), "applyOrElse"), Ident(x) ::
+                    Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil),
                 EmptyTree) ::
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
