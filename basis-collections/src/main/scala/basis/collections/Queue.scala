@@ -9,15 +9,16 @@ package basis.collections
 
 import scala.annotation.unspecialized
 
-/** A linear sequence. Stacks decompose into a `head` element and a `tail` stack.
+/** A linear sequence. Queues efficiently decompose into a `head` element and
+  * a `tail` queue.
   * 
   * ==Extensions==
   * $Extensions
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
-  * @since    0.0
+  * @version  0.1
+  * @since    0.1
   * @group    Collections
   * 
   * @groupprio  Quantifying   1
@@ -26,19 +27,19 @@ import scala.annotation.unspecialized
   * @groupprio  Traversing    4
   * @groupprio  Classifying   5
   * 
-  * @define collection  stack
+  * @define collection  queue
   * @define SequentialOps
   * The following classes implement the extensions to this interface:
   * 
-  *  - [[basis.sequential.GeneralStackOps GeneralStackOps]]
+  *  - [[basis.sequential.GeneralQueueOps GeneralQueueOps]]
   *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
-  *  - [[basis.sequential.StrictStackOps StrictStackOps]]
+  *  - [[basis.sequential.StrictQueueOps StrictQueueOps]]
   *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
-  *  - [[basis.sequential.NonStrictStackOps NonStrictStackOps]]
+  *  - [[basis.sequential.NonStrictQueueOps NonStrictQueueOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Stack[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Stack[A]] with Seq[A] {
+trait Queue[@specialized(Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Queue[A]] with Seq[A] {
   
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Quantifying */
@@ -52,7 +53,7 @@ trait Stack[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
     * @group Decomposing */
   def tail: Family
   
-  @unspecialized override def iterator: Iterator[A] = new StackIterator(this)
+  @unspecialized override def iterator: Iterator[A] = new QueueIterator(this)
   
   @unspecialized protected override def foreach[U](f: A => U) {
     var xs = this
@@ -63,8 +64,8 @@ trait Stack[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   }
 }
 
-private[collections] final class StackIterator[+A]
-    (private[this] var xs: Stack[A])
+private[collections] final class QueueIterator[+A]
+    (private[this] var xs: Queue[A])
   extends Iterator[A] {
   
   override def isEmpty: Boolean = xs.isEmpty
@@ -79,5 +80,5 @@ private[collections] final class StackIterator[+A]
     xs = xs.tail
   }
   
-  override def dup: Iterator[A] = new StackIterator(xs)
+  override def dup: Iterator[A] = new QueueIterator(xs)
 }

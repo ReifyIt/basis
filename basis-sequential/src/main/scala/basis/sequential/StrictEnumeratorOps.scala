@@ -19,10 +19,12 @@ import basis.collections._
   * @groupprio  Mapping     1
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
+  * 
+  * @define collection  enumerator
   */
 final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
   /** Returns the applications of a partial function to each element in this
-    * enumerator for which the function is defined.
+    * $collection for which the function is defined.
     * 
     * @param  q         the partial function to filter and transform elements.
     * @param  builder   the implicit accumulator for collected elements.
@@ -34,7 +36,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     builder.state
   }
   
-  /** Returns the applications of a function to each element in this enumerator.
+  /** Returns the applications of a function to each element in this $collection.
     * 
     * @param  f         the function to apply to each element.
     * @param  builder   the implicit accumulator for transformed elements.
@@ -47,7 +49,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
   }
   
   /** Returns the concatenation of all elements returned by a function applied
-    * to each element in this enumerator.
+    * to each element in this $collection.
     * 
     * @param  f         the enumerator-yielding function to apply to each element.
     * @param  builder   the implicit accumulator for flattened elements.
@@ -59,7 +61,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     builder.state
   }
   
-  /** Returns all elements in this enumerator that satisfy a predicate.
+  /** Returns all elements in this $collection that satisfy a predicate.
     * 
     * @param  p         the predicate to test elements against.
     * @param  builder   the implicit accumulator for filtered elements.
@@ -71,7 +73,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     builder.state
   }
   
-  /** Returns a view of all elements in this enumerator that satisfy a predicate.
+  /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test elements against.
     * @return a non-strict view of the filtered elements.
@@ -80,7 +82,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
   def withFilter(p: A => Boolean): Enumerator[A] =
     new NonStrictEnumeratorOps.Filter(these, p)
   
-  /** Returns all elements following the longest prefix of this enumerator
+  /** Returns all elements following the longest prefix of this $collection
     * for which each element satisfies a predicate.
     * 
     * @param  p         the predicate to test elements against.
@@ -94,7 +96,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     builder.state
   }
   
-  /** Returns the longest prefix of this enumerator for which each element
+  /** Returns the longest prefix of this $collection for which each element
     * satisfies a predicate.
     * 
     * @param  p         the predicate to test elements against.
@@ -125,7 +127,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     (builder1.state, builder2.state)
   }
   
-  /** Returns all elements in this enumerator following a prefix up to some length.
+  /** Returns all elements in this $collection following a prefix up to some length.
     * 
     * @param  lower     the length of the prefix to drop; also the inclusive
     *                   lower bound for indexes of elements to keep.
@@ -138,7 +140,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     builder.state
   }
   
-  /** Returns a prefix of this enumerator up to some length.
+  /** Returns a prefix of this $collection up to some length.
     * 
     * @param  upper     the length of the prefix to take; also the exclusive
     *                   upper bound for indexes of elements to keep.
@@ -151,7 +153,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     builder.state
   }
   
-  /** Returns an interval of elements in this enumerator.
+  /** Returns an interval of elements in this $collection.
     * 
     * @param  lower     the inclusive lower bound for indexes of elements to keep.
     * @param  upper     the exclusive upper bound for indexes of elements to keep.
@@ -165,9 +167,9 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     builder.state
   }
   
-  /** Returns the concatenation of this and another enumerator.
+  /** Returns the concatenation of this and another collection.
     * 
-    * @param  those     the enumerator to append to these elements.
+    * @param  those     the elements to append to these elements.
     * @param  builder   the implicit accumulator for concatenated elements.
     * @return the accumulated elements of both enumerators.
     * @group  Combining

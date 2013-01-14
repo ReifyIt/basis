@@ -12,7 +12,7 @@ import basis.collections._
 /** Implicit conversions that add general and non-strictly-evaluated operations to collections.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    NonStrict
   * 
@@ -23,6 +23,11 @@ import basis.collections._
   * @groupprio  NonStrict   2
   */
 class NonStrict extends General {
+  /** Implicitly provides non-strictly evaluated operations for arrays.
+    * @group NonStrict */
+  implicit def NonStrictArrayOps[A](these: Array[A]): NonStrictArrayOps[A] =
+    macro NonStrict.NonStrictArrayOps[A]
+  
   /** Implicitly provides non-strictly evaluated operations for enumerators.
     * @group NonStrict */
   implicit def NonStrictEnumeratorOps[A](these: Enumerator[A]): NonStrictEnumeratorOps[A] =
@@ -53,10 +58,10 @@ class NonStrict extends General {
   implicit def NonStrictIndexOps[A](these: Index[A]): NonStrictIndexOps[A] =
     macro NonStrict.NonStrictIndexOps[A]
   
-  /** Implicitly provides non-strictly evaluated operations for stacks.
+  /** Implicitly provides non-strictly evaluated operations for queues.
     * @group NonStrict */
-  implicit def NonStrictStackOps[A](these: Stack[A]): NonStrictStackOps[A] =
-    macro NonStrict.NonStrictStackOps[A]
+  implicit def NonStrictQueueOps[A](these: Queue[A]): NonStrictQueueOps[A] =
+    macro NonStrict.NonStrictQueueOps[A]
   
   /** Implicitly provides non-strictly evaluated operations for sets.
     * @group NonStrict */
@@ -72,6 +77,19 @@ class NonStrict extends General {
 private[sequential] object NonStrict {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
+  
+  def NonStrictArrayOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Array[A]])
+    : c.Expr[NonStrictArrayOps[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val NonStrictArrayOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.NonStrictArrayOps").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(New(NonStrictArrayOpsType, these.tree))(WeakTypeTag(NonStrictArrayOpsType))
+  }
   
   def NonStrictEnumeratorOps[A : c.WeakTypeTag]
       (c: Context)
@@ -151,17 +169,17 @@ private[sequential] object NonStrict {
     Expr(New(NonStrictIndexOpsType, these.tree))(WeakTypeTag(NonStrictIndexOpsType))
   }
   
-  def NonStrictStackOps[A : c.WeakTypeTag]
+  def NonStrictQueueOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[Stack[A]])
-    : c.Expr[NonStrictStackOps[A]] = {
+      (these: c.Expr[Queue[A]])
+    : c.Expr[NonStrictQueueOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictStackOpsType =
+    val NonStrictQueueOpsType =
       appliedType(
-        mirror.staticClass("basis.sequential.NonStrictStackOps").toType,
+        mirror.staticClass("basis.sequential.NonStrictQueueOps").toType,
         weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictStackOpsType, these.tree))(WeakTypeTag(NonStrictStackOpsType))
+    Expr(New(NonStrictQueueOpsType, these.tree))(WeakTypeTag(NonStrictQueueOpsType))
   }
   
   def NonStrictSetOps[A : c.WeakTypeTag]

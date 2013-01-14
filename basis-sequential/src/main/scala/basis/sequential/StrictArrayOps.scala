@@ -9,20 +9,20 @@ package basis.sequential
 
 import basis.collections._
 
-/** Strictly evaluated collection operations.
+/** Strictly evaluated array operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
-  * @since    0.0
+  * @version  0.1
+  * @since    0.1
   * @group    Strict
   * 
   * @groupprio  Mapping     1
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
   * 
-  * @define collection  collection
+  * @define collection  array
   */
-final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends AnyVal {
+final class StrictArrayOps[A, +From](these: Array[A]) {
   /** Returns the applications of a partial function to each element in this
     * $collection for which the function is defined.
     * 
@@ -32,7 +32,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State =
-    new StrictEnumeratorOps[A, From](these).collect[B](q)(builder)
+    macro StrictArrayOps.collect[A, B]
   
   /** Returns the applications of a function to each element in this $collection.
     * 
@@ -42,7 +42,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Mapping
     */
   def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State =
-    new StrictEnumeratorOps[A, From](these).map[B](f)(builder)
+    macro StrictArrayOps.map[A, B]
   
   /** Returns the concatenation of all elements returned by a function applied
     * to each element in this $collection.
@@ -53,7 +53,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Mapping
     */
   def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
-    new StrictEnumeratorOps[A, From](these).flatMap[B](f)(builder)
+    macro StrictArrayOps.flatMap[A, B]
   
   /** Returns all elements in this $collection that satisfy a predicate.
     * 
@@ -63,7 +63,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Filtering
     */
   def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
-    new StrictEnumeratorOps[A, From](these).filter(p)(builder)
+    macro StrictArrayOps.filter[A]
   
   /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
@@ -71,8 +71,8 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return a non-strict view of the filtered elements.
     * @group  Filtering
     */
-  def withFilter(p: A => Boolean): Collection[A] =
-    new NonStrictCollectionOps.Filter(these, p)
+  def withFilter(p: A => Boolean): Index[A] =
+    new NonStrictArrayOps.Filter(these, p)
   
   /** Returns all elements following the longest prefix of this $collection
     * for which each element satisfies a predicate.
@@ -84,7 +84,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Filtering
     */
   def dropWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
-    new StrictEnumeratorOps[A, From](these).dropWhile(p)(builder)
+    macro StrictArrayOps.dropWhile[A]
   
   /** Returns the longest prefix of this $collection for which each element
     * satisfies a predicate.
@@ -96,7 +96,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Filtering
     */
   def takeWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
-    new StrictEnumeratorOps[A, From](these).takeWhile(p)(builder)
+    macro StrictArrayOps.takeWhile[A]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
     * which each element satisfies a predicate, and the suffix beginning with
@@ -108,10 +108,11 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return the pair of accumulated prefix and suffix elements.
     * @group  Filtering
     */
-  def span(p: A => Boolean)
-      (implicit builder1: Builder[From, A], builder2: Builder[From, A])
-    : (builder1.State, builder2.State) =
-    new StrictEnumeratorOps[A, From](these).span(p)(builder1, builder2)
+  //FIXME: SI-6447
+  //def span(p: A => Boolean)
+  //    (implicit builder1: Builder[From, A], builder2: Builder[From, A])
+  //  : (builder1.State, builder2.State) =
+  //  macro StrictArrayOps.span[A]
   
   /** Returns all elements in this $collection following a prefix up to some length.
     * 
@@ -122,7 +123,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Filtering
     */
   def drop(lower: Int)(implicit builder: Builder[From, A]): builder.State =
-    new StrictEnumeratorOps[A, From](these).drop(lower)(builder)
+    macro StrictArrayOps.drop[A]
   
   /** Returns a prefix of this $collection up to some length.
     * 
@@ -133,7 +134,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Filtering
     */
   def take(upper: Int)(implicit builder: Builder[From, A]): builder.State =
-    new StrictEnumeratorOps[A, From](these).take(upper)(builder)
+    macro StrictArrayOps.take[A]
   
   /** Returns an interval of elements in this $collection.
     * 
@@ -145,16 +146,120 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Filtering
     */
   def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State =
-    new StrictEnumeratorOps[A, From](these).slice(lower, upper)(builder)
+    macro StrictArrayOps.slice[A]
   
-  /** Returns the concatenation of this and another $collection.
+  /** Returns the reverse of this $collection.
     * 
-    * @param  those     the elements to append to these elements.
-    * @param  builder   the implicit accumulator for concatenated elements.
-    * @return the accumulated elements of both collections.
+    * @param  builder   the implicit accumulator for reversed elements.
+    * @return the elements in this $collection in reverse order.
     * @group  Combining
     */
-  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
-    new StrictEnumeratorOps[B, From](these).++[B](those)(builder)
-  //new StrictEnumeratorOps[A, From](these).++[B](those)(builder) // SI-6482
+  def reverse(implicit builder: Builder[From, A]): builder.State =
+    macro StrictArrayOps.reverse[A]
+  
+  /** Returns pairs of elements from this and another $collection.
+    * 
+    * @param  those     the $collection whose elements to pair with these elements.
+    * @param  builder   the implicit accumulator for paired elements.
+    * @return the accumulated pairs of corresponding elements.
+    * @group  Combining
+    */
+  def zip[B](those: Array[B])(implicit builder: Builder[From, (A, B)]): builder.State =
+    macro StrictArrayOps.zip[A, B]
+}
+
+private[sequential] object StrictArrayOps {
+  import scala.collection.immutable.{::, Nil}
+  import scala.reflect.macros.Context
+  
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Array[A]] = {
+    import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val Apply(_, array :: Nil) = prefix.tree
+    val ArrayType = appliedType(mirror.staticClass("scala.Array").toType, weakTypeOf[A] :: Nil)
+    Expr(typeCheck(array, ArrayType))(WeakTypeTag(ArrayType))
+  }
+  
+  def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]
+      (c: Context)
+      (q: c.Expr[PartialFunction[A, B]])
+      (builder: c.Expr[Builder[_, B]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).collect[A, B](unApply[A](c))(q)(builder)
+  
+  def map[A : c.WeakTypeTag, B : c.WeakTypeTag]
+      (c: Context)
+      (f: c.Expr[A => B])
+      (builder: c.Expr[Builder[_, B]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).map[A, B](unApply[A](c))(f)(builder)
+  
+  def flatMap[A : c.WeakTypeTag, B : c.WeakTypeTag]
+      (c: Context)
+      (f: c.Expr[A => Enumerator[B]])
+      (builder: c.Expr[Builder[_, B]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).flatMap[A, B](unApply[A](c))(f)(builder)
+  
+  def filter[A : c.WeakTypeTag]
+      (c: Context)
+      (p: c.Expr[A => Boolean])
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).filter[A](unApply[A](c))(p)(builder)
+  
+  def dropWhile[A : c.WeakTypeTag]
+      (c: Context)
+      (p: c.Expr[A => Boolean])
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).dropWhile[A](unApply[A](c))(p)(builder)
+  
+  def takeWhile[A : c.WeakTypeTag]
+      (c: Context)
+      (p: c.Expr[A => Boolean])
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).takeWhile[A](unApply[A](c))(p)(builder)
+  
+  def span[A : c.WeakTypeTag]
+      (c: Context)
+      (p: c.Expr[A => Boolean])
+      (builder1: c.Expr[Builder[_, A]], builder2: c.Expr[Builder[_, A]])
+    : c.Expr[(builder1.value.State, builder2.value.State)] =
+    new ArrayMacros[c.type](c).span[A](unApply[A](c))(p)(builder1, builder2)
+  
+  def drop[A : c.WeakTypeTag]
+      (c: Context)
+      (lower: c.Expr[Int])
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).drop[A](unApply[A](c))(lower)(builder)
+  
+  def take[A : c.WeakTypeTag]
+      (c: Context)
+      (upper: c.Expr[Int])
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).take[A](unApply[A](c))(upper)(builder)
+  
+  def slice[A : c.WeakTypeTag]
+      (c: Context)
+      (lower: c.Expr[Int], upper: c.Expr[Int])
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).slice[A](unApply[A](c))(lower, upper)(builder)
+  
+  def reverse[A : c.WeakTypeTag]
+      (c: Context)
+      (builder: c.Expr[Builder[_, A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).reverse[A](unApply[A](c))(builder)
+  
+  def zip[A : c.WeakTypeTag, B : c.WeakTypeTag]
+      (c: Context)
+      (those: c.Expr[Array[B]])
+      (builder: c.Expr[Builder[_, (A, B)]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
 }

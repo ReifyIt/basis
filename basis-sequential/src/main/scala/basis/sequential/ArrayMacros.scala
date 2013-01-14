@@ -13,18 +13,21 @@ import basis.control._
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
-/** Index operations macro implementations.
+/** Array operations macro implementations.
   * 
   * @author Chris Sachs
   */
-private[sequential] final class IndexMacros[C <: Context](val context: C) {
+private[sequential] final class ArrayMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
   val universe: context.universe.type = context.universe
   
+  def isEmpty[A](these: Expr[Array[A]]): Expr[Boolean] =
+    Expr(Apply(Select(Select(these.tree, "length"), "$eq$eq"), Literal(Constant(0)) :: Nil))(TypeTag.Boolean)
+  
   def foreach[A, U]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (f: Expr[A => U])
     : Expr[Unit] = {
     val xs   = newTermName(fresh("xs$"))
@@ -33,7 +36,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) :: 
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) :: Nil,
         LabelDef(loop, Nil,
@@ -48,7 +51,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def foldLeft[A, B : WeakTypeTag]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (z: Expr[B])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
@@ -76,7 +79,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def reduceLeft[A, B >: A : WeakTypeTag]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
@@ -90,7 +93,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(1))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         If(
-          Apply(Select(Ident(n), "$less$eq"), Literal(Constant(0)) :: Nil),
+          Apply(Select(Ident(n), "$eq$eq"), Literal(Constant(0)) :: Nil),
           Throw(
             ApplyConstructor(
               Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), newTypeName("UnsupportedOperationException")),
@@ -110,25 +113,25 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def reduceLeftOption[A, B >: A : WeakTypeTag]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (op: Expr[(B, A) => B])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
-    val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
     val r    = newTermName(fresh("r$"))
+    val i    = newTermName(fresh("i$"))
     val loop = newTermName(fresh("loop$"))
     val OptionType = appliedType(mirror.staticClass("basis.control.Option").toType, weakTypeOf[B] :: Nil)
     Expr {
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-            ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(1))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) :: Nil,
         If(
           Apply(Select(Ident(n), "$less$eq"), Literal(Constant(0)) :: Nil),
           Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "None"),
           Block(
             ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Apply(Ident(xs), Literal(Constant(0)) :: Nil)) ::
+            ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(1))) ::
             LabelDef(loop, Nil,
               If(
                 Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -142,7 +145,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def foldRight[A, B : WeakTypeTag]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (z: Expr[B])
       (op: Expr[(A, B) => B])
     : Expr[B] = {
@@ -169,7 +172,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def reduceRight[A, B >: A : WeakTypeTag]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (op: Expr[(A, B) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
@@ -203,7 +206,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def reduceRightOption[A, B >: A : WeakTypeTag]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (op: Expr[(A, B) => B])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -235,7 +238,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def find[A : WeakTypeTag]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (p: Expr[A => Boolean])
     : Expr[Option[A]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -251,7 +254,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length")) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionType),
-          Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
+          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "None")) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -261,9 +264,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
                 Apply(p.tree, Ident(x) :: Nil),
                 Assign(
                   Ident(r),
-                  ApplyConstructor(
-                    Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Some")),
-                    Ident(x) :: Nil)),
+                  Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Some"), Ident(x) :: Nil)),
                 Block(
                   Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
                   Apply(Ident(loop), Nil)))),
@@ -273,7 +274,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def forall[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -302,7 +303,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def exists[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -331,7 +332,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def count[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (p: Expr[A => Boolean])
     : Expr[Int] = {
     val xs   = newTermName(fresh("xs$"))
@@ -361,7 +362,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def choose[A, B : WeakTypeTag]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -402,7 +403,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def collect[A, B]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (q: Expr[PartialFunction[A, B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -440,7 +441,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def map[A, B]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (f: Expr[A => B])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -468,7 +469,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def flatMap[A, B]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (f: Expr[A => Enumerator[B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -496,7 +497,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def filter[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -529,7 +530,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def dropWhile[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -570,7 +571,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def takeWhile[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -604,7 +605,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def span[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (p: Expr[A => Boolean])
       (builder1: Expr[Builder[_, A]], builder2: Expr[Builder[_, A]])
     : Expr[(builder1.value.State, builder2.value.State)] = {
@@ -651,7 +652,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def drop[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (lower: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -681,7 +682,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def take[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -709,7 +710,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def slice[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (lower: Expr[Int], upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -740,7 +741,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def reverse[A]
-      (these: Expr[Index[A]])
+      (these: Expr[Array[A]])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
@@ -766,7 +767,7 @@ private[sequential] final class IndexMacros[C <: Context](val context: C) {
   }
   
   def zip[A, B]
-      (these: Expr[Index[A]], those: Expr[Index[B]])
+      (these: Expr[Array[A]], those: Expr[Array[B]])
       (builder: Expr[Builder[_, (A, B)]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))

@@ -37,7 +37,7 @@ sealed abstract class List[+A]
     with Immutable
     with Family[List[A]]
     with ListLike[A]
-    with Stack[A] {
+    with Queue[A] {
   
   /** Returns the number of elements in this $collection.
     * @group Quantifying */
@@ -138,46 +138,12 @@ sealed abstract class ::[A] extends List[A] {
   private[containers] def tail_=(tail: List[A]): Unit
 }
 
-/** An extractor for [[List]] cons cells.
-  * @group Containers */
-object :: {
-  def apply[A](x: A, xs: List[A]): ::[A] = {
-    if (x.isInstanceOf[Int] && (xs.isInstanceOf[IntList] || xs.isInstanceOf[Nil.type]))
-      new IntList(x.asInstanceOf[Int], xs.asInstanceOf[List[Int]]).asInstanceOf[::[A]]
-    else if (x.isInstanceOf[Long] && (xs.isInstanceOf[LongList] || xs.isInstanceOf[Nil.type]))
-      new LongList(x.asInstanceOf[Long], xs.asInstanceOf[List[Long]]).asInstanceOf[::[A]]
-    else if (x.isInstanceOf[Float] && (xs.isInstanceOf[FloatList] || xs.isInstanceOf[Nil.type]))
-      new FloatList(x.asInstanceOf[Float], xs.asInstanceOf[List[Float]]).asInstanceOf[::[A]]
-    else if (x.isInstanceOf[Double] && (xs.isInstanceOf[DoubleList] || xs.isInstanceOf[Nil.type]))
-      new DoubleList(x.asInstanceOf[Double], xs.asInstanceOf[List[Double]]).asInstanceOf[::[A]]
-    else new RefList(x, xs)
-  }
-  
-  def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
-}
-
-/** The empty [[List]].
-  * @group Containers */
-object Nil extends List[Nothing] {
-  override def isEmpty: Boolean = true
-  
-  override def head: Nothing = throw new NoSuchElementException("Head of empty list,")
-  
-  override def tail: List[Nothing] = throw new UnsupportedOperationException("Tail of empty list.")
-  
-  override def :: [B >: Nothing](elem: B): List[B] = {
-    if (elem.isInstanceOf[Int]) new IntList(elem.asInstanceOf[Int], this).asInstanceOf[List[B]]
-    else if (elem.isInstanceOf[Long]) new LongList(elem.asInstanceOf[Long], this).asInstanceOf[List[B]]
-    else if (elem.isInstanceOf[Float]) new FloatList(elem.asInstanceOf[Float], this).asInstanceOf[List[B]]
-    else if (elem.isInstanceOf[Double]) new DoubleList(elem.asInstanceOf[Double], this).asInstanceOf[List[B]]
-    else new RefList(elem, this)
-  }
-}
-
 private[containers] final class IntList(
     override val head: Int,
     override var tail: List[Int])
-  extends ::[Int] {
+  extends ::[Int] with Reified {
+  
+  protected override def T: TypeHint[Int] = TypeHint.Int
   
   override def reverse: List[Int] = {
     var sx = Nil: List[Int]
@@ -200,7 +166,9 @@ private[containers] final class IntList(
 private[containers] final class LongList(
     override val head: Long,
     override var tail: List[Long])
-  extends ::[Long] {
+  extends ::[Long] with Reified {
+  
+  protected override def T: TypeHint[Long] = TypeHint.Long
   
   override def reverse: List[Long] = {
     var sx = Nil: List[Long]
@@ -223,7 +191,9 @@ private[containers] final class LongList(
 private[containers] final class FloatList(
     override val head: Float,
     override var tail: List[Float])
-  extends ::[Float] {
+  extends ::[Float] with Reified {
+  
+  protected override def T: TypeHint[Float] = TypeHint.Float
   
   override def reverse: List[Float] = {
     var sx = Nil: List[Float]
@@ -246,7 +216,9 @@ private[containers] final class FloatList(
 private[containers] final class DoubleList(
     override val head: Double,
     override var tail: List[Double])
-  extends ::[Double] {
+  extends ::[Double] with Reified {
+  
+  protected override def T: TypeHint[Double] = TypeHint.Double
   
   override def reverse: List[Double] = {
     var sx = Nil: List[Double]
@@ -270,6 +242,42 @@ private[containers] final class RefList[A](
     override val head: A,
     override var tail: List[A])
   extends ::[A]
+
+/** An extractor for [[List]] cons cells.
+  * @group Containers */
+object :: {
+  def apply[A](x: A, xs: List[A]): ::[A] = {
+    if (x.isInstanceOf[Int] && (xs.isInstanceOf[IntList] || xs.isInstanceOf[Nil.type]))
+      new IntList(x.asInstanceOf[Int], xs.asInstanceOf[List[Int]]).asInstanceOf[::[A]]
+    else if (x.isInstanceOf[Long] && (xs.isInstanceOf[LongList] || xs.isInstanceOf[Nil.type]))
+      new LongList(x.asInstanceOf[Long], xs.asInstanceOf[List[Long]]).asInstanceOf[::[A]]
+    else if (x.isInstanceOf[Float] && (xs.isInstanceOf[FloatList] || xs.isInstanceOf[Nil.type]))
+      new FloatList(x.asInstanceOf[Float], xs.asInstanceOf[List[Float]]).asInstanceOf[::[A]]
+    else if (x.isInstanceOf[Double] && (xs.isInstanceOf[DoubleList] || xs.isInstanceOf[Nil.type]))
+      new DoubleList(x.asInstanceOf[Double], xs.asInstanceOf[List[Double]]).asInstanceOf[::[A]]
+    else new RefList(x, xs)
+  }
+  
+  def unapply[A](list: ::[A]): Some[(A, List[A])] = Some((list.head, list.tail))
+}
+
+/** The empty [[List]].
+  * @group Containers */
+object Nil extends List[Nothing] {
+  override def isEmpty: Boolean = true
+  
+  override def head: Nothing = throw new NoSuchElementException("Head of empty list.")
+  
+  override def tail: List[Nothing] = throw new UnsupportedOperationException("Tail of empty list.")
+  
+  override def :: [B](elem: B): List[B] = {
+    if (elem.isInstanceOf[Int]) new IntList(elem.asInstanceOf[Int], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Long]) new LongList(elem.asInstanceOf[Long], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Float]) new FloatList(elem.asInstanceOf[Float], this).asInstanceOf[List[B]]
+    else if (elem.isInstanceOf[Double]) new DoubleList(elem.asInstanceOf[Double], this).asInstanceOf[List[B]]
+    else new RefList(elem, this)
+  }
+}
 
 private[containers] final class IntListIterator(private[this] var xs: List[Int]) extends Iterator[Int] {
   override def isEmpty: Boolean = xs.isEmpty

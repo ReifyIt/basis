@@ -8,11 +8,12 @@
 package basis.sequential
 
 import basis.collections._
+import basis.control._
 
 /** General enumerator operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    General
   * 
@@ -20,9 +21,11 @@ import basis.collections._
   * @groupprio  Reducing      2
   * @groupprio  Querying      3
   * @groupprio  Transforming  4
+  * 
+  * @define collection  enumerator
   */
 final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
-  /** Sequentially applies a function to each element of this enumerator.
+  /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
     * @group  Traversing
@@ -30,7 +33,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   def foreach[U](f: A => U): Unit = traverse(these)(f)
   
   /** Returns the repeated application of an associative binary operator
-    * between an identity value and all elements of this enumerator.
+    * between an identity value and all elements of this $collection.
     * 
     * @param  z   the operator's identity element.
     * @param  op  the associative binary operator to apply.
@@ -44,7 +47,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   }
   
   /** Returns the repeated application of an associative binary operator
-    * between all elements of this non-empty enumerator.
+    * between all elements of this non-empty $collection.
     * 
     * @param  op  the associative binary operator to apply.
     * @return the reduced value.
@@ -58,10 +61,10 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   }
   
   /** Returns the repeated application of an associative binary operator
-    * between all elements of this enumerator.
+    * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this enumerator is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] = {
@@ -72,7 +75,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   }
   
   /** Returns the left-to-right application of a binary operator between a
-    * start value and all elements of this enumerator.
+    * start value and all elements of this $collection.
     * 
     * @param  z   the starting value.
     * @param  op  the binary operator to apply right-recursively.
@@ -86,7 +89,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   }
   
   /** Returns the left-to-right application of a binary operator between
-    * all elements of this non-empty enumerator.
+    * all elements of this non-empty $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
     * @return the reduced value.
@@ -101,10 +104,10 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   }
   
   /** Returns the left-to-right application of a binary operator between
-    * all elements of this enumerator.
+    * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this enumerator is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] = {
@@ -115,7 +118,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     else None
   }
   
-  /** Returns the first element of this enumerator that satisfies a predicate.
+  /** Returns the first element of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return some found element, or none if no element satisfies `p`.
@@ -127,7 +130,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     f.state
   }
   
-  /** Returns `true` if a predicate holds for all elements of this enumerator.
+  /** Returns `true` if a predicate holds for all elements of this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if all elements satisfy `p`, otherwise `false`.
@@ -139,7 +142,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     f.state
   }
   
-  /** Returns `true` if a predicate holds for some element of this enumerator.
+  /** Returns `true` if a predicate holds for some element of this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if any element satisfies `p`, otherwise `false`.
@@ -151,7 +154,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     f.state
   }
   
-  /** Returns the number of elements in this enumerator that satisfy a predicate.
+  /** Returns the number of elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return the number of elements satisfying `p`.
@@ -164,7 +167,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   }
   
   /** Returns the application of a partial function to the first element
-    * of this enumerator for which the function is defined.
+    * of this $collection for which the function is defined.
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
@@ -177,12 +180,12 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     f.state
   }
   
-  /** Returns a strict operations interface to this enumerator.
+  /** Returns a strict operations interface to this $collection.
     * @group Transforming */
   def eagerly: StrictEnumeratorOps[A, Enumerator[A]] =
     new StrictEnumeratorOps[A, Enumerator[A]](these)
   
-  /** Returns a non-strict operations interface to this enumerator.
+  /** Returns a non-strict operations interface to this $collection.
     * @group Transforming */
   def lazily: NonStrictEnumeratorOps[A] =
     new NonStrictEnumeratorOps[A](these)

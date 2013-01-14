@@ -196,7 +196,7 @@ private[containers] class FloatArrayBuffer private (
   
   final override def toArraySeq: ArraySeq[Float] = {
     if (buffer == null || size != buffer.length) {
-      var array = new Array[Float](size)
+      val array = new Array[Float](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
     }

@@ -19,10 +19,12 @@ import basis.collections._
   * @groupprio  Mapping     1
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
+  * 
+  * @define collection  iterator
   */
 final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this
-    * iterator for which the function is defined.
+    * $collection for which the function is defined.
     * 
     * @param  q   the partial function to lazily filter and map elements.
     * @return a non-strict view of the filtered and mapped elements.
@@ -31,7 +33,7 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   def collect[B](q: PartialFunction[A, B]): Iterator[B] =
     new NonStrictIteratorOps.Collect(these.dup, q)
   
-  /** Returns a view that applies a function to each element in this iterator.
+  /** Returns a view that applies a function to each element in this $collection.
     * 
     * @param  f   the function to lazily apply to each element.
     * @return a non-strict view of the mapped elements.
@@ -41,16 +43,16 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
     new NonStrictIteratorOps.Map(these.dup, f)
   
   /** Returns a view concatenating all elements returned by a function
-    * applied to each element in this iterator.
+    * applied to each element in this $collection.
     * 
-    * @param  f   the iterator-yielding function to apply to each element.
+    * @param  f   the $collection-yielding function to apply to each element.
     * @return a non-strict view concatenating all elements produced by `f`.
     * @group  Mapping
     */
   def flatMap[B](f: A => Iterator[B]): Iterator[B] =
     new NonStrictIteratorOps.FlatMap(these.dup, f)
   
-  /** Returns a view of all elements in this iterator that satisfy a predicate.
+  /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test elements against.
     * @return a non-strict view of the filtered elements.
@@ -59,7 +61,7 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   def filter(p: A => Boolean): Iterator[A] =
     new NonStrictIteratorOps.Filter(these.dup, p)
   
-  /** Returns a view of all elements in this iterator that satisfy a predicate.
+  /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test elements against.
     * @return a non-strict view of the filtered elements.
@@ -69,7 +71,7 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
     new NonStrictIteratorOps.Filter(these.dup, p)
   
   /** Returns a view of all elements following the longest prefix of this
-    * iterator for which each element satisfies a predicate.
+    * $collection for which each element satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return a non-strict view of the suffix of accumulated elements beginning
@@ -79,7 +81,7 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   def dropWhile(p: A => Boolean): Iterator[A] =
     new NonStrictIteratorOps.DropWhile(these.dup, p)
   
-  /** Returns a view of the longest prefix of this iterator for which each
+  /** Returns a view of the longest prefix of this $collection for which each
     * element satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
@@ -101,7 +103,7 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   def span(p: A => Boolean): (Iterator[A], Iterator[A]) =
     (takeWhile(p), dropWhile(p))
   
-  /** Returns a view of all elements in this iterator following a prefix
+  /** Returns a view of all elements in this $collection following a prefix
     * up to some length.
     * 
     * @param  lower   the length of the prefix to drop; also the inclusive
@@ -112,7 +114,7 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   def drop(lower: Int): Iterator[A] =
     new NonStrictIteratorOps.Drop(these.dup, lower)
   
-  /** Returns a view of a prefix of this iterator up to some length.
+  /** Returns a view of a prefix of this $collection up to some length.
     * 
     * @param  upper   the length of the prefix to take; also the exclusive
     *                 upper bound for indexes of included elements.
@@ -122,7 +124,7 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   def take(upper: Int): Iterator[A] =
     new NonStrictIteratorOps.Take(these.dup, upper)
   
-  /** Returns a view of an interval of elements in this iterator.
+  /** Returns a view of an interval of elements in this $collection.
     * 
     * @param  lower   the inclusive lower bound for indexes of included elements.
     * @param  upper   the exclusive upper bound for indexes of included elements.
@@ -133,16 +135,16 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
   def slice(lower: Int, upper: Int): Iterator[A] =
     new NonStrictIteratorOps.Slice(these.dup, lower, upper)
   
-  /** Returns a view of pairs of elemnts from this and another iterator.
+  /** Returns a view of pairs of elemnts from this and another $collection.
     * 
-    * @param  those   the iterator whose elements to lazily pair with these elements.
+    * @param  those   the $collection whose elements to lazily pair with these elements.
     * @return a non-strict view of the pairs of corresponding elements.
     * @group  Combining
     */
   def zip[B](those: Iterator[B]): Iterator[(A, B)] =
     new NonStrictIteratorOps.Zip(these.dup, those.dup)
   
-  /** Returns a view concatenating this and another iterator.
+  /** Returns a view concatenating this and another $collection.
     * 
     * @param  those   the elements to append to these elements.
     * @return a non-strict view of the concatenated elements.
@@ -153,7 +155,7 @@ final class NonStrictIteratorOps[+A](val these: Iterator[A]) extends AnyVal {
 }
 
 private[sequential] object NonStrictIteratorOps {
-  import scala.annotation.tailrec
+  import scala.annotation.{switch, tailrec}
   import basis.util.IntOps
   
   object Done extends Iterator[Nothing] {
@@ -172,11 +174,7 @@ private[sequential] object NonStrictIteratorOps {
     protected override def foreach[U](f: Nothing => U): Unit = ()
   }
   
-  final class Collect[-A, +B](
-      protected[this] override val these: Iterator[A],
-      protected[this] override val q: PartialFunction[A, B])
-    extends NonStrictEnumeratorOps.Collect[A, B](these, q) with Iterator[B] {
-    
+  final class Collect[-A, +B](these: Iterator[A], q: PartialFunction[A, B]) extends Iterator[B] {
     @tailrec override def isEmpty: Boolean =
       these.isEmpty || !q.isDefinedAt(these.head) && { these.step(); isEmpty }
     
@@ -191,11 +189,7 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[B] = new Collect(these.dup, q)
   }
   
-  final class Map[-A, +B](
-      protected[this] override val these: Iterator[A],
-      protected[this] override val f: A => B)
-    extends NonStrictEnumeratorOps.Map[A, B](these, f) with Iterator[B] {
-    
+  final class Map[-A, +B](these: Iterator[A], f: A => B) extends Iterator[B] {
     override def isEmpty: Boolean = these.isEmpty
     
     override def head: B = f(these.head)
@@ -205,11 +199,9 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[B] = new Map(these.dup, f)
   }
   
-  final class FlatMap[-A, +B] private (
-      protected[this] override val these: Iterator[A],
-      protected[this] override val f: A => Iterator[B],
-      private[this] var inner: Iterator[B])
-    extends NonStrictEnumeratorOps.FlatMap[A, B](these, f) with Iterator[B] {
+  final class FlatMap[-A, +B] private
+      (these: Iterator[A], f: A => Iterator[B], private[this] var inner: Iterator[B])
+    extends Iterator[B] {
     
     def this(these: Iterator[A], f: A => Iterator[B]) = this(these, f, Done)
     
@@ -231,11 +223,9 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[B] = new FlatMap(these.dup, f, inner.dup)
   }
   
-  final class FlatMapContainer[-A, +B] private (
-      protected[this] override val these: Iterator[A],
-      protected[this] override val f: A => Container[B],
-      protected[this] var inner: Iterator[B])
-    extends NonStrictEnumeratorOps.FlatMap[A, B](these, f) with Iterator[B] {
+  final class FlatMapContainer[-A, +B] private
+      (these: Iterator[A], f: A => Container[B], protected[this] var inner: Iterator[B])
+    extends Iterator[B] {
     
     def this(these: Iterator[A], f: A => Container[B]) = this(these, f, Done)
     
@@ -257,11 +247,7 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[B] = new FlatMapContainer(these.dup, f, inner.dup)
   }
   
-  final class Filter[+A](
-      protected[this] override val these: Iterator[A],
-      protected[this] override val p: A => Boolean)
-    extends NonStrictEnumeratorOps.Filter[A](these, p) with Iterator[A] {
-    
+  final class Filter[+A](these: Iterator[A], p: A => Boolean) extends Iterator[A] {
     @tailrec override def isEmpty: Boolean =
       these.isEmpty || !p(these.head) && { these.step(); isEmpty }
     
@@ -275,11 +261,9 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[A] = new Filter(these.dup, p)
   }
   
-  final class DropWhile[+A] private (
-      protected[this] override val these: Iterator[A],
-      protected[this] override val p: A => Boolean,
-      private[this] var dropped: Boolean)
-    extends NonStrictEnumeratorOps.DropWhile[A](these, p) with Iterator[A] {
+  final class DropWhile[+A] private
+      (these: Iterator[A], p: A => Boolean, private[this] var dropped: Boolean)
+    extends Iterator[A] {
     
     def this(these: Iterator[A], p: A => Boolean) = this(these, p, false)
     
@@ -303,11 +287,9 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[A] = new DropWhile(these.dup, p, dropped)
   }
   
-  final class TakeWhile[+A] private (
-      protected[this] override val these: Iterator[A],
-      protected[this] override val p: A => Boolean,
-      private[this] var taking: Boolean)
-    extends NonStrictEnumeratorOps.TakeWhile[A](these, p) with Iterator[A] {
+  final class TakeWhile[+A] private
+      (these: Iterator[A], p: A => Boolean, private[this] var taking: Boolean)
+    extends Iterator[A] {
     
     def this(these: Iterator[A], p: A => Boolean) = this(these, p, true)
     
@@ -333,11 +315,9 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[A] = new TakeWhile(these.dup, p, taking)
   }
   
-  final class Drop[+A] private (
-      protected[this] override val these: Iterator[A],
-      protected[this] override val lower: Int,
-      private[this] var index: Int)
-    extends NonStrictEnumeratorOps.Drop[A](these, lower) with Iterator[A] {
+  final class Drop[+A] private
+      (these: Iterator[A], lower: Int, private[this] var index: Int)
+    extends Iterator[A] {
     
     def this(these: Iterator[A], lower: Int) = this(these, lower, 0)
     
@@ -357,11 +337,9 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[A] = new Drop(these.dup, lower, index)
   }
   
-  final class Take[+A] private (
-      protected[this] override val these: Iterator[A],
-      protected[this] override val upper: Int,
-      private[this] var index: Int)
-    extends NonStrictEnumeratorOps.Take[A](these, upper) with Iterator[A] {
+  final class Take[+A] private
+      (these: Iterator[A], upper: Int, private[this] var index: Int)
+    extends Iterator[A] {
     
     def this(these: Iterator[A], upper: Int) = this(these, upper, 0)
     
@@ -381,12 +359,9 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[A] = new Take(these.dup, upper, index)
   }
   
-  final class Slice[+A] private (
-      protected[this] override val these: Iterator[A],
-      protected[this] override val lower: Int,
-      protected[this] override val upper: Int,
-      private[this] var index: Int)
-    extends NonStrictEnumeratorOps.Slice[A](these, lower, upper) with Iterator[A] {
+  final class Slice[+A] private
+      (these: Iterator[A], lower: Int, upper: Int, private[this] var index: Int)
+    extends Iterator[A] {
     
     def this(these: Iterator[A], lower: Int, upper: Int) =
       this(these, 0 max lower, 0 max lower max upper, 0)
@@ -422,30 +397,28 @@ private[sequential] object NonStrictIteratorOps {
     override def dup: Iterator[(A, B)] = new Zip(these.dup, those.dup)
   }
   
-  final class ++[+A] private (
-      protected[this] override val these: Iterator[A],
-      protected[this] override val those: Iterator[A],
-      private[this] var segment: Int)
-    extends NonStrictEnumeratorOps.++[A](these, those) with Iterator[A] {
+  final class ++[+A] private
+      (these: Iterator[A], those: Iterator[A], private[this] var segment: Int)
+    extends Iterator[A] {
     
     def this(these: Iterator[A], those: Iterator[A]) = this(these, those, 0)
     
-    @tailrec override def isEmpty: Boolean = segment match {
+    @tailrec override def isEmpty: Boolean = (segment: @switch) match {
       case 0 => these.isEmpty && { segment = 1; isEmpty }
       case 1 => those.isEmpty
     }
     
-    @tailrec override def head: A = segment match {
+    @tailrec override def head: A = (segment: @switch) match {
       case 0 => if (!these.isEmpty) these.head else { segment = 1; head }
       case 1 => those.head
     }
     
-    @tailrec override def step(): Unit = segment match {
+    @tailrec override def step(): Unit = (segment: @switch) match {
       case 0 => if (!these.isEmpty) these.step() else { segment = 1; step() }
       case 1 => those.step()
     }
     
-    override def dup: Iterator[A] = segment match {
+    override def dup: Iterator[A] = (segment: @switch) match {
       case 0 if !these.isEmpty => new ++(these.dup, those.dup, 0)
       case _ => those.dup
     }

@@ -8,22 +8,23 @@
 package basis.sequential
 
 import basis.collections._
+import basis.control._
 
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
-/** Stack operations macro implementations.
+/** Queue operations macro implementations.
   * 
   * @author Chris Sachs
   */
-private[sequential] final class StackMacros[C <: Context](val context: C) {
+private[sequential] final class QueueMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
   val universe: context.universe.type = context.universe
   
   def foreach[A : WeakTypeTag, U]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (f: Expr[A => U])
     : Expr[Unit] = {
     val xs   = newTermName(fresh("xs$"))
@@ -43,12 +44,12 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def foldLeft[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (z: Expr[B])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("result$"))
+    val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -67,11 +68,11 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def reduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("result$"))
+    val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -98,18 +99,19 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def reduceLeftOption[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (op: Expr[(B, A) => B])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("result$"))
+    val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
+    val OptionType = appliedType(mirror.staticClass("basis.control.Option").toType, weakTypeOf[B] :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) :: Nil,
         If(
           Select(Ident(xs), "isEmpty"),
-          Select(Select(Ident(nme.ROOTPKG), "scala"), "None"),
+          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "None"),
           Block(
             ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Select(Ident(xs), "head")) ::
             Assign(Ident(xs), Select(Ident(xs), "tail")) ::
@@ -121,25 +123,24 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
                   Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
                   Apply(Ident(loop), Nil)),
                 EmptyTree)) :: Nil,
-            ApplyConstructor(
-              Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Some")),
-              Ident(r) :: Nil))))
-    } (OptionTag[B])
+            Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Some"), Ident(r) :: Nil))))
+    } (WeakTypeTag(OptionType))
   }
   
   def find[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (p: Expr[A => Boolean])
     : Expr[Option[A]] = {
     val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("result$"))
+    val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("head$"))
+    val x    = newTermName(fresh("x$"))
+    val OptionType = appliedType(mirror.staticClass("basis.control.Option").toType, weakTypeOf[A] :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[A].tpe),
-          Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
+        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionType),
+          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "None")) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -149,23 +150,21 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
                 Apply(p.tree, Ident(x) :: Nil),
                 Assign(
                   Ident(r),
-                  ApplyConstructor(
-                    Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Some")),
-                    Ident(x) :: Nil)),
+                  Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Some"), Ident(x) :: Nil)),
                 Block(
                   Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
                   Apply(Ident(loop), Nil)))),
             EmptyTree)) :: Nil,
         Ident(r))
-    } (OptionTag[A])
+    } (WeakTypeTag(OptionType))
   }
   
   def forall[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("result$"))
+    val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -186,11 +185,11 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def exists[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("result$"))
+    val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -211,11 +210,11 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def count[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (p: Expr[A => Boolean])
     : Expr[Int] = {
     val xs   = newTermName(fresh("xs$"))
-    val t    = newTermName(fresh("total$"))
+    val t    = newTermName(fresh("t$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -237,19 +236,20 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def choose[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("result$"))
+    val r    = newTermName(fresh("r$"))
     val f    = newTermName(fresh("pf$"))
     val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("head$"))
+    val x    = newTermName(fresh("x$"))
+    val OptionType = appliedType(mirror.staticClass("basis.control.Option").toType, weakTypeOf[B] :: Nil)
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionTag[B].tpe),
-          Select(Select(Ident(nme.ROOTPKG), "scala"), "None")) ::
+        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionType),
+          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "None")) ::
         ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -260,8 +260,8 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
                 Apply(Select(Ident(f), "isDefinedAt"), Ident(x) :: Nil),
                 Assign(
                   Ident(r),
-                  ApplyConstructor(
-                    Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Some")),
+                  Apply(
+                    Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Some"),
                     Apply(Select(Ident(f), "applyOrElse"), Ident(x) ::
                       Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil)),
                 Block(
@@ -269,19 +269,19 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
                   Apply(Ident(loop), Nil)))),
             EmptyTree)) :: Nil,
         Ident(r))
-    } (OptionTag[B])
+    } (WeakTypeTag(OptionType))
   }
   
   def collect[A : WeakTypeTag, B]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (q: Expr[PartialFunction[A, B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val f    = newTermName(fresh("pf$"))
     val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("head$"))
+    val x    = newTermName(fresh("x$"))
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
@@ -307,12 +307,12 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def map[A : WeakTypeTag, B]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (f: Expr[A => B])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -331,12 +331,12 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def flatMap[A : WeakTypeTag, B]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (f: Expr[A => Enumerator[B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -355,14 +355,14 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def filter[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("head$"))
+    val x    = newTermName(fresh("x$"))
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
@@ -384,14 +384,14 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def dropWhile[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
-    val b     = newTermName(fresh("builder$"))
+    val b     = newTermName(fresh("b$"))
     val loop1 = newTermName(fresh("loop$"))
-    val x     = newTermName(fresh("head$"))
+    val x     = newTermName(fresh("x$"))
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -421,14 +421,14 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def takeWhile[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("head$"))
+    val x    = newTermName(fresh("x$"))
     Expr {
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyType(these)), these.tree) ::
@@ -451,15 +451,15 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def span[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (p: Expr[A => Boolean])
       (builder1: Expr[Builder[_, A]], builder2: Expr[Builder[_, A]])
     : Expr[(builder1.value.State, builder2.value.State)] = {
     val xs    = newTermName(fresh("xs$"))
-    val a     = newTermName(fresh("builder$"))
-    val b     = newTermName(fresh("builder$"))
+    val a     = newTermName(fresh("b$"))
+    val b     = newTermName(fresh("b$"))
     val loop1 = newTermName(fresh("loop$"))
-    val x     = newTermName(fresh("head$"))
+    val x     = newTermName(fresh("x$"))
     val loop2 = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -494,14 +494,14 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def drop[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (lower: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val i     = newTermName(fresh("i$"))
     val n     = newTermName(fresh("n$"))
-    val b     = newTermName(fresh("builder$"))
+    val b     = newTermName(fresh("b$"))
     val loop1 = newTermName(fresh("loop$"))
     val loop2 = newTermName(fresh("loop$"))
     Expr {
@@ -534,14 +534,14 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def take[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -566,14 +566,14 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def slice[A : WeakTypeTag]
-      (these: Expr[Stack[A]])
+      (these: Expr[Queue[A]])
       (lower: Expr[Int], upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val i     = newTermName(fresh("i$"))
     val n     = newTermName(fresh("n$"))
-    val b     = newTermName(fresh("builder$"))
+    val b     = newTermName(fresh("b$"))
     val loop1 = newTermName(fresh("loop$"))
     val loop2 = newTermName(fresh("loop$"))
     Expr {
@@ -611,12 +611,12 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
   }
   
   def zip[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Stack[A]], those: Expr[Stack[B]])
+      (these: Expr[Queue[A]], those: Expr[Queue[B]])
       (builder: Expr[Builder[_, (A, B)]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val ys   = newTermName(fresh("ys$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
     Expr {
       Block(
@@ -661,9 +661,6 @@ private[sequential] final class StackMacros[C <: Context](val context: C) {
     val StateSymbol = mirror.staticClass("basis.collections.Builder").toType.member(newTypeName("State"))
     WeakTypeTag(typeRef(BuilderType(builder), StateSymbol, Nil))
   }
-  
-  private def OptionTag[A : WeakTypeTag]: WeakTypeTag[Option[A]] =
-    WeakTypeTag(appliedType(mirror.staticClass("scala.Option").toType, weakTypeOf[A] :: Nil))
   
   private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] =
     WeakTypeTag(appliedType(mirror.staticClass("scala.Tuple2").toType, weakTypeOf[A] :: weakTypeOf[B] :: Nil))

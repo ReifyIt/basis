@@ -8,11 +8,12 @@
 package basis.sequential
 
 import basis.collections._
+import basis.control._
 
 /** General indexed sequence operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    General
   * 
@@ -20,9 +21,11 @@ import basis.collections._
   * @groupprio  Reducing      2
   * @groupprio  Querying      3
   * @groupprio  Transforming  4
+  * 
+  * @define collection  index
   */
 final class GeneralIndexOps[+A](these: Index[A]) {
-  /** Sequentially applies a function to each element of this sequence.
+  /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
     * @group  Traversing
@@ -31,7 +34,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     macro GeneralIndexOps.foreach[A, U]
   
   /** Returns the repeated application of an associative binary operator
-    * between an identity value and all elements of this sequence.
+    * between an identity value and all elements of this $collection.
     * 
     * @param  z   the operator's identity element.
     * @param  op  the associative binary operator to apply.
@@ -42,7 +45,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     macro GeneralIndexOps.foldLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all elements of this non-empty sequence.
+    * between all elements of this non-empty $collection.
     * 
     * @param  op  the associative binary operator to apply.
     * @return the reduced value.
@@ -52,17 +55,17 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     macro GeneralIndexOps.reduceLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all elements of this sequence.
+    * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this sequence is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] =
     macro GeneralIndexOps.reduceLeftOption[A, B]
   
   /** Returns the left-to-right application of a binary operator between a
-    * start value and all elements of this sequence.
+    * start value and all elements of this $collection.
     * 
     * @param  z   the starting value.
     * @param  op  the binary operator to apply right-recursively.
@@ -73,7 +76,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     macro GeneralIndexOps.foldLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all elements of this non-empty sequence.
+    * all elements of this non-empty $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
     * @return the reduced value.
@@ -83,17 +86,17 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     macro GeneralIndexOps.reduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all elements of this sequence.
+    * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this sequence is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
     macro GeneralIndexOps.reduceLeftOption[A, B]
   
   /** Returns the right-to-left application of a binary operator between a
-    * start value and all elements in this sequence.
+    * start value and all elements in this $collection.
     * 
     * @param  z   the starting value.
     * @param  op  the binary operator to apply left-recursively.
@@ -104,7 +107,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     macro GeneralIndexOps.foldRight[A, B]
   
   /** Returns the right-to-left application of a binary operator between
-    * all elements in this non-empty sequence.
+    * all elements in this non-empty $collection.
     * 
     * @param  op  the binary operator to apply left-recursively.
     * @return the reduced value.
@@ -114,16 +117,16 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     macro GeneralIndexOps.reduceRight[A, B]
   
   /** Returns the right-to-left application of a binary operator between
-    * all elements in this sequence.
+    * all elements in this $collection.
     * 
     * @param  op  the binary operator to apply left-recursively.
-    * @return some reduced value, or none if this sequence is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceRightOption[B >: A](op: (A, B) => B): Option[B] =
     macro GeneralIndexOps.reduceRightOption[A, B]
   
-  /** Returns the first element of this sequence that satisfies a predicate.
+  /** Returns the first element of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return some found element, or none if no element satisfies `p`.
@@ -132,7 +135,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
   def find(p: A => Boolean): Option[A] =
     macro GeneralIndexOps.find[A]
   
-  /** Returns `true` if a predicate holds for all elements of this sequence.
+  /** Returns `true` if a predicate holds for all elements of this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if all elements satisfy `p`, otherwise `false`.
@@ -141,7 +144,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
   def forall(p: A => Boolean): Boolean =
     macro GeneralIndexOps.forall[A]
   
-  /** Returns `true` if a predicate holds for some element of this sequence.
+  /** Returns `true` if a predicate holds for some element of this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if any element satisfies `p`, otherwise `false`.
@@ -150,7 +153,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
   def exists(p: A => Boolean): Boolean =
     macro GeneralIndexOps.exists[A]
   
-  /** Returns the number of elements in this sequence that satisfy a predicate.
+  /** Returns the number of elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return the number of elements satisfying `p`.
@@ -160,7 +163,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     macro GeneralIndexOps.count[A]
   
   /** Returns the application of a partial function to the first element
-    * of this sequence for which the function is defined.
+    * of this $collection for which the function is defined.
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
@@ -170,12 +173,12 @@ final class GeneralIndexOps[+A](these: Index[A]) {
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralIndexOps.choose[A, B]
   
-  /** Returns a strict operations interface to this sequence.
+  /** Returns a strict operations interface to this $collection.
     * @group Transforming */
   def eagerly: StrictIndexOps[A, Index[A]] =
     macro GeneralIndexOps.eagerly[A]
   
-  /** Returns a non-strict operations interface to this sequence.
+  /** Returns a non-strict operations interface to this $collection.
     * @group Transforming */
   def lazily: NonStrictIndexOps[A] =
     macro GeneralIndexOps.lazily[A]

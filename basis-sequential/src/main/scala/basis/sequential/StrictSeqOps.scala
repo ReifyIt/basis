@@ -19,10 +19,12 @@ import basis.collections._
   * @groupprio  Mapping     1
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
+  * 
+  * @define collection  sequence
   */
 final class StrictSeqOps[+A, +From](these: Seq[A]) {
   /** Returns the applications of a partial function to each element in this
-    * sequence for which the function is defined.
+    * $collection for which the function is defined.
     * 
     * @param  q         the partial function to filter and transform elements.
     * @param  builder   the implicit accumulator for collected elements.
@@ -32,7 +34,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State =
     macro StrictContainerOps.collect[A, B]
   
-  /** Returns the applications of a function to each element in this sequence.
+  /** Returns the applications of a function to each element in this $collection.
     * 
     * @param  f         the function to apply to each element.
     * @param  builder   the implicit accumulator for transformed elements.
@@ -43,7 +45,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
     macro StrictContainerOps.map[A, B]
   
   /** Returns the concatenation of all elements returned by a function applied
-    * to each element in this sequence.
+    * to each element in this $collection.
     * 
     * @param  f         the enumerator-yielding function to apply to each element.
     * @param  builder   the implicit accumulator for flattened elements.
@@ -53,7 +55,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
     macro StrictContainerOps.flatMap[A, B]
   
-  /** Returns all elements in this sequence that satisfy a predicate.
+  /** Returns all elements in this $collection that satisfy a predicate.
     * 
     * @param  p         the predicate to test elements against.
     * @param  builder   the implicit accumulator for filtered elements.
@@ -63,7 +65,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
     macro StrictContainerOps.filter[A]
   
-  /** Returns a view of all elements in this sequence that satisfy a predicate.
+  /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test elements against.
     * @return a non-strict view of the filtered elements.
@@ -72,7 +74,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   def withFilter(p: A => Boolean): Seq[A] =
     new NonStrictSeqOps.Filter(these, p)
   
-  /** Returns all elements following the longest prefix of this sequence
+  /** Returns all elements following the longest prefix of this $collection
     * for which each element satisfies a predicate.
     * 
     * @param  p         the predicate to test elements against.
@@ -84,7 +86,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   def dropWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
     macro StrictContainerOps.dropWhile[A]
   
-  /** Returns the longest prefix of this sequence for which each element
+  /** Returns the longest prefix of this $collection for which each element
     * satisfies a predicate.
     * 
     * @param  p         the predicate to test elements against.
@@ -112,7 +114,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   //  : (builder1.State, builder2.State) =
   //  macro StrictContainerOps.span[A]
   
-  /** Returns all elements in this sequence following a prefix up to some length.
+  /** Returns all elements in this $collection following a prefix up to some length.
     * 
     * @param  lower     the length of the prefix to drop; also the inclusive
     *                   lower bound for indexes of elements to keep.
@@ -123,7 +125,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   def drop(lower: Int)(implicit builder: Builder[From, A]): builder.State =
     macro StrictContainerOps.drop[A]
   
-  /** Returns a prefix of this sequence up to some length.
+  /** Returns a prefix of this $collection up to some length.
     * 
     * @param  upper     the length of the prefix to take; also the exclusive
     *                   upper bound for indexes of elements to keep.
@@ -134,7 +136,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   def take(upper: Int)(implicit builder: Builder[From, A]): builder.State =
     macro StrictContainerOps.take[A]
   
-  /** Returns an interval of elements in this sequence.
+  /** Returns an interval of elements in this $collection.
     * 
     * @param  lower     the inclusive lower bound for indexes of elements to keep.
     * @param  upper     the exclusive upper bound for indexes of elements to keep.
@@ -146,7 +148,7 @@ final class StrictSeqOps[+A, +From](these: Seq[A]) {
   def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State =
     macro StrictContainerOps.slice[A]
   
-  /** Returns pairs of elements from this and another sequence.
+  /** Returns pairs of elements from this and another $collection.
     * 
     * @param  those     the container whose elements to pair with these elements.
     * @param  builder   the implicit accumulator for paired elements.

@@ -19,10 +19,12 @@ import basis.collections._
   * @groupprio  Mapping     1
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
+  * 
+  * @define collection  map
   */
 final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   /** Returns the applications of a partial function to each entry in this
-    * map for which the function is defined.
+    * $collection for which the function is defined.
     * 
     * @param  q         the partial function to filter and transform entries.
     * @param  builder   the implicit accumulator for collected elements.
@@ -32,7 +34,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   def collect[B](q: PartialFunction[(A, T), B])(implicit builder: Builder[From, B]): builder.State =
     macro StrictContainerOps.collect[(A, T), B]
   
-  /** Returns the applications of a function to each entry in this map.
+  /** Returns the applications of a function to each entry in this $collection.
     * 
     * @param  f         the function to apply to each entry.
     * @param  builder   the implicit accumulator for transformed entries.
@@ -43,7 +45,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     macro StrictContainerOps.map[(A, T), B]
   
   /** Returns the concatenation of all elements returned by a function applied
-    * to each entry in this map.
+    * to each entry in this $collection.
     * 
     * @param  f         the enumerator-yielding function to apply to each entry.
     * @param  builder   the implicit accumulator for flattened elements.
@@ -53,7 +55,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   def flatMap[B](f: ((A, T)) => Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
     macro StrictContainerOps.flatMap[(A, T), B]
   
-  /** Returns all entries in this map that satisfy a predicate.
+  /** Returns all entries in this $collection that satisfy a predicate.
     * 
     * @param  p         the predicate to test entries against.
     * @param  builder   the implicit accumulator for filtered entries.
@@ -63,7 +65,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   def filter(p: ((A, T)) => Boolean)(implicit builder: Builder[From, (A, T)]): builder.State =
     macro StrictContainerOps.filter[(A, T)]
   
-  /** Returns a view of all entries in this map that satisfy a predicate.
+  /** Returns a view of all entries in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test entries against.
     * @return a non-strict view of the filtered entries.
@@ -72,7 +74,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   def withFilter(p: ((A, T)) => Boolean): Map[A, T] =
     new NonStrictMapOps.Filter(these, p)
   
-  /** Returns all entries following the longest prefix of this map
+  /** Returns all entries following the longest prefix of this $collection
     * for which each entry satisfies a predicate.
     * 
     * @param  p         the predicate to test entries against.
@@ -84,7 +86,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   def dropWhile(p: ((A, T)) => Boolean)(implicit builder: Builder[From, (A, T)]): builder.State =
     macro StrictContainerOps.dropWhile[(A, T)]
   
-  /** Returns the longest prefix of this map for which each entry
+  /** Returns the longest prefix of this $collection for which each entry
     * satisfies a predicate.
     * 
     * @param  p         the predicate to test entries against.
@@ -112,7 +114,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   //  : (builder1.State, builder2.State) =
   //  macro StrictContainerOps.span[(A, T)]
   
-  /** Returns all entries in this map following a prefix up to some length.
+  /** Returns all entries in this $collection following a prefix up to some length.
     * 
     * @param  lower     the length of the prefix to drop; also the inclusive
     *                   lower bound for indexes of entries to keep.
@@ -123,7 +125,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   def drop(lower: Int)(implicit builder: Builder[From, (A, T)]): builder.State =
     macro StrictContainerOps.drop[(A, T)]
   
-  /** Returns a prefix of this map up to some length.
+  /** Returns a prefix of this $collection up to some length.
     * 
     * @param  upper     the length of the prefix to take; also the exclusive
     *                   upper bound for indexes of entries to keep.
@@ -134,7 +136,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
   def take(upper: Int)(implicit builder: Builder[From, (A, T)]): builder.State =
     macro StrictContainerOps.take[(A, T)]
   
-  /** Returns an interval of entries in this map.
+  /** Returns an interval of entries in this $collection.
     * 
     * @param  lower     the inclusive lower bound for indexes of entries to keep.
     * @param  upper     the exclusive upper bound for indexes of entries to keep.

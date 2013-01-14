@@ -12,13 +12,13 @@ import basis.collections._
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
 
-trait GeneralStackOpsBehaviors extends GeneralSeqOpsBehaviors { this: FunSpec =>
+trait GeneralQueueOpsBehaviors extends GeneralSeqOpsBehaviors { this: FunSpec =>
   import ShouldMatchers._
   
-  def SequentialGeneralStackOps[CC[A] <: Stack[A]](CC: BuilderFactory[CC]) {
+  def SequentialGeneralQueueOps[CC[A] <: Queue[A]](CC: BuilderFactory[CC]) {
     import general._
     
-    describe(s"A general $CC stack") {
+    describe(s"A general $CC queue") {
       it("should traverse its elements once each with foreach") {
         val xs = CC(2, 3, 5, 7)
         var n = 0

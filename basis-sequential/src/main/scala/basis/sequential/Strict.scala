@@ -12,7 +12,7 @@ import basis.collections._
 /** Implicit conversions that add general and strictly-evaluated operations to collections.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Strict
   * 
@@ -23,6 +23,11 @@ import basis.collections._
   * @groupprio  Strict    2
   */
 class Strict extends General {
+  /** Implicitly provides strictly evaluated operations for arrays.
+    * @group Strict */
+  implicit def StrictArrayOps[A](these: Array[A]): StrictArrayOps[A, Array[A]] =
+    macro Strict.StrictArrayOps[A]
+  
   /** Implicitly provides strictly evaluated operations for enumerators.
     * @group Strict */
   implicit def StrictEnumeratorOps[A](these: Enumerator[A]): StrictEnumeratorOps[A, these.Family] =
@@ -53,10 +58,10 @@ class Strict extends General {
   implicit def StrictIndexOps[A](these: Index[A]): StrictIndexOps[A, these.Family] =
     macro Strict.StrictIndexOps[A]
   
-  /** Implicitly provides strictly evaluated operations for stacks.
+  /** Implicitly provides strictly evaluated operations for queues.
     * @group Strict */
-  implicit def StrictStackOps[A](these: Stack[A]): StrictStackOps[A, these.Family] =
-    macro Strict.StrictStackOps[A]
+  implicit def StrictQueueOps[A](these: Queue[A]): StrictQueueOps[A, these.Family] =
+    macro Strict.StrictQueueOps[A]
   
   /** Implicitly provides strictly evaluated operations for sets.
     * @group Strict */
@@ -72,6 +77,20 @@ class Strict extends General {
 private[sequential] object Strict {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
+  
+  def StrictArrayOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Array[A]])
+    : c.Expr[StrictArrayOps[A, Array[A]]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val ArrayType = appliedType(mirror.staticClass("scala.Array").toType, weakTypeOf[A] :: Nil)
+    val StrictArrayOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.StrictArrayOps").toType,
+        weakTypeOf[A] :: ArrayType :: Nil)
+    Expr(New(StrictArrayOpsType, these.tree))(WeakTypeTag(StrictArrayOpsType))
+  }
   
   def StrictEnumeratorOps[A : c.WeakTypeTag]
       (c: Context)
@@ -151,17 +170,17 @@ private[sequential] object Strict {
     Expr(New(StrictIndexOpsType, these.tree))(WeakTypeTag(StrictIndexOpsType))
   }
   
-  def StrictStackOps[A : c.WeakTypeTag]
+  def StrictQueueOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[Stack[A]])
-    : c.Expr[StrictStackOps[A, these.value.Family]] = {
+      (these: c.Expr[Queue[A]])
+    : c.Expr[StrictQueueOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictStackOpsType =
+    val StrictQueueOpsType =
       appliedType(
-        mirror.staticClass("basis.sequential.StrictStackOps").toType,
+        mirror.staticClass("basis.sequential.StrictQueueOps").toType,
         weakTypeOf[A] :: FamilyType(c)(these) :: Nil)
-    Expr(New(StrictStackOpsType, these.tree))(WeakTypeTag(StrictStackOpsType))
+    Expr(New(StrictQueueOpsType, these.tree))(WeakTypeTag(StrictQueueOpsType))
   }
   
   def StrictSetOps[A : c.WeakTypeTag]

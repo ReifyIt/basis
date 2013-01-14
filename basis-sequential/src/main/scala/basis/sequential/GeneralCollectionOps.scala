@@ -8,11 +8,12 @@
 package basis.sequential
 
 import basis.collections._
+import basis.control._
 
 /** General collection operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    General
   * 
@@ -20,9 +21,11 @@ import basis.collections._
   * @groupprio  Reducing      2
   * @groupprio  Querying      3
   * @groupprio  Transforming  4
+  * 
+  * @define collection  collection
   */
 final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
-  /** Sequentially applies a function to each element of this collection.
+  /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
     * @group  Traversing
@@ -30,7 +33,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   def foreach[U](f: A => U): Unit = traverse(these)(f)
   
   /** Returns the repeated application of an associative binary operator
-    * between an identity value and all elements of this collection.
+    * between an identity value and all elements of this $collection.
     * 
     * @param  z   the operator's identity element.
     * @param  op  the associative binary operator to apply.
@@ -42,7 +45,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   //new GeneralEnumeratorOps[A](these).fold(z)(op) // SI-6482
   
   /** Returns the repeated application of an associative binary operator
-    * between all elements of this non-empty collection.
+    * between all elements of this non-empty $collection.
     * 
     * @param  op  the associative binary operator to apply.
     * @return the reduced value.
@@ -53,10 +56,10 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   //new GeneralEnumeratorOps[A](these).reduce[B](op) // SI-6482
   
   /** Returns the repeated application of an associative binary operator
-    * between all elements of this collection.
+    * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this collection is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] =
@@ -64,7 +67,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   //new GeneralEnumeratorOps[A](these).reduceOption[B](op) // SI-6482
   
   /** Returns the left-to-right application of a binary operator between a
-    * start value and all elements of this collection.
+    * start value and all elements of this $collection.
     * 
     * @param  z   the starting value.
     * @param  op  the binary operator to apply right-recursively.
@@ -75,7 +78,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     new GeneralEnumeratorOps(these).foldLeft(z)(op)
   
   /** Returns the left-to-right application of a binary operator between
-    * all elements of this non-empty collection.
+    * all elements of this non-empty $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
     * @return the reduced value.
@@ -86,17 +89,17 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   //new GeneralEnumeratorOps[A](these).reduceLeft[B](op) // SI-6482
   
   /** Returns the left-to-right application of a binary operator between
-    * all elements of this collection.
+    * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this collection is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
     new GeneralEnumeratorOps[B](these).reduceLeftOption[B](op.asInstanceOf[(B, B) => B])
   //new GeneralEnumeratorOps[A](these).reduceLeftOption[B](op) // SI-6482
   
-  /** Returns the first element of this collection that satisfies a predicate.
+  /** Returns the first element of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return some found element, or none if no element satisfies `p`.
@@ -105,7 +108,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   def find(p: A => Boolean): Option[A] =
     new GeneralEnumeratorOps(these).find(p)
   
-  /** Returns `true` if a predicate holds for all elements of this collection.
+  /** Returns `true` if a predicate holds for all elements of this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if all elements satisfy `p`, otherwise `false`.
@@ -114,7 +117,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   def forall(p: A => Boolean): Boolean =
     new GeneralEnumeratorOps(these).forall(p)
   
-  /** Returns `true` if a predicate holds for some element of this collection.
+  /** Returns `true` if a predicate holds for some element of this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if any element satisfies `p`, otherwise `false`.
@@ -123,7 +126,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   def exists(p: A => Boolean): Boolean =
     new GeneralEnumeratorOps(these).exists(p)
   
-  /** Returns the number of elements in this collection that satisfy a predicate.
+  /** Returns the number of elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return the number of elements satisfying `p`.
@@ -133,7 +136,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     new GeneralEnumeratorOps(these).count(p)
   
   /** Returns the application of a partial function to the first element
-    * of this collection for which the function is defined.
+    * of this $collection for which the function is defined.
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
@@ -143,12 +146,12 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     new GeneralEnumeratorOps(these).choose(q)
   
-  /** Returns a strict operations interface to this collection.
+  /** Returns a strict operations interface to this $collection.
     * @group Transforming */
   def eagerly: StrictCollectionOps[A, Collection[A]] =
     new StrictCollectionOps[A, Collection[A]](these)
   
-  /** Returns a non-strict operations interface to this collection.
+  /** Returns a non-strict operations interface to this $collection.
     * @group Transforming */
   def lazily: NonStrictCollectionOps[A] =
     new NonStrictCollectionOps[A](these)

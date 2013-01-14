@@ -8,11 +8,12 @@
 package basis.sequential
 
 import basis.collections._
+import basis.control._
 
 /** General map operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    General
   * 
@@ -20,9 +21,11 @@ import basis.collections._
   * @groupprio  Reducing      2
   * @groupprio  Querying      3
   * @groupprio  Transforming  4
+  * 
+  * @define collection  map
   */
 final class GeneralMapOps[+A, +T](these: Map[A, T]) {
-  /** Sequentially applies a function to each entry of this map.
+  /** Sequentially applies a function to each entry of this $collection.
     * 
     * @param  f   the function to apply to each entry.
     * @group  Traversing
@@ -31,7 +34,7 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
     macro GeneralContainerOps.foreach[(A, T), U]
   
   /** Returns the repeated application of an associative binary operator
-    * between an identity entry and all entries of this map.
+    * between an identity entry and all entries of this $collection.
     * 
     * @param  z   the operator's identity element.
     * @param  op  the associative binary operator to apply.
@@ -42,7 +45,7 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
     macro GeneralContainerOps.foldLeft[(A, T), B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all entries of this non-empty map.
+    * between all entries of this non-empty $collection.
     * 
     * @param  op  the associative binary operator to apply.
     * @return the reduced value.
@@ -52,17 +55,17 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
     macro GeneralContainerOps.reduceLeft[(A, T), B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all entries of this map.
+    * between all entries of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this map is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceOption[B >: (A, T)](op: (B, B) => B): Option[B] =
     macro GeneralContainerOps.reduceLeftOption[(A, T), B]
   
   /** Returns the left-to-right application of a binary operator between a
-    * start value and all entries of this map.
+    * start value and all entries of this $collection.
     * 
     * @param  z   the starting value.
     * @param  op  the binary operator to apply right-recursively.
@@ -73,7 +76,7 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
     macro GeneralContainerOps.foldLeft[(A, T), B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all entries of this non-empty map.
+    * all entries of this non-empty $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
     * @return the reduced value.
@@ -83,16 +86,16 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
     macro GeneralContainerOps.reduceLeft[(A, T), B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all entries of this map.
+    * all entries of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this map is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceLeftOption[B >: (A, T)](op: (B, (A, T)) => B): Option[B] =
     macro GeneralContainerOps.reduceLeftOption[(A, T), B]
   
-  /** Returns the first entry of this map that satisfies a predicate.
+  /** Returns the first entry of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test entries against.
     * @return some found entry, or none if no entry satisfies `p`.
@@ -101,7 +104,7 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
   def find(p: ((A, T)) => Boolean): Option[(A, T)] =
     macro GeneralContainerOps.find[(A, T)]
   
-  /** Returns `true` if a predicate holds for all entries of this map.
+  /** Returns `true` if a predicate holds for all entries of this $collection.
     * 
     * @param  p   the predicate to test entries against.
     * @return `true` if all entries satisfy `p`, otherwise `false`.
@@ -110,7 +113,7 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
   def forall(p: ((A, T)) => Boolean): Boolean =
     macro GeneralContainerOps.forall[(A, T)]
   
-  /** Returns `true` if a predicate holds for some entry of this map.
+  /** Returns `true` if a predicate holds for some entry of this $collection.
     * 
     * @param  p   the predicate to test entries against.
     * @return `true` if any entry satisfies `p`, otherwise `false`.
@@ -119,7 +122,7 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
   def exists(p: ((A, T)) => Boolean): Boolean =
     macro GeneralContainerOps.exists[(A, T)]
   
-  /** Returns the number of entries in this map that satisfy a predicate.
+  /** Returns the number of entries in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to test entries against.
     * @return the number of entries satisfying `p`.
@@ -129,7 +132,7 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
     macro GeneralContainerOps.count[(A, T)]
   
   /** Returns the application of a partial function to the first entry
-    * of this map for which the function is defined.
+    * of this $collection for which the function is defined.
     * 
     * @param  q   the partial function to test entries against and to apply
     *             to the first found entry.
@@ -139,12 +142,12 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
   def choose[B](q: PartialFunction[(A, T), B]): Option[B] =
     macro GeneralContainerOps.choose[(A, T), B]
   
-  /** Returns a strict operations interface to this map.
+  /** Returns a strict operations interface to this $collection.
     * @group Transforming */
   def eagerly: StrictMapOps[A, T, Map[A, T]] =
     macro GeneralMapOps.eagerly[A, T]
   
-  /** Returns a non-strict operations interface to this map.
+  /** Returns a non-strict operations interface to this $collection.
     * @group Transforming */
   def lazily: NonStrictMapOps[A, T] =
     macro GeneralMapOps.lazily[A, T]

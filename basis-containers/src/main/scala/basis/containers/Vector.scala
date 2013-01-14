@@ -43,7 +43,7 @@ private[containers] final class Vector0 extends Vector[Nothing] {
   override def apply(index: Int): Nothing =
     throw new IndexOutOfBoundsException(index.toString)
   
-  override def update[B >: Nothing](index: Int, elem: B): Vector[B] =
+  override def update[B](index: Int, elem: B): Vector[B] =
     throw new IndexOutOfBoundsException(index.toString)
   
   override protected def foreach[U](f: Nothing => U): Unit = ()

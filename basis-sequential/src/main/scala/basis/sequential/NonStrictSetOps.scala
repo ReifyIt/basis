@@ -18,9 +18,11 @@ import basis.collections._
   * 
   * @groupprio  Filtering   1
   * @groupprio  Combining   2
+  * 
+  * @define collection  set
   */
 final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
-  /** Returns a view of all elements in this set that satisfy a predicate.
+  /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test elements against.
     * @return a non-strict view of the filtered elements.
@@ -29,7 +31,7 @@ final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
   def filter(p: A => Boolean): Set[A] =
     new NonStrictSetOps.Filter(these, p)
   
-  /** Returns a view of all elements in this set that satisfy a predicate.
+  /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test elements against.
     * @return a non-strict view of the filtered elements.
@@ -39,7 +41,7 @@ final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
     new NonStrictSetOps.Filter(these, p)
   
   /** Returns a view of all elements following the longest prefix of this
-    * set for which each element satisfies a predicate.
+    * $collection for which each element satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return a non-strict view of the suffix of accumulated elements beginning
@@ -49,7 +51,7 @@ final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
   def dropWhile(p: A => Boolean): Set[A] =
     new NonStrictSetOps.DropWhile(these, p)
   
-  /** Returns a view of the longest prefix of this set for which each
+  /** Returns a view of the longest prefix of this $collection for which each
     * element satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
@@ -71,7 +73,7 @@ final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
   def span(p: A => Boolean): (Set[A], Set[A]) =
     (takeWhile(p), dropWhile(p))
   
-  /** Returns a view of all elements in this set following a prefix
+  /** Returns a view of all elements in this $collection following a prefix
     * up to some length.
     * 
     * @param  lower   the length of the prefix to drop; also the inclusive
@@ -82,7 +84,7 @@ final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
   def drop(lower: Int): Set[A] =
     new NonStrictSetOps.Drop(these, lower)
   
-  /** Returns a view of a prefix of this set up to some length.
+  /** Returns a view of a prefix of this $collection up to some length.
     * 
     * @param  upper   the length of the prefix to take; also the exclusive
     *                 upper bound for indexes of included elements.
@@ -92,7 +94,7 @@ final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
   def take(upper: Int): Set[A] =
     new NonStrictSetOps.Take(these, upper)
   
-  /** Returns a view of an interval of elements in this set.
+  /** Returns a view of an interval of elements in this $collection.
     * 
     * @param  lower   the inclusive lower bound for indexes of included elements.
     * @param  upper   the exclusive upper bound for indexes of included elements.
@@ -103,7 +105,7 @@ final class NonStrictSetOps[+A](val these: Set[A]) extends AnyVal {
   def slice(lower: Int, upper: Int): Set[A] =
     new NonStrictSetOps.Slice(these, lower, upper)
   
-  /** Returns a view concatenating this and another set.
+  /** Returns a view concatenating this and another $collection.
     * 
     * @param  those   the elements to append to these elements.
     * @return a non-strict view of the concatenated elements.

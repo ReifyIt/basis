@@ -196,7 +196,7 @@ private[containers] class LongArrayBuffer private (
   
   final override def toArraySeq: ArraySeq[Long] = {
     if (buffer == null || size != buffer.length) {
-      var array = new Array[Long](size)
+      val array = new Array[Long](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
     }

@@ -9,7 +9,7 @@ package basis.sequential
 
 import basis.collections._
 
-/** Non-strictly evaluated indexed sequence operations.
+/** Non-strictly evaluated array operations.
   * 
   * @author   Chris Sachs
   * @version  0.0
@@ -20,9 +20,9 @@ import basis.collections._
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
   * 
-  * @define collection  index
+  * @define collection  array
   */
-final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
+final class NonStrictArrayOps[A](val these: Array[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this
     * $collection for which the function is defined.
     * 
@@ -31,7 +31,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B]): Index[B] =
-    new NonStrictIndexOps.Collect(these, q)
+    new NonStrictArrayOps.Collect(these, q)
   
   /** Returns a view that applies a function to each element in this $collection.
     * 
@@ -40,7 +40,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Mapping
     */
   def map[B](f: A => B): Index[B] =
-    new NonStrictIndexOps.Map(these, f)
+    new NonStrictArrayOps.Map(these, f)
   
   /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
@@ -49,7 +49,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Filtering
     */
   def filter(p: A => Boolean): Index[A] =
-    new NonStrictIndexOps.Filter(these, p)
+    new NonStrictArrayOps.Filter(these, p)
   
   /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
@@ -58,7 +58,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Filtering
     */
   def withFilter(p: A => Boolean): Index[A] =
-    new NonStrictIndexOps.Filter(these, p)
+    new NonStrictArrayOps.Filter(these, p)
   
   /** Returns a view of all elements following the longest prefix of this
     * $collection for which each element satisfies a predicate.
@@ -69,7 +69,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Filtering
     */
   def dropWhile(p: A => Boolean): Index[A] =
-    new NonStrictIndexOps.DropWhile(these, p)
+    new NonStrictArrayOps.DropWhile(these, p)
   
   /** Returns a view of the longest prefix of this $collection for which each
     * element satisfies a predicate.
@@ -80,7 +80,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Filtering
     */
   def takeWhile(p: A => Boolean): Index[A] =
-    new NonStrictIndexOps.TakeWhile(these, p)
+    new NonStrictArrayOps.TakeWhile(these, p)
   
   /** Returns a (prefix, suffix) pair of views with the prefix being the
     * longest one for which each element satisfies a predicate, and the suffix
@@ -102,7 +102,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Filtering
     */
   def drop(lower: Int): Index[A] =
-    new NonStrictIndexOps.Drop(these, lower)
+    new NonStrictArrayOps.Drop(these, lower)
   
   /** Returns a view of a prefix of this $collection up to some length.
     * 
@@ -112,7 +112,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Filtering
     */
   def take(upper: Int): Index[A] =
-    new NonStrictIndexOps.Take(these, upper)
+    new NonStrictArrayOps.Take(these, upper)
   
   /** Returns a view of an interval of elements in this $collection.
     * 
@@ -123,7 +123,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Filtering
     */
   def slice(lower: Int, upper: Int): Index[A] =
-    new NonStrictIndexOps.Slice(these, lower, upper)
+    new NonStrictArrayOps.Slice(these, lower, upper)
   
   /** Returns a view of the reverse of this $collection.
     * 
@@ -131,7 +131,7 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @group  Combining
     */
   def reverse: Index[A] =
-    new NonStrictIndexOps.Reverse(these)
+    new NonStrictArrayOps.Reverse(these)
   
   /** Returns a view of pairs of elemnts from this and another $collection.
     * 
@@ -139,8 +139,8 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @return a non-strict view of the pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B](those: Index[B]): Index[(A, B)] =
-    new NonStrictIndexOps.Zip(these, those)
+  def zip[B](those: Array[B]): Index[(A, B)] =
+    new NonStrictArrayOps.Zip(these, those)
   
   /** Returns a view concatenating this and another $collection.
     * 
@@ -148,15 +148,15 @@ final class NonStrictIndexOps[+A](val these: Index[A]) extends AnyVal {
     * @return a non-strict view of the concatenated elements.
     * @group Combining
     */
-  def ++ [B >: A](those: Index[B]): Index[B] =
-    new NonStrictIndexOps.++(these, those)
+  def ++ [B >: A](those: Array[B]): Index[B] =
+    new NonStrictArrayOps.++(these.asInstanceOf[Array[B]], those)
 }
 
-private[sequential] object NonStrictIndexOps {
+private[sequential] object NonStrictArrayOps {
   import scala.annotation.tailrec
   import basis.util.IntOps
   
-  final class Collect[-A, +B](these: Index[A], q: PartialFunction[A, B]) extends Index[B] {
+  final class Collect[-A, +B](these: Array[A], q: PartialFunction[A, B]) extends Index[B] {
     private[this] var table: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
       if (table == null) {
@@ -185,13 +185,13 @@ private[sequential] object NonStrictIndexOps {
     override def apply(index: Int): B = q(these(lookup(index)))
   }
   
-  final class Map[-A, +B](these: Index[A], f: A => B) extends Index[B] {
+  final class Map[-A, +B](these: Array[A], f: A => B) extends Index[B] {
     override def length: Int = these.length
     
     override def apply(index: Int): B = f(these(index))
   }
   
-  final class Filter[+A](these: Index[A], p: A => Boolean) extends Index[A] {
+  final class Filter[+A](these: Array[A], p: A => Boolean) extends Index[A] {
     private[this] var table: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
       if (table == null) {
@@ -220,7 +220,7 @@ private[sequential] object NonStrictIndexOps {
     override def apply(index: Int): A = these(lookup(index))
   }
   
-  final class DropWhile[+A](these: Index[A], p: A => Boolean) extends Index[A] {
+  final class DropWhile[+A](these: Array[A], p: A => Boolean) extends Index[A] {
     private[this] var lower: Int = -1
     private[this] def offset: Int = synchronized {
       if (lower < 0) {
@@ -240,7 +240,7 @@ private[sequential] object NonStrictIndexOps {
     }
   }
   
-  final class TakeWhile[+A](these: Index[A], p: A => Boolean) extends Index[A] {
+  final class TakeWhile[+A](these: Array[A], p: A => Boolean) extends Index[A] {
     private[this] var upper: Int = -1
     
     override def length: Int = synchronized {
@@ -258,7 +258,7 @@ private[sequential] object NonStrictIndexOps {
     }
   }
   
-  final class Drop[+A](these: Index[A], lower: Int) extends Index[A] {
+  final class Drop[+A](these: Array[A], lower: Int) extends Index[A] {
     private[this] val offset: Int = 0 max lower min these.length
     
     override def length: Int = these.length - offset
@@ -270,7 +270,7 @@ private[sequential] object NonStrictIndexOps {
     }
   }
   
-  final class Take[+A](these: Index[A], upper: Int) extends Index[A] {
+  final class Take[+A](these: Array[A], upper: Int) extends Index[A] {
     override val length: Int = 0 max upper min these.length
     
     override def apply(index: Int): A = {
@@ -279,7 +279,7 @@ private[sequential] object NonStrictIndexOps {
     }
   }
   
-  final class Slice[+A](these: Index[A], lower: Int, upper: Int) extends Index[A] {
+  final class Slice[+A](these: Array[A], lower: Int, upper: Int) extends Index[A] {
     private[this] val offset: Int = 0 max lower min these.length
     
     override val length: Int = (offset max upper min these.length) - offset
@@ -290,7 +290,7 @@ private[sequential] object NonStrictIndexOps {
     }
   }
   
-  final class Reverse[+A](these: Index[A]) extends Index[A] {
+  final class Reverse[+A](these: Array[A]) extends Index[A] {
     override def length: Int = these.length
     
     override def apply(index: Int): A = {
@@ -300,13 +300,13 @@ private[sequential] object NonStrictIndexOps {
     }
   }
   
-  final class Zip[+A, +B](these: Index[A], those: Index[B]) extends Index[(A, B)] {
+  final class Zip[+A, +B](these: Array[A], those: Array[B]) extends Index[(A, B)] {
     override val length: Int = these.length min those.length
     
     override def apply(index: Int): (A, B) = (these(index), those(index))
   }
   
-  final class ++[+A](these: Index[A], those: Index[A]) extends Index[A] {
+  final class ++[+A](these: Array[A], those: Array[A]) extends Index[A] {
     override val length: Int = these.length + those.length
     
     override def apply(index: Int): A = {

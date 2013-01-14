@@ -7,6 +7,8 @@
 
 package basis.collections
 
+import basis.control._
+
 import scala.annotation.unchecked.uncheckedVariance
 
 /** An associative map. Maps consist of (key, value) pairs with unique keys.
@@ -16,7 +18,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Collections
   * 

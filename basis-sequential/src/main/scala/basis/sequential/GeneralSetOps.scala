@@ -8,11 +8,12 @@
 package basis.sequential
 
 import basis.collections._
+import basis.control._
 
 /** General set operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    General
   * 
@@ -20,9 +21,11 @@ import basis.collections._
   * @groupprio  Reducing      2
   * @groupprio  Querying      3
   * @groupprio  Transforming  4
+  * 
+  * @define collection  set
   */
 final class GeneralSetOps[+A](these: Set[A]) {
-  /** Sequentially applies a function to each element of this set.
+  /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
     * @group  Traversing
@@ -31,7 +34,7 @@ final class GeneralSetOps[+A](these: Set[A]) {
     macro GeneralContainerOps.foreach[A, U]
   
   /** Returns the repeated application of an associative binary operator
-    * between an identity value and all elements of this set.
+    * between an identity value and all elements of this $collection.
     * 
     * @param  z   the operator's identity element.
     * @param  op  the associative binary operator to apply.
@@ -42,7 +45,7 @@ final class GeneralSetOps[+A](these: Set[A]) {
     macro GeneralContainerOps.foldLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all elements of this non-empty set.
+    * between all elements of this non-empty $collection.
     * 
     * @param  op  the associative binary operator to apply.
     * @return the reduced value.
@@ -52,17 +55,17 @@ final class GeneralSetOps[+A](these: Set[A]) {
     macro GeneralContainerOps.reduceLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all elements of this set.
+    * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this set is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] =
     macro GeneralContainerOps.reduceLeftOption[A, B]
   
   /** Returns the left-to-right application of a binary operator between a
-    * start value and all elements of this set.
+    * start value and all elements of this $collection.
     * 
     * @param  z   the starting value.
     * @param  op  the binary operator to apply right-recursively.
@@ -73,7 +76,7 @@ final class GeneralSetOps[+A](these: Set[A]) {
     macro GeneralContainerOps.foldLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all elements of this non-empty set.
+    * all elements of this non-empty $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
     * @return the reduced value.
@@ -83,16 +86,16 @@ final class GeneralSetOps[+A](these: Set[A]) {
     macro GeneralContainerOps.reduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all elements of this set.
+    * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this set is empty.
+    * @return some reduced value, or none if this $collection is empty.
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
     macro GeneralContainerOps.reduceLeftOption[A, B]
   
-  /** Returns the first element of this set that satisfies a predicate.
+  /** Returns the first element of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return some found element, or none if no element satisfies `p`.
@@ -101,7 +104,7 @@ final class GeneralSetOps[+A](these: Set[A]) {
   def find(p: A => Boolean): Option[A] =
     macro GeneralContainerOps.find[A]
   
-  /** Returns `true` if a predicate holds for all elements of this set.
+  /** Returns `true` if a predicate holds for all elements of this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if all elements satisfy `p`, otherwise `false`.
@@ -110,7 +113,7 @@ final class GeneralSetOps[+A](these: Set[A]) {
   def forall(p: A => Boolean): Boolean =
     macro GeneralContainerOps.forall[A]
   
-  /** Returns `true` if a predicate holds for some element of this set.
+  /** Returns `true` if a predicate holds for some element of this $collection.
     * 
     * @param  p   the predicate to test elements against.
     * @return `true` if any element satisfies `p`, otherwise `false`.
@@ -119,7 +122,7 @@ final class GeneralSetOps[+A](these: Set[A]) {
   def exists(p: A => Boolean): Boolean =
     macro GeneralContainerOps.exists[A]
   
-  /** Returns the number of elements in this set that satisfy a predicate.
+  /** Returns the number of elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return the number of elements satisfying `p`.
@@ -129,7 +132,7 @@ final class GeneralSetOps[+A](these: Set[A]) {
     macro GeneralContainerOps.count[A]
   
   /** Returns the application of a partial function to the first element
-    * of this set for which the function is defined.
+    * of this $collection for which the function is defined.
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
@@ -139,12 +142,12 @@ final class GeneralSetOps[+A](these: Set[A]) {
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralContainerOps.choose[A, B]
   
-  /** Returns a strict operations interface to this set.
+  /** Returns a strict operations interface to this $collection.
     * @group Transforming */
   def eagerly: StrictSetOps[A, Set[A]] =
     macro GeneralSetOps.eagerly[A]
   
-  /** Returns a non-strict operations interface to this set.
+  /** Returns a non-strict operations interface to this $collection.
     * @group Transforming */
   def lazily: NonStrictSetOps[A] =
     macro GeneralSetOps.lazily[A]

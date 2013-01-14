@@ -193,7 +193,7 @@ private[containers] class RefArrayBuffer[A] private (
   
   final override def toArraySeq: ArraySeq[A] = {
     if (buffer == null || size != buffer.length) {
-      var array = new Array[AnyRef](size)
+      val array = new Array[AnyRef](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
     }

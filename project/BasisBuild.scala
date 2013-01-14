@@ -45,7 +45,8 @@ object BasisBuild extends Build {
     base         = file("basis-collections"),
     settings     = commonSettings,
     dependencies =
-      Seq(BasisRuntime,
+      Seq(BasisControl,
+          BasisRuntime,
           BasisUtil)
   )
   
@@ -55,6 +56,7 @@ object BasisBuild extends Build {
     settings     = commonSettings,
     dependencies =
       Seq(BasisCollections % "compile->compile;test->test",
+          BasisControl,
           BasisSequential % "test->test",
           BasisMemory,
           BasisUtil)

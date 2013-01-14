@@ -196,7 +196,7 @@ private[containers] class ByteArrayBuffer private (
   
   final override def toArraySeq: ArraySeq[Byte] = {
     if (buffer == null || size != buffer.length) {
-      var array = new Array[Byte](size)
+      val array = new Array[Byte](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
     }

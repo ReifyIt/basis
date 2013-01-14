@@ -21,6 +21,21 @@ package containers {
   import basis.runtime._
   
   private[containers] class Library extends Library1 {
+    import scala.reflect.ClassTag
+    
+    /** Implicitly returns a new `Array` builder.
+      * @group Builders */
+    implicit def ArrayBuilder[A](implicit A: ClassTag[A])
+      : Builder[Array[_], A] { type State = Array[A] } = (A match {
+      case ClassTag.Byte     => new ByteArrayBuilder
+      case ClassTag.Short    => new ShortArrayBuilder
+      case ClassTag.Int      => new IntArrayBuilder
+      case ClassTag.Long     => new LongArrayBuilder
+      case ClassTag.Float    => new FloatArrayBuilder
+      case ClassTag.Double   => new DoubleArrayBuilder
+      case _                 => new ArrayBuilder[A]
+    }).asInstanceOf[Builder[Array[_], A] { type State = Array[A] }]
+    
     /** Implicitly returns a new [[ArraySeq]] builder.
       * @group Builders */
     implicit def ArraySeqBuilder[A](implicit A: TypeHint[A])
@@ -87,11 +102,11 @@ package containers {
       : Builder[Index[_], A] { type State = Index[A] } =
       Index.Builder(A)
     
-    /** Implicitly returns a new default [[Stack]] builder.
+    /** Implicitly returns a new default [[Queue]] builder.
       * @group Builders */
-    implicit def StackBuilder[A](implicit A: TypeHint[A])
-      : Builder[Stack[_], A] { type State = Stack[A] } =
-      Stack.Builder[A]
+    implicit def QueueBuilder[A](implicit A: TypeHint[A])
+      : Builder[Queue[_], A] { type State = Queue[A] } =
+      Queue.Builder[A]
   }
 
   private[containers] abstract class Library2 extends Library3 { this: Library =>
@@ -155,9 +170,9 @@ package containers {
       * @group Collections */
     implicit val Index: SeqFactory[Index] = ArraySeq
     
-    /** Implicitly provides a default [[Stack]] factory.
+    /** Implicitly provides a default [[Queue]] factory.
       * @group Collections */
-    implicit val Stack: SeqFactory[Stack] = List
+    implicit val Queue: SeqFactory[Queue] = List
     
     /** Implicitly returns a new default [[Enumerator]] builder.
       * @group Builders */

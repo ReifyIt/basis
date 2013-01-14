@@ -12,7 +12,7 @@ import basis.collections._
 /** Implicit conversions that add general operations to collections.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    General
   * 
@@ -20,6 +20,11 @@ import basis.collections._
   * @groupprio  General   1
   */
 class General {
+  /** Implicitly provides general operations for arrays.
+    * @group General */
+  implicit def GeneralArrayOps[A](these: Array[A]): GeneralArrayOps[A] =
+    macro General.GeneralArrayOps[A]
+  
   /** Implicitly provides general operations for enumerators.
     * @group General */
   implicit def GeneralEnumeratorOps[A](these: Enumerator[A]): GeneralEnumeratorOps[A] =
@@ -50,10 +55,10 @@ class General {
   implicit def GeneralIndexOps[A](these: Index[A]): GeneralIndexOps[A] =
     macro General.GeneralIndexOps[A]
   
-  /** Implicitly provides general operations for stacks.
+  /** Implicitly provides general operations for queues.
     * @group General */
-  implicit def GeneralStackOps[A](these: Stack[A]): GeneralStackOps[A] =
-    macro General.GeneralStackOps[A]
+  implicit def GeneralQueueOps[A](these: Queue[A]): GeneralQueueOps[A] =
+    macro General.GeneralQueueOps[A]
   
   /** Implicitly provides general operations for sets.
     * @group General */
@@ -69,6 +74,19 @@ class General {
 private[sequential] object General {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
+  
+  def GeneralArrayOps[A : c.WeakTypeTag]
+      (c: Context)
+      (these: c.Expr[Array[A]])
+    : c.Expr[GeneralArrayOps[A]] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val GeneralArrayOpsType =
+      appliedType(
+        mirror.staticClass("basis.sequential.GeneralArrayOps").toType,
+        weakTypeOf[A] :: Nil)
+    Expr(New(GeneralArrayOpsType, these.tree))(WeakTypeTag(GeneralArrayOpsType))
+  }
   
   def GeneralEnumeratorOps[A : c.WeakTypeTag]
       (c: Context)
@@ -148,17 +166,17 @@ private[sequential] object General {
     Expr(New(GeneralIndexOpsType, these.tree))(WeakTypeTag(GeneralIndexOpsType))
   }
   
-  def GeneralStackOps[A : c.WeakTypeTag]
+  def GeneralQueueOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[Stack[A]])
-    : c.Expr[GeneralStackOps[A]] = {
+      (these: c.Expr[Queue[A]])
+    : c.Expr[GeneralQueueOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralStackOpsType =
+    val GeneralQueueOpsType =
       appliedType(
-        mirror.staticClass("basis.sequential.GeneralStackOps").toType,
+        mirror.staticClass("basis.sequential.GeneralQueueOps").toType,
         weakTypeOf[A] :: Nil)
-    Expr(New(GeneralStackOpsType, these.tree))(WeakTypeTag(GeneralStackOpsType))
+    Expr(New(GeneralQueueOpsType, these.tree))(WeakTypeTag(GeneralQueueOpsType))
   }
   
   def GeneralSetOps[A : c.WeakTypeTag]

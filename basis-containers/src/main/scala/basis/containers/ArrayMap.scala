@@ -8,6 +8,7 @@
 package basis.containers
 
 import basis.collections._
+import basis.control._
 import basis.runtime._
 import basis.util._
 
@@ -20,7 +21,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Containers
   * 

@@ -19,10 +19,12 @@ import basis.collections._
   * @groupprio  Mapping     1
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
+  * 
+  * @define collection  container
   */
 final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this
-    * container for which the function is defined.
+    * $collection for which the function is defined.
     * 
     * @param  q   the partial function to lazily filter and map elements.
     * @return a non-strict view of the filtered and mapped elements.
@@ -31,7 +33,7 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   def collect[B](q: PartialFunction[A, B]): Container[B] =
     new NonStrictContainerOps.Collect(these, q)
   
-  /** Returns a view that applies a function to each element in this container.
+  /** Returns a view that applies a function to each element in this $collection.
     * 
     * @param  f   the function to lazily apply to each element.
     * @return a non-strict view of the mapped elements.
@@ -41,16 +43,16 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
     new NonStrictContainerOps.Map(these, f)
   
   /** Returns a view concatenating all elements returned by a function
-    * applied to each element in this container.
+    * applied to each element in this $collection.
     * 
-    * @param  f   the container-yielding function to apply to each element.
+    * @param  f   the $collection-yielding function to apply to each element.
     * @return a non-strict view concatenating all elements produced by `f`.
     * @group  Mapping
     */
   def flatMap[B](f: A => Container[B]): Container[B] =
     new NonStrictContainerOps.FlatMap(these, f)
   
-  /** Returns a view of all elements in this container that satisfy a predicate.
+  /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test elements against.
     * @return a non-strict view of the filtered elements.
@@ -59,7 +61,7 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   def filter(p: A => Boolean): Container[A] =
     new NonStrictContainerOps.Filter(these, p)
   
-  /** Returns a view of all elements in this container that satisfy a predicate.
+  /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
     * @param  p   the predicate to lazily test elements against.
     * @return a non-strict view of the filtered elements.
@@ -69,7 +71,7 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
     new NonStrictContainerOps.Filter(these, p)
   
   /** Returns a view of all elements following the longest prefix of this
-    * container for which each element satisfies a predicate.
+    * $collection for which each element satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
     * @return a non-strict view of the suffix of accumulated elements beginning
@@ -79,7 +81,7 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   def dropWhile(p: A => Boolean): Container[A] =
     new NonStrictContainerOps.DropWhile(these, p)
   
-  /** Returns a view of the longest prefix of this container for which each
+  /** Returns a view of the longest prefix of this $collection for which each
     * element satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
@@ -101,7 +103,7 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   def span(p: A => Boolean): (Container[A], Container[A]) =
     (takeWhile(p), dropWhile(p))
   
-  /** Returns a view of all elements in this container following a prefix
+  /** Returns a view of all elements in this $collection following a prefix
     * up to some length.
     * 
     * @param  lower   the length of the prefix to drop; also the inclusive
@@ -112,7 +114,7 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   def drop(lower: Int): Container[A] =
     new NonStrictContainerOps.Drop(these, lower)
   
-  /** Returns a view of a prefix of this container up to some length.
+  /** Returns a view of a prefix of this $collection up to some length.
     * 
     * @param  upper   the length of the prefix to take; also the exclusive
     *                 upper bound for indexes of included elements.
@@ -122,7 +124,7 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   def take(upper: Int): Container[A] =
     new NonStrictContainerOps.Take(these, upper)
   
-  /** Returns a view of an interval of elements in this container.
+  /** Returns a view of an interval of elements in this $collection.
     * 
     * @param  lower   the inclusive lower bound for indexes of included elements.
     * @param  upper   the exclusive upper bound for indexes of included elements.
@@ -133,16 +135,16 @@ final class NonStrictContainerOps[+A](val these: Container[A]) extends AnyVal {
   def slice(lower: Int, upper: Int): Container[A] =
     new NonStrictContainerOps.Slice(these, lower, upper)
   
-  /** Returns a view of pairs of elemnts from this and another container.
+  /** Returns a view of pairs of elemnts from this and another $collection.
     * 
-    * @param  those   the container whose elements to lazily pair with these elements.
+    * @param  those   the $collection whose elements to lazily pair with these elements.
     * @return a non-strict view of the pairs of corresponding elements.
     * @group  Combining
     */
   def zip[B](those: Container[B]): Container[(A, B)] =
     new NonStrictContainerOps.Zip(these, those)
   
-  /** Returns a view concatenating this and another container.
+  /** Returns a view concatenating this and another $collection.
     * 
     * @param  those   the elements to append to these elements.
     * @return a non-strict view of the concatenated elements.
