@@ -21,6 +21,11 @@ private[containers] final class RefBatch1[+A](_1: A) extends Batch[A] {
     else throw new IndexOutOfBoundsException(index.toString)
   }
   
+  override def update[B >: A](index: Int, elem: B): Batch[B] = {
+    if (index == 0) new RefBatch1(elem)
+    else throw new IndexOutOfBoundsException(index.toString)
+  }
+  
   override def head: A = _1
   
   override def last: A = _1
@@ -46,6 +51,12 @@ private[containers] final class RefBatch2[+A](_1: A, _2: A) extends Batch[A] {
   override def apply(index: Int): A = {
     if (index == 0) _1
     else if (index == 1) _2
+    else throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: A](index: Int, elem: B): Batch[B] = {
+    if (index == 0) new RefBatch2(elem, _2)
+    else if (index == 1) new RefBatch2(_1, elem)
     else throw new IndexOutOfBoundsException(index.toString)
   }
   
@@ -83,6 +94,13 @@ private[containers] final class RefBatch3[+A](_1: A, _2: A, _3: A) extends Batch
     case 0 => _1
     case 1 => _2
     case 2 => _3
+    case _ => throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: A](index: Int, elem: B): Batch[B] = (index: @switch) match {
+    case 0 => new RefBatch3(elem, _2, _3)
+    case 1 => new RefBatch3(_1, elem, _3)
+    case 2 => new RefBatch3(_1, _2, elem)
     case _ => throw new IndexOutOfBoundsException(index.toString)
   }
   
@@ -125,6 +143,14 @@ private[containers] final class RefBatch4[+A](_1: A, _2: A, _3: A, _4: A) extend
     case 1 => _2
     case 2 => _3
     case 3 => _4
+    case _ => throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: A](index: Int, elem: B): Batch[B] = (index: @switch) match {
+    case 0 => new RefBatch4(elem, _2, _3, _4)
+    case 1 => new RefBatch4(_1, elem, _3, _4)
+    case 2 => new RefBatch4(_1, _2, elem, _4)
+    case 3 => new RefBatch4(_1, _2, _3, elem)
     case _ => throw new IndexOutOfBoundsException(index.toString)
   }
   
@@ -173,6 +199,15 @@ private[containers] final class RefBatch5[+A]
     case 2 => _3
     case 3 => _4
     case 4 => _5
+    case _ => throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: A](index: Int, elem: B): Batch[B] = (index: @switch) match {
+    case 0 => new RefBatch5(elem, _2, _3, _4, _5)
+    case 1 => new RefBatch5(_1, elem, _3, _4, _5)
+    case 2 => new RefBatch5(_1, _2, elem, _4, _5)
+    case 3 => new RefBatch5(_1, _2, _3, elem, _5)
+    case 4 => new RefBatch5(_1, _2, _3, _4, elem)
     case _ => throw new IndexOutOfBoundsException(index.toString)
   }
   
@@ -229,6 +264,16 @@ private[containers] final class RefBatch6[+A]
     case _ => throw new IndexOutOfBoundsException(index.toString)
   }
   
+  override def update[B >: A](index: Int, elem: B): Batch[B] = (index: @switch) match {
+    case 0 => new RefBatch6(elem, _2, _3, _4, _5, _6)
+    case 1 => new RefBatch6(_1, elem, _3, _4, _5, _6)
+    case 2 => new RefBatch6(_1, _2, elem, _4, _5, _6)
+    case 3 => new RefBatch6(_1, _2, _3, elem, _5, _6)
+    case 4 => new RefBatch6(_1, _2, _3, _4, elem, _6)
+    case 5 => new RefBatch6(_1, _2, _3, _4, _5, elem)
+    case _ => throw new IndexOutOfBoundsException(index.toString)
+  }
+  
   override def head: A = _1
   
   override def last: A = _6
@@ -282,6 +327,16 @@ private[containers] final class RefBatchN[+A]
     }
   }
   
+  override def update[B >: A](index: Int, elem: B): Batch[B] = {
+    val n = index - prefix.length
+    if (n < 0) new RefBatchN(length, prefix.update(index, elem), tree, suffix)
+    else {
+      val k = n - (tree.length << 2)
+      if (k < 0) new RefBatchN(length, prefix, tree.update(n >> 2, tree(n >> 2).update(n & 3, elem)), suffix)
+      else new RefBatchN(length, prefix, tree, suffix.update(index, elem))
+    }
+  }
+  
   override def head: A = prefix.head
   
   override def last: A = suffix.last
@@ -316,7 +371,19 @@ private[containers] final class RefBatchN[+A]
     }
   }
   
-  override def take(upper: Int): Batch[A] = Predef.???
+  override def take(upper: Int): Batch[A] = {
+    val n = upper - prefix.length
+    if (upper == length) this
+    else if (n <= 0) prefix.take(upper)
+    else {
+      val k = n - (tree.length << 2)
+      if (k <= 0) {
+        val split = tree.take(((n + 3) & ~3) >> 2)
+        new RefBatchN(upper, prefix, split.init, split.last.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
+      }
+      else new RefBatchN(upper, prefix, tree, suffix.take(k))
+    }
+  }
   
   override def append[B >: A](elem: B): Batch[B] = {
     if (suffix.length == 6)

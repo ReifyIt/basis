@@ -22,12 +22,13 @@ import basis.runtime._
   * @group    Containers
   * 
   * @groupprio  Quantifying   1
-  * @groupprio  Decomposing   2
-  * @groupprio  Inserting     3
-  * @groupprio  Slicing       4
-  * @groupprio  Iterating     5
-  * @groupprio  Traversing    6
-  * @groupprio  Classifying   7
+  * @groupprio  Indexing      2
+  * @groupprio  Decomposing   3
+  * @groupprio  Inserting     4
+  * @groupprio  Slicing       5
+  * @groupprio  Iterating     6
+  * @groupprio  Traversing    7
+  * @groupprio  Classifying   8
   * 
   * @define collection  batch
   */
@@ -37,6 +38,10 @@ abstract class Batch[+A] private[containers]
     with Family[Batch[A]]
     with Index[A]
     with Deque[A] {
+  
+  /** Returns a copy of this $collection with the given element at the given index.
+    * @group Indexing */
+  def update[B >: A](index: Int, elem: B): Batch[B]
   
   /** Returns all but the first `lower` elements of this $collection.
     * @group Slicing */
@@ -72,6 +77,8 @@ object Batch extends SeqFactory[Batch] {
     override def length: Int = 0
     
     override def apply(index: Int): Nothing = throw new IndexOutOfBoundsException(index.toString)
+    
+    override def update[B](index: Int, elem: B): Batch[B] = throw new IndexOutOfBoundsException(index.toString)
     
     override def head: Nothing = throw new NoSuchElementException("head of empty batch")
     

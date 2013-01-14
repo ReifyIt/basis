@@ -24,6 +24,14 @@ private[containers] final class IntBatch1(_1: Int) extends Batch[Int] with Reifi
     else throw new IndexOutOfBoundsException(index.toString)
   }
   
+  override def update[B >: Int](index: Int, elem: B): Batch[B] = {
+    if (elem.isInstanceOf[Int]) {
+      if (index == 0) new IntBatch1(elem.asInstanceOf[Int])
+      else throw new IndexOutOfBoundsException(index.toString)
+    }
+    else lift.update(index, elem)
+  }
+  
   override def head: Int = _1
   
   override def last: Int = _1
@@ -38,13 +46,15 @@ private[containers] final class IntBatch1(_1: Int) extends Batch[Int] with Reifi
   
   override def append[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch2(_1, elem.asInstanceOf[Int])
-    else new RefBatch2(_1, elem)
+    else lift.append(elem)
   }
   
   override def prepend[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch2(elem.asInstanceOf[Int], _1)
-    else new RefBatch2(elem, _1)
+    else lift.prepend(elem)
   }
+  
+  private[this] def lift: Batch[Int] = new RefBatch1(_1)
 }
 
 private[containers] final class IntBatch2(_1: Int, _2: Int) extends Batch[Int] with Reified {
@@ -58,6 +68,15 @@ private[containers] final class IntBatch2(_1: Int, _2: Int) extends Batch[Int] w
     if (index == 0) _1
     else if (index == 1) _2
     else throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: Int](index: Int, elem: B): Batch[B] = {
+    if (elem.isInstanceOf[Int]) {
+      if (index == 0) new IntBatch2(elem.asInstanceOf[Int], _2)
+      else if (index == 1) new IntBatch2(_1, elem.asInstanceOf[Int])
+      else throw new IndexOutOfBoundsException(index.toString)
+    }
+    else lift.update(index, elem)
   }
   
   override def head: Int = _1
@@ -82,13 +101,15 @@ private[containers] final class IntBatch2(_1: Int, _2: Int) extends Batch[Int] w
   
   override def append[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch3(_1, _2, elem.asInstanceOf[Int])
-    else new RefBatch3(_1, _2, elem)
+    else lift.append(elem)
   }
   
   override def prepend[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch3(elem.asInstanceOf[Int], _1, _2)
-    else new RefBatch3(elem, _1, _2)
+    else lift.prepend(elem)
   }
+  
+  private[this] def lift: Batch[Int] = new RefBatch2(_1, _2)
 }
 
 private[containers] final class IntBatch3(_1: Int, _2: Int, _3: Int) extends Batch[Int] with Reified {
@@ -103,6 +124,16 @@ private[containers] final class IntBatch3(_1: Int, _2: Int, _3: Int) extends Bat
     case 1 => _2
     case 2 => _3
     case _ => throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: Int](index: Int, elem: B): Batch[B] = {
+    if (elem.isInstanceOf[Int]) (index: @switch) match {
+      case 0 => new IntBatch3(elem.asInstanceOf[Int], _2, _3)
+      case 1 => new IntBatch3(_1, elem.asInstanceOf[Int], _3)
+      case 2 => new IntBatch3(_1, _2, elem.asInstanceOf[Int])
+      case _ => throw new IndexOutOfBoundsException(index.toString)
+    }
+    else lift.update(index, elem)
   }
   
   override def head: Int = _1
@@ -131,13 +162,15 @@ private[containers] final class IntBatch3(_1: Int, _2: Int, _3: Int) extends Bat
   
   override def append[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch4(_1, _2, _3, elem.asInstanceOf[Int])
-    else new RefBatch4(_1, _2, _3, elem)
+    else lift.append(elem)
   }
   
   override def prepend[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch4(elem.asInstanceOf[Int], _1, _2, _3)
-    else new RefBatch4(elem, _1, _2, _3)
+    else lift.prepend(elem)
   }
+  
+  private[this] def lift: Batch[Int] = new RefBatch3(_1, _2, _3)
 }
 
 private[containers] final class IntBatch4(_1: Int, _2: Int, _3: Int, _4: Int) extends Batch[Int] with Reified {
@@ -153,6 +186,17 @@ private[containers] final class IntBatch4(_1: Int, _2: Int, _3: Int, _4: Int) ex
     case 2 => _3
     case 3 => _4
     case _ => throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: Int](index: Int, elem: B): Batch[B] = {
+    if (elem.isInstanceOf[Int]) (index: @switch) match {
+      case 0 => new IntBatch4(elem.asInstanceOf[Int], _2, _3, _4)
+      case 1 => new IntBatch4(_1, elem.asInstanceOf[Int], _3, _4)
+      case 2 => new IntBatch4(_1, _2, elem.asInstanceOf[Int], _4)
+      case 3 => new IntBatch4(_1, _2, _3, elem.asInstanceOf[Int])
+      case _ => throw new IndexOutOfBoundsException(index.toString)
+    }
+    else lift.update(index, elem)
   }
   
   override def head: Int = _1
@@ -183,13 +227,15 @@ private[containers] final class IntBatch4(_1: Int, _2: Int, _3: Int, _4: Int) ex
   
   override def append[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch5(_1, _2, _3, _4, elem.asInstanceOf[Int])
-    else new RefBatch5(_1, _2, _3, _4, elem)
+    else lift.append(elem)
   }
   
   override def prepend[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch5(elem.asInstanceOf[Int], _1, _2, _3, _4)
-    else new RefBatch5(elem, _1, _2, _3, _4)
+    else lift.prepend(elem)
   }
+  
+  private[this] def lift: Batch[Int] = new RefBatch4(_1, _2, _3, _4)
 }
 
 private[containers] final class IntBatch5
@@ -209,6 +255,18 @@ private[containers] final class IntBatch5
     case 3 => _4
     case 4 => _5
     case _ => throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: Int](index: Int, elem: B): Batch[B] = {
+    if (elem.isInstanceOf[Int]) (index: @switch) match {
+      case 0 => new IntBatch5(elem.asInstanceOf[Int], _2, _3, _4, _5)
+      case 1 => new IntBatch5(_1, elem.asInstanceOf[Int], _3, _4, _5)
+      case 2 => new IntBatch5(_1, _2, elem.asInstanceOf[Int], _4, _5)
+      case 3 => new IntBatch5(_1, _2, _3, elem.asInstanceOf[Int], _5)
+      case 4 => new IntBatch5(_1, _2, _3, _4, elem.asInstanceOf[Int])
+      case _ => throw new IndexOutOfBoundsException(index.toString)
+    }
+    else lift.update(index, elem)
   }
   
   override def head: Int = _1
@@ -241,13 +299,15 @@ private[containers] final class IntBatch5
   
   override def append[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch6(_1, _2, _3, _4, _5, elem.asInstanceOf[Int])
-    else new RefBatch6(_1, _2, _3, _4, _5, elem)
+    else lift.append(elem)
   }
   
   override def prepend[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) new IntBatch6(elem.asInstanceOf[Int], _1, _2, _3, _4, _5)
-    else new RefBatch6(elem, _1, _2, _3, _4, _5)
+    else lift.prepend(elem)
   }
+  
+  private[this] def lift: Batch[Int] = new RefBatch5(_1, _2, _3, _4, _5)
 }
 
 private[containers] final class IntBatch6
@@ -268,6 +328,19 @@ private[containers] final class IntBatch6
     case 4 => _5
     case 5 => _6
     case _ => throw new IndexOutOfBoundsException(index.toString)
+  }
+  
+  override def update[B >: Int](index: Int, elem: B): Batch[B] = {
+    if (elem.isInstanceOf[Int]) (index: @switch) match {
+      case 0 => new IntBatch6(elem.asInstanceOf[Int], _2, _3, _4, _5, _6)
+      case 1 => new IntBatch6(_1, elem.asInstanceOf[Int], _3, _4, _5, _6)
+      case 2 => new IntBatch6(_1, _2, elem.asInstanceOf[Int], _4, _5, _6)
+      case 3 => new IntBatch6(_1, _2, _3, elem.asInstanceOf[Int], _5, _6)
+      case 4 => new IntBatch6(_1, _2, _3, _4, elem.asInstanceOf[Int], _6)
+      case 5 => new IntBatch6(_1, _2, _3, _4, _5, elem.asInstanceOf[Int])
+      case _ => throw new IndexOutOfBoundsException(index.toString)
+    }
+    else lift.update(index, elem)
   }
   
   override def head: Int = _1
@@ -303,14 +376,16 @@ private[containers] final class IntBatch6
   override def append[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int])
       new IntBatchN(7, new IntBatch4(_1, _2, _3, _4), Batch.Empty, new IntBatch3(_5, _6, elem.asInstanceOf[Int]))
-    else new RefBatchN(7, new IntBatch4(_1, _2, _3, _4), Batch.Empty, new RefBatch3(_5, _6, elem))
+    else lift.append(elem)
   }
   
   override def prepend[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int])
       new IntBatchN(7, new IntBatch3(elem.asInstanceOf[Int], _1, _2), Batch.Empty, new IntBatch4(_3, _4, _5, _6))
-    else new RefBatchN(7, new RefBatch3(elem, _1, _2), Batch.Empty, new IntBatch4(_3, _4, _5, _6))
+    else lift.prepend(elem)
   }
+  
+  private[this] def lift: Batch[Int] = new RefBatch6(_1, _2, _3, _4, _5, _6)
 }
 
 private[containers] final class IntBatchN
@@ -329,6 +404,19 @@ private[containers] final class IntBatchN
       if (k < 0) tree(n >> 2)(n & 3)
       else suffix(k)
     }
+  }
+  
+  override def update[B >: Int](index: Int, elem: B): Batch[B] = {
+    if (elem.isInstanceOf[Int]) {
+      val n = index - prefix.length
+      if (n < 0) new IntBatchN(length, prefix.update(index, elem).asInstanceOf[Batch[Int]], tree, suffix)
+      else {
+        val k = n - (tree.length << 2)
+        if (k < 0) new IntBatchN(length, prefix, tree.update(n >> 2, tree(n >> 2).update(n & 3, elem).asInstanceOf[Batch[Int]]), suffix)
+        else new IntBatchN(length, prefix, tree, suffix.update(index, elem).asInstanceOf[Batch[Int]])
+      }
+    }
+    else lift.update(index, elem)
   }
   
   override def head: Int = prefix.head
@@ -365,7 +453,19 @@ private[containers] final class IntBatchN
     }
   }
   
-  override def take(upper: Int): Batch[Int] = Predef.???
+  override def take(upper: Int): Batch[Int] = {
+    val n = upper - prefix.length
+    if (upper == length) this
+    else if (n <= 0) prefix.take(upper)
+    else {
+      val k = n - (tree.length << 2)
+      if (k <= 0) {
+        val split = tree.take(((n + 3) & ~3) >> 2)
+        new IntBatchN(upper, prefix, split.init, split.last.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
+      }
+      else new IntBatchN(upper, prefix, tree, suffix.take(k))
+    }
+  }
   
   override def append[B >: Int](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Int]) {
@@ -377,13 +477,7 @@ private[containers] final class IntBatchN
           new IntBatch3(suffix(4), suffix(5), elem.asInstanceOf[Int]))
       else new IntBatchN(length + 1, prefix, tree, (suffix :+ elem).asInstanceOf[Batch[Int]])
     }
-    else if (suffix.length == 6)
-      new RefBatchN(
-        length + 1,
-        prefix,
-        tree :+ new IntBatch4(suffix(0), suffix(1), suffix(2), suffix(3)),
-        new RefBatch3(suffix(4), suffix(5), elem))
-    else new RefBatchN(length + 1, prefix, tree, suffix :+ elem)
+    else lift.append(elem)
   }
   
   override def prepend[B >: Int](elem: B): Batch[B] = {
@@ -396,12 +490,8 @@ private[containers] final class IntBatchN
           suffix)
       else new IntBatchN(length + 1, (elem +: prefix).asInstanceOf[Batch[Int]], tree, suffix)
     }
-    else if (prefix.length == 6)
-      new RefBatchN(
-        length + 1,
-        new RefBatch3(elem, prefix(0), prefix(1)),
-        new IntBatch4(prefix(2), prefix(3), prefix(4), prefix(5)) +: tree,
-        suffix)
-    else new RefBatchN(length + 1, elem +: prefix, tree, suffix)
+    else lift.prepend(elem)
   }
+  
+  private[this] def lift: Batch[Int] = new RefBatchN(length, prefix, tree, suffix)
 }
