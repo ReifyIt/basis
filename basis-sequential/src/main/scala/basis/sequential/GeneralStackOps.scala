@@ -10,7 +10,7 @@ package basis.sequential
 import basis.collections._
 import basis.control._
 
-/** General queue operations.
+/** General stack operations.
   * 
   * @author   Chris Sachs
   * @version  0.1
@@ -22,16 +22,16 @@ import basis.control._
   * @groupprio  Querying      3
   * @groupprio  Transforming  4
   * 
-  * @define collection  queue
+  * @define collection  stack
   */
-final class GeneralQueueOps[+A](these: Queue[A]) {
+final class GeneralStackOps[+A](these: Stack[A]) {
   /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
     * @group  Traversing
     */
   def foreach[U](f: A => U): Unit =
-    macro GeneralQueueOps.foreach[A, U]
+    macro GeneralStackOps.foreach[A, U]
   
   /** Returns the repeated application of an associative binary operator
     * between an identity value and all elements of this $collection.
@@ -42,7 +42,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Reducing
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B =
-    macro GeneralQueueOps.foldLeft[A, B]
+    macro GeneralStackOps.foldLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this non-empty $collection.
@@ -52,7 +52,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Reducing
     */
   def reduce[B >: A](op: (B, B) => B): B =
-    macro GeneralQueueOps.reduceLeft[A, B]
+    macro GeneralStackOps.reduceLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this $collection.
@@ -62,7 +62,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Reducing
     */
   def reduceOption[B >: A](op: (B, B) => B): Option[B] =
-    macro GeneralQueueOps.reduceLeftOption[A, B]
+    macro GeneralStackOps.reduceLeftOption[A, B]
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this $collection.
@@ -73,7 +73,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Reducing
     */
   def foldLeft[B](z: B)(op: (B, A) => B): B =
-    macro GeneralQueueOps.foldLeft[A, B]
+    macro GeneralStackOps.foldLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this non-empty $collection.
@@ -83,7 +83,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B =
-    macro GeneralQueueOps.reduceLeft[A, B]
+    macro GeneralStackOps.reduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this $collection.
@@ -93,7 +93,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Reducing
     */
   def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
-    macro GeneralQueueOps.reduceLeftOption[A, B]
+    macro GeneralStackOps.reduceLeftOption[A, B]
   
   /** Returns the first element of this $collection that satisfies a predicate.
     * 
@@ -102,7 +102,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Querying
     */
   def find(p: A => Boolean): Option[A] =
-    macro GeneralQueueOps.find[A]
+    macro GeneralStackOps.find[A]
   
   /** Returns `true` if a predicate holds for all elements of this $collection.
     * 
@@ -111,7 +111,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Querying
     */
   def forall(p: A => Boolean): Boolean =
-    macro GeneralQueueOps.forall[A]
+    macro GeneralStackOps.forall[A]
   
   /** Returns `true` if a predicate holds for some element of this $collection.
     * 
@@ -120,7 +120,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Querying
     */
   def exists(p: A => Boolean): Boolean =
-    macro GeneralQueueOps.exists[A]
+    macro GeneralStackOps.exists[A]
   
   /** Returns the number of elements in this $collection that satisfy a predicate.
     * 
@@ -129,7 +129,7 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Querying
     */
   def count(p: A => Boolean): Int =
-    macro GeneralQueueOps.count[A]
+    macro GeneralStackOps.count[A]
   
   /** Returns the application of a partial function to the first element
     * of this $collection for which the function is defined.
@@ -140,92 +140,92 @@ final class GeneralQueueOps[+A](these: Queue[A]) {
     * @group  Querying
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
-    macro GeneralQueueOps.choose[A, B]
+    macro GeneralStackOps.choose[A, B]
   
   /** Returns a strict operations interface for this $collection.
     * @group Transforming */
-  def eagerly: StrictQueueOps[A, Queue[A]] =
-    macro GeneralQueueOps.eagerly[A]
+  def eagerly: StrictStackOps[A, Stack[A]] =
+    macro GeneralStackOps.eagerly[A]
   
   /** Returns a non-strict operations interface for this $collection.
     * @group Transforming */
-  def lazily: NonStrictQueueOps[A] =
-    macro GeneralQueueOps.lazily[A]
+  def lazily: NonStrictStackOps[A] =
+    macro GeneralStackOps.lazily[A]
 }
 
-private[sequential] object GeneralQueueOps {
+private[sequential] object GeneralStackOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Queue[A]] = {
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Stack[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, sequence :: Nil) = prefix.tree
-    val QueueType =
+    val StackType =
       appliedType(
-        mirror.staticClass("basis.collections.Queue").toType,
+        mirror.staticClass("basis.collections.Stack").toType,
         weakTypeOf[A] :: Nil)
-    Expr(typeCheck(sequence, QueueType))(WeakTypeTag(QueueType))
+    Expr(typeCheck(sequence, StackType))(WeakTypeTag(StackType))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => U])
     : c.Expr[Unit] =
-    new QueueMacros[c.type](c).foreach[A, U](unApply[A](c))(f)
+    new StackMacros[c.type](c).foreach[A, U](unApply[A](c))(f)
   
   def foldLeft[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (z: c.Expr[B])
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    new QueueMacros[c.type](c).foldLeft[A, B](unApply[A](c))(z)(op)
+    new StackMacros[c.type](c).foldLeft[A, B](unApply[A](c))(z)(op)
   
   def reduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    new QueueMacros[c.type](c).reduceLeft[A, B](unApply[A](c))(op)
+    new StackMacros[c.type](c).reduceLeft[A, B](unApply[A](c))(op)
   
   def reduceLeftOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[Option[B]] =
-    new QueueMacros[c.type](c).reduceLeftOption[A, B](unApply[A](c))(op)
+    new StackMacros[c.type](c).reduceLeftOption[A, B](unApply[A](c))(op)
   
   def find[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Option[A]] =
-    new QueueMacros[c.type](c).find[A](unApply[A](c))(p)
+    new StackMacros[c.type](c).find[A](unApply[A](c))(p)
   
   def forall[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    new QueueMacros[c.type](c).forall[A](unApply[A](c))(p)
+    new StackMacros[c.type](c).forall[A](unApply[A](c))(p)
   
   def exists[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    new QueueMacros[c.type](c).exists[A](unApply[A](c))(p)
+    new StackMacros[c.type](c).exists[A](unApply[A](c))(p)
   
   def count[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Int] =
-    new QueueMacros[c.type](c).count[A](unApply[A](c))(p)
+    new StackMacros[c.type](c).count[A](unApply[A](c))(p)
   
   def choose[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
-    new QueueMacros[c.type](c).choose[A, B](unApply[A](c))(q)
+    new StackMacros[c.type](c).choose[A, B](unApply[A](c))(q)
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictQueueOps[A, Queue[A]]] =
-    Strict.StrictQueueOps[A](c)(unApply[A](c))
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictStackOps[A, Stack[A]]] =
+    Strict.StrictStackOps[A](c)(unApply[A](c))
   
-  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictQueueOps[A]] =
-    NonStrict.NonStrictQueueOps[A](c)(unApply[A](c))
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictStackOps[A]] =
+    NonStrict.NonStrictStackOps[A](c)(unApply[A](c))
 }

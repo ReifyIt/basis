@@ -9,7 +9,7 @@ package basis.sequential
 
 import basis.collections._
 
-/** Non-strictly evaluated queue operations.
+/** Non-strictly evaluated stack operations.
   * 
   * @author   Chris Sachs
   * @version  0.1
@@ -20,9 +20,9 @@ import basis.collections._
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
   * 
-  * @define collection  queue
+  * @define collection  stack
   */
-final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
+final class NonStrictStackOps[+A](val these: Stack[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this
     * $collection for which the function is defined.
     * 
@@ -30,8 +30,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view of the filtered and mapped elements.
     * @group  Mapping
     */
-  def collect[B](q: PartialFunction[A, B]): Queue[B] =
-    new NonStrictQueueOps.Collect(these, q)
+  def collect[B](q: PartialFunction[A, B]): Stack[B] =
+    new NonStrictStackOps.Collect(these, q)
   
   /** Returns a view that applies a function to each element in this $collection.
     * 
@@ -39,8 +39,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view of the mapped elements.
     * @group  Mapping
     */
-  def map[B](f: A => B): Queue[B] =
-    new NonStrictQueueOps.Map(these, f)
+  def map[B](f: A => B): Stack[B] =
+    new NonStrictStackOps.Map(these, f)
   
   /** Returns a view concatenating all elements returned by a function
     * applied to each element in this $collection.
@@ -49,8 +49,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view concatenating all elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B](f: A => Queue[B]): Queue[B] =
-    new NonStrictQueueOps.FlatMap(these, f)
+  def flatMap[B](f: A => Stack[B]): Stack[B] =
+    new NonStrictStackOps.FlatMap(these, f)
   
   /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
@@ -58,8 +58,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view of the filtered elements.
     * @group  Filtering
     */
-  def filter(p: A => Boolean): Queue[A] =
-    new NonStrictQueueOps.Filter(these, p)
+  def filter(p: A => Boolean): Stack[A] =
+    new NonStrictStackOps.Filter(these, p)
   
   /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
@@ -67,8 +67,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view of the filtered elements.
     * @group  Filtering
     */
-  def withFilter(p: A => Boolean): Queue[A] =
-    new NonStrictQueueOps.Filter(these, p)
+  def withFilter(p: A => Boolean): Stack[A] =
+    new NonStrictStackOps.Filter(these, p)
   
   /** Returns a view of all elements following the longest prefix of this
     * $collection for which each element satisfies a predicate.
@@ -78,8 +78,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     *         with the first element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile(p: A => Boolean): Queue[A] =
-    new NonStrictQueueOps.DropWhile(these, p)
+  def dropWhile(p: A => Boolean): Stack[A] =
+    new NonStrictStackOps.DropWhile(these, p)
   
   /** Returns a view of the longest prefix of this $collection for which each
     * element satisfies a predicate.
@@ -89,8 +89,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     *         the first element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile(p: A => Boolean): Queue[A] =
-    new NonStrictQueueOps.TakeWhile(these, p)
+  def takeWhile(p: A => Boolean): Stack[A] =
+    new NonStrictStackOps.TakeWhile(these, p)
   
   /** Returns a (prefix, suffix) pair of views with the prefix being the
     * longest one for which each element satisfies a predicate, and the suffix
@@ -100,7 +100,7 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return the (predix, suffix) pair of non-strict views.
     * @group  Filtering
     */
-  def span(p: A => Boolean): (Queue[A], Queue[A]) =
+  def span(p: A => Boolean): (Stack[A], Stack[A]) =
     (takeWhile(p), dropWhile(p))
   
   /** Returns a view of all elements in this $collection following a prefix
@@ -111,8 +111,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view of all but the first `lower` elements.
     * @group  Filtering
     */
-  def drop(lower: Int): Queue[A] =
-    new NonStrictQueueOps.Drop(these, lower)
+  def drop(lower: Int): Stack[A] =
+    new NonStrictStackOps.Drop(these, lower)
   
   /** Returns a view of a prefix of this $collection up to some length.
     * 
@@ -121,8 +121,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view of up to the first `upper` elements.
     * @group  Filtering
     */
-  def take(upper: Int): Queue[A] =
-    new NonStrictQueueOps.Take(these, upper)
+  def take(upper: Int): Stack[A] =
+    new NonStrictStackOps.Take(these, upper)
   
   /** Returns a view of an interval of elements in this $collection.
     * 
@@ -132,8 +132,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     *         equal to `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice(lower: Int, upper: Int): Queue[A] =
-    new NonStrictQueueOps.Slice(these, lower, upper)
+  def slice(lower: Int, upper: Int): Stack[A] =
+    new NonStrictStackOps.Slice(these, lower, upper)
   
   /** Returns a view of pairs of elemnts from this and another $collection.
     * 
@@ -141,8 +141,8 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view of the pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B](those: Queue[B]): Queue[(A, B)] =
-    new NonStrictQueueOps.Zip(these, those)
+  def zip[B](those: Stack[B]): Stack[(A, B)] =
+    new NonStrictStackOps.Zip(these, those)
   
   /** Returns a view concatenating this and another $collection.
     * 
@@ -150,26 +150,26 @@ final class NonStrictQueueOps[+A](val these: Queue[A]) extends AnyVal {
     * @return a non-strict view of the concatenated elements.
     * @group Combining
     */
-  def ++ [B >: A](those: Queue[B]): Queue[B] =
-    new NonStrictQueueOps.++(these, those)
+  def ++ [B >: A](those: Stack[B]): Stack[B] =
+    new NonStrictStackOps.++(these, those)
 }
 
-private[sequential] object NonStrictQueueOps {
+private[sequential] object NonStrictStackOps {
   import scala.annotation.tailrec
   import basis.util.IntOps
   
-  object Empty extends Queue[Nothing] {
+  object Empty extends Stack[Nothing] {
     override def isEmpty: Boolean = true
     
     override def head: Nothing = throw new NoSuchElementException
     
-    override def tail: Queue[Nothing] = throw new UnsupportedOperationException
+    override def tail: Stack[Nothing] = throw new UnsupportedOperationException
   }
   
   final class Collect[-A, +B](
-      private[this] var these: Queue[A],
+      private[this] var these: Stack[A],
       private[this] val q: PartialFunction[A, B])
-    extends Queue[B] {
+    extends Stack[B] {
     
     @tailrec override def isEmpty: Boolean =
       these.isEmpty || !q.isDefinedAt(these.head) && { these = these.tail; isEmpty }
@@ -180,31 +180,31 @@ private[sequential] object NonStrictQueueOps {
       else { these = these.tail; head }
     }
     
-    @tailrec override def tail: Queue[B] = {
+    @tailrec override def tail: Stack[B] = {
       if (!these.isEmpty && q.isDefinedAt(these.head)) new Collect(these.tail, q)
       else { these = these.tail; tail }
     }
   }
   
   final class Map[-A, +B](
-      private[this] val these: Queue[A],
+      private[this] val these: Stack[A],
       private[this] val f: A => B)
-    extends Queue[B] {
+    extends Stack[B] {
     
     override def isEmpty: Boolean = these.isEmpty
     
     override def head: B = f(these.head)
     
-    override def tail: Queue[B] = new Map(these.tail, f)
+    override def tail: Stack[B] = new Map(these.tail, f)
   }
   
   final class FlatMap[-A, +B] private (
-      private[this] var these: Queue[A],
-      private[this] val f: A => Queue[B],
-      private[this] var inner: Queue[B])
-    extends Queue[B] {
+      private[this] var these: Stack[A],
+      private[this] val f: A => Stack[B],
+      private[this] var inner: Stack[B])
+    extends Stack[B] {
     
-    def this(these: Queue[A], f: A => Queue[B]) = this(these, f, Empty)
+    def this(these: Stack[A], f: A => Stack[B]) = this(these, f, Empty)
     
     @tailrec override def isEmpty: Boolean =
       inner.isEmpty && (these.isEmpty || { inner = f(these.head); these = these.tail; isEmpty })
@@ -215,7 +215,7 @@ private[sequential] object NonStrictQueueOps {
       else Empty.head
     }
     
-    override def tail: Queue[B] = {
+    override def tail: Stack[B] = {
       if (!inner.isEmpty) new FlatMap(these, f, inner.tail)
       else if (!these.isEmpty) new FlatMap(these.tail, f, f(these.head))
       else Empty.tail
@@ -223,9 +223,9 @@ private[sequential] object NonStrictQueueOps {
   }
   
   final class Filter[+A](
-      private[this] var these: Queue[A],
+      private[this] var these: Stack[A],
       private[this] val p: A => Boolean)
-    extends Queue[A] {
+    extends Stack[A] {
     
     @tailrec override def isEmpty: Boolean =
       these.isEmpty || !p(these.head) && { these = these.tail; isEmpty }
@@ -235,16 +235,16 @@ private[sequential] object NonStrictQueueOps {
       if (p(x)) x else { these = these.tail; head }
     }
     
-    @tailrec override def tail: Queue[A] = {
+    @tailrec override def tail: Stack[A] = {
       if (!these.isEmpty && p(these.head)) new Filter(these.tail, p)
       else { these = these.tail; tail }
     }
   }
   
   final class DropWhile[+A](
-      private[this] var these: Queue[A],
+      private[this] var these: Stack[A],
       private[this] val p: A => Boolean)
-    extends Queue[A] {
+    extends Stack[A] {
     
     private[this] var dropped: Boolean = false
     
@@ -259,7 +259,7 @@ private[sequential] object NonStrictQueueOps {
       }
     }
     
-    @tailrec override def tail: Queue[A] = {
+    @tailrec override def tail: Stack[A] = {
       if (dropped) these.tail
       else if (!p(these.head)) { dropped = true; tail }
       else { these = these.tail; tail }
@@ -267,9 +267,9 @@ private[sequential] object NonStrictQueueOps {
   }
   
   final class TakeWhile[+A](
-      private[this] val these: Queue[A],
+      private[this] val these: Stack[A],
       private[this] val p: A => Boolean)
-    extends Queue[A] {
+    extends Stack[A] {
     
     private[this] lazy val taking: Boolean = !these.isEmpty && p(these.head)
     
@@ -280,19 +280,19 @@ private[sequential] object NonStrictQueueOps {
       else Empty.head
     }
     
-    override def tail: Queue[A] = {
+    override def tail: Stack[A] = {
       if (taking) new TakeWhile(these.tail, p)
       else Empty.tail
     }
   }
   
   final class Drop[+A] private (
-      private[this] var these: Queue[A],
+      private[this] var these: Stack[A],
       private[this] val lower: Int,
       private[this] var index: Int)
-    extends Queue[A] {
+    extends Stack[A] {
     
-    def this(these: Queue[A], lower: Int) = this(these, lower, 0)
+    def this(these: Stack[A], lower: Int) = this(these, lower, 0)
     
     @tailrec override def isEmpty: Boolean =
       these.isEmpty || index < lower && { these = these.tail; index += 1; isEmpty }
@@ -302,19 +302,19 @@ private[sequential] object NonStrictQueueOps {
       else { these = these.tail; index += 1; head }
     }
     
-    @tailrec override def tail: Queue[A] = {
+    @tailrec override def tail: Stack[A] = {
       if (index >= lower) these.tail
       else { these = these.tail; index += 1; tail }
     }
   }
   
   final class Take[+A] private (
-      private[this] val these: Queue[A],
+      private[this] val these: Stack[A],
       private[this] val upper: Int,
       private[this] val index: Int)
-    extends Queue[A] {
+    extends Stack[A] {
     
-    def this(these: Queue[A], upper: Int) = this(these, upper, 0)
+    def this(these: Stack[A], upper: Int) = this(these, upper, 0)
     
     override def isEmpty: Boolean =
       index >= upper || these.isEmpty
@@ -324,20 +324,20 @@ private[sequential] object NonStrictQueueOps {
       else Empty.head
     }
     
-    override def tail: Queue[A] = {
+    override def tail: Stack[A] = {
       if (index < upper) new Take(these.tail, upper, index + 1)
       else Empty.tail
     }
   }
   
   final class Slice[+A] private (
-      private[this] var these: Queue[A],
+      private[this] var these: Stack[A],
       private[this] val lower: Int,
       private[this] val upper: Int,
       private[this] var index: Int)
-    extends Queue[A] {
+    extends Stack[A] {
     
-    def this(these: Queue[A], lower: Int, upper: Int) =
+    def this(these: Stack[A], lower: Int, upper: Int) =
       this(these,0 max lower, 0 max lower max upper, 0)
     
     @tailrec override def isEmpty: Boolean =
@@ -349,7 +349,7 @@ private[sequential] object NonStrictQueueOps {
       else Empty.head
     }
     
-    @tailrec override def tail: Queue[A] = {
+    @tailrec override def tail: Stack[A] = {
       if (index < lower) { these = these.tail; index += 1; tail }
       else if (index < upper) new Slice(these.tail, lower, upper, index + 1)
       else Empty.tail
@@ -357,24 +357,24 @@ private[sequential] object NonStrictQueueOps {
   }
   
   final class Zip[+A, +B](
-      private[this] val these: Queue[A],
-      private[this] val those: Queue[B])
-    extends Queue[(A, B)] {
+      private[this] val these: Stack[A],
+      private[this] val those: Stack[B])
+    extends Stack[(A, B)] {
     
     override def isEmpty: Boolean = these.isEmpty || those.isEmpty
     
     override def head: (A, B) = (these.head, those.head)
     
-    override def tail: Queue[(A, B)] = new Zip(these.tail, those.tail)
+    override def tail: Stack[(A, B)] = new Zip(these.tail, those.tail)
   }
   
   final class ++[+A] private (
-      private[this] val these: Queue[A],
-      private[this] val those: Queue[A],
+      private[this] val these: Stack[A],
+      private[this] val those: Stack[A],
       private[this] var segment: Int)
-    extends Queue[A] {
+    extends Stack[A] {
     
-    def this(these: Queue[A], those: Queue[A]) = this(these, those, 0)
+    def this(these: Stack[A], those: Stack[A]) = this(these, those, 0)
     
     @tailrec override def isEmpty: Boolean = segment match {
       case 0 => these.isEmpty && { segment = 1; isEmpty }
@@ -386,7 +386,7 @@ private[sequential] object NonStrictQueueOps {
       case 1 => those.head
     }
     
-    override def tail: Queue[A] = segment match {
+    override def tail: Stack[A] = segment match {
       case 0 if !these.isEmpty => new ++(these.tail, those, 0)
       case _ => those.tail
     }

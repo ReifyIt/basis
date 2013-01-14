@@ -37,7 +37,7 @@ sealed abstract class List[+A]
     with Immutable
     with Family[List[A]]
     with ListLike[A]
-    with Queue[A] {
+    with Stack[A] {
   
   /** Returns the number of elements in this $collection.
     * @group Quantifying */

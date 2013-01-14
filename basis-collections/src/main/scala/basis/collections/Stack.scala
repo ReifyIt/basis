@@ -9,8 +9,8 @@ package basis.collections
 
 import scala.annotation.unspecialized
 
-/** A linear sequence. Queues efficiently decompose into a `head` element and
-  * a `tail` queue.
+/** A linear sequence. Stacks efficiently decompose into a `head` element and
+  * a `tail` stack.
   * 
   * ==Extensions==
   * $Extensions
@@ -27,19 +27,19 @@ import scala.annotation.unspecialized
   * @groupprio  Traversing    4
   * @groupprio  Classifying   5
   * 
-  * @define collection  queue
+  * @define collection  stack
   * @define SequentialOps
   * The following classes implement the extensions to this interface:
   * 
-  *  - [[basis.sequential.GeneralQueueOps GeneralQueueOps]]
+  *  - [[basis.sequential.GeneralStackOps GeneralStackOps]]
   *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
-  *  - [[basis.sequential.StrictQueueOps StrictQueueOps]]
+  *  - [[basis.sequential.StrictStackOps StrictStackOps]]
   *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
-  *  - [[basis.sequential.NonStrictQueueOps NonStrictQueueOps]]
+  *  - [[basis.sequential.NonStrictStackOps NonStrictStackOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Queue[@specialized(Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Queue[A]] with Seq[A] {
+trait Stack[@specialized(Int, Long, Float, Double, Boolean) +A]
+  extends Any with Family[Stack[A]] with Seq[A] {
   
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Quantifying */
@@ -53,7 +53,7 @@ trait Queue[@specialized(Int, Long, Float, Double, Boolean) +A]
     * @group Decomposing */
   def tail: Family
   
-  @unspecialized override def iterator: Iterator[A] = new QueueIterator(this)
+  @unspecialized override def iterator: Iterator[A] = new StackIterator(this)
   
   @unspecialized protected override def foreach[U](f: A => U) {
     var xs = this
@@ -64,8 +64,8 @@ trait Queue[@specialized(Int, Long, Float, Double, Boolean) +A]
   }
 }
 
-private[collections] final class QueueIterator[+A]
-    (private[this] var xs: Queue[A])
+private[collections] final class StackIterator[+A]
+    (private[this] var xs: Stack[A])
   extends Iterator[A] {
   
   override def isEmpty: Boolean = xs.isEmpty
@@ -80,5 +80,5 @@ private[collections] final class QueueIterator[+A]
     xs = xs.tail
   }
   
-  override def dup: Iterator[A] = new QueueIterator(xs)
+  override def dup: Iterator[A] = new StackIterator(xs)
 }

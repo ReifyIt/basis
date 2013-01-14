@@ -177,6 +177,16 @@ final class GeneralArrayOps[A](these: Array[A]) {
     */
   def choose[B](q: PartialFunction[A, B]): Option[B] =
     macro GeneralArrayOps.choose[A, B]
+  
+  /** Returns a strict operations interface to this $collection.
+    * @group Transforming */
+  def eagerly: StrictArrayOps[A, Array[A]] =
+    macro GeneralArrayOps.eagerly[A]
+  
+  /** Returns a non-strict operations interface to this $collection.
+    * @group Transforming */
+  def lazily: NonStrictArrayOps[A] =
+    macro GeneralArrayOps.lazily[A]
 }
 
 private[sequential] object GeneralArrayOps {
@@ -267,4 +277,10 @@ private[sequential] object GeneralArrayOps {
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Option[B]] =
     new ArrayMacros[c.type](c).choose[A, B](unApply[A](c))(q)
+  
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictArrayOps[A, Array[A]]] =
+    Strict.StrictArrayOps[A](c)(unApply[A](c))
+  
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictArrayOps[A]] =
+    NonStrict.NonStrictArrayOps[A](c)(unApply[A](c))
 }

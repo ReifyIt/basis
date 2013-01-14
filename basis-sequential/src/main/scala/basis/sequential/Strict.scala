@@ -58,10 +58,10 @@ class Strict extends General {
   implicit def StrictIndexOps[A](these: Index[A]): StrictIndexOps[A, these.Family] =
     macro Strict.StrictIndexOps[A]
   
-  /** Implicitly provides strictly evaluated operations for queues.
+  /** Implicitly provides strictly evaluated operations for stacks.
     * @group Strict */
-  implicit def StrictQueueOps[A](these: Queue[A]): StrictQueueOps[A, these.Family] =
-    macro Strict.StrictQueueOps[A]
+  implicit def StrictStackOps[A](these: Stack[A]): StrictStackOps[A, these.Family] =
+    macro Strict.StrictStackOps[A]
   
   /** Implicitly provides strictly evaluated operations for sets.
     * @group Strict */
@@ -170,17 +170,17 @@ private[sequential] object Strict {
     Expr(New(StrictIndexOpsType, these.tree))(WeakTypeTag(StrictIndexOpsType))
   }
   
-  def StrictQueueOps[A : c.WeakTypeTag]
+  def StrictStackOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[Queue[A]])
-    : c.Expr[StrictQueueOps[A, these.value.Family]] = {
+      (these: c.Expr[Stack[A]])
+    : c.Expr[StrictStackOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictQueueOpsType =
+    val StrictStackOpsType =
       appliedType(
-        mirror.staticClass("basis.sequential.StrictQueueOps").toType,
+        mirror.staticClass("basis.sequential.StrictStackOps").toType,
         weakTypeOf[A] :: FamilyType(c)(these) :: Nil)
-    Expr(New(StrictQueueOpsType, these.tree))(WeakTypeTag(StrictQueueOpsType))
+    Expr(New(StrictStackOpsType, these.tree))(WeakTypeTag(StrictStackOpsType))
   }
   
   def StrictSetOps[A : c.WeakTypeTag]

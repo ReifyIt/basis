@@ -37,7 +37,7 @@ package basis.collections
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Deque[@specialized(Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Deque[A]] with Queue[A] {
+  extends Any with Family[Deque[A]] with Stack[A] {
   
   /** Returns the last element of this non-empty $collection.
     * @group Decomposing */

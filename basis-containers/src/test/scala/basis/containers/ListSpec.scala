@@ -17,9 +17,9 @@ class ListSpec
   extends FunSpec
     with ShouldMatchers
     with SeqFactoryBehaviors
-    with QueueBehaviors
-    with sequential.GeneralQueueOpsBehaviors
-    with sequential.StrictQueueOpsBehaviors {
+    with StackBehaviors
+    with sequential.GeneralStackOpsBehaviors
+    with sequential.StrictStackOpsBehaviors {
   
   override def suiteName = "List specification"
   
@@ -28,15 +28,15 @@ class ListSpec
   it should behave like TraversableCollection(List)
   it should behave like TraversableContainer(List)
   it should behave like TraversableSeq(List)
-  it should behave like TraversableQueue(List)
+  it should behave like TraversableStack(List)
   
   it should behave like SequentialGeneralCollectionOps(List)
   it should behave like SequentialGeneralContainerOps(List)
   it should behave like SequentialGeneralSeqOps(List)
-  it should behave like SequentialGeneralQueueOps(List)
+  it should behave like SequentialGeneralStackOps(List)
   
   it should behave like SequentialStrictCollectionOps(List)
   it should behave like SequentialStrictContainerOps(List)
   it should behave like SequentialStrictSeqOps(List)
-  it should behave like SequentialStrictQueueOps(List)
+  it should behave like SequentialStrictStackOps(List)
 }

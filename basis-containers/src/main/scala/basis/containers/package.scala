@@ -102,11 +102,11 @@ package containers {
       : Builder[Index[_], A] { type State = Index[A] } =
       Index.Builder(A)
     
-    /** Implicitly returns a new default [[Queue]] builder.
+    /** Implicitly returns a new default [[Stack]] builder.
       * @group Builders */
-    implicit def QueueBuilder[A](implicit A: TypeHint[A])
-      : Builder[Queue[_], A] { type State = Queue[A] } =
-      Queue.Builder[A]
+    implicit def StackBuilder[A](implicit A: TypeHint[A])
+      : Builder[Stack[_], A] { type State = Stack[A] } =
+      Stack.Builder[A]
   }
 
   private[containers] abstract class Library2 extends Library3 { this: Library =>
@@ -170,9 +170,9 @@ package containers {
       * @group Collections */
     implicit val Index: SeqFactory[Index] = ArraySeq
     
-    /** Implicitly provides a default [[Queue]] factory.
+    /** Implicitly provides a default [[Stack]] factory.
       * @group Collections */
-    implicit val Queue: SeqFactory[Queue] = List
+    implicit val Stack: SeqFactory[Stack] = List
     
     /** Implicitly returns a new default [[Enumerator]] builder.
       * @group Builders */

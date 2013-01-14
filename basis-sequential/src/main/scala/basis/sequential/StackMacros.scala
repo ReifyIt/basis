@@ -13,18 +13,18 @@ import basis.control._
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
-/** Queue operations macro implementations.
+/** Stack operations macro implementations.
   * 
   * @author Chris Sachs
   */
-private[sequential] final class QueueMacros[C <: Context](val context: C) {
+private[sequential] final class StackMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
   val universe: context.universe.type = context.universe
   
   def foreach[A : WeakTypeTag, U]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (f: Expr[A => U])
     : Expr[Unit] = {
     val xs   = newTermName(fresh("xs$"))
@@ -44,7 +44,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def foldLeft[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (z: Expr[B])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
@@ -68,7 +68,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def reduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
     val xs   = newTermName(fresh("xs$"))
@@ -99,7 +99,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def reduceLeftOption[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (op: Expr[(B, A) => B])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -128,7 +128,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def find[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Option[A]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -160,7 +160,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def forall[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -185,7 +185,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def exists[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = newTermName(fresh("xs$"))
@@ -210,7 +210,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def count[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Int] = {
     val xs   = newTermName(fresh("xs$"))
@@ -236,7 +236,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def choose[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Option[B]] = {
     val xs   = newTermName(fresh("xs$"))
@@ -273,7 +273,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def collect[A : WeakTypeTag, B]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (q: Expr[PartialFunction[A, B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -307,7 +307,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def map[A : WeakTypeTag, B]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (f: Expr[A => B])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -331,7 +331,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def flatMap[A : WeakTypeTag, B]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (f: Expr[A => Enumerator[B]])
       (builder: Expr[Builder[_, B]])
     : Expr[builder.value.State] = {
@@ -355,7 +355,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def filter[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -384,7 +384,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def dropWhile[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -421,7 +421,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def takeWhile[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -451,7 +451,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def span[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
       (builder1: Expr[Builder[_, A]], builder2: Expr[Builder[_, A]])
     : Expr[(builder1.value.State, builder2.value.State)] = {
@@ -494,7 +494,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def drop[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (lower: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -534,7 +534,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def take[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -566,7 +566,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def slice[A : WeakTypeTag]
-      (these: Expr[Queue[A]])
+      (these: Expr[Stack[A]])
       (lower: Expr[Int], upper: Expr[Int])
       (builder: Expr[Builder[_, A]])
     : Expr[builder.value.State] = {
@@ -611,7 +611,7 @@ private[sequential] final class QueueMacros[C <: Context](val context: C) {
   }
   
   def zip[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Queue[A]], those: Expr[Queue[B]])
+      (these: Expr[Stack[A]], those: Expr[Stack[B]])
       (builder: Expr[Builder[_, (A, B)]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
