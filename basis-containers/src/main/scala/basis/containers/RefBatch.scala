@@ -133,7 +133,10 @@ private[containers] final class RefBatch3[+A](_1: A, _2: A, _3: A) extends Batch
   override def prepend[B >: A](elem: B): Batch[B] = new RefBatch4(elem, _1, _2, _3)
 }
 
-private[containers] final class RefBatch4[+A](_1: A, _2: A, _3: A, _4: A) extends Batch[A] {
+private[containers] final class RefBatch4[+A]
+    (_1: A, _2: A, _3: A, _4: A)
+  extends Batch[A] {
+  
   override def isEmpty: Boolean = false
   
   override def length: Int = 4
@@ -332,7 +335,12 @@ private[containers] final class RefBatchN[+A]
     if (n < 0) new RefBatchN(length, prefix.update(index, elem), tree, suffix)
     else {
       val k = n - (tree.length << 2)
-      if (k < 0) new RefBatchN(length, prefix, tree.update(n >> 2, tree(n >> 2).update(n & 3, elem)), suffix)
+      if (k < 0)
+        new RefBatchN(
+          length,
+          prefix,
+          tree.update(n >> 2, tree(n >> 2).update(n & 3, elem)),
+          suffix)
       else new RefBatchN(length, prefix, tree, suffix.update(index, elem))
     }
   }

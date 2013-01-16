@@ -94,11 +94,17 @@ object Batch extends SeqFactory[Batch] {
     
     override def append[B](elem: B): Batch[B] = {
       if (elem.isInstanceOf[Int]) new IntBatch1(elem.asInstanceOf[Int]).asInstanceOf[Batch[B]]
+      else if (elem.isInstanceOf[Long]) new LongBatch1(elem.asInstanceOf[Long]).asInstanceOf[Batch[B]]
+      else if (elem.isInstanceOf[Float]) new FloatBatch1(elem.asInstanceOf[Float]).asInstanceOf[Batch[B]]
+      else if (elem.isInstanceOf[Double]) new DoubleBatch1(elem.asInstanceOf[Double]).asInstanceOf[Batch[B]]
       else new RefBatch1(elem)
     }
     
     override def prepend[B](elem: B): Batch[B] = {
       if (elem.isInstanceOf[Int]) new IntBatch1(elem.asInstanceOf[Int]).asInstanceOf[Batch[B]]
+      else if (elem.isInstanceOf[Long]) new LongBatch1(elem.asInstanceOf[Long]).asInstanceOf[Batch[B]]
+      else if (elem.isInstanceOf[Float]) new FloatBatch1(elem.asInstanceOf[Float]).asInstanceOf[Batch[B]]
+      else if (elem.isInstanceOf[Double]) new DoubleBatch1(elem.asInstanceOf[Double]).asInstanceOf[Batch[B]]
       else new RefBatch1(elem)
     }
   }

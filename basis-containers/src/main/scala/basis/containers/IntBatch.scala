@@ -173,7 +173,10 @@ private[containers] final class IntBatch3(_1: Int, _2: Int, _3: Int) extends Bat
   private[this] def lift: Batch[Int] = new RefBatch3(_1, _2, _3)
 }
 
-private[containers] final class IntBatch4(_1: Int, _2: Int, _3: Int, _4: Int) extends Batch[Int] with Reified {
+private[containers] final class IntBatch4
+    (_1: Int, _2: Int, _3: Int, _4: Int)
+  extends Batch[Int] with Reified {
+  
   protected override def T: TypeHint[Int] = TypeHint.Int
   
   override def isEmpty: Boolean = false
@@ -412,7 +415,12 @@ private[containers] final class IntBatchN
       if (n < 0) new IntBatchN(length, prefix.update(index, elem).asInstanceOf[Batch[Int]], tree, suffix)
       else {
         val k = n - (tree.length << 2)
-        if (k < 0) new IntBatchN(length, prefix, tree.update(n >> 2, tree(n >> 2).update(n & 3, elem).asInstanceOf[Batch[Int]]), suffix)
+        if (k < 0)
+          new IntBatchN(
+            length,
+            prefix,
+            tree.update(n >> 2, tree(n >> 2).update(n & 3, elem).asInstanceOf[Batch[Int]]),
+            suffix)
         else new IntBatchN(length, prefix, tree, suffix.update(index, elem).asInstanceOf[Batch[Int]])
       }
     }
