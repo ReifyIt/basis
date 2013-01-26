@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>None - basis.control.None</title>
-          <meta name="description" content="None - basis.control.None" />
-          <meta name="keywords" content="None basis.control.None" />
+          <title>NonFatal - basis.control.Trap.NonFatal</title>
+          <meta name="description" content="NonFatal - basis.control.Trap.NonFatal" />
+          <meta name="keywords" content="NonFatal basis.control.Trap.NonFatal" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'basis.control.None$';
+            var hash = 'basis.control.Trap$$NonFatal$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,8 +30,8 @@
         <body class="value">
       <div id="definition">
         <img src="../../lib/object_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a></p>
-        <h1>None</h1>
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a>.<a href="Trap$.html" class="extype" name="basis.control.Trap">Trap</a></p>
+        <h1>NonFatal</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -40,13 +40,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">None</span><span class="result"> extends <a href="Option.html" class="extype" name="basis.control.Option">Option</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+        <span class="name">NonFatal</span><span class="result"> extends <span class="extype" name="scala.runtime.AbstractFunction1">AbstractFunction1</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="scala.Throwable">Throwable</span>]]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An undefined <a href="Option.html" class="extype" name="basis.control.Option">Option</a>.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/Option.scala" target="_blank">Option.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A fuse that traps non-fatal exceptions.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/Else.scala" target="_blank">Else.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Option.html" class="extype" name="basis.control.Option">Option</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.runtime.AbstractFunction1">AbstractFunction1</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="scala.Throwable">Throwable</span>]], (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="scala.Throwable">Throwable</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -55,7 +55,7 @@
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol>
-                <li class="group out"><span>Grouped</span></li>
+                
                 <li class="alpha in"><span>Alphabetic</span></li>
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
@@ -64,7 +64,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.control.None"><span>None</span></li><li class="in" name="basis.control.Option"><span>Option</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.control.Trap.NonFatal"><span>NonFatal</span></li><li class="in" name="scala.runtime.AbstractFunction1"><span>AbstractFunction1</span></li><li class="in" name="scala.Function1"><span>Function1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -155,6 +155,35 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Function1#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[A](g:R=&gt;A):T1=&gt;A"></a>
+      <a id="andThen[A]((Trap[Throwable])⇒A):(Throwable)⇒A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="scala.Throwable">Throwable</span>]) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.Trap.NonFatal#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(e:Throwable):basis.control.Trap[Throwable]"></a>
+      <a id="apply(Throwable):Trap[Throwable]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="e">e: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="scala.Throwable">Throwable</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.control.Trap.NonFatal">NonFatal</a> → Function1</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -184,6 +213,22 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="scala.Function1#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[A](g:A=&gt;T1):A=&gt;R"></a>
+      <a id="compose[A]((A)⇒Throwable):(A)⇒Trap[Throwable]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="scala.Throwable">Throwable</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -197,8 +242,8 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.control.Option#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
-      <a id="equals(other:Any):Boolean"></a>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -206,10 +251,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this <code>Option</code> equals another <code>Option</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this <code>Option</code> equals another <code>Option</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Option.html" class="extype" name="basis.control.Option">Option</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -226,19 +271,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.control.None#get" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
-      <a id="get:Nothing"></a>
-      <a id="get:Nothing"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">get</span><span class="result">: <span class="extype" name="scala.Nothing">Nothing</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>Some</code> value, or throws an exception if <code>None</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>Some</code> value, or throws an exception if <code>None</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.control.None">None</a> → <a href="Option.html" class="extype" name="basis.control.Option">Option</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -252,7 +284,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.Option#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -264,20 +296,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a hash of this <code>Option</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a hash of this <code>Option</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Option.html" class="extype" name="basis.control.Option">Option</a> → AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.None#isDefined" visbl="pub" data-isabs="false" fullComment="yes" group="Determining">
-      <a id="isDefined:Boolean"></a>
-      <a id="isDefined:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isDefined</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this <code>Option</code> contains <code>Some</code> value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this <code>Option</code> contains <code>Some</code> value.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.control.None">None</a> → <a href="Option.html" class="extype" name="basis.control.Option">Option</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -343,7 +362,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.control.Option#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+    </li><li name="scala.Function1#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -355,7 +374,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a string representation of this <code>Option</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of this <code>Option</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Option.html" class="extype" name="basis.control.Option">Option</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -413,8 +432,10 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="basis.control.Option">
-              <h3>Inherited from <a href="Option.html" class="extype" name="basis.control.Option">Option</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</h3>
+        <div class="parent" name="scala.runtime.AbstractFunction1">
+              <h3>Inherited from <span class="extype" name="scala.runtime.AbstractFunction1">AbstractFunction1</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="scala.Throwable">Throwable</span>]]</h3>
+            </div><div class="parent" name="scala.Function1">
+              <h3>Inherited from (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="scala.Throwable">Throwable</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
@@ -426,15 +447,6 @@
         <div id="groupedMembers">
         <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
-              
-            </div><div class="group" name="Determining">
-              <h3>Determining</h3>
-              
-            </div><div class="group" name="Evaluating">
-              <h3>Evaluating</h3>
-              
-            </div><div class="group" name="Classifying">
-              <h3>Classifying</h3>
               
             </div>
         </div>

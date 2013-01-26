@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>TryOps - basis.control.TryOps</title>
-          <meta name="description" content="TryOps - basis.control.TryOps" />
-          <meta name="keywords" content="TryOps basis.control.TryOps" />
+          <title>ElseOps - basis.control.ElseOps</title>
+          <meta name="description" content="ElseOps - basis.control.ElseOps" />
+          <meta name="keywords" content="ElseOps basis.control.ElseOps" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'basis.control.TryOps';
+            var hash = 'basis.control.ElseOps';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -31,7 +31,7 @@
       <div id="definition">
         <img src="../../lib/class_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a></p>
-        <h1>TryOps</h1>
+        <h1>ElseOps</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -40,19 +40,18 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">TryOps</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">ElseOps</span><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Standard <a href="Try.html" class="extype" name="basis.control.Try">Try</a> result combinators.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/TryOps.scala" target="_blank">TryOps.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.1
-</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Standard <a href="Else.html" class="extype" name="basis.control.Else">Else</a> combinators.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/ElseOps.scala" target="_blank">ElseOps.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.1</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph102" viewBox="0.00 0.00 495.00 128.00" height="128pt" width="495pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 124)" class="graph" id="graph1"><polygon points="-4,5 -4,-124 492,-124 492,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><g class="cluster" id="graph4"></g><!-- node0 --><g class="node this class" id="graph102_0"><a xlink:title="basis.control.TryOps (this class)" xlink:href="#inheritance-diagram"><polygon points="462.25,-50 373.75,-50 373.75,-24 462.25,-24 462.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="384" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="406" text-anchor="start">TryOps[A]</text></a></g><!-- node4 --><g class="node implicit-incoming class" id="graph102_4"><a xlink:title="basis.control.Failure can be implicitly converted to TryOps[Nothing] by the implicit method TryOps in package basis.control" xlink:href="Failure.html#inheritance-diagram"><polygon points="301.25,-50 226.75,-50 226.75,-24 301.25,-24 301.25,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="237" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="259" text-anchor="start">Failure</text></a></g><!-- node4&#45;&gt;node0 --><g class="edge implicit-incoming" id="4_0"><a xlink:title="Try[A], Success[A], Failure can be implicitly converted to TryOps[A]"><path d="M309.82,-37C325.622,-37 343.532,-37 360.167,-37" stroke="#d4d4d4" fill="none"></path><polygon points="360.406,-38.7501 365.406,-37 360.406,-35.2501 360.406,-38.7501" stroke="#d4d4d4" fill="#d4d4d4"></polygon></a><text fill="#aaaaaa" font-size="10.00" font-family="Arial" y="-41.499" x="337.25" text-anchor="middle">implicitly</text></g><!-- node3 --><g class="node implicit-incoming trait" id="graph102_3"><a xlink:title="basis.control.Success can be implicitly converted to TryOps[A] by the implicit method TryOps in package basis.control" xlink:href="Success.html#inheritance-diagram"><polygon points="208,-50 114,-50 114,-24 208,-24 208,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-45" x="124" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="146" text-anchor="start">Success[A]</text></a></g><!-- node3&#45;&gt;node4 --><!-- node2 --><g class="node implicit-incoming class" id="graph102_2"><a xlink:title="basis.control.Try can be implicitly converted to TryOps[A] by the implicit method TryOps in package basis.control" xlink:href="Try.html#inheritance-diagram"><polygon points="95.25,-50 24.75,-50 24.75,-24 95.25,-24 95.25,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">Try[A]</text></a></g><!-- node2&#45;&gt;node3 --><!-- node1 --><g class="node class" id="graph102_1"><a xlink:title="scala.AnyRef"><polygon points="456.25,-120 379.75,-120 379.75,-94 456.25,-94 456.25,-120" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-115" x="390" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-103" x="412" text-anchor="start">AnyRef</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph102_1_0"><a xlink:title="TryOps[A] is a subtype of AnyRef"><path d="M418,-88.5884C418,-76.5177 418,-60.7522 418,-50.0518" stroke="#d4d4d4" fill="none"></path><polygon points="416.25,-88.8429 418,-93.843 419.75,-88.843 416.25,-88.8429" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph159" viewBox="0.00 0.00 514.00 128.00" height="128pt" width="514pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 124)" class="graph" id="graph1"><polygon points="-4,5 -4,-124 511,-124 511,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><g class="cluster" id="graph4"></g><!-- node0 --><g class="node this class" id="graph159_0"><a xlink:title="basis.control.ElseOps (this class)" xlink:href="#inheritance-diagram"><polygon points="481.25,-50 374.75,-50 374.75,-24 481.25,-24 481.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="385" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="407" text-anchor="start">ElseOps[A, B]</text></a></g><!-- node4 --><g class="node implicit-incoming class" id="graph159_4"><a xlink:title="basis.control.Else can be implicitly converted to ElseOps[A, B] by the implicit method ElseOps in package basis.control" xlink:href="Else.html#inheritance-diagram"><polygon points="303,-50 215,-50 215,-24 303,-24 303,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="225" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="247" text-anchor="start">Else[A, B]</text></a></g><!-- node4&#45;&gt;node0 --><g class="edge implicit-incoming" id="4_0"><a xlink:title="Trap[B], Free[A], Else[A, B] can be implicitly converted to ElseOps[A, B]"><path d="M310.991,-37C326.763,-37 344.319,-37 360.935,-37" stroke="#d4d4d4" fill="none"></path><polygon points="361.351,-38.7501 366.351,-37 361.351,-35.2501 361.351,-38.7501" stroke="#d4d4d4" fill="#d4d4d4"></polygon></a><text fill="#aaaaaa" font-size="10.00" font-family="Arial" y="-41.499" x="338.75" text-anchor="middle">implicitly</text></g><!-- node3 --><g class="node implicit-incoming class" id="graph159_3"><a xlink:title="basis.control.Free can be implicitly converted to ElseOps[A, Nothing] by the implicit method ElseOps in package basis.control" xlink:href="Free.html#inheritance-diagram"><polygon points="196.25,-50 119.75,-50 119.75,-24 196.25,-24 196.25,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="130" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="152" text-anchor="start">Free[A]</text></a></g><!-- node3&#45;&gt;node4 --><!-- node2 --><g class="node implicit-incoming class" id="graph159_2"><a xlink:title="basis.control.Trap can be implicitly converted to ElseOps[Nothing, B] by the implicit method ElseOps in package basis.control" xlink:href="Trap.html#inheritance-diagram"><polygon points="101.25,-50 24.75,-50 24.75,-24 101.25,-24 101.25,-50" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">Trap[B]</text></a></g><!-- node2&#45;&gt;node3 --><!-- node1 --><g class="node class" id="graph159_1"><a xlink:title="scala.AnyRef"><polygon points="466.25,-120 389.75,-120 389.75,-94 466.25,-94 466.25,-120" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-115" x="400" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-103" x="422" text-anchor="start">AnyRef</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph159_1_0"><a xlink:title="ElseOps[A, B] is a subtype of AnyRef"><path d="M428,-88.5884C428,-76.5177 428,-60.7522 428,-50.0518" stroke="#d4d4d4" fill="none"></path><polygon points="426.25,-88.8429 428,-93.843 429.75,-88.843 426.25,-88.8429" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -70,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.control.TryOps"><span>TryOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.control.ElseOps"><span>ElseOps</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -90,16 +89,16 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="basis.control.TryOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(result:basis.control.Try[A]):basis.control.TryOps[A]"></a>
-      <a id="&lt;init&gt;:TryOps[A]"></a>
+              <ol><li name="basis.control.ElseOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(self:basis.control.Else[A,B]):basis.control.ElseOps[A,B]"></a>
+      <a id="&lt;init&gt;:ElseOps[A,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">TryOps</span><span class="params">(<span name="result">result: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.A">A</span>]</span>)</span>
+        <span class="name">ElseOps</span><span class="params">(<span name="self">self: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.A">A</span>, <span class="extype" name="basis.control.ElseOps.B">B</span>]</span>)</span>
       </span>
       </h4>
       
@@ -232,21 +231,39 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.TryOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
-      <a id="filter(p:A=&gt;Boolean):basis.control.Try[A]"></a>
-      <a id="filter((A)⇒Boolean):Try[A]"></a>
+    </li><li name="basis.control.ElseOps#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="exists(p:A=&gt;Boolean):Boolean"></a>
+      <a id="exists((A)⇒Boolean):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.TryOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.A">A</span>]</span>
+        <span class="name">exists</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.ElseOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> whose value satisfies the given predicate,
-otherwise returns a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> whose value satisfies the given predicate,
-otherwise returns a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Returns <code>true</code> if this <code>Free</code> value satisfies the predicate, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this <code>Free</code> value satisfies the predicate, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.ElseOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="filter(p:A=&gt;Boolean):basis.control.Else[A,B]"></a>
+      <a id="filter((A)⇒Boolean):Else[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.ElseOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.A">A</span>, <span class="extype" name="basis.control.ElseOps.B">B</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns this <code>Free</code> if its value satisfies a predicate,
+or <code>Trap</code> if its value does not satisfy the predicate,
+otherwise returns this <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this <code>Free</code> if its value satisfies a predicate,
+or <code>Trap</code> if its value does not satisfy the predicate,
+otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -266,25 +283,43 @@ otherwise returns a <code>Failure</code>.</p></div><dl class="attributes block">
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.control.TryOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
-      <a id="flatMap[B](f:A=&gt;basis.control.Try[B]):basis.control.Try[B]"></a>
-      <a id="flatMap[B]((A)⇒Try[B]):Try[B]"></a>
+    </li><li name="basis.control.ElseOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="flatMap[X,Y&gt;:B](f:A=&gt;basis.control.Else[X,Y]):basis.control.Else[X,Y]"></a>
+      <a id="flatMap[X,Y&gt;:B]((A)⇒Else[X,Y]):Else[X,Y]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.TryOps.A">A</span>) ⇒ <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.flatMap.B">B</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.flatMap.B">B</span>]</span>
+        <span class="name">flatMap</span><span class="tparams">[<span name="X">X</span>, <span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.ElseOps.A">A</span>) ⇒ <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.flatMap.X">X</span>, <span class="extype" name="basis.control.ElseOps.flatMap.Y">Y</span>]</span>)</span><span class="result">: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.flatMap.X">X</span>, <span class="extype" name="basis.control.ElseOps.flatMap.Y">Y</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns the given <code>Try</code> function applied to a <code>Success</code> value,
-or returns <code>this</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the given <code>Try</code> function applied to a <code>Success</code> value,
-or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Returns the result of an <code>Else</code> function applied to this <code>Free</code> value,
+otherwise returns this <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the result of an <code>Else</code> function applied to this <code>Free</code> value,
+otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.control.TryOps#foreach" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+    </li><li name="basis.control.ElseOps#fold" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="fold[X](z:X)(f:A=&gt;X):X"></a>
+      <a id="fold[X](X)((A)⇒X):X"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fold</span><span class="tparams">[<span name="X">X</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="basis.control.ElseOps.fold.X">X</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.ElseOps.A">A</span>) ⇒ <span class="extype" name="basis.control.ElseOps.fold.X">X</span></span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.fold.X">X</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Apllies a function to this <code>Free</code> value, or returns the zero value for a <code>Trap</code>;
+equivalent to <code>map f getOrElse z</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Apllies a function to this <code>Free</code> value, or returns the zero value for a <code>Trap</code>;
+equivalent to <code>map f getOrElse z</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.ElseOps#foreach" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
       <a id="foreach[U](f:A=&gt;U):Unit"></a>
       <a id="foreach[U]((A)⇒U):Unit"></a>
       <h4 class="signature">
@@ -293,10 +328,42 @@ or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="att
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.TryOps.A">A</span>) ⇒ <span class="extype" name="basis.control.TryOps.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.ElseOps.A">A</span>) ⇒ <span class="extype" name="basis.control.ElseOps.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Applies the given side-effecting function only to a <code>Success</code> value.</p><div class="fullcomment"><div class="comment cmt"><p>Applies the given side-effecting function only to a <code>Success</code> value.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Applies a function to this <code>Free</code> value, otherwise does nothing.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to this <code>Free</code> value, otherwise does nothing.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.ElseOps#fuse" visbl="pub" data-isabs="false" fullComment="yes" group="Handling">
+      <a id="fuse(implicitisTry:&lt;:&lt;[B,Throwable]):basis.control.FuseOps[A,Throwable]"></a>
+      <a id="fuse(&lt;:&lt;[B,Throwable]):FuseOps[A,Throwable]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fuse</span><span class="params">(<span class="implicit">implicit </span><span name="isTry">isTry: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="basis.control.ElseOps.B">B</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">FuseOps</a>[<span class="extype" name="basis.control.ElseOps.A">A</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns an interface with combinators that trap non-fatal exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an interface with combinators that trap non-fatal exceptions.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.ElseOps#fuse" visbl="pub" data-isabs="false" fullComment="yes" group="Handling">
+      <a id="fuse[Y&gt;:B](trip:Throwable=&gt;basis.control.Trap[Y]):basis.control.FuseOps[A,Y]"></a>
+      <a id="fuse[Y&gt;:B]((Throwable)⇒Trap[Y]):FuseOps[A,Y]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fuse</span><span class="tparams">[<span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="trip">trip: (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>)</span><span class="result">: <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">FuseOps</a>[<span class="extype" name="basis.control.ElseOps.A">A</span>, <span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns an interface with combinators that trap exceptions with the given handler.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an interface with combinators that trap exceptions with the given handler.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -313,19 +380,19 @@ or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="att
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.TryOps#getOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
-      <a id="getOrElse[B&gt;:A](default:B):B"></a>
-      <a id="getOrElse[B&gt;:A](B):B"></a>
+    </li><li name="basis.control.ElseOps#getOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="getOrElse[X&gt;:A](default:=&gt;X):X"></a>
+      <a id="getOrElse[X&gt;:A](⇒X):X"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getOrElse</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.control.TryOps.A">A</span></span>]</span><span class="params">(<span name="default">default: <span class="extype" name="basis.control.TryOps.getOrElse.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.control.TryOps.getOrElse.B">B</span></span>
+        <span class="name">getOrElse</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="basis.control.ElseOps.getOrElse.X">X</span></span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.getOrElse.X">X</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns the value for a <code>Success</code>, or the <code>default</code> value for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value for a <code>Success</code>, or the <code>default</code> value for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Returns this <code>Free</code> value, or the default value for a trap <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this <code>Free</code> value, or the default value for a trap <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -355,21 +422,21 @@ or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="att
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.control.TryOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
-      <a id="map[B](f:A=&gt;B):basis.control.Try[B]"></a>
-      <a id="map[B]((A)⇒B):Try[B]"></a>
+    </li><li name="basis.control.ElseOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="map[X](f:A=&gt;X):basis.control.Else[X,B]"></a>
+      <a id="map[X]((A)⇒X):Else[X,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.TryOps.A">A</span>) ⇒ <span class="extype" name="basis.control.TryOps.map.B">B</span></span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.map.B">B</span>]</span>
+        <span class="name">map</span><span class="tparams">[<span name="X">X</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.ElseOps.A">A</span>) ⇒ <span class="extype" name="basis.control.ElseOps.map.X">X</span></span>)</span><span class="result">: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.map.X">X</span>, <span class="extype" name="basis.control.ElseOps.B">B</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Tries the given function applied to a <code>Success</code> value,
-or returns <code>this</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Tries the given function applied to a <code>Success</code> value,
-or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Binds the result of a function applied to this <code>Free</code> value,
+otherwise returns this <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Binds the result of a function applied to this <code>Free</code> value,
+otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -412,55 +479,71 @@ or returns <code>this</code> for a <code>Failure</code>.</p></div><dl class="att
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.control.TryOps#orElse" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
-      <a id="orElse[B&gt;:A](alternate:basis.control.Try[B]):basis.control.Try[B]"></a>
-      <a id="orElse[B&gt;:A](Try[B]):Try[B]"></a>
+    </li><li name="basis.control.ElseOps#orElse" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="orElse[X&gt;:A,Y](other:basis.control.Else[X,Y]):basis.control.Else[X,Y]"></a>
+      <a id="orElse[X&gt;:A,Y](Else[X,Y]):Else[X,Y]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">orElse</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.control.TryOps.A">A</span></span>]</span><span class="params">(<span name="alternate">alternate: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.orElse.B">B</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.orElse.B">B</span>]</span>
+        <span class="name">orElse</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>, <span name="Y">Y</span>]</span><span class="params">(<span name="other">other: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.orElse.X">X</span>, <span class="extype" name="basis.control.ElseOps.orElse.Y">Y</span>]</span>)</span><span class="result">: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.orElse.X">X</span>, <span class="extype" name="basis.control.ElseOps.orElse.Y">Y</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code>, or <code>alternate</code> for a <code>Failure</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code>, or <code>alternate</code> for a <code>Failure</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Returns this if <code>Free</code>, or other for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this if <code>Free</code>, or other for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.control.TryOps#recover" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
-      <a id="recover[B&gt;:A](q:PartialFunction[Throwable,B]):basis.control.Try[B]"></a>
-      <a id="recover[B&gt;:A](PartialFunction[Throwable,B]):Try[B]"></a>
+    </li><li name="basis.control.ElseOps#orNull" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="orNull[X&gt;:A](implicitisNullable:&lt;:&lt;[Null,X]):X"></a>
+      <a id="orNull[X&gt;:A](&lt;:&lt;[Null,X]):X"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">recover</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.control.TryOps.A">A</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="basis.control.TryOps.recover.B">B</span>]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recover.B">B</span>]</span>
+        <span class="name">orNull</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="isNullable">isNullable: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="scala.Null">Null</span>, <span class="extype" name="basis.control.ElseOps.orNull.X">X</span>]</span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.orNull.X">X</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
-tries the given function applied to a defined <code>Failure</code> cause.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
-tries the given function applied to a defined <code>Failure</code> cause.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Returns this <code>Free</code> value, or <code>null</code> for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this <code>Free</code> value, or <code>null</code> for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.control.TryOps#recoverWith" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
-      <a id="recoverWith[B&gt;:A](q:PartialFunction[Throwable,basis.control.Try[B]]):basis.control.Try[B]"></a>
-      <a id="recoverWith[B&gt;:A](PartialFunction[Throwable,Try[B]]):Try[B]"></a>
+    </li><li name="basis.control.ElseOps#recover" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
+      <a id="recover[X&gt;:A](q:PartialFunction[B,X]):basis.control.Else[X,B]"></a>
+      <a id="recover[X&gt;:A](PartialFunction[B,X]):Else[X,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">recoverWith</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.control.TryOps.A">A</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recoverWith.B">B</span>]]</span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.recoverWith.B">B</span>]</span>
+        <span class="name">recover</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.control.ElseOps.B">B</span>, <span class="extype" name="basis.control.ElseOps.recover.X">X</span>]</span>)</span><span class="result">: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recover.X">X</span>, <span class="extype" name="basis.control.ElseOps.B">B</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
-returns the given function applied to a defined <code>Failure</code> cause.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> or an undefined <code>Failure</code>, otherwise
-returns the given function applied to a defined <code>Failure</code> cause.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Binds the result of a function applied to this <code>Trap</code> value, if defined,
+otherwise returns this.</p><div class="fullcomment"><div class="comment cmt"><p>Binds the result of a function applied to this <code>Trap</code> value, if defined,
+otherwise returns this.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.ElseOps#recoverWith" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
+      <a id="recoverWith[X&gt;:A,Y&gt;:B](q:PartialFunction[B,basis.control.Else[X,Y]]):basis.control.Else[X,Y]"></a>
+      <a id="recoverWith[X&gt;:A,Y&gt;:B](PartialFunction[B,Else[X,Y]]):Else[X,Y]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recoverWith</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>, <span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.control.ElseOps.B">B</span>, <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recoverWith.X">X</span>, <span class="extype" name="basis.control.ElseOps.recoverWith.Y">Y</span>]]</span>)</span><span class="result">: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recoverWith.X">X</span>, <span class="extype" name="basis.control.ElseOps.recoverWith.Y">Y</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the result of an <code>Else</code> function applied to this <code>Trap</code> value,
+if defined, otherwise returns this.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the result of an <code>Else</code> function applied to this <code>Trap</code> value,
+if defined, otherwise returns this.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -538,21 +621,23 @@ returns the given function applied to a defined <code>Failure</code> cause.</p><
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.control.TryOps#withFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
-      <a id="withFilter(p:A=&gt;Boolean):basis.control.Try[A]"></a>
-      <a id="withFilter((A)⇒Boolean):Try[A]"></a>
+    </li><li name="basis.control.ElseOps#withFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
+      <a id="withFilter(p:A=&gt;Boolean):basis.control.Else[A,B]"></a>
+      <a id="withFilter((A)⇒Boolean):Else[A,B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.TryOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.TryOps.A">A</span>]</span>
+        <span class="name">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.ElseOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.A">A</span>, <span class="extype" name="basis.control.ElseOps.B">B</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>this</code> for a <code>Success</code> whose value satisfies the given predicate,
-otherwise returns a <code>Failure</code>; equivalent to <code>filter</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>this</code> for a <code>Success</code> whose value satisfies the given predicate,
-otherwise returns a <code>Failure</code>; equivalent to <code>filter</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Returns this <code>Free</code> if its value satisfies the predicate,
+or <code>Trap</code> if its value does not satisfy the predicate,
+otherwise returns this <code>Trap</code>; equivalent to <code>filter</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this <code>Free</code> if its value satisfies the predicate,
+or <code>Trap</code> if its value does not satisfy the predicate,
+otherwise returns this <code>Trap</code>; equivalent to <code>filter</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -585,6 +670,9 @@ otherwise returns a <code>Failure</code>; equivalent to <code>filter</code>.</p>
               
             </div><div class="group" name="Recovering">
               <h3>Recovering</h3>
+              
+            </div><div class="group" name="Handling">
+              <h3>Exception Handling</h3>
               
             </div>
         </div>

@@ -44,8 +44,8 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Strictly evaluated linear sequence operations.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-sequential/src/main/scala/basis/sequential/StrictStackOps.scala" target="_blank">StrictStackOps.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Strictly evaluated stack operations.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-sequential/src/main/scala/basis/sequential/StrictStackOps.scala" target="_blank">StrictStackOps.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.1</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
@@ -235,8 +235,8 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the applications of a partial function to each element in this
-sequence for which the function is defined.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the applications of a partial function to each element in this
-sequence for which the function is defined.
+stack for which the function is defined.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the applications of a partial function to each element in this
+stack for which the function is defined.
 </p></div><dl class="paramcmts block"><dt class="param">q</dt><dd class="cmt"><p>the partial function to filter and transform elements.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for collected elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated elements filtered and transformed by <code>q</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -253,7 +253,7 @@ sequence for which the function is defined.
         <span class="name">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictStackOps.From">From</span>, <span class="extype" name="basis.sequential.StrictStackOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns all elements in this sequence following a prefix up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements in this sequence following a prefix up to some length.
+      <p class="shortcomment cmt">Returns all elements in this stack following a prefix up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements in this stack following a prefix up to some length.
 </p></div><dl class="paramcmts block"><dt class="param">lower</dt><dd class="cmt"><p>the length of the prefix to drop; also the inclusive
                   lower bound for indexes of elements to keep.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for non-dropped elements.</p></dd><dt>returns</dt><dd class="cmt"><p>all but the first <code>lower</code> accumulated elements.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
@@ -271,8 +271,8 @@ sequence for which the function is defined.
         <span class="name">dropWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictStackOps.From">From</span>, <span class="extype" name="basis.sequential.StrictStackOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns all elements following the longest prefix of this sequence
-for which each element satisfies a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements following the longest prefix of this sequence
+      <p class="shortcomment cmt">Returns all elements following the longest prefix of this stack
+for which each element satisfies a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements following the longest prefix of this stack
 for which each element satisfies a predicate.
 </p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for non-dropped elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the suffix of accumulated elements beginning with the first
         element to not satisfy <code>p</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -317,7 +317,7 @@ for which each element satisfies a predicate.
         <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictStackOps.From">From</span>, <span class="extype" name="basis.sequential.StrictStackOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns all elements in this sequence that satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements in this sequence that satisfy a predicate.
+      <p class="shortcomment cmt">Returns all elements in this stack that satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements in this stack that satisfy a predicate.
 </p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for filtered elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated elements filtered by <code>p</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -351,8 +351,8 @@ for which each element satisfies a predicate.
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the concatenation of all elements returned by a function applied
-to each element in this sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the concatenation of all elements returned by a function applied
-to each element in this sequence.
+to each element in this stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the concatenation of all elements returned by a function applied
+to each element in this stack.
 </p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the enumerator-yielding function to apply to each element.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for flattened elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the concatenation of all accumulated elements produced by <code>f</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -408,7 +408,7 @@ to each element in this sequence.
         <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.sequential.StrictStackOps.A">A</span>) ⇒ <span class="extype" name="basis.sequential.StrictStackOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictStackOps.From">From</span>, <span class="extype" name="basis.sequential.StrictStackOps.map.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns the applications of a function to each element in this sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the applications of a function to each element in this sequence.
+      <p class="shortcomment cmt">Returns the applications of a function to each element in this stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the applications of a function to each element in this stack.
 </p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the function to apply to each element.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for transformed elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated elements transformed by <code>f</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -464,7 +464,7 @@ to each element in this sequence.
         <span class="name">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictStackOps.From">From</span>, <span class="extype" name="basis.sequential.StrictStackOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns an interval of elements in this sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an interval of elements in this sequence.
+      <p class="shortcomment cmt">Returns an interval of elements in this stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an interval of elements in this stack.
 </p></div><dl class="paramcmts block"><dt class="param">lower</dt><dd class="cmt"><p>the inclusive lower bound for indexes of elements to keep.</p></dd><dt class="param">upper</dt><dd class="cmt"><p>the exclusive upper bound for indexes of elements to keep.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for kept elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated elements with indexes greater than or equal to
         <code>lower</code> and less than <code>upper</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
@@ -495,7 +495,7 @@ to each element in this sequence.
         <span class="name">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictStackOps.From">From</span>, <span class="extype" name="basis.sequential.StrictStackOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a prefix of this sequence up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a prefix of this sequence up to some length.
+      <p class="shortcomment cmt">Returns a prefix of this stack up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a prefix of this stack up to some length.
 </p></div><dl class="paramcmts block"><dt class="param">upper</dt><dd class="cmt"><p>the length of the prefix to take; also the exclusive
                   upper bound for indexes of elements to keep.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for taken elements.</p></dd><dt>returns</dt><dd class="cmt"><p>up to the first <code>upper</code> accumulated elements.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
@@ -513,8 +513,8 @@ to each element in this sequence.
         <span class="name">takeWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictStackOps.From">From</span>, <span class="extype" name="basis.sequential.StrictStackOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns the longest prefix of this sequence for which each element
-satisfies a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the longest prefix of this sequence for which each element
+      <p class="shortcomment cmt">Returns the longest prefix of this stack for which each element
+satisfies a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the longest prefix of this stack for which each element
 satisfies a predicate.
 </p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for taken elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the longest prefix of accumulated elements preceding the first
         element to not satisfy <code>p</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -594,7 +594,7 @@ satisfies a predicate.
         <span class="name">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictStackOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.StrictStackOps.A">A</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a view of all elements in this sequence that satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of all elements in this sequence that satisfy a predicate.
+      <p class="shortcomment cmt">Returns a view of all elements in this stack that satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a view of all elements in this stack that satisfy a predicate.
 </p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to lazily test elements against.</p></dd><dt>returns</dt><dd class="cmt"><p>a non-strict view of the filtered elements.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictStackOps#zip" visbl="pub" data-isabs="false" fullComment="yes" group="Combining">
       <a id="zip[B](those:basis.collections.Stack[B])(implicitbuilder:basis.collections.Builder[From,(A,B)]):builder.State"></a>
@@ -608,8 +608,8 @@ satisfies a predicate.
         <span class="name">zip</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="those">those: <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.sequential.StrictStackOps.zip.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictStackOps.From">From</span>, (<span class="extype" name="basis.sequential.StrictStackOps.A">A</span>, <span class="extype" name="basis.sequential.StrictStackOps.zip.B">B</span>)]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns pairs of elements from this and another sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Returns pairs of elements from this and another sequence.
-</p></div><dl class="paramcmts block"><dt class="param">those</dt><dd class="cmt"><p>the sequence whose elements to pair with these elements.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for paired elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated pairs of corresponding elements.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Returns pairs of elements from this and another stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns pairs of elements from this and another stack.
+</p></div><dl class="paramcmts block"><dt class="param">those</dt><dd class="cmt"><p>the stack whose elements to pair with these elements.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for paired elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated pairs of corresponding elements.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>

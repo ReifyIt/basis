@@ -1,0 +1,429 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>Deque - basis.collections.Deque</title>
+          <meta name="description" content="Deque - basis.collections.Deque" />
+          <meta name="keywords" content="Deque basis.collections.Deque" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.collections.Deque';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../lib/trait_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.collections">collections</a></p>
+        <h1>Deque</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Deque</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="" class="extype" name="basis.collections.Deque">Deque</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]] with <a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A double-ended queue. Deques efficiently decompose into a <code>head</code> element
+and a <code>tail</code> deque, or an <code>init</code> deque and a <code>last</code> element.</p><h4>Extensions</h4><p>Add operations to this interface by importing one of these use cases:</p><ul><li><code>import </code><a href="../sequential/General.html" class="extype" name="basis.sequential.General"><code>basis.sequential.general</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/Strict.html" class="extype" name="basis.sequential.Strict"><code>basis.sequential.strict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/NonStrict.html" class="extype" name="basis.sequential.NonStrict"><code>basis.sequential.nonstrict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li></ul><p>The following classes implement the extensions to this interface:</p><ul><li><span class="extype" name="basis.sequential.GeneralDequeOps">GeneralDequeOps</span>
+   implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><span class="extype" name="basis.sequential.StrictDequeOps">StrictDequeOps</span>
+   implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><span class="extype" name="basis.sequential.NonStrictDequeOps">NonStrictDequeOps</span>
+   implements lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Deque.scala" target="_blank">Deque.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.1</p></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.collections.Deque.A">A</span>], <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Deque.A">A</span>], <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Deque.A">A</span>], <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Deque.A">A</span>], <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Deque.A">A</span>], <span class="extype" name="scala.Equals">Equals</span>, <a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Deque">Deque</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]], <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a href="../containers/Batch.html" class="extype" name="basis.containers.Batch">Batch</a></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph136" viewBox="0.00 0.00 229.00 158.00" height="158pt" width="229pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 154)" class="graph" id="graph1"><polygon points="-4,5 -4,-154 226,-154 226,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph136_0"><a xlink:title="basis.collections.Deque (this trait)" xlink:href="#inheritance-diagram"><polygon points="163,-88 77,-88 77,-62 163,-62 163,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-83" x="87" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="109" text-anchor="start">Deque[A]</text></a></g><!-- node1 --><g class="node class" id="graph136_1"><a xlink:title="basis.containers.Batch" xlink:href="../containers/Batch.html#inheritance-diagram"><polygon points="161,-26 79,-26 79,-0 161,-0 161,-26" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-21" x="89" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="111" text-anchor="start">Batch[A]</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph136_0_1"><a xlink:title="Batch[A] is a subtype of Deque[A]"><path d="M120,-56.6826C120,-46.8961 120,-34.9026 120,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="118.25,-56.8581 120,-61.8581 121.75,-56.8581 118.25,-56.8581" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph136_2"><a xlink:title="basis.collections.Family" xlink:href="Family.html#inheritance-diagram"><polygon points="120.25,-150 -0.25,-150 -0.25,-124 120.25,-124 120.25,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="32" text-anchor="start">Family[Deque[A]]</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph136_2_0"><a xlink:title="Deque[A] is a subtype of Family[Deque[A]]"><path d="M75.7076,-120.292C85.7614,-110.239 98.6096,-97.3904 107.876,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="74.44,-119.085 72.1419,-123.858 76.9149,-121.56 74.44,-119.085" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node3 --><g class="node trait" id="graph136_3"><a xlink:title="basis.collections.Stack" xlink:href="Stack.html#inheritance-diagram"><polygon points="221,-150 139,-150 139,-124 221,-124 221,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="149" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="171" text-anchor="start">Stack[A]</text></a></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph136_3_0"><a xlink:title="Deque[A] is a subtype of Stack[A]"><path d="M164.292,-120.292C154.239,-110.239 141.39,-97.3904 132.124,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="163.085,-121.56 167.858,-123.858 165.56,-119.085 163.085,-121.56" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                <li class="group out"><span>Grouped</span></li>
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.collections.Deque"><span>Deque</span></li><li class="in" name="basis.collections.Stack"><span>Stack</span></li><li class="in" name="basis.collections.Seq"><span>Seq</span></li><li class="in" name="basis.collections.Container"><span>Container</span></li><li class="in" name="basis.collections.Collection"><span>Collection</span></li><li class="in" name="basis.collections.Enumerator"><span>Enumerator</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="basis.collections.Family"><span>Family</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.collections.Family.Family" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="Family=Type"></a>
+      <a id="Family:Family"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Family</span><span class="result"> = <a href="" class="extype" name="basis.collections.Deque">Deque</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The base type of this collection's family.</p><div class="fullcomment"><div class="comment cmt"><p>The base type of this collection's family.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Family.html" class="extype" name="basis.collections.Family">Family</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.Stack#head" visbl="pub" data-isabs="true" fullComment="yes" group="Decomposing">
+      <a id="head:A"></a>
+      <a id="head:A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">head</span><span class="result">: <span class="extype" name="basis.collections.Deque.A">A</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the first element of this non-empty deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the first element of this non-empty deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a></dd></dl></div>
+    </li><li name="basis.collections.Deque#init" visbl="pub" data-isabs="true" fullComment="no" group="Decomposing">
+      <a id="init:Deque.this.Family"></a>
+      <a id="init:Family"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">init</span><span class="result">: <a href="#Family=Type" class="extmbr" name="basis.collections.Deque.Family">Family</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns all elements except the last of this non-empty deque.</p>
+    </li><li name="basis.collections.Stack#isEmpty" visbl="pub" data-isabs="true" fullComment="yes" group="Quantifying">
+      <a id="isEmpty:Boolean"></a>
+      <a id="isEmpty:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this deque doesn't contain any elements.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this deque doesn't contain any elements.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a></dd></dl></div>
+    </li><li name="basis.collections.Deque#last" visbl="pub" data-isabs="true" fullComment="no" group="Decomposing">
+      <a id="last:A"></a>
+      <a id="last:A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">last</span><span class="result">: <span class="extype" name="basis.collections.Deque.A">A</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the last element of this non-empty deque.</p>
+    </li><li name="basis.collections.Stack#tail" visbl="pub" data-isabs="true" fullComment="yes" group="Decomposing">
+      <a id="tail:Stack.this.Family"></a>
+      <a id="tail:Family"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tail</span><span class="result">: <a href="#Family=Type" class="extmbr" name="basis.collections.Deque.Family">Family</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns all elements except the first of this non-empty deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements except the first of this non-empty deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.Seq#canEqual" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="canEqual(other:Any):Boolean"></a>
+      <a id="canEqual(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">canEqual</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this deque might equal another object, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this deque might equal another object, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals</dd></dl></div>
+    </li><li name="basis.collections.Seq#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="equals(other:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this deque contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this deque contains the same elements in the same
+order as another sequence, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
+    </li><li name="basis.collections.Stack#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
+      <a id="foreach[U](f:A=&gt;U):Unit"></a>
+      <a id="foreach[U]((A)⇒U):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Deque.A">A</span>) ⇒ <span class="extype" name="basis.collections.Stack.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies a function to each element of this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to each element of this deque. The protected
+status of <code>foreach</code> allows optimized static implementations to shadow
+this virtual method. To force a virtual <code>foreach</code> call, invoke
+<a href="package.html#traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit" class="extmbr" name="basis.collections#traverse">traverse</a>.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.collections.Seq#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of the elements in this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a hash of the elements in this deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.Stack#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Iterating">
+      <a id="iterator:basis.collections.Iterator[A]"></a>
+      <a id="iterator:Iterator[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterator</span><span class="result">: <a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a new iterator over the elements of this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.collections.Collection#stringPrefix" visbl="prt" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="stringPrefix:String"></a>
+      <a id="stringPrefix:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stringPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a string that identifies this type of deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this type of deque.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
+    </li><li name="basis.collections.Container#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a string representation of this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of this deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a> → Any</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.collections.Stack">
+              <h3>Inherited from <a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</h3>
+            </div><div class="parent" name="basis.collections.Seq">
+              <h3>Inherited from <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</h3>
+            </div><div class="parent" name="basis.collections.Container">
+              <h3>Inherited from <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</h3>
+            </div><div class="parent" name="basis.collections.Collection">
+              <h3>Inherited from <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</h3>
+            </div><div class="parent" name="basis.collections.Enumerator">
+              <h3>Inherited from <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="basis.collections.Family">
+              <h3>Inherited from <a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Deque">Deque</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]]</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div><div class="group" name="Quantifying">
+              <h3>Quantifying</h3>
+              
+            </div><div class="group" name="Decomposing">
+              <h3>Decomposing</h3>
+              
+            </div><div class="group" name="Iterating">
+              <h3>Iterating</h3>
+              
+            </div><div class="group" name="Traversing">
+              <h3>Traversing</h3>
+              
+            </div><div class="group" name="Classifying">
+              <h3>Classifying</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

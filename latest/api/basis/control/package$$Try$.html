@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Failure - basis.control.Failure</title>
-          <meta name="description" content="Failure - basis.control.Failure" />
-          <meta name="keywords" content="Failure basis.control.Failure" />
+          <title>Try - basis.control.Try</title>
+          <meta name="description" content="Try - basis.control.Try" />
+          <meta name="keywords" content="Try basis.control.Try" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'basis.control.Failure$';
+            var hash = 'basis.control.package$$Try$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,9 +29,9 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="Failure.html" title="Go to companion"><img src="../../lib/object_to_class_big.png" /></a>
+        <img src="../../lib/object_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a></p>
-        <h1><a href="Failure.html" title="Go to companion">Failure</a></h1>
+        <h1>Try</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -40,11 +40,11 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Failure</span>
+        <span class="name">Try</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A factory for <a href="Failure.html" class="extype" name="basis.control.Failure">Failure</a> results.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/Try.scala" target="_blank">Try.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A factory for <a href="package$$Try.html" class="extype" name="basis.control.Try">Try</a> bindings.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -64,7 +64,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.control.Failure"><span>Failure</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.control.Try"><span>Try</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -155,19 +155,24 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.control.Failure#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(cause:Throwable):basis.control.Failure"></a>
-      <a id="apply(Throwable):Failure"></a>
+    </li><li name="basis.control.Try#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](expr:=&gt;A):basis.control.package.Try[A]"></a>
+      <a id="apply[A](⇒A):Try[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="Failure.html" class="extype" name="basis.control.Failure">Failure</a></span>
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="expr">expr: ⇒ <span class="extype" name="basis.control.Try.apply.A">A</span></span>)</span><span class="result">: <a href="package$$Try.html" class="extype" name="basis.control.Try">Try</a>[<span class="extype" name="basis.control.Try.apply.A">A</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a <code>Failure</code> caused by the givem exception.</p>
+      <p class="shortcomment cmt">Returns a <code>Free</code> binding for an expression,
+or a <code>Trap</code> with a caught, non-fatal exception.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <code>Free</code> binding for an expression,
+or a <code>Trap</code> with a caught, non-fatal exception.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -343,32 +348,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.Failure#unapply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unapply(failure:basis.control.Failure):Some[Throwable]"></a>
-      <a id="unapply(Failure):scala.Some[Throwable]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unapply</span><span class="params">(<span name="failure">failure: <a href="Failure.html" class="extype" name="basis.control.Failure">Failure</a></span>)</span><span class="result">: <span class="extype" name="scala.Some">scala.Some</span>[<span class="extype" name="scala.Throwable">Throwable</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Extracts the <code>cause</code> from a <code>Failure</code>.</p>
-    </li><li name="basis.control.Failure#undefined" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="undefined:basis.control.Failure"></a>
-      <a id="undefined:Failure"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">undefined</span><span class="result">: <a href="Failure.html" class="extype" name="basis.control.Failure">Failure</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns a <code>Failure</code> with an arbitrary <code>cause</code>.</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

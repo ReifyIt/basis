@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Success - basis.control.Success</title>
-          <meta name="description" content="Success - basis.control.Success" />
-          <meta name="keywords" content="Success basis.control.Success" />
+          <title>Batch - basis.containers.Batch</title>
+          <meta name="description" content="Batch - basis.containers.Batch" />
+          <meta name="keywords" content="Batch basis.containers.Batch" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'basis.control.Success$';
+            var hash = 'basis.containers.Batch$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,9 +29,9 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="Success.html" title="Go to companion"><img src="../../lib/object_to_trait_big.png" /></a>
-        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a></p>
-        <h1><a href="Success.html" title="Go to companion">Success</a></h1>
+        <a href="Batch.html" title="Go to companion"><img src="../../lib/object_to_class_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.containers">containers</a></p>
+        <h1><a href="Batch.html" title="Go to companion">Batch</a></h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -40,13 +40,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Success</span>
+        <span class="name">Batch</span><span class="result"> extends <a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A factory for <a href="Success.html" class="extype" name="basis.control.Success">Success</a> results.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/Try.scala" target="_blank">Try.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A factory for <a href="Batch.html" class="extype" name="basis.containers.Batch">batches</a>.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/Batch.scala" target="_blank">Batch.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>], <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -64,7 +64,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.control.Success"><span>Success</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.containers.Batch"><span>Batch</span></li><li class="in" name="basis.collections.SeqFactory"><span>SeqFactory</span></li><li class="in" name="basis.collections.BuilderFactory"><span>BuilderFactory</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -155,84 +155,48 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.control.Success#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(value:Boolean):basis.control.Success[Boolean]"></a>
-      <a id="apply(Boolean):Success[Boolean]"></a>
+    </li><li name="basis.containers.Batch#Builder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Builder[A](implicitevidence$1:basis.runtime.TypeHint[A]):basis.collections.Builder[Any,A]{typeState=basis.containers.Batch[A]}"></a>
+      <a id="Builder[A](TypeHint[A]):Builder[Any,A]{typeState=basis.containers.Batch[A]}"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Builder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.containers.Batch.Builder.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="basis.containers.Batch.Builder.A">A</span>] { type State = basis.containers.Batch[A] }</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.Batch">Batch</a> → <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
+    </li><li name="basis.collections.BuilderFactory#Factory" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Factory:BuilderFactory.this.type"></a>
+      <a id="Factory:Batch.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Factory</span><span class="result">: <a href="" class="extype" name="basis.containers.Batch">Batch</a>.this.type</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
+    </li><li name="basis.collections.BuilderFactory#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](elems:A*):CC[A]"></a>
+      <a id="apply[A](A*):Batch[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Success.html" class="extype" name="basis.control.Success">Success</a>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="basis.collections.BuilderFactory.apply.A">A</span>*</span>)</span><span class="result">: <a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>[<span class="extype" name="basis.collections.BuilderFactory.apply.A">A</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a <code>Success</code> with the given <code>Boolean</code> result.</p>
-    </li><li name="basis.control.Success#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(value:Double):basis.control.Success[Double]"></a>
-      <a id="apply(Double):Success[Double]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="Success.html" class="extype" name="basis.control.Success">Success</a>[<span class="extype" name="scala.Double">Double</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns a <code>Success</code> with the given <code>Double</code> result.</p>
-    </li><li name="basis.control.Success#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(value:Float):basis.control.Success[Float]"></a>
-      <a id="apply(Float):Success[Float]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="Success.html" class="extype" name="basis.control.Success">Success</a>[<span class="extype" name="scala.Float">Float</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns a <code>Success</code> with the given <code>Float</code> result.</p>
-    </li><li name="basis.control.Success#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(value:Long):basis.control.Success[Long]"></a>
-      <a id="apply(Long):Success[Long]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="Success.html" class="extype" name="basis.control.Success">Success</a>[<span class="extype" name="scala.Long">Long</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns a <code>Success</code> with the given <code>Long</code> result.</p>
-    </li><li name="basis.control.Success#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(value:Int):basis.control.Success[Int]"></a>
-      <a id="apply(Int):Success[Int]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="Success.html" class="extype" name="basis.control.Success">Success</a>[<span class="extype" name="scala.Int">Int</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns a <code>Success</code> with the given <code>Int</code> result.</p>
-    </li><li name="basis.control.Success#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[A](value:A):basis.control.Success[A]"></a>
-      <a id="apply[A](A):Success[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="basis.control.Success.apply.A">A</span></span>)</span><span class="result">: <a href="Success.html" class="extype" name="basis.control.Success">Success</a>[<span class="extype" name="basis.control.Success.apply.A">A</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns a <code>Success</code> with the given polymorphic result.</p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -262,6 +226,45 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coerce[A](elems:scala.collection.TraversableOnce[A])(implicitA:basis.runtime.TypeHint[A]):CC[A]"></a>
+      <a id="coerce[A](TraversableOnce[A])(TypeHint[A]):Batch[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
+    </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coerce[A](elems:basis.collections.Enumerator[A])(implicitA:basis.runtime.TypeHint[A]):CC[A]"></a>
+      <a id="coerce[A](Enumerator[A])(TypeHint[A]):Batch[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
+    </li><li name="basis.containers.Batch#empty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="empty[A](implicitevidence$2:basis.runtime.TypeHint[A]):basis.containers.Batch[A]"></a>
+      <a id="empty[A](TypeHint[A]):Batch[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">empty</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.containers.Batch.empty.A">A</span>]</span>)</span><span class="result">: <a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>[<span class="extype" name="basis.containers.Batch.empty.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.Batch">Batch</a> → <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -288,6 +291,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.collections.SeqFactory#fill" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fill[A](count:Int)(elem:=&gt;A):CC[A]"></a>
+      <a id="fill[A](Int)(⇒A):Batch[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fill</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="elem">elem: ⇒ <span class="extype" name="basis.collections.SeqFactory.fill.A">A</span></span>)</span><span class="result">: <a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>[<span class="extype" name="basis.collections.SeqFactory.fill.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -343,6 +362,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.SeqFactory#iterate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iterate[A](start:A,count:Int)(f:A=&gt;A):CC[A]"></a>
+      <a id="iterate[A](A,Int)((A)⇒A):Batch[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="start">start: <span class="extype" name="basis.collections.SeqFactory.iterate.A">A</span></span>, <span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.SeqFactory.iterate.A">A</span>) ⇒ <span class="extype" name="basis.collections.SeqFactory.iterate.A">A</span></span>)</span><span class="result">: <a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>[<span class="extype" name="basis.collections.SeqFactory.iterate.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -395,6 +430,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.collections.SeqFactory#tabulate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tabulate[A](count:Int)(f:Int=&gt;A):CC[A]"></a>
+      <a id="tabulate[A](Int)((Int)⇒A):Batch[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tabulate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="basis.collections.SeqFactory.tabulate.A">A</span></span>)</span><span class="result">: <a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>[<span class="extype" name="basis.collections.SeqFactory.tabulate.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -408,19 +459,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.Success#unapply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unapply[A](success:basis.control.Success[A]):Some[A]"></a>
-      <a id="unapply[A](Success[A]):scala.Some[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unapply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="success">success: <a href="Success.html" class="extype" name="basis.control.Success">Success</a>[<span class="extype" name="basis.control.Success.unapply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Some">scala.Some</span>[<span class="extype" name="basis.control.Success.unapply.A">A</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Extracts the value from a <code>Success</code>.</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -478,7 +516,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="basis.collections.SeqFactory">
+              <h3>Inherited from <a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>]</h3>
+            </div><div class="parent" name="basis.collections.BuilderFactory">
+              <h3>Inherited from <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="Batch.html" class="extype" name="basis.containers.Batch">Batch</a>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
