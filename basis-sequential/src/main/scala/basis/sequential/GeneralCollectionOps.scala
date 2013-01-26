@@ -59,12 +59,12 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceOption[B >: A](op: (B, B) => B): Option[B] =
-    new GeneralEnumeratorOps[B](these).reduceOption[B](op)
-  //new GeneralEnumeratorOps[A](these).reduceOption[B](op) // SI-6482
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
+    new GeneralEnumeratorOps[B](these).mayReduce[B](op)
+  //new GeneralEnumeratorOps[A](these).mayReduce[B](op) // SI-6482
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this $collection.
@@ -92,20 +92,20 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
-    new GeneralEnumeratorOps[B](these).reduceLeftOption[B](op.asInstanceOf[(B, B) => B])
-  //new GeneralEnumeratorOps[A](these).reduceLeftOption[B](op) // SI-6482
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
+    new GeneralEnumeratorOps[B](these).mayReduceLeft[B](op.asInstanceOf[(B, B) => B])
+  //new GeneralEnumeratorOps[A](these).mayReduceLeft[B](op) // SI-6482
   
   /** Returns the first element of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
-    * @return some found element, or none if no element satisfies `p`.
+    * @return the free found element, or a trap if no element satisfies `p`.
     * @group  Querying
     */
-  def find(p: A => Boolean): Option[A] =
+  def find(p: A => Boolean): Maybe[A] =
     new GeneralEnumeratorOps(these).find(p)
   
   /** Returns `true` if a predicate holds for all elements of this $collection.
@@ -140,10 +140,10 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
-    * @return some found and mapped element, or none if no element applies to `q`.
+    * @return the free found and mapped element, or a trap if no element applies to `q`.
     * @group  Querying
     */
-  def choose[B](q: PartialFunction[A, B]): Option[B] =
+  def choose[B](q: PartialFunction[A, B]): Maybe[B] =
     new GeneralEnumeratorOps(these).choose(q)
   
   /** Returns a strict operations interface to this $collection.

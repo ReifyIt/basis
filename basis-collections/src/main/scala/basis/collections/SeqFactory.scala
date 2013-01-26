@@ -38,17 +38,18 @@ private[collections] object SeqFactory {
       (elem: c.Expr[A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
-    import c.{Expr, fresh, prefix, WeakTypeTag}
+    import c.{Expr, fresh, prefix, weakTypeOf, WeakTypeTag}
     import c.universe._
     val i    = newTermName(fresh("i$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    Expr[CC[A]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), count.tree) ::
         ValDef(NoMods, b, TypeTree(),
           Apply(
-            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil), "expect"),
+            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(weakTypeOf[A]) :: Nil), "expect"),
             Ident(i) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
@@ -58,8 +59,7 @@ private[collections] object SeqFactory {
               Assign(Ident(i), Apply(Select(Ident(i), "$minus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
+        Select(Ident(b), "state")))
   }
   
   def tabulate[CC[_], A]
@@ -68,19 +68,20 @@ private[collections] object SeqFactory {
       (f: c.Expr[Int => A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
-    import c.{Expr, fresh, prefix, WeakTypeTag}
+    import c.{Expr, fresh, prefix, weakTypeOf, WeakTypeTag}
     import c.universe._
     val i    = newTermName(fresh("i$"))
     val n    = newTermName(fresh("n$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    Expr[CC[A]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), count.tree) ::
         ValDef(NoMods, b, TypeTree(),
           Apply(
-            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil), "expect"),
+            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(weakTypeOf[A]) :: Nil), "expect"),
             Ident(n) :: Nil)) ::
         LabelDef(loop, Nil,
           If(
@@ -90,8 +91,7 @@ private[collections] object SeqFactory {
               Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
+        Select(Ident(b), "state")))
   }
   
   def iterate[CC[_], A]
@@ -100,19 +100,20 @@ private[collections] object SeqFactory {
       (f: c.Expr[A => A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
-    import c.{Expr, fresh, prefix, WeakTypeTag}
+    import c.{Expr, fresh, prefix, weakTypeOf, WeakTypeTag}
     import c.universe._
     val n    = newTermName(fresh("n$"))
-    val b    = newTermName(fresh("builder$"))
+    val b    = newTermName(fresh("b$"))
     val a    = newTermName(fresh("a$"))
     val i    = newTermName(fresh("i$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    Expr[CC[A]](
       Block(
         ValDef(NoMods, n, TypeTree(), count.tree) ::
         ValDef(NoMods, b, TypeTree(),
           Apply(
-            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil), "expect"),
+            Select(TypeApply(Select(prefix.tree, "Builder"), TypeTree(weakTypeOf[A]) :: Nil), "expect"),
             Ident(n) :: Nil)) ::
         If(
           Apply(Select(Ident(n), "$greater"), Literal(Constant(0)) :: Nil),
@@ -130,7 +131,6 @@ private[collections] object SeqFactory {
                   Apply(Ident(loop), Nil)),
                 EmptyTree))),
           EmptyTree) :: Nil,
-        Select(Ident(b), "state"))
-    } (WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
+        Select(Ident(b), "state")))
   }
 }

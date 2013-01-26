@@ -70,6 +70,8 @@ abstract class Batch[+A] private[containers]
   protected override def stringPrefix: String = "Batch"
 }
 
+/** A factory for [[Batch batches]].
+  * @group Containers */
 object Batch extends SeqFactory[Batch] {
   private[containers] object Empty extends Batch[Nothing] {
     override def isEmpty: Boolean = true

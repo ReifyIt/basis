@@ -79,16 +79,17 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[A, T]] with Container[
     throw new NoSuchElementException(key.toString)
   }
   
-  /** Returns some value associated with the given key, or none if no association exists.
+  /** Returns the free value associated with the given key,
+    * or a trap if no association exists.
     * @group Querying */
-  def get(key: A @uncheckedVariance): Option[T] = {
+  def get(key: A @uncheckedVariance): Maybe[T] = {
     val entries = iterator
     while (!entries.isEmpty) {
       val entry = entries.head
-      if (key == entry._1) return Some(entry._2)
+      if (key == entry._1) return Free(entry._2)
       entries.step()
     }
-    None
+    Trap
   }
   
   /** Returns a new iterator over the (key, value) pairs of this $collection.

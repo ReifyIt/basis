@@ -9,23 +9,18 @@ package basis
 
 /** General utility macros. */
 package object util {
-  /** Implicitly adds arrow (-> and →) associators to all values. */
-  implicit def ArrowOps[A](left: A): ArrowOps[A] =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  /** Implicitly adds infix arrow (-> and →) associators to all values. */
+  implicit def ArrowOps[A](left: A): ArrowOps[A] = new ArrowOps(left)
   
-  /** Implicitly adds supplemental operations to `Int` values. */
-  implicit def IntOps(value: Int): IntOps =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  /** Implicitly adds extended operations to `Int` values. */
+  implicit def IntOps(a: Int): IntOps = new IntOps(a)
   
-  /** Implicitly adds supplemental operations to `Long` values. */
-  implicit def LongOps(value: Long): LongOps =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  /** Implicitly adds extended operations to `Long` values. */
+  implicit def LongOps(a: Long): LongOps = new LongOps(a)
   
-  /** Implicitly adds supplemental operations to `Float` values. */
-  implicit def FloatOps(value: Float): FloatOps =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  /** Implicitly adds extended operations to `Float` values. */
+  implicit def FloatOps(x: Float): FloatOps = new FloatOps(x)
   
-  /** Implicitly adds supplemental operations to `Double` values. */
-  implicit def DoubleOps(value: Double): DoubleOps =
-    throw new UnsupportedOperationException("Can't instantiate macro interface at runtime.")
+  /** Implicitly adds extended operations to `Double` values. */
+  implicit def DoubleOps(x: Double): DoubleOps = new DoubleOps(x)
 }

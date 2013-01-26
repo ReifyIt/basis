@@ -67,7 +67,7 @@ final class HashMap[+A, +T] private[containers] (
   
   override def apply(key: A @uncheckedVariance): T = apply(key, key.##, 0)
   
-  override def get(key: A @uncheckedVariance): Option[T] = get(key, key.##, 0)
+  override def get(key: A @uncheckedVariance): Maybe[T] = get(key, key.##, 0)
   
   /** Returns a copy of this $collection that associates the given value with the given key.
     * @group Updating */
@@ -199,11 +199,11 @@ final class HashMap[+A, +T] private[containers] (
     }
   }
   
-  @tailrec private def get(key: A @uncheckedVariance, keyHash: Int, shift: Int): Option[T] = {
+  @tailrec private def get(key: A @uncheckedVariance, keyHash: Int, shift: Int): Maybe[T] = {
     val branch = choose(keyHash, shift)
     (follow(branch): @switch) match {
-      case VOID => None
-      case LEAF => if (key == getKey(branch)) Some(getValue(branch)) else None
+      case VOID => Trap
+      case LEAF => if (key == getKey(branch)) Free(getValue(branch)) else Trap
       case TREE => getTree(branch).get(key, keyHash, shift + 5)
       case KNOT => getKnot(branch).get(key)
     }

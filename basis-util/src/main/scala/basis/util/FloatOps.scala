@@ -7,13 +7,13 @@
 
 package basis.util
 
-/** Supplemental operations on `Float` values.
+/** Extended `Float` operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   */
-final class FloatOps extends {
+final class FloatOps(x: Float) {
   def isNaN: Boolean = macro FloatMacros.isNaN
   
   def isInfinite: Boolean = macro FloatMacros.isInfinite
@@ -31,51 +31,64 @@ private[util] object FloatMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  def isNaN(c: Context): c.Expr[Boolean] = {
-    import c.{Expr, prefix, TypeTag}
+  private def unApply(c: Context): c.Expr[Float] = {
+    import c.{Expr, prefix, typeCheck, weakTypeOf}
     import c.universe._
     val Apply(_, x :: Nil) = prefix.tree
-    val Float = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float")
-    Expr(Apply(Select(Float, "isNaN"), x :: Nil))(TypeTag.Boolean)
+    Expr[Float](typeCheck(x, weakTypeOf[Float]))
+  }
+  
+  def isNaN(c: Context): c.Expr[Boolean] = {
+    import c.Expr
+    import c.universe._
+    Expr[Boolean](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float"), "isNaN"),
+        unApply(c).tree :: Nil))
   }
   
   def isInfinite(c: Context): c.Expr[Boolean] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Float = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float")
-    Expr(Apply(Select(Float, "isInfinite"), x :: Nil))(TypeTag.Boolean)
+    Expr[Boolean](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float"), "isInfinite"),
+        unApply(c).tree :: Nil))
   }
   
   def abs(c: Context): c.Expr[Float] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
-    Expr(Apply(Select(Math, "abs"), x :: Nil))(TypeTag.Float)
+    Expr[Float](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "abs"),
+        unApply(c).tree :: Nil))
   }
   
   def min(c: Context)(y: c.Expr[Float]): c.Expr[Float] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
-    Expr(Apply(Select(Math, "min"), x :: y.tree :: Nil))(TypeTag.Float)
+    Expr[Float](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "min"),
+        unApply(c).tree :: y.tree :: Nil))
   }
   
   def max(c: Context)(y: c.Expr[Float]): c.Expr[Float] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
-    Expr(Apply(Select(Math, "max"), x :: y.tree :: Nil))(TypeTag.Float)
+    Expr[Float](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "max"),
+        unApply(c).tree :: y.tree :: Nil))
   }
   
   def toIntBits(c: Context): c.Expr[Int] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Float = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float")
-    Expr(Apply(Select(Float, "floatToIntBits"), x :: Nil))(TypeTag.Int)
+    Expr[Int](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float"), "floatToIntBits"),
+        unApply(c).tree :: Nil))
   }
 }

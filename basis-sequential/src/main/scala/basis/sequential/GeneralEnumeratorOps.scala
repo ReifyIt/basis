@@ -56,22 +56,20 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   def reduce[B >: A](op: (B, B) => B): B = {
     val f = new GeneralEnumeratorOps.ReduceLeft(op)
     traverse(these)(f)
-    if (f.isDefined) f.state
-    else throw new UnsupportedOperationException
+    if (f.isDefined) f.state else throw new UnsupportedOperationException
   }
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceOption[B >: A](op: (B, B) => B): Option[B] = {
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] = {
     val f = new GeneralEnumeratorOps.ReduceLeft(op)
     traverse(these)(f)
-    if (f.isDefined) Some(f.state)
-    else None
+    if (f.isDefined) Free(f.state) else Trap
   }
   
   /** Returns the left-to-right application of a binary operator between a
@@ -99,32 +97,30 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     val f = new GeneralEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B])
   //val f = new GeneralEnumeratorOps.ReduceLeft(op) // SI-6482
     traverse(these)(f)
-    if (f.isDefined) f.state
-    else throw new UnsupportedOperationException
+    if (f.isDefined) f.state else throw new UnsupportedOperationException
   }
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] = {
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] = {
     val f = new GeneralEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B])
   //val f = new GeneralEnumeratorOps.ReduceLeft(op) // SI-6482
     traverse(these)(f)
-    if (f.isDefined) Some(f.state)
-    else None
+    if (f.isDefined) Free(f.state) else Trap
   }
   
   /** Returns the first element of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
-    * @return some found element, or none if no element satisfies `p`.
+    * @return the free found element, or a trap if no element satisfies `p`.
     * @group  Querying
     */
-  def find(p: A => Boolean): Option[A] = {
+  def find(p: A => Boolean): Maybe[A] = {
     val f = new GeneralEnumeratorOps.Find(p)
     begin(traverse(these)(f))
     f.state
@@ -171,10 +167,10 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
-    * @return some found and mapped element, or none if no element applies to `q`.
+    * @return the free found and mapped element, or a trap if no element applies to `q`.
     * @group  Querying
     */
-  def choose[B](q: PartialFunction[A, B]): Option[B] = {
+  def choose[B](q: PartialFunction[A, B]): Maybe[B] = {
     val f = new GeneralEnumeratorOps.Choose(q)
     begin(traverse(these)(f))
     f.state
@@ -209,9 +205,9 @@ private[sequential] object GeneralEnumeratorOps {
   }
   
   final class Find[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
-    private[this] var r: Option[A] = None
-    override def apply(x: A): Unit = if (p(x)) { r = Some(x); begin.break() }
-    def state: Option[A] = r
+    private[this] var r: Maybe[A] = Trap
+    override def apply(x: A): Unit = if (p(x)) { r = Free(x); begin.break() }
+    def state: Maybe[A] = r
   }
   
   final class Forall[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
@@ -233,8 +229,8 @@ private[sequential] object GeneralEnumeratorOps {
   }
   
   final class Choose[-A, +B](q: scala.PartialFunction[A, B]) extends AbstractFunction1[A, Unit] {
-    private[this] var r: Option[B] = None
-    override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Some(q(x)); begin.break() }
-    def state: Option[B] = r
+    private[this] var r: Maybe[B] = Trap
+    override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Free(q(x)); begin.break() }
+    def state: Maybe[B] = r
   }
 }

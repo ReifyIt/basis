@@ -61,14 +61,14 @@ private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Arr
     throw new NoSuchElementException(key.toString)
   }
   
-  override def get(key: A @uncheckedVariance): Option[T] = {
+  override def get(key: A @uncheckedVariance): Maybe[T] = {
     var i = 0
     val n = slots.length
     while (i < n) {
-      if (key == slots(i)) return Some(slots(i + 1).asInstanceOf[T])
+      if (key == slots(i)) return Free(slots(i + 1).asInstanceOf[T])
       i += 2
     }
-    None
+    Trap
   }
   
   /** Returns a copy of this $collection that associates the given value with the given key.

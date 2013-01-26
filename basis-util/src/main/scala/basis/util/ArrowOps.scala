@@ -10,10 +10,10 @@ package basis.util
 /** Infix arrow (-> and →) associators.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   */
-final class ArrowOps[+A] {
+final class ArrowOps[+A](left: A) {
   def -> [B](right: B): (A, B) = macro ArrowMacros.->[A, B]
   
   def → [B](right: B): (A, B) = macro ArrowMacros.->[A, B]
@@ -23,11 +23,18 @@ private[util] object ArrowMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  def -> [A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(right: c.Expr[B]): c.Expr[(A, B)] = {
-    import c.{Expr, mirror, WeakTypeTag}
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[A] = {
+    import c.{Expr, prefix, typeCheck, weakTypeOf}
     import c.universe._
-    val Apply(_, left :: Nil) = c.prefix.tree
-    val PairType = appliedType(mirror.staticClass("scala.Tuple2").toType, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    Expr(New(PairType, left, right.tree))(WeakTypeTag(PairType))
+    val Apply(_, left :: Nil) = prefix.tree
+    Expr[A](typeCheck(left, weakTypeOf[A]))
+  }
+  
+  def -> [A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(right: c.Expr[B]): c.Expr[(A, B)] = {
+    import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
+    import c.universe._
+    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
+    val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
+    Expr(New(Tuple2ABTpe, unApply[A](c).tree, right.tree))(WeakTypeTag(Tuple2ABTpe))
   }
 }

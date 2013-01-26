@@ -54,12 +54,16 @@ private[collections] object MapFactory {
       (entries: c.Expr[(A, T)]*)
       (implicit CCTag: c.WeakTypeTag[CC[_, _]], ATag: c.WeakTypeTag[A], TTag: c.WeakTypeTag[T])
     : c.Expr[CC[A, T]] = {
-    import c.{Expr, prefix, Tree, WeakTypeTag}
+    import c.{Expr, prefix, Tree, weakTypeOf, WeakTypeTag}
     import c.universe._
-    var builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: TypeTree(TTag.tpe) :: Nil): Tree
-    builder = Apply(Select(builder, "expect"), Literal(Constant(entries.length)) :: Nil)
+    
+    var b: Tree = TypeApply(Select(prefix.tree, "Builder"), TypeTree(weakTypeOf[A]) :: TypeTree(weakTypeOf[T]) :: Nil)
+    b = Apply(Select(b, "expect"), Literal(Constant(entries.length)) :: Nil)
+    
     val xs = entries.iterator
-    while (xs.hasNext) builder = Apply(Select(builder, "$plus$eq"), xs.next().tree :: Nil)
-    Expr(Select(builder, "state"))(WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: TTag.tpe :: Nil)))
+    while (xs.hasNext) b = Apply(Select(b, "$plus$eq"), xs.next().tree :: Nil)
+    
+    implicit val CCATTag = WeakTypeTag[CC[A, T]](appliedType(weakTypeOf[CC[_, _]], weakTypeOf[A] :: weakTypeOf[T] :: Nil))
+    Expr[CC[A, T]](Select(b, "state"))
   }
 }

@@ -52,12 +52,16 @@ private[collections] object BuilderFactory {
       (elems: c.Expr[A]*)
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
-    import c.{Expr, prefix, Tree, WeakTypeTag}
+    import c.{Expr, prefix, Tree, weakTypeOf, WeakTypeTag}
     import c.universe._
-    var builder = TypeApply(Select(prefix.tree, "Builder"), TypeTree(ATag.tpe) :: Nil): Tree
-    builder = Apply(Select(builder, "expect"), Literal(Constant(elems.length)) :: Nil)
+    
+    var b: Tree = TypeApply(Select(prefix.tree, "Builder"), TypeTree(weakTypeOf[A]) :: Nil)
+    b = Apply(Select(b, "expect"), Literal(Constant(elems.length)) :: Nil)
+    
     val xs = elems.iterator
-    while (xs.hasNext) builder = Apply(Select(builder, "$plus$eq"), xs.next().tree :: Nil)
-    Expr(Select(builder, "state"))(WeakTypeTag(appliedType(CCTag.tpe, ATag.tpe :: Nil)))
+    while (xs.hasNext) b = Apply(Select(b, "$plus$eq"), xs.next().tree :: Nil)
+    
+    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    Expr[CC[A]](Select(b, "state"))
   }
 }

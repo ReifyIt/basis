@@ -7,13 +7,13 @@
 
 package basis.util
 
-/** Supplemental operations on `Double` values.
+/** Extended `Double` operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   */
-final class DoubleOps {
+final class DoubleOps(x: Double) {
   def isNaN: Boolean = macro DoubleMacros.isNaN
   
   def isInfinite: Boolean = macro DoubleMacros.isInfinite
@@ -33,59 +33,73 @@ private[util] object DoubleMacros {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  def isNaN(c: Context): c.Expr[Boolean] = {
-    import c.{Expr, prefix, TypeTag}
+  private def unApply(c: Context): c.Expr[Double] = {
+    import c.{Expr, prefix, typeCheck, weakTypeOf}
     import c.universe._
     val Apply(_, x :: Nil) = prefix.tree
-    val Double = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double")
-    Expr(Apply(Select(Double, "isNaN"), x :: Nil))(TypeTag.Boolean)
+    Expr[Double](typeCheck(x, weakTypeOf[Double]))
+  }
+  
+  def isNaN(c: Context): c.Expr[Boolean] = {
+    import c.Expr
+    import c.universe._
+    Expr[Boolean](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double"), "isNaN"),
+        unApply(c).tree :: Nil))
   }
   
   def isInfinite(c: Context): c.Expr[Boolean] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Double = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double")
-    Expr(Apply(Select(Double, "isInfinite"), x :: Nil))(TypeTag.Boolean)
+    Expr[Boolean](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double"), "isInfinite"),
+        unApply(c).tree :: Nil))
   }
   
   def abs(c: Context): c.Expr[Double] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
-    Expr(Apply(Select(Math, "abs"), x :: Nil))(TypeTag.Double)
+    Expr[Double](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "abs"),
+        unApply(c).tree :: Nil))
   }
   
   def min(c: Context)(y: c.Expr[Double]): c.Expr[Double] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
-    Expr(Apply(Select(Math, "min"), x :: y.tree :: Nil))(TypeTag.Double)
+    Expr[Double](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "min"),
+        unApply(c).tree :: y.tree :: Nil))
   }
   
   def max(c: Context)(y: c.Expr[Double]): c.Expr[Double] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
-    Expr(Apply(Select(Math, "max"), x :: y.tree :: Nil))(TypeTag.Double)
+    Expr[Double](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "max"),
+        unApply(c).tree :: y.tree :: Nil))
   }
   
   def sqrt(c: Context): c.Expr[Double] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Math = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math")
-    Expr(Apply(Select(Math, "sqrt"), x :: Nil))(TypeTag.Double)
+    Expr[Double](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "sqrt"),
+        unApply(c).tree :: Nil))
   }
   
   def toLongBits(c: Context): c.Expr[Long] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.Expr
     import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    val Double = Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double")
-    Expr(Apply(Select(Double, "doubleToLongBits"), x :: Nil))(TypeTag.Long)
+    Expr[Long](
+      Apply(
+        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double"), "doubleToLongBits"),
+        unApply(c).tree :: Nil))
   }
 }

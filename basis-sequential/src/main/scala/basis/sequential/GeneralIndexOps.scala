@@ -58,11 +58,11 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceOption[B >: A](op: (B, B) => B): Option[B] =
-    macro GeneralIndexOps.reduceLeftOption[A, B]
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
+    macro GeneralIndexOps.mayReduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this $collection.
@@ -89,11 +89,11 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
-    macro GeneralIndexOps.reduceLeftOption[A, B]
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
+    macro GeneralIndexOps.mayReduceLeft[A, B]
   
   /** Returns the right-to-left application of a binary operator between a
     * start value and all elements in this $collection.
@@ -120,19 +120,19 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     * all elements in this $collection.
     * 
     * @param  op  the binary operator to apply left-recursively.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceRightOption[B >: A](op: (A, B) => B): Option[B] =
-    macro GeneralIndexOps.reduceRightOption[A, B]
+  def mayReduceRight[B >: A](op: (A, B) => B): Maybe[B] =
+    macro GeneralIndexOps.mayReduceRight[A, B]
   
   /** Returns the first element of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
-    * @return some found element, or none if no element satisfies `p`.
+    * @return the free found element, or a trap if no element satisfies `p`.
     * @group  Querying
     */
-  def find(p: A => Boolean): Option[A] =
+  def find(p: A => Boolean): Maybe[A] =
     macro GeneralIndexOps.find[A]
   
   /** Returns `true` if a predicate holds for all elements of this $collection.
@@ -167,10 +167,10 @@ final class GeneralIndexOps[+A](these: Index[A]) {
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
-    * @return some found and mapped element, or none if no element applies to `q`.
+    * @return the free found and mapped element, or a trap if no element applies to `q`.
     * @group  Querying
     */
-  def choose[B](q: PartialFunction[A, B]): Option[B] =
+  def choose[B](q: PartialFunction[A, B]): Maybe[B] =
     macro GeneralIndexOps.choose[A, B]
   
   /** Returns a strict operations interface to this $collection.
@@ -218,11 +218,11 @@ private[sequential] object GeneralIndexOps {
     : c.Expr[B] =
     new IndexMacros[c.type](c).reduceLeft[A, B](unApply[A](c))(op)
   
-  def reduceLeftOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
+  def mayReduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
-    : c.Expr[Option[B]] =
-    new IndexMacros[c.type](c).reduceLeftOption[A, B](unApply[A](c))(op)
+    : c.Expr[Maybe[B]] =
+    new IndexMacros[c.type](c).mayReduceLeft[A, B](unApply[A](c))(op)
   
   def foldRight[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
@@ -237,16 +237,16 @@ private[sequential] object GeneralIndexOps {
     : c.Expr[B] =
     new IndexMacros[c.type](c).reduceRight[A, B](unApply[A](c))(op)
   
-  def reduceRightOption[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
+  def mayReduceRight[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(A, B) => B])
-    : c.Expr[Option[B]] =
-    new IndexMacros[c.type](c).reduceRightOption[A, B](unApply[A](c))(op)
+    : c.Expr[Maybe[B]] =
+    new IndexMacros[c.type](c).mayReduceRight[A, B](unApply[A](c))(op)
   
   def find[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
-    : c.Expr[Option[A]] =
+    : c.Expr[Maybe[A]] =
     new IndexMacros[c.type](c).find[A](unApply[A](c))(p)
   
   def forall[A : c.WeakTypeTag]
@@ -270,7 +270,7 @@ private[sequential] object GeneralIndexOps {
   def choose[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (q: c.Expr[PartialFunction[A, B]])
-    : c.Expr[Option[B]] =
+    : c.Expr[Maybe[B]] =
     new IndexMacros[c.type](c).choose[A, B](unApply[A](c))(q)
   
   def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictIndexOps[A, Index[A]]] =

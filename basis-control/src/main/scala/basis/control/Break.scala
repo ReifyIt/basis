@@ -10,6 +10,7 @@ package basis.control
 /** An exception signalling a break in control flow.
   * 
   * @author Chris Sachs
+  * @group  Imperative
   */
 class Break extends Throwable {
   override def fillInStackTrace(): Throwable = this

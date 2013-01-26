@@ -17,7 +17,7 @@ import scala.reflect.macros.Context
   * 
   * @author Chris Sachs
   */
-private[sequential] final class IteratorMacros[C <: Context](val context: C) {
+private[sequential] class IteratorMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
@@ -29,7 +29,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     : Expr[Unit] = {
     val xs   = newTermName(fresh("xs$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    Expr[Unit](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) :: Nil,
         LabelDef(loop, Nil,
@@ -39,8 +39,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(f.tree, Select(Ident(xs), "head") :: Nil) ::
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),
-            EmptyTree)))
-    } (TypeTag.Unit)
+            EmptyTree))))
   }
   
   def foldLeft[A, B : WeakTypeTag]
@@ -51,7 +50,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val xs   = newTermName(fresh("xs$"))
     val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    Expr[B](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
@@ -63,8 +62,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Ident(r))
-    } (weakTypeTag[B])
+        Ident(r)))
   }
   
   def reduceLeft[A, B >: A : WeakTypeTag]
@@ -74,7 +72,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val xs   = newTermName(fresh("xs$"))
     val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    Expr[B](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         If(
@@ -94,24 +92,22 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Ident(r))
-    } (weakTypeTag[B])
+        Ident(r)))
   }
   
-  def reduceLeftOption[A, B >: A : WeakTypeTag]
+  def mayReduceLeft[A, B >: A : WeakTypeTag]
       (these: Expr[Iterator[A]])
       (op: Expr[(B, A) => B])
-    : Expr[Option[B]] = {
+    : Expr[Maybe[B]] = {
     val xs   = newTermName(fresh("xs$"))
     val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
-    val OptionType = appliedType(mirror.staticClass("basis.control.Option").toType, weakTypeOf[B] :: Nil)
-    Expr {
+    Expr[Maybe[B]](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) :: Nil,
         If(
           Select(Ident(xs), "isEmpty"),
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "None"),
+          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap"),
           Block(
             ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Select(Ident(xs), "head")) ::
             Apply(Select(Ident(xs), "step"), Nil) ::
@@ -123,24 +119,23 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                   Apply(Select(Ident(xs), "step"), Nil) :: Nil,
                   Apply(Ident(loop), Nil)),
                 EmptyTree)) :: Nil,
-            Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Some"), Ident(r) :: Nil))))
-    } (WeakTypeTag(OptionType))
+            Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"), Ident(r) :: Nil)))))
   }
   
   def find[A : WeakTypeTag]
       (these: Expr[Iterator[A]])
       (p: Expr[A => Boolean])
-    : Expr[Option[A]] = {
+    : Expr[Maybe[A]] = {
     val xs   = newTermName(fresh("xs$"))
     val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("x$"))
-    val OptionType = appliedType(mirror.staticClass("basis.control.Option").toType, weakTypeOf[A] :: Nil)
-    Expr {
+    implicit val MaybeATag = MaybeTag[A]
+    Expr[Maybe[A]](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionType),
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "None")) ::
+        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[A]]),
+          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap")) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -150,13 +145,12 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                 Apply(p.tree, Ident(x) :: Nil),
                 Assign(
                   Ident(r),
-                  Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Some"), Ident(x) :: Nil)),
+                  Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"), Ident(x) :: Nil)),
                 Block(
                   Apply(Select(Ident(xs), "step"), Nil) :: Nil,
                   Apply(Ident(loop), Nil)))),
             EmptyTree)) :: Nil,
-        Ident(r))
-    } (WeakTypeTag(OptionType))
+        Ident(r)))
   }
   
   def forall[A]
@@ -166,7 +160,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val xs   = newTermName(fresh("xs$"))
     val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    Expr[Boolean](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
@@ -180,8 +174,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                 Apply(Ident(loop), Nil)),
               Assign(Ident(r), Literal(Constant(false)))),
             EmptyTree)) :: Nil,
-        Ident(r))
-    } (TypeTag.Boolean)
+        Ident(r)))
   }
   
   def exists[A]
@@ -191,7 +184,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val xs   = newTermName(fresh("xs$"))
     val r    = newTermName(fresh("r$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    Expr[Boolean](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
@@ -205,8 +198,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                 Apply(Select(Ident(xs), "step"), Nil) :: Nil,
                 Apply(Ident(loop), Nil))),
             EmptyTree)) :: Nil,
-        Ident(r))
-    } (TypeTag.Boolean)
+        Ident(r)))
   }
   
   def count[A]
@@ -216,7 +208,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val xs   = newTermName(fresh("xs$"))
     val t    = newTermName(fresh("t$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    Expr[Int](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
@@ -231,25 +223,24 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Ident(t))
-    } (TypeTag.Int)
+        Ident(t)))
   }
   
   def choose[A, B : WeakTypeTag]
       (these: Expr[Iterator[A]])
       (q: Expr[PartialFunction[A, B]])
-    : Expr[Option[B]] = {
+    : Expr[Maybe[B]] = {
     val xs   = newTermName(fresh("xs$"))
     val r    = newTermName(fresh("r$"))
-    val f    = newTermName(fresh("pf$"))
+    val f    = newTermName(fresh("q$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("x$"))
-    val OptionType = appliedType(mirror.staticClass("basis.control.Option").toType, weakTypeOf[B] :: Nil)
-    Expr {
+    implicit val MaybeBTag = MaybeTag[B]
+    Expr[Maybe[B]](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(OptionType),
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "None")) ::
+        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[B]]),
+          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap")) ::
         ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -261,15 +252,14 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                 Assign(
                   Ident(r),
                   Apply(
-                    Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Some"),
+                    Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"),
                     Apply(Select(Ident(f), "applyOrElse"), Ident(x) ::
                       Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil)),
                 Block(
                   Apply(Select(Ident(xs), "step"), Nil) :: Nil,
                   Apply(Ident(loop), Nil)))),
             EmptyTree)) :: Nil,
-        Ident(r))
-    } (WeakTypeTag(OptionType))
+        Ident(r)))
   }
   
   def collect[A, B]
@@ -279,13 +269,15 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("b$"))
-    val f    = newTermName(fresh("pf$"))
+    val f    = newTermName(fresh("q$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("x$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -302,8 +294,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def map[A, B]
@@ -314,10 +305,12 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -326,8 +319,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def flatMap[A, B]
@@ -338,10 +330,12 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -350,8 +344,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def filter[A]
@@ -363,10 +356,12 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("x$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -379,8 +374,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def dropWhile[A]
@@ -393,10 +387,12 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val loop1 = newTermName(fresh("loop$"))
     val x     = newTermName(fresh("x$"))
     val loop2 = newTermName(fresh("loop$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -416,8 +412,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def takeWhile[A]
@@ -429,10 +424,12 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
     val x    = newTermName(fresh("x$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -446,8 +443,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                   Apply(Ident(loop), Nil)),
                 EmptyTree)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def span[A]
@@ -461,11 +457,15 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val loop1 = newTermName(fresh("loop$"))
     val x     = newTermName(fresh("x$"))
     val loop2 = newTermName(fresh("loop$"))
-    Expr {
+    implicit val builder1TypeTag = BuilderTypeTag(builder1)
+    implicit val builder1StateTag = BuilderStateTag(builder1)
+    implicit val builder2TypeTag = BuilderTypeTag(builder2)
+    implicit val builder2StateTag = BuilderStateTag(builder2)
+    Expr[(builder1.value.State, builder2.value.State)](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, a, TypeTree(BuilderType(builder1)), builder1.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder2)), builder2.tree) ::
+        ValDef(NoMods, a, TypeTree(builder1TypeTag.tpe), builder1.tree) ::
+        ValDef(NoMods, b, TypeTree(builder2TypeTag.tpe), builder2.tree) ::
         LabelDef(loop1, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -489,8 +489,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
             EmptyTree)) :: Nil,
         ApplyConstructor(
           Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Tuple2")),
-          Select(Ident(a), "state") :: Select(Ident(b), "state") :: Nil))
-    } (Tuple2Tag(StateTag(builder1), StateTag(builder2)))
+          Select(Ident(a), "state") :: Select(Ident(b), "state") :: Nil)))
   }
   
   def drop[A]
@@ -504,12 +503,14 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val b     = newTermName(fresh("b$"))
     val loop1 = newTermName(fresh("loop$"))
     val loop2 = newTermName(fresh("loop$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), lower.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -529,8 +530,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
               Apply(Select(Ident(xs), "step"), Nil) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def take[A]
@@ -543,12 +543,14 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val n    = newTermName(fresh("n$"))
     val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), upper.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -561,8 +563,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                 Apply(Ident(loop), Nil)),
               EmptyTree),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def slice[A]
@@ -576,12 +577,14 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val b     = newTermName(fresh("b$"))
     val loop1 = newTermName(fresh("loop$"))
     val loop2 = newTermName(fresh("loop$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(Modifiers(Flag.MUTABLE), n, TypeTree(), lower.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
             Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
@@ -606,8 +609,7 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                 Apply(Ident(loop2), Nil)),
               EmptyTree),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
   def zip[A, B]
@@ -618,11 +620,13 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
     val ys   = newTermName(fresh("ys$"))
     val b    = newTermName(fresh("b$"))
     val loop = newTermName(fresh("loop$"))
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Block(
         ValDef(NoMods, xs, TypeTree(), these.tree) ::
         ValDef(NoMods, ys, TypeTree(), those.tree) ::
-        ValDef(NoMods, b, TypeTree(BuilderType(builder)), builder.tree) ::
+        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -639,20 +643,35 @@ private[sequential] final class IteratorMacros[C <: Context](val context: C) {
                 Apply(Ident(loop), Nil)),
               EmptyTree),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state"))
-    } (StateTag(builder))
+        Select(Ident(b), "state")))
   }
   
-  private def BuilderType(builder: Expr[Builder[_, _]]): Type = builder.tree.symbol match {
-    case symbol: TermSymbol if symbol.isStable => singleType(NoPrefix, symbol)
-    case _ => builder.actualType
+  protected[this] def BuilderTypeTag(builder: Expr[Builder[_, _]]): WeakTypeTag[builder.value.type] =
+    WeakTypeTag[builder.value.type](builder.tree.symbol match {
+      case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
+      case _ => builder.actualType
+    })
+  
+  protected[this] def BuilderStateTag
+      (builder: Expr[Builder[_, _]])
+      (implicit BuilderTypeTag: WeakTypeTag[builder.value.type])
+    : WeakTypeTag[builder.value.State] = {
+    val BuilderTpc = mirror.staticClass("basis.collections.Builder").toType
+    val BuilderStateSym = BuilderTpc member newTypeName("State")
+    val BuilderStateTpe = typeRef(BuilderTypeTag.tpe, BuilderStateSym, Nil)
+    WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
   
-  private def StateTag(builder: Expr[Builder[_, _]]): WeakTypeTag[builder.value.State] = {
-    val StateSymbol = mirror.staticClass("basis.collections.Builder").toType.member(newTypeName("State"))
-    WeakTypeTag(typeRef(BuilderType(builder), StateSymbol, Nil))
+  implicit protected[this] def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {
+    val BasisControl = mirror.staticPackage("basis.control").moduleClass
+    val MaybeTpc = BasisControl.typeSignature.member(newTypeName("Maybe")).asType.toType
+    val MaybeATpe = appliedType(MaybeTpc, weakTypeOf[A] :: Nil)
+    WeakTypeTag[Maybe[A]](MaybeATpe)
   }
   
-  private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] =
-    WeakTypeTag(appliedType(mirror.staticClass("scala.Tuple2").toType, weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+  implicit private[this] def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
+    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
+    val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
+    WeakTypeTag[(A, B)](Tuple2ABTpe)
+  }
 }

@@ -55,14 +55,14 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
     macro GeneralContainerOps.reduceLeft[(A, T), B]
   
   /** Returns the repeated application of an associative binary operator
-    * between all entries of this $collection.
+    * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceOption[B >: (A, T)](op: (B, B) => B): Option[B] =
-    macro GeneralContainerOps.reduceLeftOption[(A, T), B]
+  def mayReduce[B >: (A, T)](op: (B, B) => B): Maybe[B] =
+    macro GeneralContainerOps.mayReduceLeft[(A, T), B]
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all entries of this $collection.
@@ -86,22 +86,22 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
     macro GeneralContainerOps.reduceLeft[(A, T), B]
   
   /** Returns the left-to-right application of a binary operator between
-    * all entries of this $collection.
+    * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceLeftOption[B >: (A, T)](op: (B, (A, T)) => B): Option[B] =
-    macro GeneralContainerOps.reduceLeftOption[(A, T), B]
+  def mayReduceLeft[B >: (A, T)](op: (B, (A, T)) => B): Maybe[B] =
+    macro GeneralContainerOps.mayReduceLeft[(A, T), B]
   
-  /** Returns the first entry of this $collection that satisfies a predicate.
+  /** Returns the first element of this $collection that satisfies a predicate.
     * 
-    * @param  p   the predicate to test entries against.
-    * @return some found entry, or none if no entry satisfies `p`.
+    * @param  p   the predicate to test elements against.
+    * @return the free found element, or a trap if no element satisfies `p`.
     * @group  Querying
     */
-  def find(p: ((A, T)) => Boolean): Option[(A, T)] =
+  def find(p: ((A, T)) => Boolean): Maybe[(A, T)] =
     macro GeneralContainerOps.find[(A, T)]
   
   /** Returns `true` if a predicate holds for all entries of this $collection.
@@ -131,15 +131,15 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
   def count(p: ((A, T)) => Boolean): Int =
     macro GeneralContainerOps.count[(A, T)]
   
-  /** Returns the application of a partial function to the first entry
+  /** Returns the application of a partial function to the first element
     * of this $collection for which the function is defined.
     * 
-    * @param  q   the partial function to test entries against and to apply
-    *             to the first found entry.
-    * @return some found and mapped entry, or none if no entry applies to `q`.
+    * @param  q   the partial function to test elements against and to apply
+    *             to the first found element.
+    * @return the free found and mapped element, or a trap if no element applies to `q`.
     * @group  Querying
     */
-  def choose[B](q: PartialFunction[(A, T), B]): Option[B] =
+  def choose[B](q: PartialFunction[(A, T), B]): Maybe[B] =
     macro GeneralContainerOps.choose[(A, T), B]
   
   /** Returns a strict operations interface to this $collection.

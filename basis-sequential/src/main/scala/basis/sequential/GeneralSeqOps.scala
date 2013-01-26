@@ -58,11 +58,11 @@ final class GeneralSeqOps[+A](these: Seq[A]) {
     * between all elements of this $collection.
     * 
     * @param  op  the associative binary operator to apply.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceOption[B >: A](op: (B, B) => B): Option[B] =
-    macro GeneralContainerOps.reduceLeftOption[A, B]
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
+    macro GeneralContainerOps.mayReduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this $collection.
@@ -89,19 +89,19 @@ final class GeneralSeqOps[+A](these: Seq[A]) {
     * all elements of this $collection.
     * 
     * @param  op  the binary operator to apply right-recursively.
-    * @return some reduced value, or none if this $collection is empty.
+    * @return the free reduced value, or a trap if this $collection is empty.
     * @group  Reducing
     */
-  def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] =
-    macro GeneralContainerOps.reduceLeftOption[A, B]
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
+    macro GeneralContainerOps.mayReduceLeft[A, B]
   
   /** Returns the first element of this $collection that satisfies a predicate.
     * 
     * @param  p   the predicate to test elements against.
-    * @return some found element, or none if no element satisfies `p`.
+    * @return the free found element, or a trap if no element satisfies `p`.
     * @group  Querying
     */
-  def find(p: A => Boolean): Option[A] =
+  def find(p: A => Boolean): Maybe[A] =
     macro GeneralContainerOps.find[A]
   
   /** Returns `true` if a predicate holds for all elements of this $collection.
@@ -136,10 +136,10 @@ final class GeneralSeqOps[+A](these: Seq[A]) {
     * 
     * @param  q   the partial function to test elements against and to apply
     *             to the first found element.
-    * @return some found and mapped element, or none if no element applies to `q`.
+    * @return the free found and mapped element, or a trap if no element applies to `q`.
     * @group  Querying
     */
-  def choose[B](q: PartialFunction[A, B]): Option[B] =
+  def choose[B](q: PartialFunction[A, B]): Maybe[B] =
     macro GeneralContainerOps.choose[A, B]
   
   /** Returns a strict operations interface to this $collection.

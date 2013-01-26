@@ -56,7 +56,6 @@ object BasisBuild extends Build {
     settings     = commonSettings,
     dependencies =
       Seq(BasisCollections % "compile->compile;test->test",
-          BasisControl,
           BasisSequential % "test->test",
           BasisMemory,
           BasisUtil)
@@ -66,7 +65,9 @@ object BasisBuild extends Build {
     id           = "basis-control",
     base         = file("basis-control"),
     settings     = commonSettings,
-    dependencies = Seq(BasisUtil)
+    dependencies =
+      Seq(BasisRuntime,
+          BasisUtil)
   )
   
   lazy val BasisGenerators = Project(
@@ -161,7 +162,10 @@ object BasisBuild extends Build {
     scalacOptions in doc <++= (version, baseDirectory in LocalProject("basis")) map { (version, baseDirectory) =>
       val tagOrBranch = if (version.endsWith("-SNAPSHOT")) "master" else "v" + version
       val docSourceUrl = "https://github.com/reifyit/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-      Seq("-groups", "-implicits", "-diagrams",
+      Seq("-groups",
+          "-implicits",
+          "-implicits-hide:basis.control.MaybeOps,.",
+          "-diagrams",
           "-sourcepath", baseDirectory.getAbsolutePath,
           "-doc-source-url", docSourceUrl)
     }
