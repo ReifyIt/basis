@@ -40,4 +40,9 @@ abstract class StringBuilder[-From] extends Builder[From, Int] {
       else 0xFFFD
     }
   }
+  
+  def ++= (chars: CharSequence): this.type = {
+    append(chars)
+    this
+  }
 }

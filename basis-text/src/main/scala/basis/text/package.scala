@@ -19,6 +19,9 @@ package basis
   * @groupprio  Builders  3
   */
 package object text {
+  /** Implicitly adds extended operations to `String` values. */
+  implicit def StringOps(s: String): StringOps = new StringOps(s)
+  
   /** Implicitly returns a new String builder.
     * @group Builders */
   implicit def StringBuilder: StringBuilder[Any] { type State = String } = new JavaStringBuilder
