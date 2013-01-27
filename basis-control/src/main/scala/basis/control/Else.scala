@@ -125,8 +125,7 @@ private[control] final class FreeBoolean(value: Boolean) extends Free[Boolean] w
   
   override val bind: Boolean = value
   
-  override def toString: String =
-    new java.lang.StringBuilder("Free").append('(').append(bind).append(')').toString
+  override def toString: String = if (value) "True" else "False"
 }
 
 private[control] final class FreeRef[+A](value: A) extends Free[A] {
@@ -175,9 +174,6 @@ object Free {
   /** Returns a `Free` binding with a `Double` value.
     * @group Constructing */
   def apply(value: Double): Free[Double] = new FreeDouble(value)
-  
-  private[this] val True: Free[Boolean] = new FreeBoolean(true)
-  private[this] val False: Free[Boolean] = new FreeBoolean(false)
   
   /** Returns a `Free` binding with a `Boolean` value.
     * @group Constructing */

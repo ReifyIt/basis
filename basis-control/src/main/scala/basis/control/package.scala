@@ -52,13 +52,31 @@ package object control {
     def apply[A](expr: => A): Try[A] = macro FuseMacros.Try[A]
   }
   
-  /** Implicitly adds standard operations to `Else` bindings.
+  /** A nondeterministic `Boolean` value; either `True`, `False`, or an arbitrary `Trap`.
+    * @group Conditional
+    * @template */
+  type Truth = Boolean Else Any
+  
+  /** Returns the `true` [[Truth]] value.
+    * @group Conditional */
+  val True: Free[Boolean] = new FreeBoolean(true)
+  
+  /** Returns the `false` [[Truth]] value.
+    * @group Conditional */
+  val False: Free[Boolean] = new FreeBoolean(false)
+  
+  /** Implicitly adds operations to `Else` values.
     * @group Conditional */
   implicit def ElseOps[A, B](self: A Else B): ElseOps[A, B] =
     macro ElseMacros.ElseOps[A, B]
   
-  /** Implicitly adds standard operations to `Maybe` bindings.
+  /** Implicitly adds operations to `Maybe` values.
     * @group Conditional */
   implicit def MaybeOps[A](self: Maybe[A]): ElseOps[A, Nothing] =
     macro ElseMacros.ElseOps[A, Nothing]
+  
+  /** Implicitly adds operations to `Truth` values.
+    * @group Conditional */
+  implicit def TruthOps(self: Truth): TruthOps =
+    macro TruthMacros.TruthOps
 }
