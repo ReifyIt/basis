@@ -10,7 +10,8 @@ package basis.control
 import basis.runtime._
 import basis.util.MurmurHash3._
 
-/** A conditional binding; either a [[Free]] value or a [[Trap]] value.
+/** A conditional binding; either an intentional [[Bind]] or an alternative [[Trap]].
+  * [[ElseOps]] provides standard operations available to all `Else` values.
   * 
   * @author   Chris Sachs
   * @version  0.1
@@ -18,109 +19,111 @@ import basis.util.MurmurHash3._
   * @group    Conditional
   * 
   * @groupprio  Determining   1
-  * @groupprio  Evaluating    2
-  * @groupprio  Composing     3
-  * @groupprio  Recovering    4
+  * @groupprio  Binding       2
+  * @groupprio  Evaluating    3
+  * @groupprio  Composing     4
+  * @groupprio  Recovering    5
   * @groupname  Handling      Exception Handling
-  * @groupprio  Handling      5
+  * @groupprio  Handling      6
   */
 sealed abstract class Else[@specialized(Int, Long, Float, Double, Boolean) +A, +B] private[control] {
-  /** Returns `true` if this is a `Free` value, otherwise returns `false`.
+  /** Returns `true` if this is a `Bind`, otherwise returns `false`.
     * @group Determining */
   def canBind: Boolean
   
-  /** Returns `true` if this is a `Trap` value, otherwise returns `false`.
+  /** Returns `true` if this is a `Trap`, otherwise returns `false`.
     * @group Determining */
   def canTrap: Boolean
   
-  /** Returns `true` if this is a `Trap` value with a safe `trap` method
+  /** Returns `true` if this is a `Trap` with a safe `trap` method
     * (one that won't throw an exception). Returns `false` if calling
-    * `trap` will throw an exception.
+    * `trap` ''will'' throw an exception.
     * @group Determining */
   def canSafelyTrap: Boolean
   
-  /** Returns this `Free` value, otherwise throws an exception if `!canBind`.
-    * @group Evaluating */
+  /** Returns the value of this `Bind`, or throws an exception if `!canBind`.
+    * If this is a `Trap[Throwable]`, throws the value of this `Trap`.
+    * @group Binding */
   def bind: A
   
-  /** Returns this `Trap` value, otherwise throws an exception if `!canSafelyTrap`.
-    * @group Evaluating */
+  /** Returns the value of this `Trap`, or throws an exception if `!canSafelyTrap`.
+    * @group Binding */
   def trap: B
 }
 
-/** A consequent [[Else]] binding.
+/** An intentional [[Else]] binding.
   * @group Conditional */
-sealed abstract class Free[+A] private[control] extends (A Else Nothing) {
+sealed abstract class Bind[+A] private[control] extends (A Else Nothing) {
   final override def canBind: Boolean = true
   
   final override def canTrap: Boolean = false
   
   final override def canSafelyTrap: Boolean = false
   
-  final override def trap: Nothing = throw new UnsupportedOperationException("Can't trap a Free value.")
+  final override def trap: Nothing = throw new UnsupportedOperationException("Can't trap Bind.")
 }
 
-private[control] final class FreeInt(value: Int) extends Free[Int] with Reified {
+private[control] final class BindInt(value: Int) extends Bind[Int] with Reified {
   protected override def T: TypeHint[Int] = TypeHint.Int
   
   override val bind: Int = value
   
   override def equals(other: Any): Boolean =
-    other.isInstanceOf[FreeInt] && bind == other.asInstanceOf[FreeInt].bind
+    other.isInstanceOf[BindInt] && bind == other.asInstanceOf[BindInt].bind
   
   override def hashCode: Int =
     mash(mix(-295445459, bind.##))
   
   override def toString: String =
-    new java.lang.StringBuilder("Free").append('(').append(bind).append(')').toString
+    new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
 }
 
-private[control] final class FreeLong(value: Long) extends Free[Long] with Reified {
+private[control] final class BindLong(value: Long) extends Bind[Long] with Reified {
   protected override def T: TypeHint[Long] = TypeHint.Long
   
   override val bind: Long = value
   
   override def equals(other: Any): Boolean =
-    other.isInstanceOf[FreeLong] && bind == other.asInstanceOf[FreeLong].bind
+    other.isInstanceOf[BindLong] && bind == other.asInstanceOf[BindLong].bind
   
   override def hashCode: Int =
     mash(mix(-295445459, bind.##))
   
   override def toString: String =
-    new java.lang.StringBuilder("Free").append('(').append(bind).append(')').toString
+    new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
 }
 
-private[control] final class FreeFloat(value: Float) extends Free[Float] with Reified {
+private[control] final class BindFloat(value: Float) extends Bind[Float] with Reified {
   protected override def T: TypeHint[Float] = TypeHint.Float
   
   override val bind: Float = value
   
   override def equals(other: Any): Boolean =
-    other.isInstanceOf[FreeFloat] && bind == other.asInstanceOf[FreeFloat].bind
+    other.isInstanceOf[BindFloat] && bind == other.asInstanceOf[BindFloat].bind
   
   override def hashCode: Int =
     mash(mix(-295445459, bind.##))
   
   override def toString: String =
-    new java.lang.StringBuilder("Free").append('(').append(bind).append(')').toString
+    new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
 }
 
-private[control] final class FreeDouble(value: Double) extends Free[Double] with Reified {
+private[control] final class BindDouble(value: Double) extends Bind[Double] with Reified {
   protected override def T: TypeHint[Double] = TypeHint.Double
   
   override val bind: Double = value
   
   override def equals(other: Any): Boolean =
-    other.isInstanceOf[FreeDouble] && bind == other.asInstanceOf[FreeDouble].bind
+    other.isInstanceOf[BindDouble] && bind == other.asInstanceOf[BindDouble].bind
   
   override def hashCode: Int =
     mash(mix(-295445459, bind.##))
   
   override def toString: String =
-    new java.lang.StringBuilder("Free").append('(').append(bind).append(')').toString
+    new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
 }
 
-private[control] final class FreeBoolean(value: Boolean) extends Free[Boolean] with Reified {
+private[control] final class BindBoolean(value: Boolean) extends Bind[Boolean] with Reified {
   protected override def T: TypeHint[Boolean] = TypeHint.Boolean
   
   override val bind: Boolean = value
@@ -128,56 +131,56 @@ private[control] final class FreeBoolean(value: Boolean) extends Free[Boolean] w
   override def toString: String = if (value) "True" else "False"
 }
 
-private[control] final class FreeRef[+A](value: A) extends Free[A] {
+private[control] final class BindRef[+A](value: A) extends Bind[A] {
   override val bind: A = value
   
   override def equals(other: Any): Boolean =
-    other.isInstanceOf[FreeRef[_]] && bind.equals(other.asInstanceOf[FreeRef[_]].bind)
+    other.isInstanceOf[BindRef[_]] && bind.equals(other.asInstanceOf[BindRef[_]].bind)
   
   override def hashCode: Int =
     mash(mix(-295445459, bind.hashCode))
   
   override def toString: String =
-    new java.lang.StringBuilder("Free").append('(').append(bind).append(')').toString
+    new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
 }
 
-/** A factory for [[Free]] bindings.
+/** A factory for [[Bind]] values.
   * 
   * @group  Conditional
   * 
   * @groupprio  Constructing  1
   */
-object Free {
-  /** Returns a `Free` binding with a polymorphic value.
+object Bind {
+  /** Binds a polymorphic value.
     * @group Constructing */
-  def apply[A](value: A): Free[A] = {
-    if (value.isInstanceOf[Int]) new FreeInt(value.asInstanceOf[Int]).asInstanceOf[Free[A]]
-    else if (value.isInstanceOf[Long]) new FreeLong(value.asInstanceOf[Long]).asInstanceOf[Free[A]]
-    else if (value.isInstanceOf[Float]) new FreeFloat(value.asInstanceOf[Float]).asInstanceOf[Free[A]]
-    else if (value.isInstanceOf[Double]) new FreeDouble(value.asInstanceOf[Double]).asInstanceOf[Free[A]]
-    else if (value.isInstanceOf[Boolean]) (if (value.asInstanceOf[Boolean]) True else False).asInstanceOf[Free[A]]
-    else new FreeRef(value)
+  def apply[A](value: A): Bind[A] = {
+    if (value.isInstanceOf[Int]) new BindInt(value.asInstanceOf[Int]).asInstanceOf[Bind[A]]
+    else if (value.isInstanceOf[Long]) new BindLong(value.asInstanceOf[Long]).asInstanceOf[Bind[A]]
+    else if (value.isInstanceOf[Float]) new BindFloat(value.asInstanceOf[Float]).asInstanceOf[Bind[A]]
+    else if (value.isInstanceOf[Double]) new BindDouble(value.asInstanceOf[Double]).asInstanceOf[Bind[A]]
+    else if (value.isInstanceOf[Boolean]) (if (value.asInstanceOf[Boolean]) True else False).asInstanceOf[Bind[A]]
+    else new BindRef(value)
   }
   
-  /** Returns a `Free` binding with an `Int` value.
+  /** Binds an `Int` value.
     * @group Constructing */
-  def apply(value: Int): Free[Int] = new FreeInt(value)
+  def apply(value: Int): Bind[Int] = new BindInt(value)
   
-  /** Returns a `Free` binding with a `Long` value.
+  /** Binds a `Long` value.
     * @group Constructing */
-  def apply(value: Long): Free[Long] = new FreeLong(value)
+  def apply(value: Long): Bind[Long] = new BindLong(value)
   
-  /** Returns a `Free` binding with a `Float` value.
+  /** Binds a `Float` value.
     * @group Constructing */
-  def apply(value: Float): Free[Float] = new FreeFloat(value)
+  def apply(value: Float): Bind[Float] = new BindFloat(value)
   
-  /** Returns a `Free` binding with a `Double` value.
+  /** Binds a `Double` value.
     * @group Constructing */
-  def apply(value: Double): Free[Double] = new FreeDouble(value)
+  def apply(value: Double): Bind[Double] = new BindDouble(value)
   
-  /** Returns a `Free` binding with a `Boolean` value.
+  /** Binds a `Boolean` value.
     * @group Constructing */
-  def apply(value: Boolean): Free[Boolean] = if (value) True else False
+  def apply(value: Boolean): Bind[Boolean] = if (value) True else False
 }
 
 /** An alternative [[Else]] binding.
@@ -187,7 +190,7 @@ sealed abstract class Trap[+B] private[control] extends (Nothing Else B) {
   
   final override def canTrap: Boolean = true
   
-  override def bind: Nothing = throw new UnsupportedOperationException("Can't bind a Trap.")
+  override def bind: Nothing = throw new UnsupportedOperationException("Can't bind Trap.")
 }
 
 private[control] final class TrapRef[+B](value: B) extends Trap[B] {
@@ -210,7 +213,7 @@ private[control] final class TrapRef[+B](value: B) extends Trap[B] {
     new java.lang.StringBuilder("Trap").append('(').append(trap).append(')').toString
 }
 
-/** The unit [[Else]] binding, and a factory for [[Trap]] bindings.
+/** The unit [[Else]] binding, and a factory for [[Trap]] values.
   * 
   * @group  Conditional
   * 
@@ -235,7 +238,7 @@ object Trap extends Trap[Nothing] {
     * @group Constructing */
   def apply[T >: Nothing Else Nothing]: T = this
   
-  /** Returns a new `Trap` value.
+  /** Returns a new `Trap`.
     * @group Constructing */
   def apply[B](value: B): Trap[B] = new TrapRef(value)
   

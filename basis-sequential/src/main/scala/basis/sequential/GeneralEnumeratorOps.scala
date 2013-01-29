@@ -69,7 +69,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   def mayReduce[B >: A](op: (B, B) => B): Maybe[B] = {
     val f = new GeneralEnumeratorOps.ReduceLeft(op)
     traverse(these)(f)
-    if (f.isDefined) Free(f.state) else Trap
+    if (f.isDefined) Bind(f.state) else Trap
   }
   
   /** Returns the left-to-right application of a binary operator between a
@@ -111,7 +111,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     val f = new GeneralEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B])
   //val f = new GeneralEnumeratorOps.ReduceLeft(op) // SI-6482
     traverse(these)(f)
-    if (f.isDefined) Free(f.state) else Trap
+    if (f.isDefined) Bind(f.state) else Trap
   }
   
   /** Returns the first element of this $collection that satisfies a predicate.
@@ -206,7 +206,7 @@ private[sequential] object GeneralEnumeratorOps {
   
   final class Find[A](p: A => Boolean) extends AbstractFunction1[A, Unit] {
     private[this] var r: Maybe[A] = Trap
-    override def apply(x: A): Unit = if (p(x)) { r = Free(x); begin.break() }
+    override def apply(x: A): Unit = if (p(x)) { r = Bind(x); begin.break() }
     def state: Maybe[A] = r
   }
   
@@ -230,7 +230,7 @@ private[sequential] object GeneralEnumeratorOps {
   
   final class Choose[-A, +B](q: scala.PartialFunction[A, B]) extends AbstractFunction1[A, Unit] {
     private[this] var r: Maybe[B] = Trap
-    override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Free(q(x)); begin.break() }
+    override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Bind(q(x)); begin.break() }
     def state: Maybe[B] = r
   }
 }

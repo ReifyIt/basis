@@ -17,7 +17,7 @@ import scala.Predef.<:<
   */
 private[control] class ElseMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
-  import universe._
+  import universe.{Bind => _, _}
   
   val universe: context.universe.type = context.universe
   
@@ -116,7 +116,7 @@ private[control] class ElseMacros[C <: Context](val context: C) {
         If(
           Select(Ident(r), "canBind"),
           Apply(
-            Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"),
+            Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Bind"),
             Apply(f.tree, Select(Ident(r), "bind") :: Nil) :: Nil),
           TypeApply(Select(Ident(r), "asInstanceOf"), TypeTree(ElseTag[Nothing, B].tpe) :: Nil))))
   }
@@ -150,7 +150,7 @@ private[control] class ElseMacros[C <: Context](val context: C) {
             Select(Select(Ident(r), "canSafelyTrap"), "$amp$amp"),
             Apply(Select(Ident(f), "isDefinedAt"), Select(Ident(r), "trap") :: Nil) :: Nil),
           Apply(
-            Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"),
+            Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Bind"),
             Apply(
               Select(Ident(f), "applyOrElse"),
               Select(Ident(r), "trap") ::
@@ -196,8 +196,8 @@ private[control] class ElseMacros[C <: Context](val context: C) {
   implicit protected def ElseTag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[A Else B] =
     WeakTypeTag(appliedType(mirror.staticClass("basis.control.Else").toType, weakTypeOf[A] :: weakTypeOf[B] :: Nil))
   
-  implicit protected def FreeTag[A : WeakTypeTag]: WeakTypeTag[Free[A]] =
-    WeakTypeTag(appliedType(mirror.staticClass("basis.control.Free").toType, weakTypeOf[A] :: Nil))
+  implicit protected def BindTag[A : WeakTypeTag]: WeakTypeTag[Bind[A]] =
+    WeakTypeTag(appliedType(mirror.staticClass("basis.control.Bind").toType, weakTypeOf[A] :: Nil))
   
   implicit protected def TrapTag[B : WeakTypeTag]: WeakTypeTag[Trap[B]] =
     WeakTypeTag(appliedType(mirror.staticClass("basis.control.Trap").toType, weakTypeOf[B] :: Nil))

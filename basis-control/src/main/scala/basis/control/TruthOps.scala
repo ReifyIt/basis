@@ -7,7 +7,7 @@
 
 package basis.control
 
-/** Operations on [[Truth]] values.
+/** Standard [[Truth]] operations.
   * 
   * @author   Chris Sachs
   * @version  0.1
@@ -17,11 +17,11 @@ package basis.control
   * @groupprio  Evaluating  1
   */
 final class TruthOps(truth: Truth) {
-  /** Returns `true` if this is the `True` [[Truth]] value.
+  /** Returns `true` if this is the `true` value of the `Truth`, otherwise returns `false`.
     * @group Evaluating */
   def isTrue: Boolean = macro TruthMacros.isTrue
   
-  /** Returns `true` if this is the `False` [[Truth]] value.
+  /** Returns `true` if this is the `false` value of the `Truth`, otherwise returns `false`.
     * @group Evaluating */
   def isFalse: Boolean = macro TruthMacros.isFalse
 }

@@ -16,7 +16,7 @@ import scala.reflect.macros.Context
   */
 private[control] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
-  import universe._
+  import universe.{Bind => _, _}
   
   def fuse[A : WeakTypeTag, B : WeakTypeTag]
       (expr: Expr[A Else B])
@@ -27,7 +27,7 @@ private[control] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
       Try(
         expr.tree,
         CaseDef(
-          Bind(e, Typed(Ident(nme.WILDCARD), TypeTree(weakTypeOf[Throwable]))),
+          universe.Bind(e, Typed(Ident(nme.WILDCARD), TypeTree(weakTypeOf[Throwable]))),
           EmptyTree,
           Apply(trip.tree, Ident(e) :: Nil)) :: Nil,
         EmptyTree))
@@ -75,9 +75,9 @@ private[control] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
         Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap"), "NonFatal")
       )(WeakTypeTag(TrapNonFatalTpe))
     val BindExpr =
-      Expr[Free[A]](
+      Expr[Bind[A]](
         Apply(
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"),
+          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Bind"),
           expr.tree :: Nil))
     fuse[A, Throwable](BindExpr)(TrapNonFatal)
   }

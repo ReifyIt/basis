@@ -65,7 +65,7 @@ private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Arr
     var i = 0
     val n = slots.length
     while (i < n) {
-      if (key == slots(i)) return Free(slots(i + 1).asInstanceOf[T])
+      if (key == slots(i)) return Bind(slots(i + 1).asInstanceOf[T])
       i += 2
     }
     Trap

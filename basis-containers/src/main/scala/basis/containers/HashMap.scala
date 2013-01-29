@@ -203,7 +203,7 @@ final class HashMap[+A, +T] private[containers] (
     val branch = choose(keyHash, shift)
     (follow(branch): @switch) match {
       case VOID => Trap
-      case LEAF => if (key == getKey(branch)) Free(getValue(branch)) else Trap
+      case LEAF => if (key == getKey(branch)) Bind(getValue(branch)) else Trap
       case TREE => getTree(branch).get(key, keyHash, shift + 5)
       case KNOT => getKnot(branch).get(key)
     }

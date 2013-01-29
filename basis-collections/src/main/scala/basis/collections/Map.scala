@@ -86,7 +86,7 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[A, T]] with Container[
     val entries = iterator
     while (!entries.isEmpty) {
       val entry = entries.head
-      if (key == entry._1) return Free(entry._2)
+      if (key == entry._1) return Bind(entry._2)
       entries.step()
     }
     Trap
