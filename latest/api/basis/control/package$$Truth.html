@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Maybe - basis.control.Maybe</title>
-          <meta name="description" content="Maybe - basis.control.Maybe" />
-          <meta name="keywords" content="Maybe basis.control.Maybe" />
+          <title>Truth - basis.control.Truth</title>
+          <meta name="description" content="Truth - basis.control.Truth" />
+          <meta name="keywords" content="Truth basis.control.Truth" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'basis.control.package$$Maybe$';
+            var hash = 'basis.control.package$$Truth';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -27,24 +27,26 @@
    	  </script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <img src="../../lib/object_big.png" />
+        <img src="../../lib/type_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a></p>
-        <h1>Maybe</h1>
+        <h1>Truth</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Maybe</span>
+        <span class="name">Truth</span><span class="result"> = <a href="Else.html" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="scala.Boolean">Boolean</span>, <span class="extype" name="scala.Any">Any</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A factory for <a href="package$$Maybe.html" class="extype" name="basis.control.Maybe">Maybe</a> bindings.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A nondeterministic <code>Boolean</code>; either <code>True</code>, <code>False</code>, or a <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>.
+<a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a> provides standard operations available to all <code>Truth</code> values.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -55,7 +57,7 @@
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol>
-                
+                <li class="group out"><span>Grouped</span></li>
                 <li class="alpha in"><span>Alphabetic</span></li>
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
@@ -64,7 +66,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.control.Maybe"><span>Maybe</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.control.Truth"><span>Truth</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -86,10 +88,82 @@
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="basis.control.Else#bind" visbl="pub" data-isabs="true" fullComment="yes" group="Binding">
+      <a id="bind:A"></a>
+      <a id="bind:A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bind</span><span class="result">: <span class="extype" name="basis.control.Else.A">A</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or throws an exception if <code>!canBind</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or throws an exception if <code>!canBind</code>.
+If this is a <code>Trap[Throwable]</code>, throws the value of this <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+    </li><li name="basis.control.Else#canBind" visbl="pub" data-isabs="true" fullComment="yes" group="Determining">
+      <a id="canBind:Boolean"></a>
+      <a id="canBind:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">canBind</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Bind</code>, otherwise returns <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Bind</code>, otherwise returns <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+    </li><li name="basis.control.Else#canSafelyTrap" visbl="pub" data-isabs="true" fullComment="yes" group="Determining">
+      <a id="canSafelyTrap:Boolean"></a>
+      <a id="canSafelyTrap:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">canSafelyTrap</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Trap</code> with a safe <code>trap</code> method
+(one that won't throw an exception).</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Trap</code> with a safe <code>trap</code> method
+(one that won't throw an exception). Returns <code>false</code> if calling
+<code>trap</code> <i>will</i> throw an exception.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+    </li><li name="basis.control.Else#canTrap" visbl="pub" data-isabs="true" fullComment="yes" group="Determining">
+      <a id="canTrap:Boolean"></a>
+      <a id="canTrap:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">canTrap</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Trap</code>, otherwise returns <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Trap</code>, otherwise returns <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+    </li><li name="basis.control.Else#trap" visbl="pub" data-isabs="true" fullComment="yes" group="Binding">
+      <a id="trap:B"></a>
+      <a id="trap:B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trap</span><span class="result">: <span class="extype" name="basis.control.Else.B">B</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the value of this <code>Trap</code>, or throws an exception if <code>!canSafelyTrap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Trap</code>, or throws an exception if <code>!canSafelyTrap</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -155,46 +229,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.control.Maybe#MaybeToOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MaybeToOption[A](maybe:basis.control.package.Maybe[A]):Option[A]"></a>
-      <a id="MaybeToOption[A](Maybe[A]):Option[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">MaybeToOption</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="maybe">maybe: <a href="package$$Maybe.html" class="extype" name="basis.control.Maybe">Maybe</a>[<span class="extype" name="basis.control.Maybe.MaybeToOption.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="basis.control.Maybe.MaybeToOption.A">A</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>Some</code> with a <code>Free</code> value, or <code>None</code> for a <code>Trap</code>.</p>
-    </li><li name="basis.control.Maybe#OptionToMaybe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OptionToMaybe[A](option:Option[A]):basis.control.package.Maybe[A]"></a>
-      <a id="OptionToMaybe[A](Option[A]):Maybe[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">OptionToMaybe</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="option">option: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="basis.control.Maybe.OptionToMaybe.A">A</span>]</span>)</span><span class="result">: <a href="package$$Maybe.html" class="extype" name="basis.control.Maybe">Maybe</a>[<span class="extype" name="basis.control.Maybe.OptionToMaybe.A">A</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>Free</code> with <code>Some</code> value, or a <code>Trap</code> for <code>None</code>.</p>
-    </li><li name="basis.control.Maybe#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply[A](value:A):basis.control.package.Maybe[A]"></a>
-      <a id="apply[A](A):Maybe[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="basis.control.Maybe.apply.A">A</span></span>)</span><span class="result">: <a href="package$$Maybe.html" class="extype" name="basis.control.Maybe">Maybe</a>[<span class="extype" name="basis.control.Maybe.apply.A">A</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns a <code>Free</code> binding with a non-<code>null</code> value,
-or a <code>Trap</code> for a <code>null</code> value.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -370,19 +404,6 @@ or a <code>Trap</code> for a <code>null</code> value.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.Maybe#unapply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="unapply[A](maybe:basis.control.package.Maybe[A]):Option[A]"></a>
-      <a id="unapply[A](Maybe[A]):Option[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">unapply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="maybe">maybe: <a href="package$$Maybe.html" class="extype" name="basis.control.Maybe">Maybe</a>[<span class="extype" name="basis.control.Maybe.unapply.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="basis.control.Maybe.unapply.A">A</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Extracts a <code>Maybe</code> binding as an <code>Option</code>.</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -451,6 +472,12 @@ or a <code>Trap</code> for a <code>null</code> value.</p>
         <div id="groupedMembers">
         <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
+              
+            </div><div class="group" name="Determining">
+              <h3>Determining</h3>
+              
+            </div><div class="group" name="Binding">
+              <h3>Binding</h3>
               
             </div>
         </div>

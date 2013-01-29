@@ -29,9 +29,9 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="package$$Try$.html" title="Go to companion"><img src="../../lib/type_to_object_big.png" /></a>
+        <img src="../../lib/type_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.control">control</a></p>
-        <h1><a href="package$$Try$.html" title="Go to companion">Try</a></h1>
+        <h1>Try</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -44,7 +44,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Either a <a href="Free.html" class="extype" name="basis.control.Free">Free</a> value or a <a href="Trap.html" class="extype" name="basis.control.Trap">trapped</a> exception.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A conditional binding with an exceptional alternative.
+<a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a> provides standard operations available to all <code>Try</code> values.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-control/src/main/scala/basis/control/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -88,7 +90,7 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="basis.control.Else#bind" visbl="pub" data-isabs="true" fullComment="yes" group="Evaluating">
+              <ol><li name="basis.control.Else#bind" visbl="pub" data-isabs="true" fullComment="yes" group="Binding">
       <a id="bind:A"></a>
       <a id="bind:A"></a>
       <h4 class="signature">
@@ -100,7 +102,8 @@
         <span class="name">bind</span><span class="result">: <span class="extype" name="basis.control.Else.A">A</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns this <code>Free</code> value, otherwise throws an exception if <code>!canBind</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this <code>Free</code> value, otherwise throws an exception if <code>!canBind</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or throws an exception if <code>!canBind</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or throws an exception if <code>!canBind</code>.
+If this is a <code>Trap[Throwable]</code>, throws the value of this <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
     </li><li name="basis.control.Else#canBind" visbl="pub" data-isabs="true" fullComment="yes" group="Determining">
       <a id="canBind:Boolean"></a>
       <a id="canBind:Boolean"></a>
@@ -113,7 +116,7 @@
         <span class="name">canBind</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Free</code> value, otherwise returns <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Free</code> value, otherwise returns <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Bind</code>, otherwise returns <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Bind</code>, otherwise returns <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
     </li><li name="basis.control.Else#canSafelyTrap" visbl="pub" data-isabs="true" fullComment="yes" group="Determining">
       <a id="canSafelyTrap:Boolean"></a>
       <a id="canSafelyTrap:Boolean"></a>
@@ -126,10 +129,10 @@
         <span class="name">canSafelyTrap</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Trap</code> value with a safe <code>trap</code> method
-(one that won't throw an exception).</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Trap</code> value with a safe <code>trap</code> method
+      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Trap</code> with a safe <code>trap</code> method
+(one that won't throw an exception).</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Trap</code> with a safe <code>trap</code> method
 (one that won't throw an exception). Returns <code>false</code> if calling
-<code>trap</code> will throw an exception.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+<code>trap</code> <i>will</i> throw an exception.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
     </li><li name="basis.control.Else#canTrap" visbl="pub" data-isabs="true" fullComment="yes" group="Determining">
       <a id="canTrap:Boolean"></a>
       <a id="canTrap:Boolean"></a>
@@ -142,8 +145,8 @@
         <span class="name">canTrap</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Trap</code> value, otherwise returns <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Trap</code> value, otherwise returns <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
-    </li><li name="basis.control.Else#trap" visbl="pub" data-isabs="true" fullComment="yes" group="Evaluating">
+      <p class="shortcomment cmt">Returns <code>true</code> if this is a <code>Trap</code>, otherwise returns <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this is a <code>Trap</code>, otherwise returns <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+    </li><li name="basis.control.Else#trap" visbl="pub" data-isabs="true" fullComment="yes" group="Binding">
       <a id="trap:B"></a>
       <a id="trap:B"></a>
       <h4 class="signature">
@@ -155,7 +158,7 @@
         <span class="name">trap</span><span class="result">: <span class="extype" name="basis.control.Else.B">B</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns this <code>Trap</code> value, otherwise throws an exception if <code>!canSafelyTrap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this <code>Trap</code> value, otherwise throws an exception if <code>!canSafelyTrap</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the value of this <code>Trap</code>, or throws an exception if <code>!canSafelyTrap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Trap</code>, or throws an exception if <code>!canSafelyTrap</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Else.html" class="extype" name="basis.control.Else">Else</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -467,14 +470,14 @@
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="Determining">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div><div class="group" name="Determining">
               <h3>Determining</h3>
               
-            </div><div class="group" name="Evaluating">
-              <h3>Evaluating</h3>
-              
-            </div><div class="group" name="Ungrouped">
-              <h3>Ungrouped</h3>
+            </div><div class="group" name="Binding">
+              <h3>Binding</h3>
               
             </div>
         </div>
