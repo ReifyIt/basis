@@ -44,12 +44,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Implements Austin Appleby's MurmurHash 3 algorithm, specifically
-MurmurHash3_x86_32 revision 136.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Implements Austin Appleby's MurmurHash 3 algorithm,
+specifically MurmurHash3_x86_32 revision 136.
 </p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-util/src/main/scala/basis/util/MurmurHash3.scala" target="_blank">MurmurHash3.scala</a></dd><div class="block">Example:
                 <ol><li class="cmt"><p></p><pre><span class="kw">import</span> MurmurHash3._
-mash(mix(mix(mix(seed, x.##), y.##), z.##))</pre></li></ol>
-              </div><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0
+mash(mix(mix(mix(seed[Example], hash(x)), hash(y)), hash(z)))</pre></li></ol>
+              </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0
 </p></dd><dt>See also</dt><dd><span class="cmt"><p><a href="http://code.google.com/p/smhasher/" target="_blank">http://code.google.com/p/smhasher/</a>
 </p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -62,7 +62,7 @@ mash(mix(mix(mix(seed, x.##), y.##), z.##))</pre></li></ol>
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol>
-                
+                <li class="group out"><span>Grouped</span></li>
                 <li class="alpha in"><span>Alphabetic</span></li>
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
@@ -246,6 +246,149 @@ mash(mix(mix(mix(seed, x.##), y.##), z.##))</pre></li></ol>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Any):Int"></a>
+      <a id="hash(Any):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of any value.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:String):Int"></a>
+      <a id="hash(String):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of a <code>String</code>.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Unit):Int"></a>
+      <a id="hash(Unit):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of <code>()</code>.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Boolean):Int"></a>
+      <a id="hash(Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of a <code>Boolean</code> value.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Char):Int"></a>
+      <a id="hash(Char):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Char">Char</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of a <code>Char</code> value.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Double):Int"></a>
+      <a id="hash(Double):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of a <code>Double</code> value.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Float):Int"></a>
+      <a id="hash(Float):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of a <code>Float</code> value.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Long):Int"></a>
+      <a id="hash(Long):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of a <code>Long</code> value.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Int):Int"></a>
+      <a id="hash(Int):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of an <code>Int</code> value.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Short):Int"></a>
+      <a id="hash(Short):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Short">Short</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of a <code>Short</code> value.</p>
+    </li><li name="basis.util.MurmurHash3#hash" visbl="pub" data-isabs="false" fullComment="no" group="Hashing">
+      <a id="hash(x:Byte):Int"></a>
+      <a id="hash(Byte):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hash</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Byte">Byte</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a hash of a <code>Byte</code> value.</p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -272,7 +415,7 @@ mash(mix(mix(mix(seed, x.##), y.##), z.##))</pre></li></ol>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.util.MurmurHash3#mash" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="basis.util.MurmurHash3#mash" visbl="pub" data-isabs="false" fullComment="no" group="Mixing">
       <a id="mash(code:Int):Int"></a>
       <a id="mash(Int):Int"></a>
       <h4 class="signature">
@@ -284,8 +427,8 @@ mash(mix(mix(mix(seed, x.##), y.##), z.##))</pre></li></ol>
         <span class="name">mash</span><span class="params">(<span name="code">code: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns the finalized hash code.</p>
-    </li><li name="basis.util.MurmurHash3#mix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Returns a finalized hash code.</p>
+    </li><li name="basis.util.MurmurHash3#mix" visbl="pub" data-isabs="false" fullComment="no" group="Mixing">
       <a id="mix(code:Int,value:Int):Int"></a>
       <a id="mix(Int,Int):Int"></a>
       <h4 class="signature">
@@ -297,7 +440,7 @@ mash(mix(mix(mix(seed, x.##), y.##), z.##))</pre></li></ol>
         <span class="name">mix</span><span class="params">(<span name="code">code: <span class="extype" name="scala.Int">Int</span></span>, <span name="value">value: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns the hash code mixed with the new hash value.</p>
+      <p class="shortcomment cmt">Returns a hash code mixed with a new hash value.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -337,6 +480,42 @@ mash(mix(mix(mix(seed, x.##), y.##), z.##))</pre></li></ol>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.util.MurmurHash3#seed" visbl="pub" data-isabs="false" fullComment="yes" group="Seeding">
+      <a id="seed(string:String):Int"></a>
+      <a id="seed(String):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">seed</span><span class="params">(<span name="string">string: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a literal hash of a compile-time constant <code>String</code>
+for use as a seed value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a literal hash of a compile-time constant <code>String</code>
+for use as a seed value.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.util.MurmurHash3#seed" visbl="pub" data-isabs="false" fullComment="yes" group="Seeding">
+      <a id="seed[T]:Int"></a>
+      <a id="seed[T]:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">seed</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a literal hash of the full name of a type symbol
+for use as a seed value.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a literal hash of the full name of a type symbol
+for use as a seed value.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -431,6 +610,15 @@ mash(mix(mix(mix(seed, x.##), y.##), z.##))</pre></li></ol>
         <div id="groupedMembers">
         <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
+              
+            </div><div class="group" name="Mixing">
+              <h3>Mixing</h3>
+              
+            </div><div class="group" name="Hashing">
+              <h3>Hashing</h3>
+              
+            </div><div class="group" name="Seeding">
+              <h3>Seeding</h3>
               
             </div>
         </div>

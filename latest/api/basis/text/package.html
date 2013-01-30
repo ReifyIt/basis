@@ -131,15 +131,15 @@
       </h4>
       <p class="comment cmt">A UTF-32 string.</p>
     </li><li name="basis.text.StringBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Builders">
-      <a id="StringBuilder[-From]extendsBuilder[From,Int]"></a>
-      <a id="StringBuilder[-From]:StringBuilder[From]"></a>
+      <a id="StringBuilderextendsBuilder[Int]"></a>
+      <a id="StringBuilder:StringBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="StringBuilder.html"><span class="name">StringBuilder</span></a><span class="tparams">[<span name="From">-From</span>]</span><span class="result"> extends <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.text.StringBuilder.From">From</span>, <span class="extype" name="scala.Int">Int</span>]</span>
+        <a href="StringBuilder.html"><span class="name">StringBuilder</span></a><span class="result"> extends <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="scala.Int">Int</span>]</span>
       </span>
       </h4>
       <p class="comment cmt">A builder for Unicode® strings.</p>
@@ -215,6 +215,19 @@
       </span>
       </h4>
       <p class="comment cmt">A factory for <a href="String1.html" class="extype" name="basis.text.String1">UTF-8 strings</a>.</p>
+    </li><li name="basis.text.package#String1Builder" visbl="pub" data-isabs="false" fullComment="no" group="Builders">
+      <a id="String1Builder:basis.text.StringBuilder{typeScope=basis.text.UTF8;typeState=basis.text.String1}"></a>
+      <a id="String1Builder:StringBuilder{.../*2definitionsintyperefinement*/}"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">String1Builder</span><span class="result">: <a href="StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a> { ... /* 2 definitions in type refinement */ }</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Implicitly returns a new UTF-8 string builder.</p>
     </li><li name="basis.text.String2" visbl="pub" data-isabs="false" fullComment="no" group="Strings">
       <a id="String2"></a>
       <a id="String2:String2"></a>
@@ -228,6 +241,19 @@
       </span>
       </h4>
       <p class="comment cmt">A factory for <a href="String2.html" class="extype" name="basis.text.String2">UTF-16 strings</a>.</p>
+    </li><li name="basis.text.package#String2Builder" visbl="pub" data-isabs="false" fullComment="no" group="Builders">
+      <a id="String2Builder:basis.text.StringBuilder{typeScope=basis.text.UTF16;typeState=basis.text.String2}"></a>
+      <a id="String2Builder:StringBuilder{.../*2definitionsintyperefinement*/}"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">String2Builder</span><span class="result">: <a href="StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a> { ... /* 2 definitions in type refinement */ }</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Implicitly returns a new UTF-16 string builder.</p>
     </li><li name="basis.text.String4" visbl="pub" data-isabs="false" fullComment="no" group="Strings">
       <a id="String4"></a>
       <a id="String4:String4"></a>
@@ -241,19 +267,32 @@
       </span>
       </h4>
       <p class="comment cmt">A factory for <a href="String4.html" class="extype" name="basis.text.String4">UTF-32 strings</a>.</p>
-    </li><li name="basis.text.package#StringBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Builders">
-      <a id="StringBuilder:basis.text.StringBuilder[Any]{typeState=String}"></a>
-      <a id="StringBuilder:StringBuilder[Any]{typeState=String}"></a>
+    </li><li name="basis.text.package#String4Builder" visbl="pub" data-isabs="false" fullComment="no" group="Builders">
+      <a id="String4Builder:basis.text.StringBuilder{typeScope=basis.text.UTF32;typeState=basis.text.String4}"></a>
+      <a id="String4Builder:StringBuilder{.../*2definitionsintyperefinement*/}"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">StringBuilder</span><span class="result">: <a href="StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a>[<span class="extype" name="scala.Any">Any</span>] { type State = String }</span>
+        <span class="name">String4Builder</span><span class="result">: <a href="StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a> { ... /* 2 definitions in type refinement */ }</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Implicitly returns a new String builder.</p>
+      <p class="shortcomment cmt">Implicitly returns a new UTF-32 string builder.</p>
+    </li><li name="basis.text.package#StringBuilder" visbl="pub" data-isabs="false" fullComment="no" group="Builders">
+      <a id="StringBuilder:basis.text.StringBuilder{typeScope=String;typeState=String}"></a>
+      <a id="StringBuilder:StringBuilder{.../*2definitionsintyperefinement*/}"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StringBuilder</span><span class="result">: <a href="StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a> { ... /* 2 definitions in type refinement */ }</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Implicitly returns a new string builder.</p>
     </li><li name="basis.text.package#StringOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="StringOps(s:String):basis.text.StringOps"></a>
       <a id="StringOps(String):StringOps"></a>

@@ -40,7 +40,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">StrictEnumeratorOps</span><span class="tparams">[<span name="A">+A</span>, <span name="From">+From</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+        <span class="name">StrictEnumeratorOps</span><span class="tparams">[<span name="A">+A</span>, <span name="From">-From</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
       </span>
       </h4>
       
@@ -51,7 +51,7 @@
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph17" viewBox="0.00 0.00 236.00 120.00" height="120pt" width="236pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 233,-116 233,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph17_0"><a xlink:title="basis.sequential.StrictEnumeratorOps (this class)" xlink:href="#inheritance-diagram"><polygon points="203.25,-50 24.75,-50 24.75,-24 203.25,-24 203.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">StrictEnumeratorOps[A, From]</text></a></g><!-- node1 --><g class="node class" id="graph17_1"><a xlink:title="scala.AnyVal"><polygon points="151.25,-112 76.75,-112 76.75,-86 151.25,-86 151.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="87" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="109" text-anchor="start">AnyVal</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph17_1_0"><a xlink:title="StrictEnumeratorOps[A, From] is a subtype of AnyVal"><path d="M114,-80.6826C114,-70.8961 114,-58.9026 114,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="112.25,-80.8581 114,-85.8581 115.75,-80.8581 112.25,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph98" viewBox="0.00 0.00 236.00 120.00" height="120pt" width="236pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 233,-116 233,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph98_0"><a xlink:title="basis.sequential.StrictEnumeratorOps (this class)" xlink:href="#inheritance-diagram"><polygon points="203.25,-50 24.75,-50 24.75,-24 203.25,-24 203.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">StrictEnumeratorOps[A, From]</text></a></g><!-- node1 --><g class="node class" id="graph98_1"><a xlink:title="scala.AnyVal"><polygon points="151.25,-112 76.75,-112 76.75,-86 151.25,-86 151.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="87" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="109" text-anchor="start">AnyVal</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph98_1_0"><a xlink:title="StrictEnumeratorOps[A, From] is a subtype of AnyVal"><path d="M114,-80.6826C114,-70.8961 114,-58.9026 114,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="112.25,-80.8581 114,-85.8581 115.75,-80.8581 112.25,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -138,15 +138,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#++" visbl="pub" data-isabs="false" fullComment="yes" group="Combining">
-      <a id="++[B&gt;:A](those:basis.collections.Enumerator[B])(implicitbuilder:basis.collections.Builder[From,B]):builder.State"></a>
-      <a id="++[B&gt;:A](Enumerator[B])(Builder[From,B]):State"></a>
+      <a id="++[B&gt;:A](those:basis.collections.Enumerator[B])(implicitbuilder:basis.collections.Builder[B]{typeScope&lt;:From}):builder.State"></a>
+      <a id="++[B&gt;:A](Enumerator[B])(Builder[B]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $plus$plus" class="name">++</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span></span>]</span><span class="params">(<span name="those">those: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.++.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.++.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span title="gt4s: $plus$plus" class="name">++</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span></span>]</span><span class="params">(<span name="those">those: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.++.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.++.B">B</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.++.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the concatenation of this and another collection.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the concatenation of this and another collection.
@@ -178,15 +178,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#collect" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
-      <a id="collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[From,B]):builder.State"></a>
-      <a id="collect[B](PartialFunction[A,B])(Builder[From,B]):State"></a>
+      <a id="collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[B]{typeScope&lt;:From}):builder.State"></a>
+      <a id="collect[B](PartialFunction[A,B])(Builder[B]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.collect.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.collect.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.collect.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.collect.B">B</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.collect.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the applications of a partial function to each element in this
@@ -194,30 +194,30 @@ enumerator for which the function is defined.</p><div class="fullcomment"><div c
 enumerator for which the function is defined.
 </p></div><dl class="paramcmts block"><dt class="param">q</dt><dd class="cmt"><p>the partial function to filter and transform elements.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for collected elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated elements filtered and transformed by <code>q</code>.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="drop(lower:Int)(implicitbuilder:basis.collections.Builder[From,A]):builder.State"></a>
-      <a id="drop(Int)(Builder[From,A]):State"></a>
+      <a id="drop(lower:Int)(implicitbuilder:basis.collections.Builder[A]{typeScope&lt;:From}):builder.State"></a>
+      <a id="drop(Int)(Builder[A]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.drop.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns all elements in this enumerator following a prefix up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements in this enumerator following a prefix up to some length.
 </p></div><dl class="paramcmts block"><dt class="param">lower</dt><dd class="cmt"><p>the length of the prefix to drop; also the inclusive
                   lower bound for indexes of elements to keep.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for non-dropped elements.</p></dd><dt>returns</dt><dd class="cmt"><p>all but the first <code>lower</code> accumulated elements.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#dropWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[From,A]):builder.State"></a>
-      <a id="dropWhile((A)⇒Boolean)(Builder[From,A]):State"></a>
+      <a id="dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]{typeScope&lt;:From}):builder.State"></a>
+      <a id="dropWhile((A)⇒Boolean)(Builder[A]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">dropWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">dropWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.dropWhile.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns all elements following the longest prefix of this enumerator
@@ -226,29 +226,29 @@ for which each element satisfies a predicate.
 </p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for non-dropped elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the suffix of accumulated elements beginning with the first
         element to not satisfy <code>p</code>.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[From,A]):builder.State"></a>
-      <a id="filter((A)⇒Boolean)(Builder[From,A]):State"></a>
+      <a id="filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]{typeScope&lt;:From}):builder.State"></a>
+      <a id="filter((A)⇒Boolean)(Builder[A]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.filter.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns all elements in this enumerator that satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements in this enumerator that satisfy a predicate.
 </p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for filtered elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated elements filtered by <code>p</code>.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
-      <a id="flatMap[B](f:A=&gt;basis.collections.Enumerator[B])(implicitbuilder:basis.collections.Builder[From,B]):builder.State"></a>
-      <a id="flatMap[B]((A)⇒Enumerator[B])(Builder[From,B]):State"></a>
+      <a id="flatMap[B](f:A=&gt;basis.collections.Enumerator[B])(implicitbuilder:basis.collections.Builder[B]{typeScope&lt;:From}):builder.State"></a>
+      <a id="flatMap[B]((A)⇒Enumerator[B])(Builder[B]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.flatMap.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.flatMap.B">B</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.flatMap.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the concatenation of all elements returned by a function applied
@@ -282,44 +282,44 @@ to each element in this enumerator.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
-      <a id="map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[From,B]):builder.State"></a>
-      <a id="map[B]((A)⇒B)(Builder[From,B]):State"></a>
+      <a id="map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[B]{typeScope&lt;:From}):builder.State"></a>
+      <a id="map[B]((A)⇒B)(Builder[B]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="basis.sequential.StrictEnumeratorOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.map.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="basis.sequential.StrictEnumeratorOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.map.B">B</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.map.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the applications of a function to each element in this enumerator.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the applications of a function to each element in this enumerator.
 </p></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the function to apply to each element.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for transformed elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated elements transformed by <code>f</code>.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[From,A]):builder.State"></a>
-      <a id="slice(Int,Int)(Builder[From,A]):State"></a>
+      <a id="slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[A]{typeScope&lt;:From}):builder.State"></a>
+      <a id="slice(Int,Int)(Builder[A]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.slice.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns an interval of elements in this enumerator.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an interval of elements in this enumerator.
 </p></div><dl class="paramcmts block"><dt class="param">lower</dt><dd class="cmt"><p>the inclusive lower bound for indexes of elements to keep.</p></dd><dt class="param">upper</dt><dd class="cmt"><p>the exclusive upper bound for indexes of elements to keep.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for kept elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the accumulated elements with indexes greater than or equal to
         <code>lower</code> and less than <code>upper</code>.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#span" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[From,A],implicitbuilder2:basis.collections.Builder[From,A]):(builder1.State,builder2.State)"></a>
-      <a id="span((A)⇒Boolean)(Builder[From,A],Builder[From,A]):(State,State)"></a>
+      <a id="span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[A]{typeScope&lt;:From},implicitbuilder2:basis.collections.Builder[A]{typeScope&lt;:From}):(builder1.State,builder2.State)"></a>
+      <a id="span((A)⇒Boolean)(Builder[A]{typeScope&lt;:From},Builder[A]{typeScope&lt;:From}):((builder1)#State,(builder2)#State)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">span</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder1">builder1: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>]</span>, <span name="builder2">builder2: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>]</span>)</span><span class="result">: (<a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a>, <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a>)</span>
+        <span class="name">span</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder1">builder1: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>] { type Scope &lt;: From }</span>, <span name="builder2">builder2: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>] { type Scope &lt;: From }</span>)</span><span class="result">: ((<span class="extype" name="basis.sequential.StrictEnumeratorOps.span.builder1">builder1</span>)#<span class="extype" name="basis.collections.Builder.State">State</span>, (<span class="extype" name="basis.sequential.StrictEnumeratorOps.span.builder2">builder2</span>)#<span class="extype" name="basis.collections.Builder.State">State</span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a (prefix, suffix) pair with the prefix being the longest one for
@@ -329,30 +329,30 @@ which each element satisfies a predicate, and the suffix beginning with
 the first element to not satisfy the predicate.
 </p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>the predicate to test elements against.</p></dd><dt class="param">builder1</dt><dd class="cmt"><p>the implicit accumulator for prefix elements.</p></dd><dt class="param">builder2</dt><dd class="cmt"><p>the implicit accumilator for suffix elements.</p></dd><dt>returns</dt><dd class="cmt"><p>the pair of accumulated prefix and suffix elements.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#take" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="take(upper:Int)(implicitbuilder:basis.collections.Builder[From,A]):builder.State"></a>
-      <a id="take(Int)(Builder[From,A]):State"></a>
+      <a id="take(upper:Int)(implicitbuilder:basis.collections.Builder[A]{typeScope&lt;:From}):builder.State"></a>
+      <a id="take(Int)(Builder[A]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.take.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a prefix of this enumerator up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a prefix of this enumerator up to some length.
 </p></div><dl class="paramcmts block"><dt class="param">upper</dt><dd class="cmt"><p>the length of the prefix to take; also the exclusive
                   upper bound for indexes of elements to keep.</p></dd><dt class="param">builder</dt><dd class="cmt"><p>the implicit accumulator for taken elements.</p></dd><dt>returns</dt><dd class="cmt"><p>up to the first <code>upper</code> accumulated elements.</p></dd></dl></div>
     </li><li name="basis.sequential.StrictEnumeratorOps#takeWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[From,A]):builder.State"></a>
-      <a id="takeWhile((A)⇒Boolean)(Builder[From,A]):State"></a>
+      <a id="takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]{typeScope&lt;:From}):builder.State"></a>
+      <a id="takeWhile((A)⇒Boolean)(Builder[A]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">takeWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.From">From</span>, <span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">takeWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictEnumeratorOps.A">A</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictEnumeratorOps.takeWhile.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the longest prefix of this enumerator for which each element

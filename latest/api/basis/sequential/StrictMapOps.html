@@ -40,7 +40,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">StrictMapOps</span><span class="tparams">[<span name="A">+A</span>, <span name="T">+T</span>, <span name="From">+From</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">StrictMapOps</span><span class="tparams">[<span name="A">+A</span>, <span name="T">+T</span>, <span name="From">-From</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -51,7 +51,7 @@
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph14" viewBox="0.00 0.00 212.00 120.00" height="120pt" width="212pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 209,-116 209,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph14_0"><a xlink:title="basis.sequential.StrictMapOps (this class)" xlink:href="#inheritance-diagram"><polygon points="180,-50 24,-50 24,-24 180,-24 180,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="34" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="56" text-anchor="start">StrictMapOps[A, T, From]</text></a></g><!-- node1 --><g class="node class" id="graph14_1"><a xlink:title="scala.AnyRef"><polygon points="140.25,-112 63.75,-112 63.75,-86 140.25,-86 140.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="74" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="96" text-anchor="start">AnyRef</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph14_1_0"><a xlink:title="StrictMapOps[A, T, From] is a subtype of AnyRef"><path d="M102,-80.6826C102,-70.8961 102,-58.9026 102,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="100.25,-80.8581 102,-85.8581 103.75,-80.8581 100.25,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph95" viewBox="0.00 0.00 212.00 120.00" height="120pt" width="212pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 209,-116 209,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph95_0"><a xlink:title="basis.sequential.StrictMapOps (this class)" xlink:href="#inheritance-diagram"><polygon points="180,-50 24,-50 24,-24 180,-24 180,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="34" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="56" text-anchor="start">StrictMapOps[A, T, From]</text></a></g><!-- node1 --><g class="node class" id="graph95_1"><a xlink:title="scala.AnyRef"><polygon points="140.25,-112 63.75,-112 63.75,-86 140.25,-86 140.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="74" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="96" text-anchor="start">AnyRef</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph95_1_0"><a xlink:title="StrictMapOps[A, T, From] is a subtype of AnyRef"><path d="M102,-80.6826C102,-70.8961 102,-58.9026 102,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="100.25,-80.8581 102,-85.8581 103.75,-80.8581 100.25,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -151,15 +151,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#++" visbl="pub" data-isabs="false" fullComment="yes" group="Combining">
-      <a id="++[B&gt;:(A,T)](those:basis.collections.Enumerator[B])(implicitbuilder:basis.collections.Builder[From,B]):builder.State"></a>
-      <a id="++[B&gt;:(A,T)](Enumerator[B])(Builder[From,B]):State"></a>
+      <a id="++[B&gt;:(A,T)](those:basis.collections.Enumerator[B])(implicitbuilder:basis.collections.Builder[B]{typeScope&lt;:From}):builder.State"></a>
+      <a id="++[B&gt;:(A,T)](Enumerator[B])(Builder[B]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $plus$plus" class="name">++</span><span class="tparams">[<span name="B">B &gt;: (<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)</span>]</span><span class="params">(<span name="those">those: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.sequential.StrictMapOps.++.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, <span class="extype" name="basis.sequential.StrictMapOps.++.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span title="gt4s: $plus$plus" class="name">++</span><span class="tparams">[<span name="B">B &gt;: (<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)</span>]</span><span class="params">(<span name="those">those: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.sequential.StrictMapOps.++.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.++.B">B</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.++.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the concatenation of this and another collection.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the concatenation of this and another collection.
@@ -223,15 +223,15 @@
               
         </dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#collect" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
-      <a id="collect[B](q:PartialFunction[(A,T),B])(implicitbuilder:basis.collections.Builder[From,B]):builder.State"></a>
-      <a id="collect[B](PartialFunction[(A,T),B])(Builder[From,B]):State"></a>
+      <a id="collect[B](q:PartialFunction[(A,T),B])(implicitbuilder:basis.collections.Builder[B]{typeScope&lt;:From}):builder.State"></a>
+      <a id="collect[B](PartialFunction[(A,T),B])(Builder[B]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[(<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>), <span class="extype" name="basis.sequential.StrictMapOps.collect.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, <span class="extype" name="basis.sequential.StrictMapOps.collect.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[(<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>), <span class="extype" name="basis.sequential.StrictMapOps.collect.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.collect.B">B</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.collect.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the applications of a partial function to each entry in this
@@ -242,15 +242,15 @@ map for which the function is defined.
               
         </dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="drop(lower:Int)(implicitbuilder:basis.collections.Builder[From,(A,T)]):builder.State"></a>
-      <a id="drop(Int)(Builder[From,(A,T)]):State"></a>
+      <a id="drop(lower:Int)(implicitbuilder:basis.collections.Builder[(A,T)]{typeScope&lt;:From}):builder.State"></a>
+      <a id="drop(Int)(Builder[(A,T)]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, (<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[(<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.drop.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns all entries in this map following a prefix up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all entries in this map following a prefix up to some length.
@@ -260,15 +260,15 @@ map for which the function is defined.
               
         </dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#dropWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="dropWhile(p:((A,T))=&gt;Boolean)(implicitbuilder:basis.collections.Builder[From,(A,T)]):builder.State"></a>
-      <a id="dropWhile(((A,T))⇒Boolean)(Builder[From,(A,T)]):State"></a>
+      <a id="dropWhile(p:((A,T))=&gt;Boolean)(implicitbuilder:basis.collections.Builder[(A,T)]{typeScope&lt;:From}):builder.State"></a>
+      <a id="dropWhile(((A,T))⇒Boolean)(Builder[(A,T)]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">dropWhile</span><span class="params">(<span name="p">p: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, (<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">dropWhile</span><span class="params">(<span name="p">p: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[(<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.dropWhile.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns all entries following the longest prefix of this map
@@ -306,15 +306,15 @@ for which each entry satisfies a predicate.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="filter(p:((A,T))=&gt;Boolean)(implicitbuilder:basis.collections.Builder[From,(A,T)]):builder.State"></a>
-      <a id="filter(((A,T))⇒Boolean)(Builder[From,(A,T)]):State"></a>
+      <a id="filter(p:((A,T))=&gt;Boolean)(implicitbuilder:basis.collections.Builder[(A,T)]{typeScope&lt;:From}):builder.State"></a>
+      <a id="filter(((A,T))⇒Boolean)(Builder[(A,T)]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="p">p: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, (<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">filter</span><span class="params">(<span name="p">p: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[(<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.filter.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns all entries in this map that satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all entries in this map that satisfy a predicate.
@@ -339,15 +339,15 @@ for which each entry satisfies a predicate.
               
         </dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
-      <a id="flatMap[B](f:((A,T))=&gt;basis.collections.Enumerator[B])(implicitbuilder:basis.collections.Builder[From,B]):builder.State"></a>
-      <a id="flatMap[B](((A,T))⇒Enumerator[B])(Builder[From,B]):State"></a>
+      <a id="flatMap[B](f:((A,T))=&gt;basis.collections.Enumerator[B])(implicitbuilder:basis.collections.Builder[B]{typeScope&lt;:From}):builder.State"></a>
+      <a id="flatMap[B](((A,T))⇒Enumerator[B])(Builder[B]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.sequential.StrictMapOps.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, <span class="extype" name="basis.sequential.StrictMapOps.flatMap.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.sequential.StrictMapOps.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.flatMap.B">B</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.flatMap.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the concatenation of all elements returned by a function applied
@@ -397,15 +397,15 @@ to each entry in this map.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Mapping">
-      <a id="map[B](f:((A,T))=&gt;B)(implicitbuilder:basis.collections.Builder[From,B]):builder.State"></a>
-      <a id="map[B](((A,T))⇒B)(Builder[From,B]):State"></a>
+      <a id="map[B](f:((A,T))=&gt;B)(implicitbuilder:basis.collections.Builder[B]{typeScope&lt;:From}):builder.State"></a>
+      <a id="map[B](((A,T))⇒B)(Builder[B]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <span class="extype" name="basis.sequential.StrictMapOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, <span class="extype" name="basis.sequential.StrictMapOps.map.B">B</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <span class="extype" name="basis.sequential.StrictMapOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.map.B">B</span>] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.map.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the applications of a function to each entry in this map.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the applications of a function to each entry in this map.
@@ -453,15 +453,15 @@ to each entry in this map.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[From,(A,T)]):builder.State"></a>
-      <a id="slice(Int,Int)(Builder[From,(A,T)]):State"></a>
+      <a id="slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[(A,T)]{typeScope&lt;:From}):builder.State"></a>
+      <a id="slice(Int,Int)(Builder[(A,T)]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, (<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[(<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.slice.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns an interval of entries in this map.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an interval of entries in this map.
@@ -484,15 +484,15 @@ to each entry in this map.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#take" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="take(upper:Int)(implicitbuilder:basis.collections.Builder[From,(A,T)]):builder.State"></a>
-      <a id="take(Int)(Builder[From,(A,T)]):State"></a>
+      <a id="take(upper:Int)(implicitbuilder:basis.collections.Builder[(A,T)]{typeScope&lt;:From}):builder.State"></a>
+      <a id="take(Int)(Builder[(A,T)]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, (<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[(<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.take.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a prefix of this map up to some length.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a prefix of this map up to some length.
@@ -502,15 +502,15 @@ to each entry in this map.
               
         </dd></dl></div>
     </li><li name="basis.sequential.StrictMapOps#takeWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Filtering">
-      <a id="takeWhile(p:((A,T))=&gt;Boolean)(implicitbuilder:basis.collections.Builder[From,(A,T)]):builder.State"></a>
-      <a id="takeWhile(((A,T))⇒Boolean)(Builder[From,(A,T)]):State"></a>
+      <a id="takeWhile(p:((A,T))=&gt;Boolean)(implicitbuilder:basis.collections.Builder[(A,T)]{typeScope&lt;:From}):builder.State"></a>
+      <a id="takeWhile(((A,T))⇒Boolean)(Builder[(A,T)]{typeScope&lt;:From}):(builder)#State"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">takeWhile</span><span class="params">(<span name="p">p: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.sequential.StrictMapOps.From">From</span>, (<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)]</span>)</span><span class="result">: <a href="../collections/Builder.html#State" class="extmbr" name="basis.collections.Builder.State">State</a></span>
+        <span class="name">takeWhile</span><span class="params">(<span name="p">p: ((<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[(<span class="extype" name="basis.sequential.StrictMapOps.A">A</span>, <span class="extype" name="basis.sequential.StrictMapOps.T">T</span>)] { type Scope &lt;: From }</span>)</span><span class="result">: (<span class="extype" name="basis.sequential.StrictMapOps.takeWhile.builder">builder</span>)#<span class="extype" name="basis.collections.Builder.State">State</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the longest prefix of this map for which each entry

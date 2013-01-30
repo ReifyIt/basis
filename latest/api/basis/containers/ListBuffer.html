@@ -40,7 +40,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ListBuffer</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <span class="extype" name="scala.Mutable">Mutable</span> with <a href="../collections/Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]] with <a href="ListLike.html" class="extype" name="basis.containers.ListLike">ListLike</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>] with <a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]</span>
+        <span class="name">ListBuffer</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <span class="extype" name="scala.Mutable">Mutable</span> with <a href="../collections/Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>[_]] with <a href="ListLike.html" class="extype" name="basis.containers.ListLike">ListLike</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>] with <a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]</span>
       </span>
       </h4>
       
@@ -48,13 +48,13 @@
    implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><a href="../sequential/StrictSeqOps.html" class="extype" name="basis.sequential.StrictSeqOps">StrictSeqOps</a>
    implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><a href="../sequential/NonStrictSeqOps.html" class="extype" name="basis.sequential.NonStrictSeqOps">NonStrictSeqOps</a>
    implements lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/ListBuffer.scala" target="_blank">ListBuffer.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/ListBuffer.scala" target="_blank">ListBuffer.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="ListLike.html" class="extype" name="basis.containers.ListLike">ListLike</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]], <span class="extype" name="scala.Mutable">Mutable</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="ListLike.html" class="extype" name="basis.containers.ListLike">ListLike</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>], <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>[_]], <span class="extype" name="scala.Mutable">Mutable</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph108" viewBox="0.00 0.00 542.00 120.00" height="120pt" width="542pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 539,-116 539,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph108_0"><a xlink:title="basis.containers.ListBuffer (this class)" xlink:href="#inheritance-diagram"><polygon points="307.25,-50 208.75,-50 208.75,-24 307.25,-24 307.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="219" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="241" text-anchor="start">ListBuffer[A]</text></a></g><!-- node1 --><g class="node trait" id="graph108_1"><a xlink:title="scala.Equals"><polygon points="74.25,-112 -0.25,-112 -0.25,-86 74.25,-86 74.25,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="32" text-anchor="start">Equals</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph108_1_0"><a xlink:title="ListBuffer[A] is a subtype of Equals"><path d="M79.5574,-86.446C118.011,-76.0061 174.405,-60.6955 213.46,-50.0923" stroke="#d4d4d4" fill="none"></path><polygon points="78.8564,-84.8228 74.4896,-87.8218 79.7735,-88.2006 78.8564,-84.8228" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph108_2"><a xlink:title="scala.Mutable"><polygon points="173,-112 93,-112 93,-86 173,-86 173,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="103" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="125" text-anchor="start">Mutable</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph108_2_0"><a xlink:title="ListBuffer[A] is a subtype of Mutable"><path d="M163.003,-83.5985C184.307,-73.3726 212.59,-59.7968 232.742,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="162.046,-82.1167 158.296,-85.8581 163.561,-85.2721 162.046,-82.1167" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node3 --><g class="node trait" id="graph108_3"><a xlink:title="basis.collections.Family" xlink:href="../collections/Family.html#inheritance-diagram"><polygon points="325,-112 191,-112 191,-86 325,-86 325,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="201" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="223" text-anchor="start">Family[ListBuffer[A]]</text></a></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph108_3_0"><a xlink:title="ListBuffer[A] is a subtype of Family[ListBuffer[A]]"><path d="M258,-80.6826C258,-70.8961 258,-58.9026 258,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="256.25,-80.8581 258,-85.8581 259.75,-80.8581 256.25,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node4 --><g class="node trait" id="graph108_4"><a xlink:title="basis.containers.ListLike" xlink:href="ListLike.html#inheritance-diagram"><polygon points="433,-112 343,-112 343,-86 433,-86 433,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="353" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="375" text-anchor="start">ListLike[A]</text></a></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph108_4_0"><a xlink:title="ListBuffer[A] is a subtype of ListLike[A]"><path d="M357.076,-83.7273C334.888,-73.4867 305.314,-59.8374 284.268,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="356.419,-85.3517 361.693,-85.8581 357.886,-82.1738 356.419,-85.3517" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node5 --><g class="node trait" id="graph108_5"><a xlink:title="basis.collections.Buffer" xlink:href="../collections/Buffer.html#inheritance-diagram"><polygon points="534.25,-112 451.75,-112 451.75,-86 534.25,-86 534.25,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="462" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="484" text-anchor="start">Buffer[A]</text></a></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph108_5_0"><a xlink:title="ListBuffer[A] is a subtype of Buffer[A]"><path d="M446.629,-86.1606C405.688,-75.7076 346.275,-60.5384 305.113,-50.0289" stroke="#d4d4d4" fill="none"></path><polygon points="446.25,-87.8699 451.528,-87.4113 447.116,-84.4787 446.25,-87.8699" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph74" viewBox="0.00 0.00 540.00 120.00" height="120pt" width="540pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 537,-116 537,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph74_0"><a xlink:title="basis.containers.ListBuffer (this class)" xlink:href="#inheritance-diagram"><polygon points="306.25,-50 207.75,-50 207.75,-24 306.25,-24 306.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="218" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="240" text-anchor="start">ListBuffer[A]</text></a></g><!-- node1 --><g class="node trait" id="graph74_1"><a xlink:title="scala.Equals"><polygon points="74.25,-112 -0.25,-112 -0.25,-86 74.25,-86 74.25,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="32" text-anchor="start">Equals</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph74_1_0"><a xlink:title="ListBuffer[A] is a subtype of Equals"><path d="M79.3648,-86.446C117.644,-76.0061 173.783,-60.6955 212.662,-50.0923" stroke="#d4d4d4" fill="none"></path><polygon points="78.6833,-84.8178 74.32,-87.8218 79.6043,-88.1945 78.6833,-84.8178" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph74_2"><a xlink:title="scala.Mutable"><polygon points="173,-112 93,-112 93,-86 173,-86 173,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="103" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="125" text-anchor="start">Mutable</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph74_2_0"><a xlink:title="ListBuffer[A] is a subtype of Mutable"><path d="M162.763,-83.5985C183.897,-73.3726 211.953,-59.7968 231.944,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="161.832,-82.105 158.093,-85.8581 163.356,-85.2555 161.832,-82.105" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node3 --><g class="node trait" id="graph74_3"><a xlink:title="basis.collections.Family" xlink:href="../collections/Family.html#inheritance-diagram"><polygon points="323,-112 191,-112 191,-86 323,-86 323,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="201" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="223" text-anchor="start">Family[ListBuffer[_]]</text></a></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph74_3_0"><a xlink:title="ListBuffer[A] is a subtype of Family[ListBuffer[_]]"><path d="M257,-80.6826C257,-70.8961 257,-58.9026 257,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="255.25,-80.8581 257,-85.8581 258.75,-80.8581 255.25,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node4 --><g class="node trait" id="graph74_4"><a xlink:title="basis.containers.ListLike" xlink:href="ListLike.html#inheritance-diagram"><polygon points="431,-112 341,-112 341,-86 431,-86 431,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="351" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="373" text-anchor="start">ListLike[A]</text></a></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph74_4_0"><a xlink:title="ListBuffer[A] is a subtype of ListLike[A]"><path d="M355.314,-83.7273C333.296,-73.4867 303.95,-59.8374 283.066,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="354.623,-85.3362 359.895,-85.8581 356.099,-82.1626 354.623,-85.3362" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node5 --><g class="node trait" id="graph74_5"><a xlink:title="basis.collections.Buffer" xlink:href="../collections/Buffer.html#inheritance-diagram"><polygon points="532.25,-112 449.75,-112 449.75,-86 532.25,-86 532.25,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="460" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="482" text-anchor="start">Buffer[A]</text></a></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph74_5_0"><a xlink:title="ListBuffer[A] is a subtype of Buffer[A]"><path d="M444.826,-86.1606C404.06,-75.7076 344.9,-60.5384 303.913,-50.0289" stroke="#d4d4d4" fill="none"></path><polygon points="444.426,-87.8645 449.704,-87.4113 445.296,-84.4742 444.426,-87.8645" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.containers.ListBuffer"><span>ListBuffer</span></li><li class="in" name="basis.collections.Buffer"><span>Buffer</span></li><li class="in" name="basis.collections.Accumulator"><span>Accumulator</span></li><li class="in" name="basis.collections.Seq"><span>Seq</span></li><li class="in" name="basis.collections.Container"><span>Container</span></li><li class="in" name="basis.collections.Collection"><span>Collection</span></li><li class="in" name="basis.collections.Enumerator"><span>Enumerator</span></li><li class="in" name="basis.containers.ListLike"><span>ListLike</span></li><li class="in" name="basis.collections.Family"><span>Family</span></li><li class="in" name="scala.Mutable"><span>Mutable</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.containers.ListBuffer"><span>ListBuffer</span></li><li class="in" name="basis.collections.Buffer"><span>Buffer</span></li><li class="in" name="basis.collections.Builder"><span>Builder</span></li><li class="in" name="basis.collections.Seq"><span>Seq</span></li><li class="in" name="basis.collections.Container"><span>Container</span></li><li class="in" name="basis.collections.Collection"><span>Collection</span></li><li class="in" name="basis.collections.Enumerator"><span>Enumerator</span></li><li class="in" name="basis.containers.ListLike"><span>ListLike</span></li><li class="in" name="basis.collections.Family"><span>Family</span></li><li class="in" name="scala.Mutable"><span>Mutable</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -119,10 +119,40 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Family</span><span class="result"> = <a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]</span>
+        <span class="name">Family</span><span class="result"> = <a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>[_]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">The base type of this collection's family.</p><div class="fullcomment"><div class="comment cmt"><p>The base type of this collection's family.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Family.html" class="extype" name="basis.collections.Family">Family</a></dd></dl></div>
+    </li><li name="basis.collections.Builder.Scope" visbl="pub" data-isabs="true" fullComment="yes" group="Exporting">
+      <a id="Scope"></a>
+      <a id="Scope:Scope"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Scope</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The implicit scope of this list buffer
+.</p><div class="fullcomment"><div class="comment cmt"><p>The implicit scope of this list buffer
+.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
+    </li><li name="basis.collections.Builder.State" visbl="pub" data-isabs="true" fullComment="yes" group="Exporting">
+      <a id="State"></a>
+      <a id="State:State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">State</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The type of state maintained by this list buffer
+.</p><div class="fullcomment"><div class="comment cmt"><p>The type of state maintained by this list buffer
+.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -169,8 +199,8 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.collections.Accumulator#++=" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
-      <a id="++=(elems:basis.collections.Enumerator[A]):Accumulator.this.type"></a>
+    </li><li name="basis.collections.Buffer#++=" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
+      <a id="++=(elems:basis.collections.Enumerator[A]):Buffer.this.type"></a>
       <a id="++=(Enumerator[A]):ListBuffer.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -183,7 +213,7 @@
       </h4>
       <p class="shortcomment cmt">Appends multiple elements to this list buffer
 .</p><div class="fullcomment"><div class="comment cmt"><p>Appends multiple elements to this list buffer
-.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
+.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a> → <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
     </li><li name="basis.collections.Buffer#++=:" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
       <a id="++=:(elems:basis.collections.Enumerator[A]):Buffer.this.type"></a>
       <a id="++=:(Enumerator[A]):ListBuffer.this.type"></a>
@@ -199,8 +229,8 @@
       <p class="shortcomment cmt">Prepends multiple elements to this list buffer
 .</p><div class="fullcomment"><div class="comment cmt"><p>Prepends multiple elements to this list buffer
 .</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a></dd></dl></div>
-    </li><li name="basis.collections.Accumulator#+=" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
-      <a id="+=(elem:A):Accumulator.this.type"></a>
+    </li><li name="basis.collections.Buffer#+=" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
+      <a id="+=(elem:A):Buffer.this.type"></a>
       <a id="+=(A):ListBuffer.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -213,7 +243,7 @@
       </h4>
       <p class="shortcomment cmt">Appends a single element to this list buffer
 .</p><div class="fullcomment"><div class="comment cmt"><p>Appends a single element to this list buffer
-.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
+.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a> → <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
     </li><li name="basis.collections.Buffer#+=:" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
       <a id="+=:(elem:A):Buffer.this.type"></a>
       <a id="+=:(A):ListBuffer.this.type"></a>
@@ -260,7 +290,7 @@
       <a id="append(A):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -269,13 +299,13 @@
       </h4>
       <p class="shortcomment cmt">Appends a single element to this list buffer
 .</p><div class="fullcomment"><div class="comment cmt"><p>Appends a single element to this list buffer
-.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
+.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
     </li><li name="basis.containers.ListBuffer#appendAll" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
       <a id="appendAll(elems:basis.collections.Enumerator[A]):Unit"></a>
       <a id="appendAll(Enumerator[A]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -284,13 +314,13 @@
       </h4>
       <p class="shortcomment cmt">Appends multiple elements to this list buffer
 .</p><div class="fullcomment"><div class="comment cmt"><p>Appends multiple elements to this list buffer
-.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
+.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
     </li><li name="basis.containers.ListBuffer#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Indexing">
       <a id="apply(index:Int):A"></a>
       <a id="apply(Int):A"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -331,7 +361,7 @@ might equal another object, otherwise <code>false</code>.</p></div><dl class="at
       <a id="clear():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -340,7 +370,7 @@ might equal another object, otherwise <code>false</code>.</p></div><dl class="at
       </h4>
       <p class="shortcomment cmt">Removes all elements from this list buffer
 .</p><div class="fullcomment"><div class="comment cmt"><p>Removes all elements from this list buffer
-.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a></dd></dl></div>
+.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -357,12 +387,12 @@ might equal another object, otherwise <code>false</code>.</p></div><dl class="at
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.containers.ListBuffer#copy" visbl="pub" data-isabs="false" fullComment="yes" group="Converting">
+    </li><li name="basis.containers.ListBuffer#copy" visbl="pub" data-isabs="false" fullComment="yes" group="Exporting">
       <a id="copy:basis.containers.ListBuffer[A]"></a>
       <a id="copy:ListBuffer[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -416,7 +446,7 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
       </h4>
       <p class="shortcomment cmt">Prepares this list buffer
 to receive a certain number of elements.</p><div class="fullcomment"><div class="comment cmt"><p>Prepares this list buffer
-to receive a certain number of elements.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
+to receive a certain number of elements.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -438,7 +468,7 @@ to receive a certain number of elements.</p></div><dl class="attributes block"> 
       <a id="foreach[U]((A)⇒U):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -485,7 +515,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       <a id="insert(Int,A):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -500,7 +530,7 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <a id="insertAll(Int,Enumerator[A]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -510,19 +540,20 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <p class="shortcomment cmt">Inserts multiple elements into this list buffer
 , starting at <code>index</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Inserts multiple elements into this list buffer
 , starting at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a></dd></dl></div>
-    </li><li name="basis.containers.ListBuffer#isEmpty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="basis.containers.ListBuffer#isEmpty" visbl="pub" data-isabs="false" fullComment="no" group="Measuring">
       <a id="isEmpty:Boolean"></a>
       <a id="isEmpty:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Returns <code>true</code> if this list buffer
+doesn't contain any elements.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -541,7 +572,7 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <a id="iterator:Iterator[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -551,12 +582,12 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <p class="shortcomment cmt">Returns a new iterator over the elements of this list buffer
 .</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this list buffer
 .</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a></dd></dl></div>
-    </li><li name="basis.containers.ListBuffer#length" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
+    </li><li name="basis.containers.ListBuffer#length" visbl="pub" data-isabs="false" fullComment="yes" group="Measuring">
       <a id="length:Int"></a>
       <a id="length:Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -610,7 +641,7 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <a id="prepend(A):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -625,7 +656,7 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <a id="prependAll(Enumerator[A]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -640,7 +671,7 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <a id="remove(Int,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -655,7 +686,7 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <a id="remove(Int):A"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -665,6 +696,21 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <p class="shortcomment cmt">Removes and returns the element of this list buffer
 at <code>index</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Removes and returns the element of this list buffer
 at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a> → <a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a></dd></dl></div>
+    </li><li name="basis.collections.Buffer#state" visbl="pub" data-isabs="false" fullComment="yes" group="Exporting">
+      <a id="state:Buffer.this.State"></a>
+      <a id="state:State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">state</span><span class="result">: <a href="#State" class="extmbr" name="basis.containers.ListBuffer.State">State</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the current state of this list buffer
+.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the current state of this list buffer
+.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a> → <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a></dd></dl></div>
     </li><li name="basis.containers.ListBuffer#stringPrefix" visbl="prt" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>
@@ -693,12 +739,12 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.containers.ListBuffer#toList" visbl="pub" data-isabs="false" fullComment="yes" group="Converting">
+    </li><li name="basis.containers.ListBuffer#toList" visbl="pub" data-isabs="false" fullComment="yes" group="Exporting">
       <a id="toList:basis.containers.List[A]"></a>
       <a id="toList:List[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -728,7 +774,7 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
       <a id="update(Int,A):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -795,8 +841,8 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
         <div id="inheritedMembers">
         <div class="parent" name="basis.collections.Buffer">
               <h3>Inherited from <a href="../collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]</h3>
-            </div><div class="parent" name="basis.collections.Accumulator">
-              <h3>Inherited from <a href="../collections/Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]</h3>
+            </div><div class="parent" name="basis.collections.Builder">
+              <h3>Inherited from <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]</h3>
             </div><div class="parent" name="basis.collections.Seq">
               <h3>Inherited from <a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]</h3>
             </div><div class="parent" name="basis.collections.Container">
@@ -808,7 +854,7 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
             </div><div class="parent" name="basis.containers.ListLike">
               <h3>Inherited from <a href="ListLike.html" class="extype" name="basis.containers.ListLike">ListLike</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]</h3>
             </div><div class="parent" name="basis.collections.Family">
-              <h3>Inherited from <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>[<span class="extype" name="basis.containers.ListBuffer.A">A</span>]]</h3>
+              <h3>Inherited from <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>[_]]</h3>
             </div><div class="parent" name="scala.Mutable">
               <h3>Inherited from <span class="extype" name="scala.Mutable">Mutable</span></h3>
             </div><div class="parent" name="scala.Equals">
@@ -825,8 +871,8 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
         <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
               
-            </div><div class="group" name="Quantifying">
-              <h3>Quantifying</h3>
+            </div><div class="group" name="Measuring">
+              <h3>Measuring</h3>
               
             </div><div class="group" name="Indexing">
               <h3>Indexing</h3>
@@ -843,8 +889,8 @@ at <code>index</code>.</p></div><dl class="attributes block"> <dt>Definition Cla
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>
               
-            </div><div class="group" name="Converting">
-              <h3>Converting</h3>
+            </div><div class="group" name="Exporting">
+              <h3>Exporting</h3>
               
             </div><div class="group" name="Classifying">
               <h3>Classifying</h3>

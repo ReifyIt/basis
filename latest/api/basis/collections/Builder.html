@@ -40,7 +40,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Builder</span><span class="tparams">[<span name="From">-From</span>, <span name="A">-A</span>]</span><span class="result"> extends <a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a>[<span class="extype" name="basis.collections.Builder.A">A</span>]</span>
+        <span class="name">Builder</span><span class="tparams">[<span name="A">-A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -48,19 +48,19 @@
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@implicitNotFound</span><span class="args">(<span>
       
-      <span class="defval" name="&quot;No builder available from ${From} for element type ${A}.&quot;">...</span>
+      <span class="defval" name="&quot;No builder available for element type ${A}.&quot;">...</span>
     </span>)</span>
               
-        </dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Builder.scala" target="_blank">Builder.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+        </dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Builder.scala" target="_blank">Builder.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a>[<span class="extype" name="basis.collections.Builder.A">A</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="../text/StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a></div>
+          <div class="subClasses hiddenContent"><a href="../containers/ArrayBuffer.html" class="extype" name="basis.containers.ArrayBuffer">ArrayBuffer</a>, <a href="Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>, <a href="../containers/ListBuffer.html" class="extype" name="basis.containers.ListBuffer">ListBuffer</a>, <a href="../text/StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph141" viewBox="0.00 0.00 172.00 158.00" height="158pt" width="172pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 154)" class="graph" id="graph1"><polygon points="-4,5 -4,-154 169,-154 169,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph141_0"><a xlink:title="basis.collections.Builder (this trait)" xlink:href="#inheritance-diagram"><polygon points="140,-88 24,-88 24,-62 140,-62 140,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-83" x="34" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="56" text-anchor="start">Builder[From, A]</text></a></g><!-- node1 --><g class="node class" id="graph141_1"><a xlink:title="basis.text.StringBuilder" xlink:href="../text/StringBuilder.html#inheritance-diagram"><polygon points="147,-26 17,-26 17,-0 147,-0 147,-26" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-21" x="27" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="49" text-anchor="start">StringBuilder[From]</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph141_0_1"><a xlink:title="StringBuilder[From] is a subtype of Builder[From, A]"><path d="M82,-56.6826C82,-46.8961 82,-34.9026 82,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="80.2501,-56.8581 82,-61.8581 83.7501,-56.8581 80.2501,-56.8581" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph141_2"><a xlink:title="basis.collections.Accumulator" xlink:href="Accumulator.html#inheritance-diagram"><polygon points="138,-150 26,-150 26,-124 138,-124 138,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="36" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="58" text-anchor="start">Accumulator[A]</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph141_2_0"><a xlink:title="Builder[From, A] is a subtype of Accumulator[A]"><path d="M82,-118.683C82,-108.896 82,-96.9026 82,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="80.2501,-118.858 82,-123.858 83.7501,-118.858 80.2501,-118.858" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph141" viewBox="0.00 0.00 211.00 158.00" height="158pt" width="211pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 154)" class="graph" id="graph1"><polygon points="-4,5 -4,-154 208,-154 208,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph141_0"><a xlink:title="basis.collections.Builder (this trait)" xlink:href="#inheritance-diagram"><polygon points="140,-88 52,-88 52,-62 140,-62 140,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-83" x="62" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="84" text-anchor="start">Builder[A]</text></a></g><!-- node1 --><g class="node trait" id="graph141_1"><a xlink:title="basis.collections.Buffer" xlink:href="Buffer.html#inheritance-diagram"><polygon points="82.25,-26 -0.25,-26 -0.25,-0 82.25,-0 82.25,-26" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-21" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="32" text-anchor="start">Buffer[A]</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph141_0_1"><a xlink:title="Buffer[A] is a subtype of Builder[A]"><path d="M81.3582,-58.0271C72.179,-48.0135 60.5333,-35.3091 52.1135,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="80.2012,-59.3548 84.8699,-61.8581 82.7813,-56.9898 80.2012,-59.3548" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node class" id="graph141_2"><a xlink:title="basis.text.StringBuilder" xlink:href="../text/StringBuilder.html#inheritance-diagram"><polygon points="203,-26 101,-26 101,-0 203,-0 203,-26" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-21" x="111" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="133" text-anchor="start">StringBuilder</text></a></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph141_0_2"><a xlink:title="StringBuilder is a subtype of Builder[A]"><path d="M110.908,-58.0271C120.254,-48.0135 132.112,-35.3091 140.684,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="109.465,-57.0087 107.332,-61.8581 112.023,-59.3969 109.465,-57.0087" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node3 --><g class="node class" id="graph141_3"><a xlink:title="scala.AnyRef"><polygon points="134.25,-150 57.75,-150 57.75,-124 134.25,-124 134.25,-150" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-145" x="68" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="90" text-anchor="start">AnyRef</text></a></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph141_3_0"><a xlink:title="Builder[A] is a subtype of AnyRef"><path d="M96,-118.683C96,-108.896 96,-96.9026 96,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="94.2501,-118.858 96,-123.858 97.7501,-118.858 94.2501,-118.858" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -78,7 +78,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.collections.Builder"><span>Builder</span></li><li class="in" name="basis.collections.Accumulator"><span>Accumulator</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.collections.Builder"><span>Builder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -100,7 +100,20 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="basis.collections.Builder.State" visbl="pub" data-isabs="true" fullComment="no" group="Examining">
+              <ol><li name="basis.collections.Builder.Scope" visbl="pub" data-isabs="true" fullComment="no" group="Exporting">
+      <a id="Scope"></a>
+      <a id="Scope:Scope"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Scope</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The implicit scope of this builder.</p>
+    </li><li name="basis.collections.Builder.State" visbl="pub" data-isabs="true" fullComment="no" group="Exporting">
       <a id="State"></a>
       <a id="State:State"></a>
       <h4 class="signature">
@@ -118,7 +131,7 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="basis.collections.Accumulator#append" visbl="pub" data-isabs="true" fullComment="yes" group="Inserting">
+              <ol><li name="basis.collections.Builder#append" visbl="pub" data-isabs="true" fullComment="no" group="Inserting">
       <a id="append(elem:A):Unit"></a>
       <a id="append(A):Unit"></a>
       <h4 class="signature">
@@ -130,7 +143,7 @@
         <span class="name">append</span><span class="params">(<span name="elem">elem: <span class="extype" name="basis.collections.Builder.A">A</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Appends a single element to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a single element to this builder.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
+      <p class="shortcomment cmt">Appends a single element to this builder.</p>
     </li><li name="basis.collections.Builder#clear" visbl="pub" data-isabs="true" fullComment="no" group="Removing">
       <a id="clear():Unit"></a>
       <a id="clear():Unit"></a>
@@ -144,8 +157,8 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Removes all elements from this builder.</p>
-    </li><li name="basis.collections.Accumulator#expect" visbl="pub" data-isabs="true" fullComment="yes" group="Inserting">
-      <a id="expect(count:Int):Accumulator.this.type"></a>
+    </li><li name="basis.collections.Builder#expect" visbl="pub" data-isabs="true" fullComment="no" group="Inserting">
+      <a id="expect(count:Int):Builder.this.type"></a>
       <a id="expect(Int):Builder.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -156,8 +169,8 @@
         <span class="name">expect</span><span class="params">(<span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.collections.Builder">Builder</a>.this.type</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Prepares this builder to receive a certain number of elements.</p><div class="fullcomment"><div class="comment cmt"><p>Prepares this builder to receive a certain number of elements.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
-    </li><li name="basis.collections.Builder#state" visbl="pub" data-isabs="true" fullComment="no" group="Examining">
+      <p class="shortcomment cmt">Prepares this builder to receive a certain number of elements.</p>
+    </li><li name="basis.collections.Builder#state" visbl="pub" data-isabs="true" fullComment="no" group="Exporting">
       <a id="state:Builder.this.State"></a>
       <a id="state:State"></a>
       <h4 class="signature">
@@ -214,8 +227,8 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.collections.Accumulator#++=" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
-      <a id="++=(elems:basis.collections.Enumerator[A]):Accumulator.this.type"></a>
+    </li><li name="basis.collections.Builder#++=" visbl="pub" data-isabs="false" fullComment="no" group="Inserting">
+      <a id="++=(elems:basis.collections.Enumerator[A]):Builder.this.type"></a>
       <a id="++=(Enumerator[A]):Builder.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -226,9 +239,9 @@
         <span title="gt4s: $plus$plus$eq" class="name">++=</span><span class="params">(<span name="elems">elems: <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Builder.A">A</span>]</span>)</span><span class="result">: <a href="" class="extype" name="basis.collections.Builder">Builder</a>.this.type</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Appends multiple elements to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Appends multiple elements to this builder.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
-    </li><li name="basis.collections.Accumulator#+=" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
-      <a id="+=(elem:A):Accumulator.this.type"></a>
+      <p class="shortcomment cmt">Appends multiple elements to this builder.</p>
+    </li><li name="basis.collections.Builder#+=" visbl="pub" data-isabs="false" fullComment="no" group="Inserting">
+      <a id="+=(elem:A):Builder.this.type"></a>
       <a id="+=(A):Builder.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -239,7 +252,7 @@
         <span title="gt4s: $plus$eq" class="name">+=</span><span class="params">(<span name="elem">elem: <span class="extype" name="basis.collections.Builder.A">A</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.collections.Builder">Builder</a>.this.type</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Appends a single element to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a single element to this builder.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
+      <p class="shortcomment cmt">Appends a single element to this builder.</p>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:AnyRef):Boolean"></a>
       <a id="==(AnyRef):Boolean"></a>
@@ -266,7 +279,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Accumulator#appendAll" visbl="pub" data-isabs="false" fullComment="yes" group="Inserting">
+    </li><li name="basis.collections.Builder#appendAll" visbl="pub" data-isabs="false" fullComment="no" group="Inserting">
       <a id="appendAll(elems:basis.collections.Enumerator[A]):Unit"></a>
       <a id="appendAll(Enumerator[A]):Unit"></a>
       <h4 class="signature">
@@ -278,7 +291,7 @@
         <span class="name">appendAll</span><span class="params">(<span name="elems">elems: <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Builder.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Appends multiple elements to this builder.</p><div class="fullcomment"><div class="comment cmt"><p>Appends multiple elements to this builder.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a></dd></dl></div>
+      <p class="shortcomment cmt">Appends multiple elements to this builder.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -511,9 +524,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="basis.collections.Accumulator">
-              <h3>Inherited from <a href="Accumulator.html" class="extype" name="basis.collections.Accumulator">Accumulator</a>[<span class="extype" name="basis.collections.Builder.A">A</span>]</h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
@@ -525,14 +536,14 @@
         <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
               
-            </div><div class="group" name="Examining">
-              <h3>Examining</h3>
-              
             </div><div class="group" name="Inserting">
               <h3>Inserting</h3>
               
             </div><div class="group" name="Removing">
               <h3>Removing</h3>
+              
+            </div><div class="group" name="Exporting">
+              <h3>Exporting</h3>
               
             </div>
         </div>

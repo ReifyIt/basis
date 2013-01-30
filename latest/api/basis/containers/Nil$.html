@@ -46,7 +46,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The empty <a href="List.html" class="extype" name="basis.containers.List">List</a>.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/List.scala" target="_blank">List.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="List.html" class="extype" name="basis.containers.List">List</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="ListLike.html" class="extype" name="basis.containers.ListLike">ListLike</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>[<span class="extype" name="scala.Nothing">Nothing</span>]], <span class="extype" name="scala.Immutable">Immutable</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="List.html" class="extype" name="basis.containers.List">List</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="ListLike.html" class="extype" name="basis.containers.ListLike">ListLike</a>[<span class="extype" name="scala.Nothing">Nothing</span>], <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>[_]], <span class="extype" name="scala.Immutable">Immutable</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -95,7 +95,7 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Family</span><span class="result"> = <a href="List.html" class="extype" name="basis.containers.List">List</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+        <span class="name">Family</span><span class="result"> = <a href="List.html" class="extype" name="basis.containers.List">List</a>[_]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">The base type of this collection's family.</p><div class="fullcomment"><div class="comment cmt"><p>The base type of this collection's family.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/Family.html" class="extype" name="basis.collections.Family">Family</a></dd></dl></div>
@@ -339,7 +339,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the first element of this non-empty list.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the first element of this non-empty list.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.Nil">Nil</a> → <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a></dd></dl></div>
-    </li><li name="basis.containers.Nil#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
+    </li><li name="basis.containers.Nil#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Measuring">
       <a id="isEmpty:Boolean"></a>
       <a id="isEmpty:Boolean"></a>
       <h4 class="signature">
@@ -378,7 +378,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a new iterator over the elements of this list.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this list.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="List.html" class="extype" name="basis.containers.List">List</a> → <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a></dd></dl></div>
-    </li><li name="basis.containers.List#length" visbl="pub" data-isabs="false" fullComment="yes" group="Quantifying">
+    </li><li name="basis.containers.List#length" visbl="pub" data-isabs="false" fullComment="yes" group="Measuring">
       <a id="length:Int"></a>
       <a id="length:Int"></a>
       <h4 class="signature">
@@ -494,7 +494,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <span class="name">tail</span><span class="result">: <a href="List.html" class="extype" name="basis.containers.List">List</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns all elements except the first of this non-empty list.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements except the first of this non-empty list.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.Nil">Nil</a> → <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns all elements except the first of this non-empty list.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements except the first of this non-empty list.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.Nil">Nil</a> → <a href="List.html" class="extype" name="basis.containers.List">List</a> → <a href="../collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a></dd></dl></div>
     </li><li name="basis.containers.List#take" visbl="pub" data-isabs="false" fullComment="yes" group="Slicing">
       <a id="take(upper:Int):basis.containers.List[A]"></a>
       <a id="take(Int):List[Nothing]"></a>
@@ -508,7 +508,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the <code>upper</code> heads of this list.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the <code>upper</code> heads of this list.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="List.html" class="extype" name="basis.containers.List">List</a></dd></dl></div>
-    </li><li name="basis.containers.List#toList" visbl="pub" data-isabs="false" fullComment="yes" group="Converting">
+    </li><li name="basis.containers.List#toList" visbl="pub" data-isabs="false" fullComment="yes" group="Exporting">
       <a id="toList:List.this.type"></a>
       <a id="toList:Nil.this.type"></a>
       <h4 class="signature">
@@ -606,7 +606,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
             </div><div class="parent" name="basis.containers.ListLike">
               <h3>Inherited from <a href="ListLike.html" class="extype" name="basis.containers.ListLike">ListLike</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</h3>
             </div><div class="parent" name="basis.collections.Family">
-              <h3>Inherited from <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>[<span class="extype" name="scala.Nothing">Nothing</span>]]</h3>
+              <h3>Inherited from <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>[_]]</h3>
             </div><div class="parent" name="scala.Immutable">
               <h3>Inherited from <span class="extype" name="scala.Immutable">Immutable</span></h3>
             </div><div class="parent" name="scala.Equals">
@@ -623,8 +623,8 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
               
-            </div><div class="group" name="Quantifying">
-              <h3>Quantifying</h3>
+            </div><div class="group" name="Measuring">
+              <h3>Measuring</h3>
               
             </div><div class="group" name="Decomposing">
               <h3>Decomposing</h3>
@@ -641,8 +641,8 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>
               
-            </div><div class="group" name="Converting">
-              <h3>Converting</h3>
+            </div><div class="group" name="Exporting">
+              <h3>Exporting</h3>
               
             </div><div class="group" name="Classifying">
               <h3>Classifying</h3>
