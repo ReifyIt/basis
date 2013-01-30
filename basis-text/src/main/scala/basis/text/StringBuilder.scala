@@ -22,15 +22,17 @@ abstract class StringBuilder[-From] extends Builder[From, Int] {
   /** Prepares this $collection to receive a certain number of characters. */
   override def expect(count: Int): this.type
   
-  def append(chars: java.lang.CharSequence) {
-    val n = chars.length
+  override def append(c: Int): Unit
+  
+  def append(cs: java.lang.CharSequence) {
+    val n = cs.length
     var i = 0
     while (i < n) this += {
-      val c1 = chars.charAt(i).toInt
+      val c1 = cs.charAt(i).toInt
       i += 1
       if (c1 <= 0xD7FF || c1 >= 0xE000) c1 // U+0000..U+D7FF | U+E000..U+FFFF
       else if (c1 <= 0xDBFF && i < n) { // c1 >= 0xD800
-        val c2 = chars.charAt(i).toInt
+        val c2 = cs.charAt(i).toInt
         if (c2 >= 0xDC00 && c2 <= 0xDFFF) { // U+10000..U+10FFFF
           i += 1
           (((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000
@@ -41,8 +43,13 @@ abstract class StringBuilder[-From] extends Builder[From, Int] {
     }
   }
   
-  def ++= (chars: CharSequence): this.type = {
-    append(chars)
+  override def += (c: Int): this.type = {
+    append(c)
+    this
+  }
+  
+  def ++= (cs: CharSequence): this.type = {
+    append(cs)
     this
   }
 }

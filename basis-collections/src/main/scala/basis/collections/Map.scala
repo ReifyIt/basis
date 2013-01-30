@@ -126,12 +126,12 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[A, T]] with Container[
     var c = 1
     val these = iterator
     while (!these.isEmpty) {
-      val h = these.head._1.##
+      val h = hash(these.head._1)
       a ^= h
       b += h
       if (h != 0) c *= h
       these.step()
     }
-    mash(mix(mix(mix(-1628184653, a), b), c))
+    mash(mix(mix(mix(seed[Map[_, _]], a), b), c))
   }
 }

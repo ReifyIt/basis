@@ -61,10 +61,10 @@ trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
     * @group Classifying */
   override def hashCode: Int = {
     import basis.util.MurmurHash3._
-    var h = -1628178762
+    var h = seed[Seq[_]]
     val these = iterator
     while (!these.isEmpty) {
-      h = mix(h, these.head.##)
+      h = mix(h, hash(these.head))
       these.step()
     }
     mash(h)

@@ -244,7 +244,7 @@ object Struct {
       case that: Record2[_, _] => T1.equals(that.T1) && T2.equals(that.T2)
       case _ => false
     }
-    override def hashCode: Int = mash(mix(mix(-1547717151, T1.hashCode), T2.hashCode))
+    override def hashCode: Int = mash(mix(mix(seed[Record2[_, _]], T1.hashCode), T2.hashCode))
     override def toString: String = "("+ T1 +", "+ T2 +")"
   }
   
@@ -282,7 +282,7 @@ object Struct {
       case that: Record3[_, _, _] => T1.equals(that.T1) && T2.equals(that.T2) && T3.equals(that.T3)
       case _ => false
     }
-    override def hashCode: Int = mash(mix(mix(mix(-1547717150, T1.hashCode), T2.hashCode), T3.hashCode))
+    override def hashCode: Int = mash(mix(mix(mix(seed[Record3[_, _, _]], T1.hashCode), T2.hashCode), T3.hashCode))
     override def toString: String = "("+ T1 +", "+ T2 +", "+ T3 +")"
   }
   
@@ -324,7 +324,7 @@ object Struct {
       case _ => false
     }
     override def hashCode: Int =
-      mash(mix(mix(mix(mix(-1547717149, T1.hashCode), T2.hashCode), T3.hashCode), T4.hashCode))
+      mash(mix(mix(mix(mix(seed[Record4[_, _, _, _]], T1.hashCode), T2.hashCode), T3.hashCode), T4.hashCode))
     override def toString: String = "("+ T1 +", "+ T2 +", "+ T3 +", "+ T4 +")"
   }
   

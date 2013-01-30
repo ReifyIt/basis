@@ -95,12 +95,12 @@ trait Set[+A] extends Any with Equals with Family[Set[A]] with Container[A] {
     var c = 1
     val these = iterator
     while (!these.isEmpty) {
-      val h = these.head.##
+      val h = hash(these.head)
       a ^= h
       b += h
       if (h != 0) c *= h
       these.step()
     }
-    mash(mix(mix(mix(-1628178759, a), b), c))
+    mash(mix(mix(mix(seed[Set[_]], a), b), c))
   }
 }

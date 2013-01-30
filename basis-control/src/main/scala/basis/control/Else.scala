@@ -72,7 +72,7 @@ private[control] final class BindInt(value: Int) extends Bind[Int] with Reified 
     other.isInstanceOf[BindInt] && bind == other.asInstanceOf[BindInt].bind
   
   override def hashCode: Int =
-    mash(mix(-295445459, bind.##))
+    mash(mix(seed[Bind[_]], hash(bind)))
   
   override def toString: String =
     new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
@@ -87,7 +87,7 @@ private[control] final class BindLong(value: Long) extends Bind[Long] with Reifi
     other.isInstanceOf[BindLong] && bind == other.asInstanceOf[BindLong].bind
   
   override def hashCode: Int =
-    mash(mix(-295445459, bind.##))
+    mash(mix(seed[Bind[_]], hash(bind)))
   
   override def toString: String =
     new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
@@ -102,7 +102,7 @@ private[control] final class BindFloat(value: Float) extends Bind[Float] with Re
     other.isInstanceOf[BindFloat] && bind == other.asInstanceOf[BindFloat].bind
   
   override def hashCode: Int =
-    mash(mix(-295445459, bind.##))
+    mash(mix(seed[Bind[_]], hash(bind)))
   
   override def toString: String =
     new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
@@ -117,7 +117,7 @@ private[control] final class BindDouble(value: Double) extends Bind[Double] with
     other.isInstanceOf[BindDouble] && bind == other.asInstanceOf[BindDouble].bind
   
   override def hashCode: Int =
-    mash(mix(-295445459, bind.##))
+    mash(mix(seed[Bind[_]], hash(bind)))
   
   override def toString: String =
     new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
@@ -138,7 +138,7 @@ private[control] final class BindRef[+A](value: A) extends Bind[A] {
     other.isInstanceOf[BindRef[_]] && bind.equals(other.asInstanceOf[BindRef[_]].bind)
   
   override def hashCode: Int =
-    mash(mix(-295445459, bind.hashCode))
+    mash(mix(seed[Bind[_]], hash(bind)))
   
   override def toString: String =
     new java.lang.StringBuilder("Bind").append('(').append(bind).append(')').toString
@@ -207,7 +207,7 @@ private[control] final class TrapRef[+B](value: B) extends Trap[B] {
     other.isInstanceOf[TrapRef[_]] && trap.equals(other.asInstanceOf[TrapRef[_]].trap)
   
   override def hashCode: Int =
-    mash(mix(-295028498, trap.hashCode))
+    mash(mix(seed[Trap[_]], hash(trap)))
   
   override def toString: String =
     new java.lang.StringBuilder("Trap").append('(').append(trap).append(')').toString
