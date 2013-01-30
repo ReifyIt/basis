@@ -159,8 +159,9 @@ private[containers] final class ShortArraySeqIterator
   override def dup: Iterator[Short] = new ShortArraySeqIterator(array, i, n)
 }
 
-private[containers] final class ShortArraySeqBuilder
-  extends ShortArrayBuffer with Builder[Any, Short] {
+private[containers] final class ShortArraySeqBuilder extends ShortArrayBuffer {
+  override type Scope = ArraySeq[_]
   override type State = ArraySeq[Short]
   override def state: ArraySeq[Short] = toArraySeq
+  override def toString: String = "ArraySeqBuilder"+"["+"Short"+"]"
 }

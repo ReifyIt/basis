@@ -21,7 +21,7 @@ import scala.annotation.unspecialized
   * @since    0.1
   * @group    Collections
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Decomposing   2
   * @groupprio  Iterating     3
   * @groupprio  Traversing    4
@@ -39,10 +39,10 @@ import scala.annotation.unspecialized
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Stack[@specialized(Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Stack[A]] with Seq[A] {
+  extends Any with Family[Stack[_]] with Seq[A] {
   
   /** Returns `true` if this $collection doesn't contain any elements.
-    * @group Quantifying */
+    * @group Measuring */
   def isEmpty: Boolean
   
   /** Returns the first element of this non-empty $collection.
@@ -51,7 +51,7 @@ trait Stack[@specialized(Int, Long, Float, Double, Boolean) +A]
   
   /** Returns all elements except the first of this non-empty $collection.
     * @group Decomposing */
-  def tail: Family
+  def tail: Stack[A]
   
   @unspecialized override def iterator: Iterator[A] = new StackIterator(this)
   

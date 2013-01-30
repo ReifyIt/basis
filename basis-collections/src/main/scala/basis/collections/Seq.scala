@@ -33,7 +33,7 @@ package basis.collections
   *  - [[basis.sequential.NonStrictSeqOps NonStrictSeqOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Seq[+A] extends Any with Equals with Family[Seq[A]] with Container[A] {
+trait Seq[+A] extends Any with Equals with Family[Seq[_]] with Container[A] {
   /** Returns `true` if this $collection might equal another object, otherwise `false`.
     * @group Classifying */
   override def canEqual(other: Any): Boolean = other.isInstanceOf[Seq[_]]

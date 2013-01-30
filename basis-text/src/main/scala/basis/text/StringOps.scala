@@ -26,8 +26,8 @@ final class StringOps(s: String) {
   }
   
   /** Appends this `String`, quoted and escaped, to the given builder. */
-  def show(builder: Builder[Any, Int]) {
-    builder += '\"'
+  def show(builder: StringBuilder) {
+    builder.append('\"')
     var i = 0
     val n = s.length
     while (i < n) {
@@ -43,6 +43,6 @@ final class StringOps(s: String) {
       }
       i = s.offsetByCodePoints(i, 1)
     }
-    builder += '\"'
+    builder.append('\"')
   }
 }

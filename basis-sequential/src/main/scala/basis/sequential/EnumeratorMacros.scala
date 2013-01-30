@@ -24,9 +24,11 @@ private[sequential] final class EnumeratorMacros[C <: Context](val context: C) {
   
   def ++ [A]
       (these: Expr[Enumerator[A]], those: Expr[Enumerator[A]])
-      (builder: Expr[Builder[_, A]])
+      (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
-    Expr {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
       Select(
         Apply(
           Select(
@@ -37,17 +39,22 @@ private[sequential] final class EnumeratorMacros[C <: Context](val context: C) {
               these.tree :: Nil),
             "$plus$plus$eq"),
           those.tree :: Nil),
-        "state")
-    } (StateTag(builder))
+        "state"))
   }
   
-  private def BuilderType(builder: Expr[Builder[_, _]]): Type = builder.tree.symbol match {
-    case symbol: TermSymbol if symbol.isStable => singleType(NoPrefix, symbol)
-    case _ => builder.actualType
-  }
+  protected[this] def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
+    WeakTypeTag[builder.value.type](builder.tree.symbol match {
+      case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
+      case _ => builder.actualType
+    })
   
-  private def StateTag(builder: Expr[Builder[_, _]]): WeakTypeTag[builder.value.State] = {
-    val StateSymbol = mirror.staticClass("basis.collections.Builder").toType.member(newTypeName("State"))
-    WeakTypeTag(typeRef(BuilderType(builder), StateSymbol, Nil))
+  protected[this] def BuilderStateTag
+      (builder: Expr[Builder[_]])
+      (implicit BuilderTypeTag: WeakTypeTag[builder.value.type])
+    : WeakTypeTag[builder.value.State] = {
+    val BuilderTpc = mirror.staticClass("basis.collections.Builder").toType
+    val BuilderStateSym = BuilderTpc member newTypeName("State")
+    val BuilderStateTpe = typeRef(BuilderTypeTag.tpe, BuilderStateSym, Nil).normalize
+    WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
 }

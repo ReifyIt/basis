@@ -16,12 +16,12 @@ import basis.collections._
   * @since    0.0
   * @group    Surrogates
   * 
-  * @groupprio  Converting  1
+  * @groupprio  Exporting   1
   * 
   * @define collection  collection
   */
 trait ListLike[+A] extends Any { this: Enumerator[A] =>
   /** Returns a list containing the elements of this $collection.
-    * @group Converting */
+    * @group Exporting */
   def toList: List[A]
 }

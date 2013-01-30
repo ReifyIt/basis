@@ -159,8 +159,9 @@ private[containers] final class ByteArraySeqIterator
   override def dup: Iterator[Byte] = new ByteArraySeqIterator(array, i, n)
 }
 
-private[containers] final class ByteArraySeqBuilder
-  extends ByteArrayBuffer with Builder[Any, Byte] {
+private[containers] final class ByteArraySeqBuilder extends ByteArrayBuffer {
+  override type Scope = ArraySeq[_]
   override type State = ArraySeq[Byte]
   override def state: ArraySeq[Byte] = toArraySeq
+  override def toString: String = "ArraySeqBuilder"+"["+"Byte"+"]"
 }

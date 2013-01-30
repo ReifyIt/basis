@@ -10,26 +10,26 @@ package basis.collections
 /** A mutable collection.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Collections
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Inserting     3
   * @groupprio  Removing      4
   * @groupprio  Iterating     5
   * @groupprio  Traversing    6
-  * @groupprio  Converting    7
+  * @groupprio  Exporting     7
   * @groupprio  Classifying   8
   * 
   * @define collection  buffer
   */
 trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
-  extends Equals with Family[Buffer[A]] with Seq[A] with Accumulator[A] {
+  extends Equals with Family[Buffer[_]] with Seq[A] with Builder[A] {
   
   /** Returns the number of elements in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   def length: Int
   
   /** Returns the element at the given index.
@@ -78,13 +78,9 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
     }
   }
   
-  /** Removes all elements from this $collection.
-    * @group Removing */
-  def clear(): Unit
-  
   /** Returns a distinct copy of this $collection.
-    * @group Converting */
-  def copy: Family
+    * @group Exporting */
+  def copy: Buffer[A]
   
   /** Prepends a single element to this $collection.
     * @group Inserting */
@@ -99,6 +95,18 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
     prependAll(elems)
     this
   }
+  
+  override def += (elem: A): this.type = {
+    append(elem)
+    this
+  }
+  
+  override def ++= (elems: Enumerator[A]): this.type = {
+    appendAll(elems)
+    this
+  }
+  
+  override def state: State = throw new UnsupportedOperationException("Buffer has no state.")
 }
 
 private[collections] object Buffer {

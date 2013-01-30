@@ -17,7 +17,7 @@ import basis.util._
   * @since    0.0
   * @group    Unicode
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Iterating     3
   * @groupprio  Traversing    4
@@ -27,11 +27,11 @@ import basis.util._
   */
 abstract class UTF16 extends Equals with Family[UTF16] with Seq[Int] {
   /** Returns `true` if this $collection doesn't contain any code units.
-    * @group Quantifying */
+    * @group Measuring */
   def isEmpty: Boolean = size == 0
   
   /** Returns the number of code points in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   def length: Int = {
     var l = 0
     var i = 0
@@ -44,7 +44,7 @@ abstract class UTF16 extends Equals with Family[UTF16] with Seq[Int] {
   }
   
   /** Returns the number of unsigned 16-bit code units in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   def size: Int
   
   /** Returns the unsigned 16-bit code unit at `index`.

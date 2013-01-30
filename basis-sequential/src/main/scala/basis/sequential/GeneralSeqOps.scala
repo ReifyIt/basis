@@ -144,7 +144,7 @@ final class GeneralSeqOps[+A](these: Seq[A]) {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictSeqOps[A, Seq[A]] =
+  def eagerly: StrictSeqOps[A, Seq[_]] =
     macro GeneralSeqOps.eagerly[A]
   
   /** Returns a non-strict operations interface to this $collection.
@@ -168,7 +168,7 @@ private[sequential] object GeneralSeqOps {
     Expr(typeCheck(sequence, SeqType))(WeakTypeTag(SeqType))
   }
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSeqOps[A, Seq[A]]] =
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSeqOps[A, Seq[_]]] =
     Strict.StrictSeqOps[A](c)(unApply[A](c))
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictSeqOps[A]] =

@@ -144,7 +144,7 @@ final class GeneralMapOps[+A, +T](these: Map[A, T]) {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictMapOps[A, T, Map[A, T]] =
+  def eagerly: StrictMapOps[A, T, Map[_, _]] =
     macro GeneralMapOps.eagerly[A, T]
   
   /** Returns a non-strict operations interface to this $collection.
@@ -168,7 +168,7 @@ private[sequential] object GeneralMapOps {
     Expr(typeCheck(map, MapType))(WeakTypeTag(MapType))
   }
   
-  def eagerly[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[StrictMapOps[A, T, Map[A, T]]] =
+  def eagerly[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[StrictMapOps[A, T, Map[_, _]]] =
     Strict.StrictMapOps[A, T](c)(unApply[A, T](c))
   
   def lazily[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[NonStrictMapOps[A, T]] =

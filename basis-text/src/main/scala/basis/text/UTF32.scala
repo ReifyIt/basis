@@ -17,7 +17,7 @@ import basis.util._
   * @since    0.0
   * @group    Unicode
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Iterating     3
   * @groupprio  Traversing    4
@@ -27,11 +27,11 @@ import basis.util._
   */
 abstract class UTF32 extends Equals with Family[UTF32] with Index[Int] {
   /** Returns `true` if this $collection doesn't contain any code units.
-    * @group Quantifying */
+    * @group Measuring */
   def isEmpty: Boolean = length == 0
   
   /** Returns the number of code points in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   override def length: Int
   
   /** Returns the unsigned 32-bit code unit at `index`.

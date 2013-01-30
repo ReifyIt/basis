@@ -22,10 +22,11 @@ import scala.collection.TraversableOnce
   */
 @implicitNotFound("No builder factory available for ${CC}.")
 trait BuilderFactory[+CC[_]] {
-  implicit def Factory: this.type = this
-  
   implicit def Builder[A](implicit A: TypeHint[A])
-    : Builder[Any, A] { type State = CC[A] @uncheckedVariance }
+    : Builder[A] {
+      type Scope = CC[X] @uncheckedVariance forSome { type X }
+      type State = CC[A] @uncheckedVariance
+    }
   
   def empty[A](implicit A: TypeHint[A]): CC[A] =
     Builder(A).state
@@ -35,7 +36,7 @@ trait BuilderFactory[+CC[_]] {
   
   def coerce[A](elems: TraversableOnce[A])(implicit A: TypeHint[A]): CC[A] = {
     val builder = Builder(A)
-    elems.foreach(new Accumulator.Append(builder))
+    elems.foreach(new basis.collections.Builder.Append(builder))
     builder.state
   }
   

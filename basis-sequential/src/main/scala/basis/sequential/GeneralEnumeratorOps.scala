@@ -178,8 +178,8 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictEnumeratorOps[A, Enumerator[A]] =
-    new StrictEnumeratorOps[A, Enumerator[A]](these)
+  def eagerly: StrictEnumeratorOps[A, Enumerator[_]] =
+    new StrictEnumeratorOps[A, Enumerator[_]](these)
   
   /** Returns a non-strict operations interface to this $collection.
     * @group Transforming */

@@ -159,8 +159,9 @@ private[containers] final class FloatArraySeqIterator
   override def dup: Iterator[Float] = new FloatArraySeqIterator(array, i, n)
 }
 
-private[containers] final class FloatArraySeqBuilder
-  extends FloatArrayBuffer with Builder[Any, Float] {
+private[containers] final class FloatArraySeqBuilder extends FloatArrayBuffer {
+  override type Scope = ArraySeq[_]
   override type State = ArraySeq[Float]
   override def state: ArraySeq[Float] = toArraySeq
+  override def toString: String = "ArraySeqBuilder"+"["+"Float"+"]"
 }

@@ -144,7 +144,7 @@ final class GeneralIteratorOps[+A](these: Iterator[A]) {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictIteratorOps[A, Iterator[A]] =
+  def eagerly: StrictIteratorOps[A, Iterator[_]] =
     macro GeneralIteratorOps.eagerly[A]
   
   /** Returns a non-strict operations interface to this $collection.
@@ -223,7 +223,7 @@ private[sequential] object GeneralIteratorOps {
     : c.Expr[Maybe[B]] =
     new IteratorMacros[c.type](c).choose[A, B](unApply[A](c))(q)
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictIteratorOps[A, Iterator[A]]] =
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictIteratorOps[A, Iterator[_]]] =
     Strict.StrictIteratorOps[A](c)(unApply[A](c))
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictIteratorOps[A]] =

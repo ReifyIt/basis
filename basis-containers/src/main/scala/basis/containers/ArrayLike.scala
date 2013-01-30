@@ -17,15 +17,15 @@ import basis.util._
   * @since    0.0
   * @group    Surrogates
   * 
-  * @groupprio  Quantifying   1
-  * @groupprio  Indexing      2
-  * @groupprio  Converting    3
+  * @groupprio  Measuring   1
+  * @groupprio  Indexing    2
+  * @groupprio  Exporting   3
   * 
   * @define collection  collection
   */
 trait ArrayLike[+A] extends Any { this: Enumerator[A] =>
   /** Returns the number of elements in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   def length: Int
   
   /** Returns the element at the given index.
@@ -38,7 +38,7 @@ trait ArrayLike[+A] extends Any { this: Enumerator[A] =>
     * @param  to      the destination array.
     * @param  offset  the offset to copy to in the destination array.
     * @param  count   the number of elements to copy.
-    * @group  Converting
+    * @group  Exporting
     */
   def copyToArray[B >: A](index: Int, to: Array[B], offset: Int, count: Int) {
     var i = index
@@ -54,7 +54,7 @@ trait ArrayLike[+A] extends Any { this: Enumerator[A] =>
   
   /** Returns an array containing the elements of this $collection.
     * 
-    * @group  Converting
+    * @group  Exporting
     * @usecase def toArray: Array[A]
     * @inheritdoc
     */

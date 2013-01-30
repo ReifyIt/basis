@@ -148,8 +148,8 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictCollectionOps[A, Collection[A]] =
-    new StrictCollectionOps[A, Collection[A]](these)
+  def eagerly: StrictCollectionOps[A, Collection[_]] =
+    new StrictCollectionOps[A, Collection[_]](these)
   
   /** Returns a non-strict operations interface to this $collection.
     * @group Transforming */

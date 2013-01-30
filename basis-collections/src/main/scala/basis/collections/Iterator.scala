@@ -55,7 +55,7 @@ import scala.annotation.unspecialized
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Iterator[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Iterator[A]] with Enumerator[A] {
+  extends Any with Family[Iterator[_]] with Enumerator[A] {
   
   /** Returns `true` when this $collection has reached a sentinel element.
     * @group Examining */

@@ -25,7 +25,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @since    0.0
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Updating      3
   * @groupprio  Iterating     4
@@ -38,7 +38,7 @@ final class HashSet[+A] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Equals with Immutable with Family[HashSet[A]] with Set[A] {
+  extends Equals with Immutable with Family[HashSet[_]] with Set[A] {
   
   import HashSet.{VOID, LEAF, TREE, KNOT}
   
@@ -261,8 +261,8 @@ final class HashSet[+A] private[containers] (
   * @group Containers */
 object HashSet extends SetFactory[HashSet] {
   implicit override def Builder[A : TypeHint]
-    : Builder[Any, A] { type State = HashSet[A] } =
-    new HashSetBuilder
+    : Builder[A] { type Scope = HashSet[_]; type State = HashSet[A] } =
+    new HashSetBuilder[A]
   
   private[this] val empty = new HashSet[Nothing](0, 0, new Array[AnyRef](0))
   override def empty[A : TypeHint]: HashSet[A] = empty
@@ -399,7 +399,9 @@ private[containers] final class HashSetIterator[+A](
     new HashSetIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
-private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
+private[containers] final class HashSetBuilder[A] extends Builder[A] {
+  override type Scope = HashSet[_]
+  
   override type State = HashSet[A]
   
   private[this] var these: HashSet[A] = HashSet.empty[A]
@@ -417,4 +419,6 @@ private[containers] final class HashSetBuilder[A] extends Builder[Any, A] {
   override def state: HashSet[A] = these
   
   override def clear(): Unit = these = HashSet.empty[A]
+  
+  override def toString: String = "HashSetBuilder"
 }

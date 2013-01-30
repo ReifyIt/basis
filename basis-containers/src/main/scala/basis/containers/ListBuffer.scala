@@ -17,17 +17,17 @@ import basis.runtime._
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Inserting     3
   * @groupprio  Removing      4
   * @groupprio  Iterating     5
   * @groupprio  Traversing    6
-  * @groupprio  Converting    7
+  * @groupprio  Exporting     7
   * @groupprio  Classifying   8
   * 
   * @define collection  list buffer
@@ -44,17 +44,19 @@ class ListBuffer[A] private (
     private[this] var aliased: Int)
   extends Equals
     with Mutable
-    with Family[ListBuffer[A]]
+    with Family[ListBuffer[_]]
     with ListLike[A]
     with Buffer[A] {
   
   def this() = this(Nil, null, 0, 0)
   
-  final def isEmpty: Boolean = size == 0
+  /** Returns `true` if this $collection doesn't contain any elements.
+    * @group Measuring */
+  def isEmpty: Boolean = size == 0
   
-  final override def length: Int = size
+  override def length: Int = size
   
-  final override def apply(index: Int): A = {
+  override def apply(index: Int): A = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     var i = 0
     var xs = first
@@ -65,7 +67,7 @@ class ListBuffer[A] private (
     xs.head
   }
   
-  final override def update(index: Int, elem: A) {
+  override def update(index: Int, elem: A) {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     if (index == 0) first = ::(elem, first.tail)
     else {
@@ -76,7 +78,7 @@ class ListBuffer[A] private (
     }
   }
   
-  final override def append(elem: A) {
+  override def append(elem: A) {
     val xn = ::(elem, Nil)
     if (size == 0) first = xn
     else dealias(size - 1).tail = xn
@@ -85,7 +87,7 @@ class ListBuffer[A] private (
     aliased += 1
   }
   
-  final override def appendAll(elems: Enumerator[A]) {
+  override def appendAll(elems: Enumerator[A]) {
     if (elems.isInstanceOf[Nil.type]) ()
     else if (elems.isInstanceOf[::[_]]) {
       var xs = elems.asInstanceOf[::[A]]
@@ -102,7 +104,7 @@ class ListBuffer[A] private (
     else super.appendAll(elems)
   }
   
-  final override def prepend(elem: A) {
+  override def prepend(elem: A) {
     val x0 = ::(elem, first)
     first = x0
     if (size == 0) last = x0
@@ -110,7 +112,7 @@ class ListBuffer[A] private (
     aliased += 1
   }
   
-  final override def prependAll(elems: Enumerator[A]) {
+  override def prependAll(elems: Enumerator[A]) {
     if (size == 0) appendAll(elems)
     else {
       val f = new Prepend
@@ -137,7 +139,7 @@ class ListBuffer[A] private (
     }
   }
   
-  final override def insert(index: Int, elem: A) {
+  override def insert(index: Int, elem: A) {
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) append(elem)
     else if (index == 0) prepend(elem)
@@ -149,7 +151,7 @@ class ListBuffer[A] private (
     }
   }
   
-  final override def insertAll(index: Int, elems: Enumerator[A]) {
+  override def insertAll(index: Int, elems: Enumerator[A]) {
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
@@ -167,7 +169,7 @@ class ListBuffer[A] private (
     }
   }
   
-  final override def remove(index: Int): A = {
+  override def remove(index: Int): A = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     if (index == 0) {
       val x0 = first
@@ -197,7 +199,7 @@ class ListBuffer[A] private (
     }
   }
   
-  final override def remove(index: Int, count: Int) {
+  override def remove(index: Int, count: Int) {
     if (count < 0) throw new IllegalArgumentException("negative count")
     if (index < 0) throw new IndexOutOfBoundsException(index.toString)
     if (index + count > size) throw new IndexOutOfBoundsException((index + count).toString)
@@ -226,28 +228,28 @@ class ListBuffer[A] private (
     if (aliased > count) aliased -= count else aliased = 0
   }
   
-  final override def clear() {
+  override def clear() {
     first = Nil
     last = null
     size = 0
     aliased = 0
   }
   
-  final override def copy: ListBuffer[A] = {
+  override def copy: ListBuffer[A] = {
     aliased = 0
     new ListBuffer(first, last, size, aliased)
   }
   
-  final override def toList: List[A] = {
+  override def toList: List[A] = {
     aliased = 0
     first
   }
   
   override def expect(count: Int): this.type = this
   
-  final override def iterator: Iterator[A] = new ListBufferIterator(first)
+  override def iterator: Iterator[A] = new ListBufferIterator(first)
   
-  protected final override def foreach[U](f: A => U) {
+  protected override def foreach[U](f: A => U) {
     var xs = first
     while (!xs.isEmpty) {
       f(xs.head)
@@ -295,8 +297,8 @@ class ListBuffer[A] private (
   * @group Containers */
 object ListBuffer extends SeqFactory[ListBuffer] {
   implicit override def Builder[A : TypeHint]
-    : Builder[Any, A] { type State = ListBuffer[A] } =
-    new ListBufferBuilder
+    : Builder[A] { type Scope = ListBuffer[_]; type State = ListBuffer[A] } =
+    new ListBufferBuilder[A]
   
   override def empty[A : TypeHint]: ListBuffer[A] = new ListBuffer
   
@@ -337,8 +339,9 @@ private[containers] final class ListBufferIterator[+A] private (
   override def dup: Iterator[A] = new ListBufferIterator(empty, head, next)
 }
 
-private[containers] final class ListBufferBuilder[A]
-  extends ListBuffer[A] with Builder[Any, A] {
+private[containers] final class ListBufferBuilder[A] extends ListBuffer[A] {
+  override type Scope = ListBuffer[_]
   override type State = ListBuffer[A]
   override def state: ListBuffer[A] = copy
+  override def toString: String = "ListBufferBuilder"
 }

@@ -26,19 +26,19 @@ private[containers] class DoubleArrayBuffer private (
   
   protected override def T: TypeHint[Double] = TypeHint.Double
   
-  final override def length: Int = size
+  override def length: Int = size
   
-  final override def apply(index: Int): Double = {
+  override def apply(index: Int): Double = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     buffer(index)
   }
   
-  final override def update(index: Int, elem: Double) {
+  override def update(index: Int, elem: Double) {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     buffer(index) = elem
   }
   
-  final override def append(elem: Double) {
+  override def append(elem: Double) {
     var array = buffer
     if (aliased || size + 1 > array.length) {
       array = new Array[Double](expand(size + 1))
@@ -50,7 +50,7 @@ private[containers] class DoubleArrayBuffer private (
     size += 1
   }
   
-  final override def appendAll(elems: Enumerator[Double]) {
+  override def appendAll(elems: Enumerator[Double]) {
     if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Double]]
       val n = xs.length
@@ -67,7 +67,7 @@ private[containers] class DoubleArrayBuffer private (
     else appendAll(ArrayBuffer.coerce(elems))
   }
   
-  final override def prepend(elem: Double) {
+  override def prepend(elem: Double) {
     var array = buffer
     if (aliased || size + 1 > array.length) array = new Array[Double](expand(1 + size))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
@@ -77,7 +77,7 @@ private[containers] class DoubleArrayBuffer private (
     aliased = false
   }
   
-  final override def prependAll(elems: Enumerator[Double]) {
+  override def prependAll(elems: Enumerator[Double]) {
     if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Double]]
       val n = xs.length
@@ -92,7 +92,7 @@ private[containers] class DoubleArrayBuffer private (
     else prependAll(ArrayBuffer.coerce(elems))
   }
   
-  final override def insert(index: Int, elem: Double) {
+  override def insert(index: Int, elem: Double) {
     if (index == size) append(elem)
     else if (index == 0) prepend(elem)
     else {
@@ -110,7 +110,7 @@ private[containers] class DoubleArrayBuffer private (
     }
   }
   
-  final override def insertAll(index: Int, elems: Enumerator[Double]) {
+  override def insertAll(index: Int, elems: Enumerator[Double]) {
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
     else if (elems.isInstanceOf[ArrayLike[_]]) {
@@ -131,7 +131,7 @@ private[containers] class DoubleArrayBuffer private (
     else insertAll(index, ArrayBuffer.coerce(elems))
   }
   
-  final override def remove(index: Int): Double = {
+  override def remove(index: Int): Double = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     var array = buffer
     val x = array(index)
@@ -150,7 +150,7 @@ private[containers] class DoubleArrayBuffer private (
     x
   }
   
-  final override def remove(index: Int, count: Int) {
+  override def remove(index: Int, count: Int) {
     if (count < 0) throw new IllegalArgumentException("negative count")
     if (index < 0) throw new IndexOutOfBoundsException(index.toString)
     if (index + count > size) throw new IndexOutOfBoundsException((index + count).toString)
@@ -169,23 +169,35 @@ private[containers] class DoubleArrayBuffer private (
     }
   }
   
-  final override def clear() {
+  override def += (elem: Double): this.type = {
+    append(elem)
+    this
+  }
+  
+  override def ++= (elems: Enumerator[Double]): this.type = {
+    appendAll(elems)
+    this
+  }
+  
+  override def clear() {
     aliased = true
     size = 0
     buffer = null
   }
   
-  final override def copy: ArrayBuffer[Double] = {
+  override def state: State = throw new UnsupportedOperationException
+  
+  override def copy: ArrayBuffer[Double] = {
     aliased = true
     new DoubleArrayBuffer(buffer, size, aliased)
   }
   
-  final override def copyToArray[B >: Double](index: Int, to: Array[B], offset: Int, count: Int) {
+  override def copyToArray[B >: Double](index: Int, to: Array[B], offset: Int, count: Int) {
     if (to.isInstanceOf[Array[Double]]) java.lang.System.arraycopy(buffer, index, to, offset, count)
     else super.copyToArray(index, to, offset, count)
   }
   
-  final override def toArray[B >: Double](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
+  override def toArray[B >: Double](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
     if (B == scala.reflect.ClassTag.Double) {
       val array = new Array[Double](size)
       java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -194,7 +206,7 @@ private[containers] class DoubleArrayBuffer private (
     else super.toArray
   }
   
-  final override def toArraySeq: ArraySeq[Double] = {
+  override def toArraySeq: ArraySeq[Double] = {
     if (buffer == null || size != buffer.length) {
       val array = new Array[Double](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -215,7 +227,7 @@ private[containers] class DoubleArrayBuffer private (
   
   protected def defaultSize: Int = 16
   
-  final override def iterator: Iterator[Double] = new DoubleArrayBufferIterator(this)
+  override def iterator: Iterator[Double] = new DoubleArrayBufferIterator(this)
   
   private[this] def expand(size: Int): Int = {
     var n = (defaultSize max size) - 1
@@ -250,8 +262,9 @@ private[containers] final class DoubleArrayBufferIterator private (
   override def dup: Iterator[Double] = new DoubleArrayBufferIterator(b, i, n, x)
 }
 
-private[containers] final class DoubleArrayBufferBuilder
-  extends DoubleArrayBuffer with Builder[Any, Double] {
+private[containers] final class DoubleArrayBufferBuilder extends DoubleArrayBuffer {
+  override type Scope = ArrayBuffer[_]
   override type State = ArrayBuffer[Double]
   override def state: ArrayBuffer[Double] = copy
+  override def toString: String = "ArrayBufferBuilder"+"["+"Double"+"]"
 }

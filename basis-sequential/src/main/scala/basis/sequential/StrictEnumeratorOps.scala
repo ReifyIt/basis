@@ -22,7 +22,7 @@ import basis.collections._
   * 
   * @define collection  enumerator
   */
-final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends AnyVal {
+final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends AnyVal {
   /** Returns the applications of a partial function to each element in this
     * $collection for which the function is defined.
     * 
@@ -31,7 +31,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @return the accumulated elements filtered and transformed by `q`.
     * @group  Mapping
     */
-  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State = {
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] { type Scope <: From }): builder.State = {
     traverse(these)(new StrictEnumeratorOps.CollectInto(q)(builder))
     builder.state
   }
@@ -43,7 +43,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @return the accumulated elements transformed by `f`.
     * @group  Mapping
     */
-  def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State = {
+  def map[B](f: A => B)(implicit builder: Builder[B] { type Scope <: From }): builder.State = {
     traverse(these)(new StrictEnumeratorOps.MapInto(f)(builder))
     builder.state
   }
@@ -56,7 +56,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[From, B]): builder.State = {
+  def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State = {
     traverse(these)(new StrictEnumeratorOps.FlatMapInto(f)(builder))
     builder.state
   }
@@ -68,7 +68,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State = {
+  def filter(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
     traverse(these)(new StrictEnumeratorOps.FilterInto(p)(builder))
     builder.state
   }
@@ -91,7 +91,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State = {
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
     traverse(these)(new StrictEnumeratorOps.DropWhileInto(p)(builder))
     builder.state
   }
@@ -105,7 +105,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State = {
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
     begin(traverse(these)(new StrictEnumeratorOps.TakeWhileInto(p)(builder)))
     builder.state
   }
@@ -121,7 +121,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def span(p: A => Boolean)
-      (implicit builder1: Builder[From, A], builder2: Builder[From, A])
+      (implicit builder1: Builder[A] { type Scope <: From }, builder2: Builder[A] { type Scope <: From })
     : (builder1.State, builder2.State) = {
     traverse(these)(new StrictEnumeratorOps.SpanInto(p)(builder1, builder2))
     (builder1.state, builder2.state)
@@ -135,7 +135,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop(lower: Int)(implicit builder: Builder[From, A]): builder.State = {
+  def drop(lower: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
     traverse(these)(new StrictEnumeratorOps.DropInto(lower)(builder))
     builder.state
   }
@@ -148,7 +148,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take(upper: Int)(implicit builder: Builder[From, A]): builder.State = {
+  def take(upper: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
     begin(traverse(these)(new StrictEnumeratorOps.TakeInto(upper)(builder)))
     builder.state
   }
@@ -162,7 +162,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State = {
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
     begin(traverse(these)(new StrictEnumeratorOps.SliceInto(lower, upper)(builder)))
     builder.state
   }
@@ -174,7 +174,7 @@ final class StrictEnumeratorOps[+A, +From](val these: Enumerator[A]) extends Any
     * @return the accumulated elements of both enumerators.
     * @group  Combining
     */
-  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     (builder ++= these ++= those).state
 }
 
@@ -198,13 +198,13 @@ private[sequential] object StrictEnumeratorOps {
   def ++ [A : c.WeakTypeTag]
       (c: Context)
       (those: c.Expr[Enumerator[A]])
-      (builder: c.Expr[Builder[_, A]])
+      (builder: c.Expr[Builder[A]])
     : c.Expr[builder.value.State] =
     new EnumeratorMacros[c.type](c).++[A](unApply[A](c), those)(builder)
   
   final class CollectInto[-A, B]
       (q: PartialFunction[A, B])
-      (builder: Builder[_, B])
+      (builder: Builder[B])
     extends AbstractFunction1[A, Unit] {
     
     override def apply(x: A) {
@@ -214,7 +214,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class MapInto[-A, +B]
       (f: A => B)
-      (builder: Builder[_, B])
+      (builder: Builder[B])
     extends AbstractFunction1[A, Unit] {
     
     override def apply(x: A) {
@@ -224,7 +224,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class FlatMapInto[-A, +B]
       (f: A => Enumerator[B])
-      (builder: Builder[_, B])
+      (builder: Builder[B])
     extends AbstractFunction1[A, Unit] {
     
     override def apply(x: A) {
@@ -234,7 +234,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class FilterInto[-A]
       (p: A => Boolean)
-      (builder: Builder[_, A])
+      (builder: Builder[A])
     extends AbstractFunction1[A, Unit] {
     
     override def apply(x: A) {
@@ -244,7 +244,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class DropWhileInto[-A]
       (p: A => Boolean)
-      (builder: Builder[_, A])
+      (builder: Builder[A])
     extends AbstractFunction1[A, Unit] {
     
     private[this] var taking: Boolean = false
@@ -256,7 +256,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class TakeWhileInto[-A]
       (p: A => Boolean)
-      (builder: Builder[_, A])
+      (builder: Builder[A])
     extends AbstractFunction1[A, Unit] {
     
     override def apply(x: A) {
@@ -267,7 +267,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class SpanInto[-A]
       (p: A => Boolean)
-      (builder1: Builder[_, A], builder2: Builder[_, A])
+      (builder1: Builder[A], builder2: Builder[A])
     extends AbstractFunction1[A, Unit] {
     
     private[this] var taking: Boolean = false
@@ -280,7 +280,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class DropInto[-A]
       (lower: Int)
-      (builder: Builder[_, A])
+      (builder: Builder[A])
     extends AbstractFunction1[A, Unit] {
     
     private[this] var i = 0
@@ -293,7 +293,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class TakeInto[-A]
       (upper: Int)
-      (builder: Builder[_, A])
+      (builder: Builder[A])
     extends AbstractFunction1[A, Unit] {
     
     private[this] var i = 0
@@ -309,7 +309,7 @@ private[sequential] object StrictEnumeratorOps {
   
   final class SliceInto[-A]
       (lower: Int, upper: Int)
-      (builder: Builder[_, A])
+      (builder: Builder[A])
     extends AbstractFunction1[A, Unit] {
     
     private[this] var l = 0 max lower

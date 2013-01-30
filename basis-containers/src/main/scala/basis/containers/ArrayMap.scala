@@ -25,7 +25,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @since    0.0
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Updating      3
   * @groupprio  Iterating     4
@@ -35,7 +35,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @define collection  array map
   */
 private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Array[AnyRef])
-  extends Equals with Immutable with Family[ArrayMap[A, T]] with Map[A, T] {
+  extends Equals with Immutable with Family[ArrayMap[_, _]] with Map[A, T] {
   
   override def isEmpty: Boolean = slots.length == 0
   
@@ -129,8 +129,8 @@ private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Arr
   * @group Containers */
 private[containers] object ArrayMap extends MapFactory[ArrayMap] {
   implicit override def Builder[A : TypeHint, T : TypeHint]
-    : Builder[Any, (A, T)] { type State = ArrayMap[A, T] } =
-    new ArrayMapBuilder
+    : Builder[(A, T)] { type Scope = ArrayMap[_, _]; type State = ArrayMap[A, T] } =
+    new ArrayMapBuilder[A, T]
   
   private[this] val empty = new ArrayMap[Nothing, Nothing](new Array[AnyRef](0))
   override def empty[A : TypeHint, T : TypeHint]: ArrayMap[A, T] = empty
@@ -173,7 +173,9 @@ private[containers] final class ArrayMapIterator[+A, +T]
   override def dup: Iterator[(A, T)] = new ArrayMapIterator(slots, index)
 }
 
-private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T)] {
+private[containers] final class ArrayMapBuilder[A, T] extends Builder[(A, T)] {
+  override type Scope = ArrayMap[_, _]
+  
   override type State = ArrayMap[A, T]
   
   private[this] var seen: HashMap[A, Int] = HashMap.empty[A, Int]
@@ -243,4 +245,6 @@ private[containers] final class ArrayMapBuilder[A, T] extends Builder[Any, (A, T
     aliased = true
     size = 0
   }
+  
+  override def toString: String = "ArrayMapBuilder"
 }

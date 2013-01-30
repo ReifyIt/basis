@@ -144,7 +144,7 @@ final class GeneralSetOps[+A](these: Set[A]) {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictSetOps[A, Set[A]] =
+  def eagerly: StrictSetOps[A, Set[_]] =
     macro GeneralSetOps.eagerly[A]
   
   /** Returns a non-strict operations interface to this $collection.
@@ -168,7 +168,7 @@ private[sequential] object GeneralSetOps {
     Expr(typeCheck(set, SetType))(WeakTypeTag(SetType))
   }
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSetOps[A, Set[A]]] =
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSetOps[A, Set[_]]] =
     Strict.StrictSetOps[A](c)(unApply[A](c))
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictSetOps[A]] =

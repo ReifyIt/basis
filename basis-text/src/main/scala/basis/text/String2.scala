@@ -34,13 +34,13 @@ object String2 {
     s.append(chars)
     s.state
   }
-  
-  implicit def Builder: StringBuilder[Any] { type State = String2 } = new String2Builder
 }
 
 /** A builder for 16-bit Unicode strings in the UTF-16 encoding form.
   * Produces only well-formed code unit sequences. */
-private[text] final class String2Builder extends StringBuilder[Any] {
+private[text] final class String2Builder extends StringBuilder {
+  override type Scope = UTF16
+  
   override type State = String2
   
   private[this] var codeUnits: Array[Char] = _
@@ -109,4 +109,6 @@ private[text] final class String2Builder extends StringBuilder[Any] {
     aliased = true
     size = 0
   }
+  
+  override def toString: String = "String2Builder"
 }

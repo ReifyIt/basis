@@ -159,8 +159,9 @@ private[containers] final class LongArraySeqIterator
   override def dup: Iterator[Long] = new LongArraySeqIterator(array, i, n)
 }
 
-private[containers] final class LongArraySeqBuilder
-  extends LongArrayBuffer with Builder[Any, Long] {
+private[containers] final class LongArraySeqBuilder extends LongArrayBuffer {
+  override type Scope = ArraySeq[_]
   override type State = ArraySeq[Long]
   override def state: ArraySeq[Long] = toArraySeq
+  override def toString: String = "ArraySeqBuilder"+"["+"Long"+"]"
 }

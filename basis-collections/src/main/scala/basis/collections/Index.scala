@@ -20,7 +20,7 @@ import scala.annotation.unspecialized
   * @since    0.0
   * @group    Collections
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Iterating     3
   * @groupprio  Traversing    4
@@ -38,10 +38,10 @@ import scala.annotation.unspecialized
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Index[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Index[A]] with Seq[A] {
+  extends Any with Family[Index[_]] with Seq[A] {
   
   /** Returns the number of elements in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   def length: Int
   
   /** Returns the element at the given index.

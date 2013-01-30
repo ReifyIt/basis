@@ -16,7 +16,7 @@ import basis.control._
   * @since    0.1
   * @group    General
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Traversing    2
   * @groupprio  Reducing      3
   * @groupprio  Querying      4
@@ -26,7 +26,7 @@ import basis.control._
   */
 final class GeneralArrayOps[A](these: Array[A]) {
   /** Returns `true` if this $collection doesn't contain any elements.
-    * @group Quantifying */
+    * @group Measuring */
   def isEmpty: Boolean =
     macro GeneralArrayOps.isEmpty[A]
   
@@ -180,7 +180,7 @@ final class GeneralArrayOps[A](these: Array[A]) {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictArrayOps[A, Array[A]] =
+  def eagerly: StrictArrayOps[A, Array[_]] =
     macro GeneralArrayOps.eagerly[A]
   
   /** Returns a non-strict operations interface to this $collection.
@@ -278,7 +278,7 @@ private[sequential] object GeneralArrayOps {
     : c.Expr[Maybe[B]] =
     new ArrayMacros[c.type](c).choose[A, B](unApply[A](c))(q)
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictArrayOps[A, Array[A]]] =
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictArrayOps[A, Array[_]]] =
     Strict.StrictArrayOps[A](c)(unApply[A](c))
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictArrayOps[A]] =

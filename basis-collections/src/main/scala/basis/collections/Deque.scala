@@ -19,7 +19,7 @@ package basis.collections
   * @since    0.1
   * @group    Collections
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Decomposing   2
   * @groupprio  Iterating     3
   * @groupprio  Traversing    4
@@ -37,7 +37,9 @@ package basis.collections
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Deque[@specialized(Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Deque[A]] with Stack[A] {
+  extends Any with Family[Deque[_]] with Stack[A] {
+  
+  override def head: A
   
   /** Returns the last element of this non-empty $collection.
     * @group Decomposing */
@@ -45,5 +47,7 @@ trait Deque[@specialized(Int, Long, Float, Double, Boolean) +A]
   
   /** Returns all elements except the last of this non-empty $collection.
     * @group Decomposing */
-  def init: Family
+  def init: Deque[A]
+  
+  override def tail: Deque[A]
 }

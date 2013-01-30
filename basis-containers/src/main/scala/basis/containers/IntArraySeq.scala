@@ -159,8 +159,9 @@ private[containers] final class IntArraySeqIterator
   override def dup: Iterator[Int] = new IntArraySeqIterator(array, i, n)
 }
 
-private[containers] final class IntArraySeqBuilder
-  extends IntArrayBuffer with Builder[Any, Int] {
+private[containers] final class IntArraySeqBuilder extends IntArrayBuffer {
+  override type Scope = ArraySeq[_]
   override type State = ArraySeq[Int]
   override def state: ArraySeq[Int] = toArraySeq
+  override def toString: String = "ArraySeqBuilder"+"["+"Int"+"]"
 }

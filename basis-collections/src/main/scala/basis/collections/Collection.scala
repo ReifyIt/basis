@@ -36,7 +36,7 @@ package basis.collections
   *  - [[basis.sequential.NonStrictCollectionOps NonStrictCollectionOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Collection[+A] extends Any with Family[Collection[A]] with Enumerator[A] {
+trait Collection[+A] extends Any with Family[Collection[_]] with Enumerator[A] {
   /** Returns a string representation of this $collection.
     * @group Classifying */
   override def toString: String = {

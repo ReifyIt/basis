@@ -144,8 +144,9 @@ private[containers] final class RefArraySeqIterator[A]
   override def dup: Iterator[A] = new RefArraySeqIterator(array, i, n)
 }
 
-private[containers] final class RefArraySeqBuilder[A]
-  extends RefArrayBuffer[A] with Builder[Any, A] {
+private[containers] final class RefArraySeqBuilder[A] extends RefArrayBuffer[A] {
+  override type Scope = ArraySeq[_]
   override type State = ArraySeq[A]
   override def state: ArraySeq[A] = toArraySeq
+  override def toString: String = "ArraySeqBuilder"
 }

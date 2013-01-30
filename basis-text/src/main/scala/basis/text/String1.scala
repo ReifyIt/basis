@@ -34,13 +34,13 @@ object String1 {
     s.append(chars)
     s.state
   }
-  
-  implicit def Builder: StringBuilder[Any] { type State = String1 } = new String1Builder
 }
 
 /** A builder for 8-bit Unicode strings in the UTF-8 encoding form.
   * Produces only well-formed code unit sequences. */
-private[text] final class String1Builder extends StringBuilder[Any] {
+private[text] final class String1Builder extends StringBuilder {
+  override type Scope = UTF8
+  
   override type State = String1
   
   private[this] var codeUnits: Array[Byte] = _
@@ -125,4 +125,6 @@ private[text] final class String1Builder extends StringBuilder[Any] {
     aliased = true
     size = 0
   }
+  
+  override def toString: String = "String1Builder"
 }

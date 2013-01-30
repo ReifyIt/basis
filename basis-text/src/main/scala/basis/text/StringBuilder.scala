@@ -12,13 +12,13 @@ import basis.collections._
 /** A builder for Unicode® strings.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Builders
   * 
   * @define collection  string builder
   */
-abstract class StringBuilder[-From] extends Builder[From, Int] {
+abstract class StringBuilder extends Builder[Int] {
   /** Prepares this $collection to receive a certain number of characters. */
   override def expect(count: Int): this.type
   

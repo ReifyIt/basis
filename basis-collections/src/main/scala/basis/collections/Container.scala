@@ -34,7 +34,7 @@ package basis.collections
   *  - [[basis.sequential.NonStrictContainerOps NonStrictContainerOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Container[+A] extends Any with Family[Container[A]] with Collection[A] {
+trait Container[+A] extends Any with Family[Container[_]] with Collection[A] {
   /** Returns a new iterator over the elements of this $collection.
     * @group Iterating */
   def iterator: Iterator[A]

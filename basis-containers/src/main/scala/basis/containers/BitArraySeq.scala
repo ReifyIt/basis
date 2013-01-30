@@ -113,7 +113,9 @@ private[containers] final class BitArraySeqIterator
   override def dup: Iterator[Boolean] = new BitArraySeqIterator(words, i, n)
 }
 
-private[containers] final class BitArraySeqBuilder extends Builder[Any, Boolean] {
+private[containers] final class BitArraySeqBuilder extends Builder[Boolean] {
+  override type Scope = ArraySeq[_]
+  
   override type State = ArraySeq[Boolean]
   
   private[this] var words: Array[Int] = _
@@ -173,4 +175,6 @@ private[containers] final class BitArraySeqBuilder extends Builder[Any, Boolean]
     aliased = true
     length = 0
   }
+  
+  override def toString: String = "ArraySeqBuilder"+"["+"Boolean"+"]"
 }

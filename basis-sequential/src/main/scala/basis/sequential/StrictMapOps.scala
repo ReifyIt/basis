@@ -22,7 +22,7 @@ import basis.collections._
   * 
   * @define collection  map
   */
-final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
+final class StrictMapOps[+A, +T, -From](these: Map[A, T]) {
   /** Returns the applications of a partial function to each entry in this
     * $collection for which the function is defined.
     * 
@@ -31,7 +31,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     * @return the accumulated elements filtered and transformed by `q`.
     * @group  Mapping
     */
-  def collect[B](q: PartialFunction[(A, T), B])(implicit builder: Builder[From, B]): builder.State =
+  def collect[B](q: PartialFunction[(A, T), B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     macro StrictContainerOps.collect[(A, T), B]
   
   /** Returns the applications of a function to each entry in this $collection.
@@ -41,7 +41,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     * @return the accumulated elements transformed by `f`.
     * @group  Mapping
     */
-  def map[B](f: ((A, T)) => B)(implicit builder: Builder[From, B]): builder.State =
+  def map[B](f: ((A, T)) => B)(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     macro StrictContainerOps.map[(A, T), B]
   
   /** Returns the concatenation of all elements returned by a function applied
@@ -52,7 +52,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B](f: ((A, T)) => Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+  def flatMap[B](f: ((A, T)) => Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     macro StrictContainerOps.flatMap[(A, T), B]
   
   /** Returns all entries in this $collection that satisfy a predicate.
@@ -62,7 +62,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     * @return the accumulated entries filtered by `p`.
     * @group  Filtering
     */
-  def filter(p: ((A, T)) => Boolean)(implicit builder: Builder[From, (A, T)]): builder.State =
+  def filter(p: ((A, T)) => Boolean)(implicit builder: Builder[(A, T)] { type Scope <: From }): builder.State =
     macro StrictContainerOps.filter[(A, T)]
   
   /** Returns a view of all entries in this $collection that satisfy a predicate.
@@ -83,7 +83,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     *         entry to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile(p: ((A, T)) => Boolean)(implicit builder: Builder[From, (A, T)]): builder.State =
+  def dropWhile(p: ((A, T)) => Boolean)(implicit builder: Builder[(A, T)] { type Scope <: From }): builder.State =
     macro StrictContainerOps.dropWhile[(A, T)]
   
   /** Returns the longest prefix of this $collection for which each entry
@@ -95,7 +95,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     *         entry to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile(p: ((A, T)) => Boolean)(implicit builder: Builder[From, (A, T)]): builder.State =
+  def takeWhile(p: ((A, T)) => Boolean)(implicit builder: Builder[(A, T)] { type Scope <: From }): builder.State =
     macro StrictContainerOps.takeWhile[(A, T)]
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
@@ -110,7 +110,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     */
   //FIXME: SI-6447
   //def span(p: ((A, T)) => Boolean)
-  //    (implicit builder1: Builder[From, (A, T)], builder2: Builder[From, (A, T)])
+  //    (implicit builder1: Builder[(A, T) { type Scope <: From }], builder2: Builder[(A, T) { type Scope <: From }])
   //  : (builder1.State, builder2.State) =
   //  macro StrictContainerOps.span[(A, T)]
   
@@ -122,7 +122,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     * @return all but the first `lower` accumulated entries.
     * @group  Filtering
     */
-  def drop(lower: Int)(implicit builder: Builder[From, (A, T)]): builder.State =
+  def drop(lower: Int)(implicit builder: Builder[(A, T)] { type Scope <: From }): builder.State =
     macro StrictContainerOps.drop[(A, T)]
   
   /** Returns a prefix of this $collection up to some length.
@@ -133,7 +133,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     * @return up to the first `upper` accumulated entries.
     * @group  Filtering
     */
-  def take(upper: Int)(implicit builder: Builder[From, (A, T)]): builder.State =
+  def take(upper: Int)(implicit builder: Builder[(A, T)] { type Scope <: From }): builder.State =
     macro StrictContainerOps.take[(A, T)]
   
   /** Returns an interval of entries in this $collection.
@@ -145,7 +145,7 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice(lower: Int, upper: Int)(implicit builder: Builder[From, (A, T)]): builder.State =
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[(A, T)] { type Scope <: From }): builder.State =
     macro StrictContainerOps.slice[(A, T)]
   
   /** Returns the concatenation of this and another collection.
@@ -155,6 +155,6 @@ final class StrictMapOps[+A, +T, +From](these: Map[A, T]) {
     * @return the accumulated entries of both collections.
     * @group  Combining
     */
-  def ++ [B >: (A, T)](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+  def ++ [B >: (A, T)](those: Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     macro StrictEnumeratorOps.++[B]
 }

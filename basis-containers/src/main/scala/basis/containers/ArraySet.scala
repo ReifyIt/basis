@@ -24,7 +24,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @since    0.0
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Updating      3
   * @groupprio  Iterating     4
@@ -34,7 +34,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @define collection  array set
   */
 private[containers] final class ArraySet[+A] private[containers] (slots: Array[AnyRef])
-  extends Equals with Immutable with Family[ArraySet[A]] with Set[A] {
+  extends Equals with Immutable with Family[ArraySet[_]] with Set[A] {
   
   override def isEmpty: Boolean = slots.length == 0
   
@@ -103,8 +103,8 @@ private[containers] final class ArraySet[+A] private[containers] (slots: Array[A
   * @group Containers */
 private[containers] object ArraySet extends SetFactory[ArraySet] {
   implicit override def Builder[A : TypeHint]
-    : Builder[Any, A] { type State = ArraySet[A] } =
-    new ArraySetBuilder
+    : Builder[A] { type Scope = ArraySet[_]; type State = ArraySet[A] } =
+    new ArraySetBuilder[A]
   
   private[this] val empty = new ArraySet[Nothing](new Array[AnyRef](0))
   override def empty[A : TypeHint]: ArraySet[A] = empty
@@ -147,7 +147,9 @@ private[containers] final class ArraySetIterator[+A]
   override def dup: Iterator[A] = new ArraySetIterator(slots, index)
 }
 
-private[containers] final class ArraySetBuilder[A] extends Builder[Any, A] {
+private[containers] final class ArraySetBuilder[A] extends Builder[A] {
+  override type Scope = ArraySet[_]
+  
   override type State = ArraySet[A]
   
   private[this] var seen: HashSet[A] = HashSet.empty[A]
@@ -206,4 +208,6 @@ private[containers] final class ArraySetBuilder[A] extends Builder[Any, A] {
     aliased = true
     size = 0
   }
+  
+  override def toString: String = "ArraySetBuilder"
 }

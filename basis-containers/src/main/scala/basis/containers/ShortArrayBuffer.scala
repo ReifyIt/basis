@@ -26,19 +26,19 @@ private[containers] class ShortArrayBuffer private (
   
   protected override def T: TypeHint[Short] = TypeHint.Short
   
-  final override def length: Int = size
+  override def length: Int = size
   
-  final override def apply(index: Int): Short = {
+  override def apply(index: Int): Short = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     buffer(index)
   }
   
-  final override def update(index: Int, elem: Short) {
+  override def update(index: Int, elem: Short) {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     buffer(index) = elem
   }
   
-  final override def append(elem: Short) {
+  override def append(elem: Short) {
     var array = buffer
     if (aliased || size + 1 > array.length) {
       array = new Array[Short](expand(size + 1))
@@ -50,7 +50,7 @@ private[containers] class ShortArrayBuffer private (
     size += 1
   }
   
-  final override def appendAll(elems: Enumerator[Short]) {
+  override def appendAll(elems: Enumerator[Short]) {
     if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Short]]
       val n = xs.length
@@ -67,7 +67,7 @@ private[containers] class ShortArrayBuffer private (
     else appendAll(ArrayBuffer.coerce(elems))
   }
   
-  final override def prepend(elem: Short) {
+  override def prepend(elem: Short) {
     var array = buffer
     if (aliased || size + 1 > array.length) array = new Array[Short](expand(1 + size))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
@@ -77,7 +77,7 @@ private[containers] class ShortArrayBuffer private (
     aliased = false
   }
   
-  final override def prependAll(elems: Enumerator[Short]) {
+  override def prependAll(elems: Enumerator[Short]) {
     if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Short]]
       val n = xs.length
@@ -92,7 +92,7 @@ private[containers] class ShortArrayBuffer private (
     else prependAll(ArrayBuffer.coerce(elems))
   }
   
-  final override def insert(index: Int, elem: Short) {
+  override def insert(index: Int, elem: Short) {
     if (index == size) append(elem)
     else if (index == 0) prepend(elem)
     else {
@@ -110,7 +110,7 @@ private[containers] class ShortArrayBuffer private (
     }
   }
   
-  final override def insertAll(index: Int, elems: Enumerator[Short]) {
+  override def insertAll(index: Int, elems: Enumerator[Short]) {
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
     else if (elems.isInstanceOf[ArrayLike[_]]) {
@@ -131,7 +131,7 @@ private[containers] class ShortArrayBuffer private (
     else insertAll(index, ArrayBuffer.coerce(elems))
   }
   
-  final override def remove(index: Int): Short = {
+  override def remove(index: Int): Short = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     var array = buffer
     val x = array(index)
@@ -150,7 +150,7 @@ private[containers] class ShortArrayBuffer private (
     x
   }
   
-  final override def remove(index: Int, count: Int) {
+  override def remove(index: Int, count: Int) {
     if (count < 0) throw new IllegalArgumentException("negative count")
     if (index < 0) throw new IndexOutOfBoundsException(index.toString)
     if (index + count > size) throw new IndexOutOfBoundsException((index + count).toString)
@@ -169,23 +169,23 @@ private[containers] class ShortArrayBuffer private (
     }
   }
   
-  final override def clear() {
+  override def clear() {
     aliased = true
     size = 0
     buffer = null
   }
   
-  final override def copy: ArrayBuffer[Short] = {
+  override def copy: ArrayBuffer[Short] = {
     aliased = true
     new ShortArrayBuffer(buffer, size, aliased)
   }
   
-  final override def copyToArray[B >: Short](index: Int, to: Array[B], offset: Int, count: Int) {
+  override def copyToArray[B >: Short](index: Int, to: Array[B], offset: Int, count: Int) {
     if (to.isInstanceOf[Array[Short]]) java.lang.System.arraycopy(buffer, index, to, offset, count)
     else super.copyToArray(index, to, offset, count)
   }
   
-  final override def toArray[B >: Short](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
+  override def toArray[B >: Short](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
     if (B == scala.reflect.ClassTag.Short) {
       val array = new Array[Short](size)
       java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -194,7 +194,7 @@ private[containers] class ShortArrayBuffer private (
     else super.toArray
   }
   
-  final override def toArraySeq: ArraySeq[Short] = {
+  override def toArraySeq: ArraySeq[Short] = {
     if (buffer == null || size != buffer.length) {
       val array = new Array[Short](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -215,7 +215,7 @@ private[containers] class ShortArrayBuffer private (
   
   protected def defaultSize: Int = 16
   
-  final override def iterator: Iterator[Short] = new ShortArrayBufferIterator(this)
+  override def iterator: Iterator[Short] = new ShortArrayBufferIterator(this)
   
   private[this] def expand(size: Int): Int = {
     var n = (defaultSize max size) - 1
@@ -250,8 +250,9 @@ private[containers] final class ShortArrayBufferIterator private (
   override def dup: Iterator[Short] = new ShortArrayBufferIterator(b, i, n, x)
 }
 
-private[containers] final class ShortArrayBufferBuilder
-  extends ShortArrayBuffer with Builder[Any, Short] {
+private[containers] final class ShortArrayBufferBuilder extends ShortArrayBuffer {
+  override type Scope = ArrayBuffer[_]
   override type State = ArrayBuffer[Short]
   override def state: ArrayBuffer[Short] = copy
+  override def toString: String = "ArrayBufferBuilder"+"["+"Short"+"]"
 }

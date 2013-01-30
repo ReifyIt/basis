@@ -23,13 +23,13 @@ import basis.util._
   * @since    0.0
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Inserting     3
   * @groupprio  Removing      4
   * @groupprio  Iterating     5
   * @groupprio  Traversing    6
-  * @groupprio  Converting    7
+  * @groupprio  Exporting     7
   * @groupprio  Classifying   8
   * 
   * @define collection  array sequence
@@ -37,7 +37,7 @@ import basis.util._
 abstract class ArraySeq[+A]
   extends Equals
     with Immutable
-    with Family[ArraySeq[A]]
+    with Family[ArraySeq[_]]
     with ArrayLike[A]
     with Index[A] {
   
@@ -181,7 +181,7 @@ abstract class ArraySeq[+A]
   * @group Containers */
 object ArraySeq extends SeqFactory[ArraySeq] {
   implicit override def Builder[A](implicit A: TypeHint[A])
-    : Builder[Any, A] { type State = ArraySeq[A] } = (A match {
+    : Builder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] } = (A match {
     case TypeHint.Byte     => new ByteArraySeqBuilder
     case TypeHint.Short    => new ShortArraySeqBuilder
     case TypeHint.Int      => new IntArraySeqBuilder
@@ -189,9 +189,9 @@ object ArraySeq extends SeqFactory[ArraySeq] {
     case TypeHint.Float    => new FloatArraySeqBuilder
     case TypeHint.Double   => new DoubleArraySeqBuilder
     case TypeHint.Boolean  => new BitArraySeqBuilder
-    case struct: Struct[A] => new ValArraySeqBuilder()(struct)
+    case struct: Struct[A] => new ValArraySeqBuilder[A]()(struct)
     case _                 => new RefArraySeqBuilder[A]
-  }).asInstanceOf[Builder[Any, A] { type State = ArraySeq[A] }]
+  }).asInstanceOf[Builder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] }]
   
   override def toString: String = "ArraySeq"
 }

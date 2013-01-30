@@ -22,7 +22,7 @@ import basis.collections._
   * 
   * @define collection  collection
   */
-final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends AnyVal {
+final class StrictCollectionOps[+A, -From](val these: Collection[A]) extends AnyVal {
   /** Returns the applications of a partial function to each element in this
     * $collection for which the function is defined.
     * 
@@ -31,7 +31,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return the accumulated elements filtered and transformed by `q`.
     * @group  Mapping
     */
-  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[From, B]): builder.State =
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).collect[B](q)(builder)
   
   /** Returns the applications of a function to each element in this $collection.
@@ -41,7 +41,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return the accumulated elements transformed by `f`.
     * @group  Mapping
     */
-  def map[B](f: A => B)(implicit builder: Builder[From, B]): builder.State =
+  def map[B](f: A => B)(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).map[B](f)(builder)
   
   /** Returns the concatenation of all elements returned by a function applied
@@ -52,7 +52,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return the concatenation of all accumulated elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+  def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).flatMap[B](f)(builder)
   
   /** Returns all elements in this $collection that satisfy a predicate.
@@ -62,7 +62,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return the accumulated elements filtered by `p`.
     * @group  Filtering
     */
-  def filter(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+  def filter(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).filter(p)(builder)
   
   /** Returns a view of all elements in this $collection that satisfy a predicate.
@@ -83,7 +83,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).dropWhile(p)(builder)
   
   /** Returns the longest prefix of this $collection for which each element
@@ -95,7 +95,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     *         element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile(p: A => Boolean)(implicit builder: Builder[From, A]): builder.State =
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).takeWhile(p)(builder)
   
   /** Returns a (prefix, suffix) pair with the prefix being the longest one for
@@ -109,7 +109,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @group  Filtering
     */
   def span(p: A => Boolean)
-      (implicit builder1: Builder[From, A], builder2: Builder[From, A])
+      (implicit builder1: Builder[A] { type Scope <: From }, builder2: Builder[A] { type Scope <: From })
     : (builder1.State, builder2.State) =
     new StrictEnumeratorOps[A, From](these).span(p)(builder1, builder2)
   
@@ -121,7 +121,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return all but the first `lower` accumulated elements.
     * @group  Filtering
     */
-  def drop(lower: Int)(implicit builder: Builder[From, A]): builder.State =
+  def drop(lower: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).drop(lower)(builder)
   
   /** Returns a prefix of this $collection up to some length.
@@ -132,7 +132,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return up to the first `upper` accumulated elements.
     * @group  Filtering
     */
-  def take(upper: Int)(implicit builder: Builder[From, A]): builder.State =
+  def take(upper: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).take(upper)(builder)
   
   /** Returns an interval of elements in this $collection.
@@ -144,7 +144,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     *         `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice(lower: Int, upper: Int)(implicit builder: Builder[From, A]): builder.State =
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).slice(lower, upper)(builder)
   
   /** Returns the concatenation of this and another $collection.
@@ -154,7 +154,7 @@ final class StrictCollectionOps[+A, +From](val these: Collection[A]) extends Any
     * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[From, B]): builder.State =
+  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[B, From](these).++[B](those)(builder)
   //new StrictEnumeratorOps[A, From](these).++[B](those)(builder) // SI-6482
 }

@@ -21,13 +21,13 @@ import basis.runtime._
   * @since    0.0
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Decomposing   2
   * @groupprio  Composing     3
   * @groupprio  Slicing       4
   * @groupprio  Iterating     5
   * @groupprio  Traversing    6
-  * @groupprio  Converting    7
+  * @groupprio  Exporting     7
   * @groupprio  Classifying   8
   * 
   * @define collection  list
@@ -35,12 +35,14 @@ import basis.runtime._
 sealed abstract class List[+A]
   extends Equals
     with Immutable
-    with Family[List[A]]
+    with Family[List[_]]
     with ListLike[A]
     with Stack[A] {
   
+  override def tail: List[A]
+  
   /** Returns the number of elements in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   def length: Int = {
     var n = 0
     var xs = this
@@ -117,8 +119,8 @@ sealed abstract class List[+A]
   * @group Containers */
 object List extends SeqFactory[List] {
   implicit override def Builder[A : TypeHint]
-    : Builder[Any, A] { type State = List[A] } =
-    new ListBuilder
+    : Builder[A] { type Scope = List[_]; type State = List[A] } =
+    new ListBuilder[A]
   
   override def empty[A : TypeHint]: Nil.type = Nil
   
@@ -359,8 +361,9 @@ private[containers] final class RefListIterator[+A](private[this] var xs: List[A
   override def dup: Iterator[A] = new RefListIterator(xs)
 }
 
-private[containers] final class ListBuilder[A] extends ListBuffer[A] with Builder[Any, A] {
+private[containers] final class ListBuilder[A] extends ListBuffer[A] {
+  override type Scope = List[_]
   override type State = List[A]
   override def state: List[A] = toList
-  protected override def stringPrefix: String = "List.Builder"
+  override def toString: String = "ListBuilder"
 }

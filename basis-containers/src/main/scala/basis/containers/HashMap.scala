@@ -26,7 +26,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @since    0.0
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Updating      3
   * @groupprio  Iterating     4
@@ -39,7 +39,7 @@ final class HashMap[+A, +T] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Equals with Immutable with Family[HashMap[A, T]] with Map[A, T] {
+  extends Equals with Immutable with Family[HashMap[_, _]] with Map[A, T] {
   
   import HashMap.{VOID, LEAF, TREE, KNOT}
   
@@ -338,8 +338,8 @@ final class HashMap[+A, +T] private[containers] (
   * @group Containers */
 object HashMap extends MapFactory[HashMap] {
   implicit override def Builder[A : TypeHint, T : TypeHint]
-    : Builder[Any, (A, T)] { type State = HashMap[A, T] } =
-    new HashMapBuilder
+    : Builder[(A, T)] { type Scope = HashMap[_, _]; type State = HashMap[A, T] } =
+    new HashMapBuilder[A, T]
   
   private[this] val empty = new HashMap[Nothing, Nothing](0, 0, new Array[AnyRef](0))
   override def empty[A : TypeHint, T : TypeHint]: HashMap[A, T] = empty
@@ -483,7 +483,9 @@ private[containers] final class HashMapIterator[+A, +T](
     new HashMapIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
-private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)] {
+private[containers] final class HashMapBuilder[A, T] extends Builder[(A, T)] {
+  override type Scope = HashMap[_, _]
+  
   override type State = HashMap[A, T]
   
   private[this] var these: HashMap[A, T] = HashMap.empty[A, T]
@@ -501,4 +503,6 @@ private[containers] final class HashMapBuilder[A, T] extends Builder[Any, (A, T)
   override def state: HashMap[A, T] = these
   
   override def clear(): Unit = these = HashMap.empty[A, T]
+  
+  override def toString: String = "HashMapBuilder"
 }

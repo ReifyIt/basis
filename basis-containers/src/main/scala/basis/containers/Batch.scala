@@ -21,7 +21,7 @@ import basis.runtime._
   * @since    0.1
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Decomposing   3
   * @groupprio  Inserting     4
@@ -35,9 +35,13 @@ import basis.runtime._
 abstract class Batch[+A] private[containers]
   extends Equals
     with Immutable
-    with Family[Batch[A]]
+    with Family[Batch[_]]
     with Index[A]
     with Deque[A] {
+  
+  override def init: Batch[A]
+  
+  override def tail: Batch[A]
   
   /** Returns a copy of this $collection with the given element at the given index.
     * @group Indexing */
@@ -73,6 +77,12 @@ abstract class Batch[+A] private[containers]
 /** A factory for [[Batch batches]].
   * @group Containers */
 object Batch extends SeqFactory[Batch] {
+  implicit override def Builder[A : TypeHint]
+    : Builder[A] { type Scope = Batch[_]; type State = Batch[A] } =
+    new BatchBuilder[A]
+  
+  override def empty[A : TypeHint]: Batch[A] = Empty
+  
   private[containers] object Empty extends Batch[Nothing] {
     override def isEmpty: Boolean = true
     
@@ -110,15 +120,11 @@ object Batch extends SeqFactory[Batch] {
       else new RefBatch1(elem)
     }
   }
-  
-  implicit override def Builder[A : TypeHint]
-    : Builder[Any, A] { type State = Batch[A] } =
-    new BatchBuilder
-  
-  override def empty[A : TypeHint]: Batch[A] = Empty
 }
 
-private[containers] final class BatchBuilder[A] extends Builder[Any, A] {
+private[containers] final class BatchBuilder[A] extends Builder[A] {
+  override type Scope = Batch[_]
+  
   override type State = Batch[A]
   
   private[this] var these: Batch[A] = Batch.Empty
@@ -136,4 +142,6 @@ private[containers] final class BatchBuilder[A] extends Builder[Any, A] {
   override def state: Batch[A] = these
   
   override def clear(): Unit = these = Batch.Empty
+  
+  override def toString: String = "BatchBuilder"
 }

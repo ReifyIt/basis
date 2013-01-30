@@ -159,8 +159,9 @@ private[containers] final class DoubleArraySeqIterator
   override def dup: Iterator[Double] = new DoubleArraySeqIterator(array, i, n)
 }
 
-private[containers] final class DoubleArraySeqBuilder
-  extends DoubleArrayBuffer with Builder[Any, Double] {
+private[containers] final class DoubleArraySeqBuilder extends DoubleArrayBuffer {
+  override type Scope = ArraySeq[_]
   override type State = ArraySeq[Double]
   override def state: ArraySeq[Double] = toArraySeq
+  override def toString: String = "ArraySeqBuilder"+"["+"Double"+"]"
 }

@@ -21,7 +21,7 @@ import basis.runtime._
   * @since    0.0
   * @group    Containers
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Iterating     3
   * @groupprio  Traversing    4
@@ -29,7 +29,7 @@ import basis.runtime._
   * 
   * @define collection  vector
   */
-sealed abstract class Vector[+A] extends Equals with Immutable with Family[Vector[A]] with Index[A] {
+sealed abstract class Vector[+A] extends Equals with Immutable with Family[Vector[_]] with Index[A] {
   /** Returns a copy of this $collection with the given element at the given index.
     * @group Indexing */
   def update[B >: A](index: Int, elem: B): Vector[B]
@@ -280,8 +280,8 @@ private[containers] final class Vector6[+A](
   * @group Containers */
 object Vector extends SeqFactory[Vector] {
   implicit override def Builder[A : TypeHint]
-    : Builder[Any, A] { type State = Vector[A] } =
-    new VectorBuilder
+    : Builder[A] { type Scope = Vector[_]; type State = Vector[A] } =
+    new VectorBuilder[A]
   
   private[this] val empty = new Vector0
   override def empty[A : TypeHint]: Vector[A] = empty
@@ -416,7 +416,9 @@ private[containers] final class VectorIterator[+A](
     new VectorIterator(length, index, node1, node2, node3, node4, node5, node6)
 }
 
-private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
+private[containers] final class VectorBuilder[A] extends Builder[A] {
+  override type Scope = Vector[_]
+  
   override type State = Vector[A]
   
   private[this] var node1: Array[AnyRef] = _
@@ -527,4 +529,6 @@ private[containers] final class VectorBuilder[A] extends Builder[Any, A] {
     node6 = null
     length = 0
   }
+  
+  override def toString: String = "VectorBuilder"
 }

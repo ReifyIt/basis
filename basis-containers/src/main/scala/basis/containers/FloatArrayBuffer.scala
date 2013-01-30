@@ -26,19 +26,19 @@ private[containers] class FloatArrayBuffer private (
   
   protected override def T: TypeHint[Float] = TypeHint.Float
   
-  final override def length: Int = size
+  override def length: Int = size
   
-  final override def apply(index: Int): Float = {
+  override def apply(index: Int): Float = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     buffer(index)
   }
   
-  final override def update(index: Int, elem: Float) {
+  override def update(index: Int, elem: Float) {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     buffer(index) = elem
   }
   
-  final override def append(elem: Float) {
+  override def append(elem: Float) {
     var array = buffer
     if (aliased || size + 1 > array.length) {
       array = new Array[Float](expand(size + 1))
@@ -50,7 +50,7 @@ private[containers] class FloatArrayBuffer private (
     size += 1
   }
   
-  final override def appendAll(elems: Enumerator[Float]) {
+  override def appendAll(elems: Enumerator[Float]) {
     if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Float]]
       val n = xs.length
@@ -67,7 +67,7 @@ private[containers] class FloatArrayBuffer private (
     else appendAll(ArrayBuffer.coerce(elems))
   }
   
-  final override def prepend(elem: Float) {
+  override def prepend(elem: Float) {
     var array = buffer
     if (aliased || size + 1 > array.length) array = new Array[Float](expand(1 + size))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 1, size)
@@ -77,7 +77,7 @@ private[containers] class FloatArrayBuffer private (
     aliased = false
   }
   
-  final override def prependAll(elems: Enumerator[Float]) {
+  override def prependAll(elems: Enumerator[Float]) {
     if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Float]]
       val n = xs.length
@@ -92,7 +92,7 @@ private[containers] class FloatArrayBuffer private (
     else prependAll(ArrayBuffer.coerce(elems))
   }
   
-  final override def insert(index: Int, elem: Float) {
+  override def insert(index: Int, elem: Float) {
     if (index == size) append(elem)
     else if (index == 0) prepend(elem)
     else {
@@ -110,7 +110,7 @@ private[containers] class FloatArrayBuffer private (
     }
   }
   
-  final override def insertAll(index: Int, elems: Enumerator[Float]) {
+  override def insertAll(index: Int, elems: Enumerator[Float]) {
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
     else if (elems.isInstanceOf[ArrayLike[_]]) {
@@ -131,7 +131,7 @@ private[containers] class FloatArrayBuffer private (
     else insertAll(index, ArrayBuffer.coerce(elems))
   }
   
-  final override def remove(index: Int): Float = {
+  override def remove(index: Int): Float = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
     var array = buffer
     val x = array(index)
@@ -150,7 +150,7 @@ private[containers] class FloatArrayBuffer private (
     x
   }
   
-  final override def remove(index: Int, count: Int) {
+  override def remove(index: Int, count: Int) {
     if (count < 0) throw new IllegalArgumentException("negative count")
     if (index < 0) throw new IndexOutOfBoundsException(index.toString)
     if (index + count > size) throw new IndexOutOfBoundsException((index + count).toString)
@@ -169,23 +169,23 @@ private[containers] class FloatArrayBuffer private (
     }
   }
   
-  final override def clear() {
+  override def clear() {
     aliased = true
     size = 0
     buffer = null
   }
   
-  final override def copy: ArrayBuffer[Float] = {
+  override def copy: ArrayBuffer[Float] = {
     aliased = true
     new FloatArrayBuffer(buffer, size, aliased)
   }
   
-  final override def copyToArray[B >: Float](index: Int, to: Array[B], offset: Int, count: Int) {
+  override def copyToArray[B >: Float](index: Int, to: Array[B], offset: Int, count: Int) {
     if (to.isInstanceOf[Array[Float]]) java.lang.System.arraycopy(buffer, index, to, offset, count)
     else super.copyToArray(index, to, offset, count)
   }
   
-  final override def toArray[B >: Float](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
+  override def toArray[B >: Float](implicit B: scala.reflect.ClassTag[B]): Array[B] = {
     if (B == scala.reflect.ClassTag.Float) {
       val array = new Array[Float](size)
       java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -194,7 +194,7 @@ private[containers] class FloatArrayBuffer private (
     else super.toArray
   }
   
-  final override def toArraySeq: ArraySeq[Float] = {
+  override def toArraySeq: ArraySeq[Float] = {
     if (buffer == null || size != buffer.length) {
       val array = new Array[Float](size)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
@@ -215,7 +215,7 @@ private[containers] class FloatArrayBuffer private (
   
   protected def defaultSize: Int = 16
   
-  final override def iterator: Iterator[Float] = new FloatArrayBufferIterator(this)
+  override def iterator: Iterator[Float] = new FloatArrayBufferIterator(this)
   
   private[this] def expand(size: Int): Int = {
     var n = (defaultSize max size) - 1
@@ -250,8 +250,9 @@ private[containers] final class FloatArrayBufferIterator private (
   override def dup: Iterator[Float] = new FloatArrayBufferIterator(b, i, n, x)
 }
 
-private[containers] final class FloatArrayBufferBuilder
-  extends FloatArrayBuffer with Builder[Any, Float] {
+private[containers] final class FloatArrayBufferBuilder extends FloatArrayBuffer {
+  override type Scope = ArrayBuffer[_]
   override type State = ArrayBuffer[Float]
   override def state: ArrayBuffer[Float] = copy
+  override def toString: String = "ArrayBufferBuilder"+"["+"Float"+"]"
 }

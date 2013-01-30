@@ -22,12 +22,11 @@ import scala.collection.TraversableOnce
   */
 @implicitNotFound("No map factory available for ${CC}.")
 trait MapFactory[+CC[_, _]] {
-  type Product[A, T] = CC[A, T]
-  
-  implicit def Factory: this.type = this
-  
   implicit def Builder[A, T](implicit A: TypeHint[A], T: TypeHint[T])
-    : Builder[Any, (A, T)] { type State = CC[A, T] @uncheckedVariance }
+    : Builder[(A, T)] {
+      type Scope = CC[X, Y] @uncheckedVariance forSome { type X; type Y }
+      type State = CC[A, T] @uncheckedVariance
+    }
   
   def empty[A, T](implicit A: TypeHint[A], T: TypeHint[T]): CC[A, T] =
     Builder(A, T).state
@@ -37,7 +36,7 @@ trait MapFactory[+CC[_, _]] {
   
   def coerce[A, T](entries: TraversableOnce[(A, T)])(implicit A: TypeHint[A], T: TypeHint[T]): CC[A, T] = {
     val builder = Builder(A, T)
-    entries.foreach(new Accumulator.Append(builder))
+    entries.foreach(new basis.collections.Builder.Append(builder))
     builder.state
   }
   

@@ -50,7 +50,7 @@ package basis.collections
   *  - [[basis.sequential.NonStrictEnumeratorOps NonStrictEnumeratorOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Enumerator[+A] extends Any with Family[Enumerator[A]] {
+trait Enumerator[+A] extends Any with Family[Enumerator[_]] {
   /** Applies a function to each element of this $collection. The protected
     * status of `foreach` allows optimized static implementations to shadow
     * this virtual method. To force a virtual `foreach` call, invoke

@@ -144,7 +144,7 @@ final class GeneralContainerOps[+A](these: Container[A]) {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictContainerOps[A, Container[A]] =
+  def eagerly: StrictContainerOps[A, Container[_]] =
     macro GeneralContainerOps.eagerly[A]
   
   /** Returns a non-strict operations interface to this $collection.
@@ -233,7 +233,7 @@ private[sequential] object GeneralContainerOps {
     : c.Expr[Maybe[B]] =
     new IteratorMacros[c.type](c).choose[A, B](iterator(c)(unApply[A](c)))(q)
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictContainerOps[A, Container[A]]] =
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictContainerOps[A, Container[_]]] =
     Strict.StrictContainerOps[A](c)(unApply[A](c))
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictContainerOps[A]] =

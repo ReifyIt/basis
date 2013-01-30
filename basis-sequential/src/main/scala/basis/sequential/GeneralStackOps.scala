@@ -144,7 +144,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
   
   /** Returns a strict operations interface for this $collection.
     * @group Transforming */
-  def eagerly: StrictStackOps[A, Stack[A]] =
+  def eagerly: StrictStackOps[A, Stack[_]] =
     macro GeneralStackOps.eagerly[A]
   
   /** Returns a non-strict operations interface for this $collection.
@@ -223,7 +223,7 @@ private[sequential] object GeneralStackOps {
     : c.Expr[Maybe[B]] =
     new StackMacros[c.type](c).choose[A, B](unApply[A](c))(q)
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictStackOps[A, Stack[A]]] =
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictStackOps[A, Stack[_]]] =
     Strict.StrictStackOps[A](c)(unApply[A](c))
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictStackOps[A]] =

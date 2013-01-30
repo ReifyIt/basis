@@ -20,7 +20,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @since    0.0
   * @group    Collections
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Iterating     3
   * @groupprio  Traversing    4
@@ -37,13 +37,13 @@ import scala.annotation.unchecked.uncheckedVariance
   *  - [[basis.sequential.NonStrictSetOps NonStrictSetOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Set[+A] extends Any with Equals with Family[Set[A]] with Container[A] {
+trait Set[+A] extends Any with Equals with Family[Set[_]] with Container[A] {
   /** Returns `true` if this $collection doesn't contain any elements.
-    * @group Quantifying */
+    * @group Measuring */
   def isEmpty: Boolean = iterator.isEmpty
   
   /** Returns the number of elements in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   def size: Int = {
     var count = 0
     val these = iterator

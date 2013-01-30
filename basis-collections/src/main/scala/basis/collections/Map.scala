@@ -22,7 +22,7 @@ import scala.annotation.unchecked.uncheckedVariance
   * @since    0.0
   * @group    Collections
   * 
-  * @groupprio  Quantifying   1
+  * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Iterating     3
   * @groupprio  Traversing    4
@@ -39,13 +39,13 @@ import scala.annotation.unchecked.uncheckedVariance
   *  - [[basis.sequential.NonStrictMapOps NonStrictMapOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Map[+A, +T] extends Any with Equals with Family[Map[A, T]] with Container[(A, T)] {
+trait Map[+A, +T] extends Any with Equals with Family[Map[_, _]] with Container[(A, T)] {
   /** Returns `true` if this $collection doesn't contain any associations.
-    * @group Quantifying */
+    * @group Measuring */
   def isEmpty: Boolean = iterator.isEmpty
   
   /** Returns the number of associations in this $collection.
-    * @group Quantifying */
+    * @group Measuring */
   def size: Int = {
     var count = 0
     val entries = iterator

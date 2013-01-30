@@ -175,7 +175,7 @@ final class GeneralIndexOps[+A](these: Index[A]) {
   
   /** Returns a strict operations interface to this $collection.
     * @group Transforming */
-  def eagerly: StrictIndexOps[A, Index[A]] =
+  def eagerly: StrictIndexOps[A, Index[_]] =
     macro GeneralIndexOps.eagerly[A]
   
   /** Returns a non-strict operations interface to this $collection.
@@ -273,7 +273,7 @@ private[sequential] object GeneralIndexOps {
     : c.Expr[Maybe[B]] =
     new IndexMacros[c.type](c).choose[A, B](unApply[A](c))(q)
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictIndexOps[A, Index[A]]] =
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictIndexOps[A, Index[_]]] =
     Strict.StrictIndexOps[A](c)(unApply[A](c))
   
   def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictIndexOps[A]] =

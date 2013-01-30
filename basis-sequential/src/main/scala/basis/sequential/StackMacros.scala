@@ -31,7 +31,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr[Unit](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) :: Nil,
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) :: Nil,
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
@@ -52,7 +52,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr[B](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -74,7 +74,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr[B](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         If(
           Select(Ident(xs), "isEmpty"),
           Throw(
@@ -104,7 +104,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr[Maybe[B]](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) :: Nil,
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) :: Nil,
         If(
           Select(Ident(xs), "isEmpty"),
           Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap"),
@@ -133,7 +133,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val MaybeATag = MaybeTag[A]
     Expr[Maybe[A]](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[A]]),
           Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap")) ::
         LabelDef(loop, Nil,
@@ -162,7 +162,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr[Boolean](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
         LabelDef(loop, Nil,
           If(
@@ -186,7 +186,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr[Boolean](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
         LabelDef(loop, Nil,
           If(
@@ -210,7 +210,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     val loop = newTermName(fresh("loop$"))
     Expr[Int](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
         LabelDef(loop, Nil,
           If(
@@ -238,7 +238,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val MaybeBTag = MaybeTag[B]
     Expr[Maybe[B]](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[B]]),
           Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap")) ::
         ValDef(NoMods, f, TypeTree(), q.tree) ::
@@ -265,7 +265,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def collect[A : WeakTypeTag, B]
       (these: Expr[Stack[A]])
       (q: Expr[PartialFunction[A, B]])
-      (builder: Expr[Builder[_, B]])
+      (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("b$"))
@@ -276,7 +276,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
@@ -300,7 +300,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def map[A : WeakTypeTag, B]
       (these: Expr[Stack[A]])
       (f: Expr[A => B])
-      (builder: Expr[Builder[_, B]])
+      (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("b$"))
@@ -309,7 +309,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -325,7 +325,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def flatMap[A : WeakTypeTag, B]
       (these: Expr[Stack[A]])
       (f: Expr[A => Enumerator[B]])
-      (builder: Expr[Builder[_, B]])
+      (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("b$"))
@@ -334,7 +334,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -350,7 +350,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def filter[A : WeakTypeTag]
       (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A]])
+      (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("b$"))
@@ -360,7 +360,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -380,7 +380,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def dropWhile[A : WeakTypeTag]
       (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A]])
+      (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val b     = newTermName(fresh("b$"))
@@ -391,7 +391,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
@@ -418,7 +418,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def takeWhile[A : WeakTypeTag]
       (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
-      (builder: Expr[Builder[_, A]])
+      (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val b    = newTermName(fresh("b$"))
@@ -428,7 +428,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -449,7 +449,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def span[A : WeakTypeTag]
       (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
-      (builder1: Expr[Builder[_, A]], builder2: Expr[Builder[_, A]])
+      (builder1: Expr[Builder[A]], builder2: Expr[Builder[A]])
     : Expr[(builder1.value.State, builder2.value.State)] = {
     val xs    = newTermName(fresh("xs$"))
     val a     = newTermName(fresh("b$"))
@@ -463,7 +463,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builder2StateTag = BuilderStateTag(builder2)
     Expr[(builder1.value.State, builder2.value.State)](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(NoMods, a, TypeTree(builder1TypeTag.tpe), builder1.tree) ::
         ValDef(NoMods, b, TypeTree(builder2TypeTag.tpe), builder2.tree) ::
         LabelDef(loop1, Nil,
@@ -495,7 +495,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def drop[A : WeakTypeTag]
       (these: Expr[Stack[A]])
       (lower: Expr[Int])
-      (builder: Expr[Builder[_, A]])
+      (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val i     = newTermName(fresh("i$"))
@@ -507,7 +507,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), lower.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
@@ -536,7 +536,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def take[A : WeakTypeTag]
       (these: Expr[Stack[A]])
       (upper: Expr[Int])
-      (builder: Expr[Builder[_, A]])
+      (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val i    = newTermName(fresh("i$"))
@@ -547,7 +547,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), upper.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
@@ -569,7 +569,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   def slice[A : WeakTypeTag]
       (these: Expr[Stack[A]])
       (lower: Expr[Int], upper: Expr[Int])
-      (builder: Expr[Builder[_, A]])
+      (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     val xs    = newTermName(fresh("xs$"))
     val i     = newTermName(fresh("i$"))
@@ -581,7 +581,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(Modifiers(Flag.MUTABLE), n, TypeTree(), lower.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
@@ -614,7 +614,7 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
   
   def zip[A : WeakTypeTag, B : WeakTypeTag]
       (these: Expr[Stack[A]], those: Expr[Stack[B]])
-      (builder: Expr[Builder[_, (A, B)]])
+      (builder: Expr[Builder[(A, B)]])
     : Expr[builder.value.State] = {
     val xs   = newTermName(fresh("xs$"))
     val ys   = newTermName(fresh("ys$"))
@@ -624,8 +624,8 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(FamilyTag(these).tpe), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(FamilyTag(those).tpe), those.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(weakTypeOf[Stack[B]]), those.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -646,31 +646,26 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         Select(Ident(b), "state")))
   }
   
-  protected[this] def BuilderTypeTag(builder: Expr[Builder[_, _]]): WeakTypeTag[builder.value.type] =
+  protected[this] def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
     WeakTypeTag[builder.value.type](builder.tree.symbol match {
       case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
       case _ => builder.actualType
     })
   
   protected[this] def BuilderStateTag
-      (builder: Expr[Builder[_, _]])
+      (builder: Expr[Builder[_]])
       (implicit BuilderTypeTag: WeakTypeTag[builder.value.type])
     : WeakTypeTag[builder.value.State] = {
     val BuilderTpc = mirror.staticClass("basis.collections.Builder").toType
     val BuilderStateSym = BuilderTpc member newTypeName("State")
-    val BuilderStateTpe = typeRef(BuilderTypeTag.tpe, BuilderStateSym, Nil)
+    val BuilderStateTpe = typeRef(BuilderTypeTag.tpe, BuilderStateSym, Nil).normalize
     WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
   
-  protected[this] def FamilyTag(these: Expr[Family[_]]): WeakTypeTag[these.value.Family] = {
-    val TheseTpe = these.tree.symbol match {
-      case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
-      case _ => these.actualType
-    }
-    val FamilyTpc = mirror.staticClass("basis.collections.Family").toType
-    val FamilySym = FamilyTpc member newTypeName("Family")
-    val FamilyTpe = typeRef(TheseTpe, FamilySym, Nil)
-    WeakTypeTag[these.value.Family](FamilyTpe)
+  implicit protected[this] def StackTag[A : WeakTypeTag]: WeakTypeTag[Stack[A]] = {
+    val StackTpc = mirror.staticClass("basis.collections.Stack").toType
+    val StackTpe = appliedType(StackTpc, weakTypeOf[A] :: Nil)
+    WeakTypeTag[Stack[A]](StackTpe)
   }
   
   implicit protected[this] def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {

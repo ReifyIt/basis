@@ -34,8 +34,6 @@ object String4 {
     s.append(chars)
     s.state
   }
-  
-  implicit def Builder: StringBuilder[Any] { type State = String4 } = new String4Builder
 }
 
 /** A builder for 32-bit Unicode strings in the UTF-32 encoding form.
@@ -61,7 +59,9 @@ private[text] final class String4Iterator
 
 /** A builder for 32-bit Unicode strings in the UTF-32 encoding form.
   * Produces only well-formed code unit sequences. */
-private[text] final class String4Builder extends StringBuilder[Any] {
+private[text] final class String4Builder extends StringBuilder {
+  override type Scope = UTF32
+  
   override type State = String4
   
   private[this] var codeUnits: Array[Int] = _
@@ -123,4 +123,6 @@ private[text] final class String4Builder extends StringBuilder[Any] {
     aliased = true
     size = 0
   }
+  
+  override def toString: String = "String4Builder"
 }

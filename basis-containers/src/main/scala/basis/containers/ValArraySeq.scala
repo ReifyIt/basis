@@ -17,10 +17,7 @@ import basis.util._
   * @author Chris Sachs
   * @since  0.0
   */
-private[containers] final class ValArraySeq[+A]
-    (data: Data)(implicit A: Struct[A])
-  extends ArraySeq[A] with Reified {
-  
+private[containers] final class ValArraySeq[+A](data: Data)(implicit A: Struct[A]) extends ArraySeq[A] with Reified {
   if (data.size % A.size != 0L) throw new IllegalArgumentException("Data size not a multiple of struct size.")
   if (data.size / A.size > Int.MaxValue) throw new IllegalArgumentException("length > Int.MaxValue")
   
@@ -154,7 +151,9 @@ private[containers] final class ValArraySeq[+A]
   }
 }
 
-private[containers] final class ValArraySeqBuilder[A](implicit A: Struct[A]) extends Builder[Any, A] {
+private[containers] final class ValArraySeqBuilder[A](implicit A: Struct[A]) extends Builder[A] {
+  override type Scope = ArraySeq[_]
+  
   override type State = ArraySeq[A]
   
   private[this] var data: Data = _
@@ -207,4 +206,6 @@ private[containers] final class ValArraySeqBuilder[A](implicit A: Struct[A]) ext
     aliased = true
     length = 0
   }
+  
+  override def toString: String = "ArraySeqBuilder"+"("+ A +")"
 }

@@ -16,7 +16,9 @@ import basis.util._
   * @since  0.0
   * @group  Builders
   */
-private[text] final class JavaStringBuilder extends StringBuilder[Any] {
+private[text] final class JavaStringBuilder extends StringBuilder {
+  override type Scope = String
+  
   override type State = String
   
   private[this] var codeUnits: Array[scala.Char] = null
@@ -76,4 +78,6 @@ private[text] final class JavaStringBuilder extends StringBuilder[Any] {
     codeUnits = null
     size = 0
   }
+  
+  override def toString: String = "StringBuilder"
 }
