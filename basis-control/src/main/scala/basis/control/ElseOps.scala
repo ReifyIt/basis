@@ -25,8 +25,8 @@ import Predef.<:<
 final class ElseOps[+A, +B](self: A Else B) {
   /** Returns the value of this `Bind`, or the `default` value for a `Trap`.
     * @group Evaluating */
-  def getOrElse[X >: A](default: => X): X =
-    macro ElseMacros.getOrElse[X]
+  def bindOrElse[X >: A](default: => X): X =
+    macro ElseMacros.bindOrElse[X]
   
   /** Returns this `Bind`, or the `other` binding for a `Trap`.
     * @group Composing */
@@ -39,7 +39,7 @@ final class ElseOps[+A, +B](self: A Else B) {
     macro ElseMacros.orNull[X]
   
   /** Apllies a function to the value of this `Bind`, or returns the zero
-    * value for a `Trap`; equivalent to `map f getOrElse z`.
+    * value for a `Trap`; equivalent to `map f bindOrElse z`.
     * @group Evaluating */
   def fold[X](z: X)(f: A => X): X =
     macro ElseMacros.fold[A, X]

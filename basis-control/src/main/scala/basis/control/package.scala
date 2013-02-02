@@ -71,8 +71,8 @@ package object control {
   
   /** Implicitly adds standard operations to [[Maybe]] values.
     * @group Conditional */
-  implicit def MaybeOps[A](self: Maybe[A]): ElseOps[A, Any] =
-    macro ElseMacros.ElseOps[A, Any]
+  implicit def MaybeOps[A](self: A Else Nothing): ElseOps[A, Nothing] =
+    macro ElseMacros.ElseOps[A, Nothing]
   
   /** Implicitly adds standard operations to [[Truth]] values.
     * @group Conditional */

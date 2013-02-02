@@ -21,7 +21,7 @@ private[control] class ElseMacros[C <: Context](val context: C) {
   
   val universe: context.universe.type = context.universe
   
-  def getOrElse[X : WeakTypeTag]
+  def bindOrElse[X : WeakTypeTag]
       (self: Expr[X Else Any])
       (default: Expr[X])
     : Expr[X] = {
@@ -224,11 +224,11 @@ private[control] object ElseMacros {
     Expr[ElseOps[A, B]](New(ElseOpsABTpe, self.tree))(WeakTypeTag(ElseOpsABTpe))
   }
   
-  def getOrElse[X : c.WeakTypeTag]
+  def bindOrElse[X : c.WeakTypeTag]
       (c: Context)
       (default: c.Expr[X])
     : c.Expr[X] =
-    new ElseMacros[c.type](c).getOrElse[X](unApply[X, Any](c))(default)
+    new ElseMacros[c.type](c).bindOrElse[X](unApply[X, Any](c))(default)
   
   def orElse[X : c.WeakTypeTag, Y : c.WeakTypeTag]
       (c: Context)
