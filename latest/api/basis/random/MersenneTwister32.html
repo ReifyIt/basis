@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Randomness - basis.generators.Randomness</title>
-          <meta name="description" content="Randomness - basis.generators.Randomness" />
-          <meta name="keywords" content="Randomness basis.generators.Randomness" />
+          <title>MersenneTwister32 - basis.random.MersenneTwister32</title>
+          <meta name="description" content="MersenneTwister32 - basis.random.MersenneTwister32" />
+          <meta name="keywords" content="MersenneTwister32 basis.random.MersenneTwister32" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'basis.generators.Randomness$';
+            var hash = 'basis.random.MersenneTwister32';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -27,27 +27,35 @@
    	  </script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <a href="Randomness.html" title="Go to companion"><img src="../../lib/object_to_class_big.png" /></a>
-        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.generators">generators</a></p>
-        <h1><a href="Randomness.html" title="Go to companion">Randomness</a></h1>
+        <img src="../../lib/class_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.random">random</a></p>
+        <h1>MersenneTwister32</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Randomness</span><span class="result"> extends <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></span>
+        <span class="name">MersenneTwister32</span><span class="result"> extends <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a> with <a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a>[<span class="extype" name="scala.Int">Int</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A synchronized source of <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a>.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-generators/src/main/scala/basis/generators/Randomness.scala" target="_blank">Randomness.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A 32-bit pseudorandom number generator. Implements Makoto Matsumoto and
+Takuji Nishimura's MT19937 algorithm.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-random/src/main/scala/basis/random/MersenneTwister32.scala" target="_blank">MersenneTwister32.scala</a></dd><dt>Since</dt><dd><p>0.0
+</p></dd><dt>See also</dt><dd><span class="cmt"><p><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/emt19937ar.html" target="_blank">MT19937</a>
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a>[<span class="extype" name="scala.Int">Int</span>], () ⇒ <span class="extype" name="scala.Int">Int</span>, <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph46" viewBox="0.00 0.00 203.00 120.00" height="120pt" width="203pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 200,-116 200,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph46_0"><a xlink:title="basis.random.MersenneTwister32 (this class)" xlink:href="#inheritance-diagram"><polygon points="158,-50 26,-50 26,-24 158,-24 158,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="36" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="58" text-anchor="start">MersenneTwister32</text></a></g><!-- node1 --><g class="node class" id="graph46_1"><a xlink:title="basis.random.Entropy" xlink:href="Entropy.html#inheritance-diagram"><polygon points="78.25,-112 -0.25,-112 -0.25,-86 78.25,-86 78.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="32" text-anchor="start">Entropy</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph46_1_0"><a xlink:title="MersenneTwister32 is a subtype of Entropy"><path d="M53.1094,-82.0271C61.9547,-72.0135 73.177,-59.3091 81.2906,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="51.724,-80.9521 49.7253,-85.8581 54.3471,-83.2693 51.724,-80.9521" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph46_2"><a xlink:title="basis.random.Arbitrary" xlink:href="Arbitrary.html#inheritance-diagram"><polygon points="195.25,-112 96.75,-112 96.75,-86 195.25,-86 195.25,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="107" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="129" text-anchor="start">Arbitrary[Int]</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph46_2_0"><a xlink:title="MersenneTwister32 is a subtype of Arbitrary[Int]"><path d="M131.624,-82.0271C122.612,-72.0135 111.178,-59.3091 102.911,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="130.427,-83.3123 135.072,-85.8581 133.028,-80.9709 130.427,-83.3123" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+              </div></div>
         
 
       <div id="mbrsel">
@@ -64,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.generators.Randomness"><span>Randomness</span></li><li class="in" name="basis.generators.Randomness"><span>Randomness</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.random.MersenneTwister32"><span>MersenneTwister32</span></li><li class="in" name="basis.random.Arbitrary"><span>Arbitrary</span></li><li class="in" name="scala.Function0"><span>Function0</span></li><li class="in" name="basis.random.Entropy"><span>Entropy</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -82,7 +90,49 @@
 
       <div id="template">
         <div id="allMembers">
-        
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="basis.random.MersenneTwister32#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;():basis.random.MersenneTwister32"></a>
+      <a id="&lt;init&gt;:MersenneTwister32"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MersenneTwister32</span><span class="params">()</span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.random.MersenneTwister32#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(key:Array[Int]):basis.random.MersenneTwister32"></a>
+      <a id="&lt;init&gt;:MersenneTwister32"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MersenneTwister32</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.random.MersenneTwister32#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(seed:Int):basis.random.MersenneTwister32"></a>
+      <a id="&lt;init&gt;:MersenneTwister32"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MersenneTwister32</span><span class="params">(<span name="seed">seed: <span class="extype" name="scala.Int">Int</span></span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -155,6 +205,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.random.MersenneTwister32#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply():Int"></a>
+      <a id="apply():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → Function0</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -210,6 +273,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.random.Arbitrary#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filter(p:R=&gt;Boolean):basis.random.Arbitrary[R]"></a>
+      <a id="filter((Int)⇒Boolean):Arbitrary[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -224,6 +303,22 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.random.Arbitrary#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatMap[T](f:R=&gt;basis.random.Arbitrary[T]):basis.random.Arbitrary[T]"></a>
+      <a id="flatMap[T]((Int)⇒Arbitrary[T]):Arbitrary[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMap</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Int">Int</span>) ⇒ <a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a>[<span class="extype" name="basis.random.Arbitrary.flatMap.T">T</span>]</span>)</span><span class="result">: <a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a>[<span class="extype" name="basis.random.Arbitrary.flatMap.T">T</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -265,6 +360,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.random.Arbitrary#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map[T](f:R=&gt;T):basis.random.Arbitrary[T]"></a>
+      <a id="map[T]((Int)⇒T):Arbitrary[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="basis.random.Arbitrary.map.T">T</span></span>)</span><span class="result">: <a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a>[<span class="extype" name="basis.random.Arbitrary.map.T">T</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -278,7 +389,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="basis.random.Entropy#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBelow(upper:Double):Double"></a>
       <a id="nextBelow(Double):Double"></a>
       <h4 class="signature">
@@ -290,8 +401,8 @@
         <span class="name">nextBelow</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBelow(upper:Float):Float"></a>
       <a id="nextBelow(Float):Float"></a>
       <h4 class="signature">
@@ -303,8 +414,8 @@
         <span class="name">nextBelow</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBelow(upper:Long):Long"></a>
       <a id="nextBelow(Long):Long"></a>
       <h4 class="signature">
@@ -316,8 +427,8 @@
         <span class="name">nextBelow</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBelow(upper:Int):Int"></a>
       <a id="nextBelow(Int):Int"></a>
       <h4 class="signature">
@@ -329,8 +440,8 @@
         <span class="name">nextBelow</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBelow(upper:Short):Short"></a>
       <a id="nextBelow(Short):Short"></a>
       <h4 class="signature">
@@ -342,8 +453,8 @@
         <span class="name">nextBelow</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Short">Short</span></span>)</span><span class="result">: <span class="extype" name="scala.Short">Short</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBelow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBelow(upper:Byte):Byte"></a>
       <a id="nextBelow(Byte):Byte"></a>
       <h4 class="signature">
@@ -355,8 +466,8 @@
         <span class="name">nextBelow</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Byte">Byte</span></span>)</span><span class="result">: <span class="extype" name="scala.Byte">Byte</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBetween(lower:Double,upper:Double):Double"></a>
       <a id="nextBetween(Double,Double):Double"></a>
       <h4 class="signature">
@@ -368,8 +479,8 @@
         <span class="name">nextBetween</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Double">Double</span></span>, <span name="upper">upper: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBetween(lower:Float,upper:Float):Float"></a>
       <a id="nextBetween(Float,Float):Float"></a>
       <h4 class="signature">
@@ -381,8 +492,8 @@
         <span class="name">nextBetween</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Float">Float</span></span>, <span name="upper">upper: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBetween(lower:Long,upper:Long):Long"></a>
       <a id="nextBetween(Long,Long):Long"></a>
       <h4 class="signature">
@@ -394,8 +505,8 @@
         <span class="name">nextBetween</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Long">Long</span></span>, <span name="upper">upper: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBetween(lower:Int,upper:Int):Int"></a>
       <a id="nextBetween(Int,Int):Int"></a>
       <h4 class="signature">
@@ -407,8 +518,8 @@
         <span class="name">nextBetween</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBetween(lower:Short,upper:Short):Short"></a>
       <a id="nextBetween(Short,Short):Short"></a>
       <h4 class="signature">
@@ -420,8 +531,8 @@
         <span class="name">nextBetween</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Short">Short</span></span>, <span name="upper">upper: <span class="extype" name="scala.Short">Short</span></span>)</span><span class="result">: <span class="extype" name="scala.Short">Short</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.Entropy#nextBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBetween(lower:Byte,upper:Byte):Byte"></a>
       <a id="nextBetween(Byte,Byte):Byte"></a>
       <h4 class="signature">
@@ -433,8 +544,8 @@
         <span class="name">nextBetween</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Byte">Byte</span></span>, <span name="upper">upper: <span class="extype" name="scala.Byte">Byte</span></span>)</span><span class="result">: <span class="extype" name="scala.Byte">Byte</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextBoolean" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.MersenneTwister32#nextBoolean" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextBoolean():Boolean"></a>
       <a id="nextBoolean():Boolean"></a>
       <h4 class="signature">
@@ -446,8 +557,8 @@
         <span class="name">nextBoolean</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextByte" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.MersenneTwister32#nextByte" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextByte():Byte"></a>
       <a id="nextByte():Byte"></a>
       <h4 class="signature">
@@ -459,8 +570,8 @@
         <span class="name">nextByte</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Byte">Byte</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextDouble" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.MersenneTwister32#nextDouble" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextDouble():Double"></a>
       <a id="nextDouble():Double"></a>
       <h4 class="signature">
@@ -472,8 +583,8 @@
         <span class="name">nextDouble</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextFloat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.MersenneTwister32#nextFloat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextFloat():Float"></a>
       <a id="nextFloat():Float"></a>
       <h4 class="signature">
@@ -485,8 +596,8 @@
         <span class="name">nextFloat</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextInt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.MersenneTwister32#nextInt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextInt():Int"></a>
       <a id="nextInt():Int"></a>
       <h4 class="signature">
@@ -498,8 +609,8 @@
         <span class="name">nextInt</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextLong" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.MersenneTwister32#nextLong" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextLong():Long"></a>
       <a id="nextLong():Long"></a>
       <h4 class="signature">
@@ -511,8 +622,8 @@
         <span class="name">nextLong</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
-    </li><li name="basis.generators.Randomness#nextShort" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
+    </li><li name="basis.random.MersenneTwister32#nextShort" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextShort():Short"></a>
       <a id="nextShort():Short"></a>
       <h4 class="signature">
@@ -524,7 +635,7 @@
         <span class="name">nextShort</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Short">Short</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -551,19 +662,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.generators.Randomness#shared" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="shared:basis.generators.Randomness"></a>
-      <a id="shared:Randomness"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">shared</span><span class="result">: <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -577,7 +675,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.generators.Randomness#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="basis.random.MersenneTwister32#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -589,7 +687,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.generators.Randomness">Randomness</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.random.MersenneTwister32">MersenneTwister32</a> → <a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a> → Function0 → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -638,6 +736,22 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="basis.random.Arbitrary#withFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withFilter(p:R=&gt;Boolean):basis.random.Arbitrary[R]"></a>
+      <a id="withFilter((Int)⇒Boolean):Arbitrary[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li></ol>
             </div>
 
@@ -647,8 +761,12 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="basis.generators.Randomness">
-              <h3>Inherited from <a href="Randomness.html" class="extype" name="basis.generators.Randomness">Randomness</a></h3>
+        <div class="parent" name="basis.random.Arbitrary">
+              <h3>Inherited from <a href="Arbitrary.html" class="extype" name="basis.random.Arbitrary">Arbitrary</a>[<span class="extype" name="scala.Int">Int</span>]</h3>
+            </div><div class="parent" name="scala.Function0">
+              <h3>Inherited from () ⇒ <span class="extype" name="scala.Int">Int</span></h3>
+            </div><div class="parent" name="basis.random.Entropy">
+              <h3>Inherited from <a href="Entropy.html" class="extype" name="basis.random.Entropy">Entropy</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

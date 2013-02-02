@@ -254,6 +254,46 @@ If this is a <code>Trap[Throwable]</code>, throws the value of this <code>Trap</
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.control.ElseOps#bindOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="bindOrElse[X&gt;:A](default:=&gt;X):X"></a>
+      <a id="bindOrElse[X&gt;:A](⇒X):X"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">bindOrElse</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="basis.control.ElseOps.bindOrElse.X">X</span></span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.bindOrElse.X">X</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] performed by method ElseOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.MaybeOps#bindOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="bindOrElse[X&gt;:A](default:=&gt;X):X"></a>
+      <a id="bindOrElse[X&gt;:A](⇒X):X"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">bindOrElse</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="basis.control.ElseOps.bindOrElse.X">X</span></span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.bindOrElse.X">X</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -350,8 +390,48 @@ otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block">
 otherwise returns this <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the binding of a function applied to the value of this <code>Bind</code>,
 otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.ElseOps#fuse" visbl="pub" data-isabs="false" fullComment="yes" group="Handling">
+      <a id="fuse[Y&gt;:B](trip:Throwable=&gt;basis.control.Trap[Y]):basis.control.FuseOps[A,Y]"></a>
+      <a id="fuse[Y&gt;:B]((Throwable)⇒Trap[Y]):FuseOps[A,Y]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">fuse</span><span class="tparams">[<span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="trip">trip: (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>)</span><span class="result">: <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">FuseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap exceptions with the given handler.</p><div class="fullcomment"><div class="comment cmt"><p>Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap exceptions with the given handler.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] performed by method ElseOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
             
+          </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.control.MaybeOps#fuse" visbl="pub" data-isabs="false" fullComment="yes" group="Handling">
+      <a id="fuse[Y&gt;:B](trip:Throwable=&gt;basis.control.Trap[Y]):basis.control.FuseOps[A,Y]"></a>
+      <a id="fuse[Y&gt;:B]((Throwable)⇒Trap[Y]):FuseOps[A,Y]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">fuse</span><span class="tparams">[<span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="trip">trip: (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>)</span><span class="result">: <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">FuseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap exceptions with the given handler.</p><div class="fullcomment"><div class="comment cmt"><p>Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap exceptions with the given handler.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
           </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -369,46 +449,6 @@ otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block">
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.ElseOps#getOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
-      <a id="getOrElse[X&gt;:A](default:=&gt;X):X"></a>
-      <a id="getOrElse[X&gt;:A](⇒X):X"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="implicit">getOrElse</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="basis.control.ElseOps.getOrElse.X">X</span></span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.getOrElse.X">X</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
-            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] performed by method ElseOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="basis.control.MaybeOps#getOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
-      <a id="getOrElse[X&gt;:A](default:=&gt;X):X"></a>
-      <a id="getOrElse[X&gt;:A](⇒X):X"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="implicit">getOrElse</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="basis.control.ElseOps.getOrElse.X">X</span></span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.getOrElse.X">X</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
-            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -548,8 +588,8 @@ otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block">
       </h4>
       <p class="shortcomment cmt">Returns this <code>Bind</code>, or the <code>other</code> binding for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this <code>Bind</code>, or the <code>other</code> binding for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
           </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -588,8 +628,8 @@ otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block">
       </h4>
       <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or <code>null</code> for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or <code>null</code> for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
           </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -618,22 +658,22 @@ if defined, otherwise returns this.</p></div><dl class="attributes block"> <dt c
         </dd></dl></div>
     </li><li name="basis.control.MaybeOps#recover" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
       <a id="recover[X&gt;:A](q:PartialFunction[B,X]):basis.control.Else[X,B]"></a>
-      <a id="recover[X&gt;:A](PartialFunction[Any,X]):Else[X,Any]"></a>
+      <a id="recover[X&gt;:A](PartialFunction[Nothing,X]):Else[X,Nothing]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="implicit">recover</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="basis.control.ElseOps.recover.X">X</span>]</span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recover.X">X</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="implicit">recover</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Nothing">Nothing</span>, <span class="extype" name="basis.control.ElseOps.recover.X">X</span>]</span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recover.X">X</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Binds the result of a function applied to the value of this <code>Trap</code>,
 if defined, otherwise returns this.</p><div class="fullcomment"><div class="comment cmt"><p>Binds the result of a function applied to the value of this <code>Trap</code>,
 if defined, otherwise returns this.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
           </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -662,22 +702,22 @@ if defined, otherwise returns this.</p></div><dl class="attributes block"> <dt c
         </dd></dl></div>
     </li><li name="basis.control.MaybeOps#recoverWith" visbl="pub" data-isabs="false" fullComment="yes" group="Recovering">
       <a id="recoverWith[X&gt;:A,Y&gt;:B](q:PartialFunction[B,basis.control.Else[X,Y]]):basis.control.Else[X,Y]"></a>
-      <a id="recoverWith[X&gt;:A,Y&gt;:B](PartialFunction[Any,Else[X,Y]]):Else[X,Y]"></a>
+      <a id="recoverWith[X&gt;:A,Y&gt;:B](PartialFunction[Nothing,Else[X,Y]]):Else[X,Y]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="implicit">recoverWith</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>, <span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Any">Any</span>, <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recoverWith.X">X</span>, <span class="extype" name="basis.control.ElseOps.recoverWith.Y">Y</span>]]</span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recoverWith.X">X</span>, <span class="extype" name="basis.control.ElseOps.recoverWith.Y">Y</span>]</span>
+        <span class="implicit">recoverWith</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>, <span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Nothing">Nothing</span>, <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recoverWith.X">X</span>, <span class="extype" name="basis.control.ElseOps.recoverWith.Y">Y</span>]]</span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.recoverWith.X">X</span>, <span class="extype" name="basis.control.ElseOps.recoverWith.Y">Y</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns the binding of a function applied to the value of this <code>Trap</code>,
 if defined, otherwise returns this.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the binding of a function applied to the value of this <code>Trap</code>,
 if defined, otherwise returns this.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
           </dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
@@ -799,9 +839,9 @@ otherwise returns <code>false</code>.</p></div><dl class="attributes block"> <dt
 otherwise returns <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if the value of this <code>Bind</code> satisfies the predicate,
 otherwise returns <code>false</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Any]).exists(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Nothing]).exists(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -831,14 +871,14 @@ otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block">
         </dd></dl></div>
     </li><li name="basis.control.MaybeOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
       <a id="filter(p:A=&gt;Boolean):basis.control.Else[A,B]"></a>
-      <a id="filter((A)⇒Boolean):Else[A,Any]"></a>
+      <a id="filter((A)⇒Boolean):Else[A,Nothing]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="implicit shadowed">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.Else.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="implicit shadowed">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.Else.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns this <code>Bind</code> if its value satisfies the predicate,
@@ -847,9 +887,9 @@ otherwise returns this <code>Trap</code>.</p><div class="fullcomment"><div class
 returns the unit <code>Trap</code> if its value does not satisfy the predicate,
 otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Any]).filter(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Nothing]).filter(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -866,8 +906,8 @@ otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block">
       </span>
       </h4>
       <p class="shortcomment cmt">Apllies a function to the value of this <code>Bind</code>, or returns the zero
-value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Apllies a function to the value of this <code>Bind</code>, or returns the zero
-value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+value for a <code>Trap</code>; equivalent to <code>map f bindOrElse z</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Apllies a function to the value of this <code>Bind</code>, or returns the zero
+value for a <code>Trap</code>; equivalent to <code>map f bindOrElse z</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
             <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] performed by method ElseOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
             
@@ -888,12 +928,12 @@ value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p>
       </span>
       </h4>
       <p class="shortcomment cmt">Apllies a function to the value of this <code>Bind</code>, or returns the zero
-value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Apllies a function to the value of this <code>Bind</code>, or returns the zero
-value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+value for a <code>Trap</code>; equivalent to <code>map f bindOrElse z</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Apllies a function to the value of this <code>Bind</code>, or returns the zero
+value for a <code>Trap</code>; equivalent to <code>map f bindOrElse z</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Any]).fold(z)(f)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Nothing]).fold(z)(f)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -931,9 +971,9 @@ value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p>
       </h4>
       <p class="shortcomment cmt">Applies a function to the value of this <code>Bind</code>, otherwise does nothing.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to the value of this <code>Bind</code>, otherwise does nothing.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Any]).foreach(f)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Nothing]).foreach(f)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -957,63 +997,23 @@ value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.control.ElseOps#fuse" visbl="pub" data-isabs="false" fullComment="yes" group="Handling">
-      <a id="fuse[Y&gt;:B](trip:Throwable=&gt;basis.control.Trap[Y]):basis.control.FuseOps[A,Y]"></a>
-      <a id="fuse[Y&gt;:B]((Throwable)⇒Trap[Y]):FuseOps[A,Y]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="implicit shadowed">fuse</span><span class="tparams">[<span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="trip">trip: (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>)</span><span class="result">: <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">FuseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap exceptions with the given handler.</p><div class="fullcomment"><div class="comment cmt"><p>Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap exceptions with the given handler.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
-            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] performed by method ElseOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, B]).fuse(trip)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="basis.control.MaybeOps#fuse" visbl="pub" data-isabs="false" fullComment="yes" group="Handling">
       <a id="fuse(implicitisTry:&lt;:&lt;[B,Throwable]):basis.control.FuseOps[A,Throwable]"></a>
-      <a id="fuse(&lt;:&lt;[Any,Throwable]):FuseOps[A,Throwable]"></a>
+      <a id="fuse(&lt;:&lt;[Nothing,Throwable]):FuseOps[A,Throwable]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="implicit shadowed">fuse</span><span class="params">(<span class="implicit">implicit </span><span name="isTry">isTry: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">FuseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>
+        <span class="implicit shadowed">fuse</span><span class="params">(<span class="implicit">implicit </span><span name="isTry">isTry: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="scala.Nothing">Nothing</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result">: <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">FuseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap non-fatal exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap non-fatal exceptions.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Any]).fuse(isTry)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="basis.control.MaybeOps#fuse" visbl="pub" data-isabs="false" fullComment="yes" group="Handling">
-      <a id="fuse[Y&gt;:B](trip:Throwable=&gt;basis.control.Trap[Y]):basis.control.FuseOps[A,Y]"></a>
-      <a id="fuse[Y&gt;:B]((Throwable)⇒Trap[Y]):FuseOps[A,Y]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="implicit shadowed">fuse</span><span class="tparams">[<span name="Y">Y &gt;: <span class="extype" name="basis.control.ElseOps.B">B</span></span>]</span><span class="params">(<span name="trip">trip: (<span class="extype" name="scala.Throwable">Throwable</span>) ⇒ <a href="Trap.html" class="extype" name="basis.control.Trap">Trap</a>[<span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>)</span><span class="result">: <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">FuseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.ElseOps.fuse.Y">Y</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap exceptions with the given handler.</p><div class="fullcomment"><div class="comment cmt"><p>Selects <a href="FuseOps.html" class="extype" name="basis.control.FuseOps">fused</a> combinators that trap exceptions with the given handler.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
-            This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Any]).fuse(trip)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Nothing]).fuse(isTry)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -1041,23 +1041,23 @@ otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block">
         </dd></dl></div>
     </li><li name="basis.control.MaybeOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
       <a id="map[X](f:A=&gt;X):basis.control.Else[X,B]"></a>
-      <a id="map[X]((A)⇒X):Else[X,Any]"></a>
+      <a id="map[X]((A)⇒X):Else[X,Nothing]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="implicit shadowed">map</span><span class="tparams">[<span name="X">X</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.Else.A">A</span>) ⇒ <span class="extype" name="basis.control.ElseOps.map.X">X</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.map.X">X</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="implicit shadowed">map</span><span class="tparams">[<span name="X">X</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.control.Else.A">A</span>) ⇒ <span class="extype" name="basis.control.ElseOps.map.X">X</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.ElseOps.map.X">X</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Binds the result of a function applied to the value of this <code>Bind</code>,
 otherwise returns this <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Binds the result of a function applied to the value of this <code>Bind</code>,
 otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Any]).map(f)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Nothing]).map(f)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -1087,14 +1087,14 @@ otherwise returns this <code>Trap</code>; equivalent to <code>filter</code>.</p>
         </dd></dl></div>
     </li><li name="basis.control.MaybeOps#withFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Composing">
       <a id="withFilter(p:A=&gt;Boolean):basis.control.Else[A,B]"></a>
-      <a id="withFilter((A)⇒Boolean):Else[A,Any]"></a>
+      <a id="withFilter((A)⇒Boolean):Else[A,Nothing]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="implicit shadowed">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.Else.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+        <span class="implicit shadowed">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.control.Else.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns this <code>Bind</code> if its value satisfies the predicate,
@@ -1103,9 +1103,9 @@ otherwise returns this <code>Trap</code>; equivalent to <code>filter</code>.</p>
 returns the unit <code>Trap</code> if its value does not satisfy the predicate,
 otherwise returns this <code>Trap</code>; equivalent to <code>filter</code>.</p></div><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
             This member is added by an implicit conversion from <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to
-            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
-            
-          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Any]).withFilter(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
+            <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>] performed by method MaybeOps in <a href="package.html" class="extype" name="basis.control">basis.control</a>.
+            This conversion will take place only if B is a subclass of Nothing (B &lt;: <span class="extype" name="scala.Nothing">Nothing</span>).
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(else: ElseOps[A, Nothing]).withFilter(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -1131,7 +1131,7 @@ otherwise returns this <code>Trap</code>; equivalent to <code>filter</code>.</p>
               </h3>
             </div><div class="conversion" name="basis.control.MaybeOps">
               <h3>Inherited by implicit conversion MaybeOps from
-                <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Any">Any</span>]
+                <a href="" class="extype" name="basis.control.Else">Else</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="basis.control.Else.B">B</span>] to <a href="ElseOps.html" class="extype" name="basis.control.ElseOps">ElseOps</a>[<span class="extype" name="basis.control.Else.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>]
               </h3>
             </div>
         </div>

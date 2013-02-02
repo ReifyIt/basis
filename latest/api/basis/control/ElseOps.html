@@ -189,6 +189,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.control.ElseOps#bindOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
+      <a id="bindOrElse[X&gt;:A](default:=&gt;X):X"></a>
+      <a id="bindOrElse[X&gt;:A](⇒X):X"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindOrElse</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="basis.control.ElseOps.bindOrElse.X">X</span></span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.bindOrElse.X">X</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -316,8 +332,8 @@ otherwise returns this <code>Trap</code>.</p></div><dl class="attributes block">
       </span>
       </h4>
       <p class="shortcomment cmt">Apllies a function to the value of this <code>Bind</code>, or returns the zero
-value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Apllies a function to the value of this <code>Bind</code>, or returns the zero
-value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+value for a <code>Trap</code>; equivalent to <code>map f bindOrElse z</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Apllies a function to the value of this <code>Bind</code>, or returns the zero
+value for a <code>Trap</code>; equivalent to <code>map f bindOrElse z</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@macroImpl</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -382,22 +398,6 @@ value for a <code>Trap</code>; equivalent to <code>map f getOrElse z</code>.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="basis.control.ElseOps#getOrElse" visbl="pub" data-isabs="false" fullComment="yes" group="Evaluating">
-      <a id="getOrElse[X&gt;:A](default:=&gt;X):X"></a>
-      <a id="getOrElse[X&gt;:A](⇒X):X"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getOrElse</span><span class="tparams">[<span name="X">X &gt;: <span class="extype" name="basis.control.ElseOps.A">A</span></span>]</span><span class="params">(<span name="default">default: ⇒ <span class="extype" name="basis.control.ElseOps.getOrElse.X">X</span></span>)</span><span class="result">: <span class="extype" name="basis.control.ElseOps.getOrElse.X">X</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the value of this <code>Bind</code>, or the <code>default</code> value for a <code>Trap</code>.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@macroImpl</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
