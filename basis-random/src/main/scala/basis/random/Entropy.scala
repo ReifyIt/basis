@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis.generators
+package basis.random
 
 import basis.util._
 
@@ -14,11 +14,11 @@ import scala.annotation.implicitNotFound
 /** A source of pseudorandom primitive values.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   */
-@implicitNotFound("No source of randomness available.")
-abstract class Randomness {
+@implicitNotFound("No source of entropy available.")
+abstract class Entropy {
   def nextByte(): Byte
   
   def nextShort(): Short
@@ -104,51 +104,4 @@ abstract class Randomness {
       throw new IllegalArgumentException("Invalid bounds"+" "+"["+ lower +", "+ upper+")"+".")
     lower + nextDouble() * size
   }
-}
-
-/** A synchronized source of [[Randomness]]. */
-object Randomness extends Randomness {
-  private[this] val rand = new MersenneTwister32
-  
-  override def nextByte(): Byte = synchronized(rand.nextByte())
-  
-  override def nextShort(): Short = synchronized(rand.nextShort())
-  
-  override def nextInt(): Int = synchronized(rand.nextInt())
-  
-  override def nextLong(): Long = synchronized(rand.nextLong())
-  
-  override def nextFloat(): Float = synchronized(rand.nextFloat())
-  
-  override def nextDouble(): Double = synchronized(rand.nextDouble())
-  
-  override def nextBoolean(): Boolean = synchronized(rand.nextBoolean())
-  
-  override def nextBelow(upper: Byte): Byte = synchronized(rand.nextBelow(upper))
-  
-  override def nextBelow(upper: Short): Short = synchronized(rand.nextBelow(upper))
-  
-  override def nextBelow(upper: Int): Int = synchronized(rand.nextBelow(upper))
-  
-  override def nextBelow(upper: Long): Long = synchronized(rand.nextBelow(upper))
-  
-  override def nextBelow(upper: Float): Float = synchronized(rand.nextBelow(upper))
-  
-  override def nextBelow(upper: Double): Double = synchronized(rand.nextBelow(upper))
-  
-  override def nextBetween(lower: Byte, upper: Byte): Byte = synchronized(rand.nextBetween(lower, upper))
-  
-  override def nextBetween(lower: Short, upper: Short): Short = synchronized(rand.nextBetween(lower, upper))
-  
-  override def nextBetween(lower: Int, upper: Int): Int = synchronized(rand.nextBetween(lower, upper))
-  
-  override def nextBetween(lower: Long, upper: Long): Long = synchronized(rand.nextBetween(lower, upper))
-  
-  override def nextBetween(lower: Float, upper: Float): Float = synchronized(rand.nextBetween(lower, upper))
-  
-  override def nextBetween(lower: Double, upper: Double): Double = synchronized(rand.nextBetween(lower, upper))
-  
-  implicit def shared: Randomness = this
-  
-  override def toString: String = "Randomness"
 }

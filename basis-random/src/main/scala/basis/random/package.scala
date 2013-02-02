@@ -5,10 +5,19 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis.generators
+package basis
 
-/** An exception indicating arbitrary value generation failure.
-  * 
-  * @author Chris Sachs
-  */
-class ArbitraryException(message: String) extends RuntimeException(message)
+/** Random data generation. */
+package object random {
+  private[this] val localEntropy = new java.lang.ThreadLocal[Entropy]
+  
+  /** Returns a thread-local pseudorandom number generator. */
+  implicit def Entropy: Entropy = {
+    var S = localEntropy.get
+    if (S == null) {
+      S = new MersenneTwister32
+      localEntropy.set(S)
+    }
+    S
+  }
+}

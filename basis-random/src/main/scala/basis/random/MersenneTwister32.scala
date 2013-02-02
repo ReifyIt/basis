@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis.generators
+package basis.random
 
 import basis.util._
 
@@ -20,7 +20,7 @@ import basis.util._
 final class MersenneTwister32 private (
     private[this] val state: Array[Int],
     private[this] var index: Int)
-  extends Randomness with Arbitrary[Int] {
+  extends Entropy with Arbitrary[Int] {
   
   def this(seed: Int) = {
     this(new Array[Int](624), 0)

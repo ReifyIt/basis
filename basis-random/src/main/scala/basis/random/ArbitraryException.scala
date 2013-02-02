@@ -5,7 +5,10 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis
+package basis.random
 
-/** Arbitrary data generation. */
-package object generators
+/** Failure to generate an arbitrary value.
+  * 
+  * @author Chris Sachs
+  */
+class ArbitraryException(message: String) extends RuntimeException(message)
