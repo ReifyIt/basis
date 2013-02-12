@@ -25,10 +25,9 @@ import basis.runtime._
   * @groupprio  Indexing      2
   * @groupprio  Inserting     3
   * @groupprio  Removing      4
-  * @groupprio  Iterating     5
-  * @groupprio  Traversing    6
-  * @groupprio  Exporting     7
-  * @groupprio  Classifying   8
+  * @groupprio  Traversing    5
+  * @groupprio  Exporting     6
+  * @groupprio  Classifying   7
   * 
   * @define collection  list buffer
   * 
@@ -116,7 +115,7 @@ class ListBuffer[A] private (
     if (size == 0) appendAll(elems)
     else {
       val f = new Prepend
-      traverse(elems)(f)
+      elems traverse f
       f.splice()
     }
   }
@@ -155,7 +154,7 @@ class ListBuffer[A] private (
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
-    else traverse(elems)(new Insert(index))
+    else elems traverse new Insert(index)
   }
   
   private final class Insert(index: Int) extends scala.runtime.AbstractFunction1[A, Unit] {
@@ -249,7 +248,7 @@ class ListBuffer[A] private (
   
   override def iterator: Iterator[A] = new ListBufferIterator(first)
   
-  protected override def foreach[U](f: A => U) {
+  override def traverse(f: A => Unit) {
     var xs = first
     while (!xs.isEmpty) {
       f(xs.head)

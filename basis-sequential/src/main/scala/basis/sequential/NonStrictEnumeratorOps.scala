@@ -146,6 +146,7 @@ final class NonStrictEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal 
 }
 
 private[sequential] object NonStrictEnumeratorOps {
+  import scala.runtime.AbstractFunction1
   import basis.util.IntOps
   
   class Collect[-A, +B](
@@ -153,9 +154,12 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val q: PartialFunction[A, B])
     extends Enumerator[B] {
     
-    protected override def foreach[U](f: B => U) {
-      traverse(these)(x => if (q.isDefinedAt(x)) f(q(x)))
-    }
+    override def traverse(g: B => Unit): Unit =
+      these traverse new CollectTraverse(q, g)
+  }
+  
+  final class CollectTraverse[-A, +B](q: PartialFunction[A, B], g: B => Unit) extends AbstractFunction1[A, Unit] {
+    override def apply(x: A): Unit = if (q.isDefinedAt(x)) g(q(x))
   }
   
   class Map[-A, +B](
@@ -163,9 +167,8 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val f: A => B)
     extends Enumerator[B] {
     
-    protected override def foreach[U](g: B => U) {
-      traverse(these)(f andThen g)
-    }
+    override def traverse(g: B => Unit): Unit =
+      these traverse (f andThen g)
   }
   
   class FlatMap[-A, +B](
@@ -173,9 +176,12 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val f: A => Enumerator[B])
     extends Enumerator[B] {
     
-    protected override def foreach[U](g: B => U) {
-      traverse(these)(x => traverse(f(x))(g))
-    }
+    override def traverse(g: B => Unit): Unit =
+      these traverse new FlatMapTraverse(f, g)
+  }
+  
+  final class FlatMapTraverse[-A, +B](f: A => Enumerator[B], g: B => Unit) extends AbstractFunction1[A, Unit] {
+    override def apply(x: A): Unit = f(x) traverse g
   }
   
   class Filter[+A](
@@ -183,9 +189,12 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val p: A => Boolean)
     extends Enumerator[A] {
     
-    protected override def foreach[U](f: A => U) {
-      traverse(these)(x => if (p(x)) f(x))
-    }
+    override def traverse(g: A => Unit): Unit =
+      these traverse new FilterTraverse(p, g)
+  }
+  
+  final class FilterTraverse[-A](p: A => Boolean, g: A => Unit) extends AbstractFunction1[A, Unit] {
+    override def apply(x: A): Unit = if (p(x)) g(x)
   }
   
   class DropWhile[+A](
@@ -193,10 +202,13 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val p: A => Boolean)
     extends Enumerator[A] {
     
-    protected override def foreach[U](f: A => U) {
-      var split = false
-      traverse(these)(x => if (split || (!p(x) && { split = true; true })) f(x))
-    }
+    override def traverse(g: A => Unit): Unit =
+      these traverse new DropWhileTraverse(p, g)
+  }
+  
+  final class DropWhileTraverse[-A](p: A => Boolean, g: A => Unit) extends AbstractFunction1[A, Unit] {
+    private[this] var split = false
+    override def apply(x: A): Unit = if (split || (!p(x) && { split = true; true })) g(x)
   }
   
   class TakeWhile[+A](
@@ -204,9 +216,12 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val p: A => Boolean)
     extends Enumerator[A] {
     
-    protected override def foreach[U](f: A => U) {
-      begin(traverse(these)(x => if (p(x)) f(x) else begin.break()))
-    }
+    override def traverse(g: A => Unit): Unit =
+      begin(these traverse new TakeWhileTraverse(p, g))
+  }
+  
+  final class TakeWhileTraverse[-A](p: A => Boolean, g: A => Unit) extends AbstractFunction1[A, Unit] {
+    override def apply(x: A): Unit = if (p(x)) g(x) else begin.break()
   }
   
   class Drop[+A](
@@ -214,10 +229,13 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val lower: Int)
     extends Enumerator[A] {
     
-    protected override def foreach[U](f: A => U) {
-      var i = 0
-      traverse(these)(x => if (i >= lower) f(x) else i += 1)
-    }
+    override def traverse(g: A => Unit): Unit =
+      these traverse new DropTraverse(lower, g)
+  }
+  
+  final class DropTraverse[-A](l: Int, g: A => Unit) extends AbstractFunction1[A, Unit] {
+    private[this] var i = 0
+    override def apply(x: A): Unit = if (i >= l) g(x) else i += 1
   }
   
   class Take[+A](
@@ -225,10 +243,13 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val upper: Int)
     extends Enumerator[A] {
     
-    protected override def foreach[U](f: A => U) {
-      var i = 0
-      begin(traverse(these)(x => if (i < upper) { f(x); i += 1 } else begin.break()))
-    }
+    override def traverse(g: A => Unit): Unit =
+      begin(these traverse new TakeTraverse(upper, g))
+  }
+  
+  final class TakeTraverse[-A](u: Int, g: A => Unit) extends AbstractFunction1[A, Unit] {
+    private[this] var i = 0
+    override def apply(x: A): Unit = if (i < u) { g(x); i += 1 } else begin.break()
   }
   
   class Slice[+A](
@@ -237,12 +258,16 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val upper: Int)
     extends Enumerator[A] {
     
-    protected override def foreach[U](f: A => U) {
+    override def traverse(g: A => Unit) {
       var l = 0 max lower
       val u = l max upper
-      var i = 0
-      if (l < u) begin(traverse(these)(x => if (i < u) { if (i >= l) f(x); i += 1 } else begin.break()))
+      if (l < u) begin(these traverse new SliceTraverse(l, u, g))
     }
+  }
+  
+  final class SliceTraverse[-A](l: Int, u: Int, g: A => Unit) extends AbstractFunction1[A, Unit] {
+    private[this] var i = 0
+    override def apply(x: A): Unit = if (i < u) { if (i >= l) g(x); i += 1 } else begin.break()
   }
   
   class ++[+A](
@@ -250,9 +275,9 @@ private[sequential] object NonStrictEnumeratorOps {
       protected[this] val those: Enumerator[A])
     extends Enumerator[A] {
     
-    protected override def foreach[U](f: A => U) {
-      traverse(these)(f)
-      traverse(those)(f)
+    override def traverse(g: A => Unit) {
+      these traverse g
+      those traverse g
     }
   }
 }

@@ -17,15 +17,14 @@ import basis.runtime._
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Containers
   * 
   * @groupprio  Measuring     1
   * @groupprio  Indexing      2
-  * @groupprio  Iterating     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  vector
   */
@@ -46,7 +45,7 @@ private[containers] final class Vector0 extends Vector[Nothing] {
   override def update[B](index: Int, elem: B): Vector[B] =
     throw new IndexOutOfBoundsException(index.toString)
   
-  override protected def foreach[U](f: Nothing => U): Unit = ()
+  override def traverse(f: Nothing => Unit): Unit = ()
 }
 
 private[containers] final class Vector1[+A](
@@ -69,7 +68,7 @@ private[containers] final class Vector1[+A](
   
   override def iterator: Iterator[A] = new VectorIterator(node1, length)
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach1(node1)(f)
+  override def traverse(f: A => Unit): Unit = Vector.traverse1(node1)(f)
 }
 
 private[containers] final class Vector2[+A](
@@ -99,7 +98,7 @@ private[containers] final class Vector2[+A](
   
   override def iterator: Iterator[A] = new VectorIterator(node2, length)
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach2(node2)(f)
+  override def traverse(f: A => Unit): Unit = Vector.traverse2(node2)(f)
 }
 
 private[containers] final class Vector3[+A](
@@ -135,7 +134,7 @@ private[containers] final class Vector3[+A](
   
   override def iterator: Iterator[A] = new VectorIterator(node3, length)
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach3(node3)(f)
+  override def traverse(f: A => Unit): Unit = Vector.traverse3(node3)(f)
 }
 
 private[containers] final class Vector4[+A](
@@ -177,7 +176,7 @@ private[containers] final class Vector4[+A](
   
   override def iterator: Iterator[A] = new VectorIterator(node4, length)
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach4(node4)(f)
+  override def traverse(f: A => Unit): Unit = Vector.traverse4(node4)(f)
 }
 
 private[containers] final class Vector5[+A](
@@ -225,7 +224,7 @@ private[containers] final class Vector5[+A](
   
   override def iterator: Iterator[A] = new VectorIterator(node5, length)
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach5(node5)(f)
+  override def traverse(f: A => Unit): Unit = Vector.traverse5(node5)(f)
 }
 
 private[containers] final class Vector6[+A](
@@ -273,7 +272,7 @@ private[containers] final class Vector6[+A](
   
   override def iterator: Iterator[A] = new VectorIterator(node6, length)
   
-  protected override def foreach[U](f: A => U): Unit = Vector.foreach6(node6)(f)
+  override def traverse(f: A => Unit): Unit = Vector.traverse6(node6)(f)
 }
 
 /** A factory for [[Vector vectors]].
@@ -286,7 +285,7 @@ object Vector extends SeqFactory[Vector] {
   private[this] val empty = new Vector0
   override def empty[A : TypeHint]: Vector[A] = empty
   
-  private[containers] def foreach1[A, U](node1: Array[AnyRef])(f: A => U) {
+  private[containers] def traverse1[A](node1: Array[AnyRef])(f: A => Unit) {
     var i = 0
     val n = node1.length
     while (i < n) {
@@ -295,47 +294,47 @@ object Vector extends SeqFactory[Vector] {
     }
   }
   
-  private[containers] def foreach2[A, U](node2: Array[Array[AnyRef]])(f: A => U) {
+  private[containers] def traverse2[A](node2: Array[Array[AnyRef]])(f: A => Unit) {
     var i = 0
     val n = node2.length
     while (i < n) {
-      foreach1(node2(i))(f)
+      traverse1(node2(i))(f)
       i += 1
     }
   }
   
-  private[containers] def foreach3[A, U](node3: Array[Array[Array[AnyRef]]])(f: A => U) {
+  private[containers] def traverse3[A](node3: Array[Array[Array[AnyRef]]])(f: A => Unit) {
     var i = 0
     val n = node3.length
     while (i < n) {
-      foreach2(node3(i))(f)
+      traverse2(node3(i))(f)
       i += 1
     }
   }
   
-  private[containers] def foreach4[A, U](node4: Array[Array[Array[Array[AnyRef]]]])(f: A => U) {
+  private[containers] def traverse4[A](node4: Array[Array[Array[Array[AnyRef]]]])(f: A => Unit) {
     var i = 0
     val n = node4.length
     while (i < n) {
-      foreach3(node4(i))(f)
+      traverse3(node4(i))(f)
       i += 1
     }
   }
   
-  private[containers] def foreach5[A, U](node5: Array[Array[Array[Array[Array[AnyRef]]]]])(f: A => U) {
+  private[containers] def traverse5[A](node5: Array[Array[Array[Array[Array[AnyRef]]]]])(f: A => Unit) {
     var i = 0
     val n = node5.length
     while (i < n) {
-      foreach4(node5(i))(f)
+      traverse4(node5(i))(f)
       i += 1
     }
   }
   
-  private[containers] def foreach6[A, U](node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]])(f: A => U) {
+  private[containers] def traverse6[A](node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]])(f: A => Unit) {
     var i = 0
     val n = node6.length
     while (i < n) {
-      foreach5(node6(i))(f)
+      traverse5(node6(i))(f)
       i += 1
     }
   }

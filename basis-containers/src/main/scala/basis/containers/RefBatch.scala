@@ -9,6 +9,7 @@ package basis.containers
 
 import basis.collections._
 
+import scala.Predef.<:<
 import scala.annotation.{switch, tailrec}
 
 private[containers] final class RefBatch1[+A](_1: A) extends Batch[A] {
@@ -41,6 +42,14 @@ private[containers] final class RefBatch1[+A](_1: A) extends Batch[A] {
   override def append[B >: A](elem: B): Batch[B] = new RefBatch2(_1, elem)
   
   override def prepend[B >: A](elem: B): Batch[B] = new RefBatch2(elem, _1)
+  
+  override def traverse(f: A => Unit) {
+    f(_1)
+  }
+  
+  override def flatTraverse[B](f: B => Unit)(implicit isNested: A <:< Batch[B]) {
+    _1 traverse f
+  }
 }
 
 private[containers] final class RefBatch2[+A](_1: A, _2: A) extends Batch[A] {
@@ -83,6 +92,14 @@ private[containers] final class RefBatch2[+A](_1: A, _2: A) extends Batch[A] {
   override def append[B >: A](elem: B): Batch[B] = new RefBatch3(_1, _2, elem)
   
   override def prepend[B >: A](elem: B): Batch[B] = new RefBatch3(elem, _1, _2)
+  
+  override def traverse(f: A => Unit) {
+    f(_1); f(_2)
+  }
+  
+  override def flatTraverse[B](f: B => Unit)(implicit isNested: A <:< Batch[B]) {
+    _1 traverse f; _2 traverse f
+  }
 }
 
 private[containers] final class RefBatch3[+A](_1: A, _2: A, _3: A) extends Batch[A] {
@@ -131,6 +148,14 @@ private[containers] final class RefBatch3[+A](_1: A, _2: A, _3: A) extends Batch
   override def append[B >: A](elem: B): Batch[B] = new RefBatch4(_1, _2, _3, elem)
   
   override def prepend[B >: A](elem: B): Batch[B] = new RefBatch4(elem, _1, _2, _3)
+  
+  override def traverse(f: A => Unit) {
+    f(_1); f(_2); f(_3)
+  }
+  
+  override def flatTraverse[B](f: B => Unit)(implicit isNested: A <:< Batch[B]) {
+    _1 traverse f; _2 traverse f; _3 traverse f
+  }
 }
 
 private[containers] final class RefBatch4[+A]
@@ -186,6 +211,14 @@ private[containers] final class RefBatch4[+A]
   override def append[B >: A](elem: B): Batch[B] = new RefBatch5(_1, _2, _3, _4, elem)
     
   override def prepend[B >: A](elem: B): Batch[B] = new RefBatch5(elem, _1, _2, _3, _4)
+  
+  override def traverse(f: A => Unit) {
+    f(_1); f(_2); f(_3); f(_4)
+  }
+  
+  override def flatTraverse[B](f: B => Unit)(implicit isNested: A <:< Batch[B]) {
+    _1 traverse f; _2 traverse f; _3 traverse f; _4 traverse f
+  }
 }
 
 private[containers] final class RefBatch5[+A]
@@ -247,6 +280,14 @@ private[containers] final class RefBatch5[+A]
     
   override def prepend[B >: A](elem: B): Batch[B] =
     new RefBatch6(elem, _1, _2, _3, _4, _5)
+  
+  override def traverse(f: A => Unit) {
+    f(_1); f(_2); f(_3); f(_4); f(_5)
+  }
+  
+  override def flatTraverse[B](f: B => Unit)(implicit isNested: A <:< Batch[B]) {
+    _1 traverse f; _2 traverse f; _3 traverse f; _4 traverse f; _5 traverse f
+  }
 }
 
 private[containers] final class RefBatch6[+A]
@@ -312,6 +353,14 @@ private[containers] final class RefBatch6[+A]
     
   override def prepend[B >: A](elem: B): Batch[B] =
     new RefBatchN(7, new RefBatch3(elem, _1, _2), Batch.Empty, new RefBatch4(_3, _4, _5, _6))
+  
+  override def traverse(f: A => Unit) {
+    f(_1); f(_2); f(_3); f(_4); f(_5); f(_6)
+  }
+  
+  override def flatTraverse[B](f: B => Unit)(implicit isNested: A <:< Batch[B]) {
+    _1 traverse f; _2 traverse f; _3 traverse f; _4 traverse f; _5 traverse f; _6 traverse f
+  }
 }
 
 private[containers] final class RefBatchN[+A]
@@ -411,5 +460,22 @@ private[containers] final class RefBatchN[+A]
         new RefBatch4(prefix(2), prefix(3), prefix(4), prefix(5)) +: tree,
         suffix)
     else new RefBatchN(length + 1, elem +: prefix, tree, suffix)
+  }
+  
+  override def traverse(f: A => Unit) {
+    prefix traverse f
+    tree flatTraverse f
+    suffix traverse f
+  }
+  
+  override def flatTraverse[B](f: B => Unit)(implicit isNested: A <:< Batch[B]) {
+    prefix flatTraverse f
+    var i = 0
+    val n = tree.length
+    while (i < n) {
+      tree(i) flatTraverse f
+      i += 1
+    }
+    suffix flatTraverse f
   }
 }

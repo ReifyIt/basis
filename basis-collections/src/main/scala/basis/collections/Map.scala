@@ -24,9 +24,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * 
   * @groupprio  Measuring     1
   * @groupprio  Querying      2
-  * @groupprio  Iterating     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  map
   * @define SequentialOps
@@ -93,7 +92,7 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[_, _]] with Container[
   }
   
   /** Returns a new iterator over the (key, value) pairs of this $collection.
-    * @group Iterating */
+    * @group Traversing */
   override def iterator: Iterator[(A, T)]
   
   /** Returns `true` if this $collection might equal another object, otherwise `false`.

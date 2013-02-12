@@ -54,6 +54,8 @@ private[containers] final class LongBatch1(_1: Long) extends Batch[Long] with Re
     else lift.prepend(elem)
   }
   
+  override def traverse(f: Long => Unit): Unit = f(_1)
+  
   private[this] def lift: Batch[Long] = new RefBatch1(_1)
 }
 
@@ -107,6 +109,10 @@ private[containers] final class LongBatch2(_1: Long, _2: Long) extends Batch[Lon
   override def prepend[B >: Long](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Long]) new LongBatch3(elem.asInstanceOf[Long], _1, _2)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Long => Unit) {
+    f(_1); f(_2)
   }
   
   private[this] def lift: Batch[Long] = new RefBatch2(_1, _2)
@@ -168,6 +174,10 @@ private[containers] final class LongBatch3(_1: Long, _2: Long, _3: Long) extends
   override def prepend[B >: Long](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Long]) new LongBatch4(elem.asInstanceOf[Long], _1, _2, _3)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Long => Unit) {
+    f(_1); f(_2); f(_3)
   }
   
   private[this] def lift: Batch[Long] = new RefBatch3(_1, _2, _3)
@@ -236,6 +246,10 @@ private[containers] final class LongBatch4
   override def prepend[B >: Long](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Long]) new LongBatch5(elem.asInstanceOf[Long], _1, _2, _3, _4)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Long => Unit) {
+    f(_1); f(_2); f(_3); f(_4)
   }
   
   private[this] def lift: Batch[Long] = new RefBatch4(_1, _2, _3, _4)
@@ -308,6 +322,10 @@ private[containers] final class LongBatch5
   override def prepend[B >: Long](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Long]) new LongBatch6(elem.asInstanceOf[Long], _1, _2, _3, _4, _5)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Long => Unit) {
+    f(_1); f(_2); f(_3); f(_4); f(_5)
   }
   
   private[this] def lift: Batch[Long] = new RefBatch5(_1, _2, _3, _4, _5)
@@ -386,6 +404,10 @@ private[containers] final class LongBatch6
     if (elem.isInstanceOf[Long])
       new LongBatchN(7, new LongBatch3(elem.asInstanceOf[Long], _1, _2), Batch.Empty, new LongBatch4(_3, _4, _5, _6))
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Long => Unit) {
+    f(_1); f(_2); f(_3); f(_4); f(_5); f(_6)
   }
   
   private[this] def lift: Batch[Long] = new RefBatch6(_1, _2, _3, _4, _5, _6)
@@ -499,6 +521,12 @@ private[containers] final class LongBatchN
       else new LongBatchN(length + 1, (elem +: prefix).asInstanceOf[Batch[Long]], tree, suffix)
     }
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Long => Unit) {
+    prefix traverse f
+    tree flatTraverse f
+    suffix traverse f
   }
   
   private[this] def lift: Batch[Long] = new RefBatchN(length, prefix, tree, suffix)

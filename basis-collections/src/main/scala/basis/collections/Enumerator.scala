@@ -7,20 +7,15 @@
 
 package basis.collections
 
-/** A stateful traversable collection. `Enumerator` declares a protected
-  * `foreach` method that traverses its elements. To traverse an enumerator,
-  * invoke [[basis.collections#traverse basis.collections.traverse]], or add
-  * a public `foreach` implementation by importing
-  * [[basis.sequential.General `basis.sequential.general`]]`._`. Traversing
-  * an enumerator may alter its state, causing subsequent traversals to yield
-  * different results.
+/** A once traversable collection. Traversing an enumerator may alter its
+  * state, causing subsequent traversals to yield different results.
   * 
   * ==Extensions==
   * $Extensions
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Collections
   * 
@@ -51,18 +46,7 @@ package basis.collections
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Enumerator[+A] extends Any with Family[Enumerator[_]] {
-  /** Applies a function to each element of this $collection. The protected
-    * status of `foreach` allows optimized static implementations to shadow
-    * this virtual method. To force a virtual `foreach` call, invoke
-    * [[basis.collections#traverse traverse]].
-    * 
-    * @group  Traversing
-    */
-  protected def foreach[U](f: A => U): Unit
-}
-
-private[collections] object Enumerator {
-  /** Applies a function to each of an enumerator's elements by invoking the
-    * enumerator's protected `foreach` method. */
-  def traverse[A, U](xs: Enumerator[A])(f: A => U): Unit = xs.foreach[U](f)
+  /** Applies a side-effecting function to each element of this $collection.
+    * @group Traversing */
+  def traverse(f: A => Unit): Unit
 }

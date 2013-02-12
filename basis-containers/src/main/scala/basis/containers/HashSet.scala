@@ -21,16 +21,15 @@ import scala.annotation.unchecked.uncheckedVariance
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Containers
   * 
   * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Updating      3
-  * @groupprio  Iterating     4
-  * @groupprio  Traversing    5
-  * @groupprio  Classifying   6
+  * @groupprio  Traversing    4
+  * @groupprio  Classifying   5
   * 
   * @define collection  hash set
   */
@@ -224,7 +223,7 @@ final class HashSet[+A] private[containers] (
   
   override def iterator: Iterator[A] = new HashSetIterator(this)
   
-  protected override def foreach[U](f: A => U) {
+  override def traverse(f: A => Unit) {
     var i = 0
     var treeMap = this.treeMap
     var leafMap = this.leafMap
@@ -232,8 +231,8 @@ final class HashSet[+A] private[containers] (
       ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
         case VOID => ()
         case LEAF => f(leafAt(i)); i += 1
-        case TREE => treeAt(i).foreach(f); i += 1
-        case KNOT => knotAt(i).foreach(f); i += 1
+        case TREE => treeAt(i) traverse f; i += 1
+        case KNOT => knotAt(i) traverse f; i += 1
       }
       treeMap >>>= 1
       leafMap >>>= 1

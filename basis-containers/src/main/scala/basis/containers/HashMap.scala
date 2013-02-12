@@ -29,9 +29,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Updating      3
-  * @groupprio  Iterating     4
-  * @groupprio  Traversing    5
-  * @groupprio  Classifying   6
+  * @groupprio  Traversing    4
+  * @groupprio  Classifying   5
   * 
   * @define collection  hash map
   */
@@ -298,7 +297,7 @@ final class HashMap[+A, +T] private[containers] (
   
   override def iterator: Iterator[(A, T)] = new HashMapIterator(this)
   
-  protected override def foreach[U](f: ((A, T)) => U) {
+  override def traverse(f: ((A, T)) => Unit) {
     var i = 0
     var j = 0
     var treeMap = this.treeMap
@@ -307,8 +306,8 @@ final class HashMap[+A, +T] private[containers] (
       ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
         case VOID => ()
         case LEAF => f((keyAt(i), valueAt(j))); i += 1; j += 1
-        case TREE => treeAt(i).foreach(f); i += 1
-        case KNOT => knotAt(i).foreach(f); i += 1
+        case TREE => treeAt(i) traverse f; i += 1
+        case KNOT => knotAt(i) traverse f; i += 1
       }
       treeMap >>>= 1
       leafMap >>>= 1

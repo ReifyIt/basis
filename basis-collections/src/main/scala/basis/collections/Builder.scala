@@ -39,7 +39,7 @@ trait Builder[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A] {
   /** Appends multiple elements to this $collection.
     * @group Inserting */
   def appendAll(elems: Enumerator[A]) {
-    traverse(elems)(new Builder.Append(this))
+    elems traverse new Builder.Append(this)
   }
   
   /** Appends a single element to this $collection.
@@ -70,9 +70,9 @@ trait Builder[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) -A] {
 }
 
 private[collections] object Builder {
-  import scala.runtime.AbstractFunction1
-  
-  final class Append[-A](b: Builder[A]) extends AbstractFunction1[A, Unit] {
+  private[collections] final class Append[-A]
+      (private[this] val b: Builder[A])
+    extends scala.runtime.AbstractFunction1[A, Unit] {
     override def apply(x: A): Unit = b.append(x)
   }
 }

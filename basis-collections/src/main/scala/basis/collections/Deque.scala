@@ -21,9 +21,8 @@ package basis.collections
   * 
   * @groupprio  Measuring     1
   * @groupprio  Decomposing   2
-  * @groupprio  Iterating     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  deque
   * @define SequentialOps

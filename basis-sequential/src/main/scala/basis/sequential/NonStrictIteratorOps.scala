@@ -171,7 +171,7 @@ private[sequential] object NonStrictIteratorOps {
     
     override def dup: Done.type = this
     
-    protected override def foreach[U](f: Nothing => U): Unit = ()
+    override def traverse(f: Nothing => Unit): Unit = ()
   }
   
   final class Collect[-A, +B](these: Iterator[A], q: PartialFunction[A, B]) extends Iterator[B] {

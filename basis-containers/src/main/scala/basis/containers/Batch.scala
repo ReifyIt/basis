@@ -10,6 +10,8 @@ package basis.containers
 import basis.collections._
 import basis.runtime._
 
+import scala.Predef.<:<
+
 /** A finger tree.
   * 
   * ==Extensions==
@@ -26,9 +28,8 @@ import basis.runtime._
   * @groupprio  Decomposing   3
   * @groupprio  Inserting     4
   * @groupprio  Slicing       5
-  * @groupprio  Iterating     6
-  * @groupprio  Traversing    7
-  * @groupprio  Classifying   8
+  * @groupprio  Traversing    6
+  * @groupprio  Classifying   7
   * 
   * @define collection  batch
   */
@@ -70,6 +71,19 @@ abstract class Batch[+A] private[containers]
   /** Returns a copy of this $collection with the given element prepended.
     * @group Inserting */
   def +: [B >: A](elem: B): Batch[B] = prepend(elem)
+  
+  override def traverse(f: A => Unit): Unit
+  
+  /** Applies a side-effecting function to each nested element of this $collection.
+    * @group Traversing */
+  def flatTraverse[B](f: B => Unit)(implicit isNested: A <:< Batch[B]) {
+    var i = 0
+    val n = length
+    while (i < n) {
+      this(i) traverse f
+      i += 1
+    }
+  }
   
   protected override def stringPrefix: String = "Batch"
 }
@@ -119,6 +133,10 @@ object Batch extends SeqFactory[Batch] {
       else if (elem.isInstanceOf[Double]) new DoubleBatch1(elem.asInstanceOf[Double]).asInstanceOf[Batch[B]]
       else new RefBatch1(elem)
     }
+    
+    override def traverse(f: Nothing => Unit): Unit = ()
+    
+    override def flatTraverse[B](f: B => Unit)(implicit isNested: Nothing <:< Batch[B]): Unit = ()
   }
 }
 

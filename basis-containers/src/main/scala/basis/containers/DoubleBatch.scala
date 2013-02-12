@@ -54,6 +54,8 @@ private[containers] final class DoubleBatch1(_1: Double) extends Batch[Double] w
     else lift.prepend(elem)
   }
   
+  override def traverse(f: Double => Unit): Unit = f(_1)
+  
   private[this] def lift: Batch[Double] = new RefBatch1(_1)
 }
 
@@ -107,6 +109,10 @@ private[containers] final class DoubleBatch2(_1: Double, _2: Double) extends Bat
   override def prepend[B >: Double](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Double]) new DoubleBatch3(elem.asInstanceOf[Double], _1, _2)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Double => Unit) {
+    f(_1); f(_2)
   }
   
   private[this] def lift: Batch[Double] = new RefBatch2(_1, _2)
@@ -168,6 +174,10 @@ private[containers] final class DoubleBatch3(_1: Double, _2: Double, _3: Double)
   override def prepend[B >: Double](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Double]) new DoubleBatch4(elem.asInstanceOf[Double], _1, _2, _3)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Double => Unit) {
+    f(_1); f(_2); f(_3)
   }
   
   private[this] def lift: Batch[Double] = new RefBatch3(_1, _2, _3)
@@ -236,6 +246,10 @@ private[containers] final class DoubleBatch4
   override def prepend[B >: Double](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Double]) new DoubleBatch5(elem.asInstanceOf[Double], _1, _2, _3, _4)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Double => Unit) {
+    f(_1); f(_2); f(_3); f(_4)
   }
   
   private[this] def lift: Batch[Double] = new RefBatch4(_1, _2, _3, _4)
@@ -308,6 +322,10 @@ private[containers] final class DoubleBatch5
   override def prepend[B >: Double](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Double]) new DoubleBatch6(elem.asInstanceOf[Double], _1, _2, _3, _4, _5)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Double => Unit) {
+    f(_1); f(_2); f(_3); f(_4); f(_5)
   }
   
   private[this] def lift: Batch[Double] = new RefBatch5(_1, _2, _3, _4, _5)
@@ -386,6 +404,10 @@ private[containers] final class DoubleBatch6
     if (elem.isInstanceOf[Double])
       new DoubleBatchN(7, new DoubleBatch3(elem.asInstanceOf[Double], _1, _2), Batch.Empty, new DoubleBatch4(_3, _4, _5, _6))
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Double => Unit) {
+    f(_1); f(_2); f(_3); f(_4); f(_5); f(_6)
   }
   
   private[this] def lift: Batch[Double] = new RefBatch6(_1, _2, _3, _4, _5, _6)
@@ -499,6 +521,12 @@ private[containers] final class DoubleBatchN
       else new DoubleBatchN(length + 1, (elem +: prefix).asInstanceOf[Batch[Double]], tree, suffix)
     }
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Double => Unit) {
+    prefix traverse f
+    tree flatTraverse f
+    suffix traverse f
   }
   
   private[this] def lift: Batch[Double] = new RefBatchN(length, prefix, tree, suffix)

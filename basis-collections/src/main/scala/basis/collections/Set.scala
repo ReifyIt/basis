@@ -22,9 +22,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * 
   * @groupprio  Measuring     1
   * @groupprio  Querying      2
-  * @groupprio  Iterating     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  set
   * @define SequentialOps

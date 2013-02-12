@@ -30,7 +30,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     * @param  f   the function to apply to each element.
     * @group  Traversing
     */
-  def foreach[U](f: A => U): Unit = traverse(these)(f)
+  def foreach[U](f: A => U): Unit = these traverse new GeneralEnumeratorOps.Foreach(f)
   
   /** Returns the repeated application of an associative binary operator
     * between an identity value and all elements of this $collection.
@@ -42,7 +42,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B = {
     val f = new GeneralEnumeratorOps.FoldLeft(z)(op)
-    traverse(these)(f)
+    these traverse f
     f.state
   }
   
@@ -55,7 +55,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def reduce[B >: A](op: (B, B) => B): B = {
     val f = new GeneralEnumeratorOps.ReduceLeft(op)
-    traverse(these)(f)
+    these traverse f
     if (f.isDefined) f.state else throw new UnsupportedOperationException
   }
   
@@ -68,7 +68,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def mayReduce[B >: A](op: (B, B) => B): Maybe[B] = {
     val f = new GeneralEnumeratorOps.ReduceLeft(op)
-    traverse(these)(f)
+    these traverse f
     if (f.isDefined) Bind(f.state) else Trap
   }
   
@@ -82,7 +82,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def foldLeft[B](z: B)(op: (B, A) => B): B = {
     val f = new GeneralEnumeratorOps.FoldLeft(z)(op)
-    traverse(these)(f)
+    these traverse f
     f.state
   }
   
@@ -96,7 +96,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   def reduceLeft[B >: A](op: (B, A) => B): B = {
     val f = new GeneralEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B])
   //val f = new GeneralEnumeratorOps.ReduceLeft(op) // SI-6482
-    traverse(these)(f)
+    these traverse f
     if (f.isDefined) f.state else throw new UnsupportedOperationException
   }
   
@@ -110,7 +110,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
   def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] = {
     val f = new GeneralEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B])
   //val f = new GeneralEnumeratorOps.ReduceLeft(op) // SI-6482
-    traverse(these)(f)
+    these traverse f
     if (f.isDefined) Bind(f.state) else Trap
   }
   
@@ -122,7 +122,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def find(p: A => Boolean): Maybe[A] = {
     val f = new GeneralEnumeratorOps.Find(p)
-    begin(traverse(these)(f))
+    begin(these traverse f)
     f.state
   }
   
@@ -134,7 +134,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def forall(p: A => Boolean): Boolean = {
     val f = new GeneralEnumeratorOps.Forall(p)
-    begin(traverse(these)(f))
+    begin(these traverse f)
     f.state
   }
   
@@ -146,7 +146,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def exists(p: A => Boolean): Boolean = {
     val f = new GeneralEnumeratorOps.Exists(p)
-    begin(traverse(these)(f))
+    begin(these traverse f)
     f.state
   }
   
@@ -158,7 +158,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def count(p: A => Boolean): Int = {
     val f = new GeneralEnumeratorOps.Count(p)
-    traverse(these)(f)
+    these traverse f
     f.state
   }
   
@@ -172,7 +172,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     */
   def choose[B](q: PartialFunction[A, B]): Maybe[B] = {
     val f = new GeneralEnumeratorOps.Choose(q)
-    begin(traverse(these)(f))
+    begin(these traverse f)
     f.state
   }
   
@@ -189,6 +189,10 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
 
 private[sequential] object GeneralEnumeratorOps {
   import scala.runtime.AbstractFunction1
+  
+  final class Foreach[-A, +U](f: A => U) extends AbstractFunction1[A, Unit] {
+    override def apply(x: A): Unit = f(x)
+  }
   
   final class FoldLeft[-A, +B](z: B)(op: (B, A) => B) extends AbstractFunction1[A, Unit] {
     private[this] var r: B = z

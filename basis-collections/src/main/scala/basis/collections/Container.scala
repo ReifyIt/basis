@@ -15,13 +15,12 @@ package basis.collections
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Collections
   * 
-  * @groupprio  Iterating     1
-  * @groupprio  Traversing    2
-  * @groupprio  Classifying   3
+  * @groupprio  Traversing    1
+  * @groupprio  Classifying   2
   * 
   * @define collection  container
   * @define SequentialOps
@@ -36,10 +35,10 @@ package basis.collections
   */
 trait Container[+A] extends Any with Family[Container[_]] with Collection[A] {
   /** Returns a new iterator over the elements of this $collection.
-    * @group Iterating */
+    * @group Traversing */
   def iterator: Iterator[A]
   
-  protected override def foreach[U](f: A => U) {
+  override def traverse(f: A => Unit) {
     val xs = iterator
     while (!xs.isEmpty) { f(xs.head); xs.step() }
   }

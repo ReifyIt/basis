@@ -17,7 +17,7 @@ import basis.runtime._
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Containers
   * 
@@ -25,10 +25,9 @@ import basis.runtime._
   * @groupprio  Decomposing   2
   * @groupprio  Composing     3
   * @groupprio  Slicing       4
-  * @groupprio  Iterating     5
-  * @groupprio  Traversing    6
-  * @groupprio  Exporting     7
-  * @groupprio  Classifying   8
+  * @groupprio  Traversing    5
+  * @groupprio  Exporting     6
+  * @groupprio  Classifying   7
   * 
   * @define collection  list
   */
@@ -104,7 +103,7 @@ sealed abstract class List[+A]
   
   override def iterator: Iterator[A] = new RefListIterator(this)
   
-  protected override def foreach[U](f: A => U) {
+  override def traverse(f: A => Unit) {
     var xs = this
     while (!xs.isEmpty) {
       f(xs.head)
@@ -162,6 +161,14 @@ private[containers] final class IntList(
     else new RefList(elem, this)
   }
   
+  override def traverse(f: Int => Unit) {
+    var xs = this: List[Int]
+    while (!xs.isEmpty) {
+      f(xs.head)
+      xs = xs.tail
+    }
+  }
+  
   override def iterator: Iterator[Int] = new IntListIterator(this)
 }
 
@@ -185,6 +192,14 @@ private[containers] final class LongList(
   override def :: [B >: Long](elem: B): List[B] = {
     if (elem.isInstanceOf[Long]) new LongList(elem.asInstanceOf[Long], this)
     else new RefList(elem, this)
+  }
+  
+  override def traverse(f: Long => Unit) {
+    var xs = this: List[Long]
+    while (!xs.isEmpty) {
+      f(xs.head)
+      xs = xs.tail
+    }
   }
   
   override def iterator: Iterator[Long] = new LongListIterator(this)
@@ -212,6 +227,14 @@ private[containers] final class FloatList(
     else new RefList(elem, this)
   }
   
+  override def traverse(f: Float => Unit) {
+    var xs = this: List[Float]
+    while (!xs.isEmpty) {
+      f(xs.head)
+      xs = xs.tail
+    }
+  }
+  
   override def iterator: Iterator[Float] = new FloatListIterator(this)
 }
 
@@ -235,6 +258,14 @@ private[containers] final class DoubleList(
   override def :: [B >: Double](elem: B): List[B] = {
     if (elem.isInstanceOf[Double]) new DoubleList(elem.asInstanceOf[Double], this)
     else new RefList(elem, this)
+  }
+  
+  override def traverse(f: Double => Unit) {
+    var xs = this: List[Double]
+    while (!xs.isEmpty) {
+      f(xs.head)
+      xs = xs.tail
+    }
   }
   
   override def iterator: Iterator[Double] = new DoubleListIterator(this)
@@ -279,6 +310,8 @@ object Nil extends List[Nothing] {
     else if (elem.isInstanceOf[Double]) new DoubleList(elem.asInstanceOf[Double], this).asInstanceOf[List[B]]
     else new RefList(elem, this)
   }
+  
+  override def traverse(f: Nothing => Unit): Unit = ()
 }
 
 private[containers] final class IntListIterator(private[this] var xs: List[Int]) extends Iterator[Int] {

@@ -7,8 +7,6 @@
 
 package basis.collections
 
-import scala.annotation.unspecialized
-
 /** A linear sequence. Stacks efficiently decompose into a `head` element and
   * a `tail` stack.
   * 
@@ -18,14 +16,13 @@ import scala.annotation.unspecialized
   * 
   * @author   Chris Sachs
   * @version  0.1
-  * @since    0.1
+  * @since    0.0
   * @group    Collections
   * 
   * @groupprio  Measuring     1
   * @groupprio  Decomposing   2
-  * @groupprio  Iterating     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  stack
   * @define SequentialOps
@@ -53,9 +50,9 @@ trait Stack[@specialized(Int, Long, Float, Double, Boolean) +A]
     * @group Decomposing */
   def tail: Stack[A]
   
-  @unspecialized override def iterator: Iterator[A] = new StackIterator(this)
+  override def iterator: Iterator[A] = new StackIterator(this)
   
-  @unspecialized protected override def foreach[U](f: A => U) {
+  override def traverse(f: A => Unit) {
     var xs = this
     while (!xs.isEmpty) {
       f(xs.head)
@@ -64,8 +61,9 @@ trait Stack[@specialized(Int, Long, Float, Double, Boolean) +A]
   }
 }
 
-private[collections] final class StackIterator[+A]
-    (private[this] var xs: Stack[A])
+private[collections] final class StackIterator
+    [@specialized(Int, Long, Float, Double, Boolean) +A]
+    (protected[this] var xs: Stack[A])
   extends Iterator[A] {
   
   override def isEmpty: Boolean = xs.isEmpty

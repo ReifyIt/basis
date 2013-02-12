@@ -54,6 +54,8 @@ private[containers] final class FloatBatch1(_1: Float) extends Batch[Float] with
     else lift.prepend(elem)
   }
   
+  override def traverse(f: Float => Unit): Unit = f(_1)
+  
   private[this] def lift: Batch[Float] = new RefBatch1(_1)
 }
 
@@ -107,6 +109,10 @@ private[containers] final class FloatBatch2(_1: Float, _2: Float) extends Batch[
   override def prepend[B >: Float](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Float]) new FloatBatch3(elem.asInstanceOf[Float], _1, _2)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Float => Unit) {
+    f(_1); f(_2)
   }
   
   private[this] def lift: Batch[Float] = new RefBatch2(_1, _2)
@@ -168,6 +174,10 @@ private[containers] final class FloatBatch3(_1: Float, _2: Float, _3: Float) ext
   override def prepend[B >: Float](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Float]) new FloatBatch4(elem.asInstanceOf[Float], _1, _2, _3)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Float => Unit) {
+    f(_1); f(_2); f(_3)
   }
   
   private[this] def lift: Batch[Float] = new RefBatch3(_1, _2, _3)
@@ -236,6 +246,10 @@ private[containers] final class FloatBatch4
   override def prepend[B >: Float](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Float]) new FloatBatch5(elem.asInstanceOf[Float], _1, _2, _3, _4)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Float => Unit) {
+    f(_1); f(_2); f(_3); f(_4)
   }
   
   private[this] def lift: Batch[Float] = new RefBatch4(_1, _2, _3, _4)
@@ -308,6 +322,10 @@ private[containers] final class FloatBatch5
   override def prepend[B >: Float](elem: B): Batch[B] = {
     if (elem.isInstanceOf[Float]) new FloatBatch6(elem.asInstanceOf[Float], _1, _2, _3, _4, _5)
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Float => Unit) {
+    f(_1); f(_2); f(_3); f(_4); f(_5)
   }
   
   private[this] def lift: Batch[Float] = new RefBatch5(_1, _2, _3, _4, _5)
@@ -386,6 +404,10 @@ private[containers] final class FloatBatch6
     if (elem.isInstanceOf[Float])
       new FloatBatchN(7, new FloatBatch3(elem.asInstanceOf[Float], _1, _2), Batch.Empty, new FloatBatch4(_3, _4, _5, _6))
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Float => Unit) {
+    f(_1); f(_2); f(_3); f(_4); f(_5); f(_6)
   }
   
   private[this] def lift: Batch[Float] = new RefBatch6(_1, _2, _3, _4, _5, _6)
@@ -499,6 +521,12 @@ private[containers] final class FloatBatchN
       else new FloatBatchN(length + 1, (elem +: prefix).asInstanceOf[Batch[Float]], tree, suffix)
     }
     else lift.prepend(elem)
+  }
+  
+  override def traverse(f: Float => Unit) {
+    prefix traverse f
+    tree flatTraverse f
+    suffix traverse f
   }
   
   private[this] def lift: Batch[Float] = new RefBatchN(length, prefix, tree, suffix)

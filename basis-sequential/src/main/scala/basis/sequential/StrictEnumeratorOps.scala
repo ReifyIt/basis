@@ -32,7 +32,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Mapping
     */
   def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] { type Scope <: From }): builder.State = {
-    traverse(these)(new StrictEnumeratorOps.CollectInto(q)(builder))
+    these traverse new StrictEnumeratorOps.CollectInto(q)(builder)
     builder.state
   }
   
@@ -44,7 +44,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Mapping
     */
   def map[B](f: A => B)(implicit builder: Builder[B] { type Scope <: From }): builder.State = {
-    traverse(these)(new StrictEnumeratorOps.MapInto(f)(builder))
+    these traverse new StrictEnumeratorOps.MapInto(f)(builder)
     builder.state
   }
   
@@ -57,7 +57,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Mapping
     */
   def flatMap[B](f: A => Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State = {
-    traverse(these)(new StrictEnumeratorOps.FlatMapInto(f)(builder))
+    these traverse new StrictEnumeratorOps.FlatMapInto(f)(builder)
     builder.state
   }
   
@@ -69,7 +69,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def filter(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
-    traverse(these)(new StrictEnumeratorOps.FilterInto(p)(builder))
+    these traverse new StrictEnumeratorOps.FilterInto(p)(builder)
     builder.state
   }
   
@@ -92,7 +92,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def dropWhile(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
-    traverse(these)(new StrictEnumeratorOps.DropWhileInto(p)(builder))
+    these traverse new StrictEnumeratorOps.DropWhileInto(p)(builder)
     builder.state
   }
   
@@ -106,7 +106,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def takeWhile(p: A => Boolean)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
-    begin(traverse(these)(new StrictEnumeratorOps.TakeWhileInto(p)(builder)))
+    begin(these traverse new StrictEnumeratorOps.TakeWhileInto(p)(builder))
     builder.state
   }
   
@@ -123,7 +123,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
   def span(p: A => Boolean)
       (implicit builder1: Builder[A] { type Scope <: From }, builder2: Builder[A] { type Scope <: From })
     : (builder1.State, builder2.State) = {
-    traverse(these)(new StrictEnumeratorOps.SpanInto(p)(builder1, builder2))
+    these traverse new StrictEnumeratorOps.SpanInto(p)(builder1, builder2)
     (builder1.state, builder2.state)
   }
   
@@ -136,7 +136,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def drop(lower: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
-    traverse(these)(new StrictEnumeratorOps.DropInto(lower)(builder))
+    these traverse new StrictEnumeratorOps.DropInto(lower)(builder)
     builder.state
   }
   
@@ -149,7 +149,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def take(upper: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
-    begin(traverse(these)(new StrictEnumeratorOps.TakeInto(upper)(builder)))
+    begin(these traverse new StrictEnumeratorOps.TakeInto(upper)(builder))
     builder.state
   }
   
@@ -163,7 +163,7 @@ final class StrictEnumeratorOps[+A, -From](val these: Enumerator[A]) extends Any
     * @group  Filtering
     */
   def slice(lower: Int, upper: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State = {
-    begin(traverse(these)(new StrictEnumeratorOps.SliceInto(lower, upper)(builder)))
+    begin(these traverse new StrictEnumeratorOps.SliceInto(lower, upper)(builder))
     builder.state
   }
   

@@ -19,9 +19,8 @@ import basis.util._
   * 
   * @groupprio  Measuring     1
   * @groupprio  Indexing      2
-  * @groupprio  Iterating     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  text
   */
@@ -142,10 +141,10 @@ abstract class UTF8 extends Equals with Family[UTF8] with Seq[Int] {
   /** Sequentially applies a function to each code point in this $collection.
     * Applies the replacement character U+FFFD in lieu of the maximal subpart
     * of any ill-formed subsequences. */
-  protected override def foreach[U](f: Int => U) {
+  override def traverse(f: Int => Unit) {
     var i = 0
     var n = size
-    while (i < n) f({
+    while (i < n) f {
       val c1 = get(i)
       i += 1
       if (c1 <= 0x7F) c1 // U+0000..U+007F
@@ -189,7 +188,7 @@ abstract class UTF8 extends Equals with Family[UTF8] with Seq[Int] {
         else 0xFFFD
       }
       else 0xFFFD
-    }: Int)
+    }
   }
   
   /** Returns a Java String equivalent to this $collection. */

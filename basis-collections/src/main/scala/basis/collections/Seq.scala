@@ -18,9 +18,8 @@ package basis.collections
   * @since    0.0
   * @group    Collections
   * 
-  * @groupprio  Iterating     1
-  * @groupprio  Traversing    2
-  * @groupprio  Classifying   3
+  * @groupprio  Traversing    1
+  * @groupprio  Classifying   2
   * 
   * @define collection  sequence
   * @define SequentialOps

@@ -19,9 +19,8 @@ import basis.util._
   * 
   * @groupprio  Measuring     1
   * @groupprio  Indexing      2
-  * @groupprio  Iterating     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  text
   */
@@ -54,7 +53,7 @@ abstract class UTF32 extends Equals with Family[UTF32] with Index[Int] {
   
   /** Sequentially applies a function to each code point in this $collection.
     * Applies the replacement character U+FFFD in lieu of invalid characters. */
-  protected override def foreach[U](f: Int => U) {
+  override def traverse(f: Int => Unit) {
     var i = 0
     val n = length
     while (i < n) {

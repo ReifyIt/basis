@@ -30,7 +30,8 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * @param  f   the function to apply to each element.
     * @group  Traversing
     */
-  def foreach[U](f: A => U): Unit = traverse(these)(f)
+  def foreach[U](f: A => U): Unit =
+    new GeneralEnumeratorOps[A](these).foreach(f)
   
   /** Returns the repeated application of an associative binary operator
     * between an identity value and all elements of this $collection.

@@ -7,18 +7,14 @@
 
 package basis.collections
 
-/** A traversable collection. `Collection` declares a protected `foreach`
-  * method that traverses its elements. To traverse a collection, invoke
-  * [[basis.collections#traverse basis.collections.traverse]], or add
-  * a public `foreach` implementation by importing
-  * [[basis.sequential.General `basis.sequential.general`]]`._`.
+/** A traversable collection.
   * 
   * ==Extensions==
   * $Extensions
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Collections
   * 
@@ -42,21 +38,22 @@ trait Collection[+A] extends Any with Family[Collection[_]] with Enumerator[A] {
   override def toString: String = {
     val s = new java.lang.StringBuilder(stringPrefix)
     s.append('(')
-    foreach(new Collection.AddString(s))
+    traverse(new Collection.AddString(s))
     s.append(')')
     s.toString
   }
   
-  /** Returns a string that identifies this type of $collection.
+  /** Returns a string that identifies this family of $collection.
     * @group Classifying */
   protected def stringPrefix: String = getClass.getSimpleName
 }
 
 private[collections] object Collection {
-  import scala.runtime.AbstractFunction1
-  
-  final class AddString[-A](s: java.lang.StringBuilder) extends AbstractFunction1[A, Unit] {
+  private[collections] final class AddString[-A](s: java.lang.StringBuilder)
+    extends scala.runtime.AbstractFunction1[A, Unit] {
     private[this] var e: Boolean = true
-    override def apply(x: A): Unit = (if (e) { e = false; s } else s.append(", ")).append(x)
+    override def apply(x: A) {
+      (if (e) { e = false; s } else s.append(", ")).append(x)
+    }
   }
 }

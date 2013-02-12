@@ -27,10 +27,9 @@ import basis.util._
   * @groupprio  Indexing      2
   * @groupprio  Inserting     3
   * @groupprio  Removing      4
-  * @groupprio  Iterating     5
-  * @groupprio  Traversing    6
-  * @groupprio  Exporting     7
-  * @groupprio  Classifying   8
+  * @groupprio  Traversing    5
+  * @groupprio  Exporting     6
+  * @groupprio  Classifying   7
   * 
   * @define collection  array sequence
   */

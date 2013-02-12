@@ -7,8 +7,6 @@
 
 package basis.collections
 
-import scala.annotation.unspecialized
-
 /** An indexed sequence. Indexes can randomly access their elements.
   * 
   * ==Extensions==
@@ -16,15 +14,14 @@ import scala.annotation.unspecialized
   * $SequentialOps
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Collections
   * 
   * @groupprio  Measuring     1
   * @groupprio  Indexing      2
-  * @groupprio  Iterating     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
   * @define collection  index
   * @define SequentialOps
@@ -48,9 +45,9 @@ trait Index[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
     * @group Indexing */
   def apply(index: Int): A
   
-  @unspecialized override def iterator: Iterator[A] = new IndexIterator(this)
+  override def iterator: Iterator[A] = new IndexIterator(this)
   
-  @unspecialized protected override def foreach[U](f: A => U) {
+  override def traverse(f: A => Unit) {
     var i = 0
     val n = length
     while (i < n) {
@@ -60,8 +57,9 @@ trait Index[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
   }
 }
 
-private[collections] final class IndexIterator[+A]
-    (xs: Index[A], private[this] var i: Int, n: Int)
+private[collections] final class IndexIterator
+    [@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
+    (protected[this] val xs: Index[A], protected[this] var i: Int, protected[this] val n: Int)
   extends Iterator[A] {
   
   def this(xs: Index[A]) = this(xs, 0, xs.length)

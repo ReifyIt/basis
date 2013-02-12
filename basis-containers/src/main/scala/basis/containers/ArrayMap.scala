@@ -28,9 +28,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * @groupprio  Measuring     1
   * @groupprio  Querying      2
   * @groupprio  Updating      3
-  * @groupprio  Iterating     4
-  * @groupprio  Traversing    5
-  * @groupprio  Classifying   6
+  * @groupprio  Traversing    4
+  * @groupprio  Classifying   5
   * 
   * @define collection  array map
   */
@@ -115,7 +114,7 @@ private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Arr
   
   override def iterator: Iterator[(A, T)] = new ArrayMapIterator(slots, 0)
   
-  protected[containers] override def foreach[U](f: ((A, T)) => U) {
+  override def traverse(f: ((A, T)) => Unit) {
     var i = 0
     val n = slots.length
     while (i < n) {

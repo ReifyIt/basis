@@ -18,10 +18,9 @@ package basis.collections
   * @groupprio  Indexing      2
   * @groupprio  Inserting     3
   * @groupprio  Removing      4
-  * @groupprio  Iterating     5
-  * @groupprio  Traversing    6
-  * @groupprio  Exporting     7
-  * @groupprio  Classifying   8
+  * @groupprio  Traversing    5
+  * @groupprio  Exporting     6
+  * @groupprio  Classifying   7
   * 
   * @define collection  buffer
   */
@@ -47,7 +46,7 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
   /** Prepends multiple elements to this $collection.
     * @group Inserting */
   def prependAll(elems: Enumerator[A]) {
-    traverse(elems)(new Buffer.Insert(this, 0))
+    elems traverse new Buffer.Insert(this, 0)
   }
   
   /** Inserts a single element into this $collection at `index`.
@@ -58,7 +57,7 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
     * @group Inserting */
   def insertAll(index: Int, elems: Enumerator[A]) {
     if (index < 0 || index > length) throw new IndexOutOfBoundsException(index.toString)
-    traverse(elems)(new Buffer.Insert(this, index))
+    elems traverse new Buffer.Insert(this, index)
   }
   
   /** Removes and returns the element of this $collection at `index`.
@@ -106,13 +105,13 @@ trait Buffer[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) A]
     this
   }
   
-  override def state: State = throw new UnsupportedOperationException("Buffer has no state.")
+  override def state: State = throw new UnsupportedOperationException("Buffer has no defined state.")
 }
 
 private[collections] object Buffer {
-  import scala.runtime.AbstractFunction1
-  
-  final class Insert[-A](b: Buffer[A], private[this] var i: Int) extends AbstractFunction1[A, Unit] {
+  private[collections] final class Insert[-A]
+      (private[this] val b: Buffer[A], private[this] var i: Int)
+    extends scala.runtime.AbstractFunction1[A, Unit] {
     override def apply(x: A) {
       b.insert(i, x)
       i += 1
