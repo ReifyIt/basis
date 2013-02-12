@@ -128,7 +128,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Map#iterator" visbl="pub" data-isabs="true" fullComment="yes" group="Iterating">
+    </li><li name="basis.collections.Map#iterator" visbl="pub" data-isabs="true" fullComment="yes" group="Traversing">
       <a id="iterator:basis.collections.Iterator[(A,T)]"></a>
       <a id="iterator:Iterator[(A,T)]"></a>
       <h4 class="signature">
@@ -252,23 +252,6 @@
       <p class="shortcomment cmt">Returns <code>true</code> if this map contains exactly the same keys as
 another map, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this map contains exactly the same keys as
 another map, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Map">Map</a> → Equals → Any</dd></dl></div>
-    </li><li name="basis.collections.Container#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
-      <a id="foreach[U](f:A=&gt;U):Unit"></a>
-      <a id="foreach[U](((A,T))⇒U):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: ((<span class="extype" name="basis.collections.Map.A">A</span>, <span class="extype" name="basis.collections.Map.T">T</span>)) ⇒ <span class="extype" name="basis.collections.Container.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Applies a function to each element of this map.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to each element of this map. The protected
-status of <code>foreach</code> allows optimized static implementations to shadow
-this virtual method. To force a virtual <code>foreach</code> call, invoke
-<a href="package.html#traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit" class="extmbr" name="basis.collections#traverse">traverse</a>.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li><li name="basis.collections.Map#get" visbl="pub" data-isabs="false" fullComment="no" group="Querying">
       <a id="get(key:A@scala.annotation.unchecked.uncheckedVariance):basis.control.Maybe[T]"></a>
       <a id="get(A):Maybe[T]"></a>
@@ -347,7 +330,7 @@ or a trap if no association exists.</p>
         <span class="name">stringPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a string that identifies this type of map.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this type of map.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a string that identifies this family of map.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this family of map.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
     </li><li name="basis.collections.Container#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -361,6 +344,19 @@ or a trap if no association exists.</p>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a string representation of this map.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of this map.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a> → Any</dd></dl></div>
+    </li><li name="basis.collections.Container#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+      <a id="traverse(f:A=&gt;Unit):Unit"></a>
+      <a id="traverse(((A,T))⇒Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="params">(<span name="f">f: ((<span class="extype" name="basis.collections.Map.A">A</span>, <span class="extype" name="basis.collections.Map.T">T</span>)) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies a side-effecting function to each element of this map.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a side-effecting function to each element of this map.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -395,9 +391,6 @@ or a trap if no association exists.</p>
               
             </div><div class="group" name="Querying">
               <h3>Querying</h3>
-              
-            </div><div class="group" name="Iterating">
-              <h3>Iterating</h3>
               
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>

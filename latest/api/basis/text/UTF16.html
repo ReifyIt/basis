@@ -324,20 +324,6 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.text.UTF16#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
-      <a id="foreach[U](f:Int=&gt;U):Unit"></a>
-      <a id="foreach[U]((Int)⇒U):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="basis.text.UTF16.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Sequentially applies a function to each code point in this text.</p><div class="fullcomment"><div class="comment cmt"><p>Sequentially applies a function to each code point in this text.
-Applies the replacement character U+FFFD in lieu of unpaired surrogates.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.text.UTF16">UTF16</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -390,7 +376,7 @@ Applies the replacement character U+FFFD in lieu of unpaired surrogates.</p></di
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.text.UTF16#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Iterating">
+    </li><li name="basis.text.UTF16#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
       <a id="iterator:basis.collections.Iterator[Int]"></a>
       <a id="iterator:Iterator[Int]"></a>
       <h4 class="signature">
@@ -481,7 +467,7 @@ thereof, at <code>index</code>.</p>
         <span class="name">stringPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a string that identifies this type of text.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this type of text.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a string that identifies this family of text.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this family of text.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -508,6 +494,20 @@ thereof, at <code>index</code>.</p>
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a Java String equivalent to this text.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a Java String equivalent to this text.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.text.UTF16">UTF16</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="basis.text.UTF16#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+      <a id="traverse(f:Int=&gt;Unit):Unit"></a>
+      <a id="traverse((Int)⇒Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Sequentially applies a function to each code point in this text.</p><div class="fullcomment"><div class="comment cmt"><p>Sequentially applies a function to each code point in this text.
+Applies the replacement character U+FFFD in lieu of unpaired surrogates.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.text.UTF16">UTF16</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -594,9 +594,6 @@ thereof, at <code>index</code>.</p>
               
             </div><div class="group" name="Indexing">
               <h3>Indexing</h3>
-              
-            </div><div class="group" name="Iterating">
-              <h3>Iterating</h3>
               
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>

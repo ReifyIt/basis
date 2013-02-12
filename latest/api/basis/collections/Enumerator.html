@@ -44,17 +44,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A stateful traversable collection. <code>Enumerator</code> declares a protected
-<code>foreach</code> method that traverses its elements. To traverse an enumerator,
-invoke <a href="package.html#traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit" class="extmbr" name="basis.collections#traverse">basis.collections.traverse</a>, or add
-a public <code>foreach</code> implementation by importing
-<a href="../sequential/General.html" class="extype" name="basis.sequential.General"><code>basis.sequential.general</code></a><code>._</code>. Traversing
-an enumerator may alter its state, causing subsequent traversals to yield
-different results.</p><h4>Extensions</h4><p>Add operations to this interface by importing one of these use cases:</p><ul><li><code>import </code><a href="../sequential/General.html" class="extype" name="basis.sequential.General"><code>basis.sequential.general</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/Strict.html" class="extype" name="basis.sequential.Strict"><code>basis.sequential.strict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/NonStrict.html" class="extype" name="basis.sequential.NonStrict"><code>basis.sequential.nonstrict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li></ul><p>The following classes implement the extensions to this interface:</p><ul><li><a href="../sequential/GeneralEnumeratorOps.html" class="extype" name="basis.sequential.GeneralEnumeratorOps">GeneralEnumeratorOps</a>
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A once traversable collection. Traversing an enumerator may alter its
+state, causing subsequent traversals to yield different results.</p><h4>Extensions</h4><p>Add operations to this interface by importing one of these use cases:</p><ul><li><code>import </code><a href="../sequential/General.html" class="extype" name="basis.sequential.General"><code>basis.sequential.general</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/Strict.html" class="extype" name="basis.sequential.Strict"><code>basis.sequential.strict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/NonStrict.html" class="extype" name="basis.sequential.NonStrict"><code>basis.sequential.nonstrict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li></ul><p>The following classes implement the extensions to this interface:</p><ul><li><a href="../sequential/GeneralEnumeratorOps.html" class="extype" name="basis.sequential.GeneralEnumeratorOps">GeneralEnumeratorOps</a>
    implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><a href="../sequential/StrictEnumeratorOps.html" class="extype" name="basis.sequential.StrictEnumeratorOps">StrictEnumeratorOps</a>
    implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><a href="../sequential/NonStrictEnumeratorOps.html" class="extype" name="basis.sequential.NonStrictEnumeratorOps">NonStrictEnumeratorOps</a>
    implements lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Enumerator.scala" target="_blank">Enumerator.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Enumerator.scala" target="_blank">Enumerator.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Enumerator">Enumerator</a>[_]], <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -121,24 +116,7 @@ different results.</p><h4>Extensions</h4><p>Add operations to this interface by 
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="basis.collections.Enumerator#foreach" visbl="prt" data-isabs="true" fullComment="yes" group="Traversing">
-      <a id="foreach[U](f:A=&gt;U):Unit"></a>
-      <a id="foreach[U]((A)⇒U):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Enumerator.A">A</span>) ⇒ <span class="extype" name="basis.collections.Enumerator.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Applies a function to each element of this enumerator.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to each element of this enumerator. The protected
-status of <code>foreach</code> allows optimized static implementations to shadow
-this virtual method. To force a virtual <code>foreach</code> call, invoke
-<a href="package.html#traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit" class="extmbr" name="basis.collections#traverse">traverse</a>.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
       <h4 class="signature">
@@ -151,6 +129,19 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.Enumerator#traverse" visbl="pub" data-isabs="true" fullComment="no" group="Traversing">
+      <a id="traverse(f:A=&gt;Unit):Unit"></a>
+      <a id="traverse((A)⇒Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Enumerator.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies a side-effecting function to each element of this enumerator.</p>
     </li></ol>
             </div>
 

@@ -216,7 +216,7 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Inserts a single element into this buffer at <code>index</code>.</p>
-    </li><li name="basis.collections.Container#iterator" visbl="pub" data-isabs="true" fullComment="yes" group="Iterating">
+    </li><li name="basis.collections.Container#iterator" visbl="pub" data-isabs="true" fullComment="yes" group="Traversing">
       <a id="iterator:basis.collections.Iterator[A]"></a>
       <a id="iterator:Iterator[A]"></a>
       <h4 class="signature">
@@ -502,23 +502,6 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.collections.Container#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
-      <a id="foreach[U](f:A=&gt;U):Unit"></a>
-      <a id="foreach[U]((A)⇒U):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Buffer.A">A</span>) ⇒ <span class="extype" name="basis.collections.Container.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Applies a function to each element of this buffer.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to each element of this buffer. The protected
-status of <code>foreach</code> allows optimized static implementations to shadow
-this virtual method. To force a virtual <code>foreach</code> call, invoke
-<a href="package.html#traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit" class="extmbr" name="basis.collections#traverse">traverse</a>.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -661,7 +644,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <span class="name">stringPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a string that identifies this type of buffer.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this type of buffer.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a string that identifies this family of buffer.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this family of buffer.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -688,6 +671,19 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a string representation of this buffer.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of this buffer.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a> → Any</dd></dl></div>
+    </li><li name="basis.collections.Container#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+      <a id="traverse(f:A=&gt;Unit):Unit"></a>
+      <a id="traverse((A)⇒Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Buffer.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies a side-effecting function to each element of this buffer.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a side-effecting function to each element of this buffer.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -782,9 +778,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
               
             </div><div class="group" name="Removing">
               <h3>Removing</h3>
-              
-            </div><div class="group" name="Iterating">
-              <h3>Iterating</h3>
               
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>

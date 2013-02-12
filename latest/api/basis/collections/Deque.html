@@ -279,26 +279,6 @@ and a <code>tail</code> deque, or an <code>init</code> deque and a <code>last</c
       <p class="shortcomment cmt">Returns <code>true</code> if this deque contains the same elements in the same
 order as another sequence, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this deque contains the same elements in the same
 order as another sequence, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
-    </li><li name="basis.collections.Stack#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
-      <a id="foreach[U](f:A=&gt;U):Unit"></a>
-      <a id="foreach[U]((A)⇒U):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Deque.A">A</span>) ⇒ <span class="extype" name="basis.collections.Stack.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Applies a function to each element of this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to each element of this deque. The protected
-status of <code>foreach</code> allows optimized static implementations to shadow
-this virtual method. To force a virtual <code>foreach</code> call, invoke
-<a href="package.html#traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit" class="extmbr" name="basis.collections#traverse">traverse</a>.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="basis.collections.Seq#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -325,7 +305,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Stack#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Iterating">
+    </li><li name="basis.collections.Stack#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
       <a id="iterator:basis.collections.Iterator[A]"></a>
       <a id="iterator:Iterator[A]"></a>
       <h4 class="signature">
@@ -337,10 +317,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <span class="name">iterator</span><span class="result">: <a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a new iterator over the elements of this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <p class="shortcomment cmt">Returns a new iterator over the elements of this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a></dd></dl></div>
     </li><li name="basis.collections.Collection#stringPrefix" visbl="prt" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>
@@ -353,7 +330,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <span class="name">stringPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a string that identifies this type of deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this type of deque.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a string that identifies this family of deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this family of deque.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
     </li><li name="basis.collections.Container#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -367,6 +344,19 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a string representation of this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of this deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a> → Any</dd></dl></div>
+    </li><li name="basis.collections.Stack#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+      <a id="traverse(f:A=&gt;Unit):Unit"></a>
+      <a id="traverse((A)⇒Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Deque.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies a side-effecting function to each element of this deque.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a side-effecting function to each element of this deque.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -405,9 +395,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
               
             </div><div class="group" name="Decomposing">
               <h3>Decomposing</h3>
-              
-            </div><div class="group" name="Iterating">
-              <h3>Iterating</h3>
               
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>

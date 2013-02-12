@@ -48,7 +48,7 @@
    implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><a href="../sequential/StrictIndexOps.html" class="extype" name="basis.sequential.StrictIndexOps">StrictIndexOps</a>
    implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><a href="../sequential/NonStrictIndexOps.html" class="extype" name="basis.sequential.NonStrictIndexOps">NonStrictIndexOps</a>
    implements lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Index.scala" target="_blank">Index.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Index.scala" target="_blank">Index.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Index.A">A</span>], <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Index.A">A</span>], <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Index.A">A</span>], <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Index.A">A</span>], <span class="extype" name="scala.Equals">Equals</span>, <a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Index">Index</a>[_]], <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -239,26 +239,6 @@
       <p class="shortcomment cmt">Returns <code>true</code> if this index contains the same elements in the same
 order as another sequence, otherwise <code>false</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this index contains the same elements in the same
 order as another sequence, otherwise <code>false</code>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a> → Equals → Any</dd></dl></div>
-    </li><li name="basis.collections.Index#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
-      <a id="foreach[U](f:A=&gt;U):Unit"></a>
-      <a id="foreach[U]((A)⇒U):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Index.A">A</span>) ⇒ <span class="extype" name="basis.collections.Index.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Applies a function to each element of this index.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to each element of this index. The protected
-status of <code>foreach</code> allows optimized static implementations to shadow
-this virtual method. To force a virtual <code>foreach</code> call, invoke
-<a href="package.html#traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit" class="extmbr" name="basis.collections#traverse">traverse</a>.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Index">Index</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="basis.collections.Seq#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -285,7 +265,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Index#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Iterating">
+    </li><li name="basis.collections.Index#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
       <a id="iterator:basis.collections.Iterator[A]"></a>
       <a id="iterator:Iterator[A]"></a>
       <h4 class="signature">
@@ -297,10 +277,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <span class="name">iterator</span><span class="result">: <a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Index.A">A</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a new iterator over the elements of this index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this index.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Index">Index</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <p class="shortcomment cmt">Returns a new iterator over the elements of this index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this index.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Index">Index</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a></dd></dl></div>
     </li><li name="basis.collections.Collection#stringPrefix" visbl="prt" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>
@@ -313,7 +290,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <span class="name">stringPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a string that identifies this type of index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this type of index.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a string that identifies this family of index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this family of index.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
     </li><li name="basis.collections.Container#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -327,6 +304,19 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a string representation of this index.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of this index.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a> → Any</dd></dl></div>
+    </li><li name="basis.collections.Index#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+      <a id="traverse(f:A=&gt;Unit):Unit"></a>
+      <a id="traverse((A)⇒Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Index.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies a side-effecting function to each element of this index.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a side-effecting function to each element of this index.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Index">Index</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -363,9 +353,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
               
             </div><div class="group" name="Indexing">
               <h3>Indexing</h3>
-              
-            </div><div class="group" name="Iterating">
-              <h3>Iterating</h3>
               
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>

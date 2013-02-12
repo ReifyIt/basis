@@ -48,7 +48,7 @@
    implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><a href="../sequential/StrictSetOps.html" class="extype" name="basis.sequential.StrictSetOps">StrictSetOps</a>
    implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><a href="../sequential/NonStrictSetOps.html" class="extype" name="basis.sequential.NonStrictSetOps">NonStrictSetOps</a>
    implements lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/HashSet.scala" target="_blank">HashSet.scala</a></dd><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/HashSet.scala" target="_blank">HashSet.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="../collections/Set.html" class="extype" name="basis.collections.Set">Set</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>], <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>], <a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>], <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.containers.HashSet.A">A</span>], <a href="../collections/Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.containers.HashSet">HashSet</a>[_]], <span class="extype" name="scala.Immutable">Immutable</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
@@ -304,23 +304,6 @@ another set, otherwise <code>false</code>.</p></div><dl class="attributes block"
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.containers.HashSet#foreach" visbl="prt" data-isabs="false" fullComment="yes" group="Traversing">
-      <a id="foreach[U](f:A=&gt;U):Unit"></a>
-      <a id="foreach[U]((A)⇒U):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.containers.HashSet.A">A</span>) ⇒ <span class="extype" name="basis.containers.HashSet.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Applies a function to each element of this hash set.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a function to each element of this hash set. The protected
-status of <code>foreach</code> allows optimized static implementations to shadow
-this virtual method. To force a virtual <code>foreach</code> call, invoke
-<a href="../collections/package.html#traverse[A,U](xs:basis.collections.Enumerator[A])(f:A=&gt;U):Unit" class="extmbr" name="basis.collections#traverse">traverse</a>.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.HashSet">HashSet</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -373,7 +356,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.containers.HashSet#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Iterating">
+    </li><li name="basis.containers.HashSet#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
       <a id="iterator:basis.collections.Iterator[A]"></a>
       <a id="iterator:Iterator[A]"></a>
       <h4 class="signature">
@@ -450,7 +433,7 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
         <span class="name">stringPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a string that identifies this type of hash set.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this type of hash set.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a string that identifies this family of hash set.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string that identifies this family of hash set.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -477,6 +460,19 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a string representation of this hash set.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of this hash set.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.HashSet">HashSet</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="../collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="basis.containers.HashSet#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+      <a id="traverse(f:A=&gt;Unit):Unit"></a>
+      <a id="traverse((A)⇒Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.containers.HashSet.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Applies a side-effecting function to each element of this hash set.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a side-effecting function to each element of this hash set.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.HashSet">HashSet</a> → <a href="../collections/Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -568,9 +564,6 @@ this virtual method. To force a virtual <code>foreach</code> call, invoke
               
             </div><div class="group" name="Updating">
               <h3>Updating</h3>
-              
-            </div><div class="group" name="Iterating">
-              <h3>Iterating</h3>
               
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>
