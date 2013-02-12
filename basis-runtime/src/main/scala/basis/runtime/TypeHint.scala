@@ -29,11 +29,6 @@ object TypeHint {
     override def toString: String = "Any"
   }
   
-  implicit object AnyVal extends ClassHint[AnyVal] {
-    override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
-    override def toString: String = "AnyVal"
-  }
-  
   implicit object Byte extends ClassHint[Byte] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Byte.TYPE
     override def newArray(length: Int): Array[Byte] = new Array[Byte](length)
@@ -86,18 +81,6 @@ object TypeHint {
     override def runtimeClass: java.lang.Class[_] = java.lang.Void.TYPE
     override def newArray(length: Int): Array[Unit] = new Array[Unit](length)
     override def toString: String = "Unit"
-  }
-  
-  implicit object AnyRef extends ClassHint[AnyRef] {
-    override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
-    override def newArray(length: Int): Array[AnyRef] = new Array[AnyRef](length)
-    override def toString: String = "AnyRef"
-  }
-  
-  implicit object Nothing extends ClassHint[Nothing] {
-    override def runtimeClass: java.lang.Class[_] = classOf[scala.runtime.Nothing$]
-    override def newArray(length: Int): Array[Nothing] = new Array[Nothing](length)
-    override def toString: String = "Nothing"
   }
   
   implicit def Array[T](implicit T: ClassHint[T]): ClassHint[Array[T]] = ClassHint.Array(T)
