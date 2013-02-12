@@ -83,6 +83,10 @@ sealed abstract class List[+A]
   def slice(lower: Int, upper: Int): List[A] =
     if (lower < upper) drop(lower).take(upper) else Nil
   
+  /** Returns this $collection with the given element prepended.
+    * @group Composing */
+  def :: [B >: A](elem: B): List[B] = new RefList(elem, this)
+  
   /** Returns the reverse of this $collection.
     * @group Composing */
   def reverse: List[A] = {
@@ -94,10 +98,6 @@ sealed abstract class List[+A]
     }
     sx
   }
-  
-  /** Returns this $collection with the given element prepended.
-    * @group Composing */
-  def :: [B >: A](elem: B): List[B] = new RefList(elem, this)
   
   override def toList: this.type = this
   
@@ -139,12 +139,17 @@ sealed abstract class ::[A] extends List[A] {
   private[containers] def tail_=(tail: List[A]): Unit
 }
 
-private[containers] final class IntList(
-    override val head: Int,
-    override var tail: List[Int])
-  extends ::[Int] with Reified {
-  
+private[containers] final class IntList(car: Int, cdr: List[Int]) extends ::[Int] with Reified {
   protected override def T: TypeHint[Int] = TypeHint.Int
+  
+  override val head: Int = car
+  
+  override var tail: List[Int] = cdr
+  
+  override def :: [B >: Int](elem: B): List[B] = {
+    if (elem.isInstanceOf[Int]) new IntList(elem.asInstanceOf[Int], this)
+    else new RefList(elem, this)
+  }
   
   override def reverse: List[Int] = {
     var sx = Nil: List[Int]
@@ -154,11 +159,6 @@ private[containers] final class IntList(
       xs = xs.tail
     }
     sx
-  }
-  
-  override def :: [B >: Int](elem: B): List[B] = {
-    if (elem.isInstanceOf[Int]) new IntList(elem.asInstanceOf[Int], this)
-    else new RefList(elem, this)
   }
   
   override def traverse(f: Int => Unit) {
@@ -172,12 +172,17 @@ private[containers] final class IntList(
   override def iterator: Iterator[Int] = new IntListIterator(this)
 }
 
-private[containers] final class LongList(
-    override val head: Long,
-    override var tail: List[Long])
-  extends ::[Long] with Reified {
-  
+private[containers] final class LongList(car: Long, cdr: List[Long]) extends ::[Long] with Reified {
   protected override def T: TypeHint[Long] = TypeHint.Long
+  
+  override val head: Long = car
+  
+  override var tail: List[Long] = cdr
+  
+  override def :: [B >: Long](elem: B): List[B] = {
+    if (elem.isInstanceOf[Long]) new LongList(elem.asInstanceOf[Long], this)
+    else new RefList(elem, this)
+  }
   
   override def reverse: List[Long] = {
     var sx = Nil: List[Long]
@@ -187,11 +192,6 @@ private[containers] final class LongList(
       xs = xs.tail
     }
     sx
-  }
-  
-  override def :: [B >: Long](elem: B): List[B] = {
-    if (elem.isInstanceOf[Long]) new LongList(elem.asInstanceOf[Long], this)
-    else new RefList(elem, this)
   }
   
   override def traverse(f: Long => Unit) {
@@ -205,12 +205,17 @@ private[containers] final class LongList(
   override def iterator: Iterator[Long] = new LongListIterator(this)
 }
 
-private[containers] final class FloatList(
-    override val head: Float,
-    override var tail: List[Float])
-  extends ::[Float] with Reified {
-  
+private[containers] final class FloatList(car: Float, cdr: List[Float]) extends ::[Float] with Reified {
   protected override def T: TypeHint[Float] = TypeHint.Float
+  
+  override val head: Float = car
+  
+  override var tail: List[Float] = cdr
+  
+  override def :: [B >: Float](elem: B): List[B] = {
+    if (elem.isInstanceOf[Float]) new FloatList(elem.asInstanceOf[Float], this)
+    else new RefList(elem, this)
+  }
   
   override def reverse: List[Float] = {
     var sx = Nil: List[Float]
@@ -220,11 +225,6 @@ private[containers] final class FloatList(
       xs = xs.tail
     }
     sx
-  }
-  
-  override def :: [B >: Float](elem: B): List[B] = {
-    if (elem.isInstanceOf[Float]) new FloatList(elem.asInstanceOf[Float], this)
-    else new RefList(elem, this)
   }
   
   override def traverse(f: Float => Unit) {
@@ -238,12 +238,17 @@ private[containers] final class FloatList(
   override def iterator: Iterator[Float] = new FloatListIterator(this)
 }
 
-private[containers] final class DoubleList(
-    override val head: Double,
-    override var tail: List[Double])
-  extends ::[Double] with Reified {
-  
+private[containers] final class DoubleList(car: Double, cdr: List[Double]) extends ::[Double] with Reified {
   protected override def T: TypeHint[Double] = TypeHint.Double
+  
+  override val head: Double = car
+  
+  override var tail: List[Double] = cdr
+  
+  override def :: [B >: Double](elem: B): List[B] = {
+    if (elem.isInstanceOf[Double]) new DoubleList(elem.asInstanceOf[Double], this)
+    else new RefList(elem, this)
+  }
   
   override def reverse: List[Double] = {
     var sx = Nil: List[Double]
@@ -253,11 +258,6 @@ private[containers] final class DoubleList(
       xs = xs.tail
     }
     sx
-  }
-  
-  override def :: [B >: Double](elem: B): List[B] = {
-    if (elem.isInstanceOf[Double]) new DoubleList(elem.asInstanceOf[Double], this)
-    else new RefList(elem, this)
   }
   
   override def traverse(f: Double => Unit) {
@@ -271,10 +271,11 @@ private[containers] final class DoubleList(
   override def iterator: Iterator[Double] = new DoubleListIterator(this)
 }
 
-private[containers] final class RefList[A](
-    override val head: A,
-    override var tail: List[A])
-  extends ::[A]
+private[containers] final class RefList[A](car: A, cdr: List[A]) extends ::[A] {
+  override val head: A = car
+  
+  override var tail: List[A] = cdr
+}
 
 /** An extractor for [[List]] cons cells.
   * @group Containers */
