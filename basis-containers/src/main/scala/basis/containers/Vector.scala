@@ -64,7 +64,7 @@ private[containers] final class Vector0 extends Vector[Nothing] {
 }
 
 private[containers] final class Vector1[+A](
-    node1: Array[AnyRef],
+    private[containers] val node1: Array[AnyRef],
     override val length: Int)
   extends Vector[A] {
   
@@ -106,7 +106,7 @@ private[containers] final class Vector1[+A](
 }
 
 private[containers] final class Vector2[+A](
-    node2: Array[Array[AnyRef]],
+    private[containers] val node2: Array[Array[AnyRef]],
     override val length: Int)
   extends Vector[A] {
   
@@ -162,7 +162,7 @@ private[containers] final class Vector2[+A](
 }
 
 private[containers] final class Vector3[+A](
-    node3: Array[Array[Array[AnyRef]]],
+    private[containers] val node3: Array[Array[Array[AnyRef]]],
     override val length: Int)
   extends Vector[A] {
   
@@ -231,7 +231,7 @@ private[containers] final class Vector3[+A](
 }
 
 private[containers] final class Vector4[+A](
-    node4: Array[Array[Array[Array[AnyRef]]]],
+    private[containers] val node4: Array[Array[Array[Array[AnyRef]]]],
     override val length: Int)
   extends Vector[A] {
   
@@ -313,7 +313,7 @@ private[containers] final class Vector4[+A](
 }
 
 private[containers] final class Vector5[+A](
-    node5: Array[Array[Array[Array[Array[AnyRef]]]]],
+    private[containers] val node5: Array[Array[Array[Array[Array[AnyRef]]]]],
     override val length: Int)
   extends Vector[A] {
   
@@ -408,7 +408,7 @@ private[containers] final class Vector5[+A](
 }
 
 private[containers] final class Vector6[+A](
-    node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]],
+    private[containers] val node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]],
     override val length: Int)
   extends Vector[A] {
   
@@ -502,7 +502,7 @@ private[containers] final class Vector6[+A](
       }
       new Vector6(newNode6, length + 1)
     }
-    else throw new UnsupportedOperationException("Maximum vector size exceeded")
+    else throw new UnsupportedOperationException("Maximum vector length exceeded")
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node6, length)
@@ -672,8 +672,46 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
   
   private[this] var length: Int = 0
   
+  private[this] def initNode1(node1: Array[AnyRef]) {
+    this.node1 = new Array[AnyRef](32)
+    java.lang.System.arraycopy(node1, 0, this.node1, 0, node1.length)
+  }
+  
+  private[this] def initNode2(node2: Array[Array[AnyRef]]) {
+    this.node2 = new Array[Array[AnyRef]](32)
+    java.lang.System.arraycopy(node2, 0, this.node2, 0, node2.length)
+    initNode1(node2(node2.length - 1))
+  }
+  
+  private[this] def initNode3(node3: Array[Array[Array[AnyRef]]]) {
+    this.node3 = new Array[Array[Array[AnyRef]]](32)
+    java.lang.System.arraycopy(node3, 0, this.node3, 0, node3.length)
+    initNode2(node3(node3.length - 1))
+  }
+  
+  private[this] def initNode4(node4: Array[Array[Array[Array[AnyRef]]]]) {
+    this.node4 = new Array[Array[Array[Array[AnyRef]]]](32)
+    java.lang.System.arraycopy(node4, 0, this.node4, 0, node4.length)
+    initNode3(node4(node4.length - 1))
+  }
+  
+  private[this] def initNode5(node5: Array[Array[Array[Array[Array[AnyRef]]]]]) {
+    this.node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](32)
+    java.lang.System.arraycopy(node5, 0, this.node5, 0, node5.length)
+    initNode4(node5(node5.length - 1))
+  }
+  
+  private[this] def initNode6(node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]]) {
+    this.node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](32)
+    java.lang.System.arraycopy(node6, 0, this.node6, 0, node6.length)
+    initNode5(node6(node6.length - 1))
+  }
+  
   override def append(elem: A) {
+    val length = this.length
     if (length == 0) node1 = new Array[AnyRef](32)
+    else if (length == (1 << 30))
+      throw new UnsupportedOperationException("Maximum vector length exceeded")
     else {
       if ((length & 0x1FFFFFF) == 0) {
         if (length == (1 << 25)) {
@@ -717,7 +755,33 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
       }
     }
     node1(length & 0x1F) = elem.asInstanceOf[AnyRef]
-    length += 1
+    this.length = length + 1
+  }
+  
+  override def appendAll(elems: Enumerator[A]) {
+    if (length == 0) elems match {
+      case elems: Vector0 => ()
+      case elems: Vector1[A] =>
+        initNode1(elems.node1)
+        length = elems.length
+      case elems: Vector2[A] =>
+        initNode2(elems.node2)
+        length = elems.length
+      case elems: Vector3[A] =>
+        initNode3(elems.node3)
+        length = elems.length
+      case elems: Vector4[A] =>
+        initNode4(elems.node4)
+        length = elems.length
+      case elems: Vector5[A] =>
+        initNode5(elems.node5)
+        length = elems.length
+      case elems: Vector6[A] =>
+        initNode6(elems.node6)
+        length = elems.length
+      case _ => super.appendAll(elems)
+    }
+    else super.appendAll(elems)
   }
   
   override def expect(count: Int): this.type = this
