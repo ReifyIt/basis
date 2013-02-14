@@ -23,8 +23,9 @@ import basis.runtime._
   * 
   * @groupprio  Measuring     1
   * @groupprio  Indexing      2
-  * @groupprio  Traversing    3
-  * @groupprio  Classifying   4
+  * @groupprio  Inserting     3
+  * @groupprio  Traversing    4
+  * @groupprio  Classifying   5
   * 
   * @define collection  vector
   */
@@ -32,6 +33,14 @@ sealed abstract class Vector[+A] extends Equals with Immutable with Family[Vecto
   /** Returns a copy of this $collection with the given element at the given index.
     * @group Indexing */
   def update[B >: A](index: Int, elem: B): Vector[B]
+  
+  /** Returns a copy of this $collection with the given element appended.
+    * @group Inserting */
+  def append[B >: A](elem: B): Vector[B]
+  
+  /** Returns a copy of this $collection with the given element appended.
+    * @group Inserting */
+  def :+ [B >: A](elem: B): Vector[B] = append(elem)
   
   protected override def stringPrefix: String = "Vector"
 }
@@ -44,6 +53,12 @@ private[containers] final class Vector0 extends Vector[Nothing] {
   
   override def update[B](index: Int, elem: B): Vector[B] =
     throw new IndexOutOfBoundsException(index.toString)
+  
+  override def append[B](elem: B): Vector[B] = {
+    val newNode1 = new Array[AnyRef](1)
+    newNode1(0) = elem.asInstanceOf[AnyRef]
+    new Vector1(newNode1, 1)
+  }
   
   override def traverse(f: Nothing => Unit): Unit = ()
 }
@@ -64,6 +79,25 @@ private[containers] final class Vector1[+A](
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
     newNode1(index) = elem.asInstanceOf[AnyRef]
     new Vector1(newNode1, length)
+  }
+  
+  override def append[B >: A](elem: B): Vector[B] = {
+    val length  = this.length
+    val length1 = length & 0x1F
+    
+    val newNode1 = new Array[AnyRef](length1 + 1)
+    newNode1(length1) = elem.asInstanceOf[AnyRef]
+    
+    if (length1 != 0) {
+      java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
+      new Vector1(newNode1, length + 1)
+    }
+    else {
+      val newNode2 = new Array[Array[AnyRef]](2)
+      newNode2(0) = node1
+      newNode2(1) = newNode1
+      new Vector2(newNode2, length + 1)
+    }
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node1, length)
@@ -87,13 +121,39 @@ private[containers] final class Vector2[+A](
     val newNode2 = new Array[Array[AnyRef]](node2.length)
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
     
-    val node1 = newNode2((index >>> 5) & 0x1F)
+    val node1 = newNode2(index >>> 5 & 0x1F)
     val newNode1 = new Array[AnyRef](node1.length)
-    newNode2((index >>> 5) & 0x1F) = newNode1
+    newNode2(index >>> 5 & 0x1F) = newNode1
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
     
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
     new Vector2(newNode2, length)
+  }
+  
+  override def append[B >: A](elem: B): Vector[B] = {
+    val length  = this.length
+    val length1 = length       & 0x1F
+    val length2 = length >>> 5 & 0x1F
+    
+    val newNode1 = new Array[AnyRef](length1 + 1)
+    newNode1(length1) = elem.asInstanceOf[AnyRef]
+    val newNode2 = new Array[Array[AnyRef]](length2 + 1)
+    newNode2(length2) = newNode1
+    
+    if ((length & 0x3FF) != 0) {
+      java.lang.System.arraycopy(node2, 0, newNode2, 0, length2)
+      if (length1 != 0) {
+        val node1 = node2(length2)
+        java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
+      }
+      new Vector2(newNode2, length + 1)
+    }
+    else {
+      val newNode3 = new Array[Array[Array[AnyRef]]](2)
+      newNode3(0) = node2
+      newNode3(1) = newNode2
+      new Vector3(newNode3, length + 1)
+    }
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node2, length)
@@ -118,18 +178,51 @@ private[containers] final class Vector3[+A](
     val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
     
-    val node2 = newNode3((index >>> 10) & 0x1F)
+    val node2 = newNode3(index >>> 10 & 0x1F)
     val newNode2 = new Array[Array[AnyRef]](node2.length)
-    newNode3((index >>> 10) & 0x1F) = newNode2
+    newNode3(index >>> 10 & 0x1F) = newNode2
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
     
-    val node1 = newNode2((index >>>  5) & 0x1F)
+    val node1 = newNode2(index >>>  5 & 0x1F)
     val newNode1 = new Array[AnyRef](node1.length)
-    newNode2((index >>>  5) & 0x1F) = newNode1
+    newNode2(index >>>  5 & 0x1F) = newNode1
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
     
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
     new Vector3(newNode3, length)
+  }
+  
+  override def append[B >: A](elem: B): Vector[B] = {
+    val length  = this.length
+    val length1 = length        & 0x1F
+    val length2 = length >>>  5 & 0x1F
+    val length3 = length >>> 10 & 0x1F
+    
+    val newNode1 = new Array[AnyRef](length1 + 1)
+    newNode1(length1) = elem.asInstanceOf[AnyRef]
+    val newNode2 = new Array[Array[AnyRef]](length2 + 1)
+    newNode2(length2) = newNode1
+    val newNode3 = new Array[Array[Array[AnyRef]]](length3 + 1)
+    newNode3(length3) = newNode2
+    
+    if ((length & 0x7FFF) != 0) {
+      java.lang.System.arraycopy(node3, 0, newNode3, 0, length3)
+      if ((length & 0x3FF) != 0) {
+        val node2 = node3(length3)
+        java.lang.System.arraycopy(node2, 0, newNode2, 0, length2)
+        if (length1 != 0) {
+          val node1 = node2(length2)
+          java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
+        }
+      }
+      new Vector3(newNode3, length + 1)
+    }
+    else {
+      val newNode4 = new Array[Array[Array[Array[AnyRef]]]](2)
+      newNode4(0) = node3
+      newNode4(1) = newNode3
+      new Vector4(newNode4, length + 1)
+    }
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node3, length)
@@ -155,23 +248,63 @@ private[containers] final class Vector4[+A](
     val newNode4 = new Array[Array[Array[Array[AnyRef]]]](node4.length)
     java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
     
-    val node3 = newNode4((index >>> 15) & 0x1F)
+    val node3 = newNode4(index >>> 15 & 0x1F)
     val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
-    newNode4((index >>> 15) & 0x1F) = newNode3
+    newNode4(index >>> 15 & 0x1F) = newNode3
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
     
-    val node2 = newNode3((index >>> 10) & 0x1F)
+    val node2 = newNode3(index >>> 10 & 0x1F)
     val newNode2 = new Array[Array[AnyRef]](node2.length)
-    newNode3((index >>> 10) & 0x1F) = newNode2
+    newNode3(index >>> 10 & 0x1F) = newNode2
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
     
-    val node1 = newNode2((index >>>  5) & 0x1F)
+    val node1 = newNode2(index >>>  5 & 0x1F)
     val newNode1 = new Array[AnyRef](node1.length)
-    newNode2((index >>>  5) & 0x1F) = newNode1
+    newNode2(index >>>  5 & 0x1F) = newNode1
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
     
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
     new Vector4(newNode4, length)
+  }
+  
+  override def append[B >: A](elem: B): Vector[B] = {
+    val length  = this.length
+    val length1 = length        & 0x1F
+    val length2 = length >>>  5 & 0x1F
+    val length3 = length >>> 10 & 0x1F
+    val length4 = length >>> 15 & 0x1F
+    
+    val newNode1 = new Array[AnyRef](length1 + 1)
+    newNode1(length1) = elem.asInstanceOf[AnyRef]
+    val newNode2 = new Array[Array[AnyRef]](length2 + 1)
+    newNode2(length2) = newNode1
+    val newNode3 = new Array[Array[Array[AnyRef]]](length3 + 1)
+    newNode3(length3) = newNode2
+    val newNode4 = new Array[Array[Array[Array[AnyRef]]]](length4 + 1)
+    newNode4(length4) = newNode3
+    
+    if ((length & 0xFFFFF) != 0) {
+      java.lang.System.arraycopy(node4, 0, newNode4, 0, length4)
+      if ((length & 0x7FFF) != 0) {
+        val node3 = node4(length4)
+        java.lang.System.arraycopy(node3, 0, newNode3, 0, length3)
+        if ((length & 0x3FF) != 0) {
+          val node2 = node3(length3)
+          java.lang.System.arraycopy(node2, 0, newNode2, 0, length2)
+          if (length1 != 0) {
+            val node1 = node2(length2)
+            java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
+          }
+        }
+      }
+      new Vector4(newNode4, length + 1)
+    }
+    else {
+      val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](2)
+      newNode5(0) = node4
+      newNode5(1) = newNode4
+      new Vector5(newNode5, length + 1)
+    }
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node4, length)
@@ -198,28 +331,75 @@ private[containers] final class Vector5[+A](
     val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](node5.length)
     java.lang.System.arraycopy(node5, 0, newNode5, 0, node5.length)
     
-    val node4 = newNode5((index >>> 20) & 0x1F)
+    val node4 = newNode5(index >>> 20 & 0x1F)
     val newNode4 = new Array[Array[Array[Array[AnyRef]]]](node4.length)
-    newNode5((index >>> 20) & 0x1F) = newNode4
+    newNode5(index >>> 20 & 0x1F) = newNode4
     java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
     
-    val node3 = newNode4((index >>> 15) & 0x1F)
+    val node3 = newNode4(index >>> 15 & 0x1F)
     val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
-    newNode4((index >>> 15) & 0x1F) = newNode3
+    newNode4(index >>> 15 & 0x1F) = newNode3
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
     
-    val node2 = newNode3((index >>> 10) & 0x1F)
+    val node2 = newNode3(index >>> 10 & 0x1F)
     val newNode2 = new Array[Array[AnyRef]](node2.length)
-    newNode3((index >>> 10) & 0x1F) = newNode2
+    newNode3(index >>> 10 & 0x1F) = newNode2
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
     
-    val node1 = newNode2((index >>>  5) & 0x1F)
+    val node1 = newNode2(index >>>  5 & 0x1F)
     val newNode1 = new Array[AnyRef](node1.length)
-    newNode2((index >>>  5) & 0x1F) = newNode1
+    newNode2(index >>>  5 & 0x1F) = newNode1
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
     
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
     new Vector5(newNode5, length)
+  }
+  
+  override def append[B >: A](elem: B): Vector[B] = {
+    val length  = this.length
+    val length1 = length        & 0x1F
+    val length2 = length >>>  5 & 0x1F
+    val length3 = length >>> 10 & 0x1F
+    val length4 = length >>> 15 & 0x1F
+    val length5 = length >>> 20 & 0x1F
+    
+    val newNode1 = new Array[AnyRef](length1 + 1)
+    newNode1(length1) = elem.asInstanceOf[AnyRef]
+    val newNode2 = new Array[Array[AnyRef]](length2 + 1)
+    newNode2(length2) = newNode1
+    val newNode3 = new Array[Array[Array[AnyRef]]](length3 + 1)
+    newNode3(length3) = newNode2
+    val newNode4 = new Array[Array[Array[Array[AnyRef]]]](length4 + 1)
+    newNode4(length4) = newNode3
+    val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](length5 + 1)
+    newNode5(length5) = newNode4
+    
+    if ((length & 0x1FFFFFF) != 0) {
+      java.lang.System.arraycopy(node5, 0, newNode5, 0, length5)
+      if ((length & 0xFFFFF) != 0) {
+        val node4 = node5(length5)
+        java.lang.System.arraycopy(node4, 0, newNode4, 0, length4)
+        if ((length & 0x7FFF) != 0) {
+          val node3 = node4(length4)
+          java.lang.System.arraycopy(node3, 0, newNode3, 0, length3)
+          if ((length & 0x3FF) != 0) {
+            val node2 = node3(length3)
+            java.lang.System.arraycopy(node2, 0, newNode2, 0, length2)
+            if (length1 != 0) {
+              val node1 = node2(length2)
+              java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
+            }
+          }
+        }
+      }
+      new Vector5(newNode5, length + 1)
+    }
+    else {
+      val newNode6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](2)
+      newNode6(0) = node5
+      newNode6(1) = newNode5
+      new Vector6(newNode6, length + 1)
+    }
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node5, length)
@@ -246,28 +426,83 @@ private[containers] final class Vector6[+A](
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     val newNode6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](node6.length)
     java.lang.System.arraycopy(node6, 0, newNode6, 0, node6.length)
-    val node5 = newNode6((index >>> 25) & 0x1F)
+    
+    val node5 = newNode6(index >>> 25 & 0x1F)
     val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](node5.length)
+    newNode6(index >>> 25 & 0x1F) = newNode5
     java.lang.System.arraycopy(node5, 0, newNode5, 0, node5.length)
-    val node4 = newNode5((index >>> 20) & 0x1F)
+    
+    val node4 = newNode5(index >>> 20 & 0x1F)
     val newNode4 = new Array[Array[Array[Array[AnyRef]]]](node4.length)
+    newNode5(index >>> 20 & 0x1F) = newNode4
     java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
-    val node3 = newNode4((index >>> 15) & 0x1F)
+    
+    val node3 = newNode4(index >>> 15 & 0x1F)
     val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
+    newNode4(index >>> 15 & 0x1F) = newNode3
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
-    val node2 = newNode3((index >>> 10) & 0x1F)
+    
+    val node2 = newNode3(index >>> 10 & 0x1F)
     val newNode2 = new Array[Array[AnyRef]](node2.length)
+    newNode3(index >>> 10 & 0x1F) = newNode2
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
-    val node1 = newNode2((index >>>  5) & 0x1F)
+    
+    val node1 = newNode2(index >>>  5 & 0x1F)
     val newNode1 = new Array[AnyRef](node1.length)
+    newNode2(index >>>  5 & 0x1F) = newNode1
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
+    
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
-    newNode2((index >>>  5) & 0x1F) = newNode1
-    newNode3((index >>> 10) & 0x1F) = newNode2
-    newNode4((index >>> 15) & 0x1F) = newNode3
-    newNode5((index >>> 20) & 0x1F) = newNode4
-    newNode6((index >>> 25) & 0x1F) = newNode5
     new Vector4(newNode4, length)
+  }
+  
+  override def append[B >: A](elem: B): Vector[B] = {
+    val length  = this.length
+    val length1 = length        & 0x1F
+    val length2 = length >>>  5 & 0x1F
+    val length3 = length >>> 10 & 0x1F
+    val length4 = length >>> 15 & 0x1F
+    val length5 = length >>> 20 & 0x1F
+    val length6 = length >>> 25 & 0x1F
+    
+    val newNode1 = new Array[AnyRef](length1 + 1)
+    newNode1(length1) = elem.asInstanceOf[AnyRef]
+    val newNode2 = new Array[Array[AnyRef]](length2 + 1)
+    newNode2(length2) = newNode1
+    val newNode3 = new Array[Array[Array[AnyRef]]](length3 + 1)
+    newNode3(length3) = newNode2
+    val newNode4 = new Array[Array[Array[Array[AnyRef]]]](length4 + 1)
+    newNode4(length4) = newNode3
+    val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](length5 + 1)
+    newNode5(length5) = newNode4
+    val newNode6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](length6 + 1)
+    newNode6(length6) = newNode5
+    
+    if ((length & 0x3FFFFFFF) != 0) {
+      java.lang.System.arraycopy(node6, 0, newNode6, 0, length6)
+      if ((length & 0x1FFFFFF) != 0) {
+        val node5 = node6(length6)
+        java.lang.System.arraycopy(node5, 0, newNode5, 0, length5)
+        if ((length & 0xFFFFF) != 0) {
+          val node4 = node5(length5)
+          java.lang.System.arraycopy(node4, 0, newNode4, 0, length4)
+          if ((length & 0x7FFF) != 0) {
+            val node3 = node4(length4)
+            java.lang.System.arraycopy(node3, 0, newNode3, 0, length3)
+            if ((length & 0x3FF) != 0) {
+              val node2 = node3(length3)
+              java.lang.System.arraycopy(node2, 0, newNode2, 0, length2)
+              if (length1 != 0) {
+                val node1 = node2(length2)
+                java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
+              }
+            }
+          }
+        }
+      }
+      new Vector6(newNode6, length + 1)
+    }
+    else throw new UnsupportedOperationException("Maximum vector size exceeded")
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node6, length)
@@ -402,12 +637,20 @@ private[containers] final class VectorIterator[+A](
     if (index >= length) throw new UnsupportedOperationException("Empty iterator step.")
     val diff = index ^ (index + 1)
     index += 1
-    if (diff < length) {
-      if (diff >= (1 << 25)) node5 = node6(index >>> 25 & 0x1F)
-      if (diff >= (1 << 20)) node4 = node5(index >>> 20 & 0x1F)
-      if (diff >= (1 << 15)) node3 = node4(index >>> 15 & 0x1F)
-      if (diff >= (1 << 10)) node2 = node3(index >>> 10 & 0x1F)
-      if (diff >= (1 <<  5)) node1 = node2(index >>>  5 & 0x1F)
+    if (index < length && diff >= (1 << 5)) {
+      if (diff >= (1 << 10)) {
+        if (diff >= (1 << 15)) {
+          if (diff >= (1 << 20)) {
+            if (diff >= (1 << 25)) {
+              node5 = node6(index >>> 25 & 0x1F)
+            }
+            node4 = node5(index >>> 20 & 0x1F)
+          }
+          node3 = node4(index >>> 15 & 0x1F)
+        }
+        node2 = node3(index >>> 10 & 0x1F)
+      }
+      node1 = node2(index >>> 5 & 0x1F)
     }
   }
   
@@ -433,7 +676,7 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
     if (length == 0) node1 = new Array[AnyRef](32)
     else {
       if ((length & 0x1FFFFFF) == 0) {
-        if (length == 1 << 25) {
+        if (length == (1 << 25)) {
           node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](32)
           node6(0) = node5
         }
@@ -441,7 +684,7 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
         node6(length >>> 25 & 0x1F) = node5
       }
       if ((length & 0xFFFFF) == 0) {
-        if (length == 1 << 20) {
+        if (length == (1 << 20)) {
           node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](32)
           node5(0) = node4
         }
@@ -449,7 +692,7 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
         node5(length >>> 20 & 0x1F) = node4
       }
       if ((length & 0x7FFF) == 0) {
-        if (length == 1 << 15) {
+        if (length == (1 << 15)) {
           node4 = new Array[Array[Array[Array[AnyRef]]]](32)
           node4(0) = node3
         }
@@ -457,7 +700,7 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
         node4(length >>> 15 & 0x1F) = node3
       }
       if ((length & 0x3FF) == 0) {
-        if (length == 1 << 10) {
+        if (length == (1 << 10)) {
           node3 = new Array[Array[Array[AnyRef]]](32)
           node3(0) = node2
         }
@@ -465,7 +708,7 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
         node3(length >>> 10 & 0x1F) = node2
       }
       if ((length & 0x1F) == 0) {
-        if (length == 1 << 5) {
+        if (length == (1 << 5)) {
           node2 = new Array[Array[AnyRef]](32)
           node2(0) = node1
         }
