@@ -180,7 +180,7 @@ abstract class ArraySeq[+A]
   * @group Containers */
 object ArraySeq extends SeqFactory[ArraySeq] {
   implicit override def Builder[A](implicit A: TypeHint[A])
-    : Builder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] } = (A match {
+    : ArrayBuilder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] } = (A match {
     case TypeHint.Byte     => new ByteArraySeqBuilder
     case TypeHint.Short    => new ShortArraySeqBuilder
     case TypeHint.Int      => new IntArraySeqBuilder
@@ -190,7 +190,7 @@ object ArraySeq extends SeqFactory[ArraySeq] {
     case TypeHint.Boolean  => new BitArraySeqBuilder
     case struct: Struct[A] => new ValArraySeqBuilder[A]()(struct)
     case _                 => new RefArraySeqBuilder[A]
-  }).asInstanceOf[Builder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] }]
+  }).asInstanceOf[ArrayBuilder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] }]
   
   override def toString: String = "ArraySeq"
 }

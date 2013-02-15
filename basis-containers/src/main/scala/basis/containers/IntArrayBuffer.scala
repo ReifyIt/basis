@@ -67,6 +67,19 @@ private[containers] class IntArrayBuffer private (
     else appendAll(ArrayBuffer.coerce(elems))
   }
   
+  override def appendArray(elems: Array[Int]) {
+    val n = elems.length
+    var array = buffer
+    if (aliased || size + n > array.length) {
+      array = new Array[Int](expand(size + n))
+      if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
+      buffer = array
+      aliased = false
+    }
+    java.lang.System.arraycopy(elems, 0, array, size, n)
+    size += n
+  }
+  
   override def prepend(elem: Int) {
     var array = buffer
     if (aliased || size + 1 > array.length) array = new Array[Int](expand(1 + size))
@@ -92,11 +105,22 @@ private[containers] class IntArrayBuffer private (
     else prependAll(ArrayBuffer.coerce(elems))
   }
   
+  override def prependArray(elems: Array[Int]) {
+    val n = elems.length
+    var array = buffer
+    if (aliased || size + n > array.length) array = new Array[Int](expand(n + size))
+    if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
+    java.lang.System.arraycopy(elems, 0, array, 0, n)
+    buffer = array
+    size += n
+    aliased = false
+  }
+  
   override def insert(index: Int, elem: Int) {
     if (index == size) append(elem)
     else if (index == 0) prepend(elem)
+    else if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     else {
-      if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
       var array = buffer
       if (aliased || size + 1 > array.length) {
         array = new Array[Int](expand(size + 1))
@@ -113,10 +137,10 @@ private[containers] class IntArrayBuffer private (
   override def insertAll(index: Int, elems: Enumerator[Int]) {
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
+    else if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     else if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Int]]
       val n = xs.length
-      if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
       var array = buffer
       if (aliased || size + n > array.length) {
         array = new Array[Int](expand(size + n))
@@ -129,6 +153,25 @@ private[containers] class IntArrayBuffer private (
       aliased = false
     }
     else insertAll(index, ArrayBuffer.coerce(elems))
+  }
+  
+  override def insertArray(index: Int, elems: Array[Int]) {
+    if (index == size) appendArray(elems)
+    else if (index == 0) prependArray(elems)
+    else if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
+    else {
+      val n = elems.length
+      var array = buffer
+      if (aliased || size + n > array.length) {
+        array = new Array[Int](expand(size + n))
+        java.lang.System.arraycopy(buffer, 0, array, 0, index)
+      }
+      java.lang.System.arraycopy(buffer, index, array, index + n, size - index)
+      java.lang.System.arraycopy(elems, 0, array, index, n)
+      buffer = array
+      size += n
+      aliased = false
+    }
   }
   
   override def remove(index: Int): Int = {
@@ -209,6 +252,7 @@ private[containers] class IntArrayBuffer private (
       val array = new Array[Int](size + count)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
+      aliased = false
     }
     this
   }

@@ -151,60 +151,85 @@ private[containers] final class ValArraySeq[+A](data: Data)(implicit A: Struct[A
   }
 }
 
-private[containers] final class ValArraySeqBuilder[A](implicit A: Struct[A]) extends Builder[A] {
+private[containers] final class ValArraySeqBuilder[A](implicit A: Struct[A]) extends ArrayBuilder[A] {
   override type Scope = ArraySeq[_]
-  
   override type State = ArraySeq[A]
   
-  private[this] var data: Data = _
-  
+  private[this] var buffer: Data = _
+  private[this] var size: Int = 0
   private[this] var aliased: Boolean = true
   
-  private[this] var length: Int = 0
+  private[this] def capacity: Int = (buffer.size / A.size).toInt
   
-  private[this] def capacity: Int = (data.size / A.size).toInt
-  
-  private[this] def expand(base: Int, size: Int): Int = {
-    var n = (base max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
-  
-  private[this] def resize(size: Int) {
-    data = if (data != null) data.copy(A.size * size) else Data.alloc[A](size)
-  }
-  
-  private[this] def prepare(size: Int) {
-    if (aliased || size > capacity) {
-      resize(expand(16, size))
-      aliased = false
-    }
-  }
+  protected def defaultSize: Int = 16
   
   override def append(elem: A) {
-    prepare(length + 1)
-    A.store(data, A.size * length, elem)
-    length += 1
+    if (buffer == null) buffer = Data.alloc[A](defaultSize)
+    else if (aliased || size + 1 > capacity) buffer = buffer.copy(A.size * expand(size + 1))
+    A.store(buffer, A.size * size, elem)
+    size += 1
+    aliased = false
+  }
+  
+  override def appendAll(elems: Enumerator[A]) {
+    if (elems.isInstanceOf[ArrayLike[_]]) {
+      val xs = elems.asInstanceOf[ArrayLike[A]]
+      val n = xs.length
+      if (buffer == null) buffer = Data.alloc[A](expand(n))
+      else if (aliased || size + n > capacity) buffer = buffer.copy(A.size * expand(size + n))
+      var i = 0
+      while (i < n) {
+        A.store(buffer, A.size * (size + i), xs(i))
+        i += 1
+      }
+      size += n
+      aliased = false
+    }
+    else appendAll(ArrayBuffer.coerce(elems))
+  }
+  
+  override def appendArray(elems: Array[A]) {
+    val n = elems.length
+    if (buffer == null) buffer = Data.alloc[A](expand(n))
+    else if (aliased || size + n > capacity) buffer = buffer.copy(A.size * expand(size + n))
+    var i = 0
+    while (i < n) {
+      A.store(buffer, A.size * (size + i), elems(i))
+      i += 1
+    }
+    size += n
+    aliased = false
   }
   
   override def expect(count: Int): this.type = {
-    if (data == null || length + count > capacity) {
-      resize(length + count)
+    if (buffer == null) {
+      buffer = Data.alloc[A](0)
+      aliased = false
+    }
+    else if (size + count > capacity) {
+      buffer = buffer.copy(A.size * size)
       aliased = false
     }
     this
   }
   
   override def state: ArraySeq[A] = {
-    if (data == null || length != capacity) resize(length)
+    if (buffer == null) buffer = Data.alloc[A](0)
+    else if (size != capacity) buffer = buffer.copy(A.size * size)
     aliased = true
-    new ValArraySeq(data)
+    new ValArraySeq[A](buffer)
   }
   
   override def clear() {
-    data = null
     aliased = true
-    length = 0
+    size = 0
+    buffer = null
+  }
+  
+  private[this] def expand(size: Int): Int = {
+    var n = (defaultSize max size) - 1
+    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+    n + 1
   }
   
   override def toString: String = "ArraySeqBuilder"+"("+ A +")"

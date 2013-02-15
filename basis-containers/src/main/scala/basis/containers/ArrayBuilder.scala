@@ -13,9 +13,41 @@ import basis.util._
 
 import scala.reflect.ClassTag
 
-private[containers] final class ArrayBuilder[A](implicit A: ClassTag[A]) extends Builder[A] {
-  override type Scope = Array[_]
+/** An array-compatible collection builder.
+  * 
+  * @author   Chris Sachs
+  * @version  0.1
+  * @since    0.1
+  * @group    Builders
+  * 
+  * @groupprio  Inserting   1
+  * @groupprio  Removing    2
+  * @groupprio  Exporting   3
+  * 
+  * @define collection  array builder
+  */
+trait ArrayBuilder[A] extends Builder[A] {
+  /** Appends an array of elements to this $collection.
+    * @group Inserting */
+  def appendArray(elems: Array[A]) {
+    var i = 0
+    val n = elems.length
+    while (i < n) {
+      append(elems(i))
+      i += 1
+    }
+  }
   
+  /** Appends an array of elements to this $collection.
+    * @group Inserting */
+  def ++= (elems: Array[A]): this.type = {
+    appendArray(elems)
+    this
+  }
+}
+
+private[containers] final class RefArrayBuilder[A](implicit A: ClassTag[A]) extends ArrayBuilder[A] {
+  override type Scope = Array[_]
   override type State = Array[A]
   
   private[this] var buffer: Array[A] = _
@@ -23,12 +55,6 @@ private[containers] final class ArrayBuilder[A](implicit A: ClassTag[A]) extends
   private[this] var aliased: Boolean = true
   
   protected def defaultSize: Int = 16
-  
-  private[this] def expand(size: Int): Int = {
-    var n = (defaultSize max size) - 1
-    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
-    n + 1
-  }
   
   override def append(elem: A) {
     var array = buffer
@@ -42,11 +68,42 @@ private[containers] final class ArrayBuilder[A](implicit A: ClassTag[A]) extends
     size += 1
   }
   
+  override def appendAll(elems: Enumerator[A]) {
+    if (elems.isInstanceOf[ArrayLike[_]]) {
+      val xs = elems.asInstanceOf[ArrayLike[A]]
+      val n = xs.length
+      var array = buffer
+      if (aliased || size + n > array.length) {
+        array = A.newArray(expand(size + n))
+        if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
+        buffer = array
+        aliased = false
+      }
+      xs.copyToArray(0, array, size, n)
+      size += n
+    }
+    else appendAll(ArrayBuffer.coerce(elems))
+  }
+  
+  override def appendArray(elems: Array[A]) {
+    val n = elems.length
+    var array = buffer
+    if (aliased || size + n > array.length) {
+      array = A.newArray(expand(size + n))
+      if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
+      buffer = array
+      aliased = false
+    }
+    Array.copy(elems, 0, array, size, n)
+    size += n
+  }
+  
   override def expect(count: Int): this.type = {
     if (buffer == null || size + count > buffer.length) {
       val array = A.newArray(size + count)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
+      aliased = false
     }
     this
   }
@@ -66,6 +123,12 @@ private[containers] final class ArrayBuilder[A](implicit A: ClassTag[A]) extends
     aliased = true
     size = 0
     buffer = null
+  }
+  
+  private[this] def expand(size: Int): Int = {
+    var n = (defaultSize max size) - 1
+    n |= n >> 1; n |= n >> 2; n |= n >> 4; n |= n >> 8; n |= n >> 16
+    n + 1
   }
   
   override def toString: String = "ArrayBuilder"+"["+ A +"]"

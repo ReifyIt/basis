@@ -67,6 +67,19 @@ private[containers] class ShortArrayBuffer private (
     else appendAll(ArrayBuffer.coerce(elems))
   }
   
+  override def appendArray(elems: Array[Short]) {
+    val n = elems.length
+    var array = buffer
+    if (aliased || size + n > array.length) {
+      array = new Array[Short](expand(size + n))
+      if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
+      buffer = array
+      aliased = false
+    }
+    java.lang.System.arraycopy(elems, 0, array, size, n)
+    size += n
+  }
+  
   override def prepend(elem: Short) {
     var array = buffer
     if (aliased || size + 1 > array.length) array = new Array[Short](expand(1 + size))
@@ -92,11 +105,22 @@ private[containers] class ShortArrayBuffer private (
     else prependAll(ArrayBuffer.coerce(elems))
   }
   
+  override def prependArray(elems: Array[Short]) {
+    val n = elems.length
+    var array = buffer
+    if (aliased || size + n > array.length) array = new Array[Short](expand(n + size))
+    if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
+    java.lang.System.arraycopy(elems, 0, array, 0, n)
+    buffer = array
+    size += n
+    aliased = false
+  }
+  
   override def insert(index: Int, elem: Short) {
     if (index == size) append(elem)
     else if (index == 0) prepend(elem)
+    else if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     else {
-      if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
       var array = buffer
       if (aliased || size + 1 > array.length) {
         array = new Array[Short](expand(size + 1))
@@ -113,10 +137,10 @@ private[containers] class ShortArrayBuffer private (
   override def insertAll(index: Int, elems: Enumerator[Short]) {
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
+    else if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     else if (elems.isInstanceOf[ArrayLike[_]]) {
       val xs = elems.asInstanceOf[ArrayLike[Short]]
       val n = xs.length
-      if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
       var array = buffer
       if (aliased || size + n > array.length) {
         array = new Array[Short](expand(size + n))
@@ -129,6 +153,25 @@ private[containers] class ShortArrayBuffer private (
       aliased = false
     }
     else insertAll(index, ArrayBuffer.coerce(elems))
+  }
+  
+  override def insertArray(index: Int, elems: Array[Short]) {
+    if (index == size) appendArray(elems)
+    else if (index == 0) prependArray(elems)
+    else if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
+    else {
+      val n = elems.length
+      var array = buffer
+      if (aliased || size + n > array.length) {
+        array = new Array[Short](expand(size + n))
+        java.lang.System.arraycopy(buffer, 0, array, 0, index)
+      }
+      java.lang.System.arraycopy(buffer, index, array, index + n, size - index)
+      java.lang.System.arraycopy(elems, 0, array, index, n)
+      buffer = array
+      size += n
+      aliased = false
+    }
   }
   
   override def remove(index: Int): Short = {
@@ -209,6 +252,7 @@ private[containers] class ShortArrayBuffer private (
       var array = new Array[Short](size + count)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
+      aliased = false
     }
     this
   }

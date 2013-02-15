@@ -37,12 +37,57 @@ abstract class ArrayBuffer[A]
     with Mutable
     with Family[ArrayBuffer[_]]
     with ArrayLike[A]
-    with Index[A]
-    with Buffer[A] {
+    with ArrayBuilder[A]
+    with Buffer[A]
+    with Index[A] {
   
   /** Returns this $collection converted to an array sequence.
     * @group Exporting */
   def toArraySeq: ArraySeq[A]
+  
+  /** Prepends an array of elements to this $collection.
+    * @group Inserting */
+  def prependArray(elems: Array[A]) {
+    var i = 0
+    val n = length
+    while (i < n) {
+      insert(i, elems(i))
+      i += 1
+    }
+  }
+  
+  /** Inserts an array of elements into this $collection, starting at `index`.
+    * @group Inserting */
+  def insertArray(index: Int, elems: Array[A]) {
+    var i = 0
+    val n = length
+    while (i < n) {
+      insert(index + i, elems(i))
+      i += 1
+    }
+  }
+  
+  override def ++= (elems: Enumerator[A]): this.type = {
+    appendAll(elems)
+    this
+  }
+  
+  override def ++= (elems: Array[A]): this.type = {
+    appendArray(elems)
+    this
+  }
+  
+  override def ++=: (elems: Enumerator[A]): this.type = {
+    prependAll(elems)
+    this
+  }
+  
+  /** Prepends an array of elements to this $collection.
+    * @group Inserting */
+  def ++=: (elems: Array[A]): this.type = {
+    prependArray(elems)
+    this
+  }
   
   protected override def stringPrefix: String = "ArrayBuffer"
 }
@@ -51,7 +96,7 @@ abstract class ArrayBuffer[A]
   * @group Containers */
 object ArrayBuffer extends SeqFactory[ArrayBuffer] {
   implicit override def Builder[A](implicit A: TypeHint[A])
-    : Builder[A] { type Scope = ArrayBuffer[_]; type State = ArrayBuffer[A] } = (A match {
+    : ArrayBuilder[A] { type Scope = ArrayBuffer[_]; type State = ArrayBuffer[A] } = (A match {
     case TypeHint.Byte    => new ByteArrayBufferBuilder
     case TypeHint.Short   => new ShortArrayBufferBuilder
     case TypeHint.Int     => new IntArrayBufferBuilder
@@ -59,7 +104,7 @@ object ArrayBuffer extends SeqFactory[ArrayBuffer] {
     case TypeHint.Float   => new FloatArrayBufferBuilder
     case TypeHint.Double  => new DoubleArrayBufferBuilder
     case _                => new RefArrayBufferBuilder[A]
-  }).asInstanceOf[Builder[A] { type Scope = ArrayBuffer[_]; type State = ArrayBuffer[A] }]
+  }).asInstanceOf[ArrayBuilder[A] { type Scope = ArrayBuffer[_]; type State = ArrayBuffer[A] }]
   
   override def toString: String = "ArrayBuffer"
 }

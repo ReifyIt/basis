@@ -116,26 +116,26 @@ package containers {
     /** Implicitly returns a new `Array` builder.
       * @group Builders */
     implicit def ArrayBuilder[A](implicit A: ClassTag[A])
-      : Builder[A] { type Scope = Array[_]; type State = Array[A] } = (A match {
-      case ClassTag.Byte     => new ByteArrayBuilder
-      case ClassTag.Short    => new ShortArrayBuilder
-      case ClassTag.Int      => new IntArrayBuilder
-      case ClassTag.Long     => new LongArrayBuilder
-      case ClassTag.Float    => new FloatArrayBuilder
-      case ClassTag.Double   => new DoubleArrayBuilder
-      case _                 => new ArrayBuilder[A]
-    }).asInstanceOf[Builder[A] { type Scope = Array[_]; type State = Array[A] }]
+      : ArrayBuilder[A] { type Scope = Array[_]; type State = Array[A] } = (A match {
+      case ClassTag.Byte    => new ByteArrayBuilder
+      case ClassTag.Short   => new ShortArrayBuilder
+      case ClassTag.Int     => new IntArrayBuilder
+      case ClassTag.Long    => new LongArrayBuilder
+      case ClassTag.Float   => new FloatArrayBuilder
+      case ClassTag.Double  => new DoubleArrayBuilder
+      case _                => new RefArrayBuilder[A]
+    }).asInstanceOf[ArrayBuilder[A] { type Scope = Array[_]; type State = Array[A] }]
     
     /** Implicitly returns a new [[ArraySeq]] builder.
       * @group Builders */
     implicit def ArraySeqBuilder[A](implicit A: TypeHint[A])
-      : Builder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] } =
+      : ArrayBuilder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] } =
       ArraySeq.Builder(A)
     
     /** Implicitly returns a new [[ArrayBuffer]] builder.
       * @group Builders */
     implicit def ArrayBufferBuilder[A](implicit A: TypeHint[A])
-      : Builder[A] { type Scope = ArrayBuffer[_]; type State = ArrayBuffer[A] } =
+      : ArrayBuilder[A] { type Scope = ArrayBuffer[_]; type State = ArrayBuffer[A] } =
       ArrayBuffer.Builder(A)
     
     /** Implicitly returns a new [[List]] builder.
