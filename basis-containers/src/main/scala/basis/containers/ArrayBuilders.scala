@@ -13,37 +13,46 @@ import basis.util._
 
 import scala.reflect.ClassTag
 
-/** An array-compatible collection builder.
-  * 
-  * @author   Chris Sachs
-  * @version  0.1
-  * @since    0.1
-  * @group    Builders
-  * 
-  * @groupprio  Inserting   1
-  * @groupprio  Removing    2
-  * @groupprio  Exporting   3
-  * 
-  * @define collection  array builder
-  */
-trait ArrayBuilder[A] extends Builder[A] {
-  /** Appends an array of elements to this $collection.
-    * @group Inserting */
-  def appendArray(elems: Array[A]) {
-    var i = 0
-    val n = elems.length
-    while (i < n) {
-      append(elems(i))
-      i += 1
-    }
-  }
-  
-  /** Appends an array of elements to this $collection.
-    * @group Inserting */
-  def ++= (elems: Array[A]): this.type = {
-    appendArray(elems)
-    this
-  }
+private[containers] final class ByteArrayBuilder extends ByteArrayBuffer {
+  override type Scope = Array[_]
+  override type State = Array[Byte]
+  override def state: Array[Byte] = toArray
+  override def toString: String = "ArrayBuilder"+"["+"Byte"+"]"
+}
+
+private[containers] final class ShortArrayBuilder extends ShortArrayBuffer {
+  override type Scope = Array[_]
+  override type State = Array[Short]
+  override def state: Array[Short] = toArray
+  override def toString: String = "ArrayBuilder"+"["+"Short"+"]"
+}
+
+private[containers] final class IntArrayBuilder extends IntArrayBuffer {
+  override type Scope = Array[_]
+  override type State = Array[Int]
+  override def state: Array[Int] = toArray
+  override def toString: String = "ArrayBuilder"+"["+"Int"+"]"
+}
+
+private[containers] final class LongArrayBuilder extends LongArrayBuffer {
+  override type Scope = Array[_]
+  override type State = Array[Long]
+  override def state: Array[Long] = toArray
+  override def toString: String = "ArrayBuilder"+"["+"Long"+"]"
+}
+
+private[containers] final class FloatArrayBuilder extends FloatArrayBuffer {
+  override type Scope = Array[_]
+  override type State = Array[Float]
+  override def state: Array[Float] = toArray
+  override def toString: String = "ArrayBuilder"+"["+"Float"+"]"
+}
+
+private[containers] final class DoubleArrayBuilder extends DoubleArrayBuffer {
+  override type Scope = Array[_]
+  override type State = Array[Double]
+  override def state: Array[Double] = toArray
+  override def toString: String = "ArrayBuilder"+"["+"Double"+"]"
 }
 
 private[containers] final class RefArrayBuilder[A](implicit A: ClassTag[A]) extends ArrayBuilder[A] {
@@ -132,46 +141,4 @@ private[containers] final class RefArrayBuilder[A](implicit A: ClassTag[A]) exte
   }
   
   override def toString: String = "ArrayBuilder"+"["+ A +"]"
-}
-
-private[containers] final class ByteArrayBuilder extends ByteArrayBuffer {
-  override type Scope = Array[_]
-  override type State = Array[Byte]
-  override def state: Array[Byte] = toArray
-  override def toString: String = "ArrayBuilder"+"["+"Byte"+"]"
-}
-
-private[containers] final class ShortArrayBuilder extends ShortArrayBuffer {
-  override type Scope = Array[_]
-  override type State = Array[Short]
-  override def state: Array[Short] = toArray
-  override def toString: String = "ArrayBuilder"+"["+"Short"+"]"
-}
-
-private[containers] final class IntArrayBuilder extends IntArrayBuffer {
-  override type Scope = Array[_]
-  override type State = Array[Int]
-  override def state: Array[Int] = toArray
-  override def toString: String = "ArrayBuilder"+"["+"Int"+"]"
-}
-
-private[containers] final class LongArrayBuilder extends LongArrayBuffer {
-  override type Scope = Array[_]
-  override type State = Array[Long]
-  override def state: Array[Long] = toArray
-  override def toString: String = "ArrayBuilder"+"["+"Long"+"]"
-}
-
-private[containers] final class FloatArrayBuilder extends FloatArrayBuffer {
-  override type Scope = Array[_]
-  override type State = Array[Float]
-  override def state: Array[Float] = toArray
-  override def toString: String = "ArrayBuilder"+"["+"Float"+"]"
-}
-
-private[containers] final class DoubleArrayBuilder extends DoubleArrayBuffer {
-  override type Scope = Array[_]
-  override type State = Array[Double]
-  override def state: Array[Double] = toArray
-  override def toString: String = "ArrayBuilder"+"["+"Double"+"]"
 }

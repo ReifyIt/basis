@@ -12,7 +12,7 @@ import basis.collections._
 /** Strictly evaluated collection operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Strict
   * 
@@ -147,14 +147,14 @@ final class StrictCollectionOps[+A, -From](val these: Collection[A]) extends Any
   def slice(lower: Int, upper: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[A, From](these).slice(lower, upper)(builder)
   
-  /** Returns the concatenation of this and another $collection.
+  /** Returns the concatenation of this and another collection.
     * 
     * @param  those     the elements to append to these elements.
     * @param  builder   the implicit accumulator for concatenated elements.
     * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
+  def ++ [B >: A](those: Collection[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     new StrictEnumeratorOps[B, From](these).++[B](those)(builder)
   //new StrictEnumeratorOps[A, From](these).++[B](those)(builder) // SI-6482
 }

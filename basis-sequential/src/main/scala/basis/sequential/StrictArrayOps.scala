@@ -166,6 +166,36 @@ final class StrictArrayOps[A, -From](these: Array[A]) {
     */
   def zip[B](those: Array[B])(implicit builder: Builder[(A, B)] { type Scope <: From }): builder.State =
     macro StrictArrayOps.zip[A, B]
+  
+  /** Returns a copy of this $collection with an appended element.
+    * 
+    * @param  elem      the element to append to these elements.
+    * @param  builder   the implicit accumulator for concatenated elements.
+    * @return these elements with `elem` appended.
+    * @group  Combining
+    */
+  def :+ (elem: A)(implicit builder: ArrayBuilder[A] { type Scope <: From }): builder.State =
+    macro StrictArrayOps.:+[A]
+  
+  /** Returns a copy of this $collection with a prepended element.
+    * 
+    * @param  elem      the element to prepend to these elements.
+    * @param  builder   the implicit accumulator for concatenated elements.
+    * @return these elements with `elem` prepended.
+    * @group  Combining
+    */
+  def +: (elem: A)(implicit builder: ArrayBuilder[A] { type Scope <: From }): builder.State =
+    macro StrictArrayOps.+:[A]
+  
+  /** Returns the concatenation of this and another array.
+    * 
+    * @param  those     the array to append to these elements.
+    * @param  builder   the implicit accumulator for concatenated elements.
+    * @return the accumulated elements of both arrays.
+    * @group  Combining
+    */
+  def ++ (those: Array[A])(implicit builder: ArrayBuilder[A] { type Scope <: From }): builder.State =
+    macro StrictArrayOps.++[A]
 }
 
 private[sequential] object StrictArrayOps {
@@ -262,4 +292,25 @@ private[sequential] object StrictArrayOps {
       (builder: c.Expr[Builder[(A, B)]])
     : c.Expr[builder.value.State] =
     new ArrayMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
+  
+  def :+ [A : c.WeakTypeTag]
+      (c: Context)
+      (elem: c.Expr[A])
+      (builder: c.Expr[ArrayBuilder[A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).:+[A](unApply[A](c), elem)(builder)
+  
+  def +: [A : c.WeakTypeTag]
+      (c: Context)
+      (elem: c.Expr[A])
+      (builder: c.Expr[ArrayBuilder[A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).+:[A](elem, unApply[A](c))(builder)
+  
+  def ++ [A : c.WeakTypeTag]
+      (c: Context)
+      (those: c.Expr[Array[A]])
+      (builder: c.Expr[ArrayBuilder[A]])
+    : c.Expr[builder.value.State] =
+    new ArrayMacros[c.type](c).++[A](unApply[A](c), those)(builder)
 }

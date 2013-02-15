@@ -22,6 +22,46 @@ private[sequential] final class EnumeratorMacros[C <: Context](val context: C) {
   
   val universe: context.universe.type = context.universe
   
+  def :+ [A]
+      (these: Expr[Enumerator[A]], elem: Expr[A])
+      (builder: Expr[Builder[A]])
+    : Expr[builder.value.State] = {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
+      Select(
+        Apply(
+          Select(
+            Apply(
+              Select(
+                builder.tree,
+                "$plus$plus$eq"),
+              these.tree :: Nil),
+            "$plus$eq"),
+          elem.tree :: Nil),
+        "state"))
+  }
+  
+  def +: [A]
+      (elem: Expr[A], these: Expr[Enumerator[A]])
+      (builder: Expr[Builder[A]])
+    : Expr[builder.value.State] = {
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
+      Select(
+        Apply(
+          Select(
+            Apply(
+              Select(
+                builder.tree,
+                "$plus$eq"),
+              elem.tree :: Nil),
+            "$plus$plus$eq"),
+          these.tree :: Nil),
+        "state"))
+  }
+  
   def ++ [A]
       (these: Expr[Enumerator[A]], those: Expr[Enumerator[A]])
       (builder: Expr[Builder[A]])

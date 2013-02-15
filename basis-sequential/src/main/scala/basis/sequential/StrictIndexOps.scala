@@ -12,7 +12,7 @@ import basis.collections._
 /** Strictly evaluated indexed sequence operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Strict
   * 
@@ -167,15 +167,35 @@ final class StrictIndexOps[+A, -From](these: Index[A]) {
   def zip[B](those: Index[B])(implicit builder: Builder[(A, B)] { type Scope <: From }): builder.State =
     macro StrictIndexOps.zip[A, B]
   
-  /** Returns the concatenation of this and another collection.
+  /** Returns a copy of this $collection with an appended element.
+    * 
+    * @param  elem      the element to append to these elements.
+    * @param  builder   the implicit accumulator for concatenated elements.
+    * @return these elements with `elem` appended.
+    * @group  Combining
+    */
+  def :+ (elem: A)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
+    macro StrictIndexOps.:+[A]
+  
+  /** Returns a copy of this $collection with a prepended element.
+    * 
+    * @param  elem      the element to prepend to these elements.
+    * @param  builder   the implicit accumulator for concatenated elements.
+    * @return these elements with `elem` prepended.
+    * @group  Combining
+    */
+  def +: (elem: A)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
+    macro StrictIndexOps.+:[A]
+  
+  /** Returns the concatenation of this and another index.
     * 
     * @param  those     the elements to append to these elements.
     * @param  builder   the implicit accumulator for concatenated elements.
     * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
-    macro StrictEnumeratorOps.++[B]
+  def ++ [B >: A](those: Index[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
+    macro StrictIndexOps.++[B]
 }
 
 private[sequential] object StrictIndexOps {
@@ -275,4 +295,25 @@ private[sequential] object StrictIndexOps {
       (builder: c.Expr[Builder[(A, B)]])
     : c.Expr[builder.value.State] =
     new IndexMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
+  
+  def :+ [A : c.WeakTypeTag]
+      (c: Context)
+      (elem: c.Expr[A])
+      (builder: c.Expr[Builder[A]])
+    : c.Expr[builder.value.State] =
+    new IndexMacros[c.type](c).:+[A](unApply[A](c), elem)(builder)
+  
+  def +: [A : c.WeakTypeTag]
+      (c: Context)
+      (elem: c.Expr[A])
+      (builder: c.Expr[Builder[A]])
+    : c.Expr[builder.value.State] =
+    new IndexMacros[c.type](c).+:[A](elem, unApply[A](c))(builder)
+  
+  def ++ [A : c.WeakTypeTag]
+      (c: Context)
+      (those: c.Expr[Index[A]])
+      (builder: c.Expr[Builder[A]])
+    : c.Expr[builder.value.State] =
+    new IndexMacros[c.type](c).++[A](unApply[A](c), those)(builder)
 }

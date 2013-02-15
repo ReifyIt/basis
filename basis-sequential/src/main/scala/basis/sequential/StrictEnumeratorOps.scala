@@ -195,6 +195,20 @@ private[sequential] object StrictEnumeratorOps {
     Expr(typeCheck(enumerator, EnumeratorType))(WeakTypeTag(EnumeratorType))
   }
   
+  def :+ [A : c.WeakTypeTag]
+      (c: Context)
+      (elem: c.Expr[A])
+      (builder: c.Expr[Builder[A]])
+    : c.Expr[builder.value.State] =
+    new EnumeratorMacros[c.type](c).:+[A](unApply[A](c), elem)(builder)
+  
+  def +: [A : c.WeakTypeTag]
+      (c: Context)
+      (elem: c.Expr[A])
+      (builder: c.Expr[Builder[A]])
+    : c.Expr[builder.value.State] =
+    new EnumeratorMacros[c.type](c).+:[A](elem, unApply[A](c))(builder)
+  
   def ++ [A : c.WeakTypeTag]
       (c: Context)
       (those: c.Expr[Enumerator[A]])

@@ -12,7 +12,7 @@ import basis.collections._
 /** Strictly evaluated set operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Strict
   * 
@@ -148,13 +148,13 @@ final class StrictSetOps[+A, -From](these: Set[A]) {
   def slice(lower: Int, upper: Int)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
     macro StrictContainerOps.slice[A]
   
-  /** Returns the concatenation of this and another collection.
+  /** Returns the concatenation of this and another set.
     * 
     * @param  those     the elements to append to these elements.
     * @param  builder   the implicit accumulator for concatenated elements.
     * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
+  def ++ [B >: A](those: Set[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     macro StrictEnumeratorOps.++[B]
 }

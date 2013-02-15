@@ -12,7 +12,7 @@ import basis.collections._
 /** Strictly evaluated map operations.
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * @group    Strict
   * 
@@ -148,13 +148,13 @@ final class StrictMapOps[+A, +T, -From](these: Map[A, T]) {
   def slice(lower: Int, upper: Int)(implicit builder: Builder[(A, T)] { type Scope <: From }): builder.State =
     macro StrictContainerOps.slice[(A, T)]
   
-  /** Returns the concatenation of this and another collection.
+  /** Returns the concatenation of this and another map.
     * 
     * @param  those     the entries to append to these entries.
     * @param  builder   the implicit accumulator for concatenated entries.
     * @return the accumulated entries of both collections.
     * @group  Combining
     */
-  def ++ [B >: (A, T)](those: Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
-    macro StrictEnumeratorOps.++[B]
+  def ++ [B >: A, U >: T](those: Map[B, U])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
+    macro StrictEnumeratorOps.++[(B, U)]
 }

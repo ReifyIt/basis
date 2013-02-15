@@ -798,6 +798,89 @@ private[sequential] class IndexMacros[C <: Context](val context: C) {
         Select(Ident(b), "state")))
   }
   
+  def :+ [A]
+      (these: Expr[Index[A]], elem: Expr[A])
+      (builder: Expr[Builder[A]])
+    : Expr[builder.value.State] = {
+    val xs = newTermName(fresh("xs$"))
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
+      Block(
+        ValDef(NoMods, xs, TypeTree(), these.tree) :: Nil,
+        Select(
+          Apply(
+            Select(
+              Apply(
+                Select(
+                  Apply(
+                    Select(builder.tree, "expect"),
+                    Apply(
+                      Select(Select(Ident(xs), "length"), "$plus"),
+                      Literal(Constant(1)) :: Nil) :: Nil),
+                  "$plus$plus$eq"),
+                Ident(xs) :: Nil),
+              "$plus$eq"),
+            elem.tree :: Nil),
+          "state")))
+  }
+  
+  def +: [A]
+      (elem: Expr[A], these: Expr[Index[A]])
+      (builder: Expr[Builder[A]])
+    : Expr[builder.value.State] = {
+    val xs = newTermName(fresh("xs$"))
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
+      Block(
+        ValDef(NoMods, xs, TypeTree(), these.tree) :: Nil,
+        Select(
+          Apply(
+            Select(
+              Apply(
+                Select(
+                  Apply(
+                    Select(builder.tree, "expect"),
+                    Apply(
+                      Select(Literal(Constant(1)), "$plus"),
+                      Select(Ident(xs), "length") :: Nil) :: Nil),
+                  "$plus$eq"),
+                elem.tree :: Nil),
+              "$plus$plus$eq"),
+            Ident(xs) :: Nil),
+          "state")))
+  }
+  
+  def ++ [A]
+      (these: Expr[Index[A]], those: Expr[Index[A]])
+      (builder: Expr[Builder[A]])
+    : Expr[builder.value.State] = {
+    val xs = newTermName(fresh("xs$"))
+    val ys = newTermName(fresh("ys$"))
+    implicit val builderTypeTag = BuilderTypeTag(builder)
+    implicit val builderStateTag = BuilderStateTag(builder)
+    Expr[builder.value.State](
+      Block(
+        ValDef(NoMods, xs, TypeTree(), these.tree) ::
+        ValDef(NoMods, ys, TypeTree(), those.tree) :: Nil,
+        Select(
+          Apply(
+            Select(
+              Apply(
+                Select(
+                  Apply(
+                    Select(builder.tree, "expect"),
+                    Apply(
+                      Select(Select(Ident(xs), "length"), "$plus"),
+                      Select(Ident(ys), "length") :: Nil) :: Nil),
+                  "$plus$plus$eq"),
+                Ident(xs) :: Nil),
+              "$plus$plus$eq"),
+            Ident(ys) :: Nil),
+          "state")))
+  }
+  
   private[this] def max(x: Tree, y: Tree): Tree =
     Apply(Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "max"), x :: y :: Nil)
   

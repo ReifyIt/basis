@@ -13,7 +13,7 @@ import basis.collections._
   * 
   * @author   Chris Sachs
   * @version  0.1
-  * @since    0.1
+  * @since    0.0
   * @group    Strict
   * 
   * @groupprio  Mapping     1
@@ -158,14 +158,34 @@ final class StrictStackOps[+A, -From](these: Stack[A]) {
   def zip[B](those: Stack[B])(implicit builder: Builder[(A, B)] { type Scope <: From }): builder.State =
     macro StrictStackOps.zip[A, B]
   
-  /** Returns the concatenation of this and another collection.
+  /** Returns a copy of this $collection with an appended element.
+    * 
+    * @param  elem      the element to append to these elements.
+    * @param  builder   the implicit accumulator for concatenated elements.
+    * @return these elements with `elem` appended.
+    * @group  Combining
+    */
+  def :+ (elem: A)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
+    macro StrictEnumeratorOps.:+[A]
+  
+  /** Returns a copy of this $collection with a prepended element.
+    * 
+    * @param  elem      the element to prepend to these elements.
+    * @param  builder   the implicit accumulator for concatenated elements.
+    * @return these elements with `elem` prepended.
+    * @group  Combining
+    */
+  def +: (elem: A)(implicit builder: Builder[A] { type Scope <: From }): builder.State =
+    macro StrictEnumeratorOps.+:[A]
+  
+  /** Returns the concatenation of this and another stack.
     * 
     * @param  those     the elements to append to these elements.
     * @param  builder   the implicit accumulator for concatenated elements.
     * @return the accumulated elements of both collections.
     * @group  Combining
     */
-  def ++ [B >: A](those: Enumerator[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
+  def ++ [B >: A](those: Stack[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
     macro StrictEnumeratorOps.++[B]
 }
 

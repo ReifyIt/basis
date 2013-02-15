@@ -7,6 +7,11 @@
 
 package basis
 
+import basis.collections._
+import basis.runtime._
+
+import scala.reflect.ClassTag
+
 /** Specialized collection implementations.
   * 
   * @groupprio  Surrogates    1
@@ -17,11 +22,6 @@ package basis
 package object containers extends basis.containers.Library1
 
 package containers {
-  import basis.collections._
-  import basis.runtime._
-  
-  import scala.reflect.ClassTag
-  
   private[containers] abstract class Library1 extends Library2 {
     /** The default [[Enumerator]] factory.
       * @group Collections */
