@@ -205,12 +205,13 @@ private[sequential] object StrictIndexOps {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Index[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, sequence :: Nil) = prefix.tree
-    val IndexType =
-      appliedType(
-        mirror.staticClass("basis.collections.Index").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(typeCheck(sequence, IndexType))(WeakTypeTag(IndexType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val IndexATag =
+      WeakTypeTag[Index[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Index").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Index[A]](typeCheck(these, weakTypeOf[Index[A]]))
   }
   
   def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]

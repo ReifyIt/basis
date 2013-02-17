@@ -160,22 +160,24 @@ private[sequential] object GeneralContainerOps {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Container[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, container :: Nil) = prefix.tree
-    val ContainerType =
-      appliedType(
-        mirror.staticClass("basis.collections.Container").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(typeCheck(container, ContainerType))(WeakTypeTag(ContainerType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val ContainerATag =
+      WeakTypeTag[Container[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Container").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Container[A]](typeCheck(these, weakTypeOf[Container[A]]))
   }
   
-  private def iterator[A : c.WeakTypeTag](c: Context)(container: c.Expr[Container[A]]): c.Expr[Iterator[A]] = {
+  private def iterator[A : c.WeakTypeTag](c: Context)(these: c.Expr[Container[A]]): c.Expr[Iterator[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val IteratorType =
-      appliedType(
-        mirror.staticClass("basis.collections.Iterator").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(Select(container.tree, "iterator"))(WeakTypeTag(IteratorType))
+    implicit val IteratorATag =
+      WeakTypeTag[Iterator[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Iterator").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Iterator[A]](Select(these.tree, "iterator": TermName))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]

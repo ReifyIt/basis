@@ -155,6 +155,5 @@ final class StrictCollectionOps[+A, -From](val these: Collection[A]) extends Any
     * @group  Combining
     */
   def ++ [B >: A](those: Collection[B])(implicit builder: Builder[B] { type Scope <: From }): builder.State =
-    new StrictEnumeratorOps[B, From](these).++[B](those)(builder)
-  //new StrictEnumeratorOps[A, From](these).++[B](those)(builder) // SI-6482
+    new StrictEnumeratorOps[A, From](these).++[B](those)(builder)
 }

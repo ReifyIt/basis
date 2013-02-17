@@ -196,9 +196,13 @@ private[sequential] object GeneralArrayOps {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Array[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, array :: Nil) = prefix.tree
-    val ArrayType = appliedType(mirror.staticClass("scala.Array").toType, weakTypeOf[A] :: Nil)
-    Expr(typeCheck(array, ArrayType))(WeakTypeTag(ArrayType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val ArrayATag =
+      WeakTypeTag[Array[A]](
+        appliedType(
+          mirror.staticClass("scala.Array").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Array[A]](typeCheck(these, weakTypeOf[Array[A]]))
   }
   
   def isEmpty[A : c.WeakTypeTag](c: Context): c.Expr[Boolean] =

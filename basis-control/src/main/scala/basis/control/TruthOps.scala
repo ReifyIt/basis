@@ -33,17 +33,23 @@ private[control] object TruthMacros {
   private def unApply(c: Context): c.Expr[Truth] = {
     import c.{Expr, mirror, prefix, typeCheck, WeakTypeTag}
     import c.universe._
-    val Apply(_, truth :: Nil) = prefix.tree
-    val BasisControlTpe = mirror.staticPackage("basis.control").moduleClass.typeSignature
-    val TruthTpe = BasisControlTpe.member(newTypeName("Truth")).asType.toType
-    Expr[Truth](typeCheck(truth, TruthTpe))(WeakTypeTag(TruthTpe))
+    val Apply(_, self :: Nil) = prefix.tree
+    implicit val TruthTag =
+      WeakTypeTag[Truth](
+        mirror.staticPackage("basis.control").moduleClass.typeSignature.
+          member(newTypeName("Truth")).asType.toType)
+    Expr[Truth](typeCheck(self, weakTypeOf[Truth]))
   }
   
   def TruthOps(c: Context)(self: c.Expr[Truth]): c.Expr[TruthOps] = {
     import c.{Expr, mirror, WeakTypeTag}
     import c.universe._
-    val TruthOpsTpe = mirror.staticClass("basis.control.TruthOps").toType
-    Expr[TruthOps](New(TruthOpsTpe, self.tree))(WeakTypeTag(TruthOpsTpe))
+    implicit val TruthOpsTag =
+      WeakTypeTag[TruthOps](mirror.staticClass("basis.control.TruthOps").toType)
+    Expr[TruthOps](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[TruthOps])), nme.CONSTRUCTOR),
+        self.tree :: Nil))
   }
   
   def isTrue(c: Context): c.Expr[Boolean] = {
@@ -51,7 +57,7 @@ private[control] object TruthMacros {
     import c.universe._
     Expr[Boolean](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "True"), "eq"),
+        Select(Select(BasisControl(c), "True": TermName), "eq": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -60,7 +66,12 @@ private[control] object TruthMacros {
     import c.universe._
     Expr[Boolean](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "False"), "eq"),
+        Select(Select(BasisControl(c), "False": TermName), "eq": TermName),
         unApply(c).tree :: Nil))
+  }
+  
+  private def BasisControl(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "control": TermName)
   }
 }

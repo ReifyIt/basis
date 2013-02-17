@@ -160,12 +160,13 @@ private[sequential] object GeneralSeqOps {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Seq[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, sequence :: Nil) = prefix.tree
-    val SeqType =
-      appliedType(
-        mirror.staticClass("basis.collections.Seq").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(typeCheck(sequence, SeqType))(WeakTypeTag(SeqType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val SeqATag =
+      WeakTypeTag[Seq[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Seq").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Seq[A]](typeCheck(these, weakTypeOf[Seq[A]]))
   }
   
   def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSeqOps[A, Seq[_]]] =

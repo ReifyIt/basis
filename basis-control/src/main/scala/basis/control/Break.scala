@@ -12,6 +12,6 @@ package basis.control
   * @author Chris Sachs
   * @group  Imperative
   */
-class Break extends Throwable {
-  override def fillInStackTrace(): Throwable = this
+class Break extends Throwable(null, null, false, false) {
+  override def toString: String = "Break"
 }

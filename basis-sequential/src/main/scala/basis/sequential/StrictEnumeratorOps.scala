@@ -187,12 +187,13 @@ private[sequential] object StrictEnumeratorOps {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Enumerator[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, enumerator :: Nil) = prefix.tree
-    val EnumeratorType =
-      appliedType(
-        mirror.staticClass("basis.collections.Enumerator").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(typeCheck(enumerator, EnumeratorType))(WeakTypeTag(EnumeratorType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val EnumeratorATag =
+      WeakTypeTag[Enumerator[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Enumerator").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Enumerator[A]](typeCheck(these, weakTypeOf[Enumerator[A]]))
   }
   
   def :+ [A : c.WeakTypeTag]

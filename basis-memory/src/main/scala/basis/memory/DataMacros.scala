@@ -34,7 +34,7 @@ private[memory] class DataMacros[C <: Context](val context: C) {
   val PaddedDoubleTpe = mirror.staticModule("basis.memory.Struct.PaddedDouble").moduleClass.asType.toType
   
   def load(data: Tree, address: Tree)(f: Tree)(fieldList: List[Expr[Struct[_]]]): Tree = {
-    val pointer = newTermName(fresh("pointer$"))
+    val pointer = fresh("pointer$"): TermName
     var fields = fieldList
     val loads = List.newBuilder[Tree]
     loads += loadField(data, Ident(pointer))(fields.head)
@@ -44,14 +44,22 @@ private[memory] class DataMacros[C <: Context](val context: C) {
         case (Literal(Constant(offset: Long)), Literal(Constant(alignment: Long))) if base >= 0L =>
           val delta = align(base + offset, alignment) - base
           base += delta
-          Apply(Select(Ident(pointer), "$plus"), Literal(Constant(delta)) :: Nil)
+          Apply(
+            Select(Ident(pointer), ("+": TermName).encodedName),
+            Literal(Constant(delta)) :: Nil)
         case (offset, alignment) =>
           base = -1L
           Apply(
-            Select(Ident(pointer), "$plus"),
+            Select(Ident(pointer), ("+": TermName).encodedName),
             Apply(
-              Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "memory"), nme.PACKAGE), "align"),
-              Apply(Select(Apply(Select(Ident(pointer), "$minus"), address :: Nil), "$plus"), offset :: Nil) ::
+              Select(BasisMemory, "align": TermName),
+              Apply(
+                Select(
+                  Apply(
+                    Select(Ident(pointer), ("-": TermName).encodedName),
+                    address :: Nil),
+                  ("+": TermName).encodedName),
+                offset :: Nil) ::
               alignment :: Nil) :: Nil)
       }
       fields = fields.tail
@@ -61,7 +69,7 @@ private[memory] class DataMacros[C <: Context](val context: C) {
   }
   
   def store(data: Tree, address: Tree)(valueList: List[Tree])(fieldList: List[Expr[Struct[_]]]): Tree = {
-    val pointer = newTermName(fresh("pointer$"))
+    val pointer = fresh("pointer$"): TermName
     var values = valueList
     var fields = fieldList
     val stores = List.newBuilder[Tree]
@@ -72,14 +80,22 @@ private[memory] class DataMacros[C <: Context](val context: C) {
         case (Literal(Constant(offset: Long)), Literal(Constant(alignment: Long))) if base >= 0L =>
           val delta = align(base + offset, alignment) - base
           base += delta
-          Apply(Select(Ident(pointer), "$plus"), Literal(Constant(delta)) :: Nil)
+          Apply(
+            Select(Ident(pointer), ("+": TermName).encodedName),
+            Literal(Constant(delta)) :: Nil)
         case (offset, alignment) =>
           base = -1L
           Apply(
-            Select(Ident(pointer), "$plus"),
+            Select(Ident(pointer), ("+": TermName).encodedName),
             Apply(
-              Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "memory"), nme.PACKAGE), "align"),
-              Apply(Select(Apply(Select(Ident(pointer), "$minus"), address :: Nil), "$plus"), offset :: Nil) ::
+              Select(BasisMemory, "align": TermName),
+              Apply(
+                Select(
+                  Apply(
+                    Select(Ident(pointer), ("-": TermName).encodedName),
+                    address :: Nil),
+                  ("+": TermName).encodedName),
+                offset :: Nil) ::
               alignment :: Nil) :: Nil)
       }
       values = values.tail
@@ -93,63 +109,63 @@ private[memory] class DataMacros[C <: Context](val context: C) {
   def loadField(data: Tree, address: Tree)(field: Expr[Struct[_]]): Tree = {
     val fieldType = field.actualType
     if (fieldType =:= PackedByteTpe)
-      Apply(Select(data, "loadByte"), address :: Nil)
+      Apply(Select(data, "loadByte": TermName), address :: Nil)
     else if (fieldType =:= PackedShortTpe)
-      Apply(Select(data, "loadUnalignedShort"), address :: Nil)
+      Apply(Select(data, "loadUnalignedShort": TermName), address :: Nil)
     else if (fieldType =:= PackedIntTpe)
-      Apply(Select(data, "loadUnalignedInt"), address :: Nil)
+      Apply(Select(data, "loadUnalignedInt": TermName), address :: Nil)
     else if (fieldType =:= PackedLongTpe)
-      Apply(Select(data, "loadUnalignedLong"), address :: Nil)
+      Apply(Select(data, "loadUnalignedLong": TermName), address :: Nil)
     else if (fieldType =:= PackedFloatTpe)
-      Apply(Select(data, "loadUnalignedFloat"), address :: Nil)
+      Apply(Select(data, "loadUnalignedFloat": TermName), address :: Nil)
     else if (fieldType =:= PackedDoubleTpe)
-      Apply(Select(data, "loadUnalignedDouble"), address :: Nil)
+      Apply(Select(data, "loadUnalignedDouble": TermName), address :: Nil)
     else if (fieldType =:= PackedBooleanTpe)
       Apply(
-        Select(Apply(Select(data, "loadByte"), address :: Nil), "$eq$eq"),
+        Select(Apply(Select(data, "loadByte": TermName), address :: Nil), ("==": TermName).encodedName),
         Literal(Constant(0)) :: Nil)
     else if (fieldType =:= PaddedShortTpe)
-      Apply(Select(data, "loadShort"), address :: Nil)
+      Apply(Select(data, "loadShort": TermName), address :: Nil)
     else if (fieldType =:= PaddedIntTpe)
-      Apply(Select(data, "loadInt"), address :: Nil)
+      Apply(Select(data, "loadInt": TermName), address :: Nil)
     else if (fieldType =:= PaddedLongTpe)
-      Apply(Select(data, "loadLong"), address :: Nil)
+      Apply(Select(data, "loadLong": TermName), address :: Nil)
     else if (fieldType =:= PaddedFloatTpe)
-      Apply(Select(data, "loadFloat"), address :: Nil)
+      Apply(Select(data, "loadFloat": TermName), address :: Nil)
     else if (fieldType =:= PaddedDoubleTpe)
-      Apply(Select(data, "loadDouble"), address :: Nil)
-    else Apply(Select(field.tree, "load"), data :: address :: Nil)
+      Apply(Select(data, "loadDouble": TermName), address :: Nil)
+    else Apply(Select(field.tree, "load": TermName), data :: address :: Nil)
   }
   
   def storeField(data: Tree, address: Tree, value: Tree)(field: Expr[Struct[_]]): Tree = {
     val fieldType = field.actualType
     if (fieldType =:= PackedByteTpe)
-      Apply(Select(data, "storeByte"), address :: value :: Nil)
+      Apply(Select(data, "storeByte": TermName), address :: value :: Nil)
     else if (fieldType =:= PackedShortTpe)
-      Apply(Select(data, "storeUnalignedShort"), address :: value :: Nil)
+      Apply(Select(data, "storeUnalignedShort": TermName), address :: value :: Nil)
     else if (fieldType =:= PackedIntTpe)
-      Apply(Select(data, "storeUnalignedInt"), address :: value :: Nil)
+      Apply(Select(data, "storeUnalignedInt": TermName), address :: value :: Nil)
     else if (fieldType =:= PackedLongTpe)
-      Apply(Select(data, "storeUnalignedLong"), address :: value :: Nil)
+      Apply(Select(data, "storeUnalignedLong": TermName), address :: value :: Nil)
     else if (fieldType =:= PackedFloatTpe)
-      Apply(Select(data, "storeUnalignedFloat"), address :: value :: Nil)
+      Apply(Select(data, "storeUnalignedFloat": TermName), address :: value :: Nil)
     else if (fieldType =:= PackedDoubleTpe)
-      Apply(Select(data, "storeUnalignedDouble"), address :: value :: Nil)
+      Apply(Select(data, "storeUnalignedDouble": TermName), address :: value :: Nil)
     else if (fieldType =:= PackedBooleanTpe)
       Apply(
-        Select(data, "storeByte"),
+        Select(data, "storeByte": TermName),
         address :: If(value, Literal(Constant(0.toByte)), Literal(Constant(-1.toByte))) :: Nil)
     else if (fieldType =:= PaddedShortTpe)
-      Apply(Select(data, "storeShort"), address :: value :: Nil)
+      Apply(Select(data, "storeShort": TermName), address :: value :: Nil)
     else if (fieldType =:= PaddedIntTpe)
-      Apply(Select(data, "storeInt"), address :: value :: Nil)
+      Apply(Select(data, "storeInt": TermName), address :: value :: Nil)
     else if (fieldType =:= PaddedLongTpe)
-      Apply(Select(data, "storeLong"), address :: value :: Nil)
+      Apply(Select(data, "storeLong": TermName), address :: value :: Nil)
     else if (fieldType =:= PaddedFloatTpe)
-      Apply(Select(data, "storeFloat"), address :: value :: Nil)
+      Apply(Select(data, "storeFloat": TermName), address :: value :: Nil)
     else if (fieldType =:= PaddedDoubleTpe)
-      Apply(Select(data, "storeDouble"), address :: value :: Nil)
-    else Apply(Select(field.tree, "store"), data :: address :: value :: Nil)
+      Apply(Select(data, "storeDouble": TermName), address :: value :: Nil)
+    else Apply(Select(field.tree, "store": TermName), data :: address :: value :: Nil)
   }
   
   def alignOf(field: Expr[Struct[_]]): Tree = {
@@ -170,7 +186,7 @@ private[memory] class DataMacros[C <: Context](val context: C) {
     else if (fieldType =:= PaddedLongTpe  ||
              fieldType =:= PaddedDoubleTpe)
       Literal(Constant(8L))
-    else Select(field.tree, "alignment")
+    else Select(field.tree, "alignment": TermName)
   }
   
   def sizeOf(field: Expr[Struct[_]]): Tree = {
@@ -191,8 +207,11 @@ private[memory] class DataMacros[C <: Context](val context: C) {
              fieldType =:= PackedDoubleTpe ||
              fieldType =:= PaddedDoubleTpe)
       Literal(Constant(8L))
-    else Select(field.tree, "size")
+    else Select(field.tree, "size": TermName)
   }
+  
+  private def BasisMemory: Tree =
+    Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "memory": TermName)
 }
 
 private[memory] object DataMacros {

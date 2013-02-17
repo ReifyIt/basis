@@ -47,7 +47,7 @@ private[util] object IntMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "abs"),
+        Select(JavaLangMath(c), "abs": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -56,7 +56,7 @@ private[util] object IntMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "min"),
+        Select(JavaLangMath(c), "min": TermName),
         unApply(c).tree :: b.tree :: Nil))
   }
   
@@ -65,7 +65,7 @@ private[util] object IntMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "max"),
+        Select(JavaLangMath(c), "max": TermName),
         unApply(c).tree :: b.tree :: Nil))
   }
   
@@ -74,7 +74,7 @@ private[util] object IntMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Integer"), "signum"),
+        Select(JavaLangInteger(c), "signum": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -83,7 +83,7 @@ private[util] object IntMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Integer"), "bitCount"),
+        Select(JavaLangInteger(c), "bitCount": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -92,7 +92,7 @@ private[util] object IntMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Integer"), "numberOfLeadingZeros"),
+        Select(JavaLangInteger(c), "numberOfLeadingZeros": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -101,7 +101,7 @@ private[util] object IntMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Integer"), "numberOfTrailingZeros"),
+        Select(JavaLangInteger(c), "numberOfTrailingZeros": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -110,7 +110,22 @@ private[util] object IntMacros {
     import c.universe._
     Expr[Float](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float"), "intBitsToFloat"),
+        Select(JavaLangFloat(c), "intBitsToFloat": TermName),
         unApply(c).tree :: Nil))
+  }
+  
+  private def JavaLangFloat(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Float": TermName)
+  }
+  
+  private def JavaLangInteger(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Integer": TermName)
+  }
+  
+  private def JavaLangMath(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Math": TermName)
   }
 }

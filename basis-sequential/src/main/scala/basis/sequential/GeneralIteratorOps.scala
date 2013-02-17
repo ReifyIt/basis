@@ -160,12 +160,13 @@ private[sequential] object GeneralIteratorOps {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Iterator[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, iterator :: Nil) = prefix.tree
-    val IteratorType =
-      appliedType(
-        mirror.staticClass("basis.collections.Iterator").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(typeCheck(iterator, IteratorType))(WeakTypeTag(IteratorType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val IteratorATag =
+      WeakTypeTag[Iterator[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Iterator").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Iterator[A]](typeCheck(these, weakTypeOf[Iterator[A]]))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]

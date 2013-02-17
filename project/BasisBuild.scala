@@ -149,14 +149,13 @@ object BasisBuild extends Build {
   )
   
   lazy val scalaSettings = Seq(
-    scalaVersion   := "2.10.0",
+    scalaVersion   := "2.10.1-RC1",
     scalacOptions ++= Seq("-language:_", "-Yno-predef")
   )
   
   lazy val compileSettings = Seq(
     scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
-    libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _ % "provided"),
-    libraryDependencies  += "org.scalatest" % "scalatest_2.10.0" % "1.8" % "test"
+    libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _ % "provided")
   )
   
   lazy val docSettings = Seq(

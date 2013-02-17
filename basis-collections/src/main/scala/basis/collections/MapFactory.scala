@@ -56,13 +56,13 @@ private[collections] object MapFactory {
     import c.{Expr, prefix, Tree, weakTypeOf, WeakTypeTag}
     import c.universe._
     
-    var b: Tree = TypeApply(Select(prefix.tree, "Builder"), TypeTree(weakTypeOf[A]) :: TypeTree(weakTypeOf[T]) :: Nil)
-    b = Apply(Select(b, "expect"), Literal(Constant(entries.length)) :: Nil)
+    var b = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: TypeTree(weakTypeOf[T]) :: Nil): Tree
+    b = Apply(Select(b, "expect": TermName), Literal(Constant(entries.length)) :: Nil)
     
     val xs = entries.iterator
-    while (xs.hasNext) b = Apply(Select(b, "$plus$eq"), xs.next().tree :: Nil)
+    while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
     
     implicit val CCATTag = WeakTypeTag[CC[A, T]](appliedType(weakTypeOf[CC[_, _]], weakTypeOf[A] :: weakTypeOf[T] :: Nil))
-    Expr[CC[A, T]](Select(b, "state"))
+    Expr[CC[A, T]](Select(b, "state": TermName))
   }
 }

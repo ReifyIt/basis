@@ -33,23 +33,24 @@ private[control] object Begin {
     import c.{Expr, fresh, prefix, TypeTag}
     import c.universe._
     val signal = newTermName(fresh("signal$"))
-    Expr(
+    Expr[Unit](
       Try(
         op.tree,
         CaseDef(
-          Bind(
-            signal,
-            Typed(
-              Ident(nme.WILDCARD),
-              Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), newTypeName("Break")))),
-          Apply(Select(Ident(signal), "eq"), Select(prefix.tree, "signal") :: Nil),
+          Bind(signal, Typed(Ident(nme.WILDCARD), Select(BasisControl(c), "Break": TypeName))),
+          Apply(Select(Ident(signal), "eq": TermName), Select(prefix.tree, "signal": TermName) :: Nil),
           EmptyTree) :: Nil,
-        EmptyTree))(TypeTag.Unit)
+        EmptyTree))
   }
   
   def break(c: Context { type PrefixType <: Begin })(): c.Expr[Nothing] = {
-    import c.{Expr, prefix, TypeTag}
+    import c.{Expr, prefix, WeakTypeTag}
     import c.universe._
-    Expr(Throw(Select(prefix.tree, "signal")))(TypeTag.Nothing)
+    Expr[Nothing](Throw(Select(prefix.tree, "signal": TermName)))(WeakTypeTag.Nothing)
+  }
+  
+  private def BasisControl(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "control": TermName)
   }
 }

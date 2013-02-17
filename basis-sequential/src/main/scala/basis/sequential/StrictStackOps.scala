@@ -196,12 +196,13 @@ private[sequential] object StrictStackOps {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Stack[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, sequence :: Nil) = prefix.tree
-    val StackType =
-      appliedType(
-        mirror.staticClass("basis.collections.Stack").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(typeCheck(sequence, StackType))(WeakTypeTag(StackType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val StackATag =
+      WeakTypeTag[Stack[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Stack").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Stack[A]](typeCheck(these, weakTypeOf[Stack[A]]))
   }
   
   def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]

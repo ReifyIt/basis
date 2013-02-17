@@ -35,11 +35,11 @@ private[sequential] final class EnumeratorMacros[C <: Context](val context: C) {
             Apply(
               Select(
                 builder.tree,
-                "$plus$plus$eq"),
+                ("++=": TermName).encodedName),
               these.tree :: Nil),
-            "$plus$eq"),
+            ("+=": TermName).encodedName),
           elem.tree :: Nil),
-        "state"))
+        "state": TermName))
   }
   
   def +: [A]
@@ -55,11 +55,11 @@ private[sequential] final class EnumeratorMacros[C <: Context](val context: C) {
             Apply(
               Select(
                 builder.tree,
-                "$plus$eq"),
+                ("+=": TermName).encodedName),
               elem.tree :: Nil),
-            "$plus$plus$eq"),
+            ("++=": TermName).encodedName),
           these.tree :: Nil),
-        "state"))
+        "state": TermName))
   }
   
   def ++ [A]
@@ -75,20 +75,20 @@ private[sequential] final class EnumeratorMacros[C <: Context](val context: C) {
             Apply(
               Select(
                 builder.tree,
-                "$plus$plus$eq"),
+                ("++=": TermName).encodedName),
               these.tree :: Nil),
-            "$plus$plus$eq"),
+            ("++=": TermName).encodedName),
           those.tree :: Nil),
-        "state"))
+        "state": TermName))
   }
   
-  protected[this] def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
+  protected def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
     WeakTypeTag[builder.value.type](builder.tree.symbol match {
       case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
       case _ => builder.actualType
     })
   
-  protected[this] def BuilderStateTag
+  protected def BuilderStateTag
       (builder: Expr[Builder[_]])
       (implicit BuilderTypeTag: WeakTypeTag[builder.value.type])
     : WeakTypeTag[builder.value.State] = {

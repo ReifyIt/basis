@@ -31,7 +31,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * @group  Traversing
     */
   def foreach[U](f: A => U): Unit =
-    new GeneralEnumeratorOps[A](these).foreach(f)
+    new GeneralEnumeratorOps(these).foreach(f)
   
   /** Returns the repeated application of an associative binary operator
     * between an identity value and all elements of this $collection.
@@ -42,8 +42,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B =
-    new GeneralEnumeratorOps[B](these).fold(z)(op)
-  //new GeneralEnumeratorOps[A](these).fold(z)(op) // SI-6482
+    new GeneralEnumeratorOps(these).fold(z)(op)
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this non-empty $collection.
@@ -53,8 +52,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduce[B >: A](op: (B, B) => B): B =
-    new GeneralEnumeratorOps[B](these).reduce[B](op)
-  //new GeneralEnumeratorOps[A](these).reduce[B](op) // SI-6482
+    new GeneralEnumeratorOps(these).reduce(op)
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this $collection.
@@ -64,8 +62,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
-    new GeneralEnumeratorOps[B](these).mayReduce[B](op)
-  //new GeneralEnumeratorOps[A](these).mayReduce[B](op) // SI-6482
+    new GeneralEnumeratorOps(these).mayReduce(op)
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this $collection.
@@ -86,8 +83,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B =
-    new GeneralEnumeratorOps[B](these).reduceLeft[B](op.asInstanceOf[(B, B) => B])
-  //new GeneralEnumeratorOps[A](these).reduceLeft[B](op) // SI-6482
+    new GeneralEnumeratorOps(these).reduceLeft(op)
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this $collection.
@@ -97,8 +93,7 @@ final class GeneralCollectionOps[+A](val these: Collection[A]) extends AnyVal {
     * @group  Reducing
     */
   def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
-    new GeneralEnumeratorOps[B](these).mayReduceLeft[B](op.asInstanceOf[(B, B) => B])
-  //new GeneralEnumeratorOps[A](these).mayReduceLeft[B](op) // SI-6482
+    new GeneralEnumeratorOps(these).mayReduceLeft(op)
   
   /** Returns the first element of this $collection that satisfies a predicate.
     * 

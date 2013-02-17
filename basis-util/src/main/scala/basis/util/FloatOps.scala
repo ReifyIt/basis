@@ -43,7 +43,7 @@ private[util] object FloatMacros {
     import c.universe._
     Expr[Boolean](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float"), "isNaN"),
+        Select(JavaLangFloat(c), "isNaN": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -52,7 +52,7 @@ private[util] object FloatMacros {
     import c.universe._
     Expr[Boolean](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float"), "isInfinite"),
+        Select(JavaLangFloat(c), "isInfinite": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -61,7 +61,7 @@ private[util] object FloatMacros {
     import c.universe._
     Expr[Float](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "abs"),
+        Select(JavaLangMath(c), "abs": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -70,7 +70,7 @@ private[util] object FloatMacros {
     import c.universe._
     Expr[Float](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "min"),
+        Select(JavaLangMath(c), "min": TermName),
         unApply(c).tree :: y.tree :: Nil))
   }
   
@@ -79,7 +79,7 @@ private[util] object FloatMacros {
     import c.universe._
     Expr[Float](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "max"),
+        Select(JavaLangMath(c), "max": TermName),
         unApply(c).tree :: y.tree :: Nil))
   }
   
@@ -88,7 +88,17 @@ private[util] object FloatMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Float"), "floatToIntBits"),
+        Select(JavaLangFloat(c), "floatToIntBits": TermName),
         unApply(c).tree :: Nil))
+  }
+  
+  private def JavaLangFloat(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Float": TermName)
+  }
+  
+  private def JavaLangMath(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Math": TermName)
   }
 }

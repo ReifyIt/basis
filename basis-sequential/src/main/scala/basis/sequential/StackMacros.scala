@@ -27,17 +27,17 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (these: Expr[Stack[A]])
       (f: Expr[A => U])
     : Expr[Unit] = {
-    val xs   = newTermName(fresh("xs$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val loop = fresh("loop$"): TermName
     Expr[Unit](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) :: Nil,
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              Apply(f.tree, Select(Ident(xs), "head") :: Nil) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Apply(f.tree, Select(Ident(xs), "head": TermName) :: Nil) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree))))
   }
@@ -47,19 +47,19 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (z: Expr[B])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
-    val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("r$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val r    = fresh("r$"): TermName
+    val loop = fresh("loop$"): TermName
     Expr[B](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head") :: Nil)) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head": TermName) :: Nil)) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Ident(r)))
@@ -69,27 +69,27 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (these: Expr[Stack[A]])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
-    val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("r$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val r    = fresh("r$"): TermName
+    val loop = fresh("loop$"): TermName
     Expr[B](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         If(
-          Select(Ident(xs), "isEmpty"),
+          Select(Ident(xs), "isEmpty": TermName),
           Throw(
-            ApplyConstructor(
-              Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), newTypeName("UnsupportedOperationException")),
+            Apply(
+              Select(New(TypeTree(weakTypeOf[UnsupportedOperationException])), nme.CONSTRUCTOR),
               Literal(Constant("Empty reduce.")) :: Nil)),
           EmptyTree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Select(Ident(xs), "head")) ::
-        Assign(Ident(xs), Select(Ident(xs), "tail")) ::
+        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Select(Ident(xs), "head": TermName)) ::
+        Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head") :: Nil)) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head": TermName) :: Nil)) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Ident(r)))
@@ -99,55 +99,52 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (these: Expr[Stack[A]])
       (op: Expr[(B, A) => B])
     : Expr[Maybe[B]] = {
-    val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("r$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val r    = fresh("r$"): TermName
+    val loop = fresh("loop$"): TermName
     Expr[Maybe[B]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) :: Nil,
         If(
-          Select(Ident(xs), "isEmpty"),
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap"),
+          Select(Ident(xs), "isEmpty": TermName),
+          Select(BasisControl, "Trap": TermName),
           Block(
-            ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Select(Ident(xs), "head")) ::
-            Assign(Ident(xs), Select(Ident(xs), "tail")) ::
+            ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Select(Ident(xs), "head": TermName)) ::
+            Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) ::
             LabelDef(loop, Nil,
               If(
-                Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+                Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
                 Block(
-                  Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head") :: Nil)) ::
-                  Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                  Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head": TermName) :: Nil)) ::
+                  Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                   Apply(Ident(loop), Nil)),
                 EmptyTree)) :: Nil,
-            Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"), Ident(r) :: Nil)))))
+            Apply(Select(BasisControl, "Bind": TermName), Ident(r) :: Nil)))))
   }
   
   def find[A : WeakTypeTag]
       (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Maybe[A]] = {
-    val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("r$"))
-    val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("x$"))
+    val xs   = fresh("xs$"): TermName
+    val r    = fresh("r$"): TermName
+    val loop = fresh("loop$"): TermName
+    val x    = fresh("x$"): TermName
     implicit val MaybeATag = MaybeTag[A]
     Expr[Maybe[A]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[A]]),
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap")) ::
+        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[A]]), Select(BasisControl, "Trap": TermName)) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) :: Nil,
+              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) :: Nil,
               If(
                 Apply(p.tree, Ident(x) :: Nil),
-                Assign(
-                  Ident(r),
-                  Apply(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"), Ident(x) :: Nil)),
+                Assign(Ident(r), Apply(Select(BasisControl, "Bind": TermName), Ident(x) :: Nil)),
                 Block(
-                  Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                  Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                   Apply(Ident(loop), Nil)))),
             EmptyTree)) :: Nil,
         Ident(r)))
@@ -157,20 +154,20 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
-    val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("r$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val r    = fresh("r$"): TermName
+    val loop = fresh("loop$"): TermName
     Expr[Boolean](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             If(
-              Apply(p.tree, Select(Ident(xs), "head") :: Nil),
+              Apply(p.tree, Select(Ident(xs), "head": TermName) :: Nil),
               Block(
-                Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                 Apply(Ident(loop), Nil)),
               Assign(Ident(r), Literal(Constant(false)))),
             EmptyTree)) :: Nil,
@@ -181,21 +178,21 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
-    val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("r$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val r    = fresh("r$"): TermName
+    val loop = fresh("loop$"): TermName
     Expr[Boolean](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             If(
-              Apply(p.tree, Select(Ident(xs), "head") :: Nil),
+              Apply(p.tree, Select(Ident(xs), "head": TermName) :: Nil),
               Assign(Ident(r), Literal(Constant(true))),
               Block(
-                Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                 Apply(Ident(loop), Nil))),
             EmptyTree)) :: Nil,
         Ident(r)))
@@ -205,22 +202,22 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (these: Expr[Stack[A]])
       (p: Expr[A => Boolean])
     : Expr[Int] = {
-    val xs   = newTermName(fresh("xs$"))
-    val t    = newTermName(fresh("t$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val t    = fresh("t$"): TermName
+    val loop = fresh("loop$"): TermName
     Expr[Int](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
               If(
-                Apply(p.tree, Select(Ident(xs), "head") :: Nil),
-                Assign(Ident(t), Apply(Select(Ident(t), "$plus"), Literal(Constant(1)) :: Nil)),
+                Apply(p.tree, Select(Ident(xs), "head": TermName) :: Nil),
+                Assign(Ident(t), Apply(Select(Ident(t), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)),
                 EmptyTree) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
         Ident(t)))
@@ -230,33 +227,33 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (these: Expr[Stack[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Maybe[B]] = {
-    val xs   = newTermName(fresh("xs$"))
-    val r    = newTermName(fresh("r$"))
-    val f    = newTermName(fresh("q$"))
-    val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("x$"))
+    val xs   = fresh("xs$"): TermName
+    val r    = fresh("r$"): TermName
+    val f    = fresh("q$"): TermName
+    val loop = fresh("loop$"): TermName
+    val x    = fresh("x$"): TermName
     implicit val MaybeBTag = MaybeTag[B]
     Expr[Maybe[B]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Stack[A]]), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[B]]),
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap")) ::
+        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[B]]), Select(BasisControl, "Trap": TermName)) ::
         ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) :: Nil,
+              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) :: Nil,
               If(
-                Apply(Select(Ident(f), "isDefinedAt"), Ident(x) :: Nil),
+                Apply(Select(Ident(f), "isDefinedAt": TermName), Ident(x) :: Nil),
                 Assign(
                   Ident(r),
                   Apply(
-                    Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Free"),
-                    Apply(Select(Ident(f), "applyOrElse"), Ident(x) ::
-                      Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil)),
+                    Select(BasisControl, "Bind": TermName),
+                    Apply(
+                      Select(Ident(f), "applyOrElse": TermName),
+                      Ident(x) :: Select(ScalaPartialFunction, "empty": TermName) :: Nil) :: Nil)),
                 Block(
-                  Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                  Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                   Apply(Ident(loop), Nil)))),
             EmptyTree)) :: Nil,
         Ident(r)))
@@ -267,11 +264,11 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (q: Expr[PartialFunction[A, B]])
       (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
-    val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("b$"))
-    val f    = newTermName(fresh("q$"))
-    val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("x$"))
+    val xs   = fresh("xs$"): TermName
+    val b    = fresh("b$"): TermName
+    val f    = fresh("q$"): TermName
+    val loop = fresh("loop$"): TermName
+    val x    = fresh("x$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -281,20 +278,21 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) ::
+              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
               If(
-                Apply(Select(Ident(f), "isDefinedAt"), Ident(x) :: Nil),
+                Apply(Select(Ident(f), "isDefinedAt": TermName), Ident(x) :: Nil),
                 Apply(
-                  Select(Ident(b), "append"),
-                  Apply(Select(Ident(f), "applyOrElse"), Ident(x) ::
-                    Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil),
+                  Select(Ident(b), "append": TermName),
+                  Apply(
+                    Select(Ident(f), "applyOrElse": TermName),
+                    Ident(x) :: Select(ScalaPartialFunction, "empty": TermName) :: Nil) :: Nil),
                 EmptyTree) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def map[A : WeakTypeTag, B]
@@ -302,9 +300,9 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (f: Expr[A => B])
       (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
-    val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("b$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val b    = fresh("b$"): TermName
+    val loop = fresh("loop$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -313,13 +311,15 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              Apply(Select(Ident(b), "append"), Apply(f.tree, Select(Ident(xs), "head") :: Nil) :: Nil) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Apply(
+                Select(Ident(b), "append": TermName),
+                Apply(f.tree, Select(Ident(xs), "head": TermName) :: Nil) :: Nil) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def flatMap[A : WeakTypeTag, B]
@@ -327,9 +327,9 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (f: Expr[A => Enumerator[B]])
       (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
-    val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("b$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val b    = fresh("b$"): TermName
+    val loop = fresh("loop$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -338,13 +338,15 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              Apply(Select(Ident(b), "appendAll"), Apply(f.tree, Select(Ident(xs), "head") :: Nil) :: Nil) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Apply(
+                Select(Ident(b), "appendAll": TermName),
+                Apply(f.tree, Select(Ident(xs), "head": TermName) :: Nil) :: Nil) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def filter[A : WeakTypeTag]
@@ -352,10 +354,10 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
-    val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("b$"))
-    val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("x$"))
+    val xs   = fresh("xs$"): TermName
+    val b    = fresh("b$"): TermName
+    val loop = fresh("loop$"): TermName
+    val x    = fresh("x$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -364,17 +366,17 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) ::
+              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
               If(
                 Apply(p.tree, Ident(x) :: Nil),
-                Apply(Select(Ident(b), "append"), Ident(x) :: Nil),
+                Apply(Select(Ident(b), "append": TermName), Ident(x) :: Nil),
                 EmptyTree) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def dropWhile[A : WeakTypeTag]
@@ -382,11 +384,11 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
-    val xs    = newTermName(fresh("xs$"))
-    val b     = newTermName(fresh("b$"))
-    val loop1 = newTermName(fresh("loop$"))
-    val x     = newTermName(fresh("x$"))
-    val loop2 = newTermName(fresh("loop$"))
+    val xs    = fresh("xs$"): TermName
+    val b     = fresh("b$"): TermName
+    val loop1 = fresh("loop$"): TermName
+    val x     = fresh("x$"): TermName
+    val loop2 = fresh("loop$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -395,24 +397,24 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Apply(Ident(loop1), Nil),
-                Apply(Select(Ident(b), "append"), Ident(x) :: Nil))),
+                Apply(Select(Ident(b), "append": TermName), Ident(x) :: Nil))),
             EmptyTree)) ::
         LabelDef(loop2, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def takeWhile[A : WeakTypeTag]
@@ -420,10 +422,10 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
-    val xs   = newTermName(fresh("xs$"))
-    val b    = newTermName(fresh("b$"))
-    val loop = newTermName(fresh("loop$"))
-    val x    = newTermName(fresh("x$"))
+    val xs   = fresh("xs$"): TermName
+    val b    = fresh("b$"): TermName
+    val loop = fresh("loop$"): TermName
+    val x    = fresh("x$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -432,18 +434,18 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Block(
-                  Apply(Select(Ident(b), "append"), Ident(x) :: Nil) :: Nil,
+                  Apply(Select(Ident(b), "append": TermName), Ident(x) :: Nil) :: Nil,
                   Apply(Ident(loop), Nil)),
                 EmptyTree)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def span[A : WeakTypeTag]
@@ -451,12 +453,12 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (p: Expr[A => Boolean])
       (builder1: Expr[Builder[A]], builder2: Expr[Builder[A]])
     : Expr[(builder1.value.State, builder2.value.State)] = {
-    val xs    = newTermName(fresh("xs$"))
-    val a     = newTermName(fresh("b$"))
-    val b     = newTermName(fresh("b$"))
-    val loop1 = newTermName(fresh("loop$"))
-    val x     = newTermName(fresh("x$"))
-    val loop2 = newTermName(fresh("loop$"))
+    val xs    = fresh("xs$"): TermName
+    val a     = fresh("b$"): TermName
+    val b     = fresh("b$"): TermName
+    val loop1 = fresh("loop$"): TermName
+    val x     = fresh("x$"): TermName
+    val loop2 = fresh("loop$"): TermName
     implicit val builder1TypeTag = BuilderTypeTag(builder1)
     implicit val builder1StateTag = BuilderStateTag(builder1)
     implicit val builder2TypeTag = BuilderTypeTag(builder2)
@@ -468,28 +470,28 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builder2TypeTag.tpe), builder2.tree) ::
         LabelDef(loop1, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head")) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               If(
                 Apply(p.tree, Ident(x) :: Nil),
                 Block(
-                  Apply(Select(Ident(a), "append"), Ident(x) :: Nil) :: Nil,
+                  Apply(Select(Ident(a), "append": TermName), Ident(x) :: Nil) :: Nil,
                   Apply(Ident(loop1), Nil)),
-                Apply(Select(Ident(b), "append"), Ident(x) :: Nil))),
+                Apply(Select(Ident(b), "append": TermName), Ident(x) :: Nil))),
             EmptyTree)) ::
         LabelDef(loop2, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
-        ApplyConstructor(
-          Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Tuple2")),
-          Select(Ident(a), "state") :: Select(Ident(b), "state") :: Nil)))
+        Apply(
+          Select(New(TypeTree(weakTypeOf[(builder1.value.State, builder2.value.State)])), nme.CONSTRUCTOR),
+          Select(Ident(a), "state": TermName) :: Select(Ident(b), "state": TermName) :: Nil)))
   }
   
   def drop[A : WeakTypeTag]
@@ -497,12 +499,12 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (lower: Expr[Int])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
-    val xs    = newTermName(fresh("xs$"))
-    val i     = newTermName(fresh("i$"))
-    val n     = newTermName(fresh("n$"))
-    val b     = newTermName(fresh("b$"))
-    val loop1 = newTermName(fresh("loop$"))
-    val loop2 = newTermName(fresh("loop$"))
+    val xs    = fresh("xs$"): TermName
+    val i     = fresh("i$"): TermName
+    val n     = fresh("n$"): TermName
+    val b     = fresh("b$"): TermName
+    val loop1 = fresh("loop$"): TermName
+    val loop2 = fresh("loop$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -513,24 +515,24 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
-            Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
+            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
             If(
-              Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+              Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
               Block(
-                Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) ::
-                Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
+                Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                 Apply(Ident(loop1), Nil)),
               EmptyTree),
             EmptyTree)) ::
         LabelDef(loop2, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             Block(
-              Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
-              Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+              Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
+              Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
               Apply(Ident(loop2), Nil)),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def take[A : WeakTypeTag]
@@ -538,11 +540,11 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (upper: Expr[Int])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
-    val xs   = newTermName(fresh("xs$"))
-    val i    = newTermName(fresh("i$"))
-    val n    = newTermName(fresh("n$"))
-    val b    = newTermName(fresh("b$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val i    = fresh("i$"): TermName
+    val n    = fresh("n$"): TermName
+    val b    = fresh("b$"): TermName
+    val loop = fresh("loop$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -553,17 +555,17 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
-            Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
+            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
             If(
-              Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+              Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
               Block(
-                Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
-                Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) ::
-                Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
+                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
+                Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                 Apply(Ident(loop), Nil)),
               EmptyTree),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def slice[A : WeakTypeTag]
@@ -571,12 +573,12 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
       (lower: Expr[Int], upper: Expr[Int])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
-    val xs    = newTermName(fresh("xs$"))
-    val i     = newTermName(fresh("i$"))
-    val n     = newTermName(fresh("n$"))
-    val b     = newTermName(fresh("b$"))
-    val loop1 = newTermName(fresh("loop$"))
-    val loop2 = newTermName(fresh("loop$"))
+    val xs    = fresh("xs$"): TermName
+    val i     = fresh("i$"): TermName
+    val n     = fresh("n$"): TermName
+    val b     = fresh("b$"): TermName
+    val loop1 = fresh("loop$"): TermName
+    val loop2 = fresh("loop$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -587,39 +589,39 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
-            Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
+            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
             If(
-              Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+              Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
               Block(
-                Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) ::
-                Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
+                Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                 Apply(Ident(loop1), Nil)),
               EmptyTree),
             EmptyTree)) ::
         Assign(Ident(n), upper.tree) ::
         LabelDef(loop2, Nil,
           If(
-            Apply(Select(Ident(i), "$less"), Ident(n) :: Nil),
+            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
             If(
-              Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+              Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
               Block(
-                Apply(Select(Ident(b), "append"), Select(Ident(xs), "head") :: Nil) ::
-                Assign(Ident(i), Apply(Select(Ident(i), "$plus"), Literal(Constant(1)) :: Nil)) ::
-                Assign(Ident(xs), Select(Ident(xs), "tail")) :: Nil,
+                Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
+                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
+                Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) :: Nil,
                 Apply(Ident(loop2), Nil)),
               EmptyTree),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
   def zip[A : WeakTypeTag, B : WeakTypeTag]
       (these: Expr[Stack[A]], those: Expr[Stack[B]])
       (builder: Expr[Builder[(A, B)]])
     : Expr[builder.value.State] = {
-    val xs   = newTermName(fresh("xs$"))
-    val ys   = newTermName(fresh("ys$"))
-    val b    = newTermName(fresh("b$"))
-    val loop = newTermName(fresh("loop$"))
+    val xs   = fresh("xs$"): TermName
+    val ys   = fresh("ys$"): TermName
+    val b    = fresh("b$"): TermName
+    val loop = fresh("loop$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
@@ -629,30 +631,31 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
-            Select(Select(Ident(xs), "isEmpty"), "unary_$bang"),
+            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
             If(
-              Select(Select(Ident(ys), "isEmpty"), "unary_$bang"),
+              Select(Select(Ident(ys), "isEmpty": TermName), ("unary_!": TermName).encodedName),
               Block(
                 Apply(
-                  Select(Ident(b), "append"),
-                  ApplyConstructor(
-                    Select(Select(Ident(nme.ROOTPKG), "scala"), newTypeName("Tuple2")),
-                    Select(Ident(xs), "head") :: Select(Ident(ys), "head") :: Nil) :: Nil) ::
-                Assign(Ident(xs), Select(Ident(xs), "tail")) ::
-                Assign(Ident(ys), Select(Ident(ys), "tail")) :: Nil,
+                  Select(Ident(b), "append": TermName),
+                  Apply(
+                    Select(New(TypeTree(weakTypeOf[(A, B)])), nme.CONSTRUCTOR),
+                    Select(Ident(xs), "head": TermName) ::
+                    Select(Ident(ys), "head": TermName) :: Nil) :: Nil) ::
+                Assign(Ident(xs), Select(Ident(xs), "tail": TermName)) ::
+                Assign(Ident(ys), Select(Ident(ys), "tail": TermName)) :: Nil,
                 Apply(Ident(loop), Nil)),
               EmptyTree),
             EmptyTree)) :: Nil,
-        Select(Ident(b), "state")))
+        Select(Ident(b), "state": TermName)))
   }
   
-  protected[this] def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
+  protected def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
     WeakTypeTag[builder.value.type](builder.tree.symbol match {
       case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
       case _ => builder.actualType
     })
   
-  protected[this] def BuilderStateTag
+  protected def BuilderStateTag
       (builder: Expr[Builder[_]])
       (implicit BuilderTypeTag: WeakTypeTag[builder.value.type])
     : WeakTypeTag[builder.value.State] = {
@@ -662,22 +665,31 @@ private[sequential] class StackMacros[C <: Context](val context: C) {
     WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
   
-  implicit protected[this] def StackTag[A : WeakTypeTag]: WeakTypeTag[Stack[A]] = {
+  implicit protected def StackTag[A : WeakTypeTag]: WeakTypeTag[Stack[A]] = {
     val StackTpc = mirror.staticClass("basis.collections.Stack").toType
     val StackTpe = appliedType(StackTpc, weakTypeOf[A] :: Nil)
     WeakTypeTag[Stack[A]](StackTpe)
   }
   
-  implicit protected[this] def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {
+  implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {
     val BasisControl = mirror.staticPackage("basis.control").moduleClass
     val MaybeTpc = BasisControl.typeSignature.member(newTypeName("Maybe")).asType.toType
     val MaybeATpe = appliedType(MaybeTpc, weakTypeOf[A] :: Nil)
     WeakTypeTag[Maybe[A]](MaybeATpe)
   }
   
-  implicit private[this] def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
+  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
     val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
     val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
     WeakTypeTag[(A, B)](Tuple2ABTpe)
   }
+  
+  implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] =
+    WeakTypeTag(mirror.staticClass("java.lang.UnsupportedOperationException").toType)
+  
+  private def BasisControl: Tree =
+    Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "control": TermName)
+  
+  private def ScalaPartialFunction: Tree =
+    Select(Select(Ident(nme.ROOTPKG), "scala": TermName), "PartialFunction": TermName)
 }

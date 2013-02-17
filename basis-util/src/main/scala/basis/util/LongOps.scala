@@ -47,7 +47,7 @@ private[util] object LongMacros {
     import c.universe._
     Expr[Long](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "abs"),
+        Select(JavaLangMath(c), "abs": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -56,7 +56,7 @@ private[util] object LongMacros {
     import c.universe._
     Expr[Long](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "min"),
+        Select(JavaLangMath(c), "min": TermName),
         unApply(c).tree :: b.tree :: Nil))
   }
   
@@ -65,7 +65,7 @@ private[util] object LongMacros {
     import c.universe._
     Expr[Long](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "max"),
+        Select(JavaLangMath(c), "max": TermName),
         unApply(c).tree :: b.tree :: Nil))
   }
   
@@ -74,7 +74,7 @@ private[util] object LongMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long"), "signum"),
+        Select(JavaLangLong(c), "signum": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -83,7 +83,7 @@ private[util] object LongMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long"), "bitCount"),
+        Select(JavaLangLong(c), "bitCount": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -92,7 +92,7 @@ private[util] object LongMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long"), "numberOfLeadingZeros"),
+        Select(JavaLangLong(c), "numberOfLeadingZeros": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -101,7 +101,7 @@ private[util] object LongMacros {
     import c.universe._
     Expr[Int](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Long"), "numberOfTrailingZeros"),
+        Select(JavaLangLong(c), "numberOfTrailingZeros": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -110,7 +110,22 @@ private[util] object LongMacros {
     import c.universe._
     Expr[Double](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double"), "longBitsToDouble"),
+        Select(JavaLangDouble(c), "longBitsToDouble": TermName),
         unApply(c).tree :: Nil))
+  }
+  
+  private def JavaLangDouble(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Double": TermName)
+  }
+  
+  private def JavaLangLong(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Long": TermName)
+  }
+  
+  private def JavaLangMath(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Math": TermName)
   }
 }

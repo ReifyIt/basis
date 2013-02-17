@@ -17,7 +17,7 @@ import scala.Predef.<:<
   */
 private[control] class ElseMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
-  import universe.{Bind => _, _}
+  import universe.{Bind => _, Try => _, _}
   
   val universe: context.universe.type = context.universe
   
@@ -25,13 +25,13 @@ private[control] class ElseMacros[C <: Context](val context: C) {
       (self: Expr[X Else Any])
       (default: Expr[X])
     : Expr[X] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[X](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
-          Select(Ident(r), "canBind"),
-          Select(Ident(r), "bind"),
+          Select(Ident(r), "canBind": TermName),
+          Select(Ident(r), "bind": TermName),
           default.tree)))
   }
   
@@ -39,13 +39,15 @@ private[control] class ElseMacros[C <: Context](val context: C) {
       (self: Expr[X Else Any])
       (other: Expr[X Else Y])
     : Expr[X Else Y] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[X Else Y](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
-          Select(Ident(r), "canBind"),
-          TypeApply(Select(Ident(r), "asInstanceOf"), TypeTree(ElseTag[X, Nothing].tpe) :: Nil),
+          Select(Ident(r), "canBind": TermName),
+          TypeApply(
+            Select(Ident(r), "asInstanceOf": TermName),
+            TypeTree(ElseTag[X, Nothing].tpe) :: Nil),
           other.tree)))
   }
   
@@ -53,13 +55,13 @@ private[control] class ElseMacros[C <: Context](val context: C) {
       (self: Expr[X Else Any])
       (isNullable: Expr[Null <:< X])
     : Expr[X] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[X](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
-          Select(Ident(r), "canBind"),
-          Select(Ident(r), "bind"),
+          Select(Ident(r), "canBind": TermName),
+          Select(Ident(r), "bind": TermName),
           Literal(Constant(null)))))
   }
   
@@ -68,13 +70,13 @@ private[control] class ElseMacros[C <: Context](val context: C) {
       (z: Expr[X])
       (f: Expr[A => X])
     : Expr[X] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[X](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
-          Select(Ident(r), "canBind"),
-          Apply(f.tree, Select(Ident(r), "bind") :: Nil),
+          Select(Ident(r), "canBind": TermName),
+          Apply(f.tree, Select(Ident(r), "bind": TermName) :: Nil),
           z.tree)))
   }
   
@@ -82,26 +84,26 @@ private[control] class ElseMacros[C <: Context](val context: C) {
       (self: Expr[A Else Any])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[Boolean](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         Apply(
-          Select(Select(Ident(r), "canBind"), "$amp$amp"),
-          Apply(p.tree, Select(Ident(r), "bind") :: Nil) :: Nil)))
+          Select(Select(Ident(r), "canBind": TermName), ("&&": TermName).encodedName),
+          Apply(p.tree, Select(Ident(r), "bind": TermName) :: Nil) :: Nil)))
   }
   
   def foreach[A, U]
       (self: Expr[A Else Any])
       (f: Expr[A => U])
     : Expr[Unit] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[Unit](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
-          Select(Ident(r), "canBind"),
-          Apply(f.tree, Select(Ident(r), "bind") :: Nil),
+          Select(Ident(r), "canBind": TermName),
+          Apply(f.tree, Select(Ident(r), "bind": TermName) :: Nil),
           EmptyTree)))
   }
   
@@ -109,52 +111,58 @@ private[control] class ElseMacros[C <: Context](val context: C) {
       (self: Expr[A Else B])
       (f: Expr[A => X])
     : Expr[X Else B] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[X Else B](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
-          Select(Ident(r), "canBind"),
+          Select(Ident(r), "canBind": TermName),
           Apply(
-            Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Bind"),
-            Apply(f.tree, Select(Ident(r), "bind") :: Nil) :: Nil),
-          TypeApply(Select(Ident(r), "asInstanceOf"), TypeTree(ElseTag[Nothing, B].tpe) :: Nil))))
+            Select(BasisControl, "Bind": TermName),
+            Apply(f.tree, Select(Ident(r), "bind": TermName) :: Nil) :: Nil),
+          TypeApply(
+            Select(Ident(r), "asInstanceOf": TermName),
+            TypeTree(ElseTag[Nothing, B].tpe) :: Nil))))
   }
   
   def flatMap[A, X : WeakTypeTag, Y : WeakTypeTag]
       (self: Expr[A Else Y])
       (f: Expr[A => (X Else Y)])
     : Expr[X Else Y] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[X Else Y](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
-          Select(Ident(r), "canBind"),
-          Apply(f.tree, Select(Ident(r), "bind") :: Nil),
-          TypeApply(Select(Ident(r), "asInstanceOf"), TypeTree(ElseTag[Nothing, Y].tpe) :: Nil))))
+          Select(Ident(r), "canBind": TermName),
+          Apply(f.tree, Select(Ident(r), "bind": TermName) :: Nil),
+          TypeApply(
+            Select(Ident(r), "asInstanceOf": TermName),
+            TypeTree(ElseTag[Nothing, Y].tpe) :: Nil))))
   }
   
   def recover[X : WeakTypeTag, B : WeakTypeTag]
       (self: Expr[X Else B])
       (q: Expr[PartialFunction[B, X]])
     : Expr[X Else B] = {
-    val r = newTermName(fresh("r$"))
-    val f = newTermName(fresh("q$"))
+    val r = fresh("r$"): TermName
+    val f = fresh("q$"): TermName
     Expr[X Else B](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) ::
         ValDef(NoMods, f, TypeTree(), q.tree) :: Nil,
         If(
           Apply(
-            Select(Select(Ident(r), "canSafelyTrap"), "$amp$amp"),
-            Apply(Select(Ident(f), "isDefinedAt"), Select(Ident(r), "trap") :: Nil) :: Nil),
-          Apply(
-            Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Bind"),
+            Select(Select(Ident(r), "canSafelyTrap": TermName), ("&&": TermName).encodedName),
             Apply(
-              Select(Ident(f), "applyOrElse"),
-              Select(Ident(r), "trap") ::
-              Select(Select(Select(Ident(nme.ROOTPKG), "scala"), "PartialFunction"), "empty") :: Nil) :: Nil),
+              Select(Ident(f), "isDefinedAt": TermName),
+              Select(Ident(r), "trap": TermName) :: Nil) :: Nil),
+          Apply(
+            Select(BasisControl, "Bind": TermName),
+            Apply(
+              Select(Ident(f), "applyOrElse": TermName),
+              Select(Ident(r), "trap": TermName) ::
+              Select(ScalaPartialFunction, "empty": TermName) :: Nil) :: Nil),
           Ident(r))))
   }
   
@@ -162,15 +170,15 @@ private[control] class ElseMacros[C <: Context](val context: C) {
       (self: Expr[X Else B])
       (q: Expr[PartialFunction[B, X Else Y]])
     : Expr[X Else Y] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[X Else Y](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
-          Select(Ident(r), "canSafelyTrap"),
+          Select(Ident(r), "canSafelyTrap": TermName),
           Apply(
-            Select(q.tree, "applyOrElse"),
-            Select(Ident(r), "trap") ::
+            Select(q.tree, "applyOrElse": TermName),
+            Select(Ident(r), "trap": TermName) ::
             Function(
               ValDef(Modifiers(Flag.PARAM), nme.WILDCARD, TypeTree(weakTypeOf[B]), EmptyTree) :: Nil,
               Ident(r)) :: Nil),
@@ -181,16 +189,16 @@ private[control] class ElseMacros[C <: Context](val context: C) {
       (self: Expr[A Else B])
       (p: Expr[A => Boolean])
     : Expr[A Else B] = {
-    val r = newTermName(fresh("r$"))
+    val r = fresh("r$"): TermName
     Expr[A Else B](
       Block(
         ValDef(NoMods, r, TypeTree(), self.tree) :: Nil,
         If(
           Apply(
-            Select(Select(Ident(r), "canTrap"), "$bar$bar"),
-            Apply(p.tree, Select(Ident(r), "bind") :: Nil) :: Nil),
+            Select(Select(Ident(r), "canTrap": TermName), ("||": TermName).encodedName),
+            Apply(p.tree, Select(Ident(r), "bind": TermName) :: Nil) :: Nil),
           Ident(r),
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap"))))
+          Select(BasisControl, "Trap": TermName))))
   }
   
   implicit protected def ElseTag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[A Else B] =
@@ -201,6 +209,12 @@ private[control] class ElseMacros[C <: Context](val context: C) {
   
   implicit protected def TrapTag[B : WeakTypeTag]: WeakTypeTag[Trap[B]] =
     WeakTypeTag(appliedType(mirror.staticClass("basis.control.Trap").toType, weakTypeOf[B] :: Nil))
+  
+  private def BasisControl: Tree =
+    Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "control": TermName)
+  
+  private def ScalaPartialFunction: Tree =
+    Select(Select(Ident(nme.ROOTPKG), "scala": TermName), "PartialFunction": TermName)
 }
 
 private[control] object ElseMacros {
@@ -208,9 +222,12 @@ private[control] object ElseMacros {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, self :: Nil) = prefix.tree
-    val ElseTpc = mirror.staticClass("basis.control.Else").toType
-    val AElseBTpe = appliedType(ElseTpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    Expr(typeCheck(self, AElseBTpe))(WeakTypeTag(AElseBTpe))
+    implicit val AElseBTag =
+      WeakTypeTag[A Else B](
+        appliedType(
+          mirror.staticClass("basis.control.Else").toType,
+          weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+    Expr[A Else B](typeCheck(self, weakTypeOf[A Else B]))
   }
   
   def ElseOps[A : c.WeakTypeTag, B : c.WeakTypeTag]
@@ -219,9 +236,15 @@ private[control] object ElseMacros {
     : c.Expr[ElseOps[A, B]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val ElseOpsTpc = mirror.staticClass("basis.control.ElseOps").toType
-    val ElseOpsABTpe = appliedType(ElseOpsTpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    Expr[ElseOps[A, B]](New(ElseOpsABTpe, self.tree))(WeakTypeTag(ElseOpsABTpe))
+    implicit val ElseOpsABTag =
+      WeakTypeTag[ElseOps[A, B]](
+        appliedType(
+          mirror.staticClass("basis.control.ElseOps").toType,
+          weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+    Expr[ElseOps[A, B]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[ElseOps[A, B]])), nme.CONSTRUCTOR),
+        self.tree :: Nil))
   }
   
   def bindOrElse[X : c.WeakTypeTag]

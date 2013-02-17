@@ -33,8 +33,14 @@ private[util] object ArrowMacros {
   def -> [A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)(right: c.Expr[B]): c.Expr[(A, B)] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
-    val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    Expr(New(Tuple2ABTpe, unApply[A](c).tree, right.tree))(WeakTypeTag(Tuple2ABTpe))
+    implicit val Tuple2ABTag =
+      WeakTypeTag[(A, B)](
+        appliedType(
+          mirror.staticClass("scala.Tuple2").toType,
+          weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+    Expr[(A, B)](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[(A, B)])), nme.CONSTRUCTOR),
+        unApply[A](c).tree :: right.tree :: Nil))
   }
 }

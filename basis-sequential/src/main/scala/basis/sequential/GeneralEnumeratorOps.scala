@@ -94,8 +94,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B = {
-    val f = new GeneralEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B])
-  //val f = new GeneralEnumeratorOps.ReduceLeft(op) // SI-6482
+    val f = new GeneralEnumeratorOps.ReduceLeft(op)
     these traverse f
     if (f.isDefined) f.state else throw new UnsupportedOperationException
   }
@@ -108,8 +107,7 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
     * @group  Reducing
     */
   def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] = {
-    val f = new GeneralEnumeratorOps.ReduceLeft(op.asInstanceOf[(B, B) => B])
-  //val f = new GeneralEnumeratorOps.ReduceLeft(op) // SI-6482
+    val f = new GeneralEnumeratorOps.ReduceLeft(op)
     these traverse f
     if (f.isDefined) Bind(f.state) else Trap
   }

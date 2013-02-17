@@ -56,13 +56,13 @@ private[collections] object BuilderFactory {
     import c.{Expr, prefix, Tree, weakTypeOf, WeakTypeTag}
     import c.universe._
     
-    var b: Tree = TypeApply(Select(prefix.tree, "Builder"), TypeTree(weakTypeOf[A]) :: Nil)
-    b = Apply(Select(b, "expect"), Literal(Constant(elems.length)) :: Nil)
+    var b = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: Nil): Tree
+    b = Apply(Select(b, "expect": TermName), Literal(Constant(elems.length)) :: Nil)
     
     val xs = elems.iterator
-    while (xs.hasNext) b = Apply(Select(b, "$plus$eq"), xs.next().tree :: Nil)
+    while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
     
     implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
-    Expr[CC[A]](Select(b, "state"))
+    Expr[CC[A]](Select(b, "state": TermName))
   }
 }

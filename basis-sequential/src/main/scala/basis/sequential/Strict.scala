@@ -85,11 +85,15 @@ private[sequential] object Strict {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
     val ArrayTpe = appliedType(mirror.staticClass("scala.Array").toType, WildcardType :: Nil)
-    val StrictArrayOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictArrayOps").toType,
-        weakTypeOf[A] :: ArrayTpe :: Nil)
-    Expr(New(StrictArrayOpsTpe, these.tree))(WeakTypeTag(StrictArrayOpsTpe))
+    implicit val StrictArrayOpsATag =
+      WeakTypeTag[StrictArrayOps[A, Array[_]]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictArrayOps").toType,
+          weakTypeOf[A] :: appliedType(mirror.staticClass("scala.Array").toType, WildcardType :: Nil) :: Nil))
+    Expr[StrictArrayOps[A, Array[_]]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictArrayOps[A, Array[_]]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictEnumeratorOps[A : c.WeakTypeTag]
@@ -98,11 +102,15 @@ private[sequential] object Strict {
     : c.Expr[StrictEnumeratorOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictEnumeratorOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictEnumeratorOps").toType,
-        weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictEnumeratorOpsTpe, these.tree))(WeakTypeTag(StrictEnumeratorOpsTpe))
+    implicit val StrictEnumeratorOpsATag =
+      WeakTypeTag[StrictEnumeratorOps[A, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictEnumeratorOps").toType,
+          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictEnumeratorOps[A, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictEnumeratorOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictIteratorOps[A : c.WeakTypeTag]
@@ -111,11 +119,15 @@ private[sequential] object Strict {
     : c.Expr[StrictIteratorOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictIteratorOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictIteratorOps").toType,
-        weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictIteratorOpsTpe, these.tree))(WeakTypeTag(StrictIteratorOpsTpe))
+    implicit val StrictIteratorOpsATag =
+      WeakTypeTag[StrictIteratorOps[A, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictIteratorOps").toType,
+          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictIteratorOps[A, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictIteratorOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictCollectionOps[A : c.WeakTypeTag]
@@ -124,11 +136,15 @@ private[sequential] object Strict {
     : c.Expr[StrictCollectionOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictCollectionOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictCollectionOps").toType,
-        weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictCollectionOpsTpe, these.tree))(WeakTypeTag(StrictCollectionOpsTpe))
+    implicit val StrictCollectionOpsATag =
+      WeakTypeTag[StrictCollectionOps[A, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictCollectionOps").toType,
+          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictCollectionOps[A, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictCollectionOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictContainerOps[A : c.WeakTypeTag]
@@ -137,11 +153,15 @@ private[sequential] object Strict {
     : c.Expr[StrictContainerOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictContainerOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictContainerOps").toType,
-        weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictContainerOpsTpe, these.tree))(WeakTypeTag(StrictContainerOpsTpe))
+    implicit val StrictContainerOpsATag =
+      WeakTypeTag[StrictContainerOps[A, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictContainerOps").toType,
+          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictContainerOps[A, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictContainerOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictSeqOps[A : c.WeakTypeTag]
@@ -150,11 +170,15 @@ private[sequential] object Strict {
     : c.Expr[StrictSeqOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictSeqOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictSeqOps").toType,
-        weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictSeqOpsTpe, these.tree))(WeakTypeTag(StrictSeqOpsTpe))
+    implicit val StrictSeqOpsATag =
+      WeakTypeTag[StrictSeqOps[A, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictSeqOps").toType,
+          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictSeqOps[A, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictSeqOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictIndexOps[A : c.WeakTypeTag]
@@ -163,11 +187,15 @@ private[sequential] object Strict {
     : c.Expr[StrictIndexOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictIndexOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictIndexOps").toType,
-        weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictIndexOpsTpe, these.tree))(WeakTypeTag(StrictIndexOpsTpe))
+    implicit val StrictIndexOpsATag =
+      WeakTypeTag[StrictIndexOps[A, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictIndexOps").toType,
+          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictIndexOps[A, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictIndexOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictStackOps[A : c.WeakTypeTag]
@@ -176,11 +204,15 @@ private[sequential] object Strict {
     : c.Expr[StrictStackOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictStackOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictStackOps").toType,
-        weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictStackOpsTpe, these.tree))(WeakTypeTag(StrictStackOpsTpe))
+    implicit val StrictStackOpsATag =
+      WeakTypeTag[StrictStackOps[A, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictStackOps").toType,
+          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictStackOps[A, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictStackOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictSetOps[A : c.WeakTypeTag]
@@ -189,11 +221,15 @@ private[sequential] object Strict {
     : c.Expr[StrictSetOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictSetOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictSetOps").toType,
-        weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictSetOpsTpe, these.tree))(WeakTypeTag(StrictSetOpsTpe))
+    implicit val StrictSetOpsATag =
+      WeakTypeTag[StrictSetOps[A, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictSetOps").toType,
+          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictSetOps[A, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictSetOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def StrictMapOps[A : c.WeakTypeTag, T : c.WeakTypeTag]
@@ -202,14 +238,18 @@ private[sequential] object Strict {
     : c.Expr[StrictMapOps[A, T, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val StrictMapOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.StrictMapOps").toType,
-        weakTypeOf[A] :: weakTypeOf[T] :: FamilyTag(c)(these).tpe :: Nil)
-    Expr(New(StrictMapOpsTpe, these.tree))(WeakTypeTag(StrictMapOpsTpe))
+    implicit val StrictMapOpsATTag =
+      WeakTypeTag[StrictMapOps[A, T, these.value.Family]](
+        appliedType(
+          mirror.staticClass("basis.sequential.StrictMapOps").toType,
+          weakTypeOf[A] :: weakTypeOf[T] :: FamilyTag(c)(these).tpe :: Nil))
+    Expr[StrictMapOps[A, T, these.value.Family]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[StrictMapOps[A, T, these.value.Family]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
-  private[this] def FamilyTag(c: Context)(these: c.Expr[Family[_]]): c.WeakTypeTag[these.value.Family] = {
+  private def FamilyTag(c: Context)(these: c.Expr[Family[_]]): c.WeakTypeTag[these.value.Family] = {
     import c.{mirror, WeakTypeTag}
     import c.universe._
     val TheseTpe = these.tree.symbol match {

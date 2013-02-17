@@ -84,11 +84,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictArrayOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictArrayOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictArrayOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictArrayOpsTpe, these.tree))(WeakTypeTag(NonStrictArrayOpsTpe))
+    implicit val NonStrictArrayOpsATag =
+      WeakTypeTag[NonStrictArrayOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictArrayOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictArrayOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictArrayOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictEnumeratorOps[A : c.WeakTypeTag]
@@ -97,11 +101,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictEnumeratorOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictEnumeratorOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictEnumeratorOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictEnumeratorOpsTpe, these.tree))(WeakTypeTag(NonStrictEnumeratorOpsTpe))
+    implicit val NonStrictEnumeratorOpsATag =
+      WeakTypeTag[NonStrictEnumeratorOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictEnumeratorOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictEnumeratorOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictEnumeratorOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictIteratorOps[A : c.WeakTypeTag]
@@ -110,11 +118,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictIteratorOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictIteratorOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictIteratorOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictIteratorOpsTpe, these.tree))(WeakTypeTag(NonStrictIteratorOpsTpe))
+    implicit val NonStrictIteratorOpsATag =
+      WeakTypeTag[NonStrictIteratorOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictIteratorOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictIteratorOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictIteratorOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictCollectionOps[A : c.WeakTypeTag]
@@ -123,11 +135,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictCollectionOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictCollectionOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictCollectionOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictCollectionOpsTpe, these.tree))(WeakTypeTag(NonStrictCollectionOpsTpe))
+    implicit val NonStrictCollectionOpsATag =
+      WeakTypeTag[NonStrictCollectionOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictCollectionOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictCollectionOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictCollectionOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictContainerOps[A : c.WeakTypeTag]
@@ -136,11 +152,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictContainerOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictContainerOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictContainerOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictContainerOpsTpe, these.tree))(WeakTypeTag(NonStrictContainerOpsTpe))
+    implicit val NonStrictContainerOpsATag =
+      WeakTypeTag[NonStrictContainerOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictContainerOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictContainerOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictContainerOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictSeqOps[A : c.WeakTypeTag]
@@ -149,11 +169,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictSeqOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictSeqOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictSeqOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictSeqOpsTpe, these.tree))(WeakTypeTag(NonStrictSeqOpsTpe))
+    implicit val NonStrictSeqOpsATag =
+      WeakTypeTag[NonStrictSeqOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictSeqOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictSeqOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictSeqOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictIndexOps[A : c.WeakTypeTag]
@@ -162,11 +186,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictIndexOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictIndexOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictIndexOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictIndexOpsTpe, these.tree))(WeakTypeTag(NonStrictIndexOpsTpe))
+    implicit val NonStrictIndexOpsATag =
+      WeakTypeTag[NonStrictIndexOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictIndexOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictIndexOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictIndexOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictStackOps[A : c.WeakTypeTag]
@@ -175,11 +203,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictStackOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictStackOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictStackOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictStackOpsTpe, these.tree))(WeakTypeTag(NonStrictStackOpsTpe))
+    implicit val NonStrictStackOpsATag =
+      WeakTypeTag[NonStrictStackOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictStackOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictStackOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictStackOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictSetOps[A : c.WeakTypeTag]
@@ -188,11 +220,15 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictSetOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictSetOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictSetOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(NonStrictSetOpsTpe, these.tree))(WeakTypeTag(NonStrictSetOpsTpe))
+    implicit val NonStrictSetOpsATag =
+      WeakTypeTag[NonStrictSetOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictSetOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[NonStrictSetOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictSetOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def NonStrictMapOps[A : c.WeakTypeTag, T : c.WeakTypeTag]
@@ -201,10 +237,14 @@ private[sequential] object NonStrict {
     : c.Expr[NonStrictMapOps[A, T]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val NonStrictMapOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.NonStrictMapOps").toType,
-        weakTypeOf[A] :: weakTypeOf[T] :: Nil)
-    Expr(New(NonStrictMapOpsTpe, these.tree))(WeakTypeTag(NonStrictMapOpsTpe))
+    implicit val NonStrictMapOpsATTag =
+      WeakTypeTag[NonStrictMapOps[A, T]](
+        appliedType(
+          mirror.staticClass("basis.sequential.NonStrictMapOps").toType,
+          weakTypeOf[A] :: weakTypeOf[T] :: Nil))
+    Expr[NonStrictMapOps[A, T]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[NonStrictMapOps[A, T]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
 }

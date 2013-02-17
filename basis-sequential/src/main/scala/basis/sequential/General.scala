@@ -81,11 +81,15 @@ private[sequential] object General {
     : c.Expr[GeneralArrayOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralArrayOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralArrayOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralArrayOpsTpe, these.tree))(WeakTypeTag(GeneralArrayOpsTpe))
+    implicit val GeneralArrayOpsATag =
+      WeakTypeTag[GeneralArrayOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralArrayOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralArrayOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralArrayOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralEnumeratorOps[A : c.WeakTypeTag]
@@ -94,11 +98,15 @@ private[sequential] object General {
     : c.Expr[GeneralEnumeratorOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralEnumeratorOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralEnumeratorOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralEnumeratorOpsTpe, these.tree))(WeakTypeTag(GeneralEnumeratorOpsTpe))
+    implicit val GeneralEnumeratorOpsATag =
+      WeakTypeTag[GeneralEnumeratorOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralEnumeratorOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralEnumeratorOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralEnumeratorOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralIteratorOps[A : c.WeakTypeTag]
@@ -107,11 +115,15 @@ private[sequential] object General {
     : c.Expr[GeneralIteratorOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralIteratorOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralIteratorOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralIteratorOpsTpe, these.tree))(WeakTypeTag(GeneralIteratorOpsTpe))
+    implicit val GeneralIteratorOpsATag =
+      WeakTypeTag[GeneralIteratorOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralIteratorOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralIteratorOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralIteratorOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralCollectionOps[A : c.WeakTypeTag]
@@ -120,11 +132,15 @@ private[sequential] object General {
     : c.Expr[GeneralCollectionOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralCollectionOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralCollectionOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralCollectionOpsTpe, these.tree))(WeakTypeTag(GeneralCollectionOpsTpe))
+    implicit val GeneralCollectionOpsATag =
+      WeakTypeTag[GeneralCollectionOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralCollectionOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralCollectionOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralCollectionOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralContainerOps[A : c.WeakTypeTag]
@@ -133,11 +149,15 @@ private[sequential] object General {
     : c.Expr[GeneralContainerOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralContainerOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralContainerOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralContainerOpsTpe, these.tree))(WeakTypeTag(GeneralContainerOpsTpe))
+    implicit val GeneralContainerOpsATag =
+      WeakTypeTag[GeneralContainerOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralContainerOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralContainerOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralContainerOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralSeqOps[A : c.WeakTypeTag]
@@ -146,11 +166,15 @@ private[sequential] object General {
     : c.Expr[GeneralSeqOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralSeqOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralSeqOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralSeqOpsTpe, these.tree))(WeakTypeTag(GeneralSeqOpsTpe))
+    implicit val GeneralSeqOpsATag =
+      WeakTypeTag[GeneralSeqOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralSeqOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralSeqOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralSeqOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralIndexOps[A : c.WeakTypeTag]
@@ -159,11 +183,15 @@ private[sequential] object General {
     : c.Expr[GeneralIndexOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralIndexOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralIndexOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralIndexOpsTpe, these.tree))(WeakTypeTag(GeneralIndexOpsTpe))
+    implicit val GeneralIndexOpsATag =
+      WeakTypeTag[GeneralIndexOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralIndexOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralIndexOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralIndexOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralStackOps[A : c.WeakTypeTag]
@@ -172,11 +200,15 @@ private[sequential] object General {
     : c.Expr[GeneralStackOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralStackOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralStackOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralStackOpsTpe, these.tree))(WeakTypeTag(GeneralStackOpsTpe))
+    implicit val GeneralStackOpsATag =
+      WeakTypeTag[GeneralStackOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralStackOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralStackOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralStackOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralSetOps[A : c.WeakTypeTag]
@@ -185,11 +217,15 @@ private[sequential] object General {
     : c.Expr[GeneralSetOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralSetOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralSetOps").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(New(GeneralSetOpsTpe, these.tree))(WeakTypeTag(GeneralSetOpsTpe))
+    implicit val GeneralSetOpsATag =
+      WeakTypeTag[GeneralSetOps[A]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralSetOps").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[GeneralSetOps[A]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralSetOps[A]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
   
   def GeneralMapOps[A : c.WeakTypeTag, T : c.WeakTypeTag]
@@ -198,10 +234,14 @@ private[sequential] object General {
     : c.Expr[GeneralMapOps[A, T]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val GeneralMapOpsTpe =
-      appliedType(
-        mirror.staticClass("basis.sequential.GeneralMapOps").toType,
-        weakTypeOf[A] :: weakTypeOf[T] :: Nil)
-    Expr(New(GeneralMapOpsTpe, these.tree))(WeakTypeTag(GeneralMapOpsTpe))
+    implicit val GeneralMapOpsATTag =
+      WeakTypeTag[GeneralMapOps[A, T]](
+        appliedType(
+          mirror.staticClass("basis.sequential.GeneralMapOps").toType,
+          weakTypeOf[A] :: weakTypeOf[T] :: Nil))
+    Expr[GeneralMapOps[A, T]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[GeneralMapOps[A, T]])), nme.CONSTRUCTOR),
+        these.tree :: Nil))
   }
 }

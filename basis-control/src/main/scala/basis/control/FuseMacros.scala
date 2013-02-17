@@ -16,15 +16,15 @@ import scala.reflect.macros.Context
   */
 private[control] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
-  import universe.{Bind => _, _}
+  import universe.{Bind => _, Try => _, _}
   
   def fuse[A : WeakTypeTag, B : WeakTypeTag]
       (expr: Expr[A Else B])
       (trip: Expr[Throwable => Trap[B]])
     : Expr[A Else B] = {
-    val e = newTermName(fresh("e$"))
+    val e = fresh("e$"): TermName
     Expr[A Else B](
-      Try(
+      universe.Try(
         expr.tree,
         CaseDef(
           universe.Bind(e, Typed(Ident(nme.WILDCARD), TypeTree(weakTypeOf[Throwable]))),
@@ -70,20 +70,24 @@ private[control] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
   
   def fuseTry[A : WeakTypeTag](expr: Expr[A]): Expr[A Else Throwable] = {
     val TrapNonFatalTpe = mirror.staticModule("basis.control.Trap.NonFatal").moduleClass.asType.toType
+    implicit val TrapNonFatalTag = WeakTypeTag[Trap.NonFatal.type](TrapNonFatalTpe)
     val TrapNonFatal =
       Expr[Trap.NonFatal.type](
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap"), "NonFatal")
-      )(WeakTypeTag(TrapNonFatalTpe))
+        Select(Select(BasisControl, "Trap": TermName), "NonFatal": TermName))
+    implicit val BindATag = BindTag[A]
     val BindExpr =
       Expr[Bind[A]](
         Apply(
-          Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Bind"),
+          Select(BasisControl, "Bind": TermName),
           expr.tree :: Nil))
     fuse[A, Throwable](BindExpr)(TrapNonFatal)
   }
   
   implicit protected def ThrowableTag: WeakTypeTag[Throwable] =
-    WeakTypeTag(mirror.staticClass("java.lang.Throwable").toType)
+    WeakTypeTag[Throwable](mirror.staticClass("java.lang.Throwable").toType)
+  
+  private def BasisControl: Tree =
+    Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "control": TermName)
 }
 
 private[control] object FuseMacros {
@@ -91,18 +95,22 @@ private[control] object FuseMacros {
     : (c.Expr[A Else B], c.Expr[Throwable => Trap[B]]) = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    
     val Apply(_, self :: trip :: Nil) = prefix.tree
-    val ElseTpc = mirror.staticClass("basis.control.Else").toType
-    val AElseBTpe = appliedType(ElseTpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    val selfExpr = Expr[A Else B](typeCheck(self, AElseBTpe))(WeakTypeTag(AElseBTpe))
-    
-    val ThrowableTpe = mirror.staticClass("java.lang.Throwable").toType
-    val TrapBTpe = appliedType(mirror.staticClass("basis.control.Trap").toType, weakTypeOf[B] :: Nil)
-    val ThrowableToTrapBTpe = appliedType(definitions.FunctionClass(1).toType, ThrowableTpe :: TrapBTpe :: Nil)
-    val tripExpr = Expr[Throwable => Trap[B]](typeCheck(trip, ThrowableToTrapBTpe))(WeakTypeTag(ThrowableToTrapBTpe))
-    
-    (selfExpr, tripExpr)
+    implicit val AElseBTag =
+      WeakTypeTag[A Else B](
+        appliedType(
+          mirror.staticClass("basis.control.Else").toType,
+          weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+    implicit val ThrowableToTrapBTag =
+      WeakTypeTag[Throwable => Trap[B]](
+        appliedType(
+          definitions.FunctionClass(1).toType,
+          mirror.staticClass("java.lang.Throwable").toType ::
+          appliedType(
+            mirror.staticClass("basis.control.Trap").toType,
+            weakTypeOf[B] :: Nil) :: Nil))
+    (Expr[A Else B](typeCheck(self, weakTypeOf[A Else B])),
+     Expr[Throwable => Trap[B]](typeCheck(trip, weakTypeOf[Throwable => Trap[B]])))
   }
   
   def FuseOps[A : c.WeakTypeTag, B : c.WeakTypeTag]
@@ -112,9 +120,15 @@ private[control] object FuseMacros {
     : c.Expr[FuseOps[A, B]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val FuseOpsTpc = mirror.staticClass("basis.control.FuseOps").toType
-    val FuseOpsABTpe = appliedType(FuseOpsTpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    Expr[FuseOps[A, B]](New(FuseOpsABTpe, self.tree, trip.tree))(WeakTypeTag(FuseOpsABTpe))
+    implicit val FuseOpsABTag =
+      WeakTypeTag[FuseOps[A, B]](
+        appliedType(
+          mirror.staticClass("basis.control.FuseOps").toType,
+          weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+    Expr[FuseOps[A, B]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[FuseOps[A, B]])), nme.CONSTRUCTOR),
+        self.tree :: trip.tree :: Nil))
   }
   
   def TryFuseOps[A : c.WeakTypeTag]
@@ -123,16 +137,15 @@ private[control] object FuseMacros {
     : c.Expr[FuseOps[A, Throwable]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    
-    val FuseOpsTpc = mirror.staticClass("basis.control.FuseOps").toType
-    val ThrowableTpe = mirror.staticClass("java.lang.Throwable").toType
-    val FuseOpsAThrowableTpe = appliedType(FuseOpsTpc, weakTypeOf[A] :: ThrowableTpe :: Nil)
-    
-    val TrapThrowableTpe = appliedType(mirror.staticClass("basis.control.Trap").toType, ThrowableTpe :: Nil)
-    val ThrowableToTrapThrowableTpe = appliedType(definitions.FunctionClass(1).toType, ThrowableTpe :: TrapThrowableTpe :: Nil)
-    
-    val TrapNonFatal = Select(Select(Select(Select(Ident(nme.ROOTPKG), "basis"), "control"), "Trap"), "NonFatal")
-    Expr[FuseOps[A, Throwable]](New(FuseOpsAThrowableTpe, self.tree, TrapNonFatal))(WeakTypeTag(FuseOpsAThrowableTpe))
+    implicit val FuseOpsAThrowableTag =
+      WeakTypeTag[FuseOps[A, Throwable]](
+        appliedType(
+          mirror.staticClass("basis.control.FuseOps").toType,
+          weakTypeOf[A] :: mirror.staticClass("java.lang.Throwable").toType :: Nil))
+    Expr[FuseOps[A, Throwable]](
+      Apply(
+        Select(New(TypeTree(weakTypeOf[FuseOps[A, Throwable]])), nme.CONSTRUCTOR),
+        self.tree :: Select(Select(BasisControl(c), "Trap": TermName), "NonFatal": TermName) :: Nil))
   }
   
   def Try[A : c.WeakTypeTag]
@@ -179,5 +192,10 @@ private[control] object FuseMacros {
     : c.Expr[A Else B] = {
     val (self, trip) = unApply[A, B](c)
     new FuseMacros[c.type](c).fuseFilter[A, B](self)(p)(trip)
+  }
+  
+  private def BasisControl(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "control": TermName)
   }
 }

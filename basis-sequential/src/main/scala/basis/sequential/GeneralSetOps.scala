@@ -160,12 +160,13 @@ private[sequential] object GeneralSetOps {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Set[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, set :: Nil) = prefix.tree
-    val SetType =
-      appliedType(
-        mirror.staticClass("basis.collections.Set").toType,
-        weakTypeOf[A] :: Nil)
-    Expr(typeCheck(set, SetType))(WeakTypeTag(SetType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val SetATag =
+      WeakTypeTag[Set[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Set").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Set[A]](typeCheck(these, weakTypeOf[Set[A]]))
   }
   
   def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSetOps[A, Set[_]]] =

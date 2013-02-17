@@ -160,12 +160,13 @@ private[sequential] object GeneralMapOps {
   private def unApply[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[Map[A, T]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
-    val Apply(_, map :: Nil) = prefix.tree
-    val MapType =
-      appliedType(
-        mirror.staticClass("basis.collections.Map").toType,
-        weakTypeOf[A] :: weakTypeOf[T] :: Nil)
-    Expr(typeCheck(map, MapType))(WeakTypeTag(MapType))
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val MapATTag =
+      WeakTypeTag[Map[A, T]](
+        appliedType(
+          mirror.staticClass("basis.collections.Map").toType,
+          weakTypeOf[A] :: weakTypeOf[T] :: Nil))
+    Expr[Map[A, T]](typeCheck(these, weakTypeOf[Map[A, T]]))
   }
   
   def eagerly[A : c.WeakTypeTag, T : c.WeakTypeTag](c: Context): c.Expr[StrictMapOps[A, T, Map[_, _]]] =

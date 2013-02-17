@@ -45,7 +45,7 @@ private[util] object DoubleMacros {
     import c.universe._
     Expr[Boolean](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double"), "isNaN"),
+        Select(JavaLangDouble(c), "isNaN": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -54,7 +54,7 @@ private[util] object DoubleMacros {
     import c.universe._
     Expr[Boolean](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double"), "isInfinite"),
+        Select(JavaLangDouble(c), "isInfinite": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -63,7 +63,7 @@ private[util] object DoubleMacros {
     import c.universe._
     Expr[Double](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "abs"),
+        Select(JavaLangMath(c), "abs": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -72,7 +72,7 @@ private[util] object DoubleMacros {
     import c.universe._
     Expr[Double](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "min"),
+        Select(JavaLangMath(c), "min": TermName),
         unApply(c).tree :: y.tree :: Nil))
   }
   
@@ -81,7 +81,7 @@ private[util] object DoubleMacros {
     import c.universe._
     Expr[Double](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "max"),
+        Select(JavaLangMath(c), "max": TermName),
         unApply(c).tree :: y.tree :: Nil))
   }
   
@@ -90,7 +90,7 @@ private[util] object DoubleMacros {
     import c.universe._
     Expr[Double](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Math"), "sqrt"),
+        Select(JavaLangMath(c), "sqrt": TermName),
         unApply(c).tree :: Nil))
   }
   
@@ -99,7 +99,17 @@ private[util] object DoubleMacros {
     import c.universe._
     Expr[Long](
       Apply(
-        Select(Select(Select(Select(Ident(nme.ROOTPKG), "java"), "lang"), "Double"), "doubleToLongBits"),
+        Select(JavaLangDouble(c), "doubleToLongBits": TermName),
         unApply(c).tree :: Nil))
+  }
+  
+  private def JavaLangDouble(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Double": TermName)
+  }
+  
+  private def JavaLangMath(c: Context): c.Tree = {
+    import c.universe._
+    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Math": TermName)
   }
 }
