@@ -20,6 +20,7 @@ object BasisBuild extends Build {
       Seq(BasisCollections,
           BasisContainers,
           BasisControl,
+          BasisDispatch,
           BasisMath,
           BasisMemory,
           BasisRandom,
@@ -31,6 +32,7 @@ object BasisBuild extends Build {
       Seq(BasisCollections,
           BasisContainers,
           BasisControl,
+          BasisDispatch,
           BasisMath,
           BasisMemory,
           BasisRandom,
@@ -68,6 +70,16 @@ object BasisBuild extends Build {
     dependencies =
       Seq(BasisRuntime,
           BasisUtil)
+  )
+  
+  lazy val BasisDispatch = Project(
+    id           = "basis-dispatch",
+    base         = file("basis-dispatch"),
+    settings     = commonSettings,
+    dependencies =
+      Seq(BasisContainers,
+          BasisSequential,
+          BasisControl)
   )
   
   lazy val BasisMath = Project(
@@ -155,6 +167,7 @@ object BasisBuild extends Build {
   
   lazy val compileSettings = Seq(
     scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
+    javacOptions  in Compile ++= Seq("-Xlint", "-XDignore.symbol.file"),
     libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _ % "provided")
   )
   
