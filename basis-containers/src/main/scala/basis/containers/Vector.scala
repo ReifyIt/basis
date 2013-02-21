@@ -29,7 +29,13 @@ import basis.runtime._
   * 
   * @define collection  vector
   */
-sealed abstract class Vector[+A] extends Equals with Immutable with Family[Vector[_]] with Index[A] {
+sealed abstract class Vector[+A]
+  extends Equals
+    with Immutable
+    with Family[Vector[_]]
+    with Compound[Vector[A]]
+    with Index[A] {
+  
   /** Returns a copy of this $collection with the given element at the given index.
     * @group Indexing */
   def update[B >: A](index: Int, elem: B): Vector[B]
@@ -59,6 +65,10 @@ private[containers] final class Vector0 extends Vector[Nothing] {
     newNode1(0) = elem.asInstanceOf[AnyRef]
     new Vector1(newNode1, 1)
   }
+  
+  override def iterator: Iterator[Nothing] = new VectorIterator(null, 0)
+  
+  override def segments: Iterator[Vector[Nothing]] = new VectorSplitter(null, 0)
   
   override def traverse(f: Nothing => Unit): Unit = ()
 }
@@ -101,6 +111,8 @@ private[containers] final class Vector1[+A](
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node1, length)
+  
+  override def segments: Iterator[Vector[A]] = new VectorSplitter(node1, length)
   
   override def traverse(f: A => Unit): Unit = Vector.traverse1(node1)(f)
 }
@@ -157,6 +169,8 @@ private[containers] final class Vector2[+A](
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node2, length)
+  
+  override def segments: Iterator[Vector[A]] = new VectorSplitter(node2, length)
   
   override def traverse(f: A => Unit): Unit = Vector.traverse2(node2)(f)
 }
@@ -226,6 +240,8 @@ private[containers] final class Vector3[+A](
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node3, length)
+  
+  override def segments: Iterator[Vector[A]] = new VectorSplitter(node3, length)
   
   override def traverse(f: A => Unit): Unit = Vector.traverse3(node3)(f)
 }
@@ -308,6 +324,8 @@ private[containers] final class Vector4[+A](
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node4, length)
+  
+  override def segments: Iterator[Vector[A]] = new VectorSplitter(node4, length)
   
   override def traverse(f: A => Unit): Unit = Vector.traverse4(node4)(f)
 }
@@ -403,6 +421,8 @@ private[containers] final class Vector5[+A](
   }
   
   override def iterator: Iterator[A] = new VectorIterator(node5, length)
+  
+  override def segments: Iterator[Vector[A]] = new VectorSplitter(node5, length)
   
   override def traverse(f: A => Unit): Unit = Vector.traverse5(node5)(f)
 }
@@ -507,6 +527,8 @@ private[containers] final class Vector6[+A](
   
   override def iterator: Iterator[A] = new VectorIterator(node6, length)
   
+  override def segments: Iterator[Vector[A]] = new VectorSplitter(node6, length)
+  
   override def traverse(f: A => Unit): Unit = Vector.traverse6(node6)(f)
 }
 
@@ -517,7 +539,7 @@ object Vector extends SeqFactory[Vector] {
     : Builder[A] { type Scope = Vector[_]; type State = Vector[A] } =
     new VectorBuilder[A]
   
-  private[this] val empty = new Vector0
+  private[containers] val empty = new Vector0
   override def empty[A : TypeHint]: Vector[A] = empty
   
   private[containers] def traverse1[A](node1: Array[AnyRef])(f: A => Unit) {
@@ -623,7 +645,6 @@ private[containers] final class VectorIterator[+A](
     else if (length > 0) {
       node1 = trie.asInstanceOf[Array[AnyRef]]
     }
-    else throw new AssertionError
   }
   
   override def isEmpty: Boolean = index >= length
@@ -658,6 +679,86 @@ private[containers] final class VectorIterator[+A](
     new VectorIterator(length, index, node1, node2, node3, node4, node5, node6)
 }
 
+private[containers] final class VectorSplitter[+A](
+    private[this] val length: Int,
+    private[this] var index: Int,
+    private[this] var node1: Array[AnyRef],
+    private[this] var node2: Array[Array[AnyRef]],
+    private[this] var node3: Array[Array[Array[AnyRef]]],
+    private[this] var node4: Array[Array[Array[Array[AnyRef]]]],
+    private[this] var node5: Array[Array[Array[Array[Array[AnyRef]]]]],
+    private[this] var node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]])
+  extends Iterator[Vector[A]] {
+  
+  def this(trie: AnyRef, length: Int) = {
+    this(length, 0, null, null, null, null, null, null)
+    if (length > (1 << 25)) {
+      node6 = trie.asInstanceOf[Array[Array[Array[Array[Array[Array[AnyRef]]]]]]]
+      node5 = node6(0)
+      node4 = node5(0)
+      node3 = node4(0)
+      node2 = node3(0)
+      node1 = node2(0)
+    }
+    else if (length > (1 << 20)) {
+      node5 = trie.asInstanceOf[Array[Array[Array[Array[Array[AnyRef]]]]]]
+      node4 = node5(0)
+      node3 = node4(0)
+      node2 = node3(0)
+      node1 = node2(0)
+    }
+    else if (length > (1 << 15)) {
+      node4 = trie.asInstanceOf[Array[Array[Array[Array[AnyRef]]]]]
+      node3 = node4(0)
+      node2 = node3(0)
+      node1 = node2(0)
+    }
+    else if (length > (1 << 10)) {
+      node3 = trie.asInstanceOf[Array[Array[Array[AnyRef]]]]
+      node2 = node3(0)
+      node1 = node2(0)
+    }
+    else if (length > (1 << 5)) {
+      node2 = trie.asInstanceOf[Array[Array[AnyRef]]]
+      node1 = node2(0)
+    }
+    else if (length > 0) {
+      node1 = trie.asInstanceOf[Array[AnyRef]]
+    }
+  }
+  
+  override def isEmpty: Boolean = index >= length
+  
+  override def head: Vector[A] = {
+    if (index >= length) throw new NoSuchElementException("Head of empty iterator.")
+    new Vector1(node1, node1.length)
+  }
+  
+  override def step() {
+    if (index >= length) throw new UnsupportedOperationException("Empty iterator step.")
+    val diff = index ^ (index + 32)
+    index += 32
+    if (index < length) {
+      if (diff >= (1 << 10)) {
+        if (diff >= (1 << 15)) {
+          if (diff >= (1 << 20)) {
+            if (diff >= (1 << 25)) {
+              node5 = node6(index >>> 25 & 0x1F)
+            }
+            node4 = node5(index >>> 20 & 0x1F)
+          }
+          node3 = node4(index >>> 15 & 0x1F)
+        }
+        node2 = node3(index >>> 10 & 0x1F)
+      }
+      node1 = node2(index >>> 5 & 0x1F)
+    }
+  }
+  
+  override def dup: Iterator[Vector[A]] =
+    new VectorSplitter(length, index, node1, node2, node3, node4, node5, node6)
+}
+
 private[containers] final class VectorBuilder[A] extends Builder[A] {
   override type Scope = Vector[_]
   
@@ -670,160 +771,241 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
   private[this] var node5: Array[Array[Array[Array[Array[AnyRef]]]]] = _
   private[this] var node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]] = _
   
+  private[this] var result: Vector[A] = _
+  
   private[this] var length: Int = 0
   
-  private[this] def initNode1(node1: Array[AnyRef]) {
-    this.node1 = new Array[AnyRef](32)
-    java.lang.System.arraycopy(node1, 0, this.node1, 0, node1.length)
+  private[this] var aliased: Int = 0
+  
+  private[this] def gotoNode1() {
+    if (length >= (1 << 5)) gotoNode2()
+    if (aliased == 1 || (length & 0x1F) == 0) {
+      val oldNode1 = node1
+      node1 = new Array[AnyRef](32)
+      if (aliased == 1) {
+        java.lang.System.arraycopy(oldNode1, 0, node1, 0, oldNode1.length)
+        aliased = 2
+        result = null
+      }
+      if (length == (1 << 5)) node2(0) = oldNode1
+      if (length >= (1 << 5)) node2(length >>> 5 & 0x1F) = node1
+    }
   }
   
-  private[this] def initNode2(node2: Array[Array[AnyRef]]) {
-    this.node2 = new Array[Array[AnyRef]](32)
-    java.lang.System.arraycopy(node2, 0, this.node2, 0, node2.length)
-    initNode1(node2(node2.length - 1))
+  private[this] def gotoNode2() {
+    if (length >= (1 << 10)) gotoNode3()
+    if (aliased == 2 || (length & 0x3FF) == 0 || length == (1 << 5)) {
+      val oldNode2 = node2
+      node2 = new Array[Array[AnyRef]](32)
+      if (aliased == 2) {
+        java.lang.System.arraycopy(oldNode2, 0, node2, 0, oldNode2.length)
+        aliased = 3
+        result = null
+      }
+      if (length == (1 << 10)) node3(0) = oldNode2
+      if (length >= (1 << 10)) node3(length >>> 10 & 0x1F) = node2
+    }
   }
   
-  private[this] def initNode3(node3: Array[Array[Array[AnyRef]]]) {
-    this.node3 = new Array[Array[Array[AnyRef]]](32)
-    java.lang.System.arraycopy(node3, 0, this.node3, 0, node3.length)
-    initNode2(node3(node3.length - 1))
+  private[this] def gotoNode3() {
+    if (length >= (1 << 15)) gotoNode4()
+    if (aliased == 3 || (length & 0x7FFF) == 0 || length == (1 << 10)) {
+      val oldNode3 = node3
+      node3 = new Array[Array[Array[AnyRef]]](32)
+      if (aliased == 3) {
+        java.lang.System.arraycopy(oldNode3, 0, node3, 0, oldNode3.length)
+        aliased = 4
+        result = null
+      }
+      if (length == (1 << 15)) node4(0) = oldNode3
+      if (length >= (1 << 15)) node4(length >>> 15 & 0x1F) = node3
+    }
   }
   
-  private[this] def initNode4(node4: Array[Array[Array[Array[AnyRef]]]]) {
-    this.node4 = new Array[Array[Array[Array[AnyRef]]]](32)
-    java.lang.System.arraycopy(node4, 0, this.node4, 0, node4.length)
-    initNode3(node4(node4.length - 1))
+  private[this] def gotoNode4() {
+    if (length >= (1 << 20)) gotoNode5()
+    if (aliased == 4 || (length & 0xFFFFF) == 0 || length == (1 << 15)) {
+      val oldNode4 = node4
+      node4 = new Array[Array[Array[Array[AnyRef]]]](32)
+      if (aliased == 4) {
+        java.lang.System.arraycopy(oldNode4, 0, node4, 0, oldNode4.length)
+        aliased = 5
+        result = null
+      }
+      if (length == (1 << 20)) node5(0) = oldNode4
+      if (length >= (1 << 20)) node5(length >>> 20 & 0x1F) = node4
+    }
   }
   
-  private[this] def initNode5(node5: Array[Array[Array[Array[Array[AnyRef]]]]]) {
-    this.node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](32)
-    java.lang.System.arraycopy(node5, 0, this.node5, 0, node5.length)
-    initNode4(node5(node5.length - 1))
+  private[this] def gotoNode5() {
+    if (length >= (1 << 25)) gotoNode6()
+    if (aliased == 5 || (length & 0x1FFFFFF) == 0 || length == (1 << 20)) {
+      val oldNode5 = node5
+      node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](32)
+      if (aliased == 5) {
+        java.lang.System.arraycopy(oldNode5, 0, node5, 0, oldNode5.length)
+        aliased == 6
+        result = null
+      }
+      if (length == (1 << 25)) node6(0) = oldNode5
+      if (length >= (1 << 25)) node6(length >>> 25 & 0x1F) = node5
+    }
   }
   
-  private[this] def initNode6(node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]]) {
-    this.node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](32)
-    java.lang.System.arraycopy(node6, 0, this.node6, 0, node6.length)
-    initNode5(node6(node6.length - 1))
+  private[this] def gotoNode6() {
+    if (aliased == 6 || length == (1 << 25)) {
+      val oldNode6 = node6
+      node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](32)
+      if (aliased == 6) {
+        java.lang.System.arraycopy(oldNode6, 0, node6, 0, oldNode6.length)
+        aliased == 7
+        result = null
+      }
+    }
   }
   
   override def append(elem: A) {
-    val length = this.length
-    if (length == 0) node1 = new Array[AnyRef](32)
-    else if (length == (1 << 30))
-      throw new UnsupportedOperationException("Maximum vector length exceeded")
-    else {
-      if ((length & 0x1FFFFFF) == 0) {
-        if (length == (1 << 25)) {
-          node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](32)
-          node6(0) = node5
-        }
-        node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](32)
-        node6(length >>> 25 & 0x1F) = node5
-      }
-      if ((length & 0xFFFFF) == 0) {
-        if (length == (1 << 20)) {
-          node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](32)
-          node5(0) = node4
-        }
-        node4 = new Array[Array[Array[Array[AnyRef]]]](32)
-        node5(length >>> 20 & 0x1F) = node4
-      }
-      if ((length & 0x7FFF) == 0) {
-        if (length == (1 << 15)) {
-          node4 = new Array[Array[Array[Array[AnyRef]]]](32)
-          node4(0) = node3
-        }
-        node3 = new Array[Array[Array[AnyRef]]](32)
-        node4(length >>> 15 & 0x1F) = node3
-      }
-      if ((length & 0x3FF) == 0) {
-        if (length == (1 << 10)) {
-          node3 = new Array[Array[Array[AnyRef]]](32)
-          node3(0) = node2
-        }
-        node2 = new Array[Array[AnyRef]](32)
-        node3(length >>> 10 & 0x1F) = node2
-      }
-      if ((length & 0x1F) == 0) {
-        if (length == (1 << 5)) {
-          node2 = new Array[Array[AnyRef]](32)
-          node2(0) = node1
-        }
-        node1 = new Array[AnyRef](32)
-        node2(length >>> 5 & 0x1F) = node1
-      }
-    }
+    if (length >= (1 << 30)) throw new UnsupportedOperationException("Maximum vector length exceeded")
+    gotoNode1()
     node1(length & 0x1F) = elem.asInstanceOf[AnyRef]
-    this.length = length + 1
+    length += 1
   }
   
-  override def appendAll(elems: Enumerator[A]) {
-    if (length == 0) elems match {
-      case elems: Vector0 => ()
-      case elems: Vector1[A] =>
-        initNode1(elems.node1)
-        length = elems.length
-      case elems: Vector2[A] =>
-        initNode2(elems.node2)
-        length = elems.length
-      case elems: Vector3[A] =>
-        initNode3(elems.node3)
-        length = elems.length
-      case elems: Vector4[A] =>
-        initNode4(elems.node4)
-        length = elems.length
-      case elems: Vector5[A] =>
-        initNode5(elems.node5)
-        length = elems.length
-      case elems: Vector6[A] =>
-        initNode6(elems.node6)
-        length = elems.length
-      case _ => super.appendAll(elems)
+  override def appendAll(elems: Enumerator[A]): Unit = elems match {
+    case elems: Vector0 if length == 0 => ()
+    case elems: Vector1[A] if (length & 0x1F) == 0 =>
+      gotoNode2()
+      if (length == (1 << 5)) node2(0) = node1
+      node1 = elems.node1
+      node2(length >>> 5 & 0x1F) = node1
+      length += (1 << 5)
+      if (elems.length < (1 << 5)) aliased = 1
+    case elems: Vector2[A] if (length & 0x3FF) == 0 =>
+      gotoNode3()
+      if (length == (1 << 10)) node3(0) = node2
+      node2 = elems.node2
+      node1 = node2(node2.length - 1)
+      node3(length >>> 10 & 0x1F) = node2
+      length += (1 << 10)
+      if (elems.length < (1 << 10)) aliased = 2
+    case elems: Vector3[A] if (length & 0x7FFF) == 0 =>
+      gotoNode4()
+      if (length == (1 << 15)) node4(0) = node3
+      node3 = elems.node3
+      node2 = node3(node3.length - 1)
+      node1 = node2(node2.length - 1)
+      node4(length >>> 15 & 0x1F) = node3
+      length += (1 << 15)
+      if (elems.length < (1 << 15)) aliased = 3
+    case elems: Vector4[A] if (length & 0xFFFFF) == 0 =>
+      gotoNode5()
+      if (length == (1 << 20)) node5(0) = node4
+      node4 = elems.node4
+      node3 = node4(node4.length - 1)
+      node2 = node3(node3.length - 1)
+      node1 = node2(node2.length - 1)
+      node5(length >>> 20 & 0x1F) = node4
+      length += (1 << 20)
+      if (elems.length < (1 << 20)) aliased = 4
+    case elems: Vector5[A] if (length & 0x1FFFFFF) == 0 =>
+      gotoNode6()
+      if (length == (1 << 25)) node6(0) = node5
+      node5 = elems.node5
+      node4 = node5(node5.length - 1)
+      node3 = node4(node4.length - 1)
+      node2 = node3(node3.length - 1)
+      node1 = node2(node2.length - 1)
+      node6(length >>> 25 & 0x1F) = node5
+      length += (1 << 25)
+      if (elems.length < (1 << 25)) aliased = 5
+    case elems: Vector6[A] if length == 0 =>
+      node6 = elems.node6
+      node5 = node6(node6.length - 1)
+      node4 = node5(node5.length - 1)
+      node3 = node4(node4.length - 1)
+      node2 = node3(node3.length - 1)
+      node1 = node2(node2.length - 1)
+      length = elems.length
+      if (elems.length < (1 << 30)) aliased = 6
+    case _ => super.appendAll(elems)
+  }
+  
+  private[this] def alias: Vector[A] = if (length == 0) Vector.empty else alias1
+  
+  private[this] def alias1: Vector[A] = {
+    val last1 = (length - 1) & 0x1F
+    if (last1 != 0) {
+      val oldNode1 = node1
+      node1 = new Array[AnyRef](last1 + 1)
+      java.lang.System.arraycopy(oldNode1, 0, node1, 0, last1 + 1)
+      aliased = 1
     }
-    else super.appendAll(elems)
+    if (length <= (1 << 5)) new Vector1(node1, length) else alias2
   }
   
-  override def expect(count: Int): this.type = this
+  private[this] def alias2: Vector[A] = {
+    val last2 = (length - 1) >>> 5 & 0x1F
+    if (last2 != 0) {
+      val oldNode2 = node2
+      node2 = new Array[Array[AnyRef]](last2 + 1)
+      java.lang.System.arraycopy(oldNode2, 0, node2, 0, last2)
+      node2(last2) = node1
+      aliased = 2
+    }
+    if (length <= (1 << 10)) new Vector2(node2, length) else alias3
+  }
+  
+  private[this] def alias3: Vector[A] = {
+    val last3 = (length - 1) >>> 10 & 0x1F
+    if (last3 != 0) {
+      val oldNode3 = node3
+      node3 = new Array[Array[Array[AnyRef]]](last3 + 1)
+      java.lang.System.arraycopy(oldNode3, 0, node3, 0, last3)
+      node3(last3) = node2
+      aliased = 3
+    }
+    if (length <= (1 << 15)) new Vector3(node3, length) else alias4
+  }
+  
+  private[this] def alias4: Vector[A] = {
+    val last4 = (length - 1) >>> 15 & 0x1F
+    if (last4 != 0) {
+      val oldNode4 = node4
+      node4 = new Array[Array[Array[Array[AnyRef]]]](last4 + 1)
+      java.lang.System.arraycopy(oldNode4, 0, node4, 0, last4)
+      node4(last4) = node3
+      aliased = 4
+    }
+    if (length <= (1 << 20)) new Vector4(node4, length) else alias5
+  }
+  
+  private[this] def alias5: Vector[A] = {
+    val last5 = (length - 1) >>> 20 & 0x1F
+    if (last5 != 0) {
+      val oldNode5 = node5
+      node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](last5 + 1)
+      java.lang.System.arraycopy(oldNode5, 0, node5, 0, last5)
+      node5(last5) = node4
+      aliased = 5
+    }
+    if (length <= (1 << 25)) new Vector5(node5, length) else alias6
+  }
+  
+  private[this] def alias6: Vector[A] = {
+    val last6 = (length - 1) >>> 25 & 0x1F
+    if (last6 != 0) {
+      val oldNode6 = node6
+      node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](last6 + 1)
+      java.lang.System.arraycopy(oldNode6, 0, node6, 0, last6)
+      node6(last6) = node5
+      aliased = 6
+    }
+    new Vector6(node6, length)
+  }
   
   override def state: Vector[A] = {
-    if (length == 0) Vector.empty[A]
-    else {
-      val last = length - 1
-      val node1 = new Array[AnyRef]((last & 0x1F) + 1)
-      java.lang.System.arraycopy(this.node1, 0, node1, 0, node1.length)
-      if (length <= (1 << 5)) new Vector1(node1, length)
-      else {
-        val node2 = new Array[Array[AnyRef]]((last >>> 5 & 0x1F) + 1)
-        java.lang.System.arraycopy(this.node2, 0, node2, 0, node2.length - 1)
-        node2(node2.length - 1) = node1
-        if (length <= (1 << 10)) new Vector2(node2, length)
-        else {
-          val node3 = new Array[Array[Array[AnyRef]]]((last >>> 10 & 0x1F) + 1)
-          java.lang.System.arraycopy(this.node3, 0, node3, 0, node3.length - 1)
-          node3(node3.length - 1) = node2
-          if (length <= (1 << 15)) new Vector3(node3, length)
-          else {
-            val node4 = new Array[Array[Array[Array[AnyRef]]]]((last >>> 15 & 0x1F) + 1)
-            java.lang.System.arraycopy(this.node4, 0, node4, 0, node4.length - 1)
-            node4(node4.length - 1) = node3
-            if (length <= (1 << 20)) new Vector4(node4, length)
-            else {
-              val node5 = new Array[Array[Array[Array[Array[AnyRef]]]]]((last >>> 20 & 0x1F) + 1)
-              java.lang.System.arraycopy(this.node5, 0, node5, 0, node5.length - 1)
-              node5(node5.length - 1) = node4
-              if (length <= (1 << 25)) new Vector5(node5, length)
-              else {
-                val node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]]((last >>> 25 & 0x1F) + 1)
-                java.lang.System.arraycopy(this.node6, 0, node6, 0, node6.length - 1)
-                node6(node6.length - 1) = node5
-                new Vector6(node6, length)
-              }
-            }
-          }
-        }
-      }
-    }
+    if (result == null) result = alias
+    result
   }
   
   override def clear() {
@@ -835,6 +1017,8 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
     node6 = null
     length = 0
   }
+  
+  override def expect(count: Int): this.type = this
   
   override def toString: String = "VectorBuilder"
 }
