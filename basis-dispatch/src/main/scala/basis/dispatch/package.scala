@@ -12,7 +12,7 @@ import basis.control._
 /** Concurrent execution. */
 package object dispatch {
   /** The default async implementation. */
-  val async: Async = Async.Main
+  val async: Async = Async.Main // TODO: specify implementation with system property
   
   /** Returns a new latch, and the relay it triggers. */
   def defer[A]: (Latch[A], Relay[A]) = {

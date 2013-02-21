@@ -24,7 +24,7 @@ import scala.runtime.AbstractFunction1
   * @groupprio  Composing   3
   * @groupprio  Recovering  4
   */
-class Thunk[A] extends Latch[A] with Relay[A] {
+private[basis] class Thunk[A] extends Latch[A] with Relay[A] {
   import MetaThunk._
   
   @volatile private[dispatch] final var state: AnyRef = Batch.empty[Latch[A]]
@@ -39,7 +39,7 @@ class Thunk[A] extends Latch[A] with Relay[A] {
     !s.isInstanceOf[_ Else _] && { s.asInstanceOf[Batch[Latch[A]]] traverse new Thunk.Trigger(result); true }
   }
   
-  override def forward[B >: A](that: Latch[B]): Unit = defer(that)
+  final override def forward[B >: A](that: Latch[B]): Unit = defer(that)
   
   override def run[U](f: Try[A] => U): Unit = defer(new Thunk.Run(f))
   
@@ -100,17 +100,56 @@ class Thunk[A] extends Latch[A] with Relay[A] {
     t
   }
   
-  private[dispatch] final def defer(thunk: Latch[A]) {
-    if (thunk == null) throw new NullPointerException
+  private[basis] final def defer(latch: Latch[A]) {
+    if (latch == null) throw new NullPointerException
     var s = null: AnyRef
     do s = state
     while (!s.isInstanceOf[_ Else _] &&
-           !Unsafe.compareAndSwapObject(this, StateOffset, state, state.asInstanceOf[Batch[Latch[A]]] :+ thunk))
-    if (s.isInstanceOf[_ Else _]) thunk set s.asInstanceOf[Try[A]]
+           !Unsafe.compareAndSwapObject(this, StateOffset, state, state.asInstanceOf[Batch[Latch[A]]] :+ latch))
+    if (s.isInstanceOf[_ Else _]) latch set s.asInstanceOf[Try[A]]
   }
 }
 
-private[dispatch] object Thunk {
+private[basis] object Thunk {
+  class Group[A] extends Thunk[Batch[A]] {
+    import MetaThunk._
+    import MetaGroup._
+    
+    @volatile private[dispatch] final var store: Batch[A] = Batch.empty[A]
+    
+    /** The number of results to accumulate; unbounded when negative */
+    @volatile final var size: Int = 0
+    
+    /** Adds a successful result, setting this thunk upon accumulating `size`
+      * elements, or failing this thunk if an element traps. */
+    final def put(elem: Try[A]): Boolean = {
+      if (elem == null) throw new NullPointerException
+      if (elem.canTrap) set(elem.asInstanceOf[Nothing Else Throwable])
+      else {
+        var b = null: Batch[A]
+        var n = 0
+        var s = 0
+        do { b = store; s = size; n = b.length }
+        while ((n < s || s < 0) && !Unsafe.compareAndSwapObject(this, StoreOffset, b, b :+ elem.bind))
+        if (n == size - 1) set(Bind(store)) // recheck size
+        true
+      }
+    }
+    
+    /** Negates `size` and sets this thunk if complete. */
+    final def commit() {
+      val s = -size
+      size = s
+      val b = store // must read after updating size
+      if (b.length == s) set(Bind(b)) // safely races with last put
+    }
+    
+    /** Puts the result of a thunk in this group. */
+    final class Put(thunk: () => A) extends AbstractFunction0[Unit] {
+      override def apply(): Unit = put(try Bind(thunk()) catch { case e: Throwable => Trap.NonFatal(e) })
+    }
+  }
+  
   abstract class When[-A] extends AbstractFunction0[Unit] with Latch[A] {
     @volatile protected[this] final var value: Try[A] = _
     final override def isSet: Boolean = value != null
@@ -131,9 +170,19 @@ private[dispatch] object Thunk {
     def apply(result: Try[A]): Unit
   }
   
-  final class Exec[-A](expr: => A, t: Latch[A]) extends AbstractFunction0[Unit] {
+  final class Eval[-A](expr: => A, t: Latch[A]) extends AbstractFunction0[Unit] {
     override def apply(): Unit =
       t set (try Bind(expr) catch { case e: Throwable => Trap.NonFatal(e) })
+  }
+  
+  final class Exec[-A](thunk: () => A, t: Latch[A]) extends AbstractFunction0[Unit] {
+    override def apply(): Unit =
+      t set (try Bind(thunk()) catch { case e: Throwable => Trap.NonFatal(e) })
+  }
+  
+  final class Race[-A](thunk: () => A, t: Latch[A]) extends AbstractFunction0[Unit] {
+    override def apply(): Unit =
+      if (!t.isSet) t set (try Bind(thunk()) catch { case e: Throwable => Trap.NonFatal(e) })
   }
   
   final class Run[-A](f: Try[A] => _) extends When[A] {
@@ -228,6 +277,6 @@ private[dispatch] object Thunk {
   }
   
   final class Trigger[+A](r: Try[A]) extends AbstractFunction1[Latch[A], Unit] {
-    override def apply(that: Latch[A]): Unit = that set r
+    override def apply(latch: Latch[A]): Unit = latch set r
   }
 }

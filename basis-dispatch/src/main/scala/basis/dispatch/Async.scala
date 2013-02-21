@@ -7,6 +7,7 @@
 
 package basis.dispatch
 
+import basis.collections._
 import basis.containers._
 import basis.sequential.strict._
 
@@ -14,6 +15,7 @@ import java.util.concurrent.locks.LockSupport
 
 import scala.annotation.{elidable, tailrec}
 import scala.reflect.ClassTag
+import scala.runtime.AbstractFunction1
 
 /** A lock-free, work-stealing thread pool for asynchronous computations.
   * 
@@ -137,7 +139,7 @@ abstract class Async extends Trace { async =>
   
   override def apply[A](expr: => A): Relay[A] = {
     val t = new Thunk[A]
-    exec(new Thunk.Exec(expr, t))
+    exec(new Thunk.Eval(expr, t))
     t
   }
   
@@ -153,6 +155,33 @@ abstract class Async extends Trace { async =>
     else pushQueue(thunk)
   }
   
+  override def relay[A](thunk: () => A): Relay[A] = {
+    val t = new Thunk[A]
+    exec(new Thunk.Exec(thunk, t))
+    t
+  }
+  
+  override def relayAll[A](thunks: Enumerator[() => A]): Relay[Batch[A]] = {
+    val g = new Thunk.Group[A]
+    thunks traverse {
+      val thread = Thread.currentThread
+      if (thread.isInstanceOf[WorkerThread]) new Async.RelayAllToWorker(g, thread.asInstanceOf[WorkerThread])
+      else new Async.RelayAll(g, async)
+    }
+    g.commit()
+    g
+  }
+  
+  override def relayAny[A](thunks: Enumerator[() => A]): Relay[A] = {
+    val t = new Thunk[A]
+    thunks traverse {
+      val thread = Thread.currentThread
+      if (thread.isInstanceOf[WorkerThread]) new Async.RelayAnyToWorker(t, thread.asInstanceOf[WorkerThread])
+      else new Async.RelayAny(t, async)
+    }
+    t
+  }
+  
   /** The type of worker threads.
     * @group Workers */
   protected type Worker <: WorkerThread
@@ -166,9 +195,6 @@ abstract class Async extends Trace { async =>
   protected implicit def WorkerTag: ClassTag[Worker]
   
   /** An asynchronous worker thread.
-    * 
-    * @groupprio  Running       1
-    * @groupprio  Classifying   2
     * @group Workers */
   protected class WorkerThread extends Thread { this: Worker =>
     import MetaWorkerThread._
@@ -176,8 +202,7 @@ abstract class Async extends Trace { async =>
     /** The work queue for this worker. */
     @volatile private[dispatch] final var queue: Batch[() => _] = Batch.empty[() => _]
     
-    /** The unique identifier of this worker.
-      * @group Classifying */
+    /** The unique identifier of this worker. */
     final val uid: Int = getUID()
     
     /** The random seed to pick workers from whom to steal. */
@@ -300,8 +325,7 @@ abstract class Async extends Trace { async =>
       result
     }
     
-    /** Runs this worker's main loop.
-      * @group Running */
+    /** Runs this worker's main loop. */
     final override def run() {
       didStartWorker(this)
       isWorking = true
@@ -364,8 +388,7 @@ abstract class Async extends Trace { async =>
       isWorking = true
     }
     
-    /** Returns the name of this worker.
-      * @group Classifying */
+    /** Returns the name of this worker. */
     protected def name: String = {
       new java.lang.StringBuilder().
         append(async.name).
@@ -415,7 +438,7 @@ abstract class Async extends Trace { async =>
 }
 
 /** Async implementations. */
-object Async {
+private[dispatch] object Async {
   /** The primary, unmonitored async implementation. */
   object Main extends Async {
     protected final override type Worker = WorkerThread
@@ -423,5 +446,35 @@ object Async {
     protected final override def Worker(): Worker = new Worker
     
     protected implicit final override def WorkerTag: ClassTag[Worker] = ClassTag[Worker](Predef.classOf[Worker])
+  }
+  
+  private[dispatch] final class RelayAll[-A]
+      (group: Thunk.Group[A], async: Async)
+    extends AbstractFunction1[() => A, Unit] {
+    override def apply(thunk: () => A) {
+      group.size -= 1
+      async pushQueue new group.Put(thunk)
+    }
+  }
+  
+  private[dispatch] final class RelayAllToWorker[-A]
+      (group: Thunk.Group[A], worker: A#WorkerThread forSome { type A <: Async })
+    extends AbstractFunction1[() => A, Unit] {
+    override def apply(thunk: () => A) {
+      group.size -= 1
+      worker pushQueue new group.Put(thunk)
+    }
+  }
+  
+  private[dispatch] final class RelayAny[-A]
+      (latch: Latch[A], async: Async)
+    extends AbstractFunction1[() => A, Unit] {
+    override def apply(thunk: () => A): Unit = async pushQueue new Thunk.Race(thunk, latch)
+  }
+  
+  private[dispatch] final class RelayAnyToWorker[-A]
+      (latch: Latch[A], worker: A#WorkerThread forSome { type A <: Async })
+    extends AbstractFunction1[() => A, Unit] {
+    override def apply(thunk: () => A): Unit = worker pushQueue new Thunk.Race(thunk, latch)
   }
 }

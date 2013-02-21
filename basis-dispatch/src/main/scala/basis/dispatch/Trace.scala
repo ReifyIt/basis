@@ -7,6 +7,9 @@
 
 package basis.dispatch
 
+import basis.collections._
+import basis.containers._
+
 /** A future computation coordinator.
   * 
   * @author   Chris Sachs
@@ -16,7 +19,7 @@ package basis.dispatch
   * @groupprio  Evaluating  1
   */
 trait Trace {
-  /** Returns a relay triggered by the completion of an asynchronous computation.
+  /** Returns a relay triggered with the evaluation of an asynchronous expression.
     * @group Evaluating */
   def apply[A](expr: => A): Relay[A]
   
@@ -27,4 +30,19 @@ trait Trace {
   /** Asynchronously executes a thunk.
     * @group Evaluating */
   def exec[U](thunk: () => U): Unit
+  
+  /** Returns a relay triggered with the result of an asynchronous computation.
+    * @group Evaluating */
+  def relay[A](thunk: () => A): Relay[A]
+  
+  /** Returns a relay triggered with the successful results of all the given
+    * asynchronous computations, or with the failure of any one of the computations.
+    * @group Evaluating */
+  def relayAll[A](thunks: Enumerator[() => A]): Relay[Enumerator[A]]
+  
+  /** Returns a relay triggered with the result of the first given asynchronous
+    * computation to complete.
+    * @note   may not execute all the given computations.
+    * @group  Evaluating */
+  def relayAny[A](thunks: Enumerator[() => A]): Relay[A]
 }

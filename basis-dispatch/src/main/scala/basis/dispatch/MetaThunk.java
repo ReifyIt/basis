@@ -25,4 +25,20 @@ final class MetaThunk {
       throw new Error(e);
     }
   }
+  
+  static final class MetaGroup {
+    private MetaGroup() {}
+    
+    static final long StoreOffset;
+    
+    static {
+      try {
+        Class<Thunk.Group> ThunkGroupClass = Thunk.Group.class;
+        StoreOffset = Unsafe.objectFieldOffset(ThunkGroupClass.getDeclaredField("store"));
+      }
+      catch (Exception e) {
+        throw new Error(e);
+      }
+    }
+  }
 }
