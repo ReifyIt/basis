@@ -9,13 +9,13 @@ package basis.dispatch
 
 import basis.control._
 
-/** A receiver of a future result.
+/** A future result receiver.
   * 
   * @author   Chris Sachs
   * @version  0.1
   * @since    0.1
   * 
-  * @groupprio  Testing     1
+  * @groupprio  Evaluating  1
   * @groupprio  Relaying    2
   * @groupprio  Composing   3
   * @groupprio  Recovering  4
@@ -23,7 +23,7 @@ import basis.control._
 trait Relay[+A] {
   /** Returns `true` if this relay is set with a value or exception,
     * otherwise returns `false` if this relay is not yet set.
-    * @group Testing */
+    * @group Evaluating */
   def isSet: Boolean
   
   /** Applies a function to the received result.

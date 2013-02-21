@@ -13,10 +13,21 @@ import basis.control._
 import scala.runtime.AbstractFunction0
 import scala.runtime.AbstractFunction1
 
-private[dispatch] class Thunk[A] extends Latch[A] with Relay[A] {
+/** A pending computation relayed by the default async implementation.
+  * 
+  * @author   Chris Sachs
+  * @version  0.1
+  * @since    0.1
+  * 
+  * @groupprio  Evaluating  1
+  * @groupprio  Relaying    2
+  * @groupprio  Composing   3
+  * @groupprio  Recovering  4
+  */
+class Thunk[A] extends Latch[A] with Relay[A] {
   import MetaThunk._
   
-  @volatile protected[this] var state: AnyRef = Batch.empty[Latch[A]]
+  @volatile private[dispatch] final var state: AnyRef = Batch.empty[Latch[A]]
   
   final override def isSet: Boolean = state.isInstanceOf[_ Else _]
   
@@ -28,68 +39,68 @@ private[dispatch] class Thunk[A] extends Latch[A] with Relay[A] {
     !s.isInstanceOf[_ Else _] && { s.asInstanceOf[Batch[Latch[A]]] traverse new Thunk.Trigger(result); true }
   }
   
-  final override def forward[B >: A](that: Latch[B]): Unit = defer(that)
+  override def forward[B >: A](that: Latch[B]): Unit = defer(that)
   
-  final override def run[U](f: Try[A] => U): Unit = defer(new Thunk.Run(f))
+  override def run[U](f: Try[A] => U): Unit = defer(new Thunk.Run(f))
   
-  final override def foreach[U](f: A => U): Unit = defer(new Thunk.Foreach(f))
+  override def foreach[U](f: A => U): Unit = defer(new Thunk.Foreach(f))
   
-  final override def andThen[U](q: PartialFunction[Try[A], U]): Relay[A] = {
+  override def andThen[U](q: PartialFunction[Try[A], U]): Relay[A] = {
     val t = new Thunk[A]
     defer(new Thunk.AndThen(q, t))
     t
   }
   
-  final override def choose[B](q: PartialFunction[A, B]): Relay[B] = {
+  override def choose[B](q: PartialFunction[A, B]): Relay[B] = {
     val t = new Thunk[B]
     defer(new Thunk.Choose(q, t))
     t
   }
   
-  final override def map[B](f: A => B): Relay[B] = {
+  override def map[B](f: A => B): Relay[B] = {
     val t = new Thunk[B]
     defer(new Thunk.Map(f, t))
     t
   }
   
-  final override def flatMap[B](f: A => Relay[B]): Relay[B] = {
+  override def flatMap[B](f: A => Relay[B]): Relay[B] = {
     val t = new Thunk[B]
     defer(new Thunk.FlatMap(f, t))
     t
   }
   
-  final override def recover[B >: A](q: PartialFunction[Throwable, B]): Relay[B] = {
+  override def recover[B >: A](q: PartialFunction[Throwable, B]): Relay[B] = {
     val t = new Thunk[B]
     defer(new Thunk.Recover(q, t))
     t
   }
   
-  final override def recoverWith[B >: A](q: PartialFunction[Throwable, Relay[B]]): Relay[B] = {
+  override def recoverWith[B >: A](q: PartialFunction[Throwable, Relay[B]]): Relay[B] = {
     val t = new Thunk[B]
     defer(new Thunk.RecoverWith(q, t))
     t
   }
   
-  final override def filter(p: A => Boolean): Relay[A] = {
+  override def filter(p: A => Boolean): Relay[A] = {
     val t = new Thunk[A]
     defer(new Thunk.Filter(p, t))
     t
   }
   
-  final override def withFilter(p: A => Boolean): Relay[A] = {
+  override def withFilter(p: A => Boolean): Relay[A] = {
     val t = new Thunk[A]
     defer(new Thunk.Filter(p, t))
     t
   }
   
-  final override def zip[B](that: Relay[B]): Relay[(A, B)] = {
+  override def zip[B](that: Relay[B]): Relay[(A, B)] = {
     val t = new Thunk.Zip[A, B]
     this forward new t.Set1
     that forward new t.Set2
     t
   }
   
-  private def defer(thunk: Latch[A]) {
+  private[dispatch] final def defer(thunk: Latch[A]) {
     if (thunk == null) throw new NullPointerException
     var s = null: AnyRef
     do s = state
@@ -101,7 +112,7 @@ private[dispatch] class Thunk[A] extends Latch[A] with Relay[A] {
 
 private[dispatch] object Thunk {
   abstract class When[-A] extends AbstractFunction0[Unit] with Latch[A] {
-    protected[this] var value: Try[A] = _
+    @volatile protected[this] final var value: Try[A] = _
     final override def isSet: Boolean = value != null
     final override def set(result: Try[A]): Boolean = {
       if (result == null) throw new NullPointerException
@@ -184,8 +195,8 @@ private[dispatch] object Thunk {
   }
   
   final class Zip[A, B] extends Thunk[(A, B)] {
-    @volatile protected[this] var _1: Try[A] = _
-    @volatile protected[this] var _2: Try[B] = _
+    @volatile private[dispatch] final var _1: Try[A] = _
+    @volatile private[dispatch] final var _2: Try[B] = _
     def set1(r1: Try[A]) {
       if (r1 == null) throw new NullPointerException
       if (_1 == null) {

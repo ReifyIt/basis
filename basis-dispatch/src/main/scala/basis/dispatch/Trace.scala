@@ -7,7 +7,7 @@
 
 package basis.dispatch
 
-/** A coordinator of future computations.
+/** A future computation coordinator.
   * 
   * @author   Chris Sachs
   * @version  0.1
