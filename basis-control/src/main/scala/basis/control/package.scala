@@ -28,7 +28,7 @@ package object control {
   
   /** Binds a non-`null` value, or returns the unit [[Trap$ Trap]] for `null`.
     * @group Conditional */
-  def Maybe[A](value: A): Maybe[A] = if (value != null) Bind(value) else Trap
+  def Maybe[A](value: A): A Else Nothing = if (value != null) Bind(value) else Trap
   
   /** A nondeterministic `Boolean`; either `True`, `False`, or a [[Trap]].
     * [[ElseOps]] provides standard operations available to all `Truth` values.
