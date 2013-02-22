@@ -26,15 +26,31 @@ final class MetaThunk {
     }
   }
   
-  static final class MetaGroup {
-    private MetaGroup() {}
+  static final class MetaJoinAll {
+    private MetaJoinAll() {}
     
-    static final long StoreOffset;
+    static final long BatchOffset;
     
     static {
       try {
-        Class<Thunk.Group> ThunkGroupClass = Thunk.Group.class;
-        StoreOffset = Unsafe.objectFieldOffset(ThunkGroupClass.getDeclaredField("store"));
+        Class<Thunk.JoinAll> ThunkJoinAllClass = Thunk.JoinAll.class;
+        BatchOffset = Unsafe.objectFieldOffset(ThunkJoinAllClass.getDeclaredField("batch"));
+      }
+      catch (Exception e) {
+        throw new Error(e);
+      }
+    }
+  }
+  
+  static final class MetaJoinAny {
+    private MetaJoinAny() {}
+    
+    static final long CountOffset;
+    
+    static {
+      try {
+        Class<Thunk.JoinAny> ThunkJoinAnyClass = Thunk.JoinAny.class;
+        CountOffset = Unsafe.objectFieldOffset(ThunkJoinAnyClass.getDeclaredField("count"));
       }
       catch (Exception e) {
         throw new Error(e);

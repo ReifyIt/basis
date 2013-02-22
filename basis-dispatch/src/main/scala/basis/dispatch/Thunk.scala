@@ -111,42 +111,80 @@ private[basis] class Thunk[A] extends Latch[A] with Relay[A] {
 }
 
 private[basis] object Thunk {
-  class Group[A] extends Thunk[Batch[A]] {
-    import MetaThunk._
-    import MetaGroup._
+  import MetaThunk._
+  
+  class JoinAll[A] extends Thunk[Batch[A]] {
+    import MetaJoinAll._
     
-    @volatile private[dispatch] final var store: Batch[A] = Batch.empty[A]
+    @volatile private[dispatch] final var batch: Batch[A] = Batch.empty[A]
     
     /** The number of results to accumulate; unbounded when negative */
     @volatile final var size: Int = 0
     
-    /** Adds a successful result, setting this thunk upon accumulating `size`
-      * elements, or failing this thunk if an element traps. */
-    final def put(elem: Try[A]): Boolean = {
-      if (elem == null) throw new NullPointerException
-      if (elem.canTrap) set(elem.asInstanceOf[Nothing Else Throwable])
+    /** Submits a result, setting this thunk upon accumulating `size` results,
+      * or failing this thunk if any result traps. */
+    final def put(result: Try[A]) {
+      if (result == null) throw new NullPointerException
+      if (result.canTrap) set(result.asInstanceOf[Nothing Else Throwable])
       else {
         var b = null: Batch[A]
         var n = 0
         var s = 0
-        do { b = store; s = size; n = b.length }
-        while ((n < s || s < 0) && !Unsafe.compareAndSwapObject(this, StoreOffset, b, b :+ elem.bind))
-        if (n == size - 1) set(Bind(store)) // recheck size
-        true
+        do { b = batch; s = size; n = b.length }
+        while ((n < s || s < 0) && !Unsafe.compareAndSwapObject(this, BatchOffset, b, b :+ result.bind))
+        s = size // recheck size
+        if (n == s - 1) set(Bind(batch))
       }
     }
     
-    /** Negates `size` and sets this thunk if complete. */
+    /** Negates `size`, and sets this thunk if complete. */
     final def commit() {
       val s = -size
       size = s
-      val b = store // must read after updating size
+      val b = batch // must read after updating size
       if (b.length == s) set(Bind(b)) // safely races with last put
     }
     
-    /** Puts the result of a thunk in this group. */
+    /** Submits the result of a thunk to this group. */
     final class Put(thunk: () => A) extends AbstractFunction0[Unit] {
-      override def apply(): Unit = put(try Bind(thunk()) catch { case e: Throwable => Trap.NonFatal(e) })
+      override def apply(): Unit =
+        put(try Bind(thunk()) catch { case e: Throwable => Trap.NonFatal(e) })
+    }
+  }
+  
+  class JoinAny[A] extends Thunk[A] {
+    import MetaJoinAny._
+    
+    /** The number of received results. */
+    @volatile private[dispatch] final var count: Int = 0
+    
+    /** The number of results to expect; unbounded when negative. */
+    @volatile final var size: Int = 0
+    
+    /** Sets this thunk with a successful result, or upon receiving `size` results. */
+    final def put(result: Try[A]) {
+      if (result == null) throw new NullPointerException
+      var n = 0
+      var s = 0
+      do { n = count; s = size }
+      while ((n < s || s < 0) && !Unsafe.compareAndSwapInt(this, CountOffset, n, n + 1))
+      s = size // recheck size
+      if (n == s - 1) set(result)
+      else if ((n < s || s < 0) && result.canBind) set(result)
+    }
+    
+    /** Negates `size`, and traps this thunk if complete. */
+    final def commit() {
+      val s = -size
+      size = s
+      val n = count // must read after updating size
+      if (n == s) set(Trap) // safely races with put
+    }
+    
+    /** Submits the result of a thunk to this group. */
+    final class Put(thunk: () => A) extends AbstractFunction0[Unit] {
+      override def apply(): Unit =
+        if (!isSet) put(try Bind(thunk()) catch { case e: Throwable => Trap.NonFatal(e) })
     }
   }
   
@@ -178,11 +216,6 @@ private[basis] object Thunk {
   final class Exec[-A](thunk: () => A, t: Latch[A]) extends AbstractFunction0[Unit] {
     override def apply(): Unit =
       t set (try Bind(thunk()) catch { case e: Throwable => Trap.NonFatal(e) })
-  }
-  
-  final class Race[-A](thunk: () => A, t: Latch[A]) extends AbstractFunction0[Unit] {
-    override def apply(): Unit =
-      if (!t.isSet) t set (try Bind(thunk()) catch { case e: Throwable => Trap.NonFatal(e) })
   }
   
   final class Run[-A](f: Try[A] => _) extends When[A] {

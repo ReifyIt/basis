@@ -89,25 +89,25 @@ abstract class Async extends Trace { async =>
   
   /** Starts or resumes enough workers to reach the target level of parallelism. */
   @tailrec private[dispatch] final def wakeForWork() {
-    val workingSize = working.size
-    if (workingSize < parallelism) {
-      val waiting = this.waiting
-      if (!waiting.isEmpty && Unsafe.compareAndSwapObject(this, WaitingOffset, waiting, waiting.tail)) {
+    val waiting = this.waiting
+    val workingSize = workers.length - blocked.size
+    if (working.size < parallelism && !waiting.isEmpty) {
+      if (Unsafe.compareAndSwapObject(this, WaitingOffset, waiting, waiting.tail)) {
         val worker = waiting.head
         willResumeWorkerToIncreaseParallelism(worker, workingSize)
         worker.isWaiting = false
         if (worker.isParking) LockSupport.unpark(worker)
-        wakeForWork()
       }
-      else {
-        val worker = Worker()
-        willStartWorkerToIncreaseParallelism(worker, workingSize)
-        var ws = null: Array[Worker]
-        do ws = workers
-        while (!Unsafe.compareAndSwapObject(this, WorkersOffset, ws, ws :+ worker))
-        worker.start()
-        wakeForWork()
-      }
+      wakeForWork()
+    }
+    else if (workingSize < parallelism) {
+      val worker = Worker()
+      willStartWorkerToIncreaseParallelism(worker, workingSize)
+      var ws = null: Array[Worker]
+      do ws = workers
+      while (!Unsafe.compareAndSwapObject(this, WorkersOffset, ws, ws :+ worker))
+      worker.start()
+      wakeForWork()
     }
   }
   
@@ -162,23 +162,24 @@ abstract class Async extends Trace { async =>
   }
   
   override def relayAll[A](thunks: Enumerator[() => A]): Relay[Batch[A]] = {
-    val g = new Thunk.Group[A]
+    val t = new Thunk.JoinAll[A]
     thunks traverse {
       val thread = Thread.currentThread
-      if (thread.isInstanceOf[WorkerThread]) new Async.RelayAllToWorker(g, thread.asInstanceOf[WorkerThread])
-      else new Async.RelayAll(g, async)
+      if (thread.isInstanceOf[WorkerThread]) new Async.RelayAllToWorker(t, thread.asInstanceOf[WorkerThread])
+      else new Async.RelayAll(t, async)
     }
-    g.commit()
-    g
+    t.commit()
+    t
   }
   
   override def relayAny[A](thunks: Enumerator[() => A]): Relay[A] = {
-    val t = new Thunk[A]
+    val t = new Thunk.JoinAny[A]
     thunks traverse {
       val thread = Thread.currentThread
       if (thread.isInstanceOf[WorkerThread]) new Async.RelayAnyToWorker(t, thread.asInstanceOf[WorkerThread])
       else new Async.RelayAny(t, async)
     }
+    t.commit()
     t
   }
   
@@ -295,23 +296,20 @@ abstract class Async extends Trace { async =>
       thunk
     }
     
-    /** Evaluates an expression that potentially blocks and compensates by
-      * releasing a waiting worker or starting a new worker if no active
-      * workers remain. */
-    private[dispatch] final def block[A](expr: => A): A = {
-      isWorking = false
-      isBlocked = true
-      val workers = async.workers
-      val working = async.working
+    /** Compensate for a potentially blocked thread by releasing a waiting
+      * worker or starting a new worker if no active workers remain. */
+    @tailrec private[dispatch] final def compensateForBlock() {
       val waiting = async.waiting
-      if (working.size < parallelism && !waiting.isEmpty &&
-          Unsafe.compareAndSwapObject(async, WaitingOffset, waiting, waiting.tail)) {
-        val worker = waiting.head
-        willResumeWorkerToCompensateForBlock(worker, this)
-        worker.isWaiting = false
-        if (worker.isParking) LockSupport.unpark(worker)
+      if (working.size < parallelism && !waiting.isEmpty) {
+        if (Unsafe.compareAndSwapObject(async, WaitingOffset, waiting, waiting.tail)) {
+          val worker = waiting.head
+          willResumeWorkerToCompensateForBlock(worker, this)
+          worker.isWaiting = false
+          if (worker.isParking) LockSupport.unpark(worker)
+        }
+        else compensateForBlock()
       }
-      else if (workers.length < parallelism || working.isEmpty) {
+      else if (workers.length < parallelism || waiting.isEmpty) {
         val worker = Worker()
         willStartWorkerToCompensateForBlock(worker, this)
         var ws = null: Array[Worker]
@@ -319,6 +317,13 @@ abstract class Async extends Trace { async =>
         while (!Unsafe.compareAndSwapObject(async, WorkersOffset, ws, ws :+ worker))
         worker.start()
       }
+    }
+    
+    /** Evaluates and compensates for an expression that potentially blocks. */
+    private[dispatch] final def block[A](expr: => A): A = {
+      isWorking = false
+      isBlocked = true
+      compensateForBlock()
       val result = expr
       isBlocked = false
       isWorking = true
@@ -355,8 +360,8 @@ abstract class Async extends Trace { async =>
       catch { case e: Exception => didThrowException(this, e) }
     }
     
-    /** Parks this worker thread in between scans for work. Signals this worker
-      * to terminate if the number of active threads exceeds the target parallelism. */
+    /** Parks this thread in between scans for work. Terminates workers when
+      * idle or when the number of active threads exceeds the target parallelism. */
     private[dispatch] final def idle() {
       isWorking = false
       willPauseWorker(this)
@@ -365,22 +370,23 @@ abstract class Async extends Trace { async =>
       while (!Unsafe.compareAndSwapObject(async, WaitingOffset, ws, this :: ws))
       isWaiting = true
       didPauseWorker(this)
-      if (working.size == parallelism) {
-        isParking = true
-        LockSupport.parkNanos(async, 4000000000L)
-        val workingSize = working.size
-        if (isWaiting && workingSize > parallelism) {
-          willStopWorkerToDecreaseParallelism(this, workingSize)
-          isHalting = true
-        }
-        isParking = false
-      }
       while (isWaiting) {
         scanForWork()
         isParking = true
         if (isWaiting) {
+          val startTime = System.currentTimeMillis
           Thread.interrupted()
-          LockSupport.park(async)
+          LockSupport.parkNanos(async, 10000000000L)
+          val workingSize = working.size
+          val waiting = async.waiting
+          if ((System.currentTimeMillis - startTime >= 8000 && workingSize == 0 || workingSize == parallelism) &&
+              !waiting.isEmpty && Unsafe.compareAndSwapObject(async, WaitingOffset, waiting, waiting.tail)) {
+            val worker = waiting.head
+            willStopWorker(worker)
+            worker.isHalting = true
+            worker.isWaiting = false
+            if (worker.isParking) LockSupport.unpark(worker)
+          }
         }
         isParking = false
       }
@@ -416,12 +422,6 @@ abstract class Async extends Trace { async =>
   @elidable(1500) protected def didStartWorker(worker: Worker): Unit = ()
   
   /** @group Monitoring */
-  @elidable(1500) protected def willStopWorkerToDecreaseParallelism(worker: Worker, workingSize: Int): Unit = ()
-  
-  /** @group Monitoring */
-  @elidable(1500) protected def didStopWorker(worker: Worker): Unit = ()
-  
-  /** @group Monitoring */
   @elidable(1500) protected def willPauseWorker(worker: Worker): Unit = ()
   
   /** @group Monitoring */
@@ -435,6 +435,14 @@ abstract class Async extends Trace { async =>
   
   /** @group Monitoring */
   @elidable(1500) protected def didResumeWorker(worker: Worker): Unit = ()
+  
+  /** @group Monitoring */
+  @elidable(1500) protected def willStopWorker(worker: Worker): Unit = ()
+  
+  /** @group Monitoring */
+  @elidable(1500) protected def didStopWorker(worker: Worker): Unit = ()
+  
+  def liveCount: Int = workers.length
 }
 
 /** Async implementations. */
@@ -449,7 +457,7 @@ private[dispatch] object Async {
   }
   
   private[dispatch] final class RelayAll[-A]
-      (group: Thunk.Group[A], async: Async)
+      (group: Thunk.JoinAll[A], async: Async)
     extends AbstractFunction1[() => A, Unit] {
     override def apply(thunk: () => A) {
       group.size -= 1
@@ -458,7 +466,7 @@ private[dispatch] object Async {
   }
   
   private[dispatch] final class RelayAllToWorker[-A]
-      (group: Thunk.Group[A], worker: A#WorkerThread forSome { type A <: Async })
+      (group: Thunk.JoinAll[A], worker: T#WorkerThread forSome { type T <: Async })
     extends AbstractFunction1[() => A, Unit] {
     override def apply(thunk: () => A) {
       group.size -= 1
@@ -467,14 +475,24 @@ private[dispatch] object Async {
   }
   
   private[dispatch] final class RelayAny[-A]
-      (latch: Latch[A], async: Async)
+      (group: Thunk.JoinAny[A], async: Async)
     extends AbstractFunction1[() => A, Unit] {
-    override def apply(thunk: () => A): Unit = async pushQueue new Thunk.Race(thunk, latch)
+    override def apply(thunk: () => A) {
+      if (!group.isSet) {
+        group.size -= 1
+        async pushQueue new group.Put(thunk)
+      }
+    }
   }
   
   private[dispatch] final class RelayAnyToWorker[-A]
-      (latch: Latch[A], worker: A#WorkerThread forSome { type A <: Async })
+      (group: Thunk.JoinAny[A], worker: T#WorkerThread forSome { type T <: Async })
     extends AbstractFunction1[() => A, Unit] {
-    override def apply(thunk: () => A): Unit = worker pushQueue new Thunk.Race(thunk, latch)
+    override def apply(thunk: () => A) {
+      if (!group.isSet) {
+        group.size -= 1
+        worker pushQueue new group.Put(thunk)
+      }
+    }
   }
 }
