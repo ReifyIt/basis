@@ -57,4 +57,20 @@ final class MetaThunk {
       }
     }
   }
+  
+  static final class MetaJoinFirst {
+    private MetaJoinFirst() {}
+    
+    static final long CountOffset;
+    
+    static {
+      try {
+        Class<Thunk.JoinFirst> ThunkJoinFirstClass = Thunk.JoinFirst.class;
+        CountOffset = Unsafe.objectFieldOffset(ThunkJoinFirstClass.getDeclaredField("count"));
+      }
+      catch (Exception e) {
+        throw new Error(e);
+      }
+    }
+  }
 }

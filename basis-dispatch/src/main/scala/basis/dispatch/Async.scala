@@ -183,6 +183,17 @@ abstract class Async extends Trace { async =>
     t
   }
   
+  override def relayFirst[A](thunks: Enumerator[() => A])(p: A => Boolean): Relay[A] = {
+    val t = new Thunk.JoinFirst(p)
+    thunks traverse {
+      val thread = Thread.currentThread
+      if (thread.isInstanceOf[WorkerThread]) new Async.RelayAnyToWorker(t, thread.asInstanceOf[WorkerThread])
+      else new Async.RelayAny(t, async)
+    }
+    t.commit()
+    t
+  }
+  
   /** The type of worker threads.
     * @group Workers */
   protected type Worker <: WorkerThread
@@ -457,41 +468,41 @@ private[dispatch] object Async {
   }
   
   private[dispatch] final class RelayAll[-A]
-      (group: Thunk.JoinAll[A], async: Async)
+      (group: Thunk.Join[A, _], async: Async)
     extends AbstractFunction1[() => A, Unit] {
     override def apply(thunk: () => A) {
-      group.size -= 1
-      async pushQueue new group.Put(thunk)
+      group.limit -= 1
+      async pushQueue new Thunk.PutAll(thunk, group)
     }
   }
   
   private[dispatch] final class RelayAllToWorker[-A]
-      (group: Thunk.JoinAll[A], worker: T#WorkerThread forSome { type T <: Async })
+      (group: Thunk.Join[A, _], worker: T#WorkerThread forSome { type T <: Async })
     extends AbstractFunction1[() => A, Unit] {
     override def apply(thunk: () => A) {
-      group.size -= 1
-      worker pushQueue new group.Put(thunk)
+      group.limit -= 1
+      worker pushQueue new Thunk.PutAll(thunk, group)
     }
   }
   
   private[dispatch] final class RelayAny[-A]
-      (group: Thunk.JoinAny[A], async: Async)
+      (group: Thunk.Join[A, _], async: Async)
     extends AbstractFunction1[() => A, Unit] {
     override def apply(thunk: () => A) {
       if (!group.isSet) {
-        group.size -= 1
-        async pushQueue new group.Put(thunk)
+        group.limit -= 1
+        async pushQueue new Thunk.PutAny(thunk, group)
       }
     }
   }
   
   private[dispatch] final class RelayAnyToWorker[-A]
-      (group: Thunk.JoinAny[A], worker: T#WorkerThread forSome { type T <: Async })
+      (group: Thunk.Join[A, _], worker: T#WorkerThread forSome { type T <: Async })
     extends AbstractFunction1[() => A, Unit] {
     override def apply(thunk: () => A) {
       if (!group.isSet) {
-        group.size -= 1
-        worker pushQueue new group.Put(thunk)
+        group.limit -= 1
+        worker pushQueue new Thunk.PutAny(thunk, group)
       }
     }
   }

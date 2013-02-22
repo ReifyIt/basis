@@ -41,8 +41,15 @@ trait Trace {
   def relayAll[A](thunks: Enumerator[() => A]): Relay[Enumerator[A]]
   
   /** Returns a relay triggered with the result of the first asynchronous
-    * computation to complete successfully, or a trap if none succeeds.
+    * computation to successfully complete, or a trap if none succeeds.
     * @note   may not execute all the given computations.
     * @group  Evaluating */
   def relayAny[A](thunks: Enumerator[() => A]): Relay[A]
+  
+  /** Returns a relay triggered with the result of the first asynchronous
+    * computation to successfully complete that satisfies the predicate,
+    * or a trap if none succeeds, or none satisfies the predicate.
+    * @note   may not execute all the given computations.
+    * @group  Evaluating */
+  def relayFirst[A](thunks: Enumerator[() => A])(p: A => Boolean): Relay[A]
 }
