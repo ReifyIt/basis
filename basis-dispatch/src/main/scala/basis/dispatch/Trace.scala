@@ -52,4 +52,10 @@ trait Trace {
     * @note   may not execute all the given computations.
     * @group  Evaluating */
   def relayFirst[A](thunks: Enumerator[() => A])(p: A => Boolean): Relay[A]
+  
+  /** Returns a relay triggered with the folded result of the given
+    * asynchronous computations, or with the failure of any one computation
+    * or reduce operation, or with a trap if `thunks` is empty.
+    * @group Evaluating */
+  def reduce[A](thunks: Enumerator[() => A])(op: (A, A) => A): Relay[A]
 }

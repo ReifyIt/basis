@@ -73,4 +73,22 @@ final class MetaThunk {
       }
     }
   }
+  
+  static final class MetaReduce {
+    private MetaReduce() {}
+    
+    static final long ReadyOffset;
+    static final long CountOffset;
+    
+    static {
+      try {
+        Class<Thunk.Reduce> ThunkReduceClass = Thunk.Reduce.class;
+        ReadyOffset = Unsafe.objectFieldOffset(ThunkReduceClass.getDeclaredField("ready"));
+        CountOffset = Unsafe.objectFieldOffset(ThunkReduceClass.getDeclaredField("count"));
+      }
+      catch (Exception e) {
+        throw new Error(e);
+      }
+    }
+  }
 }

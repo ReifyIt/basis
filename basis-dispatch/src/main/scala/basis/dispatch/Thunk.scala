@@ -174,8 +174,7 @@ private[basis] object Thunk {
       do { n = count; k = limit }
       while ((n < k || k < 0) && !Unsafe.compareAndSwapInt(this, CountOffset, n, n + 1))
       k = limit // recheck limit
-      if (n == k - 1) set(result)
-      else if ((n < k || k < 0) && result.canBind) set(result)
+      if (n == k - 1 || (n < k || k < 0) && result.canBind) set(result)
     }
     
     /** Negates `limit`, and traps this thunk if complete. */
@@ -203,8 +202,8 @@ private[basis] object Thunk {
       do { n = count; k = limit }
       while ((n < k || k < 0) && !Unsafe.compareAndSwapInt(this, CountOffset, n, n + 1))
       k = limit // recheck limit
-      if (n == k - 1) set(if (result.canBind && p(result.bind)) result else Trap)
-      else if ((n < k || k < 0) && result.canBind && p(result.bind)) set(result)
+      if ((n < k || k < 0) && result.canBind && p(result.bind)) set(result)
+      else if (n == k - 1) set(Trap)
     }
     
     /** Negates `limit`, and traps this thunk if complete. */
@@ -213,6 +212,57 @@ private[basis] object Thunk {
       limit = k
       val n = count // must read after updating limit
       if (n == k) set(Trap) // safely races with put
+    }
+  }
+  
+  class Reduce[A](op: (A, A) => A) extends Join[A, A] {
+    import MetaReduce._
+    
+    @volatile private[dispatch] final var ready: A = null.asInstanceOf[A]
+    
+    @volatile private[dispatch] final var count: Int = 0
+    
+    @volatile final override var limit: Int = 0
+    
+    final override def put(result: Try[A]) {
+      if (result == null) throw new NullPointerException
+      if (result.canTrap) set(result.asInstanceOf[Nothing Else Throwable])
+      else {
+        var r = null.asInstanceOf[A]
+        do r = ready
+        while (r != null && !Unsafe.compareAndSwapObject(this, ReadyOffset, r, null) ||
+               r == null && !Unsafe.compareAndSwapObject(this, ReadyOffset, null, result.bind))
+        var n = 0
+        if (r != null) {
+          do n = count
+          while (!Unsafe.compareAndSwapInt(this, CountOffset, n, n - 1))
+          async exec new Step(r, result.bind)
+        }
+        else {
+          do n = count
+          while (!Unsafe.compareAndSwapInt(this, CountOffset, n, n + 2))
+          val l = limit
+          if (n == l - 1) {
+            set(result)
+            ready = null.asInstanceOf[A]
+          }
+        }
+      }
+    }
+    
+    final def commit() {
+      val k = -limit
+      limit = k
+      val n = count // must read after updating limit
+      if (n == k) {
+        set(Maybe(ready)) // safely races with put
+        ready = null.asInstanceOf[A]
+      }
+    }
+    
+    final class Step(a: A, b: A) extends AbstractFunction0[Unit] {
+      override def apply(): Unit =
+        put(try Bind(op(a, b)) catch { case e: Throwable => Trap.NonFatal(e) })
     }
   }
   
@@ -243,7 +293,7 @@ private[basis] object Thunk {
       if (result == null) throw new NullPointerException
       if (value == null) {
         value = result
-        async.exec(this)
+        async exec this
         true
       }
       else false

@@ -194,6 +194,17 @@ abstract class Async extends Trace { async =>
     t
   }
   
+  override def reduce[A](thunks: Enumerator[() => A])(op: (A, A) => A): Relay[A] = {
+    val t = new Thunk.Reduce(op)
+    thunks traverse {
+      val thread = Thread.currentThread
+      if (thread.isInstanceOf[WorkerThread]) new Async.RelayAllToWorker(t, thread.asInstanceOf[WorkerThread])
+      else new Async.RelayAll(t, async)
+    }
+    t.commit()
+    t
+  }
+  
   /** The type of worker threads.
     * @group Workers */
   protected type Worker <: WorkerThread
