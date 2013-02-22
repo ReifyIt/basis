@@ -933,8 +933,8 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
   private[this] def alias: Vector[A] = if (length == 0) Vector.empty else alias1
   
   private[this] def alias1: Vector[A] = {
-    val last1 = (length - 1) & 0x1F
-    if (last1 != 0) {
+    if ((length & 0x1F) != 0) {
+      val last1 = (length - 1) & 0x1F
       val oldNode1 = node1
       node1 = new Array[AnyRef](last1 + 1)
       java.lang.System.arraycopy(oldNode1, 0, node1, 0, last1 + 1)
@@ -944,8 +944,8 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
   }
   
   private[this] def alias2: Vector[A] = {
-    val last2 = (length - 1) >>> 5 & 0x1F
-    if (last2 != 0) {
+    if ((length >>> 5 & 0x1F) != 0) {
+      val last2 = (length - 1) >>> 5 & 0x1F
       val oldNode2 = node2
       node2 = new Array[Array[AnyRef]](last2 + 1)
       java.lang.System.arraycopy(oldNode2, 0, node2, 0, last2)
@@ -956,8 +956,8 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
   }
   
   private[this] def alias3: Vector[A] = {
-    val last3 = (length - 1) >>> 10 & 0x1F
-    if (last3 != 0) {
+    if ((length >>> 10 & 0x1F) != 0) {
+      val last3 = (length - 1) >>> 10 & 0x1F
       val oldNode3 = node3
       node3 = new Array[Array[Array[AnyRef]]](last3 + 1)
       java.lang.System.arraycopy(oldNode3, 0, node3, 0, last3)
@@ -968,8 +968,8 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
   }
   
   private[this] def alias4: Vector[A] = {
-    val last4 = (length - 1) >>> 15 & 0x1F
-    if (last4 != 0) {
+    if ((length >>> 15 & 0x1F) != 0) {
+      val last4 = (length - 1) >>> 15 & 0x1F
       val oldNode4 = node4
       node4 = new Array[Array[Array[Array[AnyRef]]]](last4 + 1)
       java.lang.System.arraycopy(oldNode4, 0, node4, 0, last4)
@@ -980,8 +980,8 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
   }
   
   private[this] def alias5: Vector[A] = {
-    val last5 = (length - 1) >>> 20 & 0x1F
-    if (last5 != 0) {
+    if ((length >>> 20 & 0x1F) != 0) {
+      val last5 = (length - 1) >>> 20 & 0x1F
       val oldNode5 = node5
       node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](last5 + 1)
       java.lang.System.arraycopy(oldNode5, 0, node5, 0, last5)
@@ -992,8 +992,8 @@ private[containers] final class VectorBuilder[A] extends Builder[A] {
   }
   
   private[this] def alias6: Vector[A] = {
-    val last6 = (length - 1) >>> 25 & 0x1F
-    if (last6 != 0) {
+    if ((length >>> 25 & 0x1F) != 0) {
+      val last6 = (length - 1) >>> 25 & 0x1F
       val oldNode6 = node6
       node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](last6 + 1)
       java.lang.System.arraycopy(oldNode6, 0, node6, 0, last6)
