@@ -91,6 +91,24 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[_, _]] with Container[
     Trap
   }
   
+  /** Applies a side-effecting functiont or each key and value of this $collection.
+    * @group Traversing */
+  def traverse(f: (A, T) => Unit) {
+    val xs = iterator
+    while (!xs.isEmpty) {
+      val x = xs.head
+      f(x._1, x._2)
+      xs.step()
+    }
+  }
+  
+  /** Applies a side-effecting function to each (key, value) pair of this $collection.
+    * @group Traversing */
+  override def traverse(f: ((A, T)) => Unit) {
+    val xs = iterator
+    while (!xs.isEmpty) { f(xs.head); xs.step() }
+  }
+  
   /** Returns a new iterator over the (key, value) pairs of this $collection.
     * @group Traversing */
   override def iterator: Iterator[(A, T)]

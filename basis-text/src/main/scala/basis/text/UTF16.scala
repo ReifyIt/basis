@@ -85,9 +85,6 @@ abstract class UTF16 extends Equals with Family[UTF16] with Seq[Int] {
     else index + 1
   }
   
-  /** Returns a new iterator over the code points of this $collection. */
-  override def iterator: Iterator[Int] = new UTF16Iterator(this, 0)
-  
   /** Sequentially applies a function to each code point in this $collection.
     * Applies the replacement character U+FFFD in lieu of unpaired surrogates. */
   override def traverse(f: Int => Unit) {
@@ -108,6 +105,9 @@ abstract class UTF16 extends Equals with Family[UTF16] with Seq[Int] {
       else 0xFFFD
     }
   }
+  
+  /** Returns a new iterator over the code points of this $collection. */
+  override def iterator: Iterator[Int] = new UTF16Iterator(this, 0)
   
   /** Returns a Java String equivalent to this $collection. */
   override def toString: String = {

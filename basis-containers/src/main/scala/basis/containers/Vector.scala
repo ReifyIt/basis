@@ -66,11 +66,11 @@ private[containers] final class Vector0 extends Vector[Nothing] {
     new Vector1(newNode1, 1)
   }
   
+  override def traverse(f: Nothing => Unit): Unit = ()
+  
   override def iterator: Iterator[Nothing] = new VectorIterator(null, 0)
   
   override def segments: Iterator[Vector[Nothing]] = new VectorSplitter(null, 0)
-  
-  override def traverse(f: Nothing => Unit): Unit = ()
 }
 
 private[containers] final class Vector1[+A](
@@ -110,11 +110,11 @@ private[containers] final class Vector1[+A](
     }
   }
   
+  override def traverse(f: A => Unit): Unit = Vector.traverse1(node1)(f)
+  
   override def iterator: Iterator[A] = new VectorIterator(node1, length)
   
   override def segments: Iterator[Vector[A]] = new VectorSplitter(node1, length)
-  
-  override def traverse(f: A => Unit): Unit = Vector.traverse1(node1)(f)
 }
 
 private[containers] final class Vector2[+A](
@@ -168,11 +168,11 @@ private[containers] final class Vector2[+A](
     }
   }
   
+  override def traverse(f: A => Unit): Unit = Vector.traverse2(node2)(f)
+  
   override def iterator: Iterator[A] = new VectorIterator(node2, length)
   
   override def segments: Iterator[Vector[A]] = new VectorSplitter(node2, length)
-  
-  override def traverse(f: A => Unit): Unit = Vector.traverse2(node2)(f)
 }
 
 private[containers] final class Vector3[+A](
@@ -239,11 +239,11 @@ private[containers] final class Vector3[+A](
     }
   }
   
+  override def traverse(f: A => Unit): Unit = Vector.traverse3(node3)(f)
+  
   override def iterator: Iterator[A] = new VectorIterator(node3, length)
   
   override def segments: Iterator[Vector[A]] = new VectorSplitter(node3, length)
-  
-  override def traverse(f: A => Unit): Unit = Vector.traverse3(node3)(f)
 }
 
 private[containers] final class Vector4[+A](
@@ -323,11 +323,11 @@ private[containers] final class Vector4[+A](
     }
   }
   
+  override def traverse(f: A => Unit): Unit = Vector.traverse4(node4)(f)
+  
   override def iterator: Iterator[A] = new VectorIterator(node4, length)
   
   override def segments: Iterator[Vector[A]] = new VectorSplitter(node4, length)
-  
-  override def traverse(f: A => Unit): Unit = Vector.traverse4(node4)(f)
 }
 
 private[containers] final class Vector5[+A](
@@ -420,11 +420,11 @@ private[containers] final class Vector5[+A](
     }
   }
   
+  override def traverse(f: A => Unit): Unit = Vector.traverse5(node5)(f)
+  
   override def iterator: Iterator[A] = new VectorIterator(node5, length)
   
   override def segments: Iterator[Vector[A]] = new VectorSplitter(node5, length)
-  
-  override def traverse(f: A => Unit): Unit = Vector.traverse5(node5)(f)
 }
 
 private[containers] final class Vector6[+A](
@@ -525,11 +525,11 @@ private[containers] final class Vector6[+A](
     else throw new UnsupportedOperationException("Maximum vector length exceeded")
   }
   
+  override def traverse(f: A => Unit): Unit = Vector.traverse6(node6)(f)
+  
   override def iterator: Iterator[A] = new VectorIterator(node6, length)
   
   override def segments: Iterator[Vector[A]] = new VectorSplitter(node6, length)
-  
-  override def traverse(f: A => Unit): Unit = Vector.traverse6(node6)(f)
 }
 
 /** A factory for [[Vector vectors]].

@@ -112,7 +112,14 @@ private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Arr
   
   private[containers] def valueAt(index: Int): T = slots((index >> 1) + 1).asInstanceOf[T]
   
-  override def iterator: Iterator[(A, T)] = new ArrayMapIterator(slots, 0)
+  override def traverse(f: (A, T) => Unit) {
+    var i = 0
+    val n = slots.length
+    while (i < n) {
+      f(slots(i).asInstanceOf[A], slots(i + 1).asInstanceOf[T])
+      i += 2
+    }
+  }
   
   override def traverse(f: ((A, T)) => Unit) {
     var i = 0
@@ -122,6 +129,8 @@ private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Arr
       i += 2
     }
   }
+  
+  override def iterator: Iterator[(A, T)] = new ArrayMapIterator(slots, 0)
 }
 
 /** A factory for [[ArrayMap array maps]].

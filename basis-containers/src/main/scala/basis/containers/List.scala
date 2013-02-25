@@ -99,10 +99,6 @@ sealed abstract class List[+A]
     sx
   }
   
-  override def toList: this.type = this
-  
-  override def iterator: Iterator[A] = new RefListIterator(this)
-  
   override def traverse(f: A => Unit) {
     var xs = this
     while (!xs.isEmpty) {
@@ -110,6 +106,10 @@ sealed abstract class List[+A]
       xs = xs.tail
     }
   }
+  
+  override def iterator: Iterator[A] = new RefListIterator(this)
+  
+  override def toList: this.type = this
   
   protected override def stringPrefix: String = "List"
 }

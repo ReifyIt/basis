@@ -246,8 +246,6 @@ class ListBuffer[A] private (
   
   override def expect(count: Int): this.type = this
   
-  override def iterator: Iterator[A] = new ListBufferIterator(first)
-  
   override def traverse(f: A => Unit) {
     var xs = first
     while (!xs.isEmpty) {
@@ -255,6 +253,8 @@ class ListBuffer[A] private (
       xs = xs.tail
     }
   }
+  
+  override def iterator: Iterator[A] = new ListBufferIterator(first)
   
   protected override def stringPrefix: String = "ListBuffer"
   

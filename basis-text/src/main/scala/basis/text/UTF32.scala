@@ -48,9 +48,6 @@ abstract class UTF32 extends Equals with Family[UTF32] with Index[Int] {
     else 0xFFFD
   }
   
-  /** Returns a new iterator over the code points of this $collection. */
-  override def iterator: Iterator[Int] = new UTF32Iterator(this, 0)
-  
   /** Sequentially applies a function to each code point in this $collection.
     * Applies the replacement character U+FFFD in lieu of invalid characters. */
   override def traverse(f: Int => Unit) {
@@ -61,6 +58,9 @@ abstract class UTF32 extends Equals with Family[UTF32] with Index[Int] {
       i += 1
     }
   }
+  
+  /** Returns a new iterator over the code points of this $collection. */
+  override def iterator: Iterator[Int] = new UTF32Iterator(this, 0)
   
   /** Returns a Java String equivalent to this $collection. */
   override def toString: String = {

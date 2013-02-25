@@ -221,8 +221,6 @@ final class HashSet[+A] private[containers] (
     }
   }
   
-  override def iterator: Iterator[A] = new HashSetIterator(this)
-  
   override def traverse(f: A => Unit) {
     var i = 0
     var treeMap = this.treeMap
@@ -238,6 +236,8 @@ final class HashSet[+A] private[containers] (
       leafMap >>>= 1
     }
   }
+  
+  override def iterator: Iterator[A] = new HashSetIterator(this)
   
   override def toString: String = {
     val s = new java.lang.StringBuilder("HashSet")

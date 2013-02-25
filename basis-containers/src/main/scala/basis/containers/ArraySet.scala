@@ -86,8 +86,6 @@ private[containers] final class ArraySet[+A] private[containers] (slots: Array[A
   
   private[containers] def elementAt(index: Int): A = slots(index).asInstanceOf[A]
   
-  override def iterator: Iterator[A] = new ArraySetIterator(slots, 0)
-  
   override def traverse(f: A => Unit) {
     var i = 0
     val n = slots.length
@@ -96,6 +94,8 @@ private[containers] final class ArraySet[+A] private[containers] (slots: Array[A
       i += 1
     }
   }
+  
+  override def iterator: Iterator[A] = new ArraySetIterator(slots, 0)
 }
 
 /** A factory for [[ArraySet array sets]].
