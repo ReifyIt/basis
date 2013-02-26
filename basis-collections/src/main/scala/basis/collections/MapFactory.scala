@@ -26,15 +26,17 @@ trait MapFactory[+CC[_, _], -Hint[_]] {
       type State = CC[A, T] @uncheckedVariance
     }
   
-  def empty[A, T](implicit A: Hint[A], T: Hint[T]): CC[A, T] =
-    Builder(A, T).state
+  def empty[A, T](implicit A: Hint[A], T: Hint[T]): CC[A, T] = Builder(A, T).state
   
-  def coerce[A, T](entries: Enumerator[(A, T)])(implicit A: Hint[A], T: Hint[T]): CC[A, T] =
-    (Builder(A, T) ++= entries).state
+  def coerce[A, T](entries: Enumerator[(A, T)])(implicit A: Hint[A], T: Hint[T]): CC[A, T] = {
+    val builder = Builder(A, T)
+    entries traverse new basis.collections.Builder.Append(builder)
+    builder.state
+  }
   
   def coerce[A, T](entries: TraversableOnce[(A, T)])(implicit A: Hint[A], T: Hint[T]): CC[A, T] = {
     val builder = Builder(A, T)
-    entries.foreach(new basis.collections.Builder.Append(builder))
+    entries foreach new basis.collections.Builder.Append(builder)
     builder.state
   }
   

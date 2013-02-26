@@ -121,12 +121,12 @@ object List extends SeqFactory[List, TypeHint] {
     : Builder[A] { type Scope = List[_]; type State = List[A] } =
     new ListBuilder[A]
   
-  override def empty[A : TypeHint]: Nil.type = Nil
+  override def empty[A : TypeHint]: List[A] = Nil
   
-  override def coerce[A : TypeHint](elems: Enumerator[A]): List[A] = elems match {
-    case xs: ListLike[A] => xs.toList
-    case _ => super.coerce(elems)
-  }
+  override def coerce[A : TypeHint](elems: Enumerator[A]): List[A] =
+    if (elems.isInstanceOf[List[_]]) elems.asInstanceOf[List[A]]
+    else if (elems.isInstanceOf[ListLike[_]]) elems.asInstanceOf[ListLike[A]].toList
+    else super.coerce(elems)
   
   override def toString: String = "List"
 }

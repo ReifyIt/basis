@@ -30,7 +30,8 @@ import scala.annotation.unchecked.uncheckedVariance
   * @groupprio  Querying      2
   * @groupprio  Updating      3
   * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Projecting    5
+  * @groupprio  Classifying   6
   * 
   * @define collection  hash map
   */
@@ -38,7 +39,7 @@ final class HashMap[+A, +T] private[containers] (
     private[containers] val treeMap: Int,
     private[containers] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Equals with Immutable with Family[HashMap[_, _]] with Map[A, T] {
+  extends Equals with Immutable with Family[HashMap[_, _]] with Map[A, T] { self =>
   
   import HashMap.{VOID, LEAF, TREE, KNOT}
   
@@ -75,6 +76,14 @@ final class HashMap[+A, +T] private[containers] (
   /** Returns a copy of this $collection that associates nothing with the given key.
     * @group Updating */
   def - (key: A @uncheckedVariance): HashMap[A, T] = remove(key, key.##, 0)
+  
+  /** Returns the set of keys with associations in this $collection.
+    * @group Projecting */
+  def keys: Set[A] = new Keys
+  
+  /** Returns the associated values in this $collection.
+    * @group Projecting */
+  def values: Container[T] = new Values
   
   private def knotMap: Int = treeMap & leafMap
   
@@ -295,6 +304,39 @@ final class HashMap[+A, +T] private[containers] (
     }
   }
   
+  private[containers] def traverseKeys(f: A => Unit) {
+    var i = 0
+    var treeMap = this.treeMap
+    var leafMap = this.leafMap
+    while ((treeMap | leafMap) != 0) {
+      ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
+        case VOID => ()
+        case LEAF => f(keyAt(i)); i += 1
+        case TREE => treeAt(i) traverseKeys f; i += 1
+        case KNOT => knotAt(i) traverseKeys f; i += 1
+      }
+      treeMap >>>= 1
+      leafMap >>>= 1
+    }
+  }
+  
+  private[containers] def traverseValues(f: T => Unit) {
+    var i = 0
+    var j = 0
+    var treeMap = this.treeMap
+    var leafMap = this.leafMap
+    while ((treeMap | leafMap) != 0) {
+      ((leafMap & 1 | (treeMap & 1) << 1): @switch) match {
+        case VOID => ()
+        case LEAF => f(valueAt(j)); i += 1; j += 1
+        case TREE => treeAt(i) traverseValues f; i += 1
+        case KNOT => knotAt(i) traverseValues f; i += 1
+      }
+      treeMap >>>= 1
+      leafMap >>>= 1
+    }
+  }
+  
   override def traverse(f: (A, T) => Unit) {
     var i = 0
     var j = 0
@@ -348,6 +390,28 @@ final class HashMap[+A, +T] private[containers] (
     s.append(')')
     s.toString
   }
+  
+  private final class Keys extends Set[A] {
+    override def isEmpty: Boolean = self.isEmpty
+    
+    override def size: Int = self.size
+    
+    override def contains(elem: A @uncheckedVariance): Boolean = self contains elem
+    
+    override def traverse(f: A => Unit): Unit = self traverseKeys f
+    
+    override def iterator: Iterator[A] = new HashMapKeyIterator(self)
+    
+    protected override def stringPrefix: String = "HashMap.Keys"
+  }
+  
+  private final class Values extends Container[T] {
+    override def traverse(f: T => Unit): Unit = self traverseValues f
+    
+    override def iterator: Iterator[T] = new HashMapValueIterator(self)
+    
+    protected override def stringPrefix: String = "HashMap.Values"
+  }
 }
 
 /** A factory for [[HashMap hash maps]].
@@ -360,6 +424,10 @@ object HashMap extends MapFactory[HashMap, TypeHint] {
   private[this] val empty = new HashMap[Nothing, Nothing](0, 0, new Array[AnyRef](0))
   override def empty[A : TypeHint, T : TypeHint]: HashMap[A, T] = empty
   
+  override def coerce[A : TypeHint, T : TypeHint](elems: Enumerator[(A, T)]): HashMap[A, T] =
+    if (elems.isInstanceOf[HashMap[_, _]]) elems.asInstanceOf[HashMap[A, T]]
+    else super.coerce(elems)
+  
   override def toString: String = "HashMap"
   
   private[containers] final val VOID = 0
@@ -368,15 +436,13 @@ object HashMap extends MapFactory[HashMap, TypeHint] {
   private[containers] final val KNOT = 3
 }
 
-private[containers] final class HashMapIterator[+A, +T](
-    nodes: Array[AnyRef], private[this] var depth: Int,
-    stack: Array[Int], private[this] var stackPointer: Int)
-  extends Iterator[(A, T)] {
+private[containers] sealed abstract class HashTrieMapIterator[+A, +T] protected (
+    protected[this] final val nodes: Array[AnyRef], protected[this] final var depth: Int,
+    protected[this] final val stack: Array[Int], protected[this] final var stackPointer: Int) {
   
   import HashMap.{VOID, LEAF, TREE, KNOT}
   
-  def this(tree: HashMap[A, T]) = {
-    this(new Array[AnyRef](7), 0, new Array[Int](28), 0)
+  protected[this] final def init(tree: HashMap[A, T]) {
     node = tree
     i = 0
     j = 0
@@ -384,24 +450,24 @@ private[containers] final class HashMapIterator[+A, +T](
     leafMap = tree.leafMap
   }
   
-  private[this] def node: AnyRef = nodes(depth)
-  private[this] def node_=(node: AnyRef): Unit = nodes(depth) = node
+  protected[this] final def node: AnyRef = nodes(depth)
+  protected[this] final def node_=(node: AnyRef): Unit = nodes(depth) = node
   
-  private[this] def i: Int = stack(stackPointer)
-  private[this] def i_=(index: Int): Unit = stack(stackPointer) = index
+  protected[this] final def i: Int = stack(stackPointer)
+  protected[this] final def i_=(index: Int): Unit = stack(stackPointer) = index
   
-  private[this] def j: Int = stack(stackPointer + 1)
-  private[this] def j_=(index: Int): Unit = stack(stackPointer + 1) = index
+  protected[this] final def j: Int = stack(stackPointer + 1)
+  protected[this] final def j_=(index: Int): Unit = stack(stackPointer + 1) = index
   
-  private[this] def treeMap: Int = stack(stackPointer + 2)
-  private[this] def treeMap_=(treeMap: Int): Unit = stack(stackPointer + 2) = treeMap
+  protected[this] final def treeMap: Int = stack(stackPointer + 2)
+  protected[this] final def treeMap_=(treeMap: Int): Unit = stack(stackPointer + 2) = treeMap
   
-  private[this] def leafMap: Int = stack(stackPointer + 3)
-  private[this] def leafMap_=(leafMap: Int): Unit = stack(stackPointer + 3) = leafMap
+  protected[this] final def leafMap: Int = stack(stackPointer + 3)
+  protected[this] final def leafMap_=(leafMap: Int): Unit = stack(stackPointer + 3) = leafMap
   
-  private[this] def follow: Int = leafMap & 1 | (treeMap & 1) << 1
+  protected[this] final def follow: Int = leafMap & 1 | (treeMap & 1) << 1
   
-  private[this] def push(tree: HashMap[A, T]) {
+  protected[this] final def push(tree: HashMap[A, T]) {
     depth += 1
     node = tree
     
@@ -412,7 +478,7 @@ private[containers] final class HashMapIterator[+A, +T](
     leafMap = tree.leafMap
   }
   
-  private[this] def push(knot: ArrayMap[A, T]) {
+  protected[this] final def push(knot: ArrayMap[A, T]) {
     depth += 1
     node = knot
     
@@ -420,7 +486,7 @@ private[containers] final class HashMapIterator[+A, +T](
     i = 0
   }
   
-  private[this] def pop() {
+  protected[this] final def pop() {
     node = null
     depth -= 1
     
@@ -435,7 +501,7 @@ private[containers] final class HashMapIterator[+A, +T](
     leafMap >>>= 1
   }
   
-  @tailrec override def isEmpty: Boolean = node match {
+  @tailrec final def isEmpty: Boolean = node match {
     case node: HashMap[A, T] =>
       if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
@@ -457,29 +523,73 @@ private[containers] final class HashMapIterator[+A, +T](
       else { pop(); isEmpty }
   }
   
-  @tailrec override def head: (A, T) = node match {
+  @tailrec final def entry: (A, T) = node match {
     case node: HashMap[A, T] =>
       if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
           leafMap >>>= 1
-          head
+          entry
         case LEAF => (node.keyAt(i), node.valueAt(j))
         case TREE =>
           push(node.treeAt(i))
-          head
+          entry
         case KNOT =>
           push(node.knotAt(i))
-          head
+          entry
       }
-      else if (depth > 0) { pop(); head }
+      else if (depth > 0) { pop(); entry }
       else throw new NoSuchElementException("Head of empty iterator.")
     case node: ArrayMap[A, T] =>
       if (i < node.size) (node.keyAt(i), node.valueAt(i))
-      else { pop(); head }
+      else { pop(); entry }
   }
   
-  @tailrec override def step(): Unit = node match {
+  @tailrec final def key: A = node match {
+    case node: HashMap[A, T] =>
+      if ((treeMap | leafMap) != 0) (follow: @switch) match {
+        case VOID =>
+          treeMap >>>= 1
+          leafMap >>>= 1
+          key
+        case LEAF => node.keyAt(i)
+        case TREE =>
+          push(node.treeAt(i))
+          key
+        case KNOT =>
+          push(node.knotAt(i))
+          key
+      }
+      else if (depth > 0) { pop(); key }
+      else throw new NoSuchElementException("Head of empty iterator.")
+    case node: ArrayMap[A, T] =>
+      if (i < node.size) node.keyAt(i)
+      else { pop(); key }
+  }
+  
+  @tailrec final def value: T = node match {
+    case node: HashMap[A, T] =>
+      if ((treeMap | leafMap) != 0) (follow: @switch) match {
+        case VOID =>
+          treeMap >>>= 1
+          leafMap >>>= 1
+          value
+        case LEAF => node.valueAt(j)
+        case TREE =>
+          push(node.treeAt(i))
+          value
+        case KNOT =>
+          push(node.knotAt(i))
+          value
+      }
+      else if (depth > 0) { pop(); value }
+      else throw new NoSuchElementException("Head of empty iterator.")
+    case node: ArrayMap[A, T] =>
+      if (i < node.size) node.valueAt(i)
+      else { pop(); value }
+  }
+  
+  @tailrec final def step(): Unit = node match {
     case node: HashMap[A, T] =>
       val slotMap = treeMap | leafMap
       if (slotMap != 0) {
@@ -494,9 +604,54 @@ private[containers] final class HashMapIterator[+A, +T](
       if (i < node.size) i += 1
       else { pop(); step() }
   }
+}
+
+private[containers] final class HashMapIterator[+A, +T] private (
+    _nodes: Array[AnyRef], _depth: Int,
+    _stack: Array[Int], _stackPointer: Int)
+  extends HashTrieMapIterator[A, T](_nodes, _depth, _stack, _stackPointer) with Iterator[(A, T)] {
+  
+  def this(tree: HashMap[A, T]) = {
+    this(new Array[AnyRef](7), 0, new Array[Int](28), 0)
+    init(tree)
+  }
+  
+  override def head: (A, T) = entry
   
   override def dup: Iterator[(A, T)] =
     new HashMapIterator(nodes.clone, depth, stack.clone, stackPointer)
+}
+
+private[containers] final class HashMapKeyIterator[+A] private (
+    _nodes: Array[AnyRef], _depth: Int,
+    _stack: Array[Int], _stackPointer: Int)
+  extends HashTrieMapIterator[A, Any](_nodes, _depth, _stack, _stackPointer) with Iterator[A] {
+  
+  def this(tree: HashMap[A, Any]) = {
+    this(new Array[AnyRef](7), 0, new Array[Int](28), 0)
+    init(tree)
+  }
+  
+  override def head: A = key
+  
+  override def dup: Iterator[A] =
+    new HashMapKeyIterator(nodes.clone, depth, stack.clone, stackPointer)
+}
+
+private[containers] final class HashMapValueIterator[+T] private (
+    _nodes: Array[AnyRef], _depth: Int,
+    _stack: Array[Int], _stackPointer: Int)
+  extends HashTrieMapIterator[Any, T](_nodes, _depth, _stack, _stackPointer) with Iterator[T] {
+  
+  def this(tree: HashMap[Any, T]) = {
+    this(new Array[AnyRef](7), 0, new Array[Int](28), 0)
+    init(tree)
+  }
+  
+  override def head: T = value
+  
+  override def dup: Iterator[T] =
+    new HashMapValueIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
 private[containers] final class HashMapBuilder[A, T] extends Builder[(A, T)] {

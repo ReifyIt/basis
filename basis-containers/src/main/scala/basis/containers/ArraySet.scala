@@ -108,6 +108,10 @@ private[containers] object ArraySet extends SetFactory[ArraySet, TypeHint] {
   private[this] val empty = new ArraySet[Nothing](new Array[AnyRef](0))
   override def empty[A : TypeHint]: ArraySet[A] = empty
   
+  override def coerce[A : TypeHint](elems: Enumerator[A]): ArraySet[A] =
+    if (elems.isInstanceOf[ArraySet[_]]) elems.asInstanceOf[ArraySet[A]]
+    else super.coerce(elems)
+  
   private[containers] def apply[A](elem: A): ArraySet[A] = {
     val slots = new Array[AnyRef](1)
     slots(0) = elem.asInstanceOf[AnyRef]

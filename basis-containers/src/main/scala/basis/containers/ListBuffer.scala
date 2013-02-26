@@ -301,6 +301,10 @@ object ListBuffer extends SeqFactory[ListBuffer, TypeHint] {
   
   override def empty[A : TypeHint]: ListBuffer[A] = new ListBuffer
   
+  override def coerce[A : TypeHint](elems: Enumerator[A]): ListBuffer[A] =
+    if (elems.isInstanceOf[ListBuffer[_]]) elems.asInstanceOf[ListBuffer[A]]
+    else super.coerce(elems)
+  
   override def toString: String = "ListBuffer"
 }
 

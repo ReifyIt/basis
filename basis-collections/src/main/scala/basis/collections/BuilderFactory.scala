@@ -26,15 +26,17 @@ trait BuilderFactory[+CC[_], -Hint[_]] {
       type State = CC[A] @uncheckedVariance
     }
   
-  def empty[A](implicit A: Hint[A]): CC[A] =
-    Builder(A).state
+  def empty[A](implicit A: Hint[A]): CC[A] = Builder(A).state
   
-  def coerce[A](elems: Enumerator[A])(implicit A: Hint[A]): CC[A] =
-    (Builder(A) ++= elems).state
+  def coerce[A](elems: Enumerator[A])(implicit A: Hint[A]): CC[A] = {
+    val builder = Builder(A)
+    elems traverse new basis.collections.Builder.Append(builder)
+    builder.state
+  }
   
   def coerce[A](elems: TraversableOnce[A])(implicit A: Hint[A]): CC[A] = {
     val builder = Builder(A)
-    elems.foreach(new basis.collections.Builder.Append(builder))
+    elems foreach new basis.collections.Builder.Append(builder)
     builder.state
   }
   

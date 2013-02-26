@@ -542,6 +542,10 @@ object Vector extends SeqFactory[Vector, TypeHint] {
   private[containers] val empty = new Vector0
   override def empty[A : TypeHint]: Vector[A] = empty
   
+  override def coerce[A : TypeHint](elems: Enumerator[A]): Vector[A] =
+    if (elems.isInstanceOf[Vector[_]]) elems.asInstanceOf[Vector[A]]
+    else super.coerce(elems)
+  
   private[containers] def traverse1[A](node1: Array[AnyRef])(f: A => Unit) {
     var i = 0
     val n = node1.length

@@ -106,5 +106,9 @@ object ArrayBuffer extends SeqFactory[ArrayBuffer, TypeHint] {
     case _                => new RefArrayBufferBuilder[A]
   }).asInstanceOf[ArrayBuilder[A] { type Scope = ArrayBuffer[_]; type State = ArrayBuffer[A] }]
   
+  override def coerce[A : TypeHint](elems: Enumerator[A]): ArrayBuffer[A] =
+    if (elems.isInstanceOf[ArrayBuffer[_]]) elems.asInstanceOf[ArrayBuffer[A]]
+    else super.coerce(elems)
+  
   override def toString: String = "ArrayBuffer"
 }

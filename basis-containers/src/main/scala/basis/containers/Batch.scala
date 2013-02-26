@@ -97,6 +97,12 @@ object Batch extends SeqFactory[Batch, TypeHint] {
   
   override def empty[A : TypeHint]: Batch[A] = Empty
   
+  override def coerce[A : TypeHint](elems: Enumerator[A]): Batch[A] =
+    if (elems.isInstanceOf[Batch[_]]) elems.asInstanceOf[Batch[A]]
+    else super.coerce(elems)
+  
+  override def toString: String = "Batch"
+  
   private[containers] object Empty extends Batch[Nothing] {
     override def isEmpty: Boolean = true
     

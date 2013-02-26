@@ -112,6 +112,24 @@ private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Arr
   
   private[containers] def valueAt(index: Int): T = slots((index >> 1) + 1).asInstanceOf[T]
   
+  private[containers] def traverseKeys(f: A => Unit) {
+    var i = 0
+    val n = slots.length
+    while (i < n) {
+      f(slots(i).asInstanceOf[A])
+      i += 2
+    }
+  }
+  
+  private[containers] def traverseValues(f: T => Unit) {
+    var i = 1
+    val n = slots.length
+    while (i < n) {
+      f(slots(i).asInstanceOf[T])
+      i += 2
+    }
+  }
+  
   override def traverse(f: (A, T) => Unit) {
     var i = 0
     val n = slots.length
@@ -142,6 +160,10 @@ private[containers] object ArrayMap extends MapFactory[ArrayMap, TypeHint] {
   
   private[this] val empty = new ArrayMap[Nothing, Nothing](new Array[AnyRef](0))
   override def empty[A : TypeHint, T : TypeHint]: ArrayMap[A, T] = empty
+  
+  override def coerce[A : TypeHint, T : TypeHint](elems: Enumerator[(A, T)]): ArrayMap[A, T] =
+    if (elems.isInstanceOf[ArrayMap[_, _]]) elems.asInstanceOf[ArrayMap[A, T]]
+    else super.coerce(elems)
   
   private[containers] def apply[A, T](key: A, value: T): ArrayMap[A, T] = {
     val slots = new Array[AnyRef](2)

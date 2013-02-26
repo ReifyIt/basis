@@ -192,5 +192,9 @@ object ArraySeq extends SeqFactory[ArraySeq, TypeHint] {
     case _                 => new RefArraySeqBuilder[A]
   }).asInstanceOf[ArrayBuilder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] }]
   
+  override def coerce[A : TypeHint](elems: Enumerator[A]): ArraySeq[A] =
+    if (elems.isInstanceOf[ArraySeq[_]]) elems.asInstanceOf[ArraySeq[A]]
+    else super.coerce(elems)
+  
   override def toString: String = "ArraySeq"
 }

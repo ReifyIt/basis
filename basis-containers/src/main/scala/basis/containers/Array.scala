@@ -11,6 +11,7 @@ import basis.collections._
 import basis.runtime._
 import basis.util._
 
+import scala.collection.TraversableOnce
 import scala.reflect.ClassTag
 
 /** A factory for arrays.
@@ -53,6 +54,14 @@ object Array extends SeqFactory[Array, ClassHint] {
     case TypeHint.Nothing => EmptyNothingArray
     case _                => A.newArray(0)
   }).asInstanceOf[Array[A]]
+  
+  override def coerce[A](elems: Enumerator[A])(implicit A: ClassHint[A]): Array[A] =
+    if (elems.isInstanceOf[ArrayLike[_]])
+      elems.asInstanceOf[ArrayLike[A]].toArray(ClassTag(A.runtimeClass))
+    else super.coerce(elems)
+  
+  override def coerce[A](elems: TraversableOnce[A])(implicit A: ClassHint[A]): Array[A] =
+    elems.toArray(ClassTag(A.runtimeClass))
   
   override def toString: String = "Array"
 }

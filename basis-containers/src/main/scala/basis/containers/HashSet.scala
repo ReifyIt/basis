@@ -266,6 +266,10 @@ object HashSet extends SetFactory[HashSet, TypeHint] {
   private[this] val empty = new HashSet[Nothing](0, 0, new Array[AnyRef](0))
   override def empty[A : TypeHint]: HashSet[A] = empty
   
+  override def coerce[A : TypeHint](elems: Enumerator[A]): HashSet[A] =
+    if (elems.isInstanceOf[HashSet[_]]) elems.asInstanceOf[HashSet[A]]
+    else super.coerce(elems)
+  
   override def toString: String = "HashSet"
   
   private[containers] final val VOID = 0
