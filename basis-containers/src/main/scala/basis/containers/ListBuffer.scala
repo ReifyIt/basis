@@ -294,7 +294,7 @@ class ListBuffer[A] private (
 
 /** A factory for [[ListBuffer list buffers]].
   * @group Containers */
-object ListBuffer extends SeqFactory[ListBuffer] {
+object ListBuffer extends SeqFactory[ListBuffer, TypeHint] {
   implicit override def Builder[A : TypeHint]
     : Builder[A] { type Scope = ListBuffer[_]; type State = ListBuffer[A] } =
     new ListBufferBuilder[A]

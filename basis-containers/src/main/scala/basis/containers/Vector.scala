@@ -534,7 +534,7 @@ private[containers] final class Vector6[+A](
 
 /** A factory for [[Vector vectors]].
   * @group Containers */
-object Vector extends SeqFactory[Vector] {
+object Vector extends SeqFactory[Vector, TypeHint] {
   implicit override def Builder[A : TypeHint]
     : Builder[A] { type Scope = Vector[_]; type State = Vector[A] } =
     new VectorBuilder[A]

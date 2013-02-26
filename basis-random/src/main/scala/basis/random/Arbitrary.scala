@@ -9,7 +9,6 @@ package basis.random
 
 import basis.collections._
 import basis.containers._
-import basis.runtime._
 import basis.util._
 
 import scala.annotation.{implicitNotFound, tailrec, unspecialized}
@@ -100,37 +99,37 @@ object Arbitrary {
   def String(length: Arbitrary[Int])(implicit C: Arbitrary[Char]): Arbitrary[String] =
     new RandomString(length)(C)
   
-  implicit def Container[CC[_], A]
-      (implicit CC: BuilderFactory[CC],
+  implicit def Container[CC[_], Hint[_], A]
+      (implicit CC: BuilderFactory[CC, Hint],
                 A: Arbitrary[A],
-                HintA: TypeHint[A])
+                HintA: Hint[A])
     : Arbitrary[CC[A]] =
     new RandomContainer(below(64))(CC, A, HintA)
   
-  def Container[CC[_], A]
+  def Container[CC[_], Hint[_], A]
       (length: Arbitrary[Int])
-      (implicit CC: BuilderFactory[CC],
+      (implicit CC: BuilderFactory[CC, Hint],
                 A: Arbitrary[A],
-                HintA: TypeHint[A])
+                HintA: Hint[A])
     : Arbitrary[CC[A]] =
     new RandomContainer(length)(CC, A, HintA)
   
-  implicit def Map[CC[_, _], A, T]
-      (implicit CC: MapFactory[CC],
+  implicit def Map[CC[_, _], Hint[_], A, T]
+      (implicit CC: MapFactory[CC, Hint],
                 A: Arbitrary[A],
                 T: Arbitrary[T],
-                HintA: TypeHint[A],
-                HintT: TypeHint[T])
+                HintA: Hint[A],
+                HintT: Hint[T])
     : Arbitrary[CC[A, T]] =
     new RandomMap(below(64))(CC, A, T, HintA, HintT)
   
-  def Map[CC[_, _], A, T]
+  def Map[CC[_, _], Hint[_], A, T]
       (length: Arbitrary[Int])
-      (implicit CC: MapFactory[CC],
+      (implicit CC: MapFactory[CC, Hint],
                 A: Arbitrary[A],
                 T: Arbitrary[T],
-                HintA: TypeHint[A],
-                HintT: TypeHint[T])
+                HintA: Hint[A],
+                HintT: Hint[T])
     : Arbitrary[CC[A, T]] =
     new RandomMap(length)(CC, A, T, HintA, HintT)
   
@@ -408,11 +407,11 @@ object Arbitrary {
     override def toString: String = "String"+"("+ C +")"
   }
   
-  private final class RandomContainer[CC[_], A]
+  private final class RandomContainer[CC[_], Hint[_], A]
       (length: Arbitrary[Int])
-      (implicit CC: BuilderFactory[CC],
+      (implicit CC: BuilderFactory[CC, Hint],
                 A: Arbitrary[A],
-                HintA: TypeHint[A])
+                HintA: Hint[A])
     extends Arbitrary[CC[A]] {
     
     override def apply(): CC[A] = {
@@ -429,13 +428,13 @@ object Arbitrary {
     override def toString: String = "Container"+"("+ CC +", "+ A +")"
   }
   
-  private final class RandomMap[CC[_, _], A, T]
+  private final class RandomMap[CC[_, _], Hint[_], A, T]
       (length: Arbitrary[Int])
-      (implicit CC: MapFactory[CC],
+      (implicit CC: MapFactory[CC, Hint],
                 A: Arbitrary[A],
                 T: Arbitrary[T],
-                HintA: TypeHint[A],
-                HintT: TypeHint[T])
+                HintA: Hint[A],
+                HintT: Hint[T])
     extends Arbitrary[CC[A, T]] {
     
     override def apply(): CC[A, T] = {

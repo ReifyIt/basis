@@ -100,7 +100,7 @@ private[containers] final class ArraySet[+A] private[containers] (slots: Array[A
 
 /** A factory for [[ArraySet array sets]].
   * @group Containers */
-private[containers] object ArraySet extends SetFactory[ArraySet] {
+private[containers] object ArraySet extends SetFactory[ArraySet, TypeHint] {
   implicit override def Builder[A : TypeHint]
     : Builder[A] { type Scope = ArraySet[_]; type State = ArraySet[A] } =
     new ArraySetBuilder[A]

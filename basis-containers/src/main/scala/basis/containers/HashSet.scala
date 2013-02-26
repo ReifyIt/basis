@@ -258,7 +258,7 @@ final class HashSet[+A] private[containers] (
 
 /** A factory for [[HashSet hash sets]].
   * @group Containers */
-object HashSet extends SetFactory[HashSet] {
+object HashSet extends SetFactory[HashSet, TypeHint] {
   implicit override def Builder[A : TypeHint]
     : Builder[A] { type Scope = HashSet[_]; type State = HashSet[A] } =
     new HashSetBuilder[A]

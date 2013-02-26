@@ -94,7 +94,7 @@ abstract class ArrayBuffer[A]
 
 /** A factory for specialized [[ArrayBuffer array buffers]].
   * @group Containers */
-object ArrayBuffer extends SeqFactory[ArrayBuffer] {
+object ArrayBuffer extends SeqFactory[ArrayBuffer, TypeHint] {
   implicit override def Builder[A](implicit A: TypeHint[A])
     : ArrayBuilder[A] { type Scope = ArrayBuffer[_]; type State = ArrayBuffer[A] } = (A match {
     case TypeHint.Byte    => new ByteArrayBufferBuilder

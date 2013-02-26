@@ -13,6 +13,50 @@ import basis.util._
 
 import scala.reflect.ClassTag
 
+/** A factory for arrays.
+  * @group Containers */
+object Array extends SeqFactory[Array, ClassHint] {
+  private[basis] lazy val EmptyByteArray: Array[Byte] = new Array[Byte](0)
+  private[basis] lazy val EmptyShortArray: Array[Short] = new Array[Short](0)
+  private[basis] lazy val EmptyCharArray: Array[Char] = new Array[Char](0)
+  private[basis] lazy val EmptyIntArray: Array[Int] = new Array[Int](0)
+  private[basis] lazy val EmptyLongArray: Array[Long] = new Array[Long](0)
+  private[basis] lazy val EmptyFloatArray: Array[Float] = new Array[Float](0)
+  private[basis] lazy val EmptyDoubleArray: Array[Double] = new Array[Double](0)
+  private[basis] lazy val EmptyBooleanArray: Array[Boolean] = new Array[Boolean](0)
+  private[basis] lazy val EmptyAnyRefArray: Array[AnyRef] = new Array[AnyRef](0)
+  private[basis] lazy val EmptyUnitArray: Array[Unit] = new Array[Unit](0)
+  private[basis] lazy val EmptyNothingArray: Array[Nothing] = new Array[Nothing](0)
+  
+  implicit override def Builder[A](implicit A: ClassHint[A])
+    : ArrayBuilder[A] { type Scope = Array[_]; type State = Array[A] } = (A match {
+    case TypeHint.Byte   => new ByteArrayBuilder
+    case TypeHint.Short  => new ShortArrayBuilder
+    case TypeHint.Int    => new IntArrayBuilder
+    case TypeHint.Long   => new LongArrayBuilder
+    case TypeHint.Float  => new FloatArrayBuilder
+    case TypeHint.Double => new DoubleArrayBuilder
+    case _               => new RefArrayBuilder()(ClassTag(A.runtimeClass))
+  }).asInstanceOf[ArrayBuilder[A] { type Scope = Array[_]; type State = Array[A] }]
+  
+  implicit override def empty[A](implicit A: ClassHint[A]): Array[A] = (A match {
+    case TypeHint.Byte    => EmptyByteArray
+    case TypeHint.Short   => EmptyShortArray
+    case TypeHint.Char    => EmptyCharArray
+    case TypeHint.Int     => EmptyIntArray
+    case TypeHint.Long    => EmptyLongArray
+    case TypeHint.Float   => EmptyFloatArray
+    case TypeHint.Double  => EmptyDoubleArray
+    case TypeHint.Boolean => EmptyBooleanArray
+    case TypeHint.AnyRef  => EmptyAnyRefArray
+    case TypeHint.Unit    => EmptyUnitArray
+    case TypeHint.Nothing => EmptyNothingArray
+    case _                => A.newArray(0)
+  }).asInstanceOf[Array[A]]
+  
+  override def toString: String = "Array"
+}
+
 private[containers] final class ByteArrayBuilder extends ByteArrayBuffer {
   override type Scope = Array[_]
   override type State = Array[Byte]
@@ -103,7 +147,7 @@ private[containers] final class RefArrayBuilder[A](implicit A: ClassTag[A]) exte
       buffer = array
       aliased = false
     }
-    Array.copy(elems, 0, array, size, n)
+    scala.Array.copy(elems, 0, array, size, n)
     size += n
   }
   

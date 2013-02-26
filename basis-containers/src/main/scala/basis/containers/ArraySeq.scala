@@ -178,7 +178,7 @@ abstract class ArraySeq[+A]
 
 /** A factory for specialized [[ArraySeq array sequences]].
   * @group Containers */
-object ArraySeq extends SeqFactory[ArraySeq] {
+object ArraySeq extends SeqFactory[ArraySeq, TypeHint] {
   implicit override def Builder[A](implicit A: TypeHint[A])
     : ArrayBuilder[A] { type Scope = ArraySeq[_]; type State = ArraySeq[A] } = (A match {
     case TypeHint.Byte     => new ByteArraySeqBuilder

@@ -135,7 +135,7 @@ private[containers] final class ArrayMap[+A, +T] private[containers] (slots: Arr
 
 /** A factory for [[ArrayMap array maps]].
   * @group Containers */
-private[containers] object ArrayMap extends MapFactory[ArrayMap] {
+private[containers] object ArrayMap extends MapFactory[ArrayMap, TypeHint] {
   implicit override def Builder[A : TypeHint, T : TypeHint]
     : Builder[(A, T)] { type Scope = ArrayMap[_, _]; type State = ArrayMap[A, T] } =
     new ArrayMapBuilder[A, T]

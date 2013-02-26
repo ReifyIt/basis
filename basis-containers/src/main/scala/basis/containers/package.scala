@@ -10,8 +10,6 @@ package basis
 import basis.collections._
 import basis.runtime._
 
-import scala.reflect.ClassTag
-
 /** Specialized collection implementations.
   * 
   * @groupprio  Surrogates    1
@@ -25,7 +23,7 @@ package containers {
   private[containers] abstract class Library1 extends Library2 {
     /** The default [[Enumerator]] factory.
       * @group Collections */
-    val Enumerator: BuilderFactory[Enumerator] = Vector
+    val Enumerator: BuilderFactory[Enumerator, TypeHint] = Vector
     
     /** Implicitly returns a new default [[Enumerator]] builder.
       * @group Builders */
@@ -37,7 +35,7 @@ package containers {
   private[containers] abstract class Library2 extends Library3 {
     /** The default [[Collection]] factory.
       * @group Collections */
-    val Collection: BuilderFactory[Collection] = Vector
+    val Collection: BuilderFactory[Collection, TypeHint] = Vector
     
     /** Implicitly returns a new default [[Collection]] builder.
       * @group Builders */
@@ -49,7 +47,7 @@ package containers {
   private[containers] abstract class Library3 extends Library4 {
     /** The default [[Container]] factory.
       * @group Collections */
-    val Container: BuilderFactory[Container] = Vector
+    val Container: BuilderFactory[Container, TypeHint] = Vector
     
     /** Implicitly returns a new default [[Container]] builder.
       * @group Builders */
@@ -61,15 +59,15 @@ package containers {
   private[containers] abstract class Library4 extends Library5 {
     /** The default [[Seq]] factory.
       * @group Collections */
-    val Seq: SeqFactory[Seq] = Vector
+    val Seq: SeqFactory[Seq, TypeHint] = Vector
     
     /** The default [[Set]] factory.
       * @group Collections */
-    val Set: SetFactory[Set] = HashSet
+    val Set: SetFactory[Set, TypeHint] = HashSet
     
     /** The default [[Map]] factory.
       * @group Collections */
-    val Map: MapFactory[Map] = HashMap
+    val Map: MapFactory[Map, TypeHint] = HashMap
     
     /** Implicitly returns a new default [[Seq]] builder.
       * @group Builders */
@@ -93,11 +91,11 @@ package containers {
   private[containers] abstract class Library5 extends Library6 {
     /** The default [[Index]] factory.
       * @group Collections */
-    val Index: SeqFactory[Index] = ArraySeq
+    val Index: SeqFactory[Index, TypeHint] = ArraySeq
     
     /** The default [[Stack]] factory.
       * @group Collections */
-    val Stack: SeqFactory[Stack] = List
+    val Stack: SeqFactory[Stack, TypeHint] = List
     
     /** Implicitly returns a new default [[Index]] builder.
       * @group Builders */
@@ -115,16 +113,9 @@ package containers {
   private[containers] abstract class Library6 {
     /** Implicitly returns a new `Array` builder.
       * @group Builders */
-    implicit def ArrayBuilder[A](implicit A: ClassTag[A])
-      : ArrayBuilder[A] { type Scope = Array[_]; type State = Array[A] } = (A match {
-      case ClassTag.Byte    => new ByteArrayBuilder
-      case ClassTag.Short   => new ShortArrayBuilder
-      case ClassTag.Int     => new IntArrayBuilder
-      case ClassTag.Long    => new LongArrayBuilder
-      case ClassTag.Float   => new FloatArrayBuilder
-      case ClassTag.Double  => new DoubleArrayBuilder
-      case _                => new RefArrayBuilder[A]
-    }).asInstanceOf[ArrayBuilder[A] { type Scope = Array[_]; type State = Array[A] }]
+    implicit def ArrayBuilder[A](implicit A: ClassHint[A])
+      : ArrayBuilder[A] { type Scope = Array[_]; type State = Array[A] } =
+      Array.Builder[A]
     
     /** Implicitly returns a new [[ArraySeq]] builder.
       * @group Builders */

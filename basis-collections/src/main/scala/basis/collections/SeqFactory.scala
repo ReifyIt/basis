@@ -17,23 +17,23 @@ import scala.annotation.implicitNotFound
   * @group    Factories
   */
 @implicitNotFound("No sequence factory available for ${CC}.")
-trait SeqFactory[+CC[_]] extends BuilderFactory[CC] {
+trait SeqFactory[+CC[_], -Hint[_]] extends BuilderFactory[CC, Hint] {
   def fill[A](count: Int)(elem: => A): CC[A] =
-    macro SeqFactory.fill[CC, A]
+    macro SeqFactory.fill[CC, Hint, A]
   
   def tabulate[A](count: Int)(f: Int => A): CC[A] =
-    macro SeqFactory.tabulate[CC, A]
+    macro SeqFactory.tabulate[CC, Hint, A]
   
   def iterate[A](start: A, count: Int)(f: A => A): CC[A] =
-    macro SeqFactory.iterate[CC, A]
+    macro SeqFactory.iterate[CC, Hint, A]
 }
 
 private[collections] object SeqFactory {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  def fill[CC[_], A]
-      (c: Context { type PrefixType <: SeqFactory[CC] })
+  def fill[CC[_], Hint[_], A]
+      (c: Context { type PrefixType <: SeqFactory[CC, Hint] })
       (count: c.Expr[Int])
       (elem: c.Expr[A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
@@ -62,8 +62,8 @@ private[collections] object SeqFactory {
         Select(Ident(b), "state": TermName)))
   }
   
-  def tabulate[CC[_], A]
-      (c: Context { type PrefixType <: SeqFactory[CC] })
+  def tabulate[CC[_], Hint[_], A]
+      (c: Context { type PrefixType <: SeqFactory[CC, Hint] })
       (count: c.Expr[Int])
       (f: c.Expr[Int => A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
@@ -94,8 +94,8 @@ private[collections] object SeqFactory {
         Select(Ident(b), "state": TermName)))
   }
   
-  def iterate[CC[_], A]
-      (c: Context { type PrefixType <: SeqFactory[CC] })
+  def iterate[CC[_], Hint[_], A]
+      (c: Context { type PrefixType <: SeqFactory[CC, Hint] })
       (start: c.Expr[A], count: c.Expr[Int])
       (f: c.Expr[A => A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])

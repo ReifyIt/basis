@@ -73,7 +73,7 @@ private[containers] class RefArrayBuffer[A] private (
       buffer = array
       aliased = false
     }
-    Array.copy(elems, 0, array, size, n)
+    scala.Array.copy(elems, 0, array, size, n)
     size += n
   }
   
@@ -107,7 +107,7 @@ private[containers] class RefArrayBuffer[A] private (
     var array = buffer
     if (aliased || size + n > array.length) array = new Array[AnyRef](expand(n + size))
     if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, n, size)
-    Array.copy(elems, 0, array, 0, n)
+    scala.Array.copy(elems, 0, array, 0, n)
     buffer = array
     size += n
     aliased = false
@@ -164,7 +164,7 @@ private[containers] class RefArrayBuffer[A] private (
         java.lang.System.arraycopy(buffer, 0, array, 0, index)
       }
       java.lang.System.arraycopy(buffer, index, array, index + n, size - index)
-      Array.copy(elems, 0, array, index, n)
+      scala.Array.copy(elems, 0, array, index, n)
       buffer = array
       size += n
       aliased = false

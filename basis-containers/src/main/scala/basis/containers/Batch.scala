@@ -90,7 +90,7 @@ abstract class Batch[+A] private[containers]
 
 /** A factory for [[Batch batches]].
   * @group Containers */
-object Batch extends SeqFactory[Batch] {
+object Batch extends SeqFactory[Batch, TypeHint] {
   implicit override def Builder[A : TypeHint]
     : Builder[A] { type Scope = Batch[_]; type State = Batch[A] } =
     new BatchBuilder[A]

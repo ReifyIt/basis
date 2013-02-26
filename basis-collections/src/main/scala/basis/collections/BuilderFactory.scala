@@ -7,8 +7,6 @@
 
 package basis.collections
 
-import basis.runtime._
-
 import scala.annotation.implicitNotFound
 import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.TraversableOnce
@@ -21,35 +19,35 @@ import scala.collection.TraversableOnce
   * @group    Factories
   */
 @implicitNotFound("No builder factory available for ${CC}.")
-trait BuilderFactory[+CC[_]] {
-  implicit def Builder[A](implicit A: TypeHint[A])
+trait BuilderFactory[+CC[_], -Hint[_]] {
+  implicit def Builder[A](implicit A: Hint[A])
     : Builder[A] {
       type Scope = CC[X] @uncheckedVariance forSome { type X }
       type State = CC[A] @uncheckedVariance
     }
   
-  def empty[A](implicit A: TypeHint[A]): CC[A] =
+  def empty[A](implicit A: Hint[A]): CC[A] =
     Builder(A).state
   
-  def coerce[A](elems: Enumerator[A])(implicit A: TypeHint[A]): CC[A] =
+  def coerce[A](elems: Enumerator[A])(implicit A: Hint[A]): CC[A] =
     (Builder(A) ++= elems).state
   
-  def coerce[A](elems: TraversableOnce[A])(implicit A: TypeHint[A]): CC[A] = {
+  def coerce[A](elems: TraversableOnce[A])(implicit A: Hint[A]): CC[A] = {
     val builder = Builder(A)
     elems.foreach(new basis.collections.Builder.Append(builder))
     builder.state
   }
   
   def apply[A](elems: A*): CC[A] =
-    macro BuilderFactory.apply[CC, A]
+    macro BuilderFactory.apply[CC, Hint, A]
 }
 
 private[collections] object BuilderFactory {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  def apply[CC[_], A]
-      (c: Context { type PrefixType <: BuilderFactory[CC] })
+  def apply[CC[_], Hint[_], A]
+      (c: Context { type PrefixType <: BuilderFactory[CC, Hint] })
       (elems: c.Expr[A]*)
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {

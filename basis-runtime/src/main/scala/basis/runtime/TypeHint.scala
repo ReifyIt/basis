@@ -8,6 +8,7 @@
 package basis.runtime
 
 import scala.annotation.implicitNotFound
+import scala.reflect.ClassTag
 
 /** A typeclass for optional run-time type information.
   * 
@@ -26,7 +27,14 @@ object TypeHint {
   
   implicit object Any extends ClassHint[Any] {
     override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
+    override def newArray(length: Int): Array[Any] = new Array[Any](length)
     override def toString: String = "Any"
+  }
+  
+  implicit object AnyVal extends ClassHint[AnyVal] {
+    override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
+    override def newArray(length: Int): Array[AnyVal] = new Array[AnyVal](length)
+    override def toString: String = "AnyVal"
   }
   
   implicit object Byte extends ClassHint[Byte] {
@@ -77,15 +85,29 @@ object TypeHint {
     override def toString: String = "Boolean"
   }
   
+  implicit object AnyRef extends ClassHint[AnyRef] {
+    override def runtimeClass: java.lang.Class[_] = classOf[java.lang.Object]
+    override def newArray(length: Int): Array[AnyRef] = new Array[AnyRef](length)
+    override def toString: String = "AnyRef"
+  }
+  
   implicit object Unit extends ClassHint[Unit] {
     override def runtimeClass: java.lang.Class[_] = java.lang.Void.TYPE
     override def newArray(length: Int): Array[Unit] = new Array[Unit](length)
     override def toString: String = "Unit"
   }
   
+  implicit object Nothing extends ClassHint[Nothing] {
+    override def runtimeClass: java.lang.Class[_] = classOf[Nothing]
+    override def newArray(length: Int): Array[Nothing] = new Array[Nothing](length)
+    override def toString: String = "Nothing"
+  }
+  
   implicit def Array[T](implicit T: ClassHint[T]): ClassHint[Array[T]] = ClassHint.Array(T)
   
   implicit def Undefined[T]: TypeHint[T] = NoTypeHint.asInstanceOf[TypeHint[T]]
+  
+  implicit def fromClassTag[T](implicit T: ClassTag[T]): ClassHint[T] = ClassHint(T.runtimeClass)
 }
 
 private[runtime] object NoTypeHint extends TypeHint[Any] {

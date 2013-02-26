@@ -352,7 +352,7 @@ final class HashMap[+A, +T] private[containers] (
 
 /** A factory for [[HashMap hash maps]].
   * @group Containers */
-object HashMap extends MapFactory[HashMap] {
+object HashMap extends MapFactory[HashMap, TypeHint] {
   implicit override def Builder[A : TypeHint, T : TypeHint]
     : Builder[(A, T)] { type Scope = HashMap[_, _]; type State = HashMap[A, T] } =
     new HashMapBuilder[A, T]

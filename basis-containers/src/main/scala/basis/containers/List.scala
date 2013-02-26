@@ -116,7 +116,7 @@ sealed abstract class List[+A]
 
 /** A factory for [[List singly-linked lists]].
   * @group Containers */
-object List extends SeqFactory[List] {
+object List extends SeqFactory[List, TypeHint] {
   implicit override def Builder[A : TypeHint]
     : Builder[A] { type Scope = List[_]; type State = List[A] } =
     new ListBuilder[A]

@@ -7,8 +7,6 @@
 
 package basis.collections
 
-import basis.runtime._
-
 import scala.annotation.implicitNotFound
 import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.TraversableOnce
@@ -21,35 +19,35 @@ import scala.collection.TraversableOnce
   * @group    Factories
   */
 @implicitNotFound("No map factory available for ${CC}.")
-trait MapFactory[+CC[_, _]] {
-  implicit def Builder[A, T](implicit A: TypeHint[A], T: TypeHint[T])
+trait MapFactory[+CC[_, _], -Hint[_]] {
+  implicit def Builder[A, T](implicit A: Hint[A], T: Hint[T])
     : Builder[(A, T)] {
       type Scope = CC[X, Y] @uncheckedVariance forSome { type X; type Y }
       type State = CC[A, T] @uncheckedVariance
     }
   
-  def empty[A, T](implicit A: TypeHint[A], T: TypeHint[T]): CC[A, T] =
+  def empty[A, T](implicit A: Hint[A], T: Hint[T]): CC[A, T] =
     Builder(A, T).state
   
-  def coerce[A, T](entries: Enumerator[(A, T)])(implicit A: TypeHint[A], T: TypeHint[T]): CC[A, T] =
+  def coerce[A, T](entries: Enumerator[(A, T)])(implicit A: Hint[A], T: Hint[T]): CC[A, T] =
     (Builder(A, T) ++= entries).state
   
-  def coerce[A, T](entries: TraversableOnce[(A, T)])(implicit A: TypeHint[A], T: TypeHint[T]): CC[A, T] = {
+  def coerce[A, T](entries: TraversableOnce[(A, T)])(implicit A: Hint[A], T: Hint[T]): CC[A, T] = {
     val builder = Builder(A, T)
     entries.foreach(new basis.collections.Builder.Append(builder))
     builder.state
   }
   
   def apply[A, T](entries: (A, T)*): CC[A, T] =
-    macro MapFactory.apply[CC, A, T]
+    macro MapFactory.apply[CC, Hint, A, T]
 }
 
 private[collections] object MapFactory {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  def apply[CC[_, _], A, T]
-      (c: Context { type PrefixType <: MapFactory[CC] })
+  def apply[CC[_, _], Hint[_], A, T]
+      (c: Context { type PrefixType <: MapFactory[CC, Hint] })
       (entries: c.Expr[(A, T)]*)
       (implicit CCTag: c.WeakTypeTag[CC[_, _]], ATag: c.WeakTypeTag[A], TTag: c.WeakTypeTag[T])
     : c.Expr[CC[A, T]] = {

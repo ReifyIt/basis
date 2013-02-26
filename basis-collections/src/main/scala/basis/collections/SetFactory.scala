@@ -17,4 +17,4 @@ import scala.annotation.implicitNotFound
   * @group    Factories
   */
 @implicitNotFound("No set factory available for ${CC}.")
-trait SetFactory[+CC[_]] extends BuilderFactory[CC]
+trait SetFactory[+CC[_], -Hint[_]] extends BuilderFactory[CC, Hint]
