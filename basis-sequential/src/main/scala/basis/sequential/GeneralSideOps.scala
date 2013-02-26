@@ -10,11 +10,11 @@ package basis.sequential
 import basis.collections._
 import basis.control._
 
-/** General stack operations.
+/** General side operations.
   * 
   * @author   Chris Sachs
   * @version  0.1
-  * @since    0.0
+  * @since    0.1
   * @group    General
   * 
   * @groupprio  Traversing    1
@@ -22,16 +22,16 @@ import basis.control._
   * @groupprio  Querying      3
   * @groupprio  Transforming  4
   * 
-  * @define collection  stack
+  * @define collection  side
   */
-final class GeneralStackOps[+A](these: Stack[A]) {
+final class GeneralSideOps[+A](these: Side[A]) {
   /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
     * @group  Traversing
     */
   def foreach[U](f: A => U): Unit =
-    macro GeneralStackOps.foreach[A, U]
+    macro GeneralSideOps.foreach[A, U]
   
   /** Returns the repeated application of an associative binary operator
     * between an identity value and all elements of this $collection.
@@ -42,7 +42,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Reducing
     */
   def fold[B >: A](z: B)(op: (B, B) => B): B =
-    macro GeneralStackOps.foldLeft[A, B]
+    macro GeneralSideOps.foldLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this non-empty $collection.
@@ -52,7 +52,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Reducing
     */
   def reduce[B >: A](op: (B, B) => B): B =
-    macro GeneralStackOps.reduceLeft[A, B]
+    macro GeneralSideOps.reduceLeft[A, B]
   
   /** Returns the repeated application of an associative binary operator
     * between all elements of this $collection.
@@ -62,7 +62,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Reducing
     */
   def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
-    macro GeneralStackOps.mayReduceLeft[A, B]
+    macro GeneralSideOps.mayReduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between a
     * start value and all elements of this $collection.
@@ -73,7 +73,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Reducing
     */
   def foldLeft[B](z: B)(op: (B, A) => B): B =
-    macro GeneralStackOps.foldLeft[A, B]
+    macro GeneralSideOps.foldLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this non-empty $collection.
@@ -83,7 +83,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Reducing
     */
   def reduceLeft[B >: A](op: (B, A) => B): B =
-    macro GeneralStackOps.reduceLeft[A, B]
+    macro GeneralSideOps.reduceLeft[A, B]
   
   /** Returns the left-to-right application of a binary operator between
     * all elements of this $collection.
@@ -93,7 +93,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Reducing
     */
   def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
-    macro GeneralStackOps.mayReduceLeft[A, B]
+    macro GeneralSideOps.mayReduceLeft[A, B]
   
   /** Returns the first element of this $collection that satisfies a predicate.
     * 
@@ -102,7 +102,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Querying
     */
   def find(p: A => Boolean): Maybe[A] =
-    macro GeneralStackOps.find[A]
+    macro GeneralSideOps.find[A]
   
   /** Returns `true` if a predicate holds for all elements of this $collection.
     * 
@@ -111,7 +111,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Querying
     */
   def forall(p: A => Boolean): Boolean =
-    macro GeneralStackOps.forall[A]
+    macro GeneralSideOps.forall[A]
   
   /** Returns `true` if a predicate holds for some element of this $collection.
     * 
@@ -120,7 +120,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Querying
     */
   def exists(p: A => Boolean): Boolean =
-    macro GeneralStackOps.exists[A]
+    macro GeneralSideOps.exists[A]
   
   /** Returns the number of elements in this $collection that satisfy a predicate.
     * 
@@ -129,7 +129,7 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Querying
     */
   def count(p: A => Boolean): Int =
-    macro GeneralStackOps.count[A]
+    macro GeneralSideOps.count[A]
   
   /** Returns the application of a partial function to the first element
     * of this $collection for which the function is defined.
@@ -140,93 +140,93 @@ final class GeneralStackOps[+A](these: Stack[A]) {
     * @group  Querying
     */
   def choose[B](q: PartialFunction[A, B]): Maybe[B] =
-    macro GeneralStackOps.choose[A, B]
+    macro GeneralSideOps.choose[A, B]
   
   /** Returns a strict operations interface for this $collection.
     * @group Transforming */
-  def eagerly: StrictStackOps[A, Stack[_]] =
-    macro GeneralStackOps.eagerly[A]
+  def eagerly: StrictSideOps[A, Side[_]] =
+    macro GeneralSideOps.eagerly[A]
   
   /** Returns a non-strict operations interface for this $collection.
     * @group Transforming */
-  def lazily: NonStrictStackOps[A] =
-    macro GeneralStackOps.lazily[A]
+  def lazily: NonStrictSideOps[A] =
+    macro GeneralSideOps.lazily[A]
 }
 
-private[sequential] object GeneralStackOps {
+private[sequential] object GeneralSideOps {
   import scala.collection.immutable.{::, Nil}
   import scala.reflect.macros.Context
   
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Stack[A]] = {
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Side[A]] = {
     import c.{Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag}
     import c.universe._
     val Apply(_, these :: Nil) = prefix.tree
-    implicit val StackATag =
-      WeakTypeTag[Stack[A]](
+    implicit val SideATag =
+      WeakTypeTag[Side[A]](
         appliedType(
-          mirror.staticClass("basis.collections.Stack").toType,
+          mirror.staticClass("basis.collections.Side").toType,
           weakTypeOf[A] :: Nil))
-    Expr[Stack[A]](typeCheck(these, weakTypeOf[Stack[A]]))
+    Expr[Side[A]](typeCheck(these, weakTypeOf[Side[A]]))
   }
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]
       (c: Context)
       (f: c.Expr[A => U])
     : c.Expr[Unit] =
-    new StackMacros[c.type](c).foreach[A, U](unApply[A](c))(f)
+    new SideMacros[c.type](c).foreach[A, U](unApply[A](c))(f)
   
   def foldLeft[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (z: c.Expr[B])
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    new StackMacros[c.type](c).foldLeft[A, B](unApply[A](c))(z)(op)
+    new SideMacros[c.type](c).foldLeft[A, B](unApply[A](c))(z)(op)
   
   def reduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[B] =
-    new StackMacros[c.type](c).reduceLeft[A, B](unApply[A](c))(op)
+    new SideMacros[c.type](c).reduceLeft[A, B](unApply[A](c))(op)
   
   def mayReduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
       (c: Context)
       (op: c.Expr[(B, A) => B])
     : c.Expr[Maybe[B]] =
-    new StackMacros[c.type](c).mayReduceLeft[A, B](unApply[A](c))(op)
+    new SideMacros[c.type](c).mayReduceLeft[A, B](unApply[A](c))(op)
   
   def find[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Maybe[A]] =
-    new StackMacros[c.type](c).find[A](unApply[A](c))(p)
+    new SideMacros[c.type](c).find[A](unApply[A](c))(p)
   
   def forall[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    new StackMacros[c.type](c).forall[A](unApply[A](c))(p)
+    new SideMacros[c.type](c).forall[A](unApply[A](c))(p)
   
   def exists[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Boolean] =
-    new StackMacros[c.type](c).exists[A](unApply[A](c))(p)
+    new SideMacros[c.type](c).exists[A](unApply[A](c))(p)
   
   def count[A : c.WeakTypeTag]
       (c: Context)
       (p: c.Expr[A => Boolean])
     : c.Expr[Int] =
-    new StackMacros[c.type](c).count[A](unApply[A](c))(p)
+    new SideMacros[c.type](c).count[A](unApply[A](c))(p)
   
   def choose[A : c.WeakTypeTag, B : c.WeakTypeTag]
       (c: Context)
       (q: c.Expr[PartialFunction[A, B]])
     : c.Expr[Maybe[B]] =
-    new StackMacros[c.type](c).choose[A, B](unApply[A](c))(q)
+    new SideMacros[c.type](c).choose[A, B](unApply[A](c))(q)
   
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictStackOps[A, Stack[_]]] =
-    Strict.StrictStackOps[A](c)(unApply[A](c))
+  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSideOps[A, Side[_]]] =
+    Strict.StrictSideOps[A](c)(unApply[A](c))
   
-  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictStackOps[A]] =
-    NonStrict.NonStrictStackOps[A](c)(unApply[A](c))
+  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictSideOps[A]] =
+    NonStrict.NonStrictSideOps[A](c)(unApply[A](c))
 }

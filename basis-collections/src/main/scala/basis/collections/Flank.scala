@@ -7,9 +7,8 @@
 
 package basis.collections
 
-/** A double-ended queue. The `:+` operator puts an element at the `foot`
-  * of a deque, and the right-associative `+:` operator puts an element at
-  * the `head` of a deque.
+/** A two-sided sequence. A flank efficiently decomposes into its `head`
+  * element and `tail` flank, and its `foot` element and `body` flank.
   * 
   * ==Extensions==
   * $Extensions
@@ -22,18 +21,23 @@ package basis.collections
   * 
   * @groupprio  Measuring     1
   * @groupprio  Decomposing   2
-  * @groupprio  Combining     3
-  * @groupprio  Traversing    4
-  * @groupprio  Classifying   5
+  * @groupprio  Traversing    3
+  * @groupprio  Classifying   4
   * 
-  * @define collection  deque
+  * @define collection  flank
   */
-trait Deque[+A] extends Any with Equals with Family[Deque[_]] with Flank[A] with Stack[A] with Queue[A] {
-  /** Returns this $collection with an appended element.
-    * @group Combining */
-  def :+ [B >: A](elem: B): Deque[B]
+trait Flank[@specialized(Int, Long, Float, Double, Boolean) +A]
+  extends Any with Equals with Family[Flank[_]] with Side[A] {
   
-  /** Returns this $collection with a prepended element.
-    * @group Combining */
-  def +: [B >: A](elem: B): Deque[B]
+  override def head: A
+  
+  override def tail: Flank[A]
+  
+  /** Returns all elements except the last of this non-empty $collection.
+    * @group Decomposing */
+  def body: Flank[A]
+  
+  /** Returns the last element of this non-empty $collection.
+    * @group Decomposing */
+  def foot: A
 }

@@ -23,7 +23,7 @@ import basis.runtime._
   * 
   * @groupprio  Measuring     1
   * @groupprio  Decomposing   2
-  * @groupprio  Composing     3
+  * @groupprio  Combining     3
   * @groupprio  Slicing       4
   * @groupprio  Traversing    5
   * @groupprio  Exporting     6
@@ -83,12 +83,8 @@ sealed abstract class List[+A]
   def slice(lower: Int, upper: Int): List[A] =
     if (lower < upper) drop(lower).take(upper) else Nil
   
-  /** Returns this $collection with the given element prepended.
-    * @group Composing */
-  def :: [B >: A](elem: B): List[B] = new RefList(elem, this)
-  
   /** Returns the reverse of this $collection.
-    * @group Composing */
+    * @group Exporting */
   def reverse: List[A] = {
     var sx = Nil: List[A]
     var xs = this
@@ -106,6 +102,8 @@ sealed abstract class List[+A]
       xs = xs.tail
     }
   }
+  
+  override def :: [B >: A](elem: B): List[B] = new RefList(elem, this)
   
   override def iterator: Iterator[A] = new RefListIterator(this)
   

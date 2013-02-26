@@ -12,7 +12,7 @@ import basis.runtime._
 
 import scala.Predef.<:<
 
-/** A finger tree.
+/** An index-mapped finger tree.
   * 
   * ==Extensions==
   * $Extensions
@@ -26,7 +26,7 @@ import scala.Predef.<:<
   * @groupprio  Measuring     1
   * @groupprio  Indexing      2
   * @groupprio  Decomposing   3
-  * @groupprio  Inserting     4
+  * @groupprio  Combining     4
   * @groupprio  Slicing       5
   * @groupprio  Traversing    6
   * @groupprio  Classifying   7
@@ -57,20 +57,18 @@ abstract class Batch[+A] private[containers]
   def take(upper: Int): Batch[A]
   
   /** Returns a copy of this $collection with the given element appended.
-    * @group Inserting */
+    * @group Combining */
   def append[B >: A](elem: B): Batch[B]
   
   /** Returns a copy of this $collection with the given element prepended.
-    * @group Inserting */
+    * @group Combining */
   def prepend[B >: A](elem: B): Batch[B]
   
-  /** Returns a copy of this $collection with the given element appended.
-    * @group Inserting */
-  def :+ [B >: A](elem: B): Batch[B] = append(elem)
+  override def :+ [B >: A](elem: B): Batch[B] = append(elem)
   
-  /** Returns a copy of this $collection with the given element prepended.
-    * @group Inserting */
-  def +: [B >: A](elem: B): Batch[B] = prepend(elem)
+  override def +: [B >: A](elem: B): Batch[B] = prepend(elem)
+  
+  override def :: [B >: A](elem: B): Batch[B] = prepend(elem)
   
   override def traverse(f: A => Unit): Unit
   

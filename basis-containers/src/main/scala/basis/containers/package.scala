@@ -93,9 +93,9 @@ package containers {
       * @group Collections */
     val Index: SeqFactory[Index, TypeHint] = ArraySeq
     
-    /** The default [[Stack]] factory.
+    /** The default [[Side]] factory.
       * @group Collections */
-    val Stack: SeqFactory[Stack, TypeHint] = List
+    val Side: SeqFactory[Side, TypeHint] = List
     
     /** Implicitly returns a new default [[Index]] builder.
       * @group Builders */
@@ -103,19 +103,63 @@ package containers {
       : Builder[A] { type Scope = Index[_]; type State = Index[A] } =
       Index.Builder(A)
     
+    /** Implicitly returns a new default [[Side]] builder.
+      * @group Builders */
+    implicit def SideBuilder[A](implicit A: TypeHint[A])
+      : Builder[A] { type Scope = Side[_]; type State = Side[A] } =
+      Side.Builder(A)
+  }
+  
+  private[containers] abstract class Library6 extends Library7 {
+    /** The default [[Flank]] factory.
+      * @group Collections */
+    val Flank: SeqFactory[Flank, TypeHint] = Batch
+    
+    /** The default [[Queue]] factory.
+      * @group Collections */
+    val Queue: SeqFactory[Queue, TypeHint] = Batch
+    
+    /** The default [[Stack]] factory.
+      * @group Collections */
+    val Stack: SeqFactory[Stack, TypeHint] = List
+    
+    /** Implicitly returns a new default [[Flank]] builder.
+      * @group Builders */
+    implicit def FlankBuilder[A](implicit A: TypeHint[A])
+      : Builder[A] { type Scope = Flank[_]; type State = Flank[A] } =
+      Flank.Builder(A)
+    
+    /** Implicitly returns a new default [[Queue]] builder.
+      * @group Builders */
+    implicit def QueueBuilder[A](implicit A: TypeHint[A])
+      : Builder[A] { type Scope = Queue[_]; type State = Queue[A] } =
+      Queue.Builder(A)
+    
     /** Implicitly returns a new default [[Stack]] builder.
       * @group Builders */
     implicit def StackBuilder[A](implicit A: TypeHint[A])
       : Builder[A] { type Scope = Stack[_]; type State = Stack[A] } =
-      Stack.Builder[A]
+      Stack.Builder(A)
   }
   
-  private[containers] abstract class Library6 {
+  private[containers] abstract class Library7 extends Library8 {
+    /** The default [[Deque]] factory.
+      * @group Collections */
+    val Deque: SeqFactory[Deque, TypeHint] = Batch
+    
+    /** Implicitly returns a new default [[Deque]] builder.
+      * @group Builders */
+    implicit def DequeBuilder[A](implicit A: TypeHint[A])
+      : Builder[A] { type Scope = Deque[_]; type State = Deque[A] } =
+      Deque.Builder(A)
+  }
+  
+  private[containers] abstract class Library8 {
     /** Implicitly returns a new `Array` builder.
       * @group Builders */
     implicit def ArrayBuilder[A](implicit A: ClassHint[A])
       : ArrayBuilder[A] { type Scope = Array[_]; type State = Array[A] } =
-      Array.Builder[A]
+      Array.Builder(A)
     
     /** Implicitly returns a new [[ArraySeq]] builder.
       * @group Builders */

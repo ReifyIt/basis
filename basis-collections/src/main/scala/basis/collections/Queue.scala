@@ -7,9 +7,8 @@
 
 package basis.collections
 
-/** A double-ended queue. The `:+` operator puts an element at the `foot`
-  * of a deque, and the right-associative `+:` operator puts an element at
-  * the `head` of a deque.
+/** A first-in first-out sequence. The `:+` operator puts an element at
+  * the `foot` of a queue.
   * 
   * ==Extensions==
   * $Extensions
@@ -26,14 +25,10 @@ package basis.collections
   * @groupprio  Traversing    4
   * @groupprio  Classifying   5
   * 
-  * @define collection  deque
+  * @define collection  queue
   */
-trait Deque[+A] extends Any with Equals with Family[Deque[_]] with Flank[A] with Stack[A] with Queue[A] {
+trait Queue[+A] extends Any with Equals with Family[Queue[_]] with Side[A] {
   /** Returns this $collection with an appended element.
     * @group Combining */
-  def :+ [B >: A](elem: B): Deque[B]
-  
-  /** Returns this $collection with a prepended element.
-    * @group Combining */
-  def +: [B >: A](elem: B): Deque[B]
+  def :+ [B >: A](elem: B): Queue[B]
 }

@@ -35,7 +35,7 @@ package basis.collections
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
 trait Index[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A]
-  extends Any with Family[Index[_]] with Seq[A] {
+  extends Any with Equals with Family[Index[_]] with Seq[A] {
   
   /** Returns the number of elements in this $collection.
     * @group Measuring */

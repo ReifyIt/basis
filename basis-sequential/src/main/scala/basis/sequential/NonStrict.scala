@@ -58,10 +58,10 @@ class NonStrict extends General {
   implicit def NonStrictIndexOps[A](these: Index[A]): NonStrictIndexOps[A] =
     macro NonStrict.NonStrictIndexOps[A]
   
-  /** Implicitly provides non-strictly evaluated operations for stacks.
+  /** Implicitly provides non-strictly evaluated operations for sides.
     * @group NonStrict */
-  implicit def NonStrictStackOps[A](these: Stack[A]): NonStrictStackOps[A] =
-    macro NonStrict.NonStrictStackOps[A]
+  implicit def NonStrictSideOps[A](these: Side[A]): NonStrictSideOps[A] =
+    macro NonStrict.NonStrictSideOps[A]
   
   /** Implicitly provides non-strictly evaluated operations for sets.
     * @group NonStrict */
@@ -197,20 +197,20 @@ private[sequential] object NonStrict {
         these.tree :: Nil))
   }
   
-  def NonStrictStackOps[A : c.WeakTypeTag]
+  def NonStrictSideOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[Stack[A]])
-    : c.Expr[NonStrictStackOps[A]] = {
+      (these: c.Expr[Side[A]])
+    : c.Expr[NonStrictSideOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    implicit val NonStrictStackOpsATag =
-      WeakTypeTag[NonStrictStackOps[A]](
+    implicit val NonStrictSideOpsATag =
+      WeakTypeTag[NonStrictSideOps[A]](
         appliedType(
-          mirror.staticClass("basis.sequential.NonStrictStackOps").toType,
+          mirror.staticClass("basis.sequential.NonStrictSideOps").toType,
           weakTypeOf[A] :: Nil))
-    Expr[NonStrictStackOps[A]](
+    Expr[NonStrictSideOps[A]](
       Apply(
-        Select(New(TypeTree(weakTypeOf[NonStrictStackOps[A]])), nme.CONSTRUCTOR),
+        Select(New(TypeTree(weakTypeOf[NonStrictSideOps[A]])), nme.CONSTRUCTOR),
         these.tree :: Nil))
   }
   
