@@ -34,11 +34,11 @@ private[containers] final class IntBatch1(_1: Int) extends Batch[Int] with Reifi
   
   override def head: Int = _1
   
-  override def last: Int = _1
-  
-  override def init: Batch[Int] = Batch.Empty
-  
   override def tail: Batch[Int] = Batch.Empty
+  
+  override def body: Batch[Int] = Batch.Empty
+  
+  override def foot: Int = _1
   
   override def drop(lower: Int): Batch[Int] = if (lower <= 0) this else Batch.Empty
   
@@ -83,11 +83,11 @@ private[containers] final class IntBatch2(_1: Int, _2: Int) extends Batch[Int] w
   
   override def head: Int = _1
   
-  override def last: Int = _2
-  
-  override def init: Batch[Int] = new IntBatch1(_1)
-  
   override def tail: Batch[Int] = new IntBatch1(_2)
+  
+  override def body: Batch[Int] = new IntBatch1(_1)
+  
+  override def foot: Int = _2
   
   override def drop(lower: Int): Batch[Int] = {
     if (lower <= 0) this
@@ -144,11 +144,11 @@ private[containers] final class IntBatch3(_1: Int, _2: Int, _3: Int) extends Bat
   
   override def head: Int = _1
   
-  override def last: Int = _3
-  
-  override def init: Batch[Int] = new IntBatch2(_1, _2)
-  
   override def tail: Batch[Int] = new IntBatch2(_2, _3)
+  
+  override def body: Batch[Int] = new IntBatch2(_1, _2)
+  
+  override def foot: Int = _3
   
   @tailrec override def drop(lower: Int): Batch[Int] = (lower: @switch) match {
     case 0 => this
@@ -214,11 +214,11 @@ private[containers] final class IntBatch4
   
   override def head: Int = _1
   
-  override def last: Int = _4
-  
-  override def init: Batch[Int] = new IntBatch3(_1, _2, _3)
-  
   override def tail: Batch[Int] = new IntBatch3(_2, _3, _4)
+  
+  override def body: Batch[Int] = new IntBatch3(_1, _2, _3)
+  
+  override def foot: Int = _4
   
   @tailrec override def drop(lower: Int): Batch[Int] = (lower: @switch) match {
     case 0 => this
@@ -288,11 +288,11 @@ private[containers] final class IntBatch5
   
   override def head: Int = _1
   
-  override def last: Int = _5
-  
-  override def init: Batch[Int] = new IntBatch4(_1, _2, _3, _4)
-  
   override def tail: Batch[Int] = new IntBatch4(_2, _3, _4, _5)
+  
+  override def body: Batch[Int] = new IntBatch4(_1, _2, _3, _4)
+  
+  override def foot: Int = _5
   
   @tailrec override def drop(lower: Int): Batch[Int] = (lower: @switch) match {
     case 0 => this
@@ -366,11 +366,11 @@ private[containers] final class IntBatch6
   
   override def head: Int = _1
   
-  override def last: Int = _6
-  
-  override def init: Batch[Int] = new IntBatch5(_1, _2, _3, _4, _5)
-  
   override def tail: Batch[Int] = new IntBatch5(_2, _3, _4, _5, _6)
+  
+  override def body: Batch[Int] = new IntBatch5(_1, _2, _3, _4, _5)
+  
+  override def foot: Int = _6
   
   @tailrec override def drop(lower: Int): Batch[Int] = (lower: @switch) match {
     case 0 => this
@@ -451,16 +451,6 @@ private[containers] final class IntBatchN
   
   override def head: Int = prefix.head
   
-  override def last: Int = suffix.last
-  
-  override def init: Batch[Int] = {
-    if (suffix.length == 1) {
-      if (tree.isEmpty) prefix
-      else new IntBatchN(length - 1, prefix, tree.init, tree.last)
-    }
-    else new IntBatchN(length - 1, prefix, tree, suffix.init)
-  }
-  
   override def tail: Batch[Int] = {
     if (prefix.length == 1) {
       if (tree.isEmpty) suffix
@@ -468,6 +458,16 @@ private[containers] final class IntBatchN
     }
     else new IntBatchN(length - 1, prefix.tail, tree, suffix)
   }
+  
+  override def body: Batch[Int] = {
+    if (suffix.length == 1) {
+      if (tree.isEmpty) prefix
+      else new IntBatchN(length - 1, prefix, tree.body, tree.foot)
+    }
+    else new IntBatchN(length - 1, prefix, tree, suffix.body)
+  }
+  
+  override def foot: Int = suffix.foot
   
   override def drop(lower: Int): Batch[Int] = {
     val n = lower - prefix.length
@@ -491,7 +491,7 @@ private[containers] final class IntBatchN
       val k = n - (tree.length << 2)
       if (k <= 0) {
         val split = tree.take(((n + 3) & ~3) >> 2)
-        new IntBatchN(upper, prefix, split.init, split.last.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
+        new IntBatchN(upper, prefix, split.body, split.foot.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
       }
       else new IntBatchN(upper, prefix, tree, suffix.take(k))
     }

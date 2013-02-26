@@ -8,7 +8,7 @@
 package basis.collections
 
 /** A double-ended queue. Deques efficiently decompose into a `head` element
-  * and a `tail` deque, or an `init` deque and a `last` element.
+  * and a `tail` deque, or a `body` deque and a `foot` element.
   * 
   * ==Extensions==
   * $Extensions
@@ -40,13 +40,13 @@ trait Deque[@specialized(Int, Long, Float, Double, Boolean) +A]
   
   override def head: A
   
-  /** Returns the last element of this non-empty $collection.
-    * @group Decomposing */
-  def last: A
+  override def tail: Deque[A]
   
   /** Returns all elements except the last of this non-empty $collection.
     * @group Decomposing */
-  def init: Deque[A]
+  def body: Deque[A]
   
-  override def tail: Deque[A]
+  /** Returns the last element of this non-empty $collection.
+    * @group Decomposing */
+  def foot: A
 }

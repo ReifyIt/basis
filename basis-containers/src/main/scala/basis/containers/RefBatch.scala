@@ -29,11 +29,11 @@ private[containers] final class RefBatch1[+A](_1: A) extends Batch[A] {
   
   override def head: A = _1
   
-  override def last: A = _1
-  
-  override def init: Batch[A] = Batch.Empty
-  
   override def tail: Batch[A] = Batch.Empty
+  
+  override def body: Batch[A] = Batch.Empty
+  
+  override def foot: A = _1
   
   override def drop(lower: Int): Batch[A] = if (lower <= 0) this else Batch.Empty
   
@@ -71,11 +71,11 @@ private[containers] final class RefBatch2[+A](_1: A, _2: A) extends Batch[A] {
   
   override def head: A = _1
   
-  override def last: A = _2
-  
-  override def init: Batch[A] = new RefBatch1(_1)
-  
   override def tail: Batch[A] = new RefBatch1(_2)
+  
+  override def body: Batch[A] = new RefBatch1(_1)
+  
+  override def foot: A = _2
   
   override def drop(lower: Int): Batch[A] = {
     if (lower <= 0) this
@@ -123,11 +123,11 @@ private[containers] final class RefBatch3[+A](_1: A, _2: A, _3: A) extends Batch
   
   override def head: A = _1
   
-  override def last: A = _3
-  
-  override def init: Batch[A] = new RefBatch2(_1, _2)
-  
   override def tail: Batch[A] = new RefBatch2(_2, _3)
+  
+  override def body: Batch[A] = new RefBatch2(_1, _2)
+  
+  override def foot: A = _3
   
   @tailrec override def drop(lower: Int): Batch[A] = (lower: @switch) match {
     case 0 => this
@@ -184,11 +184,11 @@ private[containers] final class RefBatch4[+A]
   
   override def head: A = _1
   
-  override def last: A = _4
-  
-  override def init: Batch[A] = new RefBatch3(_1, _2, _3)
-  
   override def tail: Batch[A] = new RefBatch3(_2, _3, _4)
+  
+  override def body: Batch[A] = new RefBatch3(_1, _2, _3)
+  
+  override def foot: A = _4
   
   @tailrec override def drop(lower: Int): Batch[A] = (lower: @switch) match {
     case 0 => this
@@ -249,11 +249,11 @@ private[containers] final class RefBatch5[+A]
   
   override def head: A = _1
   
-  override def last: A = _5
-  
-  override def init: Batch[A] = new RefBatch4(_1, _2, _3, _4)
-  
   override def tail: Batch[A] = new RefBatch4(_2, _3, _4, _5)
+  
+  override def body: Batch[A] = new RefBatch4(_1, _2, _3, _4)
+  
+  override def foot: A = _5
   
   @tailrec override def drop(lower: Int): Batch[A] = (lower: @switch) match {
     case 0 => this
@@ -320,11 +320,11 @@ private[containers] final class RefBatch6[+A]
   
   override def head: A = _1
   
-  override def last: A = _6
-  
-  override def init: Batch[A] = new RefBatch5(_1, _2, _3, _4, _5)
-  
   override def tail: Batch[A] = new RefBatch5(_2, _3, _4, _5, _6)
+  
+  override def body: Batch[A] = new RefBatch5(_1, _2, _3, _4, _5)
+  
+  override def foot: A = _6
   
   @tailrec override def drop(lower: Int): Batch[A] = (lower: @switch) match {
     case 0 => this
@@ -396,16 +396,6 @@ private[containers] final class RefBatchN[+A]
   
   override def head: A = prefix.head
   
-  override def last: A = suffix.last
-  
-  override def init: Batch[A] = {
-    if (suffix.length == 1) {
-      if (tree.isEmpty) prefix
-      else new RefBatchN(length - 1, prefix, tree.init, tree.last)
-    }
-    else new RefBatchN(length - 1, prefix, tree, suffix.init)
-  }
-  
   override def tail: Batch[A] = {
     if (prefix.length == 1) {
       if (tree.isEmpty) suffix
@@ -413,6 +403,16 @@ private[containers] final class RefBatchN[+A]
     }
     else new RefBatchN(length - 1, prefix.tail, tree, suffix)
   }
+  
+  override def body: Batch[A] = {
+    if (suffix.length == 1) {
+      if (tree.isEmpty) prefix
+      else new RefBatchN(length - 1, prefix, tree.body, tree.foot)
+    }
+    else new RefBatchN(length - 1, prefix, tree, suffix.body)
+  }
+  
+  override def foot: A = suffix.foot
   
   override def drop(lower: Int): Batch[A] = {
     val n = lower - prefix.length
@@ -436,7 +436,7 @@ private[containers] final class RefBatchN[+A]
       val k = n - (tree.length << 2)
       if (k <= 0) {
         val split = tree.take(((n + 3) & ~3) >> 2)
-        new RefBatchN(upper, prefix, split.init, split.last.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
+        new RefBatchN(upper, prefix, split.body, split.foot.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
       }
       else new RefBatchN(upper, prefix, tree, suffix.take(k))
     }

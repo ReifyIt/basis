@@ -34,11 +34,11 @@ private[containers] final class DoubleBatch1(_1: Double) extends Batch[Double] w
   
   override def head: Double = _1
   
-  override def last: Double = _1
-  
-  override def init: Batch[Double] = Batch.Empty
-  
   override def tail: Batch[Double] = Batch.Empty
+  
+  override def body: Batch[Double] = Batch.Empty
+  
+  override def foot: Double = _1
   
   override def drop(lower: Int): Batch[Double] = if (lower <= 0) this else Batch.Empty
   
@@ -83,11 +83,11 @@ private[containers] final class DoubleBatch2(_1: Double, _2: Double) extends Bat
   
   override def head: Double = _1
   
-  override def last: Double = _2
-  
-  override def init: Batch[Double] = new DoubleBatch1(_1)
-  
   override def tail: Batch[Double] = new DoubleBatch1(_2)
+  
+  override def body: Batch[Double] = new DoubleBatch1(_1)
+  
+  override def foot: Double = _2
   
   override def drop(lower: Int): Batch[Double] = {
     if (lower <= 0) this
@@ -144,11 +144,11 @@ private[containers] final class DoubleBatch3(_1: Double, _2: Double, _3: Double)
   
   override def head: Double = _1
   
-  override def last: Double = _3
-  
-  override def init: Batch[Double] = new DoubleBatch2(_1, _2)
-  
   override def tail: Batch[Double] = new DoubleBatch2(_2, _3)
+  
+  override def body: Batch[Double] = new DoubleBatch2(_1, _2)
+  
+  override def foot: Double = _3
   
   @tailrec override def drop(lower: Int): Batch[Double] = (lower: @switch) match {
     case 0 => this
@@ -214,11 +214,11 @@ private[containers] final class DoubleBatch4
   
   override def head: Double = _1
   
-  override def last: Double = _4
-  
-  override def init: Batch[Double] = new DoubleBatch3(_1, _2, _3)
-  
   override def tail: Batch[Double] = new DoubleBatch3(_2, _3, _4)
+  
+  override def body: Batch[Double] = new DoubleBatch3(_1, _2, _3)
+  
+  override def foot: Double = _4
   
   @tailrec override def drop(lower: Int): Batch[Double] = (lower: @switch) match {
     case 0 => this
@@ -288,11 +288,11 @@ private[containers] final class DoubleBatch5
   
   override def head: Double = _1
   
-  override def last: Double = _5
-  
-  override def init: Batch[Double] = new DoubleBatch4(_1, _2, _3, _4)
-  
   override def tail: Batch[Double] = new DoubleBatch4(_2, _3, _4, _5)
+  
+  override def body: Batch[Double] = new DoubleBatch4(_1, _2, _3, _4)
+  
+  override def foot: Double = _5
   
   @tailrec override def drop(lower: Int): Batch[Double] = (lower: @switch) match {
     case 0 => this
@@ -366,11 +366,11 @@ private[containers] final class DoubleBatch6
   
   override def head: Double = _1
   
-  override def last: Double = _6
-  
-  override def init: Batch[Double] = new DoubleBatch5(_1, _2, _3, _4, _5)
-  
   override def tail: Batch[Double] = new DoubleBatch5(_2, _3, _4, _5, _6)
+  
+  override def body: Batch[Double] = new DoubleBatch5(_1, _2, _3, _4, _5)
+  
+  override def foot: Double = _6
   
   @tailrec override def drop(lower: Int): Batch[Double] = (lower: @switch) match {
     case 0 => this
@@ -451,16 +451,6 @@ private[containers] final class DoubleBatchN
   
   override def head: Double = prefix.head
   
-  override def last: Double = suffix.last
-  
-  override def init: Batch[Double] = {
-    if (suffix.length == 1) {
-      if (tree.isEmpty) prefix
-      else new DoubleBatchN(length - 1, prefix, tree.init, tree.last)
-    }
-    else new DoubleBatchN(length - 1, prefix, tree, suffix.init)
-  }
-  
   override def tail: Batch[Double] = {
     if (prefix.length == 1) {
       if (tree.isEmpty) suffix
@@ -468,6 +458,16 @@ private[containers] final class DoubleBatchN
     }
     else new DoubleBatchN(length - 1, prefix.tail, tree, suffix)
   }
+  
+  override def body: Batch[Double] = {
+    if (suffix.length == 1) {
+      if (tree.isEmpty) prefix
+      else new DoubleBatchN(length - 1, prefix, tree.body, tree.foot)
+    }
+    else new DoubleBatchN(length - 1, prefix, tree, suffix.body)
+  }
+  
+  override def foot: Double = suffix.foot
   
   override def drop(lower: Int): Batch[Double] = {
     val n = lower - prefix.length
@@ -491,7 +491,7 @@ private[containers] final class DoubleBatchN
       val k = n - (tree.length << 2)
       if (k <= 0) {
         val split = tree.take(((n + 3) & ~3) >> 2)
-        new DoubleBatchN(upper, prefix, split.init, split.last.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
+        new DoubleBatchN(upper, prefix, split.body, split.foot.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
       }
       else new DoubleBatchN(upper, prefix, tree, suffix.take(k))
     }

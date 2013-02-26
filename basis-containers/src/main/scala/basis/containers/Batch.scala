@@ -40,7 +40,7 @@ abstract class Batch[+A] private[containers]
     with Index[A]
     with Deque[A] {
   
-  override def init: Batch[A]
+  override def body: Batch[A]
   
   override def tail: Batch[A]
   
@@ -114,11 +114,11 @@ object Batch extends SeqFactory[Batch, TypeHint] {
     
     override def head: Nothing = throw new NoSuchElementException("head of empty batch")
     
-    override def last: Nothing = throw new NoSuchElementException("last of empty batch")
-    
-    override def init: Batch[Nothing] = throw new UnsupportedOperationException("init of empty batch")
-    
     override def tail: Batch[Nothing] = throw new UnsupportedOperationException("tail of empty batch")
+    
+    override def body: Batch[Nothing] = throw new UnsupportedOperationException("init of empty batch")
+    
+    override def foot: Nothing = throw new NoSuchElementException("last of empty batch")
     
     override def drop(lower: Int): Batch[Nothing] = this
     

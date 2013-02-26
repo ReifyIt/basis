@@ -34,11 +34,11 @@ private[containers] final class FloatBatch1(_1: Float) extends Batch[Float] with
   
   override def head: Float = _1
   
-  override def last: Float = _1
-  
-  override def init: Batch[Float] = Batch.Empty
-  
   override def tail: Batch[Float] = Batch.Empty
+  
+  override def body: Batch[Float] = Batch.Empty
+  
+  override def foot: Float = _1
   
   override def drop(lower: Int): Batch[Float] = if (lower <= 0) this else Batch.Empty
   
@@ -83,11 +83,11 @@ private[containers] final class FloatBatch2(_1: Float, _2: Float) extends Batch[
   
   override def head: Float = _1
   
-  override def last: Float = _2
-  
-  override def init: Batch[Float] = new FloatBatch1(_1)
-  
   override def tail: Batch[Float] = new FloatBatch1(_2)
+  
+  override def body: Batch[Float] = new FloatBatch1(_1)
+  
+  override def foot: Float = _2
   
   override def drop(lower: Int): Batch[Float] = {
     if (lower <= 0) this
@@ -144,11 +144,11 @@ private[containers] final class FloatBatch3(_1: Float, _2: Float, _3: Float) ext
   
   override def head: Float = _1
   
-  override def last: Float = _3
-  
-  override def init: Batch[Float] = new FloatBatch2(_1, _2)
-  
   override def tail: Batch[Float] = new FloatBatch2(_2, _3)
+  
+  override def body: Batch[Float] = new FloatBatch2(_1, _2)
+  
+  override def foot: Float = _3
   
   @tailrec override def drop(lower: Int): Batch[Float] = (lower: @switch) match {
     case 0 => this
@@ -214,11 +214,11 @@ private[containers] final class FloatBatch4
   
   override def head: Float = _1
   
-  override def last: Float = _4
-  
-  override def init: Batch[Float] = new FloatBatch3(_1, _2, _3)
-  
   override def tail: Batch[Float] = new FloatBatch3(_2, _3, _4)
+  
+  override def body: Batch[Float] = new FloatBatch3(_1, _2, _3)
+  
+  override def foot: Float = _4
   
   @tailrec override def drop(lower: Int): Batch[Float] = (lower: @switch) match {
     case 0 => this
@@ -288,11 +288,11 @@ private[containers] final class FloatBatch5
   
   override def head: Float = _1
   
-  override def last: Float = _5
-  
-  override def init: Batch[Float] = new FloatBatch4(_1, _2, _3, _4)
-  
   override def tail: Batch[Float] = new FloatBatch4(_2, _3, _4, _5)
+  
+  override def body: Batch[Float] = new FloatBatch4(_1, _2, _3, _4)
+  
+  override def foot: Float = _5
   
   @tailrec override def drop(lower: Int): Batch[Float] = (lower: @switch) match {
     case 0 => this
@@ -366,11 +366,11 @@ private[containers] final class FloatBatch6
   
   override def head: Float = _1
   
-  override def last: Float = _6
-  
-  override def init: Batch[Float] = new FloatBatch5(_1, _2, _3, _4, _5)
-  
   override def tail: Batch[Float] = new FloatBatch5(_2, _3, _4, _5, _6)
+  
+  override def body: Batch[Float] = new FloatBatch5(_1, _2, _3, _4, _5)
+  
+  override def foot: Float = _6
   
   @tailrec override def drop(lower: Int): Batch[Float] = (lower: @switch) match {
     case 0 => this
@@ -451,16 +451,6 @@ private[containers] final class FloatBatchN
   
   override def head: Float = prefix.head
   
-  override def last: Float = suffix.last
-  
-  override def init: Batch[Float] = {
-    if (suffix.length == 1) {
-      if (tree.isEmpty) prefix
-      else new FloatBatchN(length - 1, prefix, tree.init, tree.last)
-    }
-    else new FloatBatchN(length - 1, prefix, tree, suffix.init)
-  }
-  
   override def tail: Batch[Float] = {
     if (prefix.length == 1) {
       if (tree.isEmpty) suffix
@@ -468,6 +458,16 @@ private[containers] final class FloatBatchN
     }
     else new FloatBatchN(length - 1, prefix.tail, tree, suffix)
   }
+  
+  override def body: Batch[Float] = {
+    if (suffix.length == 1) {
+      if (tree.isEmpty) prefix
+      else new FloatBatchN(length - 1, prefix, tree.body, tree.foot)
+    }
+    else new FloatBatchN(length - 1, prefix, tree, suffix.body)
+  }
+  
+  override def foot: Float = suffix.foot
   
   override def drop(lower: Int): Batch[Float] = {
     val n = lower - prefix.length
@@ -491,7 +491,7 @@ private[containers] final class FloatBatchN
       val k = n - (tree.length << 2)
       if (k <= 0) {
         val split = tree.take(((n + 3) & ~3) >> 2)
-        new FloatBatchN(upper, prefix, split.init, split.last.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
+        new FloatBatchN(upper, prefix, split.body, split.foot.take(((((n & 3) ^ 3) + 1) & 4) | (n & 3)))
       }
       else new FloatBatchN(upper, prefix, tree, suffix.take(k))
     }
