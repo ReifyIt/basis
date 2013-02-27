@@ -40,25 +40,25 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Stack</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="" class="extype" name="basis.collections.Stack">Stack</a>[_]] with <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</span>
+        <span class="name">Stack</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="" class="extype" name="basis.collections.Stack">Stack</a>[_]] with <a href="Side.html" class="extype" name="basis.collections.Side">Side</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A linear sequence. Stacks efficiently decompose into a <code>head</code> element and
-a <code>tail</code> stack.</p><h4>Extensions</h4><p>Add operations to this interface by importing one of these use cases:</p><ul><li><code>import </code><a href="../sequential/General.html" class="extype" name="basis.sequential.General"><code>basis.sequential.general</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/Strict.html" class="extype" name="basis.sequential.Strict"><code>basis.sequential.strict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/NonStrict.html" class="extype" name="basis.sequential.NonStrict"><code>basis.sequential.nonstrict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li></ul><p>The following classes implement the extensions to this interface:</p><ul><li><a href="../sequential/GeneralStackOps.html" class="extype" name="basis.sequential.GeneralStackOps">GeneralStackOps</a>
-   implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><a href="../sequential/StrictStackOps.html" class="extype" name="basis.sequential.StrictStackOps">StrictStackOps</a>
-   implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><a href="../sequential/NonStrictStackOps.html" class="extype" name="basis.sequential.NonStrictStackOps">NonStrictStackOps</a>
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A last-in first-out sequence. The right-associative <code>::</code> operator
+puts an element at the <code>head</code> of a stack.</p><h4>Extensions</h4><p>Add operations to this interface by importing one of these use cases:</p><ul><li><code>import </code><a href="../sequential/General.html" class="extype" name="basis.sequential.General"><code>basis.sequential.general</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/Strict.html" class="extype" name="basis.sequential.Strict"><code>basis.sequential.strict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/NonStrict.html" class="extype" name="basis.sequential.NonStrict"><code>basis.sequential.nonstrict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li></ul><p>The following classes implement the extensions to this interface:</p><ul><li><a href="../sequential/GeneralSideOps.html" class="extype" name="basis.sequential.GeneralSideOps">GeneralSideOps</a>
+   implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><a href="../sequential/StrictSideOps.html" class="extype" name="basis.sequential.StrictSideOps">StrictSideOps</a>
+   implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><a href="../sequential/NonStrictSideOps.html" class="extype" name="basis.sequential.NonStrictSideOps">NonStrictSideOps</a>
    implements lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Stack.scala" target="_blank">Stack.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Stack.scala" target="_blank">Stack.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.1</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <span class="extype" name="scala.Equals">Equals</span>, <a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Stack">Stack</a>[_]], <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Side.html" class="extype" name="basis.collections.Side">Side</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Stack.A">A</span>], <a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Stack">Stack</a>[_]], <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="../containers/$colon$colon.html" class="extype" name="basis.containers.::">::</a>, <a href="../containers/Batch.html" class="extype" name="basis.containers.Batch">Batch</a>, <a href="Deque.html" class="extype" name="basis.collections.Deque">Deque</a>, <a href="../containers/List.html" class="extype" name="basis.containers.List">List</a>, <a href="../containers/Nil$.html" class="extype" name="basis.containers.Nil">Nil</a></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph132" viewBox="0.00 0.00 215.00 158.00" height="158pt" width="215pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 154)" class="graph" id="graph1"><polygon points="-4,5 -4,-154 212,-154 212,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph132_0"><a xlink:title="basis.collections.Stack (this trait)" xlink:href="#inheritance-diagram"><polygon points="154,-88 72,-88 72,-62 154,-62 154,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-83" x="82" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="104" text-anchor="start">Stack[A]</text></a></g><!-- node1 --><g class="node trait" id="graph132_1"><a xlink:title="basis.collections.Deque" xlink:href="Deque.html#inheritance-diagram"><polygon points="108,-26 22,-26 22,-0 108,-0 108,-26" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-21" x="32" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="54" text-anchor="start">Deque[A]</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph132_0_1"><a xlink:title="Deque[A] is a subtype of Stack[A]"><path d="M100.009,-57.7607C92.0311,-47.7889 81.9822,-35.2278 74.6991,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="98.7964,-59.047 103.286,-61.8581 101.53,-56.8605 98.7964,-59.047" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node class" id="graph132_2"><a xlink:title="basis.containers.List" xlink:href="../containers/List.html#inheritance-diagram"><polygon points="198,-26 126,-26 126,-0 198,-0 198,-26" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-21" x="136" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="158" text-anchor="start">List[A]</text></a></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph132_0_2"><a xlink:title="List[A] is a subtype of Stack[A]"><path d="M126.262,-57.7607C134.406,-47.7889 144.664,-35.2278 152.099,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="124.723,-56.8785 122.916,-61.8581 127.434,-59.0924 124.723,-56.8785" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node3 --><g class="node trait" id="graph132_3"><a xlink:title="basis.collections.Family" xlink:href="Family.html#inheritance-diagram"><polygon points="114.25,-150 -0.25,-150 -0.25,-124 114.25,-124 114.25,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="32" text-anchor="start">Family[Stack[_]]</text></a></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph132_3_0"><a xlink:title="Stack[A] is a subtype of Family[Stack[_]]"><path d="M71.908,-120.027C81.2541,-110.014 93.1115,-97.3091 101.684,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="70.4647,-119.009 68.3324,-123.858 73.0234,-121.397 70.4647,-119.009" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node4 --><g class="node trait" id="graph132_4"><a xlink:title="basis.collections.Seq" xlink:href="Seq.html#inheritance-diagram"><polygon points="207,-150 133,-150 133,-124 207,-124 207,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="143" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="165" text-anchor="start">Seq[A]</text></a></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph132_4_0"><a xlink:title="Stack[A] is a subtype of Seq[A]"><path d="M154.826,-120.027C145.313,-110.014 133.244,-97.3091 124.518,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="153.753,-121.438 158.465,-123.858 156.29,-119.028 153.753,-121.438" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph148" viewBox="0.00 0.00 310.00 158.00" height="158pt" width="310pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 154)" class="graph" id="graph1"><polygon points="-4,5 -4,-154 307,-154 307,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph148_0"><a xlink:title="basis.collections.Stack (this trait)" xlink:href="#inheritance-diagram"><polygon points="191,-88 109,-88 109,-62 191,-62 191,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-83" x="119" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="141" text-anchor="start">Stack[A]</text></a></g><!-- node1 --><g class="node trait" id="graph148_1"><a xlink:title="basis.collections.Deque" xlink:href="Deque.html#inheritance-diagram"><polygon points="145,-26 59,-26 59,-0 145,-0 145,-26" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-21" x="69" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="91" text-anchor="start">Deque[A]</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph148_0_1"><a xlink:title="Deque[A] is a subtype of Stack[A]"><path d="M137.009,-57.7607C129.031,-47.7889 118.982,-35.2278 111.699,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="135.796,-59.047 140.286,-61.8581 138.53,-56.8605 135.796,-59.047" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node class" id="graph148_2"><a xlink:title="basis.containers.List" xlink:href="../containers/List.html#inheritance-diagram"><polygon points="235,-26 163,-26 163,-0 235,-0 235,-26" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-21" x="173" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="195" text-anchor="start">List[A]</text></a></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph148_0_2"><a xlink:title="List[A] is a subtype of Stack[A]"><path d="M163.262,-57.7607C171.406,-47.7889 181.664,-35.2278 189.099,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="161.723,-56.8785 159.916,-61.8581 164.434,-59.0924 161.723,-56.8785" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node3 --><g class="node trait" id="graph148_3"><a xlink:title="scala.Equals"><polygon points="74.25,-150 -0.25,-150 -0.25,-124 74.25,-124 74.25,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="32" text-anchor="start">Equals</text></a></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph148_3_0"><a xlink:title="Stack[A] is a subtype of Equals"><path d="M64.6096,-121.34C83.8109,-111.145 109.102,-97.7155 127.167,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="63.4626,-119.968 59.8672,-123.858 65.104,-123.059 63.4626,-119.968" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node4 --><g class="node trait" id="graph148_4"><a xlink:title="basis.collections.Family" xlink:href="Family.html#inheritance-diagram"><polygon points="207.25,-150 92.75,-150 92.75,-124 207.25,-124 207.25,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="103" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="125" text-anchor="start">Family[Stack[_]]</text></a></g><!-- node4&#45;&gt;node0 --><g class="edge inheritance" id="graph148_4_0"><a xlink:title="Stack[A] is a subtype of Family[Stack[_]]"><path d="M150,-118.683C150,-108.896 150,-96.9026 150,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="148.25,-118.858 150,-123.858 151.75,-118.858 148.25,-118.858" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node5 --><g class="node trait" id="graph148_5"><a xlink:title="basis.collections.Side" xlink:href="Side.html#inheritance-diagram"><polygon points="302.25,-150 225.75,-150 225.75,-124 302.25,-124 302.25,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="236" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="258" text-anchor="start">Side[A]</text></a></g><!-- node5&#45;&gt;node0 --><g class="edge inheritance" id="graph148_5_0"><a xlink:title="Stack[A] is a subtype of Side[A]"><path d="M236.146,-121.34C216.775,-111.145 191.259,-97.7155 173.035,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="235.691,-123.078 240.93,-123.858 237.321,-119.981 235.691,-123.078" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -76,7 +76,7 @@ a <code>tail</code> stack.</p><h4>Extensions</h4><p>Add operations to this inter
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.collections.Stack"><span>Stack</span></li><li class="in" name="basis.collections.Seq"><span>Seq</span></li><li class="in" name="basis.collections.Container"><span>Container</span></li><li class="in" name="basis.collections.Collection"><span>Collection</span></li><li class="in" name="basis.collections.Enumerator"><span>Enumerator</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="basis.collections.Family"><span>Family</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.collections.Stack"><span>Stack</span></li><li class="in" name="basis.collections.Side"><span>Side</span></li><li class="in" name="basis.collections.Seq"><span>Seq</span></li><li class="in" name="basis.collections.Container"><span>Container</span></li><li class="in" name="basis.collections.Collection"><span>Collection</span></li><li class="in" name="basis.collections.Enumerator"><span>Enumerator</span></li><li class="in" name="basis.collections.Family"><span>Family</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -116,7 +116,20 @@ a <code>tail</code> stack.</p><h4>Extensions</h4><p>Add operations to this inter
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="basis.collections.Stack#::" visbl="pub" data-isabs="true" fullComment="no" group="Combining">
+      <a id="::[B&gt;:A](elem:B):basis.collections.Stack[B]"></a>
+      <a id="::[B&gt;:A](B):Stack[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $colon$colon" class="name">::</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.Stack.A">A</span></span>]</span><span class="params">(<span name="elem">elem: <span class="extype" name="basis.collections.Stack.::.B">B</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.collections.Stack.::.B">B</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns this stack with a prepended element.</p>
+    </li><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
       <h4 class="signature">
@@ -129,7 +142,7 @@ a <code>tail</code> stack.</p><h4>Extensions</h4><p>Add operations to this inter
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Stack#head" visbl="pub" data-isabs="true" fullComment="no" group="Decomposing">
+    </li><li name="basis.collections.Side#head" visbl="pub" data-isabs="true" fullComment="yes" group="Decomposing">
       <a id="head:A"></a>
       <a id="head:A"></a>
       <h4 class="signature">
@@ -141,8 +154,8 @@ a <code>tail</code> stack.</p><h4>Extensions</h4><p>Add operations to this inter
         <span class="name">head</span><span class="result">: <span class="extype" name="basis.collections.Stack.A">A</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns the first element of this non-empty stack.</p>
-    </li><li name="basis.collections.Stack#isEmpty" visbl="pub" data-isabs="true" fullComment="no" group="Measuring">
+      <p class="shortcomment cmt">Returns the first element of this non-empty stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the first element of this non-empty stack.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Side.html" class="extype" name="basis.collections.Side">Side</a></dd></dl></div>
+    </li><li name="basis.collections.Side#isEmpty" visbl="pub" data-isabs="true" fullComment="yes" group="Measuring">
       <a id="isEmpty:Boolean"></a>
       <a id="isEmpty:Boolean"></a>
       <h4 class="signature">
@@ -154,20 +167,20 @@ a <code>tail</code> stack.</p><h4>Extensions</h4><p>Add operations to this inter
         <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> if this stack doesn't contain any elements.</p>
-    </li><li name="basis.collections.Stack#tail" visbl="pub" data-isabs="true" fullComment="no" group="Decomposing">
-      <a id="tail:basis.collections.Stack[A]"></a>
-      <a id="tail:Stack[A]"></a>
+      <p class="shortcomment cmt">Returns <code>true</code> if this stack doesn't contain any elements.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if this stack doesn't contain any elements.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Side.html" class="extype" name="basis.collections.Side">Side</a></dd></dl></div>
+    </li><li name="basis.collections.Side#tail" visbl="pub" data-isabs="true" fullComment="yes" group="Decomposing">
+      <a id="tail:basis.collections.Side[A]"></a>
+      <a id="tail:Side[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tail</span><span class="result">: <a href="" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</span>
+        <span class="name">tail</span><span class="result">: <a href="Side.html" class="extype" name="basis.collections.Side">Side</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns all elements except the first of this non-empty stack.</p>
+      <p class="shortcomment cmt">Returns all elements except the first of this non-empty stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns all elements except the first of this non-empty stack.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Side.html" class="extype" name="basis.collections.Side">Side</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -279,7 +292,7 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Stack#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+    </li><li name="basis.collections.Side#iterator" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
       <a id="iterator:basis.collections.Iterator[A]"></a>
       <a id="iterator:Iterator[A]"></a>
       <h4 class="signature">
@@ -291,7 +304,7 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
         <span class="name">iterator</span><span class="result">: <a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Returns a new iterator over the elements of this stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this stack.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Stack">Stack</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns a new iterator over the elements of this stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new iterator over the elements of this stack.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Side.html" class="extype" name="basis.collections.Side">Side</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a></dd></dl></div>
     </li><li name="basis.collections.Collection#stringPrefix" visbl="prt" data-isabs="false" fullComment="yes" group="Classifying">
       <a id="stringPrefix:String"></a>
       <a id="stringPrefix:String"></a>
@@ -318,7 +331,7 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
       </span>
       </h4>
       <p class="shortcomment cmt">Returns a string representation of this stack.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of this stack.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a> → Any</dd></dl></div>
-    </li><li name="basis.collections.Stack#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+    </li><li name="basis.collections.Side#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
       <a id="traverse(f:A=&gt;Unit):Unit"></a>
       <a id="traverse((A)⇒Unit):Unit"></a>
       <h4 class="signature">
@@ -330,7 +343,7 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
         <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Stack.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Applies a side-effecting function to each element of this stack.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a side-effecting function to each element of this stack.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Stack">Stack</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
+      <p class="shortcomment cmt">Applies a side-effecting function to each element of this stack.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a side-effecting function to each element of this stack.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Side.html" class="extype" name="basis.collections.Side">Side</a> → <a href="Container.html" class="extype" name="basis.collections.Container">Container</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -340,7 +353,9 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="basis.collections.Seq">
+        <div class="parent" name="basis.collections.Side">
+              <h3>Inherited from <a href="Side.html" class="extype" name="basis.collections.Side">Side</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</h3>
+            </div><div class="parent" name="basis.collections.Seq">
               <h3>Inherited from <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</h3>
             </div><div class="parent" name="basis.collections.Container">
               <h3>Inherited from <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</h3>
@@ -348,10 +363,10 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
               <h3>Inherited from <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</h3>
             </div><div class="parent" name="basis.collections.Enumerator">
               <h3>Inherited from <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
             </div><div class="parent" name="basis.collections.Family">
               <h3>Inherited from <a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Stack">Stack</a>[_]]</h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>
@@ -364,6 +379,9 @@ order as another sequence, otherwise <code>false</code>.</p></div><dl class="att
               
             </div><div class="group" name="Decomposing">
               <h3>Decomposing</h3>
+              
+            </div><div class="group" name="Combining">
+              <h3>Combining</h3>
               
             </div><div class="group" name="Traversing">
               <h3>Traversing</h3>

@@ -40,13 +40,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">List</span><span class="result"> extends <a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>]</span>
+        <span class="name">List</span><span class="result"> extends <a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A factory for <a href="List.html" class="extype" name="basis.containers.List">singly-linked lists</a>.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/List.scala" target="_blank">List.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>], <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>], <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -227,7 +227,7 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.List">List</a> → <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
     </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="coerce[A](elems:scala.collection.TraversableOnce[A])(implicitA:basis.runtime.TypeHint[A]):CC[A]"></a>
+      <a id="coerce[A](elems:scala.collection.TraversableOnce[A])(implicitA:Hint[A]):CC[A]"></a>
       <a id="coerce[A](TraversableOnce[A])(TypeHint[A]):List[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -240,15 +240,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
     </li><li name="basis.containers.List#empty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="empty[A](implicitevidence$2:basis.runtime.TypeHint[A]):basis.containers.Nil.type"></a>
-      <a id="empty[A](TypeHint[A]):Nil.type"></a>
+      <a id="empty[A](implicitevidence$2:basis.runtime.TypeHint[A]):basis.containers.List[A]"></a>
+      <a id="empty[A](TypeHint[A]):List[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">empty</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.containers.List.empty.A">A</span>]</span>)</span><span class="result">: <a href="Nil$.html" class="extype" name="basis.containers.Nil">Nil</a>.type</span>
+        <span class="name">empty</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.containers.List.empty.A">A</span>]</span>)</span><span class="result">: <a href="List.html" class="extype" name="basis.containers.List">List</a>[<span class="extype" name="basis.containers.List.empty.A">A</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.List">List</a> → <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
@@ -504,9 +504,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="basis.collections.SeqFactory">
-              <h3>Inherited from <a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>]</h3>
+              <h3>Inherited from <a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</h3>
             </div><div class="parent" name="basis.collections.BuilderFactory">
-              <h3>Inherited from <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>]</h3>
+              <h3>Inherited from <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="List.html" class="extype" name="basis.containers.List">List</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

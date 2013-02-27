@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Async - basis.dispatch.Async</title>
-          <meta name="description" content="Async - basis.dispatch.Async" />
-          <meta name="keywords" content="Async basis.dispatch.Async" />
+          <title>AtomicStack - basis.concurrent.AtomicStack</title>
+          <meta name="description" content="AtomicStack - basis.concurrent.AtomicStack" />
+          <meta name="keywords" content="AtomicStack basis.concurrent.AtomicStack" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'basis.dispatch.Async$';
+            var hash = 'basis.concurrent.AtomicStack$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,9 +29,9 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="Async.html" title="Go to companion"><img src="../../lib/object_to_class_big.png" /></a>
-        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.dispatch">dispatch</a></p>
-        <h1><a href="Async.html" title="Go to companion">Async</a></h1>
+        <a href="AtomicStack.html" title="Go to companion"><img src="../../lib/object_to_class_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.concurrent">concurrent</a></p>
+        <h1><a href="AtomicStack.html" title="Go to companion">AtomicStack</a></h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -40,13 +40,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Async</span>
+        <span class="name">AtomicStack</span><span class="result"> extends <a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Async implementations.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-dispatch/src/main/scala/basis/dispatch/Async.scala" target="_blank">Async.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A factory for <a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">atomic stacks</a>.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-concurrent/src/main/scala/basis/concurrent/AtomicStack.scala" target="_blank">AtomicStack.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>], <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -64,7 +64,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.dispatch.Async"><span>Async</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.concurrent.AtomicStack"><span>AtomicStack</span></li><li class="in" name="basis.collections.SeqFactory"><span>SeqFactory</span></li><li class="in" name="basis.collections.BuilderFactory"><span>BuilderFactory</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -155,19 +155,35 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.dispatch.Async.Main" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Main"></a>
-      <a id="Main:Main"></a>
+    </li><li name="basis.concurrent.AtomicStack#Builder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Builder[A](implicitevidence$1:basis.runtime.TypeHint[A]):basis.collections.Builder[A]{typeScope=basis.concurrent.AtomicStack[_];typeState=basis.concurrent.AtomicStack[A]}"></a>
+      <a id="Builder[A](TypeHint[A]):Builder[A]{.../*2definitionsintyperefinement*/}"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Builder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.concurrent.AtomicStack.Builder.A">A</span>]</span>)</span><span class="result">: <a href="../collections/Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.concurrent.AtomicStack.Builder.A">A</span>] { ... /* 2 definitions in type refinement */ }</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a> → <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
+    </li><li name="basis.collections.BuilderFactory#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](elems:A*):CC[A]"></a>
+      <a id="apply[A](A*):AtomicStack[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <a href="Async$$Main$.html"><span class="name">Main</span></a><span class="result"> extends <a href="Async.html" class="extype" name="basis.dispatch.Async">Async</a></span>
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="basis.collections.BuilderFactory.apply.A">A</span>*</span>)</span><span class="result">: <a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>[<span class="extype" name="basis.collections.BuilderFactory.apply.A">A</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">The primary, unmonitored async implementation.</p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -197,6 +213,45 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coerce[A](elems:scala.collection.TraversableOnce[A])(implicitA:Hint[A]):CC[A]"></a>
+      <a id="coerce[A](TraversableOnce[A])(TypeHint[A]):AtomicStack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
+    </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coerce[A](elems:basis.collections.Enumerator[A])(implicitA:Hint[A]):CC[A]"></a>
+      <a id="coerce[A](Enumerator[A])(TypeHint[A]):AtomicStack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
+    </li><li name="basis.collections.BuilderFactory#empty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="empty[A](implicitA:Hint[A]):CC[A]"></a>
+      <a id="empty[A](TypeHint[A]):AtomicStack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">empty</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.empty.A">A</span>]</span>)</span><span class="result">: <a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>[<span class="extype" name="basis.collections.BuilderFactory.empty.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -223,6 +278,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.collections.SeqFactory#fill" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fill[A](count:Int)(elem:=&gt;A):CC[A]"></a>
+      <a id="fill[A](Int)(⇒A):AtomicStack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fill</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="elem">elem: ⇒ <span class="extype" name="basis.collections.SeqFactory.fill.A">A</span></span>)</span><span class="result">: <a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>[<span class="extype" name="basis.collections.SeqFactory.fill.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -278,6 +349,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.SeqFactory#iterate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iterate[A](start:A,count:Int)(f:A=&gt;A):CC[A]"></a>
+      <a id="iterate[A](A,Int)((A)⇒A):AtomicStack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="start">start: <span class="extype" name="basis.collections.SeqFactory.iterate.A">A</span></span>, <span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.SeqFactory.iterate.A">A</span>) ⇒ <span class="extype" name="basis.collections.SeqFactory.iterate.A">A</span></span>)</span><span class="result">: <a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>[<span class="extype" name="basis.collections.SeqFactory.iterate.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -330,7 +417,23 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="basis.collections.SeqFactory#tabulate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tabulate[A](count:Int)(f:Int=&gt;A):CC[A]"></a>
+      <a id="tabulate[A](Int)((Int)⇒A):AtomicStack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tabulate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="basis.collections.SeqFactory.tabulate.A">A</span></span>)</span><span class="result">: <a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>[<span class="extype" name="basis.collections.SeqFactory.tabulate.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@macroImpl</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.concurrent.AtomicStack#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -342,7 +445,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a> → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -400,7 +503,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="basis.collections.SeqFactory">
+              <h3>Inherited from <a href="../collections/SeqFactory.html" class="extype" name="basis.collections.SeqFactory">SeqFactory</a>[<a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</h3>
+            </div><div class="parent" name="basis.collections.BuilderFactory">
+              <h3>Inherited from <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="AtomicStack.html" class="extype" name="basis.concurrent.AtomicStack">AtomicStack</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

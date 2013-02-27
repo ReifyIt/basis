@@ -40,13 +40,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">HashSet</span><span class="result"> extends <a href="../collections/SetFactory.html" class="extype" name="basis.collections.SetFactory">SetFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>]</span>
+        <span class="name">HashSet</span><span class="result"> extends <a href="../collections/SetFactory.html" class="extype" name="basis.collections.SetFactory">SetFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A factory for <a href="HashSet.html" class="extype" name="basis.containers.HashSet">hash sets</a>.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-containers/src/main/scala/basis/containers/HashSet.scala" target="_blank">HashSet.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../collections/SetFactory.html" class="extype" name="basis.collections.SetFactory">SetFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>], <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../collections/SetFactory.html" class="extype" name="basis.collections.SetFactory">SetFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>], <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -213,8 +213,21 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="basis.containers.HashSet#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coerce[A](elems:basis.collections.Enumerator[A])(implicitevidence$3:basis.runtime.TypeHint[A]):basis.containers.HashSet[A]"></a>
+      <a id="coerce[A](Enumerator[A])(TypeHint[A]):HashSet[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.containers.HashSet.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.containers.HashSet.coerce.A">A</span>]</span>)</span><span class="result">: <a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>[<span class="extype" name="basis.containers.HashSet.coerce.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.containers.HashSet">HashSet</a> → <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
     </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="coerce[A](elems:scala.collection.TraversableOnce[A])(implicitA:basis.runtime.TypeHint[A]):CC[A]"></a>
+      <a id="coerce[A](elems:scala.collection.TraversableOnce[A])(implicitA:Hint[A]):CC[A]"></a>
       <a id="coerce[A](TraversableOnce[A])(TypeHint[A]):HashSet[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -223,19 +236,6 @@
       </span>
       <span class="symbol">
         <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
-    </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="coerce[A](elems:basis.collections.Enumerator[A])(implicitA:basis.runtime.TypeHint[A]):CC[A]"></a>
-      <a id="coerce[A](Enumerator[A])(TypeHint[A]):HashSet[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <a href="../collections/Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
@@ -456,9 +456,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="basis.collections.SetFactory">
-              <h3>Inherited from <a href="../collections/SetFactory.html" class="extype" name="basis.collections.SetFactory">SetFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>]</h3>
+              <h3>Inherited from <a href="../collections/SetFactory.html" class="extype" name="basis.collections.SetFactory">SetFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</h3>
             </div><div class="parent" name="basis.collections.BuilderFactory">
-              <h3>Inherited from <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>]</h3>
+              <h3>Inherited from <a href="../collections/BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<a href="HashSet.html" class="extype" name="basis.containers.HashSet">HashSet</a>, <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -40,7 +40,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">SetFactory</span><span class="tparams">[<span name="CC">+CC<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<span class="extype" name="basis.collections.SetFactory.CC">CC</span>]</span>
+        <span class="name">SetFactory</span><span class="tparams">[<span name="CC">+CC<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="Hint">-Hint<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<span class="extype" name="basis.collections.SetFactory.CC">CC</span>, <span class="extype" name="basis.collections.SetFactory.Hint">Hint</span>]</span>
       </span>
       </h4>
       
@@ -53,14 +53,14 @@
               
         </dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/SetFactory.scala" target="_blank">SetFactory.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<span class="extype" name="basis.collections.SetFactory.CC">CC</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<span class="extype" name="basis.collections.SetFactory.CC">CC</span>, <span class="extype" name="basis.collections.SetFactory.Hint">Hint</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="../containers/HashSet$.html" class="extype" name="basis.containers.HashSet">HashSet</a></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph133" viewBox="0.00 0.00 170.00 158.00" height="158pt" width="170pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 154)" class="graph" id="graph1"><polygon points="-4,5 -4,-154 167,-154 167,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph133_0"><a xlink:title="basis.collections.SetFactory (this trait)" xlink:href="#inheritance-diagram"><polygon points="137.25,-88 24.75,-88 24.75,-62 137.25,-62 137.25,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-83" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="57" text-anchor="start">SetFactory[CC]</text></a></g><!-- node1 --><g class="node object" id="graph133_1"><a xlink:title="basis.containers.HashSet" xlink:href="../containers/HashSet$.html#inheritance-diagram"><polygon points="122.25,-26 39.75,-26 39.75,-0 122.25,-0 122.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="50" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="72" text-anchor="start">HashSet</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph133_0_1"><a xlink:title="HashSet is a subtype of SetFactory[CC]"><path d="M81,-56.6826C81,-46.8961 81,-34.9026 81,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="79.2501,-56.8581 81,-61.8581 82.7501,-56.8581 79.2501,-56.8581" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph133_2"><a xlink:title="basis.collections.BuilderFactory" xlink:href="BuilderFactory.html#inheritance-diagram"><polygon points="145.25,-150 16.75,-150 16.75,-124 145.25,-124 145.25,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="27" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="49" text-anchor="start">BuilderFactory[CC]</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph133_2_0"><a xlink:title="SetFactory[CC] is a subtype of BuilderFactory[CC]"><path d="M81,-118.683C81,-108.896 81,-96.9026 81,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="79.2501,-118.858 81,-123.858 82.7501,-118.858 79.2501,-118.858" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph150" viewBox="0.00 0.00 192.00 158.00" height="158pt" width="192pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 154)" class="graph" id="graph1"><polygon points="-4,5 -4,-154 189,-154 189,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph150_0"><a xlink:title="basis.collections.SetFactory (this trait)" xlink:href="#inheritance-diagram"><polygon points="160,-88 24,-88 24,-62 160,-62 160,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-83" x="34" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="56" text-anchor="start">SetFactory[CC, Hint]</text></a></g><!-- node1 --><g class="node object" id="graph150_1"><a xlink:title="basis.containers.HashSet" xlink:href="../containers/HashSet$.html#inheritance-diagram"><polygon points="133.25,-26 50.75,-26 50.75,-0 133.25,-0 133.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="61" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="83" text-anchor="start">HashSet</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph150_0_1"><a xlink:title="HashSet is a subtype of SetFactory[CC, Hint]"><path d="M92,-56.6826C92,-46.8961 92,-34.9026 92,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="90.2501,-56.8581 92,-61.8581 93.7501,-56.8581 90.2501,-56.8581" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph150_2"><a xlink:title="basis.collections.BuilderFactory" xlink:href="BuilderFactory.html#inheritance-diagram"><polygon points="168,-150 16,-150 16,-124 168,-124 168,-150" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-145" x="26" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="48" text-anchor="start">BuilderFactory[CC, Hint]</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph150_2_0"><a xlink:title="SetFactory[CC, Hint] is a subtype of BuilderFactory[CC, Hint]"><path d="M92,-118.683C92,-108.896 92,-96.9026 92,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="90.2501,-118.858 92,-123.858 93.7501,-118.858 90.2501,-118.858" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -103,15 +103,15 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="basis.collections.BuilderFactory#Builder" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="Builder[A](implicitA:basis.runtime.TypeHint[A]):basis.collections.Builder[A]{typeScope=CC[X]@scala.annotation.unchecked.uncheckedVarianceforSome{typeX};typeState=CC[A]@scala.annotation.unchecked.uncheckedVariance}"></a>
-      <a id="Builder[A](TypeHint[A]):Builder[A]{.../*2definitionsintyperefinement*/}"></a>
+      <a id="Builder[A](implicitA:Hint[A]):basis.collections.Builder[A]{typeScope=CC[X]@scala.annotation.unchecked.uncheckedVarianceforSome{typeX};typeState=CC[A]@scala.annotation.unchecked.uncheckedVariance}"></a>
+      <a id="Builder[A](Hint[A]):Builder[A]{.../*2definitionsintyperefinement*/}"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Builder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.Builder.A">A</span>]</span>)</span><span class="result">: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.BuilderFactory.Builder.A">A</span>] { ... /* 2 definitions in type refinement */ }</span>
+        <span class="name">Builder</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <span class="extype" name="basis.collections.SetFactory.Hint">Hint</span>[<span class="extype" name="basis.collections.BuilderFactory.Builder.A">A</span>]</span>)</span><span class="result">: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.BuilderFactory.Builder.A">A</span>] { ... /* 2 definitions in type refinement */ }</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
@@ -231,41 +231,41 @@
               
         </dd></dl></div>
     </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="coerce[A](elems:scala.collection.TraversableOnce[A])(implicitA:basis.runtime.TypeHint[A]):CC[A]"></a>
-      <a id="coerce[A](TraversableOnce[A])(TypeHint[A]):CC[A]"></a>
+      <a id="coerce[A](elems:scala.collection.TraversableOnce[A])(implicitA:Hint[A]):CC[A]"></a>
+      <a id="coerce[A](TraversableOnce[A])(Hint[A]):CC[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.SetFactory.CC">CC</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <span class="extype" name="basis.collections.SetFactory.Hint">Hint</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.SetFactory.CC">CC</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
     </li><li name="basis.collections.BuilderFactory#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="coerce[A](elems:basis.collections.Enumerator[A])(implicitA:basis.runtime.TypeHint[A]):CC[A]"></a>
-      <a id="coerce[A](Enumerator[A])(TypeHint[A]):CC[A]"></a>
+      <a id="coerce[A](elems:basis.collections.Enumerator[A])(implicitA:Hint[A]):CC[A]"></a>
+      <a id="coerce[A](Enumerator[A])(Hint[A]):CC[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.SetFactory.CC">CC</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
+        <span class="name">coerce</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <span class="extype" name="basis.collections.SetFactory.Hint">Hint</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.SetFactory.CC">CC</span>[<span class="extype" name="basis.collections.BuilderFactory.coerce.A">A</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
     </li><li name="basis.collections.BuilderFactory#empty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="empty[A](implicitA:basis.runtime.TypeHint[A]):CC[A]"></a>
-      <a id="empty[A](TypeHint[A]):CC[A]"></a>
+      <a id="empty[A](implicitA:Hint[A]):CC[A]"></a>
+      <a id="empty[A](Hint[A]):CC[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">empty</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <a href="../runtime/TypeHint.html" class="extype" name="basis.runtime.TypeHint">TypeHint</a>[<span class="extype" name="basis.collections.BuilderFactory.empty.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.SetFactory.CC">CC</span>[<span class="extype" name="basis.collections.BuilderFactory.empty.A">A</span>]</span>
+        <span class="name">empty</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="A">A: <span class="extype" name="basis.collections.SetFactory.Hint">Hint</span>[<span class="extype" name="basis.collections.BuilderFactory.empty.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.SetFactory.CC">CC</span>[<span class="extype" name="basis.collections.BuilderFactory.empty.A">A</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a></dd></dl></div>
@@ -473,7 +473,7 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="basis.collections.BuilderFactory">
-              <h3>Inherited from <a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<span class="extype" name="basis.collections.SetFactory.CC">CC</span>]</h3>
+              <h3>Inherited from <a href="BuilderFactory.html" class="extype" name="basis.collections.BuilderFactory">BuilderFactory</a>[<span class="extype" name="basis.collections.SetFactory.CC">CC</span>, <span class="extype" name="basis.collections.SetFactory.Hint">Hint</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

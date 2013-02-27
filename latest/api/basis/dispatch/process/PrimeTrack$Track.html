@@ -2,22 +2,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>WorkerThread - basis.dispatch.Async.WorkerThread</title>
-          <meta name="description" content="WorkerThread - basis.dispatch.Async.WorkerThread" />
-          <meta name="keywords" content="WorkerThread basis.dispatch.Async.WorkerThread" />
+          <title>Track - basis.dispatch.process.PrimeTrack.Track</title>
+          <meta name="description" content="Track - basis.dispatch.process.PrimeTrack.Track" />
+          <meta name="keywords" content="Track basis.dispatch.process.PrimeTrack.Track" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
-      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../lib/template.js"></script>
-      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
-      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
       <script type="text/javascript">
          if(top === self) {
-            var url = '../../index.html';
-            var hash = 'basis.dispatch.Async$WorkerThread';
+            var url = '../../../index.html';
+            var hash = 'basis.dispatch.process.PrimeTrack$Track';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,9 +29,9 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../lib/class_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.dispatch">dispatch</a>.<a href="Async.html" class="extype" name="basis.dispatch.Async">Async</a></p>
-        <h1>WorkerThread</h1>
+        <img src="../../../lib/class_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="basis">basis</a>.<a href="../package.html" class="extype" name="basis.dispatch">dispatch</a>.<a href="package.html" class="extype" name="basis.dispatch.process">process</a>.<a href="PrimeTrack.html" class="extype" name="basis.dispatch.process.PrimeTrack">PrimeTrack</a></p>
+        <h1>Track</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -40,18 +40,17 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkerThread</span><span class="result"> extends <span class="extype" name="java.lang.Thread">Thread</span></span>
+        <span class="name">Track</span><span class="result"> extends <span class="extype" name="java.lang.Thread">Thread</span> with (<a href="PrimeTrack.html" class="extype" name="basis.dispatch.process.PrimeTrack">PrimeTrack</a>.this)#<span class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An asynchronous worker thread.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Self Type</dt><dd><a href="Async.html#Worker&lt;:Async.this.WorkerThread" class="extmbr" name="basis.dispatch.Async.Worker">Worker</a></dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-dispatch/src/main/scala/basis/dispatch/Async.scala" target="_blank">Async.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="PrimeTrack.html" class="extype" name="basis.dispatch.process.PrimeTrack">PrimeTrack</a> → <a href="AsyncTrack.html" class="extype" name="basis.dispatch.process.AsyncTrack">AsyncTrack</a></dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-dispatch/src/main/scala/basis/dispatch/process/PrimeTrack.scala" target="_blank">PrimeTrack.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="java.lang.Thread">Thread</span>, <span class="extype" name="java.lang.Runnable">Runnable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent">(<a href="PrimeTrack.html" class="extype" name="basis.dispatch.process.PrimeTrack">PrimeTrack</a>.this)#<span class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</span>, <span class="extype" name="java.lang.Thread">Thread</span>, <span class="extype" name="java.lang.Runnable">Runnable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph75" viewBox="0.00 0.00 164.00 120.00" height="120pt" width="164pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 161,-116 161,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph75_0"><a xlink:title="basis.dispatch.Async.WorkerThread (this class)" xlink:href="#inheritance-diagram"><polygon points="132,-50 24,-50 24,-24 132,-24 132,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="34" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="56" text-anchor="start">WorkerThread</text></a></g><!-- node1 --><g class="node class" id="graph75_1"><a xlink:title="java.lang.Thread"><polygon points="116,-112 40,-112 40,-86 116,-86 116,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="50" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="72" text-anchor="start">Thread</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph75_1_0"><a xlink:title="WorkerThread is a subtype of Thread"><path d="M78,-80.6826C78,-70.8961 78,-58.9026 78,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="76.2501,-80.8581 78,-85.8581 79.7501,-80.8581 76.2501,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph108" viewBox="0.00 0.00 267.00 120.00" height="120pt" width="267pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 264,-116 264,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph108_0"><a xlink:title="basis.dispatch.process.PrimeTrack.Track (this class)" xlink:href="#inheritance-diagram"><polygon points="182,-50 32,-50 32,-24 182,-24 182,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-45" x="42" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="64" text-anchor="start">(PrimeTrack.this)#Track</text></a></g><!-- node1 --><g class="node class" id="graph108_1"><a xlink:title="java.lang.Thread"><polygon points="76,-112 0,-112 0,-86 76,-86 76,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-107" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="32" text-anchor="start">Thread</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph108_1_0"><a xlink:title="(PrimeTrack.this)#Track is a subtype of Thread"><path d="M55.7603,-82.5563C67.366,-72.4643 82.3076,-59.4716 93.0576,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="54.5879,-81.2566 51.9632,-85.8581 56.8846,-83.8977 54.5879,-81.2566" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph108_2"><a xlink:title="basis.dispatch.process.AsyncTrack.TrackApi" xlink:href="AsyncTrack$TrackApi.html#inheritance-diagram"><polygon points="259.25,-112 94.75,-112 94.75,-86 259.25,-86 259.25,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../../lib/trait_diagram.png" y="-107" x="105" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="127" text-anchor="start">(PrimeTrack.this)#TrackApi</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph108_2_0"><a xlink:title="(PrimeTrack.this)#Track is a subtype of (PrimeTrack.this)#TrackApi"><path d="M158.982,-82.5563C147.208,-72.4643 132.05,-59.4716 121.144,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="157.899,-83.9328 162.834,-85.8581 160.177,-81.2754 157.899,-83.9328" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -60,7 +59,7 @@
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol>
-                <li class="group out"><span>Grouped</span></li>
+                
                 <li class="alpha in"><span>Alphabetic</span></li>
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
@@ -69,7 +68,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.dispatch.Async.WorkerThread"><span>WorkerThread</span></li><li class="in" name="java.lang.Thread"><span>Thread</span></li><li class="in" name="java.lang.Runnable"><span>Runnable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.dispatch.process.PrimeTrack.Track"><span>Track</span></li><li class="in" name="basis.dispatch.process.AsyncTrack.TrackApi"><span>TrackApi</span></li><li class="in" name="java.lang.Thread"><span>Thread</span></li><li class="in" name="java.lang.Runnable"><span>Runnable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,16 +88,16 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="basis.dispatch.Async.WorkerThread#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():Async.this.WorkerThread"></a>
-      <a id="&lt;init&gt;:WorkerThread"></a>
+              <ol><li name="basis.dispatch.process.PrimeTrack.Track#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(route:PrimeTrack.this.Route):PrimeTrack.this.Track"></a>
+      <a id="&lt;init&gt;:(PrimeTrack.this)#Track"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">WorkerThread</span><span class="params">()</span>
+        <span class="name">Track</span><span class="params">(<span name="route">route: (<a href="PrimeTrack.html" class="extype" name="basis.dispatch.process.PrimeTrack">PrimeTrack</a>.this)#<span class="extype" name="basis.dispatch.process.AsyncRoute.Route">Route</span></span>)</span>
       </span>
       </h4>
       
@@ -189,6 +188,32 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#block" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="block[A](expr:=&gt;A):A"></a>
+      <a id="block[A](⇒A):A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">block</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="expr">expr: ⇒ <span class="extype" name="basis.dispatch.process.PrimeTrack.Track.block.A">A</span></span>)</span><span class="result">: <span class="extype" name="basis.dispatch.process.PrimeTrack.Track.block.A">A</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#cease" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cease():Unit"></a>
+      <a id="cease():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cease</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
     </li><li name="java.lang.Thread#checkAccess" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="checkAccess():Unit"></a>
       <a id="checkAccess():Unit"></a>
@@ -214,7 +239,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>Thread → AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>Thread → AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -256,7 +281,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -416,6 +441,32 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Thread</dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#isBlocked" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isBlocked:Boolean"></a>
+      <a id="isBlocked:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isBlocked</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#isCeasing" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isCeasing:Boolean"></a>
+      <a id="isCeasing:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isCeasing</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
     </li><li name="java.lang.Thread#isDaemon" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDaemon():Boolean"></a>
       <a id="isDaemon():Boolean"></a>
@@ -455,6 +506,45 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Thread</dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#isRunning" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isRunning:Boolean"></a>
+      <a id="isRunning:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isRunning</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#isWaiting" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isWaiting:Boolean"></a>
+      <a id="isWaiting:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isWaiting</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#isWorking" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isWorking:Boolean"></a>
+      <a id="isWorking:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isWorking</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
     </li><li name="java.lang.Thread#join" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="join():Unit"></a>
       <a id="join():Unit"></a>
@@ -503,19 +593,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="basis.dispatch.Async.WorkerThread#name" visbl="prt" data-isabs="false" fullComment="yes" group="Classifying">
-      <a id="name:String"></a>
-      <a id="name:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">name</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the name of this worker.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the name of this worker.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -555,7 +632,46 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="basis.dispatch.Async.WorkerThread#run" visbl="pub" data-isabs="false" fullComment="yes" group="Running">
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#queue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="queue:basis.concurrent.AtomicQueue[Function0[_]]"></a>
+      <a id="queue:AtomicQueue[Function0[_]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">queue</span><span class="result">: <a href="../../concurrent/AtomicQueue.html" class="extype" name="basis.concurrent.AtomicQueue">AtomicQueue</a>[<span class="extype" name="scala.Function0">Function0</span>[_]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#rouse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rouse():Unit"></a>
+      <a id="rouse():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rouse</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#route" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="route:PrimeTrack.this.Route"></a>
+      <a id="route:(PrimeTrack.this)#Route"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">route</span><span class="result">: (<a href="PrimeTrack.html" class="extype" name="basis.dispatch.process.PrimeTrack">PrimeTrack</a>.this)#<span class="extype" name="basis.dispatch.process.AsyncRoute.Route">Route</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → <a href="AsyncTrack$TrackApi.html" class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</a></dd></dl></div>
+    </li><li name="basis.dispatch.process.PrimeTrack.Track#run" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="run():Unit"></a>
       <a id="run():Unit"></a>
       <h4 class="signature">
@@ -567,7 +683,7 @@
         <span class="name">run</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Runs this worker's main loop.</p><div class="fullcomment"><div class="comment cmt"><p>Runs this worker's main loop.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.Async.WorkerThread">WorkerThread</a> → Thread → Runnable</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.dispatch.process.PrimeTrack.Track">Track</a> → Thread → Runnable</dd></dl></div>
     </li><li name="java.lang.Thread#setContextClassLoader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setContextClassLoader(x$1:ClassLoader):Unit"></a>
       <a id="setContextClassLoader(ClassLoader):Unit"></a>
@@ -672,19 +788,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Thread → AnyRef → Any</dd></dl></div>
-    </li><li name="basis.dispatch.Async.WorkerThread#uid" visbl="pub" data-isabs="false" fullComment="no" group="Classifying">
-      <a id="uid:Int"></a>
-      <a id="uid:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">uid</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">The unique identifier of this worker.</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -853,7 +956,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="java.lang.Thread">
+        <div class="parent" name="basis.dispatch.process.AsyncTrack.TrackApi">
+              <h3>Inherited from (<a href="PrimeTrack.html" class="extype" name="basis.dispatch.process.PrimeTrack">PrimeTrack</a>.this)#<span class="extype" name="basis.dispatch.process.AsyncTrack.TrackApi">TrackApi</span></h3>
+            </div><div class="parent" name="java.lang.Thread">
               <h3>Inherited from <span class="extype" name="java.lang.Thread">Thread</span></h3>
             </div><div class="parent" name="java.lang.Runnable">
               <h3>Inherited from <span class="extype" name="java.lang.Runnable">Runnable</span></h3>
@@ -866,13 +971,7 @@
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="Running">
-              <h3>Running</h3>
-              
-            </div><div class="group" name="Classifying">
-              <h3>Classifying</h3>
-              
-            </div><div class="group" name="Ungrouped">
+        <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
               
             </div>
