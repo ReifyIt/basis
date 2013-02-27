@@ -18,6 +18,7 @@ object BasisBuild extends Build {
     settings     = baseSettings,
     dependencies =
       Seq(BasisCollections,
+          BasisConcurrent,
           BasisContainers,
           BasisControl,
           BasisDispatch,
@@ -30,6 +31,7 @@ object BasisBuild extends Build {
           BasisUtil),
     aggregate    =
       Seq(BasisCollections,
+          BasisConcurrent,
           BasisContainers,
           BasisControl,
           BasisDispatch,
@@ -49,6 +51,16 @@ object BasisBuild extends Build {
     dependencies =
       Seq(BasisControl,
           BasisUtil)
+  )
+  
+  lazy val BasisConcurrent = Project(
+    id           = "basis-concurrent",
+    base         = file("basis-concurrent"),
+    settings     = commonSettings,
+    dependencies =
+      Seq(BasisCollections,
+          BasisContainers,
+          BasisRuntime)
   )
   
   lazy val BasisContainers = Project(

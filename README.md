@@ -10,7 +10,9 @@ At the same time, brass tacks software engineering makes Basis fast and memory e
 `"it.reify" %% "basis" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.collections.package)\] [basis.collections](http://basis.reify.it/collections.html) – General collections interfaces  
 `"it.reify" %% "basis-collections" % "0.1-SNAPSHOT"`
-- \[[API](http://basis.reify.it/latest/api/#basis.containers.package)\] [basis.containers](http://basis.reify.it/containers.html) – Specialized container implementations  
+- \[[API](http://basis.reify.it/latest/api/#basis.concurrent.package)\] [basis.concurrent](http://basis.reify.it/concurrent.html) – Concurrently modifiable collections  
+`"it.reify" %% "basis-containers" % "0.1-SNAPSHOT"`
+- \[[API](http://basis.reify.it/latest/api/#basis.containers.package)\] [basis.containers](http://basis.reify.it/containers.html) – Specialized collection implementations  
 `"it.reify" %% "basis-containers" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.control.package)\] [basis.control](http://basis.reify.it/control.html) – Imperative control-flow and conditional bindings  
 `"it.reify" %% "basis-control" % "0.1-SNAPSHOT"`
