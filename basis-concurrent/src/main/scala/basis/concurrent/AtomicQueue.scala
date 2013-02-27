@@ -69,7 +69,7 @@ final class AtomicQueue[A](@volatile private[concurrent] var queue: Batch[A])
     var q = null: Batch[A]
     do q = queue
     while (!q.isEmpty && !Unsafe.compareAndSwapObject(this, QueueOffset, q, q.tail))
-    if (!q.isEmpty) q.head else null
+    if (!q.isEmpty) q.head else null.asInstanceOf[A]
   }
   
   override def traverse(f: A => Unit): Unit = queue traverse f

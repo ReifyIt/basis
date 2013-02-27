@@ -66,7 +66,7 @@ final class AtomicStack[A](@volatile private[concurrent] var stack: List[A])
     var s = null: List[A]
     do s = stack
     while (!s.isEmpty && !Unsafe.compareAndSwapObject(this, StackOffset, s, s.tail))
-    if (!s.isEmpty) s.head else null
+    if (!s.isEmpty) s.head else null.asInstanceOf[A]
   }
   
   override def traverse(f: A => Unit): Unit = stack traverse f

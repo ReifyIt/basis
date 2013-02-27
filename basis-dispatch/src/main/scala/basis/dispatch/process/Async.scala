@@ -5,11 +5,9 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis
+package basis.dispatch
+package process
 
-/** Concurrent execution. */
-package object dispatch {
-  import process._
-  
-  val async: Async = new PrimeAsync
+abstract class Async extends AsyncState with AsyncRoute with AsyncTrack {
+  def main: Route
 }

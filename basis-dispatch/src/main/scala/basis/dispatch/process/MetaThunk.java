@@ -5,7 +5,7 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis.dispatch;
+package basis.dispatch.process;
 
 final class MetaThunk {
   private MetaThunk() {}
@@ -18,6 +18,7 @@ final class MetaThunk {
       java.lang.reflect.Field theUnsafeField = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
       theUnsafeField.setAccessible(true);
       Unsafe = (sun.misc.Unsafe)theUnsafeField.get(null);
+      
       Class<Thunk> ThunkClass = Thunk.class;
       StateOffset = Unsafe.objectFieldOffset(ThunkClass.getDeclaredField("state"));
     }

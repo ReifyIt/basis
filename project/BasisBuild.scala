@@ -88,8 +88,8 @@ object BasisBuild extends Build {
     base         = file("basis-dispatch"),
     settings     = commonSettings,
     dependencies =
-      Seq(BasisContainers,
-          BasisSequential,
+      Seq(BasisConcurrent,
+          BasisContainers,
           BasisControl)
   )
   

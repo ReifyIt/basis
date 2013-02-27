@@ -242,18 +242,21 @@ object Trap extends Trap[Nothing] {
     * @group Constructing */
   def apply[B](value: B): Trap[B] = new TrapRef(value)
   
+  /** Returns `true` for trap-safe exceptions, and `false` for exceptions
+    * that should propagate.
+    * @group Handling */
+  def isNonFatal(e: Throwable): Boolean =
+    e.isInstanceOf[StackOverflowError]   || !(
+    e.isInstanceOf[InterruptedException] ||
+    e.isInstanceOf[NotImplementedError]  ||
+    e.isInstanceOf[VirtualMachineError]  ||
+    e.isInstanceOf[LinkageError]         ||
+    e.isInstanceOf[ThreadDeath])
+  
   /** A fuse that traps non-fatal exceptions.
     * @group Handling */
   object NonFatal extends scala.runtime.AbstractFunction1[Throwable, Trap[Throwable]] {
-    override def apply(e: Throwable): Trap[Throwable] = {
-      if (e.isInstanceOf[StackOverflowError]   || !(
-          e.isInstanceOf[InterruptedException] ||
-          e.isInstanceOf[NotImplementedError]  ||
-          e.isInstanceOf[VirtualMachineError]  ||
-          e.isInstanceOf[LinkageError]         ||
-          e.isInstanceOf[ThreadDeath]))
-        new TrapRef(e)
-      else throw e
-    }
+    override def apply(e: Throwable): Trap[Throwable] =
+      if (Trap.isNonFatal(e)) new TrapRef(e) else throw e
   }
 }
