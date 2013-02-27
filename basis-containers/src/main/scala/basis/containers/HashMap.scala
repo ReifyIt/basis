@@ -224,7 +224,10 @@ final class HashMap[+A, +T] private[containers] (
       case LEAF =>
         val leaf = getKey(branch)
         val leafHash = leaf.##
-        if (keyHash == leafHash && key == leaf) this
+        if (keyHash == leafHash && key == leaf) {
+          if (value == getValue(branch)) this
+          else remap(treeMap, leafMap).setLeaf(branch, key, value)
+        }
         else if (keyHash != leafHash)
           remap(treeMap | branch, leafMap ^ branch).
             setTree(branch, merge(leaf, leafHash, getValue(branch), key, keyHash, value, shift + 5))
