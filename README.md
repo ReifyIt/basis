@@ -22,6 +22,8 @@ At the same time, brass tacks software engineering makes Basis fast and memory e
 `"it.reify" %% "basis-math" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.memory.package)\] [basis.memory](http://basis.reify.it/memory.html) – Virtual memory operations  
 `"it.reify" %% "basis-memory" % "0.1-SNAPSHOT"`
+- \[[API](http://basis.reify.it/latest/api/#basis.parallel.package)\] [basis.parallel](http://basis.reify.it/parallel.html) – Parallel collections operations  
+`"it.reify" %% "basis-parallel" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.random.package)\] [basis.random](http://basis.reify.it/random.html) – Arbitrary data generation  
 `"it.reify" %% "basis-random" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.runtime.package)\] [basis.runtime](http://basis.reify.it/runtime.html) – Run-time type information  

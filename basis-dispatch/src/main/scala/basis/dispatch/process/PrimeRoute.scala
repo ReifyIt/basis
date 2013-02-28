@@ -121,7 +121,7 @@ trait PrimeRoute extends AsyncRoute { async: Async =>
     }
     
     override def reduce[A](thunks: Enumerator[() => A])(op: (A, A) => A): Relay[A] = {
-      val t = new Thunk.Reduce(op)(this)
+      val t = new Thunk.Reduce(null.asInstanceOf[A])(op)(this)
       thunks traverse new RelayAll(t, {
         val thread = Thread.currentThread
         if (thread.isInstanceOf[TrackApi]) thread.asInstanceOf[TrackApi].queue else queue

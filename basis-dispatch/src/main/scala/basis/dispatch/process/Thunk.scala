@@ -259,10 +259,10 @@ private[basis] object Thunk {
     }
   }
   
-  class Reduce[A](op: (A, A) => A)(override val trace: Trace) extends Join[A, A](trace) {
+  class Reduce[A](z: A)(op: (A, A) => A)(override val trace: Trace) extends Join[A, A](trace) {
     import MetaReduce._
     
-    @volatile private[dispatch] final var ready: A = null.asInstanceOf[A]
+    @volatile private[dispatch] final var ready: A = z
     
     @volatile private[dispatch] final var count: Int = 0
     
@@ -335,6 +335,119 @@ private[basis] object Thunk {
     final class Step(a: A, b: A) extends AbstractFunction0[Unit] {
       override def apply(): Unit =
         try putBind(op(a, b)) catch { case e: Throwable if Trap.isNonFatal(e) => putTrap(e) }
+    }
+  }
+  
+  class ForAll(trace: Trace) extends Join[Boolean, Boolean](trace) {
+    import MetaForAll._
+    
+    @volatile private[dispatch] final var count: Int = 0
+    
+    @volatile final override var limit: Int = 0
+    
+    final override def put(result: Try[Boolean]) {
+      if (result == null) throw new NullPointerException
+      var n = 0
+      var k = 0
+      do { n = count; k = limit }
+      while ((n < k || k < 0) && !Unsafe.compareAndSwapInt(this, CountOffset, n, n + 1))
+      k = limit // recheck limit
+      if ((n < k || k < 0) && result.isFalse) set(False)
+      else if (n == k - 1) set(result)
+    }
+    
+    final override def putBind(value: Boolean) {
+      var n = 0
+      var k = 0
+      do { n = count; k = limit }
+      while ((n < k || k < 0) && !Unsafe.compareAndSwapInt(this, CountOffset, n, n + 1))
+      k = limit // recheck limit
+      if ((n < k || k < 0) && !value) set(False)
+      else if (n == k - 1) set(True)
+    }
+    
+    final override def putTrap(exception: Throwable): Unit = set(Trap(exception))
+    
+    final override def commit() {
+      val k = -limit
+      limit = k
+      val n = count // must read after updating limit
+      if (n == k) set(True) // safely races with put
+    }
+  }
+  
+  class Exists(trace: Trace) extends Join[Boolean, Boolean](trace) {
+    import MetaExists._
+    
+    @volatile private[dispatch] var count: Int = 0
+    
+    @volatile final override var limit: Int = 0
+    
+    final override def put(result: Try[Boolean]) {
+      if (result == null) throw new NullPointerException
+      var n = 0
+      var k = 0
+      do { n = count; k = limit }
+      while ((n < k || k < 0) && !Unsafe.compareAndSwapInt(this, CountOffset, n, n + 1))
+      k = limit // recheck limit
+      if ((n < k || k < 0) && result.isTrue) set(True)
+      else if (n == k - 1) set(result)
+    }
+    
+    final override def putBind(value: Boolean) {
+      var n = 0
+      var k = 0
+      do { n = count; k = limit }
+      while ((n < k || k < 0) && !Unsafe.compareAndSwapInt(this, CountOffset, n, n + 1))
+      k = limit // recheck limit
+      if ((n < k || k < 0) && value) set(True)
+      else if (n == k - 1) set(False)
+    }
+    
+    final override def putTrap(exception: Throwable): Unit = set(Trap(exception))
+    
+    final override def commit() {
+      val k = -limit
+      limit = k
+      val n = count // must read after updating limit
+      if (n == k) set(False) // safely races with put
+    }
+  }
+  
+  class Count(trace: Trace) extends Join[Int, Int](trace) {
+    import MetaCount._
+    
+    @volatile private[dispatch] var total: Int = 0
+    
+    @volatile private[dispatch] var count: Int = 0
+    
+    @volatile final override var limit: Int = 0
+    
+    final override def put(result: Try[Int]) {
+      if (result == null) throw new NullPointerException
+      if (result.canBind) putBind(result.bind)
+      else set(result.asInstanceOf[Nothing Else Throwable])
+    }
+    
+    final override def putBind(value: Int) {
+      var t = 0
+      var n = 0
+      var k = 0
+      do { t = total; n = count; k = limit }
+      while ((n < k || k < 0) && !Unsafe.compareAndSwapInt(this, TotalOffset, t, t + value))
+      do { n = count; k = limit }
+      while ((n < k || k < 0) && !Unsafe.compareAndSwapInt(this, CountOffset, n, n + 1))
+      k = limit // recheck limit
+      if (n == k - 1) set(Bind(total))
+    }
+    
+    final override def putTrap(exception: Throwable): Unit = set(Trap(exception))
+    
+    final override def commit() {
+      val k = -limit
+      limit = k
+      val n = count // must read after updating limit
+      if (n == k) set(Bind(total)) // safely races with last put
     }
   }
   

@@ -5,13 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis
+package basis.parallel
 
-/** Concurrent execution. */
-package object dispatch {
-  import process._
-  
-  val async: Async = new PrimeAsync
-  
-  implicit val route: async.Route = async.main
+import basis.collections._
+
+class General {
+  implicit def GeneralEnumeratorOps[A](these: Compound[Enumerator[A]]): GeneralEnumeratorOps[A] =
+    new GeneralEnumeratorOps[A](these)
 }

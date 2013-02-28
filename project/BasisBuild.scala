@@ -24,6 +24,7 @@ object BasisBuild extends Build {
           BasisDispatch,
           BasisMath,
           BasisMemory,
+          BasisParallel,
           BasisRandom,
           BasisRuntime,
           BasisSequential,
@@ -37,6 +38,7 @@ object BasisBuild extends Build {
           BasisDispatch,
           BasisMath,
           BasisMemory,
+          BasisParallel,
           BasisRandom,
           BasisRuntime,
           BasisSequential,
@@ -106,6 +108,17 @@ object BasisBuild extends Build {
     dependencies =
       Seq(BasisRuntime,
           BasisUtil)
+  )
+  
+  lazy val BasisParallel = Project(
+    id           = "basis-parallel",
+    base         = file("basis-parallel"),
+    settings     = commonSettings,
+    dependencies =
+      Seq(BasisCollections,
+          BasisControl,
+          BasisDispatch,
+          BasisSequential)
   )
   
   lazy val BasisRandom = Project(

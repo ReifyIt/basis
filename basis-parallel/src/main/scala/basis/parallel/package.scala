@@ -7,11 +7,7 @@
 
 package basis
 
-/** Concurrent execution. */
-package object dispatch {
-  import process._
-  
-  val async: Async = new PrimeAsync
-  
-  implicit val route: async.Route = async.main
+/** Parallel collections operations. */
+package object parallel {
+  val general = new General
 }

@@ -92,4 +92,54 @@ final class MetaThunk {
       }
     }
   }
+  
+  static final class MetaForAll {
+    private MetaForAll() {}
+    
+    static final long CountOffset;
+    
+    static {
+      try {
+        Class<Thunk.ForAll> ThunkForAllClass = Thunk.ForAll.class;
+        CountOffset = Unsafe.objectFieldOffset(ThunkForAllClass.getDeclaredField("count"));
+      }
+      catch (Exception e) {
+        throw new Error(e);
+      }
+    }
+  }
+  
+  static final class MetaExists {
+    private MetaExists() {}
+    
+    static final long CountOffset;
+    
+    static {
+      try {
+        Class<Thunk.Exists> ThunkExistsClass = Thunk.Exists.class;
+        CountOffset = Unsafe.objectFieldOffset(ThunkExistsClass.getDeclaredField("count"));
+      }
+      catch (Exception e) {
+        throw new Error(e);
+      }
+    }
+  }
+  
+  static final class MetaCount {
+    private MetaCount() {}
+    
+    static final long TotalOffset;
+    static final long CountOffset;
+    
+    static {
+      try {
+        Class<Thunk.Count> ThunkCountClass = Thunk.Count.class;
+        TotalOffset = Unsafe.objectFieldOffset(ThunkCountClass.getDeclaredField("total"));
+        CountOffset = Unsafe.objectFieldOffset(ThunkCountClass.getDeclaredField("count"));
+      }
+      catch (Exception e) {
+        throw new Error(e);
+      }
+    }
+  }
 }
