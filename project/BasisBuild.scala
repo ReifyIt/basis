@@ -184,7 +184,7 @@ object BasisBuild extends Build {
   )
   
   lazy val scalaSettings = Seq(
-    scalaVersion   := "2.10.1-RC1",
+    scalaVersion   := "2.10.1-RC2",
     scalacOptions ++= Seq("-language:_", "-Yno-predef")
   )
   

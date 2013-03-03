@@ -62,7 +62,7 @@ import basis.util._
   * }}}
   * 
   * @author   Chris Sachs
-  * @version  0.0
+  * @version  0.1
   * @since    0.0
   * 
   * @groupname  General     General properties
@@ -74,14 +74,17 @@ import basis.util._
   * @groupname  Unaligned   Loading and storing unaligned primitive values
   * @groupprio  Unaligned   3
   * 
+  * @groupname  Volatile    Loading and storing volatile values
+  * @groupprio  Volatile    4
+  * 
   * @groupname  Compound    Loading and storing compound values
-  * @groupprio  Compound    4
+  * @groupprio  Compound    5
   * 
   * @groupname  Aggregate   Loading and storing arrays of values
-  * @groupprio  Aggregate   5
+  * @groupprio  Aggregate   6
   * 
   * @groupname  Bulk        Bulk transfer operations
-  * @groupprio  Bulk        6
+  * @groupprio  Bulk        7
   */
 abstract class Data {
   /** Returns the size in bytes of the address space.
@@ -95,6 +98,11 @@ abstract class Data {
   /** Returns the internal byte order.
     * @group General */
   def endian: Endianness
+  
+  /** Returns `true` if this data supports volatile semantics; returns `false`
+    * if volatile operations do not guarantee coherency.
+    * @group General */
+  def isCoherent: Boolean = false
   
   /** Returns a resized copy of this data.
     * 
@@ -395,6 +403,192 @@ abstract class Data {
     */
   def storeUnalignedDouble(address: Long, value: Double): Unit =
     storeUnalignedLong(address, value.toLongBits)
+  
+  /** Loads a single byte with volatile semantics if `isCoherent`.
+    * 
+    * @param  address   the address to load.
+    * @return the loaded `Byte` value.
+    * @group  Volatile
+    */
+  def loadVolatileByte(address: Long): Byte =
+    loadByte(address)
+  
+  /** Stores a single byte with volatile semantics if `isCoherent`.
+    * 
+    * @param  address   the storage address.
+    * @param  value     the `Byte` value to store.
+    * @group  Volatile
+    */
+  def storeVolatileByte(address: Long, value: Byte): Unit =
+    storeByte(address, value)
+  
+  /** Loads a 2-byte `endian` ordered word as a native-endian `Short` value with
+    * volatile semantics if `isCoherent`. Truncates `address` to 2-byte alignment.
+    * 
+    * @param  address   the 2-byte aligned address to load.
+    * @return the loaded `Short` value.
+    * @group  Volatile
+    */
+  def loadVolatileShort(address: Long): Short =
+    loadShort(address)
+  
+  /** Stores a native-endian `Short` value as a 2-byte `endian` ordered word with
+    * volatile semantics if `isCoherent`. Truncates `address` to 2-byte alignment.
+    * 
+    * @param  address   the 2-byte aligned storage address.
+    * @param  value     the `Short` value to store.
+    * @group  Volatile
+    */
+  def storeVolatileShort(address: Long, value: Short): Unit =
+    storeShort(address, value)
+  
+  /** Loads a 4-byte `endian` ordered word as a native-endian `Int` value with
+    * volatile semantics if `isCoherent`. Truncates `address` to 4-byte alignment.
+    * 
+    * @param  address   the 4-byte aligned address to load.
+    * @return the loaded `Int` value.
+    * @group  Volatile
+    */
+  def loadVolatileInt(address: Long): Int =
+    loadInt(address)
+  
+  /** Stores a native-endian `Int` value as a 4-byte `endian` ordered word with
+    * volatile semantics if `isCoherent`. Truncates `address` to 4-byte alignment.
+    * 
+    * @param  address   the 4-byte aligned storage address.
+    * @param  value     the `Int` value to store.
+    * @group  Volatile
+    */
+  def storeVolatileInt(address: Long, value: Int): Unit =
+    storeInt(address, value)
+  
+  /** Loads an 8-byte `endian` ordered word as a native-endian `Long` value with
+    * volatile semantics if `isCoherent`. Truncates `address` to 8-byte alignment.
+    * 
+    * @param  address   the 8-byte aligned address to load.
+    * @return the loaded `Long` value.
+    * @group  Volatile
+    */ 
+  def loadVolatileLong(address: Long): Long =
+    loadLong(address)
+  
+  /** Store a native-endian `Long` value as an 8-byte `endian` ordered word with
+    * volatile semantics if `isCoherent`. Truncates `address` to 8-byte alignment.
+    * 
+    * @param  address   the 8-byte aligned storage address.
+    * @param  value     the `Long` value to store.
+    * @group  Volatile
+    */
+  def storeVolatileLong(address: Long, value: Long): Unit =
+    storeLong(address, value)
+  
+  /** Loads a 4-byte `endian` ordered word as a native-endian `Float` value with
+    * volatile semantics if `isCoherent`. Truncates `address` to 4-byte alignment.
+    * 
+    * @param  address   the 4-byte aligned address to load.
+    * @return the loaded `Float` value.
+    * @group  Volatile
+    */
+  def loadVolatileFloat(address: Long): Float =
+    loadFloat(address)
+  
+  /** Stores a native-endian `Float` value as a 4-byte `endian` ordered word with
+    * volatile semantics if `isCoherent`. Truncates `address` to 4-byte alignment.
+    * 
+    * @param  address   the 4-byte aligned storage address.
+    * @param  value     the `Float` value to store.
+    * @group  Volatile
+    */
+  def storeVolatileFloat(address: Long, value: Float): Unit =
+    storeFloat(address, value)
+  
+  /** Loads an 8-byte `endian` ordered word as a native-endian `Double` value with
+    * volatile semantics if `isCoherent`. Truncates `address` to 8-byte alignment.
+    * 
+    * @param  address   the 8-byte aligned address to load.
+    * @return the loaded `Double` value.
+    * @group  Volatile
+    */
+  def loadVolatileDouble(address: Long): Double =
+    loadDouble(address)
+  
+  /** Stores a native-endian `Double` value as an 8-byte `endian` ordered word with
+    * volatile semantics if `isCoherent`. Truncates `address` to 8-byte alignment.
+    * 
+    * @param  address   the 8-byte aligned storage address.
+    * @param  value     the `Double` value to store.
+    * @group  Volatile
+    */
+  def storeVolatileDouble(address: Long, value: Double): Unit =
+    storeDouble(address, value)
+  
+  /** Loads a 4-byte `endian` ordered word as a native-endian `Int` value with
+    * volatile semantics if `isCoherent`. Truncates `address` to 4-byte alignment.
+    * 
+    * @param  address   the 4-byte aligned address to load.
+    * @return the loaded `Int` value.
+    * @group  Volatile
+    */
+  
+  /** Stores a native-endian `Int` value as a 4-byte `endian` ordered word with
+    * volatile semantics if `isCoherent`. Truncates `address` to 4-byte alignment.
+    * 
+    * @param  address   the 4-byte aligned storage address.
+    * @param  value     the `Int` value to store.
+    * @group  Volatile
+    */
+  
+  /** Swaps a 4-byte `endian` ordered word containing an expected native-endian
+    * `Int` value with another native-endian `Int` value; the swap happens
+    * atomically if `isCoherent`, or does not happen at all if the comparison fails.
+    * 
+    * @param  address   the 4-byte aligned address to compare-and-swap.
+    * @param  expected  the old `Int` value to replace.
+    * @param  value     the new `Int` value to store.
+    * @return `true` if the swap succeeded, otherwise `false` if the swap failed.
+    * @group  Volatile
+    */
+  def compareAndSwapInt(address: Long, expected: Int, value: Int): Boolean =
+    loadInt(address) == expected && { storeInt(address, value); true }
+  
+  /** Swaps an 8-byte `endian` ordered word containing an expected native-endian
+    * `Long` value with another native-endian `Long` value; the swap happens
+    * atomically if `isCoherent`, or does not happen at all if the compatison fails.
+    * 
+    * @param  address   the 8-byte aligned address to compare-and-swap.
+    * @param  expected  the old `Long` value to replace.
+    * @param  value     the new `Long` value to store.
+    * @return `true` if the swap succeeded, otherwise `false` if the swap failed.
+    * @group  Volatile
+    */
+  def compareAndSwapLong(address: Long, expected: Long, value: Long): Boolean =
+    loadLong(address) == expected && { storeLong(address, value); true }
+  
+  /** Swaps a 4-byte `endian` ordered word containing an expected native-endian
+    * `Float` value with another native-endian `Float` value; the swap happens
+    * atomically if `isCoherent`, or does not happen at all if the comparison fails.
+    * 
+    * @param  address   the 4-byte aligned address to compare-and-swap.
+    * @param  expected  the old `Float` value to replace.
+    * @param  value     the new `Float` value to store.
+    * @return `true` if the swap succeeded, otherwise `false` if the swap failed.
+    * @group Volatile
+    */
+  def compareAndSwapFloat(address: Long, expected: Float, value: Float): Boolean =
+    compareAndSwapInt(address, expected.toIntBits, value.toIntBits)
+  
+  /** Swaps an 8-byte `endian` ordered word containing an expected native-endian
+    * `Double` value with another native-endian `Double` value; the swap happens
+    * atomically if `isCoherent`, or does not happen at all if the comparison fails.
+    * 
+    * @param  address   the 8-byte aligned address to compare-and-swap.
+    * @param  expected  the old `Double` value to replace.
+    * @param  value     the new `Double` value to store.
+    * @return `true` if the swap succeeded, otherwise `false` if the swap failed.
+    * @group  Volatile
+    */
+  def compareAndSwapDouble(address: Long, expected: Double, value: Double): Boolean =
+    compareAndSwapLong(address, expected.toLongBits, value.toLongBits)
   
   /** Loads an instance from a struct value.
     * 

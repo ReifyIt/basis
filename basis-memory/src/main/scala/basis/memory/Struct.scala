@@ -63,8 +63,11 @@ abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolea
   * @groupname  Unaligned   Unaligned primitive structs
   * @groupprio  Unaligned   3
   * 
+  * @groupname  Volatile    Volatile primitive structs
+  * @groupprio  Volatile    4
+  * 
   * @groupname  Composite   Composite structs
-  * @groupprio  Composite   4
+  * @groupprio  Composite   5
   */
 object Struct {
   import Predef.classOf
@@ -218,6 +221,78 @@ object Struct {
     override def runtimeClass: java.lang.Class[_] = java.lang.Double.TYPE
     override def newArray(length: Int): Array[Double] = new Array[Double](length)
     override def toString: String = "PaddedDouble"
+  }
+  
+  /** A `Byte` struct that supports volatile semantics when stored in coherent data.
+    * @group Volatile */
+  object VolatileByte extends Struct[Byte] {
+    override def alignment: Long = 1L
+    override def size: Long = 1L
+    override def load(data: Data, address: Long): Byte = data.loadVolatileByte(address)
+    override def store(data: Data, address: Long, value: Byte): Unit = data.storeVolatileByte(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Byte.TYPE
+    override def newArray(length: Int): Array[Byte] = new Array[Byte](length)
+    override def toString: String = "VolatileByte"
+  }
+  
+  /** An aligned `Short` struct that supports volatile semantics when stored in coherent data.
+    * @group Volatile */
+  object VolatileShort extends Struct[Short] {
+    override def alignment: Long = 2L
+    override def size: Long = 2L
+    override def load(data: Data, address: Long): Short = data.loadVolatileShort(address)
+    override def store(data: Data, address: Long, value: Short): Unit = data.storeVolatileShort(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Short.TYPE
+    override def newArray(length: Int): Array[Short] = new Array[Short](length)
+    override def toString: String = "VolatileShort"
+  }
+  
+  /** An aligned `Int` struct that supports volatile semantics when stored in coherent data.
+    * @group Volatile */
+  object VolatileInt extends Struct[Int] {
+    override def alignment: Long = 4L
+    override def size: Long = 4L
+    override def load(data: Data, address: Long): Int = data.loadVolatileInt(address)
+    override def store(data: Data, address: Long, value: Int): Unit = data.storeVolatileInt(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Integer.TYPE
+    override def newArray(length: Int): Array[Int] = new Array[Int](length)
+    override def toString: String = "VolatileInt"
+  }
+  
+  /** An aligned `Long` struct that supports volatile semantics when stored in coherent data.
+    * @group Volatile */
+  object VolatileLong extends Struct[Long] {
+    override def alignment: Long = 8L
+    override def size: Long = 8L
+    override def load(data: Data, address: Long): Long = data.loadVolatileLong(address)
+    override def store(data: Data, address: Long, value: Long): Unit = data.storeVolatileLong(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Long.TYPE
+    override def newArray(length: Int): Array[Long] = new Array[Long](length)
+    override def toString: String = "VolatileLong"
+  }
+  
+  /** An aligned `Float` struct that supports volatile semantics when stored in coherent data.
+    * @group Volatile */
+  object VolatileFloat extends Struct[Float] {
+    override def alignment: Long = 4L
+    override def size: Long = 4L
+    override def load(data: Data, address: Long): Float = data.loadVolatileFloat(address)
+    override def store(data: Data, address: Long, value: Float): Unit = data.storeVolatileFloat(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Float.TYPE
+    override def newArray(length: Int): Array[Float] = new Array[Float](length)
+    override def toString: String = "VolatileFloat"
+  }
+  
+  /** An aligned `Double` struct that supports volatile semantics when stored in coherent data.
+    * @group Volatile */
+  object VolatileDouble extends Struct[Double] {
+    override def alignment: Long = 8L
+    override def size: Long = 8L
+    override def load(data: Data, address: Long): Double = data.loadVolatileDouble(address)
+    override def store(data: Data, address: Long, value: Double): Unit = data.storeVolatileDouble(address, value)
+    override def runtimeClass: java.lang.Class[_] = java.lang.Double.TYPE
+    override def newArray(length: Int): Array[Double] = new Array[Double](length)
+    override def toString: String = "VolatileDouble"
   }
   
   /** A struct for 2-tuples of struct instances.
