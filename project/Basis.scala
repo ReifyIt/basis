@@ -5,13 +5,11 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-package basis
-
 import sbt._
 import sbt.Keys._
 import Defaults.defaultSettings
 
-object BasisBuild extends Build {
+object Basis extends Build {
   lazy val Basis = Project(
     id           = "basis",
     base         = file("."),
