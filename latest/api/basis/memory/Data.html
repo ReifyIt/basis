@@ -79,14 +79,14 @@ res4: <span class="std">String</span> = ffffbabe <span class="cmt">// the addres
 
 scala&gt; data.loadUnalignedShort(<span class="num">1</span>L).toHexString <span class="cmt">// load the unaligned middle bytes of the Int value.</span>
 res5: <span class="std">String</span> = fffffeba</pre></li></ol>
-            </div><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph133" viewBox="0.00 0.00 122.00 120.00" height="120pt" width="122pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 119,-116 119,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph133_0"><a xlink:title="basis.memory.Data (this class)" xlink:href="#inheritance-diagram"><polygon points="89.25,-50 24.75,-50 24.75,-24 89.25,-24 89.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">Data</text></a></g><!-- node1 --><g class="node class" id="graph133_1"><a xlink:title="scala.AnyRef"><polygon points="95.25,-112 18.75,-112 18.75,-86 95.25,-86 95.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="29" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="51" text-anchor="start">AnyRef</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph133_1_0"><a xlink:title="Data is a subtype of AnyRef"><path d="M57,-80.6826C57,-70.8961 57,-58.9026 57,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="55.2501,-80.8581 57,-85.8581 58.7501,-80.8581 55.2501,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph139" viewBox="0.00 0.00 122.00 120.00" height="120pt" width="122pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 119,-116 119,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this class" id="graph139_0"><a xlink:title="basis.memory.Data (this class)" xlink:href="#inheritance-diagram"><polygon points="89.25,-50 24.75,-50 24.75,-24 89.25,-24 89.25,-50" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-45" x="35" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="57" text-anchor="start">Data</text></a></g><!-- node1 --><g class="node class" id="graph139_1"><a xlink:title="scala.AnyRef"><polygon points="95.25,-112 18.75,-112 18.75,-86 95.25,-86 95.25,-112" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-107" x="29" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="51" text-anchor="start">AnyRef</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph139_1_0"><a xlink:title="Data is a subtype of AnyRef"><path d="M57,-80.6826C57,-70.8961 57,-58.9026 57,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="55.2501,-80.8581 57,-85.8581 58.7501,-80.8581 55.2501,-80.8581" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
               </div></div>
         
 
@@ -338,6 +338,78 @@ res5: <span class="std">String</span> = fffffeba</pre></li></ol>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="basis.memory.Data#compareAndSwapDouble" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="compareAndSwapDouble(address:Long,expected:Double,value:Double):Boolean"></a>
+      <a id="compareAndSwapDouble(Long,Double,Double):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compareAndSwapDouble</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="expected">expected: <span class="extype" name="scala.Double">Double</span></span>, <span name="value">value: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Swaps an 8-byte <code>endian</code> ordered word containing an expected native-endian
+<code>Double</code> value with another native-endian <code>Double</code> value; the swap happens
+atomically if <code>isCoherent</code>, or does not happen at all if the comparison fails.</p><div class="fullcomment"><div class="comment cmt"><p>Swaps an 8-byte <code>endian</code> ordered word containing an expected native-endian
+<code>Double</code> value with another native-endian <code>Double</code> value; the swap happens
+atomically if <code>isCoherent</code>, or does not happen at all if the comparison fails.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 8-byte aligned address to compare-and-swap.</p></dd><dt class="param">expected</dt><dd class="cmt"><p>the old <code>Double</code> value to replace.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the new <code>Double</code> value to store.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the swap succeeded, otherwise <code>false</code> if the swap failed.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#compareAndSwapFloat" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="compareAndSwapFloat(address:Long,expected:Float,value:Float):Boolean"></a>
+      <a id="compareAndSwapFloat(Long,Float,Float):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compareAndSwapFloat</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="expected">expected: <span class="extype" name="scala.Float">Float</span></span>, <span name="value">value: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Swaps a 4-byte <code>endian</code> ordered word containing an expected native-endian
+<code>Float</code> value with another native-endian <code>Float</code> value; the swap happens
+atomically if <code>isCoherent</code>, or does not happen at all if the comparison fails.</p><div class="fullcomment"><div class="comment cmt"><p>Swaps a 4-byte <code>endian</code> ordered word containing an expected native-endian
+<code>Float</code> value with another native-endian <code>Float</code> value; the swap happens
+atomically if <code>isCoherent</code>, or does not happen at all if the comparison fails.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 4-byte aligned address to compare-and-swap.</p></dd><dt class="param">expected</dt><dd class="cmt"><p>the old <code>Float</code> value to replace.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the new <code>Float</code> value to store.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the swap succeeded, otherwise <code>false</code> if the swap failed.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#compareAndSwapInt" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="compareAndSwapInt(address:Long,expected:Int,value:Int):Boolean"></a>
+      <a id="compareAndSwapInt(Long,Int,Int):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compareAndSwapInt</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="expected">expected: <span class="extype" name="scala.Int">Int</span></span>, <span name="value">value: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Swaps a 4-byte <code>endian</code> ordered word containing an expected native-endian
+<code>Int</code> value with another native-endian <code>Int</code> value; the swap happens
+atomically if <code>isCoherent</code>, or does not happen at all if the comparison fails.</p><div class="fullcomment"><div class="comment cmt"><p>Swaps a 4-byte <code>endian</code> ordered word containing an expected native-endian
+<code>Int</code> value with another native-endian <code>Int</code> value; the swap happens
+atomically if <code>isCoherent</code>, or does not happen at all if the comparison fails.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 4-byte aligned address to compare-and-swap.</p></dd><dt class="param">expected</dt><dd class="cmt"><p>the old <code>Int</code> value to replace.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the new <code>Int</code> value to store.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the swap succeeded, otherwise <code>false</code> if the swap failed.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#compareAndSwapLong" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="compareAndSwapLong(address:Long,expected:Long,value:Long):Boolean"></a>
+      <a id="compareAndSwapLong(Long,Long,Long):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compareAndSwapLong</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="expected">expected: <span class="extype" name="scala.Long">Long</span></span>, <span name="value">value: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Swaps an 8-byte <code>endian</code> ordered word containing an expected native-endian
+<code>Long</code> value with another native-endian <code>Long</code> value; the swap happens
+atomically if <code>isCoherent</code>, or does not happen at all if the compatison fails.</p><div class="fullcomment"><div class="comment cmt"><p>Swaps an 8-byte <code>endian</code> ordered word containing an expected native-endian
+<code>Long</code> value with another native-endian <code>Long</code> value; the swap happens
+atomically if <code>isCoherent</code>, or does not happen at all if the compatison fails.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 8-byte aligned address to compare-and-swap.</p></dd><dt class="param">expected</dt><dd class="cmt"><p>the old <code>Long</code> value to replace.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the new <code>Long</code> value to store.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the swap succeeded, otherwise <code>false</code> if the swap failed.</p></dd></dl></div>
     </li><li name="basis.memory.Data#copyToArray" visbl="pub" data-isabs="false" fullComment="yes" group="Aggregate">
       <a id="copyToArray[T](address:Long,array:Array[T],start:Int,count:Int)(implicitT:basis.memory.Struct[T]):Unit"></a>
       <a id="copyToArray[T](Long,Array[T],Int,Int)(Struct[T]):Unit"></a>
@@ -420,6 +492,20 @@ res5: <span class="std">String</span> = fffffeba</pre></li></ol>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.memory.Data#isCoherent" visbl="pub" data-isabs="false" fullComment="no" group="General">
+      <a id="isCoherent:Boolean"></a>
+      <a id="isCoherent:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isCoherent</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if this data supports volatile semantics; returns <code>false</code>
+if volatile operations do not guarantee coherency.</p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -657,6 +743,100 @@ Truncates <code>address</code> to 2-byte alignment.
       </h4>
       <p class="shortcomment cmt">Loads a 2-byte <code>endian</code> ordered word as a native-endian <code>Short</code> value.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a 2-byte <code>endian</code> ordered word as a native-endian <code>Short</code> value.
 </p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the unaligned address to load.</p></dd><dt>returns</dt><dd class="cmt"><p>the loaded <code>Short</code> value.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#loadVolatileByte" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="loadVolatileByte(address:Long):Byte"></a>
+      <a id="loadVolatileByte(Long):Byte"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadVolatileByte</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Byte">Byte</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Loads a single byte with volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a single byte with volatile semantics if <code>isCoherent</code>.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the address to load.</p></dd><dt>returns</dt><dd class="cmt"><p>the loaded <code>Byte</code> value.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#loadVolatileDouble" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="loadVolatileDouble(address:Long):Double"></a>
+      <a id="loadVolatileDouble(Long):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadVolatileDouble</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Loads an 8-byte <code>endian</code> ordered word as a native-endian <code>Double</code> value with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Loads an 8-byte <code>endian</code> ordered word as a native-endian <code>Double</code> value with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 8-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 8-byte aligned address to load.</p></dd><dt>returns</dt><dd class="cmt"><p>the loaded <code>Double</code> value.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#loadVolatileFloat" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="loadVolatileFloat(address:Long):Float"></a>
+      <a id="loadVolatileFloat(Long):Float"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadVolatileFloat</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Loads a 4-byte <code>endian</code> ordered word as a native-endian <code>Float</code> value with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a 4-byte <code>endian</code> ordered word as a native-endian <code>Float</code> value with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 4-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 4-byte aligned address to load.</p></dd><dt>returns</dt><dd class="cmt"><p>the loaded <code>Float</code> value.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#loadVolatileInt" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="loadVolatileInt(address:Long):Int"></a>
+      <a id="loadVolatileInt(Long):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadVolatileInt</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Loads a 4-byte <code>endian</code> ordered word as a native-endian <code>Int</code> value with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a 4-byte <code>endian</code> ordered word as a native-endian <code>Int</code> value with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 4-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 4-byte aligned address to load.</p></dd><dt>returns</dt><dd class="cmt"><p>the loaded <code>Int</code> value.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#loadVolatileLong" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="loadVolatileLong(address:Long):Long"></a>
+      <a id="loadVolatileLong(Long):Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadVolatileLong</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Loads an 8-byte <code>endian</code> ordered word as a native-endian <code>Long</code> value with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Loads an 8-byte <code>endian</code> ordered word as a native-endian <code>Long</code> value with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 8-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 8-byte aligned address to load.</p></dd><dt>returns</dt><dd class="cmt"><p>the loaded <code>Long</code> value.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#loadVolatileShort" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="loadVolatileShort(address:Long):Short"></a>
+      <a id="loadVolatileShort(Long):Short"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadVolatileShort</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Short">Short</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Loads a 2-byte <code>endian</code> ordered word as a native-endian <code>Short</code> value with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a 2-byte <code>endian</code> ordered word as a native-endian <code>Short</code> value with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 2-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 2-byte aligned address to load.</p></dd><dt>returns</dt><dd class="cmt"><p>the loaded <code>Short</code> value.</p></dd></dl></div>
     </li><li name="basis.memory.Data#move" visbl="pub" data-isabs="false" fullComment="yes" group="Bulk">
       <a id="move(fromAddress:Long,toAddress:Long,size:Long):Unit"></a>
       <a id="move(Long,Long,Long):Unit"></a>
@@ -934,6 +1114,100 @@ Truncates <code>address</code> to 2-byte alignment.
       </h4>
       <p class="shortcomment cmt">Stores a native-endian <code>Short</code> value as a 2-byte <code>endian</code> ordered word.</p><div class="fullcomment"><div class="comment cmt"><p>Stores a native-endian <code>Short</code> value as a 2-byte <code>endian</code> ordered word.
 </p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the unaligned storage address.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the <code>Short</code> value to store.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#storeVolatileByte" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="storeVolatileByte(address:Long,value:Byte):Unit"></a>
+      <a id="storeVolatileByte(Long,Byte):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storeVolatileByte</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="value">value: <span class="extype" name="scala.Byte">Byte</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Stores a single byte with volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Stores a single byte with volatile semantics if <code>isCoherent</code>.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the storage address.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the <code>Byte</code> value to store.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#storeVolatileDouble" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="storeVolatileDouble(address:Long,value:Double):Unit"></a>
+      <a id="storeVolatileDouble(Long,Double):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storeVolatileDouble</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="value">value: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Stores a native-endian <code>Double</code> value as an 8-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Stores a native-endian <code>Double</code> value as an 8-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 8-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 8-byte aligned storage address.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the <code>Double</code> value to store.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#storeVolatileFloat" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="storeVolatileFloat(address:Long,value:Float):Unit"></a>
+      <a id="storeVolatileFloat(Long,Float):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storeVolatileFloat</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="value">value: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Stores a native-endian <code>Float</code> value as a 4-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Stores a native-endian <code>Float</code> value as a 4-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 4-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 4-byte aligned storage address.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the <code>Float</code> value to store.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#storeVolatileInt" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="storeVolatileInt(address:Long,value:Int):Unit"></a>
+      <a id="storeVolatileInt(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storeVolatileInt</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="value">value: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Stores a native-endian <code>Int</code> value as a 4-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Stores a native-endian <code>Int</code> value as a 4-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 4-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 4-byte aligned storage address.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the <code>Int</code> value to store.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#storeVolatileLong" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="storeVolatileLong(address:Long,value:Long):Unit"></a>
+      <a id="storeVolatileLong(Long,Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storeVolatileLong</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="value">value: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Store a native-endian <code>Long</code> value as an 8-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Store a native-endian <code>Long</code> value as an 8-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 8-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 8-byte aligned storage address.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the <code>Long</code> value to store.</p></dd></dl></div>
+    </li><li name="basis.memory.Data#storeVolatileShort" visbl="pub" data-isabs="false" fullComment="yes" group="Volatile">
+      <a id="storeVolatileShort(address:Long,value:Short):Unit"></a>
+      <a id="storeVolatileShort(Long,Short):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storeVolatileShort</span><span class="params">(<span name="address">address: <span class="extype" name="scala.Long">Long</span></span>, <span name="value">value: <span class="extype" name="scala.Short">Short</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Stores a native-endian <code>Short</code> value as a 2-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Stores a native-endian <code>Short</code> value as a 2-byte <code>endian</code> ordered word with
+volatile semantics if <code>isCoherent</code>. Truncates <code>address</code> to 2-byte alignment.
+</p></div><dl class="paramcmts block"><dt class="param">address</dt><dd class="cmt"><p>the 2-byte aligned storage address.</p></dd><dt class="param">value</dt><dd class="cmt"><p>the <code>Short</code> value to store.</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -1034,6 +1308,9 @@ Truncates <code>address</code> to 2-byte alignment.
               
             </div><div class="group" name="Unaligned">
               <h3>Loading and storing unaligned primitive values</h3>
+              
+            </div><div class="group" name="Volatile">
+              <h3>Loading and storing volatile values</h3>
               
             </div><div class="group" name="Compound">
               <h3>Loading and storing compound values</h3>
