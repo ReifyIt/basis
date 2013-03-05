@@ -63,9 +63,9 @@ trait PrimeRoute extends AsyncRoute { async: Async =>
     override def uncaughtException(thread: Thread, exception: Throwable): Unit = exception.printStackTrace()
     
     override def apply[A](expr: => A): Relay[A] = {
-      val t = new Thunk[A](this)
-      exec(new Thunk.Eval(expr, t))
-      t
+      val to = new React[A](this)
+      exec(new Thunk.Eval(expr, to))
+      to
     }
     
     override def block[A](expr: => A): A = {
@@ -82,69 +82,69 @@ trait PrimeRoute extends AsyncRoute { async: Async =>
     }
     
     override def relay[A](thunk: () => A): Relay[A] = {
-      val t = new Thunk[A](this)
-      exec(new Thunk.Exec(thunk, t))
-      t
+      val to = new React[A](this)
+      exec(new Thunk.Exec(thunk, to))
+      to
     }
     
     override def relayAll[A](thunks: Enumerator[() => A]): Relay[Batch[A]] = {
-      val t = new Thunk.JoinAll[A](this)
-      thunks traverse new RelayAll(t, {
+      val to = new Tally.JoinAll[A](this)
+      thunks traverse new TallyAll(to, {
         val thread = Thread.currentThread
         if (thread.isInstanceOf[TrackApi]) thread.asInstanceOf[TrackApi].queue else queue
       })
-      t.commit()
+      to.commit()
       rouse()
-      t
+      to
     }
     
     override def relayAny[A](thunks: Enumerator[() => A]): Relay[A] = {
-      val t = new Thunk.JoinAny[A](this)
-      thunks traverse new RelayAny(t, {
+      val to = new Tally.JoinAny[A](this)
+      thunks traverse new TallyAny(to, {
         val thread = Thread.currentThread
         if (thread.isInstanceOf[TrackApi]) thread.asInstanceOf[TrackApi].queue else queue
       })
-      t.commit()
+      to.commit()
       rouse()
-      t
+      to
     }
     
     override def relayFirst[A](thunks: Enumerator[() => A])(p: A => Boolean): Relay[A] = {
-      val t = new Thunk.JoinFirst(p)(this)
-      thunks traverse new RelayAny(t, {
+      val to = new Tally.JoinFirst(p)(this)
+      thunks traverse new TallyAny(to, {
         val thread = Thread.currentThread
         if (thread.isInstanceOf[TrackApi]) thread.asInstanceOf[TrackApi].queue else queue
       })
-      t.commit()
+      to.commit()
       rouse()
-      t
+      to
     }
     
     override def reduce[A](thunks: Enumerator[() => A])(op: (A, A) => A): Relay[A] = {
-      val t = new Thunk.Reduce(null.asInstanceOf[A])(op)(this)
-      thunks traverse new RelayAll(t, {
+      val to = new Tally.Reduce(null.asInstanceOf[A])(op)(this)
+      thunks traverse new TallyAll(to, {
         val thread = Thread.currentThread
         if (thread.isInstanceOf[TrackApi]) thread.asInstanceOf[TrackApi].queue else queue
       })
-      t.commit()
+      to.commit()
       rouse()
-      t
+      to
     }
     
-    private final class RelayAll[-A](group: Thunk.Join[A, _], queue: AtomicQueue[() => _])
+    private final class TallyAll[-A](tally: Tally[A, _], queue: AtomicQueue[() => _])
       extends AbstractFunction1[() => A, Unit] {
       override def apply(thunk: () => A) {
-        group.limit -= 1
-        queue push new Thunk.PutAll(thunk, group)
+        tally.limit -= 1
+        queue push new Tally.PutAll(thunk, tally)
       }
     }
     
-    private final class RelayAny[-A](group: Thunk.Join[A, _], queue: AtomicQueue[() => _])
+    private final class TallyAny[-A](tally: Tally[A, _], queue: AtomicQueue[() => _])
       extends AbstractFunction1[() => A, Unit] {
       override def apply(thunk: () => A) {
-        if (!group.isSet) {
-          group.limit -= 1
-          queue push new Thunk.PutAny(thunk, group)
+        if (!tally.isSet) {
+          tally.limit -= 1
+          queue push new Tally.PutAny(thunk, tally)
         }
       }
     }
