@@ -41,4 +41,48 @@ private[memory] abstract class NativeData(
 	@native override def loadDouble(address: Long): Double
 	
 	@native override def storeDouble(address: Long, value: Double): Unit
+	
+	@native override def loadUnalignedShort(address: Long): Short
+	
+	@native override def storeUnalignedShort(address: Long, value: Short): Unit
+	
+	@native override def loadUnalignedInt(address: Long): Int
+	
+	@native override def storeUnalignedInt(address: Long, value: Int): Unit
+	
+	@native override def loadUnalignedLong(address: Long): Long
+	
+	@native override def storeUnalignedLong(address: Long, value: Long): Unit
+	
+	@native override def loadUnalignedFloat(address: Long): Float
+	
+	@native override def storeUnalignedFloat(address: Long, value: Float): Unit
+	
+	@native override def loadUnalignedDouble(address: Long): Double
+	
+	@native override def storeUnalignedDouble(address: Long, value: Double): Unit
+	
+	@native override def loadVolatileByte(address: Long): Byte
+	
+	@native override def storeVolatileByte(address: Long, value: Byte): Unit
+	
+	@native override def loadVolatileShort(address: Long): Short
+	
+	@native override def storeVolatileShort(address: Long, value: Short): Unit
+	
+	@native override def loadVolatileInt(address: Long): Int
+	
+	@native override def storeVolatileInt(address: Long, value: Int): Unit
+	
+	@native override def loadVolatileLong(address: Long): Long
+	
+	@native override def storeVolatileLong(address: Long, value: Long): Unit
+	
+	@native override def loadVolatileFloat(address: Long): Float
+	
+	@native override def storeVolatileFloat(address: Long, value: Float): Unit
+	
+	@native override def loadVolatileDouble(address: Long): Double
+	
+	@native override def storeVolatileDouble(address: Long, value: Double): Unit
 }
