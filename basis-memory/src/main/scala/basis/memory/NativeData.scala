@@ -85,4 +85,16 @@ private[memory] abstract class NativeData(
 	@native override def loadVolatileDouble(address: Long): Double
 	
 	@native override def storeVolatileDouble(address: Long, value: Double): Unit
+	
+	@native override def compareAndSwapInt(address: Long, expected: Int, value: Int): Boolean
+	
+	@native override def compareAndSwapLong(address: Long, expected: Long, value: Long): Boolean
+	
+	@native override def compareAndSwapFloat(address: Long, expected: Float, value: Float): Boolean
+	
+	@native override def compareAndSwapDouble(address: Long, expected: Double, value: Double): Boolean
+	
+	@native override def move(fromAddress: Long, toAddress: Long, size: Long): Unit
+	
+	@native override def clear(fromAddress: Long, untilAddress: Long): Unit
 }

@@ -7,8 +7,11 @@
 
 #include "basis/memory/package.h"
 
+#include <string.h>
+
 static jfieldID baseField;
 static jfieldID sizeField;
+static jint JNICALL unit(JNIEnv *env, jobject self);
 static jbyte JNICALL loadByte(JNIEnv *env, jobject self, jlong address);
 static void JNICALL storeByte(JNIEnv *env, jobject self, jlong address, jbyte value);
 static jshort JNICALL loadShort(JNIEnv *env, jobject self, jlong address);
@@ -43,43 +46,56 @@ static jfloat JNICALL loadVolatileFloat(JNIEnv *env, jobject self, jlong address
 static void JNICALL storeVolatileFloat(JNIEnv *env, jobject self, jlong address, jfloat value);
 static jdouble JNICALL loadVolatileDouble(JNIEnv *env, jobject self, jlong address);
 static void JNICALL storeVolatileDouble(JNIEnv *env, jobject self, jlong address, jdouble value);
+static jboolean JNICALL compareAndSwapInt(JNIEnv *env, jobject self, jlong address, jint expected, jint value);
+static jboolean JNICALL compareAndSwapLong(JNIEnv *env, jobject self, jlong address, jlong expected, jlong value);
+static jboolean JNICALL compareAndSwapFloat(JNIEnv *env, jobject self, jlong address, jfloat expected, jfloat value);
+static jboolean JNICALL compareAndSwapDouble(JNIEnv *env, jobject self, jlong address, jdouble expected, jdouble value);
+static void JNICALL move(JNIEnv *env, jobject self, jlong fromAddress, jlong toAddress, jlong size);
+static void JNICALL clear(JNIEnv *env, jobject self, jlong fromAddress, jlong untilAddress);
 
-static const int methodCount = 34;
+static const int methodCount = 41;
 static const JNINativeMethod methods[methodCount] = {
-  {"loadByte", "(L)B", loadByte},
-  {"storeByte", "(LB)V", storeByte},
-  {"loadShort", "(L)S", loadShort},
-  {"storeShort", "(LS)V", storeShort},
-  {"loadInt", "(L)I", loadInt},
-  {"storeInt", "(LI)V", storeInt},
-  {"loadLong", "(L)L", loadLong},
-  {"storeLong", "(LL)V", storeLong},
-  {"loadFloat", "(L)F", loadFloat},
-  {"storeFloat", "(LF)V", storeFloat},
-  {"loadDouble", "(L)D", loadDouble},
-  {"storeDouble", "(LD)V", storeDouble},
-  {"loadUnalignedShort", "(L)S", loadUnalignedShort},
-  {"storeUnalignedShort", "(LS)V", storeUnalignedShort},
-  {"loadUnalignedInt", "(L)I", loadUnalignedInt},
-  {"storeUnalignedInt", "(LI)V", storeUnalignedInt},
-  {"loadUnalignedLong", "(L)L", loadUnalignedLong},
-  {"storeUnalignedLong", "(LL)V", storeUnalignedLong},
-  {"loadUnalignedFloat", "(L)F", loadUnalignedFloat},
-  {"storeUnalignedFloat", "(LF)V", storeUnalignedFloat},
-  {"loadUnalignedDouble", "(L)D", loadUnalignedDouble},
-  {"storeUnalignedDouble", "(LD)V", storeUnalignedDouble},
-  {"loadVolatileByte", "(L)B", loadVolatileByte},
-  {"storeVolatileByte", "(LB)V", storeVolatileByte},
-  {"loadVolatileShort", "(L)S", loadVolatileShort},
-  {"storeVolatileShort", "(LS)V", storeVolatileShort},
-  {"loadVolatileInt", "(L)I", loadVolatileInt},
-  {"storeVolatileInt", "(LI)V", storeVolatileInt},
-  {"loadVolatileLong", "(L)L", loadVolatileLong},
-  {"storeVolatileLong", "(LL)V", storeVolatileLong},
-  {"loadVolatileFloat", "(L)F", loadVolatileFloat},
-  {"storeVolatileFloat", "(LF)V", storeVolatileFloat},
-  {"loadVolatileDouble", "(L)D", loadVolatileDouble},
-  {"storeVolatileDouble", "(LD)V", storeVolatileDouble}
+  {"unit", "()I", unit},
+  {"loadByte", "(J)B", loadByte},
+  {"storeByte", "(JB)V", storeByte},
+  {"loadShort", "(J)S", loadShort},
+  {"storeShort", "(JS)V", storeShort},
+  {"loadInt", "(J)I", loadInt},
+  {"storeInt", "(JI)V", storeInt},
+  {"loadLong", "(J)J", loadLong},
+  {"storeLong", "(JJ)V", storeLong},
+  {"loadFloat", "(J)F", loadFloat},
+  {"storeFloat", "(JF)V", storeFloat},
+  {"loadDouble", "(J)D", loadDouble},
+  {"storeDouble", "(JD)V", storeDouble},
+  {"loadUnalignedShort", "(J)S", loadUnalignedShort},
+  {"storeUnalignedShort", "(JS)V", storeUnalignedShort},
+  {"loadUnalignedInt", "(J)I", loadUnalignedInt},
+  {"storeUnalignedInt", "(JI)V", storeUnalignedInt},
+  {"loadUnalignedLong", "(J)J", loadUnalignedLong},
+  {"storeUnalignedLong", "(JJ)V", storeUnalignedLong},
+  {"loadUnalignedFloat", "(J)F", loadUnalignedFloat},
+  {"storeUnalignedFloat", "(JF)V", storeUnalignedFloat},
+  {"loadUnalignedDouble", "(J)D", loadUnalignedDouble},
+  {"storeUnalignedDouble", "(JD)V", storeUnalignedDouble},
+  {"loadVolatileByte", "(J)B", loadVolatileByte},
+  {"storeVolatileByte", "(JB)V", storeVolatileByte},
+  {"loadVolatileShort", "(J)S", loadVolatileShort},
+  {"storeVolatileShort", "(JS)V", storeVolatileShort},
+  {"loadVolatileInt", "(J)I", loadVolatileInt},
+  {"storeVolatileInt", "(JI)V", storeVolatileInt},
+  {"loadVolatileLong", "(J)J", loadVolatileLong},
+  {"storeVolatileLong", "(JJ)V", storeVolatileLong},
+  {"loadVolatileFloat", "(J)F", loadVolatileFloat},
+  {"storeVolatileFloat", "(JF)V", storeVolatileFloat},
+  {"loadVolatileDouble", "(J)D", loadVolatileDouble},
+  {"storeVolatileDouble", "(JD)V", storeVolatileDouble},
+  {"compareAndSwapInt", "(JII)Z", compareAndSwapInt},
+  {"compareAndSwapLong", "(JJJ)Z", compareAndSwapLong},
+  {"compareAndSwapFloat", "(JFF)Z", compareAndSwapFloat},
+  {"compareAndSwapDouble", "(JDD)Z", compareAndSwapDouble},
+  {"move", "(JJJ)V", move},
+  {"clear", "(JJ)V", clear}
 };
 
 jint basis_memory_NativeData_onLoad(JNIEnv *env) {
@@ -92,6 +108,10 @@ jint basis_memory_NativeData_onLoad(JNIEnv *env) {
   
   (*env)->DeleteLocalRef(env, NativeDataClass);
   return JNI_OK;
+}
+
+static jint unit(JNIEnv *env, jobject self) {
+  return (jint)sizeof(void *);
 }
 
 static jint checkAddress(JNIEnv *env, jobject self, jlong address) {
@@ -109,6 +129,18 @@ static jint checkAddress(JNIEnv *env, jobject self, jlong address) {
 static jint checkAddressRange(JNIEnv *env, jobject self, jlong address, jlong length) {
   jlong size = (*env)->GetLongField(env, self, sizeField);
   if (address < 0 || address + length > size) {
+    jclass IndexOutOfBoundsExceptionClass;
+    if ((IndexOutOfBoundsExceptionClass = (*env)->FindClass(env, "java/lang/IndexOutOfBoundsException")) == NULL) return JNI_ERR;
+    jint status = (*env)->ThrowNew(env, IndexOutOfBoundsExceptionClass, "address out of bounds");
+    (*env)->DeleteLocalRef(env, IndexOutOfBoundsExceptionClass);
+    return status;
+  }
+  return JNI_OK;
+}
+
+static jint checkAddressBounds(JNIEnv *env, jobject self, jlong lowerAddress, jlong upperAddress) {
+  jlong size = (*env)->GetLongField(env, self, sizeField);
+  if (lowerAddress > upperAddress || lowerAddress < 0 || lowerAddress >= size || upperAddress < 0 || upperAddress > size) {
     jclass IndexOutOfBoundsExceptionClass;
     if ((IndexOutOfBoundsExceptionClass = (*env)->FindClass(env, "java/lang/IndexOutOfBoundsException")) == NULL) return JNI_ERR;
     jint status = (*env)->ThrowNew(env, IndexOutOfBoundsExceptionClass, "address out of bounds");
@@ -332,4 +364,41 @@ static void JNICALL storeVolatileDouble(JNIEnv *env, jobject self, jlong address
   jlong base = (*env)->GetLongField(env, self, baseField);
   __sync_synchronize();
   *(volatile jdouble *)((char *)base + (size_t)(address & -8)) = value;
+}
+
+static jboolean JNICALL compareAndSwapInt(JNIEnv *env, jobject self, jlong address, jint expected, jint value) {
+  if (checkAddress(env, self, address) != JNI_OK) return JNI_FALSE;
+  jlong base = (*env)->GetLongField(env, self, baseField);
+  return __sync_bool_compare_and_swap((jint *)((char *)base + (size_t)(address & -4)), expected, value) ? JNI_TRUE : JNI_FALSE;
+}
+
+static jboolean JNICALL compareAndSwapLong(JNIEnv *env, jobject self, jlong address, jlong expected, jlong value) {
+  if (checkAddress(env, self, address) != JNI_OK) return JNI_FALSE;
+  jlong base = (*env)->GetLongField(env, self, baseField);
+  return __sync_bool_compare_and_swap((jlong *)((char *)base + (size_t)(address & -8)), expected, value) ? JNI_TRUE : JNI_FALSE;
+}
+
+static jboolean JNICALL compareAndSwapFloat(JNIEnv *env, jobject self, jlong address, jfloat expected, jfloat value) {
+  if (checkAddress(env, self, address) != JNI_OK) return JNI_FALSE;
+  jlong base = (*env)->GetLongField(env, self, baseField);
+  return __sync_bool_compare_and_swap((jint *)((char *)base + (size_t)(address & -4)), *(jint *)&expected, *(jint *)&value) ? JNI_TRUE : JNI_FALSE;
+}
+
+static jboolean JNICALL compareAndSwapDouble(JNIEnv *env, jobject self, jlong address, jdouble expected, jdouble value) {
+  if (checkAddress(env, self, address) != JNI_OK) return JNI_FALSE;
+  jlong base = (*env)->GetLongField(env, self, baseField);
+  return __sync_bool_compare_and_swap((jlong *)((char *)base + (size_t)(address & -8)), *(jlong *)&expected, *(jlong *)&value) ? JNI_TRUE : JNI_FALSE;
+}
+
+static void JNICALL move(JNIEnv *env, jobject self, jlong fromAddress, jlong toAddress, jlong size) {
+  if (checkAddressRange(env, self, fromAddress, size) != JNI_OK) return;
+  if (checkAddressRange(env, self, toAddress, size) != JNI_OK) return;
+  jlong base = (*env)->GetLongField(env, self, baseField);
+  memmove((char *)base + (size_t)toAddress, (char *)base + (size_t)fromAddress, (size_t)size);
+}
+
+static void JNICALL clear(JNIEnv *env, jobject self, jlong fromAddress, jlong untilAddress) {
+  if (checkAddressBounds(env, self, fromAddress, untilAddress) != JNI_OK) return;
+  jlong base = (*env)->GetLongField(env, self, baseField);
+  memset((char *)base + (size_t)fromAddress, 0, (size_t)(untilAddress - fromAddress));
 }

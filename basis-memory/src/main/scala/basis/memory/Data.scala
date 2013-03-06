@@ -522,22 +522,6 @@ abstract class Data {
   def storeVolatileDouble(address: Long, value: Double): Unit =
     storeDouble(address, value)
   
-  /** Loads a 4-byte `endian` ordered word as a native-endian `Int` value with
-    * volatile semantics if `isCoherent`. Truncates `address` to 4-byte alignment.
-    * 
-    * @param  address   the 4-byte aligned address to load.
-    * @return the loaded `Int` value.
-    * @group  Volatile
-    */
-  
-  /** Stores a native-endian `Int` value as a 4-byte `endian` ordered word with
-    * volatile semantics if `isCoherent`. Truncates `address` to 4-byte alignment.
-    * 
-    * @param  address   the 4-byte aligned storage address.
-    * @param  value     the `Int` value to store.
-    * @group  Volatile
-    */
-  
   /** Swaps a 4-byte `endian` ordered word containing an expected native-endian
     * `Int` value with another native-endian `Int` value; the swap happens
     * atomically if `isCoherent`, or does not happen at all if the comparison fails.
