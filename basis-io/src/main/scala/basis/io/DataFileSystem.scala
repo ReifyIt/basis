@@ -5,16 +5,14 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-#include "basis/memory/package.h"
+package basis.io
 
-jint basis_memory_NativeData_onLoad(JNIEnv *env);
+import basis.memory._
 
-jint basis_memory_package_onLoad(JNIEnv *env) {
-  if (basis_memory_NativeData_onLoad(env) != JNI_OK) return JNI_ERR;
+trait DataFileSystem extends FileSystem {
+  override type File <: FileApi
   
-  return JNI_OK;
-}
-
-void basis_memory_package_onUnload(JNIEnv *env) {
-  
+  trait FileApi extends super.FileApi { this: File =>
+    def data: Data
+  }
 }

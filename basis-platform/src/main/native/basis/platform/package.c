@@ -5,12 +5,16 @@
 **  |_____/\_____\____/__/\____/      http://basis.reify.it             **
 \*                                                                      */
 
-#ifndef basis_memory_package_h
-#define basis_memory_package_h
+#include "basis/platform/package.h"
 
-#include <jni.h>
+jint basis_platform_NativeData_onLoad(JNIEnv *env);
 
-jint basis_memory_package_onLoad(JNIEnv *env);
-void basis_memory_package_onUnload(JNIEnv *env);
+jint basis_platform_package_onLoad(JNIEnv *env) {
+  if (basis_platform_NativeData_onLoad(env) != JNI_OK) return JNI_ERR;
+  
+  return JNI_OK;
+}
 
-#endif /* basis_memory_package_h */
+void basis_platform_package_onUnload(JNIEnv *env) {
+  
+}

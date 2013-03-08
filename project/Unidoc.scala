@@ -2,8 +2,6 @@
 // Copyright 2009-2012 Typesafe Inc. [http://www.typesafe.com]
 // Borrowed from the Akka toolkit [http://akka.io]
 
-package basis
-
 import sbt._
 import sbt.Keys._
 import sbt.Project.Initialize

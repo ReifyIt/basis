@@ -20,9 +20,11 @@ object Basis extends Build {
           BasisContainers,
           BasisControl,
           BasisDispatch,
+          BasisIO,
           BasisMath,
           BasisMemory,
           BasisParallel,
+          BasisPlatform,
           BasisRandom,
           BasisRuntime,
           BasisSequential,
@@ -34,9 +36,11 @@ object Basis extends Build {
           BasisContainers,
           BasisControl,
           BasisDispatch,
+          BasisIO,
           BasisMath,
           BasisMemory,
           BasisParallel,
+          BasisPlatform,
           BasisRandom,
           BasisRuntime,
           BasisSequential,
@@ -93,6 +97,14 @@ object Basis extends Build {
           BasisControl)
   )
   
+  lazy val BasisIO = Project(
+    id           = "basis-io",
+    base         = file("basis-io"),
+    settings     = commonSettings,
+    dependencies =
+      Seq(BasisMemory)
+  )
+  
   lazy val BasisMath = Project(
     id           = "basis-math",
     base         = file("basis-math"),
@@ -117,6 +129,16 @@ object Basis extends Build {
           BasisControl,
           BasisDispatch,
           BasisSequential)
+  )
+  
+  lazy val BasisPlatform = Project(
+    id           = "basis-platform",
+    base         = file("basis-platform"),
+    settings     = commonSettings,
+    dependencies =
+      Seq(BasisIO,
+          BasisMemory,
+          BasisUtil)
   )
   
   lazy val BasisRandom = Project(
