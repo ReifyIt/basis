@@ -101,7 +101,7 @@ static const JNINativeMethod methods[methodCount] = {
 
 jint basis_platform_NativeData_onLoad(JNIEnv *env) {
   jclass NativeDataClass;
-  if ((NativeDataClass = (*env)->FindClass(env, "basis/memory/NativeData")) == NULL) return JNI_ERR;
+  if ((NativeDataClass = (*env)->FindClass(env, "basis/platform/NativeData")) == NULL) return JNI_ERR;
   
   if ((basis_platform_NativeData_base = (*env)->GetFieldID(env, NativeDataClass, "base", "J")) == NULL) return JNI_ERR;
   if ((basis_platform_NativeData_size = (*env)->GetFieldID(env, NativeDataClass, "size", "J")) == NULL) return JNI_ERR;

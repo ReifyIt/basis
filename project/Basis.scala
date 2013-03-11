@@ -134,7 +134,11 @@ object Basis extends Build {
   lazy val BasisPlatform = Project(
     id           = "basis-platform",
     base         = file("basis-platform"),
-    settings     = commonSettings,
+    settings     = commonSettings ++ Seq(
+      unmanagedResources in Compile <++= target map { target =>
+        Seq(target / "libbasis-platform.macosx-universal.jnilib")
+      }
+    ),
     dependencies =
       Seq(BasisIO,
           BasisMemory,

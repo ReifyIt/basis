@@ -18,6 +18,8 @@ object FileSystem extends DataFileSystem {
     
     override def base: Path
     
+    override def name: String
+    
     override def / (name: String): Path = new SubPath(this, name)
     
     override def toString: String = {
@@ -48,7 +50,10 @@ object FileSystem extends DataFileSystem {
     }
     
     private[posix] override def addString(s: java.lang.StringBuilder) {
-      if (parent != null) parent.addString(s)
+      if (parent != null) {
+        parent.addString(s)
+        if (!parent.isRoot) s.append('/')
+      }
       s.append(name)
     }
   }
@@ -57,7 +62,7 @@ object FileSystem extends DataFileSystem {
     def apply(name: String): Path = new SubPath(null, name)
   }
   
-  val / : Path = new RootPath
+  val Root : Path = new RootPath
   
   
   final class File private[posix] (private[posix] var fd: Int) extends FileApi {
@@ -73,11 +78,13 @@ object FileSystem extends DataFileSystem {
   }
   
   object File extends super.FileFactory {
-    override def apply(path: Path): File = open(path, OpenMode.ReadWrite)
+    override def apply(path: Path): File = {
+      import OpenMode._
+      import FileMode._
+      open(path, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+    }
     
     @native def open(path: Path, flags: OpenMode, mode: FileMode): File
-    
-    def open(path: Path, flags: OpenMode): File = open(path, flags, new FileMode(0))
     
     JNILibrary.init()
   }
@@ -101,9 +108,9 @@ object FileSystem extends DataFileSystem {
   final class FileMode(val value: Int) extends AnyVal {
     def contains(mode: FileMode): Boolean = (value | mode.value) == value
     
-    def & (mode: FileMode): FileMode = new FileMode(value & mode.value)
+    @inline def & (mode: FileMode): FileMode = new FileMode(value & mode.value)
     
-    def | (mode: FileMode): FileMode = new FileMode(value | mode.value)
+    @inline def | (mode: FileMode): FileMode = new FileMode(value | mode.value)
   }
   
   object FileMode {
@@ -145,9 +152,9 @@ object FileSystem extends DataFileSystem {
   final class OpenMode(val value: Int) extends AnyVal {
     def contains(mode: OpenMode): Boolean = (value | mode.value) == value
     
-    def & (mode: OpenMode): OpenMode = new OpenMode(value & mode.value)
+    @inline def & (mode: OpenMode): OpenMode = new OpenMode(value & mode.value)
     
-    def | (mode: OpenMode): OpenMode = new OpenMode(value | mode.value)
+    @inline def | (mode: OpenMode): OpenMode = new OpenMode(value | mode.value)
   }
   
   object OpenMode {
@@ -180,9 +187,9 @@ object FileSystem extends DataFileSystem {
   final class MapMode(val value: Int) extends AnyVal {
     def contains(mode: MapMode): Boolean = (value | mode.value) == value
     
-    def & (mode: MapMode): MapMode = new MapMode(value & mode.value)
+    @inline def & (mode: MapMode): MapMode = new MapMode(value & mode.value)
     
-    def | (mode: MapMode): MapMode = new MapMode(value | mode.value)
+    @inline def | (mode: MapMode): MapMode = new MapMode(value | mode.value)
   }
   
   object MapMode {
@@ -201,9 +208,9 @@ object FileSystem extends DataFileSystem {
   final class MapProt(val value: Int) extends AnyVal {
     def contains(prot: MapProt): Boolean = (value | prot.value) == value
     
-    def & (prot: MapProt): MapProt = new MapProt(value & prot.value)
+    @inline def & (prot: MapProt): MapProt = new MapProt(value & prot.value)
     
-    def | (prot: MapProt): MapProt = new MapProt(value | prot.value)
+    @inline def | (prot: MapProt): MapProt = new MapProt(value | prot.value)
   }
   
   object MapProt {
