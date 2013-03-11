@@ -18,11 +18,13 @@ jfieldID basis_platform_posix_FileSystem$File_fd;
 
 static void JNICALL File_close(JNIEnv *env, jobject self);
 static jlong JNICALL File_size(JNIEnv *env, jobject self);
+static void JNICALL File_setSize(JNIEnv *env, jobject self, jlong newSize);
 
-static const int FileMethodCount = 2;
+static const int FileMethodCount = 3;
 static const JNINativeMethod FileMethods[FileMethodCount] = {
   {"close", "()V", File_close},
-  {"size", "()J", File_size}
+  {"size", "()J", File_size},
+  {"size_$eq", "(J)V", File_setSize}
 };
 
 jint basis_platform_posix_FileSystem$File_onLoad(JNIEnv *env) {
@@ -59,7 +61,10 @@ static void JNICALL File_close(JNIEnv *env, jobject self) {
 
 static jlong JNICALL File_size(JNIEnv *env, jobject self) {
   int fd = (*env)->GetIntField(env, self, basis_platform_posix_FileSystem$File_fd);
-  if (fd < 0) return 0;
+  if (fd < 0) {
+    throwNewIOException(env, "invalid file descriptor");
+    return 0;
+  }
   
   struct stat info;
   if (fstat(fd, &info) < 0) {
@@ -68,4 +73,17 @@ static jlong JNICALL File_size(JNIEnv *env, jobject self) {
   }
   
   return info.st_size;
+}
+
+static void JNICALL File_setSize(JNIEnv *env, jobject self, jlong newSize) {
+  int fd = (*env)->GetIntField(env, self, basis_platform_posix_FileSystem$File_fd);
+  if (fd < 0) {
+    throwNewIOException(env, "invalid file descriptor");
+    return;
+  }
+  
+  if (ftruncate(fd, (off_t)newSize) < 0) {
+    throwNewIOException(env, strerror(errno));
+    return;
+  }
 }

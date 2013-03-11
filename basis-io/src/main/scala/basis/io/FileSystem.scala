@@ -35,6 +35,8 @@ trait FileSystem {
     def close(): Unit
     
     def size: Long
+    
+    def size_=(newSize: Long): Unit
   }
   
   trait FileFactory {

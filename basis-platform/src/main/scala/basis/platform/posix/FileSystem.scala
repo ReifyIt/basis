@@ -72,6 +72,8 @@ object FileSystem extends DataFileSystem {
     
     @native override def size: Long
     
+    @native override def size_=(newSize: Long): Unit
+    
     override def data: FileData = FileData.map(0, size, MapProt.ReadWrite, MapMode.Shared, this, 0)
     
     JNILibrary.init()
