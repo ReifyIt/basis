@@ -102,7 +102,9 @@ object Basis extends Build {
     base         = file("basis-io"),
     settings     = commonSettings,
     dependencies =
-      Seq(BasisMemory)
+      Seq(BasisCollections,
+          BasisControl,
+          BasisMemory)
   )
   
   lazy val BasisMath = Project(
