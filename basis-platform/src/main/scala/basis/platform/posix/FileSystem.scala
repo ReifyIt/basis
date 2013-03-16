@@ -65,7 +65,7 @@ object FileSystem extends DataFileSystem {
   val Root : Path = new RootPath
   
   
-  final class File private[posix] (private[posix] var fd: Int) extends FileApi {
+  final class File private[posix] (private[posix] var fd: Int) extends DataFileApi {
     override def isOpen: Boolean = fd >= 0
     
     @native override def close(): Unit

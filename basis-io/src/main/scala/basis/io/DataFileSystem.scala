@@ -10,9 +10,9 @@ package basis.io
 import basis.memory._
 
 trait DataFileSystem extends FileSystem {
-  override type File <: FileApi
+  override type File <: DataFileApi
   
-  trait FileApi extends super.FileApi { this: File =>
+  trait DataFileApi extends FileApi { this: File =>
     def data: Data
   }
 }
