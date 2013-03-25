@@ -27,7 +27,7 @@ package basis.collections
   * 
   * @define collection  stack
   */
-trait Stack[+A] extends Any with Equals with Family[Stack[_]] with Side[A] {
+trait Stack[+A] extends Any with Equals with Family[Stack[_]] with Link[A] {
   /** Returns this $collection with a prepended element.
     * @group Combining */
   def :: [B >: A](elem: B): Stack[B]

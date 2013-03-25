@@ -27,7 +27,7 @@ package basis.collections
   * 
   * @define collection  queue
   */
-trait Queue[+A] extends Any with Equals with Family[Queue[_]] with Side[A] {
+trait Queue[+A] extends Any with Equals with Family[Queue[_]] with Link[A] {
   /** Returns this $collection with an appended element.
     * @group Combining */
   def :+ [B >: A](elem: B): Queue[B]

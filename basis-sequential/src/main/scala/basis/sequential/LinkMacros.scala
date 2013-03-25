@@ -13,25 +13,25 @@ import basis.control._
 import scala.collection.immutable.{::, Nil}
 import scala.reflect.macros.Context
 
-/** Side operations macro implementations.
+/** Link operations macro implementations.
   * 
   * @author Chris Sachs
   */
-private[sequential] class SideMacros[C <: Context](val context: C) {
+private[sequential] class LinkMacros[C <: Context](val context: C) {
   import context.{Expr, fresh, mirror, WeakTypeTag}
   import universe._
   
   val universe: context.universe.type = context.universe
   
   def foreach[A : WeakTypeTag, U]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (f: Expr[A => U])
     : Expr[Unit] = {
     val xs   = fresh("xs$"): TermName
     val loop = fresh("loop$"): TermName
     Expr[Unit](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) :: Nil,
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) :: Nil,
         LabelDef(loop, Nil,
           If(
             Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
@@ -43,7 +43,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def foldLeft[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (z: Expr[B])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
@@ -52,7 +52,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     val loop = fresh("loop$"): TermName
     Expr[B](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -66,7 +66,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def reduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (op: Expr[(B, A) => B])
     : Expr[B] = {
     val xs   = fresh("xs$"): TermName
@@ -74,7 +74,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     val loop = fresh("loop$"): TermName
     Expr[B](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         If(
           Select(Ident(xs), "isEmpty": TermName),
           Throw(
@@ -96,7 +96,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def mayReduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (op: Expr[(B, A) => B])
     : Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
@@ -104,7 +104,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     val loop = fresh("loop$"): TermName
     Expr[Maybe[B]](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) :: Nil,
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) :: Nil,
         If(
           Select(Ident(xs), "isEmpty": TermName),
           Select(BasisControl, "Trap": TermName),
@@ -123,7 +123,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def find[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (p: Expr[A => Boolean])
     : Expr[Maybe[A]] = {
     val xs   = fresh("xs$"): TermName
@@ -133,7 +133,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val MaybeATag = MaybeTag[A]
     Expr[Maybe[A]](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[A]]), Select(BasisControl, "Trap": TermName)) ::
         LabelDef(loop, Nil,
           If(
@@ -151,7 +151,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def forall[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = fresh("xs$"): TermName
@@ -159,7 +159,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     val loop = fresh("loop$"): TermName
     Expr[Boolean](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
         LabelDef(loop, Nil,
           If(
@@ -175,7 +175,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def exists[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (p: Expr[A => Boolean])
     : Expr[Boolean] = {
     val xs   = fresh("xs$"): TermName
@@ -183,7 +183,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     val loop = fresh("loop$"): TermName
     Expr[Boolean](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
         LabelDef(loop, Nil,
           If(
@@ -199,7 +199,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def count[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (p: Expr[A => Boolean])
     : Expr[Int] = {
     val xs   = fresh("xs$"): TermName
@@ -207,7 +207,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     val loop = fresh("loop$"): TermName
     Expr[Int](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
         LabelDef(loop, Nil,
           If(
@@ -224,7 +224,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def choose[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (q: Expr[PartialFunction[A, B]])
     : Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
@@ -235,7 +235,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val MaybeBTag = MaybeTag[B]
     Expr[Maybe[B]](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[B]]), Select(BasisControl, "Trap": TermName)) ::
         ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
@@ -260,7 +260,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def collect[A : WeakTypeTag, B]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (q: Expr[PartialFunction[A, B]])
       (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
@@ -273,7 +273,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         ValDef(NoMods, f, TypeTree(), q.tree) ::
         LabelDef(loop, Nil,
@@ -296,7 +296,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def map[A : WeakTypeTag, B]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (f: Expr[A => B])
       (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
@@ -307,7 +307,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -323,7 +323,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def flatMap[A : WeakTypeTag, B]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (f: Expr[A => Enumerator[B]])
       (builder: Expr[Builder[B]])
     : Expr[builder.value.State] = {
@@ -334,7 +334,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -350,7 +350,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def filter[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
@@ -362,7 +362,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -380,7 +380,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def dropWhile[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
@@ -393,7 +393,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop1, Nil,
           If(
@@ -418,7 +418,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def takeWhile[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (p: Expr[A => Boolean])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
@@ -430,7 +430,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -449,7 +449,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def span[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (p: Expr[A => Boolean])
       (builder1: Expr[Builder[A]], builder2: Expr[Builder[A]])
     : Expr[(builder1.value.State, builder2.value.State)] = {
@@ -465,7 +465,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builder2StateTag = BuilderStateTag(builder2)
     Expr[(builder1.value.State, builder2.value.State)](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(NoMods, a, TypeTree(builder1TypeTag.tpe), builder1.tree) ::
         ValDef(NoMods, b, TypeTree(builder2TypeTag.tpe), builder2.tree) ::
         LabelDef(loop1, Nil,
@@ -495,7 +495,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def drop[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (lower: Expr[Int])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
@@ -509,7 +509,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), lower.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
@@ -536,7 +536,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def take[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (upper: Expr[Int])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
@@ -549,7 +549,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(NoMods, n, TypeTree(), upper.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
@@ -569,7 +569,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def slice[A : WeakTypeTag]
-      (these: Expr[Side[A]])
+      (these: Expr[Link[A]])
       (lower: Expr[Int], upper: Expr[Int])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
@@ -583,7 +583,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
         ValDef(Modifiers(Flag.MUTABLE), n, TypeTree(), lower.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
@@ -615,7 +615,7 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
   }
   
   def zip[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Side[A]], those: Expr[Side[B]])
+      (these: Expr[Link[A]], those: Expr[Link[B]])
       (builder: Expr[Builder[(A, B)]])
     : Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
@@ -626,8 +626,8 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     implicit val builderStateTag = BuilderStateTag(builder)
     Expr[builder.value.State](
       Block(
-        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Side[A]]), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(weakTypeOf[Side[B]]), those.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), xs, TypeTree(weakTypeOf[Link[A]]), these.tree) ::
+        ValDef(Modifiers(Flag.MUTABLE), ys, TypeTree(weakTypeOf[Link[B]]), those.tree) ::
         ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
         LabelDef(loop, Nil,
           If(
@@ -665,10 +665,10 @@ private[sequential] class SideMacros[C <: Context](val context: C) {
     WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
   
-  implicit protected def SideTag[A : WeakTypeTag]: WeakTypeTag[Side[A]] = {
-    val SideTpc = mirror.staticClass("basis.collections.Side").toType
-    val SideTpe = appliedType(SideTpc, weakTypeOf[A] :: Nil)
-    WeakTypeTag[Side[A]](SideTpe)
+  implicit protected def LinkTag[A : WeakTypeTag]: WeakTypeTag[Link[A]] = {
+    val LinkTpc = mirror.staticClass("basis.collections.Link").toType
+    val LinkTpe = appliedType(LinkTpc, weakTypeOf[A] :: Nil)
+    WeakTypeTag[Link[A]](LinkTpe)
   }
   
   implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {

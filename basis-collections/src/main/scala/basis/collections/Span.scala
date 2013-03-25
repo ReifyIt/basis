@@ -7,8 +7,8 @@
 
 package basis.collections
 
-/** A two-sided sequence. A flank efficiently decomposes into its `head`
-  * element and `tail` flank, and its `foot` element and `body` flank.
+/** A double-ended sequence. A span efficiently decomposes into its `head`
+  * element and `tail` span, and its `foot` element and `body` span.
   * 
   * ==Extensions==
   * $Extensions
@@ -24,18 +24,18 @@ package basis.collections
   * @groupprio  Traversing    3
   * @groupprio  Classifying   4
   * 
-  * @define collection  flank
+  * @define collection  span
   */
-trait Flank[@specialized(Int, Long, Float, Double, Boolean) +A]
-  extends Any with Equals with Family[Flank[_]] with Side[A] {
+trait Span[@specialized(Int, Long, Float, Double, Boolean) +A]
+  extends Any with Equals with Family[Span[_]] with Link[A] {
   
   override def head: A
   
-  override def tail: Flank[A]
+  override def tail: Span[A]
   
   /** Returns all elements except the last of this non-empty $collection.
     * @group Decomposing */
-  def body: Flank[A]
+  def body: Span[A]
   
   /** Returns the last element of this non-empty $collection.
     * @group Decomposing */

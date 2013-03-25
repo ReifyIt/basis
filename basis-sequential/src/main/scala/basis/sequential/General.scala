@@ -55,10 +55,10 @@ class General {
   implicit def GeneralIndexOps[A](these: Index[A]): GeneralIndexOps[A] =
     macro General.GeneralIndexOps[A]
   
-  /** Implicitly provides general operations for sides.
+  /** Implicitly provides general operations for links.
     * @group General */
-  implicit def GeneralSideOps[A](these: Side[A]): GeneralSideOps[A] =
-    macro General.GeneralSideOps[A]
+  implicit def GeneralLinkOps[A](these: Link[A]): GeneralLinkOps[A] =
+    macro General.GeneralLinkOps[A]
   
   /** Implicitly provides general operations for sets.
     * @group General */
@@ -194,20 +194,20 @@ private[sequential] object General {
         these.tree :: Nil))
   }
   
-  def GeneralSideOps[A : c.WeakTypeTag]
+  def GeneralLinkOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[Side[A]])
-    : c.Expr[GeneralSideOps[A]] = {
+      (these: c.Expr[Link[A]])
+    : c.Expr[GeneralLinkOps[A]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    implicit val GeneralSideOpsATag =
-      WeakTypeTag[GeneralSideOps[A]](
+    implicit val GeneralLinkOpsATag =
+      WeakTypeTag[GeneralLinkOps[A]](
         appliedType(
-          mirror.staticClass("basis.sequential.GeneralSideOps").toType,
+          mirror.staticClass("basis.sequential.GeneralLinkOps").toType,
           weakTypeOf[A] :: Nil))
-    Expr[GeneralSideOps[A]](
+    Expr[GeneralLinkOps[A]](
       Apply(
-        Select(New(TypeTree(weakTypeOf[GeneralSideOps[A]])), nme.CONSTRUCTOR),
+        Select(New(TypeTree(weakTypeOf[GeneralLinkOps[A]])), nme.CONSTRUCTOR),
         these.tree :: Nil))
   }
   

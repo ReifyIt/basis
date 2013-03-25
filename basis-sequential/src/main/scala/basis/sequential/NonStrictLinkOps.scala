@@ -9,7 +9,7 @@ package basis.sequential
 
 import basis.collections._
 
-/** Non-strictly evaluated side operations.
+/** Non-strictly evaluated link operations.
   * 
   * @author   Chris Sachs
   * @version  0.1
@@ -20,9 +20,9 @@ import basis.collections._
   * @groupprio  Filtering   2
   * @groupprio  Combining   3
   * 
-  * @define collection  side
+  * @define collection  link
   */
-final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
+final class NonStrictLinkOps[+A](val these: Link[A]) extends AnyVal {
   /** Returns a view that applies a partial function to each element in this
     * $collection for which the function is defined.
     * 
@@ -30,8 +30,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view of the filtered and mapped elements.
     * @group  Mapping
     */
-  def collect[B](q: PartialFunction[A, B]): Side[B] =
-    new NonStrictSideOps.Collect(these, q)
+  def collect[B](q: PartialFunction[A, B]): Link[B] =
+    new NonStrictLinkOps.Collect(these, q)
   
   /** Returns a view that applies a function to each element in this $collection.
     * 
@@ -39,8 +39,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view of the mapped elements.
     * @group  Mapping
     */
-  def map[B](f: A => B): Side[B] =
-    new NonStrictSideOps.Map(these, f)
+  def map[B](f: A => B): Link[B] =
+    new NonStrictLinkOps.Map(these, f)
   
   /** Returns a view concatenating all elements returned by a function
     * applied to each element in this $collection.
@@ -49,8 +49,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view concatenating all elements produced by `f`.
     * @group  Mapping
     */
-  def flatMap[B](f: A => Side[B]): Side[B] =
-    new NonStrictSideOps.FlatMap(these, f)
+  def flatMap[B](f: A => Link[B]): Link[B] =
+    new NonStrictLinkOps.FlatMap(these, f)
   
   /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
@@ -58,8 +58,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view of the filtered elements.
     * @group  Filtering
     */
-  def filter(p: A => Boolean): Side[A] =
-    new NonStrictSideOps.Filter(these, p)
+  def filter(p: A => Boolean): Link[A] =
+    new NonStrictLinkOps.Filter(these, p)
   
   /** Returns a view of all elements in this $collection that satisfy a predicate.
     * 
@@ -67,8 +67,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view of the filtered elements.
     * @group  Filtering
     */
-  def withFilter(p: A => Boolean): Side[A] =
-    new NonStrictSideOps.Filter(these, p)
+  def withFilter(p: A => Boolean): Link[A] =
+    new NonStrictLinkOps.Filter(these, p)
   
   /** Returns a view of all elements following the longest prefix of this
     * $collection for which each element satisfies a predicate.
@@ -78,8 +78,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     *         with the first element to not satisfy `p`.
     * @group  Filtering
     */
-  def dropWhile(p: A => Boolean): Side[A] =
-    new NonStrictSideOps.DropWhile(these, p)
+  def dropWhile(p: A => Boolean): Link[A] =
+    new NonStrictLinkOps.DropWhile(these, p)
   
   /** Returns a view of the longest prefix of this $collection for which each
     * element satisfies a predicate.
@@ -89,8 +89,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     *         the first element to not satisfy `p`.
     * @group  Filtering
     */
-  def takeWhile(p: A => Boolean): Side[A] =
-    new NonStrictSideOps.TakeWhile(these, p)
+  def takeWhile(p: A => Boolean): Link[A] =
+    new NonStrictLinkOps.TakeWhile(these, p)
   
   /** Returns a (prefix, suffix) pair of views with the prefix being the
     * longest one for which each element satisfies a predicate, and the suffix
@@ -100,7 +100,7 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return the (predix, suffix) pair of non-strict views.
     * @group  Filtering
     */
-  def span(p: A => Boolean): (Side[A], Side[A]) =
+  def span(p: A => Boolean): (Link[A], Link[A]) =
     (takeWhile(p), dropWhile(p))
   
   /** Returns a view of all elements in this $collection following a prefix
@@ -111,8 +111,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view of all but the first `lower` elements.
     * @group  Filtering
     */
-  def drop(lower: Int): Side[A] =
-    new NonStrictSideOps.Drop(these, lower)
+  def drop(lower: Int): Link[A] =
+    new NonStrictLinkOps.Drop(these, lower)
   
   /** Returns a view of a prefix of this $collection up to some length.
     * 
@@ -121,8 +121,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view of up to the first `upper` elements.
     * @group  Filtering
     */
-  def take(upper: Int): Side[A] =
-    new NonStrictSideOps.Take(these, upper)
+  def take(upper: Int): Link[A] =
+    new NonStrictLinkOps.Take(these, upper)
   
   /** Returns a view of an interval of elements in this $collection.
     * 
@@ -132,8 +132,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     *         equal to `lower` and less than `upper`.
     * @group  Filtering
     */
-  def slice(lower: Int, upper: Int): Side[A] =
-    new NonStrictSideOps.Slice(these, lower, upper)
+  def slice(lower: Int, upper: Int): Link[A] =
+    new NonStrictLinkOps.Slice(these, lower, upper)
   
   /** Returns a view of pairs of elemnts from this and another $collection.
     * 
@@ -141,8 +141,8 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view of the pairs of corresponding elements.
     * @group  Combining
     */
-  def zip[B](those: Side[B]): Side[(A, B)] =
-    new NonStrictSideOps.Zip(these, those)
+  def zip[B](those: Link[B]): Link[(A, B)] =
+    new NonStrictLinkOps.Zip(these, those)
   
   /** Returns a view concatenating this and another $collection.
     * 
@@ -150,26 +150,26 @@ final class NonStrictSideOps[+A](val these: Side[A]) extends AnyVal {
     * @return a non-strict view of the concatenated elements.
     * @group Combining
     */
-  def ++ [B >: A](those: Side[B]): Side[B] =
-    new NonStrictSideOps.++(these, those)
+  def ++ [B >: A](those: Link[B]): Link[B] =
+    new NonStrictLinkOps.++(these, those)
 }
 
-private[sequential] object NonStrictSideOps {
+private[sequential] object NonStrictLinkOps {
   import scala.annotation.tailrec
   import basis.util.IntOps
   
-  object Empty extends Side[Nothing] {
+  object Empty extends Link[Nothing] {
     override def isEmpty: Boolean = true
     
     override def head: Nothing = throw new NoSuchElementException
     
-    override def tail: Side[Nothing] = throw new UnsupportedOperationException
+    override def tail: Link[Nothing] = throw new UnsupportedOperationException
   }
   
   final class Collect[-A, +B](
-      private[this] var these: Side[A],
+      private[this] var these: Link[A],
       private[this] val q: PartialFunction[A, B])
-    extends Side[B] {
+    extends Link[B] {
     
     @tailrec override def isEmpty: Boolean =
       these.isEmpty || !q.isDefinedAt(these.head) && { these = these.tail; isEmpty }
@@ -180,31 +180,31 @@ private[sequential] object NonStrictSideOps {
       else { these = these.tail; head }
     }
     
-    @tailrec override def tail: Side[B] = {
+    @tailrec override def tail: Link[B] = {
       if (!these.isEmpty && q.isDefinedAt(these.head)) new Collect(these.tail, q)
       else { these = these.tail; tail }
     }
   }
   
   final class Map[-A, +B](
-      private[this] val these: Side[A],
+      private[this] val these: Link[A],
       private[this] val f: A => B)
-    extends Side[B] {
+    extends Link[B] {
     
     override def isEmpty: Boolean = these.isEmpty
     
     override def head: B = f(these.head)
     
-    override def tail: Side[B] = new Map(these.tail, f)
+    override def tail: Link[B] = new Map(these.tail, f)
   }
   
   final class FlatMap[-A, +B] private (
-      private[this] var these: Side[A],
-      private[this] val f: A => Side[B],
-      private[this] var inner: Side[B])
-    extends Side[B] {
+      private[this] var these: Link[A],
+      private[this] val f: A => Link[B],
+      private[this] var inner: Link[B])
+    extends Link[B] {
     
-    def this(these: Side[A], f: A => Side[B]) = this(these, f, Empty)
+    def this(these: Link[A], f: A => Link[B]) = this(these, f, Empty)
     
     @tailrec override def isEmpty: Boolean =
       inner.isEmpty && (these.isEmpty || { inner = f(these.head); these = these.tail; isEmpty })
@@ -215,7 +215,7 @@ private[sequential] object NonStrictSideOps {
       else Empty.head
     }
     
-    override def tail: Side[B] = {
+    override def tail: Link[B] = {
       if (!inner.isEmpty) new FlatMap(these, f, inner.tail)
       else if (!these.isEmpty) new FlatMap(these.tail, f, f(these.head))
       else Empty.tail
@@ -223,9 +223,9 @@ private[sequential] object NonStrictSideOps {
   }
   
   final class Filter[+A](
-      private[this] var these: Side[A],
+      private[this] var these: Link[A],
       private[this] val p: A => Boolean)
-    extends Side[A] {
+    extends Link[A] {
     
     @tailrec override def isEmpty: Boolean =
       these.isEmpty || !p(these.head) && { these = these.tail; isEmpty }
@@ -235,16 +235,16 @@ private[sequential] object NonStrictSideOps {
       if (p(x)) x else { these = these.tail; head }
     }
     
-    @tailrec override def tail: Side[A] = {
+    @tailrec override def tail: Link[A] = {
       if (!these.isEmpty && p(these.head)) new Filter(these.tail, p)
       else { these = these.tail; tail }
     }
   }
   
   final class DropWhile[+A](
-      private[this] var these: Side[A],
+      private[this] var these: Link[A],
       private[this] val p: A => Boolean)
-    extends Side[A] {
+    extends Link[A] {
     
     private[this] var dropped: Boolean = false
     
@@ -259,7 +259,7 @@ private[sequential] object NonStrictSideOps {
       }
     }
     
-    @tailrec override def tail: Side[A] = {
+    @tailrec override def tail: Link[A] = {
       if (dropped) these.tail
       else if (!p(these.head)) { dropped = true; tail }
       else { these = these.tail; tail }
@@ -267,9 +267,9 @@ private[sequential] object NonStrictSideOps {
   }
   
   final class TakeWhile[+A](
-      private[this] val these: Side[A],
+      private[this] val these: Link[A],
       private[this] val p: A => Boolean)
-    extends Side[A] {
+    extends Link[A] {
     
     private[this] lazy val taking: Boolean = !these.isEmpty && p(these.head)
     
@@ -280,19 +280,19 @@ private[sequential] object NonStrictSideOps {
       else Empty.head
     }
     
-    override def tail: Side[A] = {
+    override def tail: Link[A] = {
       if (taking) new TakeWhile(these.tail, p)
       else Empty.tail
     }
   }
   
   final class Drop[+A] private (
-      private[this] var these: Side[A],
+      private[this] var these: Link[A],
       private[this] val lower: Int,
       private[this] var index: Int)
-    extends Side[A] {
+    extends Link[A] {
     
-    def this(these: Side[A], lower: Int) = this(these, lower, 0)
+    def this(these: Link[A], lower: Int) = this(these, lower, 0)
     
     @tailrec override def isEmpty: Boolean =
       these.isEmpty || index < lower && { these = these.tail; index += 1; isEmpty }
@@ -302,19 +302,19 @@ private[sequential] object NonStrictSideOps {
       else { these = these.tail; index += 1; head }
     }
     
-    @tailrec override def tail: Side[A] = {
+    @tailrec override def tail: Link[A] = {
       if (index >= lower) these.tail
       else { these = these.tail; index += 1; tail }
     }
   }
   
   final class Take[+A] private (
-      private[this] val these: Side[A],
+      private[this] val these: Link[A],
       private[this] val upper: Int,
       private[this] val index: Int)
-    extends Side[A] {
+    extends Link[A] {
     
-    def this(these: Side[A], upper: Int) = this(these, upper, 0)
+    def this(these: Link[A], upper: Int) = this(these, upper, 0)
     
     override def isEmpty: Boolean =
       index >= upper || these.isEmpty
@@ -324,20 +324,20 @@ private[sequential] object NonStrictSideOps {
       else Empty.head
     }
     
-    override def tail: Side[A] = {
+    override def tail: Link[A] = {
       if (index < upper) new Take(these.tail, upper, index + 1)
       else Empty.tail
     }
   }
   
   final class Slice[+A] private (
-      private[this] var these: Side[A],
+      private[this] var these: Link[A],
       private[this] val lower: Int,
       private[this] val upper: Int,
       private[this] var index: Int)
-    extends Side[A] {
+    extends Link[A] {
     
-    def this(these: Side[A], lower: Int, upper: Int) =
+    def this(these: Link[A], lower: Int, upper: Int) =
       this(these,0 max lower, 0 max lower max upper, 0)
     
     @tailrec override def isEmpty: Boolean =
@@ -349,7 +349,7 @@ private[sequential] object NonStrictSideOps {
       else Empty.head
     }
     
-    @tailrec override def tail: Side[A] = {
+    @tailrec override def tail: Link[A] = {
       if (index < lower) { these = these.tail; index += 1; tail }
       else if (index < upper) new Slice(these.tail, lower, upper, index + 1)
       else Empty.tail
@@ -357,24 +357,24 @@ private[sequential] object NonStrictSideOps {
   }
   
   final class Zip[+A, +B](
-      private[this] val these: Side[A],
-      private[this] val those: Side[B])
-    extends Side[(A, B)] {
+      private[this] val these: Link[A],
+      private[this] val those: Link[B])
+    extends Link[(A, B)] {
     
     override def isEmpty: Boolean = these.isEmpty || those.isEmpty
     
     override def head: (A, B) = (these.head, those.head)
     
-    override def tail: Side[(A, B)] = new Zip(these.tail, those.tail)
+    override def tail: Link[(A, B)] = new Zip(these.tail, those.tail)
   }
   
   final class ++[+A] private (
-      private[this] val these: Side[A],
-      private[this] val those: Side[A],
+      private[this] val these: Link[A],
+      private[this] val those: Link[A],
       private[this] var segment: Int)
-    extends Side[A] {
+    extends Link[A] {
     
-    def this(these: Side[A], those: Side[A]) = this(these, those, 0)
+    def this(these: Link[A], those: Link[A]) = this(these, those, 0)
     
     @tailrec override def isEmpty: Boolean = segment match {
       case 0 => these.isEmpty && { segment = 1; isEmpty }
@@ -386,7 +386,7 @@ private[sequential] object NonStrictSideOps {
       case 1 => those.head
     }
     
-    override def tail: Side[A] = segment match {
+    override def tail: Link[A] = segment match {
       case 0 if !these.isEmpty => new ++(these.tail, those, 0)
       case _ => those.tail
     }

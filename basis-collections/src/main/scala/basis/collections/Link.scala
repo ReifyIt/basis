@@ -7,8 +7,8 @@
 
 package basis.collections
 
-/** A one-sided sequence. A side efficiently decompose into its `head`
-  * element and `tail` side.
+/** A linked sequence. A link efficiently decompose into its `head` element
+  * and `tail` link.
   * 
   * ==Extensions==
   * $Extensions
@@ -24,19 +24,19 @@ package basis.collections
   * @groupprio  Traversing    3
   * @groupprio  Classifying   4
   * 
-  * @define collection  side
+  * @define collection  link
   * @define SequentialOps
   * The following classes implement the extensions to this interface:
   * 
-  *  - [[basis.sequential.GeneralSideOps GeneralSideOps]]
+  *  - [[basis.sequential.GeneralLinkOps GeneralLinkOps]]
   *    implements reductive operations (`foreach`, `fold`, `reduce`, etc.).
-  *  - [[basis.sequential.StrictSideOps StrictSideOps]]
+  *  - [[basis.sequential.StrictLinkOps StrictLinkOps]]
   *    implements eager transformations (`map`, `flatMap`, `filter`, etc.).
-  *  - [[basis.sequential.NonStrictSideOps NonStrictSideOps]]
+  *  - [[basis.sequential.NonStrictLinkOps NonStricLinkOps]]
   *    implements lazy transformations (`map`, `flatMap`, `filter`, etc.).
   */
-trait Side[@specialized(Int, Long, Float, Double, Boolean) +A]
-  extends Any with Equals with Family[Side[_]] with Seq[A] {
+trait Link[@specialized(Int, Long, Float, Double, Boolean) +A]
+  extends Any with Equals with Family[Link[_]] with Seq[A] {
   
   /** Returns `true` if this $collection doesn't contain any elements.
     * @group Measuring */
@@ -48,9 +48,9 @@ trait Side[@specialized(Int, Long, Float, Double, Boolean) +A]
   
   /** Returns all elements except the first of this non-empty $collection.
     * @group Decomposing */
-  def tail: Side[A]
+  def tail: Link[A]
   
-  override def iterator: Iterator[A] = new SideIterator(this)
+  override def iterator: Iterator[A] = new LinkIterator(this)
   
   override def traverse(f: A => Unit) {
     var xs = this
@@ -61,9 +61,9 @@ trait Side[@specialized(Int, Long, Float, Double, Boolean) +A]
   }
 }
 
-private[collections] final class SideIterator
+private[collections] final class LinkIterator
     [@specialized(Int, Long, Float, Double, Boolean) +A]
-    (protected[this] var xs: Side[A])
+    (protected[this] var xs: Link[A])
   extends Iterator[A] {
   
   override def isEmpty: Boolean = xs.isEmpty
@@ -78,5 +78,5 @@ private[collections] final class SideIterator
     xs = xs.tail
   }
   
-  override def dup: Iterator[A] = new SideIterator(xs)
+  override def dup: Iterator[A] = new LinkIterator(xs)
 }

@@ -58,10 +58,10 @@ class Strict extends General {
   implicit def StrictIndexOps[A](these: Index[A]): StrictIndexOps[A, these.Family] =
     macro Strict.StrictIndexOps[A]
   
-  /** Implicitly provides strictly evaluated operations for sides.
+  /** Implicitly provides strictly evaluated operations for links.
     * @group Strict */
-  implicit def StrictSideOps[A](these: Side[A]): StrictSideOps[A, these.Family] =
-    macro Strict.StrictSideOps[A]
+  implicit def StrictLinkOps[A](these: Link[A]): StrictLinkOps[A, these.Family] =
+    macro Strict.StrictLinkOps[A]
   
   /** Implicitly provides strictly evaluated operations for sets.
     * @group Strict */
@@ -198,20 +198,20 @@ private[sequential] object Strict {
         these.tree :: Nil))
   }
   
-  def StrictSideOps[A : c.WeakTypeTag]
+  def StrictLinkOps[A : c.WeakTypeTag]
       (c: Context)
-      (these: c.Expr[Side[A]])
-    : c.Expr[StrictSideOps[A, these.value.Family]] = {
+      (these: c.Expr[Link[A]])
+    : c.Expr[StrictLinkOps[A, these.value.Family]] = {
     import c.{Expr, mirror, weakTypeOf, WeakTypeTag}
     import c.universe._
-    implicit val StrictSideOpsATag =
-      WeakTypeTag[StrictSideOps[A, these.value.Family]](
+    implicit val StrictLinkOpsATag =
+      WeakTypeTag[StrictLinkOps[A, these.value.Family]](
         appliedType(
-          mirror.staticClass("basis.sequential.StrictSideOps").toType,
+          mirror.staticClass("basis.sequential.StrictLinkOps").toType,
           weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictSideOps[A, these.value.Family]](
+    Expr[StrictLinkOps[A, these.value.Family]](
       Apply(
-        Select(New(TypeTree(weakTypeOf[StrictSideOps[A, these.value.Family]])), nme.CONSTRUCTOR),
+        Select(New(TypeTree(weakTypeOf[StrictLinkOps[A, these.value.Family]])), nme.CONSTRUCTOR),
         these.tree :: Nil))
   }
   

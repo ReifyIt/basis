@@ -93,9 +93,9 @@ package containers {
       * @group Collections */
     val Index: SeqFactory[Index, TypeHint] = ArraySeq
     
-    /** The default [[Side]] factory.
+    /** The default [[Link]] factory.
       * @group Collections */
-    val Side: SeqFactory[Side, TypeHint] = List
+    val Link: SeqFactory[Link, TypeHint] = List
     
     /** Implicitly returns a new default [[Index]] builder.
       * @group Builders */
@@ -103,17 +103,17 @@ package containers {
       : Builder[A] { type Scope = Index[_]; type State = Index[A] } =
       Index.Builder(A)
     
-    /** Implicitly returns a new default [[Side]] builder.
+    /** Implicitly returns a new default [[Link]] builder.
       * @group Builders */
-    implicit def SideBuilder[A](implicit A: TypeHint[A])
-      : Builder[A] { type Scope = Side[_]; type State = Side[A] } =
-      Side.Builder(A)
+    implicit def LinkBuilder[A](implicit A: TypeHint[A])
+      : Builder[A] { type Scope = Link[_]; type State = Link[A] } =
+      Link.Builder(A)
   }
   
   private[containers] abstract class Library6 extends Library7 {
-    /** The default [[Flank]] factory.
+    /** The default [[Span]] factory.
       * @group Collections */
-    val Flank: SeqFactory[Flank, TypeHint] = Batch
+    val Span: SeqFactory[Span, TypeHint] = Batch
     
     /** The default [[Queue]] factory.
       * @group Collections */
@@ -123,11 +123,11 @@ package containers {
       * @group Collections */
     val Stack: SeqFactory[Stack, TypeHint] = List
     
-    /** Implicitly returns a new default [[Flank]] builder.
+    /** Implicitly returns a new default [[Span]] builder.
       * @group Builders */
-    implicit def FlankBuilder[A](implicit A: TypeHint[A])
-      : Builder[A] { type Scope = Flank[_]; type State = Flank[A] } =
-      Flank.Builder(A)
+    implicit def SpanBuilder[A](implicit A: TypeHint[A])
+      : Builder[A] { type Scope = Span[_]; type State = Span[A] } =
+      Span.Builder(A)
     
     /** Implicitly returns a new default [[Queue]] builder.
       * @group Builders */

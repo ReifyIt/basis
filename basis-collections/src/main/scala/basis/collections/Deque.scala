@@ -28,7 +28,7 @@ package basis.collections
   * 
   * @define collection  deque
   */
-trait Deque[+A] extends Any with Equals with Family[Deque[_]] with Flank[A] with Stack[A] with Queue[A] {
+trait Deque[+A] extends Any with Equals with Family[Deque[_]] with Span[A] with Stack[A] with Queue[A] {
   /** Returns this $collection with an appended element.
     * @group Combining */
   def :+ [B >: A](elem: B): Deque[B]
