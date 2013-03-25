@@ -10,24 +10,14 @@ At the same time, brass tacks software engineering makes Basis fast and memory e
 `"it.reify" %% "basis" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.collections.package)\] [basis.collections](http://basis.reify.it/collections.html) – General collections interfaces  
 `"it.reify" %% "basis-collections" % "0.1-SNAPSHOT"`
-- \[[API](http://basis.reify.it/latest/api/#basis.concurrent.package)\] [basis.concurrent](http://basis.reify.it/concurrent.html) – Concurrently modifiable collections  
-`"it.reify" %% "basis-concurrent" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.containers.package)\] [basis.containers](http://basis.reify.it/containers.html) – Specialized collection implementations  
 `"it.reify" %% "basis-containers" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.control.package)\] [basis.control](http://basis.reify.it/control.html) – Imperative control-flow and conditional bindings  
 `"it.reify" %% "basis-control" % "0.1-SNAPSHOT"`
-- \[[API](http://basis.reify.it/latest/api/#basis.dispatch.package)\] [basis.dispatch](http://basis.reify.it/dispatch.html) – Concurrent execution  
-`"it.reify" %% "basis-dispatch" % "0.1-SNAPSHOT"`
-- \[[API](http://basis.reify.it/latest/api/#basis.io.package)\] [basis.io](http://basis.reify.it/io.html) – Input/Output interface  
-`"it.reify" %% "basis-io" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.math.package)\] [basis.math](http://basis.reify.it/math.html) – Abstract algebraic structures  
 `"it.reify" %% "basis-math" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.memory.package)\] [basis.memory](http://basis.reify.it/memory.html) – Virtual memory model  
 `"it.reify" %% "basis-memory" % "0.1-SNAPSHOT"`
-- \[[API](http://basis.reify.it/latest/api/#basis.parallel.package)\] [basis.parallel](http://basis.reify.it/parallel.html) – Parallel collections operations  
-`"it.reify" %% "basis-parallel" % "0.1-SNAPSHOT"`
-- \[[API](http://basis.reify.it/latest/api/#basis.platform.package)\] [basis.platform](http://basis.reify.it/platform.html) – Operating system interface  
-`"it.reify" %% "basis-platform" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.random.package)\] [basis.random](http://basis.reify.it/random.html) – Arbitrary data generation  
 `"it.reify" %% "basis-random" % "0.1-SNAPSHOT"`
 - \[[API](http://basis.reify.it/latest/api/#basis.runtime.package)\] [basis.runtime](http://basis.reify.it/runtime.html) – Run-time type information  

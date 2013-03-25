@@ -7,7 +7,7 @@
 
 import sbt._
 import sbt.Keys._
-import Defaults.defaultSettings
+import sbt.Defaults.defaultSettings
 
 object Basis extends Build {
   lazy val Basis = Project(
@@ -16,15 +16,10 @@ object Basis extends Build {
     settings     = baseSettings,
     dependencies =
       Seq(BasisCollections,
-          BasisConcurrent,
           BasisContainers,
           BasisControl,
-          BasisDispatch,
-          BasisIO,
           BasisMath,
           BasisMemory,
-          BasisParallel,
-          BasisPlatform,
           BasisRandom,
           BasisRuntime,
           BasisSequential,
@@ -32,21 +27,15 @@ object Basis extends Build {
           BasisUtil),
     aggregate    =
       Seq(BasisCollections,
-          BasisConcurrent,
           BasisContainers,
           BasisControl,
-          BasisDispatch,
-          BasisIO,
           BasisMath,
           BasisMemory,
-          BasisParallel,
-          BasisPlatform,
           BasisRandom,
           BasisRuntime,
           BasisSequential,
           BasisText,
-          BasisUtil)
-  )
+          BasisUtil))
   
   lazy val BasisCollections = Project(
     id           = "basis-collections",
@@ -54,18 +43,7 @@ object Basis extends Build {
     settings     = commonSettings,
     dependencies =
       Seq(BasisControl,
-          BasisUtil)
-  )
-  
-  lazy val BasisConcurrent = Project(
-    id           = "basis-concurrent",
-    base         = file("basis-concurrent"),
-    settings     = commonSettings,
-    dependencies =
-      Seq(BasisCollections,
-          BasisContainers,
-          BasisRuntime)
-  )
+          BasisUtil))
   
   lazy val BasisContainers = Project(
     id           = "basis-containers",
@@ -75,8 +53,7 @@ object Basis extends Build {
       Seq(BasisCollections,
           BasisMemory,
           BasisRuntime,
-          BasisUtil)
-  )
+          BasisUtil))
   
   lazy val BasisControl = Project(
     id           = "basis-control",
@@ -84,34 +61,12 @@ object Basis extends Build {
     settings     = commonSettings,
     dependencies =
       Seq(BasisRuntime,
-          BasisUtil)
-  )
-  
-  lazy val BasisDispatch = Project(
-    id           = "basis-dispatch",
-    base         = file("basis-dispatch"),
-    settings     = commonSettings,
-    dependencies =
-      Seq(BasisConcurrent,
-          BasisContainers,
-          BasisControl)
-  )
-  
-  lazy val BasisIO = Project(
-    id           = "basis-io",
-    base         = file("basis-io"),
-    settings     = commonSettings,
-    dependencies =
-      Seq(BasisCollections,
-          BasisControl,
-          BasisMemory)
-  )
+          BasisUtil))
   
   lazy val BasisMath = Project(
     id           = "basis-math",
     base         = file("basis-math"),
-    settings     = commonSettings
-  )
+    settings     = commonSettings)
   
   lazy val BasisMemory = Project(
     id           = "basis-memory",
@@ -119,33 +74,7 @@ object Basis extends Build {
     settings     = commonSettings,
     dependencies =
       Seq(BasisRuntime,
-          BasisUtil)
-  )
-  
-  lazy val BasisParallel = Project(
-    id           = "basis-parallel",
-    base         = file("basis-parallel"),
-    settings     = commonSettings,
-    dependencies =
-      Seq(BasisCollections,
-          BasisControl,
-          BasisDispatch,
-          BasisSequential)
-  )
-  
-  lazy val BasisPlatform = Project(
-    id           = "basis-platform",
-    base         = file("basis-platform"),
-    settings     = commonSettings ++ Seq(
-      unmanagedResources in Compile <++= target map { target =>
-        Seq(target / "libbasis-platform.macosx-universal.jnilib")
-      }
-    ),
-    dependencies =
-      Seq(BasisIO,
-          BasisMemory,
-          BasisUtil)
-  )
+          BasisUtil))
   
   lazy val BasisRandom = Project(
     id           = "basis-random",
@@ -154,14 +83,12 @@ object Basis extends Build {
     dependencies =
       Seq(BasisCollections,
           BasisContainers,
-          BasisUtil)
-  )
+          BasisUtil))
   
   lazy val BasisRuntime = Project(
     id           = "basis-runtime",
     base         = file("basis-runtime"),
-    settings     = commonSettings
-  )
+    settings     = commonSettings)
   
   lazy val BasisSequential = Project(
     id           = "basis-sequential",
@@ -170,8 +97,7 @@ object Basis extends Build {
     dependencies =
       Seq(BasisCollections,
           BasisControl,
-          BasisUtil)
-  )
+          BasisUtil))
   
   lazy val BasisText = Project(
     id           = "basis-text",
@@ -179,14 +105,12 @@ object Basis extends Build {
     settings     = commonSettings,
     dependencies =
       Seq(BasisCollections,
-          BasisUtil)
-  )
+          BasisUtil))
   
   lazy val BasisUtil = Project(
     id           = "basis-util",
     base         = file("basis-util"),
-    settings     = commonSettings
-  )
+    settings     = commonSettings)
   
   lazy val baseSettings =
     defaultSettings ++
@@ -203,22 +127,19 @@ object Basis extends Build {
   lazy val projectSettings = Seq(
     version      := "0.1-SNAPSHOT",
     organization := "it.reify",
-    description  := "An experimental foundation library for Scala focussed on efficiency and clean design.",
+    description  := "An experimental foundation library for Scala focussed on efficiency and clean design",
     homepage     := Some(url("http://basis.reify.it")),
     licenses     := Seq("MIT" -> url("http://www.opensource.org/licenses/mit-license.php")),
-    resolvers    += Resolver.sonatypeRepo("snapshots")
-  )
+    resolvers    += Resolver.sonatypeRepo("snapshots"))
   
   lazy val scalaSettings = Seq(
     scalaVersion   := "2.10.1",
-    scalacOptions ++= Seq("-language:_", "-Yno-predef")
-  )
+    scalacOptions ++= Seq("-language:_", "-Yno-predef"))
   
   lazy val compileSettings = Seq(
     scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
     javacOptions  in Compile ++= Seq("-Xlint", "-XDignore.symbol.file"),
-    libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _ % "provided")
-  )
+    libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _ % "provided"))
   
   lazy val docSettings = Seq(
     scalacOptions in doc <++= (version, baseDirectory in LocalProject("basis")) map { (version, baseDirectory) =>
@@ -230,8 +151,7 @@ object Basis extends Build {
           "-diagrams",
           "-sourcepath", baseDirectory.getAbsolutePath,
           "-doc-source-url", docSourceUrl)
-    }
-  )
+    })
   
   lazy val publishSettings = Seq(
     publishMavenStyle := true,
@@ -253,6 +173,5 @@ object Basis extends Build {
           <email>chris@reify.it</email>
         </developer>
       </developers>
-    }
-  )
+    })
 }
