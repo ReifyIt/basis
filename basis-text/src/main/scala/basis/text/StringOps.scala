@@ -45,4 +45,7 @@ final class StringOps(s: String) {
     }
     builder.append('\"')
   }
+  
+  /** Returns a new iterator over the code points of this `String`. */
+  def iterator: Iterator[Int] = new JavaStringIterator(s, 0)
 }

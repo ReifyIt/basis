@@ -10,12 +10,6 @@ package basis.text
 import basis.collections._
 import basis.util._
 
-/** A builder for Java strings.
-  * 
-  * @author Chris Sachs
-  * @since  0.0
-  * @group  Builders
-  */
 private[text] final class JavaStringBuilder extends StringBuilder {
   override type Scope = String
   
@@ -80,4 +74,20 @@ private[text] final class JavaStringBuilder extends StringBuilder {
   }
   
   override def toString: String = "StringBuilder"
+}
+
+private[text] final class JavaStringIterator(string: String, private[this] var index: Int) extends Iterator[Int] {
+  override def isEmpty: Boolean = index >= string.length
+  
+  override def head: Int = {
+    if (index >= string.length) throw new NoSuchElementException("Head of empty iterator.")
+    string.codePointAt(index)
+  }
+  
+  override def step() {
+    if (index >= string.length) throw new UnsupportedOperationException("Empty iterator step.")
+    index = string.offsetByCodePoints(index, 1)
+  }
+  
+  override def dup: Iterator[Int] = new JavaStringIterator(string, index)
 }
