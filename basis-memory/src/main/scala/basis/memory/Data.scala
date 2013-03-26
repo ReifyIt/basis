@@ -112,6 +112,14 @@ abstract class Data {
     */
   def copy(size: Long = this.size): Data
   
+  /** Returns a pointer to an address in this data.
+    * @group General */
+  def addressOf(address: Long): Pointer = new DataPointer(this, address)
+  
+  /** Returns a pointer to this data.
+    * @group General */
+  def addressOf: Pointer = addressOf(0L)
+  
   /** Loads a single byte.
     * 
     * @param  address   the address to load.
