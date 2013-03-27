@@ -7,6 +7,8 @@
 
 package basis
 
+import basis.collections._
+
 /** Unicode® string implementations.
   * 
   * @groupname  Strings   Unicode® strings
@@ -41,4 +43,14 @@ package object text {
     * @group Builders */
   implicit def String4Builder: StringBuilder { type Scope = UTF32; type State = String4 } =
     new String4Builder
+  
+  /** Returns a new builder that appends to the given builder code points decoded from input UTF-8 code units.
+    * @group Builder */
+  def UTF8Builder(self: Builder[Int]): Builder[Int] { type Scope = self.Scope; type State = self.State } =
+    new UTF8Builder(self).asInstanceOf[Builder[Int] { type Scope = self.Scope; type State = self.State }]
+  
+  /** Returns a new builder that appends to the given builder code points decoded from input UTF-16 code units.
+    * @group Builders */
+  def UTF16Builder(self: Builder[Int]): Builder[Int] { type Scope = self.Scope; type State = self.State } =
+    new UTF16Builder(self).asInstanceOf[Builder[Int] { type Scope = self.Scope; type State = self.State }]
 }

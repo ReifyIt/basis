@@ -10,6 +10,8 @@ package basis.text
 import basis.collections._
 import basis.util._
 
+import scala.annotation.switch
+
 /** A UTF-8 code unit sequence.
   * 
   * @author   Chris Sachs
@@ -218,4 +220,95 @@ private[text] final class UTF8Iterator(text: UTF8, private[this] var index: Int)
   }
   
   override def dup: Iterator[Int] = new UTF8Iterator(text, index)
+}
+
+private[text] final class UTF8Builder(val self: Builder[Int]) extends Builder[Int] {
+  override type Scope = self.Scope
+  
+  override type State = self.State
+  
+  private[this] var c1: Int = 0
+  private[this] var c2: Int = 0
+  private[this] var c3: Int = 0
+  private[this] var c4: Int = 0
+  private[this] var n: Int = 0
+  
+  protected def appendCodeUnit(c: Int): Unit = (n: @switch) match {
+    case 0 => c1 = c & 0xFF
+    case 1 => c2 = c & 0xFF
+    case 2 => c3 = c & 0xFF
+    case 4 => c4 = c & 0xFF
+  }
+  
+  protected def appendCodePoint(c: Int) {
+    self.append(c)
+    c1 = 0; c2 = 0; c3 = 0; c4 = 0
+    n = 0
+  }
+  
+  override def append(c: Int) {
+    appendCodeUnit(c)
+    val c1 = this.c1
+    if (c1 <= 0x7F) appendCodePoint(c1) // U+0000..U+007F
+    else if (c1 >= 0xC2 && c1 <= 0xF4) {
+      if (n >= 1) {
+        val c2 = this.c2
+        if (c1 <= 0xDF) { 
+          if (c2 >= 0x80 && c2 <= 0xBF)// U+0080..U+07FF
+            appendCodePoint(((c1 & 0x1F) << 6) | (c2 & 0x3F))
+          else {
+            appendCodePoint(0xFFFD)
+            appendCodeUnit(c)
+          }
+        }
+        else if (n >= 2) {
+          val c3 = this.c3
+          if (c1 == 0xE0 &&
+              c2 >= 0xA0 && c2 <= 0xBF
+           || c1 == 0xED &&
+              c2 >= 0x80 && c2 <= 0x9F
+           || c1 >= 0xE1 && c1 <= 0xEF &&
+              c2 >= 0x80 && c2 <= 0xBF) {
+            if (c3 >= 0x80 && c3 <= 0xBF) // U+0800..U+FFFF
+              appendCodePoint(((c1 & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F))
+            else {
+              appendCodePoint(0xFFFD)
+              appendCodeUnit(c)
+            }
+          }
+          else if (n >= 3) {
+            val c4 = this.c4
+            if ((c1 == 0xF0 &&
+                 c2 >= 0x90 && c2 <= 0xBF
+              || c1 >= 0xF1 && c1 <= 0xF3 &&
+                 c2 >= 0x80 && c2 <= 0xBF
+              || c1 == 0xF4 &&
+                 c2 >= 0x80 && c2 <= 0x8F)
+              && c3 >= 0x80 && c3 <= 0xBF) {
+              if (c4 >= 0x80 && c4 <= 0xBF) // U+10000..U+10FFFF
+                appendCodePoint(((c1 & 0x07) << 18) | ((c2 & 0x3F) << 12) | ((c3 & 0x3F) << 6) | (c4 & 0x3F))
+              else {
+                appendCodePoint(0xFFFD)
+                appendCodeUnit(c)
+              }
+            }
+            else appendCodePoint(0xFFFD)
+          }
+        }
+      }
+    }
+    else appendCodePoint(0xFFFD)
+  }
+  
+  override def expect(count: Int): this.type = this
+  
+  override def state: State = self.state
+  
+  override def clear() {
+    self.clear()
+    c1 = 0; c2 = 0; c3 = 0; c4 = 0
+    n = 0
+  }
+  
+  override def toString: String = "UTF8Builder"+"("+ self +")"
 }

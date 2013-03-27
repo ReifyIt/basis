@@ -10,6 +10,8 @@ package basis.text
 import basis.collections._
 import basis.util._
 
+import scala.annotation.switch
+
 /** A UTF-16 code unit sequence.
   * 
   * @author   Chris Sachs
@@ -136,4 +138,52 @@ private[text] final class UTF16Iterator(text: UTF16, private[this] var index: In
   }
   
   override def dup: Iterator[Int] = new UTF16Iterator(text, index)
+}
+
+private[text] final class UTF16Builder(val self: Builder[Int]) extends Builder[Int] {
+  override type Scope = self.Scope
+  
+  override type State = self.State
+  
+  private[this] var c1: Int = 0
+  private[this] var c2: Int = 0
+  private[this] var n: Int = 0
+  
+  protected def appendCodeUnit(c: Int): Unit = (n: @switch) match {
+    case 0 => c1 = c & 0xFFFF
+    case 1 => c2 = c & 0xFFFF
+  }
+  
+  protected def appendCodePoint(c: Int) {
+    self.append(c)
+    c1 = 0; c2 = 0
+    n = 0
+  }
+  
+  override def append(c: Int) {
+    appendCodeUnit(c)
+    val c1 = this.c1
+    if (c1 <= 0xD7FF || c1 >= 0xE000) appendCodePoint(c1) // U+0000..U+D7FF | U+E000..U+FFFF
+    else if (c1 <= 0xDBFF) { // c1 >= 0xD800
+      if (n >= 1) {
+        val c2 = this.c2
+        if (c2 >= 0xDC00 && c2 <= 0xDFFF) // U+10000..U+10FFFF
+          appendCodePoint((((c1 & 0x3FF) << 10) | (c2 & 0x3FF)) + 0x10000)
+        else appendCodePoint(0xFFFD)
+      }
+    }
+    else appendCodePoint(0xFFFD)
+  }
+  
+  override def expect(count: Int): this.type = this
+  
+  override def state: State = self.state
+  
+  override def clear() {
+    self.clear()
+    c1 = 0; c2 = 0
+    n = 0
+  }
+  
+  override def toString: String = "UTF16Builder"+"("+ self +")"
 }
