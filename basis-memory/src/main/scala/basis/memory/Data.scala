@@ -669,7 +669,7 @@ abstract class Data extends StaticPointer {
       (implicit T: Struct[T])
     : Array[T] = {
     val array = T.newArray(count)
-    copyToArray[T](address, array, 0, count)
+    loadToArray[T](address, array, 0, count)
     array
   }
   
@@ -683,7 +683,7 @@ abstract class Data extends StaticPointer {
     * @param  T         the implicit struct type to load.
     * @group  Aggregate
     */
-  override def copyToArray[T]
+  override def loadToArray[T]
       (address: Long, array: Array[T], start: Int, count: Int)
       (implicit T: Struct[T]) {
     val end = start + count

@@ -28,6 +28,12 @@ final class DataPointer(val data: Data, var address: Long) extends Pointer {
   override def truncate(alignment: Long): Unit =
     address &= -alignment
   
+  override def isValid(offset: Long): Boolean = {
+    val size = data.size
+    0 <= address && address < size &&
+    0 <= address + offset && address + offset <= size
+  }
+  
   override def endian: Endianness = data.endian
   
   override def loadByte(offset: Long): Byte =

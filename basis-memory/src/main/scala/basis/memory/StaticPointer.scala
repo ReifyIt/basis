@@ -179,11 +179,11 @@ abstract class StaticPointer {
       (implicit T: Struct[T])
     : Array[T] = {
     val array = T.newArray(count)
-    copyToArray[T](offset, array, 0, count)
+    loadToArray[T](offset, array, 0, count)
     array
   }
   
-  def copyToArray[T]
+  def loadToArray[T]
       (offset: Long, array: Array[T], start: Int, count: Int)
       (implicit T: Struct[T]) {
     val end = start + count

@@ -24,6 +24,8 @@ abstract class Pointer extends StaticPointer {
   
   def truncate(alignment: Long): Unit
   
+  def isValid(offset: Long): Boolean
+  
   def readByte(): Byte = {
     val value = loadByte(0L)
     this += 1L
@@ -154,5 +156,21 @@ abstract class Pointer extends StaticPointer {
   def write[T](value: T)(implicit T: Struct[T]) {
     T.store(this, 0L, value)
     this += T.size
+  }
+  
+  def readArray[T](count: Int)(implicit T: Struct[T]): Array[T] = {
+    val array = loadArray[T](0L, count)
+    this += T.size * count
+    array
+  }
+  
+  def readToArray[T](array: Array[T], start: Int, count: Int)(implicit T: Struct[T]) {
+    loadToArray[T](0L, array, start, count)
+    this += T.size * count
+  }
+  
+  def writeArray[T](array: Array[T], start: Int, count: Int)(implicit T: Struct[T]) {
+    storeArray[T](0L, array, start, count)
+    this += T.size * count
   }
 }
