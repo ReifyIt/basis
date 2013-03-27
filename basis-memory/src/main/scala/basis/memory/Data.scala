@@ -85,8 +85,11 @@ import basis.util._
   * 
   * @groupname  Bulk        Bulk transfer operations
   * @groupprio  Bulk        7
+  * 
+  * @groupname  Pointer     Pointer creation
+  * @groupprio  Pointer     8
   */
-abstract class Data {
+abstract class Data extends StaticPointer {
   /** Returns the size in bytes of the address space.
     * @group General */
   def size: Long
@@ -97,7 +100,7 @@ abstract class Data {
   
   /** Returns the internal byte order.
     * @group General */
-  def endian: Endianness
+  override def endian: Endianness
   
   /** Returns `true` if this data supports volatile semantics; returns `false`
     * if volatile operations do not guarantee coherency.
@@ -113,12 +116,12 @@ abstract class Data {
   def copy(size: Long = this.size): Data
   
   /** Returns a pointer to an address in this data.
-    * @group General */
-  def addressOf(address: Long): Pointer = new DataPointer(this, address)
+    * @group Pointer */
+  def Pointer(address: Long): Pointer = new DataPointer(this, address)
   
   /** Returns a pointer to this data.
-    * @group General */
-  def addressOf: Pointer = addressOf(0L)
+    * @group Pointer */
+  def Pointer: Pointer = Pointer(0L)
   
   /** Loads a single byte.
     * 
@@ -126,7 +129,7 @@ abstract class Data {
     * @return the loaded `Byte` value.
     * @group  Aligned
     */
-  def loadByte(address: Long): Byte
+  override def loadByte(address: Long): Byte
   
   /** Stores a single byte.
     * 
@@ -134,7 +137,7 @@ abstract class Data {
     * @param  value     the `Byte` value to store.
     * @group  Aligned
     */
-  def storeByte(address: Long, value: Byte): Unit
+  override def storeByte(address: Long, value: Byte): Unit
   
   /** Loads a 2-byte `endian` ordered word as a native-endian `Short` value.
     * Truncates `address` to 2-byte alignment.
@@ -143,7 +146,7 @@ abstract class Data {
     * @return the loaded `Short` value.
     * @group  Aligned
     */
-  def loadShort(address: Long): Short =
+  override def loadShort(address: Long): Short =
     loadUnalignedShort(address & -2L)
   
   /** Stores a native-endian `Short` value as a 2-byte `endian` ordered word.
@@ -153,7 +156,7 @@ abstract class Data {
     * @param  value     the `Short` value to store.
     * @group  Aligned
     */
-  def storeShort(address: Long, value: Short): Unit =
+  override def storeShort(address: Long, value: Short): Unit =
     storeUnalignedShort(address & -2L, value)
   
   /** Loads a 4-byte `endian` ordered word as a native-endian `Int` value.
@@ -163,7 +166,7 @@ abstract class Data {
     * @return the loaded `Int` value.
     * @group  Aligned
     */
-  def loadInt(address: Long): Int =
+  override def loadInt(address: Long): Int =
     loadUnalignedInt(address & -4L)
   
   /** Stores a native-endian `Int` value as a 4-byte `endian` ordered word.
@@ -173,7 +176,7 @@ abstract class Data {
     * @param  value     the `Int` value to store.
     * @group  Aligned
     */
-  def storeInt(address: Long, value: Int): Unit =
+  override def storeInt(address: Long, value: Int): Unit =
     storeUnalignedInt(address & -4L, value)
   
   /** Loads an 8-byte `endian` ordered word as a native-endian `Long` value.
@@ -183,7 +186,7 @@ abstract class Data {
     * @return the loaded `Long` value.
     * @group  Aligned
     */ 
-  def loadLong(address: Long): Long =
+  override def loadLong(address: Long): Long =
     loadUnalignedLong(address & -8L)
   
   /** Store a native-endian `Long` value as an 8-byte `endian` ordered word.
@@ -193,7 +196,7 @@ abstract class Data {
     * @param  value     the `Long` value to store.
     * @group  Aligned
     */
-  def storeLong(address: Long, value: Long): Unit =
+  override def storeLong(address: Long, value: Long): Unit =
     storeUnalignedLong(address & -8L, value)
   
   /** Loads a 4-byte `endian` ordered word as a native-endian `Float` value.
@@ -203,7 +206,7 @@ abstract class Data {
     * @return the loaded `Float` value.
     * @group  Aligned
     */
-  def loadFloat(address: Long): Float =
+  override def loadFloat(address: Long): Float =
     loadInt(address).toFloatBits
   
   /** Stores a native-endian `Float` value as a 4-byte `endian` ordered word.
@@ -213,7 +216,7 @@ abstract class Data {
     * @param  value     the `Float` value to store.
     * @group  Aligned
     */
-  def storeFloat(address: Long, value: Float): Unit =
+  override def storeFloat(address: Long, value: Float): Unit =
     storeInt(address, value.toIntBits)
   
   /** Loads an 8-byte `endian` ordered word as a native-endian `Double` value.
@@ -223,7 +226,7 @@ abstract class Data {
     * @return the loaded `Double` value.
     * @group  Aligned
     */
-  def loadDouble(address: Long): Double =
+  override def loadDouble(address: Long): Double =
     loadLong(address).toDoubleBits
   
   /** Stores a native-endian `Double` value as an 8-byte `endian` ordered word.
@@ -233,7 +236,7 @@ abstract class Data {
     * @param  value     the `Double` value to store.
     * @group  Aligned
     */
-  def storeDouble(address: Long, value: Double): Unit =
+  override def storeDouble(address: Long, value: Double): Unit =
     storeLong(address, value.toLongBits)
   
   /** Loads a 2-byte `endian` ordered word as a native-endian `Short` value.
@@ -242,7 +245,7 @@ abstract class Data {
     * @return the loaded `Short` value.
     * @group  Unaligned
     */
-  def loadUnalignedShort(address: Long): Short = {
+  override def loadUnalignedShort(address: Long): Short = {
     if (endian eq BigEndian) {
       ((loadByte(address)              << 8) |
        (loadByte(address + 1L) & 0xFF)).toShort
@@ -260,7 +263,7 @@ abstract class Data {
     * @param  value     the `Short` value to store.
     * @group  Unaligned
     */
-  def storeUnalignedShort(address: Long, value: Short) {
+  override def storeUnalignedShort(address: Long, value: Short) {
     if (endian eq BigEndian) {
       storeByte(address,      (value >> 8).toByte)
       storeByte(address + 1L,  value.toByte)
@@ -278,7 +281,7 @@ abstract class Data {
     * @return the loaded `Int` value.
     * @group  Unaligned
     */
-  def loadUnalignedInt(address: Long): Int = {
+  override def loadUnalignedInt(address: Long): Int = {
     if (endian eq BigEndian) {
        (loadByte(address)              << 24) |
       ((loadByte(address + 1L) & 0xFF) << 16) |
@@ -300,7 +303,7 @@ abstract class Data {
     * @param  value     the `Int` value to store.
     * @group  Unaligned
     */
-  def storeUnalignedInt(address: Long, value: Int) {
+  override def storeUnalignedInt(address: Long, value: Int) {
     if (endian eq BigEndian) {
       storeByte(address,      (value >> 24).toByte)
       storeByte(address + 1L, (value >> 16).toByte)
@@ -322,7 +325,7 @@ abstract class Data {
     * @return the loaded `Long` value.
     * @group  Unaligned
     */
-  def loadUnalignedLong(address: Long): Long = {
+  override def loadUnalignedLong(address: Long): Long = {
     if (endian eq BigEndian) {
        (loadByte(address).toLong              << 56) |
       ((loadByte(address + 1L) & 0xFF).toLong << 48) |
@@ -352,7 +355,7 @@ abstract class Data {
     * @param  value     the `Long` value to store.
     * @group  Unaligned
     */
-  def storeUnalignedLong(address: Long, value: Long) {
+  override def storeUnalignedLong(address: Long, value: Long) {
     if (endian eq BigEndian) {
       storeByte(address,      (value >> 56).toByte)
       storeByte(address + 1L, (value >> 48).toByte)
@@ -382,7 +385,7 @@ abstract class Data {
     * @return the loaded `Float` value.
     * @group  Unaligned
     */
-  def loadUnalignedFloat(address: Long): Float =
+  override def loadUnalignedFloat(address: Long): Float =
     loadUnalignedInt(address).toFloatBits
   
   /** Stores a native-endian `Float` value as a 4-byte `endian` ordered word.
@@ -391,7 +394,7 @@ abstract class Data {
     * @param  value     the `Float` value to store.
     * @group  Unaligned
     */
-  def storeUnalignedFloat(address: Long, value: Float): Unit =
+  override def storeUnalignedFloat(address: Long, value: Float): Unit =
     storeUnalignedInt(address, value.toIntBits)
   
   /** Loads an 8-byte `endian` ordered word as a native-endian `Double` value.
@@ -400,7 +403,7 @@ abstract class Data {
     * @return the loaded `Double` value.
     * @group  Unaligned
     */
-  def loadUnalignedDouble(address: Long): Double =
+  override def loadUnalignedDouble(address: Long): Double =
     loadUnalignedLong(address).toDoubleBits
   
   /** Stores a native-endian `Double` value as an 8-byte `endian` ordered word.
@@ -409,7 +412,7 @@ abstract class Data {
     * @param  value     the `Double` value to store.
     * @group  Unaligned
     */
-  def storeUnalignedDouble(address: Long, value: Double): Unit =
+  override def storeUnalignedDouble(address: Long, value: Double): Unit =
     storeUnalignedLong(address, value.toLongBits)
   
   /** Loads a single byte with volatile semantics if `isCoherent`.
@@ -590,7 +593,8 @@ abstract class Data {
     * @return the loaded instance.
     * @group  Compound
     */
-  def load[T](address: Long)(implicit T: Struct[T]): T = macro DataMacros.load[T]
+  override def load[T](address: Long)(implicit T: Struct[T]): T =
+    T.load(this, address)
   
   /** Stores an instance as a struct value.
     * 
@@ -600,7 +604,8 @@ abstract class Data {
     * @param  T         the implicit struct type to store.
     * @group  Compound
     */
-  def store[T](address: Long, value: T)(implicit T: Struct[T]): Unit = macro DataMacros.store[T]
+  override def store[T](address: Long, value: T)(implicit T: Struct[T]): Unit =
+    T.store(this, address, value)
   
   /** Loads and unpacks a struct as two values.
     * @group Compound */
@@ -659,7 +664,7 @@ abstract class Data {
     * @return the loaded array of instance values.
     * @group  Aggregate
     */
-  def loadArray[T]
+  override def loadArray[T]
       (address: Long, count: Int)
       (implicit T: Struct[T])
     : Array[T] = {
@@ -678,7 +683,7 @@ abstract class Data {
     * @param  T         the implicit struct type to load.
     * @group  Aggregate
     */
-  def copyToArray[T]
+  override def copyToArray[T]
       (address: Long, array: Array[T], start: Int, count: Int)
       (implicit T: Struct[T]) {
     val end = start + count
@@ -701,7 +706,7 @@ abstract class Data {
     * @param  T         the implicit struct type to store.
     * @group  Aggregate
     */
-  def storeArray[T]
+  override def storeArray[T]
       (address: Long, array: Array[T], start: Int, count: Int)
       (implicit T: Struct[T]) {
     val end = start + count

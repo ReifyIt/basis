@@ -37,33 +37,19 @@ abstract class Struct[@specialized(Byte, Short, Int, Long, Float, Double, Boolea
   
   /** Loads a struct instance from data.
     * 
-    * @param  data      the data to load from.
-    * @param  address   the aligned address in `data` to load from.
+    * @param  data    the data to load from.
+    * @param  offset  the aligned offset to load from.
     * @return the loaded instance.
     */
-  def load(data: Data, address: Long): T
+  def load(data: StaticPointer, offset: Long): T
   
   /** Stores a struct instance as data.
     * 
-    * @param  data      the data to store to.
-    * @param  address   the aligned address in `data` to store to.
-    * @param  value     the instance to store.
+    * @param  data    the data to store to.
+    * @param  offset  the aligned offset to store to.
+    * @param  value   the instance to store.
     */
-  def store(data: Data, address: Long, value: T): Unit
-  
-  /** Reads a struct instance from a pointer.
-    * 
-    * @param  pointer   the pointer to load from.
-    * @return the loaded instance.
-    */
-  def read(pointer: Pointer): T = Predef.???
-  
-  /** Writes a struct instance to a pointer.
-    * 
-    * @param  pointer   the pointer to store to.
-    * @param  value     the instance to store.
-    */
-  def write(pointer: Pointer, value: T): Unit = Predef.???
+  def store(data: StaticPointer, offset: Long, value: T): Unit
 }
 
 /** A factory for builtin [[Struct structs]].
@@ -96,10 +82,8 @@ object Struct {
   implicit object PackedByte extends Struct[Byte] {
     override def alignment: Long = 1L
     override def size: Long = 1L
-    override def load(data: Data, address: Long): Byte = data.loadByte(address)
-    override def store(data: Data, address: Long, value: Byte): Unit = data.storeByte(address, value)
-    override def read(pointer: Pointer): Byte = pointer.readByte()
-    override def write(pointer: Pointer, value: Byte): Unit = pointer.writeByte(value)
+    override def load(data: StaticPointer, offset: Long): Byte = data.loadByte(offset)
+    override def store(data: StaticPointer, offset: Long, value: Byte): Unit = data.storeByte(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Byte.TYPE
     override def newArray(length: Int): Array[Byte] = new Array[Byte](length)
     override def toString: String = "PackedByte"
@@ -110,10 +94,8 @@ object Struct {
   object PackedShort extends Struct[Short] {
     override def alignment: Long = 1L
     override def size: Long = 2L
-    override def load(data: Data, address: Long): Short = data.loadUnalignedShort(address)
-    override def store(data: Data, address: Long, value: Short): Unit = data.storeUnalignedShort(address, value)
-    override def read(pointer: Pointer): Short = pointer.readUnalignedShort()
-    override def write(pointer: Pointer, value: Short): Unit = pointer.writeUnalignedShort(value)
+    override def load(data: StaticPointer, offset: Long): Short = data.loadUnalignedShort(offset)
+    override def store(data: StaticPointer, offset: Long, value: Short): Unit = data.storeUnalignedShort(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Short.TYPE
     override def newArray(length: Int): Array[Short] = new Array[Short](length)
     override def toString: String = "PackedShort"
@@ -124,10 +106,8 @@ object Struct {
   object PackedInt extends Struct[Int] {
     override def alignment: Long = 1L
     override def size: Long = 4L
-    override def load(data: Data, address: Long): Int = data.loadUnalignedInt(address)
-    override def store(data: Data, address: Long, value: Int): Unit = data.storeUnalignedInt(address, value)
-    override def read(pointer: Pointer): Int = pointer.readUnalignedInt()
-    override def write(pointer: Pointer, value: Int): Unit = pointer.writeUnalignedInt(value)
+    override def load(data: StaticPointer, offset: Long): Int = data.loadUnalignedInt(offset)
+    override def store(data: StaticPointer, offset: Long, value: Int): Unit = data.storeUnalignedInt(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Integer.TYPE
     override def newArray(length: Int): Array[Int] = new Array[Int](length)
     override def toString: String = "PackedInt"
@@ -138,10 +118,8 @@ object Struct {
   object PackedLong extends Struct[Long] {
     override def alignment: Long = 1L
     override def size: Long = 8L
-    override def load(data: Data, address: Long): Long = data.loadUnalignedLong(address)
-    override def store(data: Data, address: Long, value: Long): Unit = data.storeUnalignedLong(address, value)
-    override def read(pointer: Pointer): Long = pointer.readUnalignedLong()
-    override def write(pointer: Pointer, value: Long): Unit = pointer.writeUnalignedLong(value)
+    override def load(data: StaticPointer, offset: Long): Long = data.loadUnalignedLong(offset)
+    override def store(data: StaticPointer, offset: Long, value: Long): Unit = data.storeUnalignedLong(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Long.TYPE
     override def newArray(length: Int): Array[Long] = new Array[Long](length)
     override def toString: String = "PackedLong"
@@ -152,10 +130,8 @@ object Struct {
   object PackedFloat extends Struct[Float] {
     override def alignment: Long = 1L
     override def size: Long = 4L
-    override def load(data: Data, address: Long): Float = data.loadUnalignedFloat(address)
-    override def store(data: Data, address: Long, value: Float): Unit = data.storeUnalignedFloat(address, value)
-    override def read(pointer: Pointer): Float = pointer.readUnalignedFloat()
-    override def write(pointer: Pointer, value: Float): Unit = pointer.writeUnalignedFloat(value)
+    override def load(data: StaticPointer, offset: Long): Float = data.loadUnalignedFloat(offset)
+    override def store(data: StaticPointer, offset: Long, value: Float): Unit = data.storeUnalignedFloat(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Float.TYPE
     override def newArray(length: Int): Array[Float] = new Array[Float](length)
     override def toString: String = "PackedFloat"
@@ -166,10 +142,8 @@ object Struct {
   object PackedDouble extends Struct[Double] {
     override def alignment: Long = 1L
     override def size: Long = 8L
-    override def load(data: Data, address: Long): Double = data.loadUnalignedDouble(address)
-    override def store(data: Data, address: Long, value: Double): Unit = data.storeUnalignedDouble(address, value)
-    override def read(pointer: Pointer): Double = pointer.readUnalignedDouble()
-    override def write(pointer: Pointer, value: Double): Unit = pointer.writeUnalignedDouble(value)
+    override def load(data: StaticPointer, offset: Long): Double = data.loadUnalignedDouble(offset)
+    override def store(data: StaticPointer, offset: Long, value: Double): Unit = data.storeUnalignedDouble(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Double.TYPE
     override def newArray(length: Int): Array[Double] = new Array[Double](length)
     override def toString: String = "PackedDouble"
@@ -180,10 +154,8 @@ object Struct {
   implicit object PackedBoolean extends Struct[Boolean] {
     override def alignment: Long = 1L
     override def size: Long = 1L
-    override def load(data: Data, address: Long): Boolean = decode(data.loadByte(address))
-    override def store(data: Data, address: Long, value: Boolean): Unit = data.storeByte(address, encode(value))
-    override def read(pointer: Pointer): Boolean = decode(pointer.readByte())
-    override def write(pointer: Pointer, value: Boolean): Unit = pointer.writeByte(encode(value))
+    override def load(data: StaticPointer, offset: Long): Boolean = decode(data.loadByte(offset))
+    override def store(data: StaticPointer, offset: Long, value: Boolean): Unit = data.storeByte(offset, encode(value))
     @inline private[this] def decode(value: Byte): Boolean = value == 0
     @inline private[this] def encode(value: Boolean): Byte = if (value) 0.toByte else -1.toByte
     override def runtimeClass: java.lang.Class[_] = java.lang.Boolean.TYPE
@@ -196,10 +168,8 @@ object Struct {
   implicit object PaddedShort extends Struct[Short] {
     override def alignment: Long = 2L
     override def size: Long = 2L
-    override def load(data: Data, address: Long): Short = data.loadShort(address)
-    override def store(data: Data, address: Long, value: Short): Unit = data.storeShort(address, value)
-    override def read(pointer: Pointer): Short = pointer.readShort()
-    override def write(pointer: Pointer, value: Short): Unit = pointer.writeShort(value)
+    override def load(data: StaticPointer, offset: Long): Short = data.loadShort(offset)
+    override def store(data: StaticPointer, offset: Long, value: Short): Unit = data.storeShort(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Short.TYPE
     override def newArray(length: Int): Array[Short] = new Array[Short](length)
     override def toString: String = "PaddedShort"
@@ -210,10 +180,8 @@ object Struct {
   implicit object PaddedInt extends Struct[Int] {
     override def alignment: Long = 4L
     override def size: Long = 4L
-    override def load(data: Data, address: Long): Int = data.loadInt(address)
-    override def store(data: Data, address: Long, value: Int): Unit = data.storeInt(address, value)
-    override def read(pointer: Pointer): Int = pointer.readInt()
-    override def write(pointer: Pointer, value: Int): Unit = pointer.writeInt(value)
+    override def load(data: StaticPointer, offset: Long): Int = data.loadInt(offset)
+    override def store(data: StaticPointer, offset: Long, value: Int): Unit = data.storeInt(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Integer.TYPE
     override def newArray(length: Int): Array[Int] = new Array[Int](length)
     override def toString: String = "PaddedInt"
@@ -224,10 +192,8 @@ object Struct {
   implicit object PaddedLong extends Struct[Long] {
     override def alignment: Long = 8L
     override def size: Long = 8L
-    override def load(data: Data, address: Long): Long = data.loadLong(address)
-    override def store(data: Data, address: Long, value: Long): Unit = data.storeLong(address, value)
-    override def read(pointer: Pointer): Long = pointer.readLong()
-    override def write(pointer: Pointer, value: Long): Unit = pointer.writeLong(value)
+    override def load(data: StaticPointer, offset: Long): Long = data.loadLong(offset)
+    override def store(data: StaticPointer, offset: Long, value: Long): Unit = data.storeLong(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Long.TYPE
     override def newArray(length: Int): Array[Long] = new Array[Long](length)
     override def toString: String = "PaddedLong"
@@ -238,10 +204,8 @@ object Struct {
   implicit object PaddedFloat extends Struct[Float] {
     override def alignment: Long = 4L
     override def size: Long = 4L
-    override def load(data: Data, address: Long): Float = data.loadFloat(address)
-    override def store(data: Data, address: Long, value: Float): Unit = data.storeFloat(address, value)
-    override def read(pointer: Pointer): Float = pointer.readFloat()
-    override def write(pointer: Pointer, value: Float): Unit = pointer.writeFloat(value)
+    override def load(data: StaticPointer, offset: Long): Float = data.loadFloat(offset)
+    override def store(data: StaticPointer, offset: Long, value: Float): Unit = data.storeFloat(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Float.TYPE
     override def newArray(length: Int): Array[Float] = new Array[Float](length)
     override def toString: String = "PaddedFloat"
@@ -252,10 +216,8 @@ object Struct {
   implicit object PaddedDouble extends Struct[Double] {
     override def alignment: Long = 8L
     override def size: Long = 8L
-    override def load(data: Data, address: Long): Double = data.loadDouble(address)
-    override def store(data: Data, address: Long, value: Double): Unit = data.storeDouble(address, value)
-    override def read(pointer: Pointer): Double = pointer.readDouble()
-    override def write(pointer: Pointer, value: Double): Unit = pointer.writeDouble(value)
+    override def load(data: StaticPointer, offset: Long): Double = data.loadDouble(offset)
+    override def store(data: StaticPointer, offset: Long, value: Double): Unit = data.storeDouble(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Double.TYPE
     override def newArray(length: Int): Array[Double] = new Array[Double](length)
     override def toString: String = "PaddedDouble"
@@ -266,10 +228,8 @@ object Struct {
   object VolatileByte extends Struct[Byte] {
     override def alignment: Long = 1L
     override def size: Long = 1L
-    override def load(data: Data, address: Long): Byte = data.loadVolatileByte(address)
-    override def store(data: Data, address: Long, value: Byte): Unit = data.storeVolatileByte(address, value)
-    override def read(pointer: Pointer): Byte = pointer.readByte()
-    override def write(pointer: Pointer, value: Byte): Unit = pointer.writeByte(value)
+    override def load(data: StaticPointer, offset: Long): Byte = data.loadByte(offset)
+    override def store(data: StaticPointer, offset: Long, value: Byte): Unit = data.storeByte(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Byte.TYPE
     override def newArray(length: Int): Array[Byte] = new Array[Byte](length)
     override def toString: String = "VolatileByte"
@@ -280,10 +240,8 @@ object Struct {
   object VolatileShort extends Struct[Short] {
     override def alignment: Long = 2L
     override def size: Long = 2L
-    override def load(data: Data, address: Long): Short = data.loadVolatileShort(address)
-    override def store(data: Data, address: Long, value: Short): Unit = data.storeVolatileShort(address, value)
-    override def read(pointer: Pointer): Short = pointer.readShort()
-    override def write(pointer: Pointer, value: Short): Unit = pointer.writeShort(value)
+    override def load(data: StaticPointer, offset: Long): Short = data.loadShort(offset)
+    override def store(data: StaticPointer, offset: Long, value: Short): Unit = data.storeShort(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Short.TYPE
     override def newArray(length: Int): Array[Short] = new Array[Short](length)
     override def toString: String = "VolatileShort"
@@ -294,10 +252,8 @@ object Struct {
   object VolatileInt extends Struct[Int] {
     override def alignment: Long = 4L
     override def size: Long = 4L
-    override def load(data: Data, address: Long): Int = data.loadVolatileInt(address)
-    override def store(data: Data, address: Long, value: Int): Unit = data.storeVolatileInt(address, value)
-    override def read(pointer: Pointer): Int = pointer.readInt()
-    override def write(pointer: Pointer, value: Int): Unit = pointer.writeInt(value)
+    override def load(data: StaticPointer, offset: Long): Int = data.loadInt(offset)
+    override def store(data: StaticPointer, offset: Long, value: Int): Unit = data.storeInt(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Integer.TYPE
     override def newArray(length: Int): Array[Int] = new Array[Int](length)
     override def toString: String = "VolatileInt"
@@ -308,10 +264,8 @@ object Struct {
   object VolatileLong extends Struct[Long] {
     override def alignment: Long = 8L
     override def size: Long = 8L
-    override def load(data: Data, address: Long): Long = data.loadVolatileLong(address)
-    override def store(data: Data, address: Long, value: Long): Unit = data.storeVolatileLong(address, value)
-    override def read(pointer: Pointer): Long = pointer.readLong()
-    override def write(pointer: Pointer, value: Long): Unit = pointer.writeLong(value)
+    override def load(data: StaticPointer, offset: Long): Long = data.loadLong(offset)
+    override def store(data: StaticPointer, offset: Long, value: Long): Unit = data.storeLong(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Long.TYPE
     override def newArray(length: Int): Array[Long] = new Array[Long](length)
     override def toString: String = "VolatileLong"
@@ -322,10 +276,8 @@ object Struct {
   object VolatileFloat extends Struct[Float] {
     override def alignment: Long = 4L
     override def size: Long = 4L
-    override def load(data: Data, address: Long): Float = data.loadVolatileFloat(address)
-    override def store(data: Data, address: Long, value: Float): Unit = data.storeVolatileFloat(address, value)
-    override def read(pointer: Pointer): Float = pointer.readFloat()
-    override def write(pointer: Pointer, value: Float): Unit = pointer.writeFloat(value)
+    override def load(data: StaticPointer, offset: Long): Float = data.loadFloat(offset)
+    override def store(data: StaticPointer, offset: Long, value: Float): Unit = data.storeFloat(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Float.TYPE
     override def newArray(length: Int): Array[Float] = new Array[Float](length)
     override def toString: String = "VolatileFloat"
@@ -336,10 +288,8 @@ object Struct {
   object VolatileDouble extends Struct[Double] {
     override def alignment: Long = 8L
     override def size: Long = 8L
-    override def load(data: Data, address: Long): Double = data.loadVolatileDouble(address)
-    override def store(data: Data, address: Long, value: Double): Unit = data.storeVolatileDouble(address, value)
-    override def read(pointer: Pointer): Double = pointer.readDouble()
-    override def write(pointer: Pointer, value: Double): Unit = pointer.writeDouble(value)
+    override def load(data: StaticPointer, offset: Long): Double = data.loadDouble(offset)
+    override def store(data: StaticPointer, offset: Long, value: Double): Unit = data.storeDouble(offset, value)
     override def runtimeClass: java.lang.Class[_] = java.lang.Double.TYPE
     override def newArray(length: Int): Array[Double] = new Array[Double](length)
     override def toString: String = "VolatileDouble"
@@ -354,21 +304,13 @@ object Struct {
     private[this] val offset2: Long = align(T1.size, T2.alignment)
     override val alignment: Long = T1.alignment max T2.alignment
     override val size: Long = align(offset2 + T2.size, alignment)
-    override def load(data: Data, address: Long): (T1, T2) = (
-      T1.load(data, address),
-      T2.load(data, address + offset2)
+    override def load(data: StaticPointer, offset: Long): (T1, T2) = (
+      T1.load(data, offset),
+      T2.load(data, offset + offset2)
     )
-    override def store(data: Data, address: Long, tuple: (T1, T2)) {
-      T1.store(data, address,           tuple._1)
-      T2.store(data, address + offset2, tuple._2)
-    }
-    override def read(pointer: Pointer): (T1, T2) = (
-      T1.read(pointer),
-      { pointer.align(T2.alignment); T2.read(pointer) }
-    )
-    override def write(pointer: Pointer, tuple: (T1, T2)) {
-      T1.write(pointer, tuple._1)
-      pointer.align(T2.alignment); T2.write(pointer, tuple._2)
+    override def store(data: StaticPointer, offset: Long, tuple: (T1, T2)) {
+      T1.store(data, offset,           tuple._1)
+      T2.store(data, offset + offset2, tuple._2)
     }
     override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2)]
     override def newArray(length: Int): Array[(T1, T2)] = new Array[(T1, T2)](length)
@@ -398,25 +340,15 @@ object Struct {
     private[this] val offset3: Long = align(offset2 + T2.size, T3.alignment)
     override val alignment: Long = T1.alignment max T2.alignment max T3.alignment
     override val size: Long = align(offset3 + T3.size, alignment)
-    override def load(data: Data, address: Long): (T1, T2, T3) = (
-      T1.load(data, address),
-      T2.load(data, address + offset2),
-      T3.load(data, address + offset3)
+    override def load(data: StaticPointer, offset: Long): (T1, T2, T3) = (
+      T1.load(data, offset),
+      T2.load(data, offset + offset2),
+      T3.load(data, offset + offset3)
     )
-    override def store(data: Data, address: Long, tuple: (T1, T2, T3)) {
-      T1.store(data, address,           tuple._1)
-      T2.store(data, address + offset2, tuple._2)
-      T3.store(data, address + offset3, tuple._3)
-    }
-    override def read(pointer: Pointer): (T1, T2, T3) = (
-      T1.read(pointer),
-      { pointer.align(T2.alignment); T2.read(pointer) },
-      { pointer.align(T3.alignment); T3.read(pointer) }
-    )
-    override def write(pointer: Pointer, tuple: (T1, T2, T3)) {
-      T1.write(pointer, tuple._1)
-      pointer.align(T2.alignment); T2.write(pointer, tuple._2)
-      pointer.align(T3.alignment); T3.write(pointer, tuple._3)
+    override def store(data: StaticPointer, offset: Long, tuple: (T1, T2, T3)) {
+      T1.store(data, offset,           tuple._1)
+      T2.store(data, offset + offset2, tuple._2)
+      T3.store(data, offset + offset3, tuple._3)
     }
     override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2, T3)]
     override def newArray(length: Int): Array[(T1, T2, T3)] = new Array[(T1, T2, T3)](length)
@@ -446,29 +378,17 @@ object Struct {
     private[this] val offset4: Long = align(offset3 + T3.size, T4.alignment)
     override val alignment: Long = T1.alignment max T2.alignment max T3.alignment max T4.alignment
     override val size: Long = align(offset4 + T4.size, alignment)
-    override def load(data: Data, address: Long): (T1, T2, T3, T4) = (
-      T1.load(data, address),
-      T2.load(data, address + offset2),
-      T3.load(data, address + offset3),
-      T4.load(data, address + offset4)
+    override def load(data: StaticPointer, offset: Long): (T1, T2, T3, T4) = (
+      T1.load(data, offset),
+      T2.load(data, offset + offset2),
+      T3.load(data, offset + offset3),
+      T4.load(data, offset + offset4)
     )
-    override def store(data: Data, address: Long, tuple: (T1, T2, T3, T4)) {
-      T1.store(data, address,           tuple._1)
-      T2.store(data, address + offset2, tuple._2)
-      T3.store(data, address + offset3, tuple._3)
-      T4.store(data, address + offset4, tuple._4)
-    }
-    override def read(pointer: Pointer): (T1, T2, T3, T4) = (
-      T1.read(pointer),
-      { pointer.align(T2.alignment); T2.read(pointer) },
-      { pointer.align(T3.alignment); T3.read(pointer) },
-      { pointer.align(T4.alignment); T4.read(pointer) }
-    )
-    override def write(pointer: Pointer, tuple: (T1, T2, T3, T4)) {
-      T1.write(pointer, tuple._1)
-      pointer.align(T2.alignment); T2.write(pointer, tuple._2)
-      pointer.align(T3.alignment); T3.write(pointer, tuple._3)
-      pointer.align(T4.alignment); T4.write(pointer, tuple._4)
+    override def store(data: StaticPointer, offset: Long, tuple: (T1, T2, T3, T4)) {
+      T1.store(data, offset,           tuple._1)
+      T2.store(data, offset + offset2, tuple._2)
+      T3.store(data, offset + offset3, tuple._3)
+      T4.store(data, offset + offset4, tuple._4)
     }
     override def runtimeClass: java.lang.Class[_] = classOf[(T1, T2, T3, T4)]
     override def newArray(length: Int): Array[(T1, T2, T3, T4)] = new Array[(T1, T2, T3, T4)](length)
