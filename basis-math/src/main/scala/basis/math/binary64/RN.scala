@@ -139,7 +139,7 @@ trait RN extends FN {
   override val Scalar: Real.type
   
   implicit override def ScalarTag: scala.reflect.ClassTag[Real] =
-    scala.reflect.classTag[Real]
+    scala.reflect.ClassTag(Predef.classOf[Real])
   
   override def zero: Vector = apply(new Array[Double](dim))
   

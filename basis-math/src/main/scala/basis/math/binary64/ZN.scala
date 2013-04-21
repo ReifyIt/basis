@@ -114,7 +114,7 @@ trait ZN extends FN {
   override val Scalar: Integer.type = Integer
   
   implicit override def ScalarTag: scala.reflect.ClassTag[Integer] =
-    scala.reflect.classTag[Integer]
+    scala.reflect.ClassTag(Predef.classOf[Integer])
   
   override def zero: Vector = apply(new Array[Long](dim))
   
