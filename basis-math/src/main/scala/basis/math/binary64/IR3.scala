@@ -41,6 +41,9 @@ object IR3 extends AffineSpace with IRN with F3 {
   
   override val zero: Vector = super.zero
   
+  implicit def coerce(that: IZ3.Vector): Vector =
+    new Vector(that.x, that.y, that.z)
+  
   implicit def degenerate(vector: R3.Vector): Vector =
     new Vector(vector.x, vector.y, vector.z)
   
