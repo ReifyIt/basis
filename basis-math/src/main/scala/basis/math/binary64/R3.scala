@@ -80,6 +80,9 @@ object R3 extends AffineSpace with F3 with RN {
   override val zero: Vector =
     new Vector(0.0, 0.0, 0.0)
   
+  implicit def coerce(that: Z3.Vector): Vector =
+    new Vector(that.x, that.y, that.z)
+  
   override def apply(x: Scalar, y: Scalar, z: Scalar): Vector =
     new Vector(x, y, z)
   

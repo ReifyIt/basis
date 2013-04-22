@@ -76,6 +76,9 @@ object RealInterval extends IntervalField {
   override val unit: RealInterval =
     new RealInterval(1.0, 1.0)
   
+  implicit def coerce(that: IntegerInterval): RealInterval =
+    new RealInterval(that.lower, that.upper)
+  
   implicit override def degenerate(value: Real): RealInterval =
     new RealInterval(value, value)
   

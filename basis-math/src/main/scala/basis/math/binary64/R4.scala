@@ -76,7 +76,7 @@ object R4 extends AffineSpace with F4 with RN {
   
   override val zero: Vector =
     new Vector(0.0, 0.0, 0.0, 0.0)
-  
+
   override def apply(x: Scalar, y: Scalar, z: Scalar, w: Scalar): Vector =
     new Vector(x, y, z, w)
   

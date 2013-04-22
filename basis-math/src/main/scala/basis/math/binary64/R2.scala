@@ -73,6 +73,9 @@ object R2 extends AffineSpace with F2 with RN {
   override val zero: Vector =
     new Vector(0.0, 0.0)
   
+  implicit def coerce(that: Z2.Vector): Vector =
+    new Vector(that.x, that.y)
+  
   override def apply(x: Scalar, y: Scalar): Vector =
     new Vector(x, y)
   

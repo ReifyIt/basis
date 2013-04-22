@@ -157,7 +157,7 @@ object Real extends RealField with AffineSpace with RN with RMxN {
   override val Scalar: Real.type = Real
   
   implicit override def ScalarTag: scala.reflect.ClassTag[Real] =
-    scala.reflect.classTag[Real]
+    scala.reflect.ClassTag(Predef.classOf[Real])
   
   override def dim: Int = 1
   
@@ -166,6 +166,8 @@ object Real extends RealField with AffineSpace with RN with RMxN {
   override def zero: Real = new Real(0.0)
   
   override def unit: Real = new Real(1.0)
+  
+  implicit def coerce(that: Integer): Real = new Real(that.value)
   
   implicit def apply(value: Double): Real = new Real(value)
   
