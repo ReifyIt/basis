@@ -109,6 +109,12 @@ final class Real(val value: Double) extends AnyVal with Real.Value {
   
   override def >= (that: Real): Boolean = value >= that.value
   
+  def ceil: Real =
+    new Real(java.lang.Math.ceil(value))
+  
+  def floor: Real =
+    new Real(java.lang.Math.floor(value))
+  
   def toInt: Int = value.toInt
   
   def toLong: Long = value.toLong
