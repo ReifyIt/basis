@@ -46,6 +46,9 @@ object Z3 extends AffineSpace with F3 with ZN {
     
     override def *: (scalar: Scalar): Vector = this :* scalar
     
+    override def ∘ (that: Vector): Vector =
+      new Vector(x * that.x, y * that.y, z * that.z)
+    
     override def ⋅ (that: Vector): Scalar =
       x * that.x + y * that.y + z * that.z
     

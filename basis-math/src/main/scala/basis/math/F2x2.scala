@@ -81,6 +81,11 @@ trait F2x2 extends Ring with FMxN {
         scalar * _1_1, scalar * _1_2,
         scalar * _2_1, scalar * _2_2)
     
+    override def ∘ (that: Matrix): Matrix =
+      F2x2.this.apply(
+        _1_1 * that._1_1, _1_2 * that._1_2,
+        _2_1 * that._2_1, _2_2 * that._2_2)
+    
     override def :⋅ (vector: Row): Col =
       Col(_1_1 * vector.x + _1_2 * vector.y,
           _2_1 * vector.x + _2_2 * vector.y)

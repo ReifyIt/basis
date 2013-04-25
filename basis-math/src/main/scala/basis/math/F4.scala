@@ -53,6 +53,9 @@ trait F4 extends FN {
     override def *: (scalar: Scalar): Vector =
       F4.this.apply(scalar * x, scalar * y, scalar * z, scalar * w)
     
+    override def ∘ (that: Vector): Vector =
+      F4.this.apply(x * that.x, y * that.y, z * that.z, w * that.w)
+    
     override def ⋅ (that: Vector): Scalar =
       x * that.x + y * that.y + z * that.z + w * that.w
   }

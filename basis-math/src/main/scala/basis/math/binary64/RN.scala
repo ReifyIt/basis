@@ -67,6 +67,18 @@ trait RN extends FN {
     
     override def *: (scalar: Scalar): Vector = this :* scalar
     
+    override def ∘ (that: Vector): Vector = {
+      val n = dim
+      if (n != that.dim) throw new DimensionException
+      val coords = new Array[Double](n)
+      var i = 0
+      while (i < n) {
+        coords(i) = this(i).value * that(i).value
+        i += 1
+      }
+      RN.this.apply(coords)
+    }
+    
     /** Returns the quotient of this $vector divided by a $scalar. */
     def / (scalar: Scalar): Vector = {
       val n = dim

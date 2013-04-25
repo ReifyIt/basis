@@ -80,6 +80,9 @@ trait VectorSpace {
     
     /** Returns the product of this $vector times a $scalar on the left. */
     def *: (scalar: Scalar): Vector
+    
+    /** Returns the pointwise product of this $vector times another $vector. */
+    def ∘ (that: Vector): Vector
   }
   
   /** The type of vectors in this $space. */

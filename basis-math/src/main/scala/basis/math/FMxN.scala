@@ -180,6 +180,20 @@ trait FMxN extends VectorSpace {
       FMxN.this.apply(entries)
     }
     
+    override def ∘ (that: Matrix): Matrix = {
+      val m = Col.dim
+      val n = Row.dim
+      val d = m * n
+      if (m != that.Col.dim || n != that.Row.dim) throw new DimensionException
+      val entries = new Array[Scalar](d)
+      var k = 0
+      while (k < d) {
+        entries(k) = this(k) * that(k)
+        k += 1
+      }
+      FMxN.this.apply(entries)
+    }
+    
     /** Returns a $vector in the column space by right-multiplying this $matrix
       * by a $vector in the row space. The name of this method contains
       * the unicode dot operator (U+22C5). */

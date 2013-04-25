@@ -44,6 +44,9 @@ object R2 extends AffineSpace with F2 with RN {
     
     override def *: (scalar: Scalar): Vector = this :* scalar
     
+    override def ∘ (that: Vector): Vector =
+      new Vector(x * that.x, y * that.y)
+    
     override def / (scalar: Scalar): Vector =
       new Vector(x / scalar, y / scalar)
     

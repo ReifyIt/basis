@@ -44,6 +44,8 @@ final class Integer(val value: Long) extends AnyVal with Integer.Value {
   
   override def *: (that: Integer): Integer = that * this
   
+  override def ∘ (that: Integer): Integer = this * that
+  
   override def ⋅ (that: Integer): Integer = this * that
   
   override def abs: Integer =

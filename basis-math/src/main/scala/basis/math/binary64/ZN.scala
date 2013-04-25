@@ -69,6 +69,18 @@ trait ZN extends FN {
     
     override def *: (scalar: Scalar): Vector = this :* scalar
     
+    override def ∘ (that: Vector): Vector = {
+      val n = dim
+      if (n != that.dim) throw new DimensionException
+      val coords = new Array[Long](n)
+      var i = 0
+      while (i < n) {
+        coords(i) = this(i).value * that(i).value
+        i += 1
+      }
+      ZN.this.apply(coords)
+    }
+    
     override def ⋅ (that: Vector): Scalar = {
       val n = dim
       if (n != that.dim) throw new DimensionException

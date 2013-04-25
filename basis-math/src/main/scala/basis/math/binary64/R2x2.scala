@@ -78,6 +78,11 @@ object R2x2 extends F2x2 with RMxN {
     
     override def *: (scalar: Scalar): Matrix = this :* scalar
     
+    override def ∘ (that: Matrix): Matrix =
+      new Matrix(
+        _1_1 * that._1_1, _1_2 * that._1_2,
+        _2_1 * that._2_1, _2_2 + that._2_2)
+    
     override def :⋅ (vector: Row): Col =
       new Col(
         _1_1 * vector.x + _1_2 * vector.y,

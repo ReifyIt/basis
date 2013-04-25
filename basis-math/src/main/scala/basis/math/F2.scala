@@ -44,6 +44,12 @@ trait F2 extends FN {
     
     override def *: (scalar: Scalar): Vector =
       F2.this.apply(scalar * x, scalar * y)
+    
+    override def ∘ (that: Vector): Vector =
+      F2.this.apply(x * that.x, y * that.y)
+    
+    override def ⋅ (that: Vector): Scalar =
+      x * that.x + y * that.y
   }
   
   override type Vector <: Value

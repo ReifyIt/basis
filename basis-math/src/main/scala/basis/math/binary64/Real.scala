@@ -64,6 +64,8 @@ final class Real(val value: Double) extends AnyVal with Real.Value {
   
   override def *: (that: Real): Real = that * this
   
+  override def ∘ (that: Real): Real = this * that
+  
   override def :⋅ (that: Real): Real = this * that
   
   override def ⋅: (that: Real): Real = that * this

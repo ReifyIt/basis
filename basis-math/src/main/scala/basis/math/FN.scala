@@ -124,6 +124,18 @@ trait FN extends VectorSpace {
       FN.this.apply(coords)
     }
     
+    override def ∘ (that: Vector): Vector = {
+      val n = dim
+      if (n != that.dim) throw new DimensionException
+      val coords = new Array[Scalar](n)
+      var i = 0
+      while (i < n) {
+        coords(i) = this(i) * that(i)
+        i += 1
+      }
+      FN.this.apply(coords)
+    }
+    
     /** Returns the dot product of this $vector and another $vector.
       * The name of this method contains the unicode dot operator (U+22C5). */
     def ⋅ (that: Vector): Scalar = {

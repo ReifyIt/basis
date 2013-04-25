@@ -108,6 +108,13 @@ object R4x4 extends F4x4 with RMxN {
     
     override def *: (scalar: Scalar): Matrix = this :* scalar
     
+    override def ∘ (that: Matrix): Matrix =
+      new Matrix(
+        _1_1 * that._1_1, _1_2 * that._1_2, _1_3 * that._1_3, _1_4 * that._1_4,
+        _2_1 * that._2_1, _2_2 * that._2_2, _2_3 * that._2_3, _2_4 * that._2_4,
+        _3_1 * that._3_1, _3_2 * that._3_2, _3_3 * that._3_3, _3_4 * that._3_4,
+        _4_1 * that._4_1, _4_2 * that._4_2, _4_3 * that._4_3, _4_4 * that._4_4)
+    
     override def :⋅ (vector: Row): Col =
       new Col(
         _1_1 * vector.x + _1_2 * vector.y + _1_3 * vector.z + _1_4 * vector.w,

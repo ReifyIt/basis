@@ -111,6 +111,20 @@ trait RMxN extends FMxN {
     
     override def *: (scalar: Scalar): Matrix = this :* scalar
     
+    override def ∘ (that: Matrix): Matrix = {
+      val m = Col.dim
+      val n = Row.dim
+      val d = m * n
+      if (m != that.Col.dim || n != that.Row.dim) throw new DimensionException
+      val entries = new Array[Double](d)
+      var k = 0
+      while (k < d) {
+        entries(k) = this(k).value * that(k).value
+        k += 1
+      }
+      RMxN.this.apply(entries)
+    }
+    
     override def :⋅ (vector: Row): Col = {
       val m = Col.dim
       val n = Row.dim
