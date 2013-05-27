@@ -1,80 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="UTF-8"/>
-    <title>Design – Basis</title>
-    <link href="main.css" rel="stylesheet" type="text/css"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Basis by ReifyIt</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body>
-    <header class="header">
-      <h1>Basis</h1>
-      <nav>
-        <ul>
-          <li><a href="index.html">Design</a></li>
-          <li><a href="downloads.html">Downloads</a></li>
-          <li><a href="latest/api/basis/package.html">Documentation</a></li>
-          <li><a href="https://github.com/ReifyIt/basis">Source Code</a></li>
-        </ul>
-      </nav>
-    </header>
-    <article>
+    <div class="wrapper">
       <header>
-        <h2>Design</h2>
-        <aside>
-          <h3><a href="latest/api/basis/package.html">Packages</a></h3>
-          <nav>
-            <ul>
-              <li>
-                <span class="api"><a href="latest/api/basis/collections/package.html">API</a></span>
-                <a href="collections.html">Collections</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/containers/package.html">API</a></span>
-                <a href="containers.html">Containers</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/control/package.html">API</a></span>
-                <a href="control.html">Control</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/dispatch/package.html">API</a></span>
-                <a href="dispatch.html">Dispatch</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/math/package.html">API</a></span>
-                <a href="math.html">Math</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/memory/package.html">API</a></span>
-                <a href="memory.html">Memory</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/random/package.html">API</a></span>
-                <a href="random.html">Random</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/runtime/package.html">API</a></span>
-                <a href="runtime.html">Runtime</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/sequential/package.html">API</a></span>
-                <a href="sequential.html">Sequential</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/text/package.html">API</a></span>
-                <a href="text.html">Text</a>
-              </li>
-              <li>
-                <span class="api"><a href="latest/api/basis/util/package.html">API</a></span>
-                <a href="util.html">Utilities</a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+        <h1>Basis</h1>
+        <p>An experimental foundation library for Scala focussed on efficiency and clean design</p>
+        <p class="view"><a href="https://github.com/ReifyIt/basis">View the Project on GitHub <small>ReifyIt/basis</small></a></p>
+        <ul>
+          <li><a href="https://github.com/ReifyIt/basis/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/ReifyIt/basis/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/ReifyIt/basis">View On <strong>GitHub</strong></a></li>
+        </ul>
       </header>
-      <h3><a name="overview">Overview</a></h3>
-      <p>Basis offers a foundation library for <a href="http://www.scala-lang.org">Scala</a> that applies design thinking to the development of its code. The library strives to make it easy to do the right thing, without preventing you from doing what you want. It accomplishes this by extending simple interfaces outwardly with opt-in use-case driven extensions. This approach keeps the implementation focused, honest, and modular.</p>
-      <p>At the same time, brass tacks software engineering makes Basis fast and memory efficient. Clear design enables robust optimization without compromising usability. And use-directed development prudently in-sources many performance trade-offs.</p>
-    </article>
+      <section>
+        <h2>Basis</h2>
+
+<p>Basis offers a foundation library for <a href="http://www.scala-lang.org">Scala</a> that applies design thinking to the development of its code. The library strives to make it easy to do the right thing, without preventing you from doing what you want. It accomplishes this by extending simple interfaces outwardly with opt-in use-case driven extensions. This approach keeps the implementation focused, honest, and modular.</p>
+
+<p>At the same time, brass tacks software engineering makes Basis fast and memory efficient. Clear design enables robust optimization without compromising usability. And use-directed development prudently in-sources many performance trade-offs.</p>
+
+<h3>Packages</h3>
+
+<ul>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.package">API</a>] <a href="http://basis.reify.it">basis</a> – Umbrella framework<br><code>"it.reify" %% "basis" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.collections.package">API</a>] <a href="http://basis.reify.it/collections.html">basis.collections</a> – General collections interfaces<br><code>"it.reify" %% "basis-collections" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.containers.package">API</a>] <a href="http://basis.reify.it/containers.html">basis.containers</a> – Specialized collection implementations<br><code>"it.reify" %% "basis-containers" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.control.package">API</a>] <a href="http://basis.reify.it/control.html">basis.control</a> – Imperative control-flow and conditional bindings<br><code>"it.reify" %% "basis-control" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.math.package">API</a>] <a href="http://basis.reify.it/math.html">basis.math</a> – Abstract algebraic structures<br><code>"it.reify" %% "basis-math" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.memory.package">API</a>] <a href="http://basis.reify.it/memory.html">basis.memory</a> – Virtual memory model<br><code>"it.reify" %% "basis-memory" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.random.package">API</a>] <a href="http://basis.reify.it/random.html">basis.random</a> – Arbitrary data generation<br><code>"it.reify" %% "basis-random" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.runtime.package">API</a>] <a href="http://basis.reify.it/runtime.html">basis.runtime</a> – Run-time type information<br><code>"it.reify" %% "basis-runtime" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.sequential.package">API</a>] <a href="http://basis.reify.it/sequential.html">basis.sequential</a> – Sequential collections operations<br><code>"it.reify" %% "basis-sequential" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.text.package">API</a>] <a href="http://basis.reify.it/text.html">basis.text</a> – Unicode® string implementations<br><code>"it.reify" %% "basis-text" % "0.1-SNAPSHOT"</code>
+</li>
+<li>[<a href="http://basis.reify.it/latest/api/#basis.util.package">API</a>] <a href="http://basis.reify.it/util.html">basis.util</a> – General utility macros<br><code>"it.reify" %% "basis-util" % "0.1-SNAPSHOT"</code>
+</li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/ReifyIt">ReifyIt</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
   </body>
 </html>
