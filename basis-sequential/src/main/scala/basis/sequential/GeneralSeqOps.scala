@@ -25,6 +25,13 @@ import basis.control._
   * @define collection  sequence
   */
 final class GeneralSeqOps[+A](these: Seq[A]) {
+  /** Returns `true` if this $collection contains no elements.
+    * 
+    * @return `true` if any elements exist, otherwise `false`.
+    * @group  Traversing
+    */
+  def isEmpty: Boolean = macro GeneralContainerOps.isEmpty
+  
   /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.

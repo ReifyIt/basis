@@ -25,6 +25,13 @@ import basis.control._
   * @define collection  index
   */
 final class GeneralIndexOps[+A](these: Index[A]) {
+  /** Returns `true` if this $collection contains no elements.
+    * 
+    * @return `true` if any elements exist, otherwise `false`.
+    * @group  Traversing
+    */
+  def isEmpty: Boolean = macro GeneralIndexOps.isEmpty
+  
   /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
@@ -199,6 +206,9 @@ private[sequential] object GeneralIndexOps {
           weakTypeOf[A] :: Nil))
     Expr[Index[A]](typeCheck(these, weakTypeOf[Index[A]]))
   }
+  
+  def isEmpty(c: Context): c.Expr[Boolean] =
+    new IndexMacros[c.type](c).isEmpty(unApply[Any](c))
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]
       (c: Context)

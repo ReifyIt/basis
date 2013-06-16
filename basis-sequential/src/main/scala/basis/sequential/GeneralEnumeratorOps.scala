@@ -25,6 +25,15 @@ import basis.control._
   * @define collection  enumerator
   */
 final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
+  /** Returns `true` if this $collection contains no elements.
+    * 
+    * @return `true` if any elements exist, otherwise `false`.
+    * @group  Traversing
+    */
+  def isEmpty: Boolean =
+    try { these traverse GeneralEnumeratorOps.IsEmpty; true }
+    catch { case signal: Break if signal eq begin.signal => false }
+  
   /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
@@ -187,6 +196,10 @@ final class GeneralEnumeratorOps[+A](val these: Enumerator[A]) extends AnyVal {
 
 private[sequential] object GeneralEnumeratorOps {
   import scala.runtime.AbstractFunction1
+  
+  final object IsEmpty extends AbstractFunction1[Any, Unit] {
+    override def apply(x: Any): Unit = begin.break()
+  }
   
   final class Foreach[-A, +U](f: A => U) extends AbstractFunction1[A, Unit] {
     override def apply(x: A): Unit = f(x)

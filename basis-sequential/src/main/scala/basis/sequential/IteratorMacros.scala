@@ -23,6 +23,9 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
   
   val universe: context.universe.type = context.universe
   
+  def isEmpty(these: Expr[Iterator[Any]]): Expr[Boolean] =
+    Expr[Boolean](Select(these.tree, "isEmpty": TermName))
+  
   def foreach[A, U]
       (these: Expr[Iterator[A]])
       (f: Expr[A => U])

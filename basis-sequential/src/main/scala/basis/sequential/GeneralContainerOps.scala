@@ -25,6 +25,13 @@ import basis.control._
   * @define collection  container
   */
 final class GeneralContainerOps[+A](these: Container[A]) {
+  /** Returns `true` if this $collection contains no elements.
+    * 
+    * @return `true` if any elements exist, otherwise `false`.
+    * @group  Traversing
+    */
+  def isEmpty: Boolean = macro GeneralContainerOps.isEmpty
+  
   /** Sequentially applies a function to each element of this $collection.
     * 
     * @param  f   the function to apply to each element.
@@ -179,6 +186,9 @@ private[sequential] object GeneralContainerOps {
           weakTypeOf[A] :: Nil))
     Expr[Iterator[A]](Select(these.tree, "iterator": TermName))
   }
+  
+  def isEmpty(c: Context): c.Expr[Boolean] =
+    new IteratorMacros[c.type](c).isEmpty(iterator(c)(unApply[Any](c)))
   
   def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]
       (c: Context)

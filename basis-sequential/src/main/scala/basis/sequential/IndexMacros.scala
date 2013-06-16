@@ -23,6 +23,12 @@ private[sequential] class IndexMacros[C <: Context](val context: C) {
   
   val universe: context.universe.type = context.universe
   
+  def isEmpty(these: Expr[Index[Any]]): Expr[Boolean] =
+    Expr[Boolean](
+      Apply(
+        Select(Select(these.tree, "length": TermName), ("==": TermName).encodedName),
+        Literal(Constant(0)) :: Nil))
+  
   def foreach[A, U]
       (these: Expr[Index[A]])
       (f: Expr[A => U])
