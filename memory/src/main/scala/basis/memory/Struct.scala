@@ -316,10 +316,11 @@ object Struct {
 
   /** Returns a struct for a 2-tuple of struct instances.
     * @group Composite */
-  implicit def Record2
-      [@specialized(Int, Long, Double, Boolean) T1, @specialized(Int, Long, Double, Boolean) T2]
-      (implicit T1: Struct[T1], T2: Struct[T2])
-    : Record2[T1, T2] = new Record2
+  object Record2 {
+    implicit def apply[@specialized(Int, Long, Double, Boolean) T1, @specialized(Int, Long, Double, Boolean) T2]
+        (implicit T1: Struct[T1], T2: Struct[T2])
+      : Record2[T1, T2] = new Record2
+  }
 
   /** A struct for 3-tuples of struct instances.
     * @group Composite */
@@ -352,9 +353,9 @@ object Struct {
 
   /** Returns a struct for a 3-tuple of struct instances.
     * @group Composite */
-  implicit def Record3[T1, T2, T3]
-      (implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3])
-    : Record3[T1, T2, T3] = new Record3
+  object Record3 {
+    implicit def apply[T1, T2, T3](implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3]): Record3[T1, T2, T3] = new Record3
+  }
 
   /** A struct for 4-tuples of struct instances.
     * @group Composite */
@@ -392,7 +393,9 @@ object Struct {
 
   /** Returns a struct for a 4-tuple of struct instances.
     * @group Composite */
-  implicit def Record4[T1, T2, T3, T4]
+  object Record4 {
+    implicit def apply[T1, T2, T3, T4]
       (implicit T1: Struct[T1], T2: Struct[T2], T3: Struct[T3], T4: Struct[T4])
     : Record4[T1, T2, T3, T4] = new Record4
+  }
 }
