@@ -7,5 +7,5 @@
 package basis.collections
 
 trait Family[+Base] extends Any {
-  type Family = Base
+  type Family = (Base @scala.annotation.unchecked.uncheckedVariance)
 }

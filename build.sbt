@@ -1,9 +1,13 @@
-val scalaVer    = "2.10.3"
-val paradiseVer = "2.0.0-M3"
+def scalatestVer(scalaVersion: String): String = scalaVersion match {
+  case "2.11.0-M7" => "2.0.1-SNAP4"
+  case "2.10.3"    => "1.9.2"
+}
 
-scalaVersion in Global := scalaVer
+scalaVersion in Global := "2.10.3"
 
-scalacOptions in Global ++= Seq("-language:_", "-Yno-predef")
+crossScalaVersions in Global := Seq(scalaVersion.value, "2.11.0-M7")
+
+scalacOptions in Global ++= Seq("-language:experimental.macros", "-Yno-predef")
 
 retrieveManaged := true
 
@@ -19,9 +23,16 @@ lazy val basis = (
 lazy val math, util = project settings (moduleSettings: _*)
 
 lazy val collections = project settings (moduleSettings: _*) dependsOn util settings (
-  libraryDependencies += "org.scalamacros" % s"quasiquotes_$scalaVer" % paradiseVer,
-  addCompilerPlugin("org.scalamacros" % s"paradise_$scalaVer" % paradiseVer)
+  libraryDependencies <++= (scalaVersion)(sv =>
+    if (sv startsWith "2.10.") List(
+      "org.scalamacros" % s"quasiquotes_$sv" % "2.0.0-M3",
+      "org.scalamacros" % s"paradise_$sv" % "2.0.0-M3" % "plugin"
+    )
+    else Nil
+  )
 )
+
+lazy val quasiSettings = settingKey[List[Setting[_]]]("Quasiquotes settings")
 
 lazy val form = project settings (moduleSettings: _*) dependsOn (collections, memory, text, util)
 
@@ -47,8 +58,8 @@ lazy val projectSettings = Seq(
 lazy val compileSettings = Seq(
   scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
   libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % scalaVer,
-    "org.scalatest" %% "scalatest" % "1.9.2" % "test"
+    "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+    "org.scalatest" %% "scalatest" % scalatestVer(scalaVersion.value) % "test"
   )
 )
 

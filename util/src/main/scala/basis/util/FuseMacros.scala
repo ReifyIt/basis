@@ -8,6 +8,12 @@ package basis.util
 
 import scala.collection.immutable.{ ::, Nil }
 import scala.reflect.macros.Context
+import scala.reflect.api.Universe
+import FuseMacros._
+
+final class RecoverToType[U <: Universe](sym: U#Symbol) {
+  def toType[V <: Universe]: V#Type = sym.asType.toType.asInstanceOf[V#Type]
+}
 
 private[util] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
   import context.{ Expr, fresh, mirror, WeakTypeTag }
@@ -86,6 +92,9 @@ private[util] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
 }
 
 private[util] object FuseMacros {
+  implicit def mkRecoverToType[U <: Universe](sym: U#Symbol): RecoverToType[U] =
+    new RecoverToType[U](sym)
+
   private def unApply[A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)
     : (c.Expr[A Else B], c.Expr[Throwable => Trap[B]]) = {
     import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }

@@ -52,6 +52,9 @@ trait Arbitrary[@specialized(Specializable.Primitives) +A] extends (() => A) {
 
 /** Contains builtin [[Arbitrary]] value generators. */
 object Arbitrary {
+  // Mask the package-level implicit or our own method paramters are ambiguous (thanks scala 2.11)
+  private val Random = null
+
   def apply[A](implicit A: Arbitrary[A]): A.type = A
 
   def Constant[@specialized(Specializable.Primitives) A](value: A): Arbitrary[A] = new Constant(value)

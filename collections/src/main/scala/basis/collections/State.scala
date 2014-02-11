@@ -7,5 +7,5 @@
 package basis.collections
 
 trait State[+Result] extends Any {
-  type State = Result
+  type State = (Result @scala.annotation.unchecked.uncheckedVariance)
 }
