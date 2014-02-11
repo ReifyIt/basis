@@ -10,59 +10,24 @@ package sequential
 import basis.util._
 
 final class GeneralArrayOps[A](val __ : Array[A]) extends AnyVal {
-  def isEmpty: Boolean =
-    macro GeneralArrayOps.isEmpty[A]
-
-  def foreach[U](f: A => U): Unit =
-    macro GeneralArrayOps.foreach[A, U]
-
-  def fold[B >: A](z: B)(op: (B, B) => B): B =
-    macro GeneralArrayOps.foldLeft[A, B]
-
-  def reduce[B >: A](op: (B, B) => B): B =
-    macro GeneralArrayOps.reduceLeft[A, B]
-
-  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
-    macro GeneralArrayOps.mayReduceLeft[A, B]
-
-  def foldLeft[B](z: B)(op: (B, A) => B): B =
-    macro GeneralArrayOps.foldLeft[A, B]
-
-  def reduceLeft[B >: A](op: (B, A) => B): B =
-    macro GeneralArrayOps.reduceLeft[A, B]
-
-  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
-    macro GeneralArrayOps.mayReduceLeft[A, B]
-
-  def foldRight[B](z: B)(op: (A, B) => B): B =
-    macro GeneralArrayOps.foldRight[A, B]
-
-  def reduceRight[B >: A](op: (A, B) => B): B =
-    macro GeneralArrayOps.reduceRight[A, B]
-
-  def mayReduceRight[B >: A](op: (A, B) => B): Maybe[B] =
-    macro GeneralArrayOps.mayReduceRight[A, B]
-
-  def find(p: A => Boolean): Maybe[A] =
-    macro GeneralArrayOps.find[A]
-
-  def forall(p: A => Boolean): Boolean =
-    macro GeneralArrayOps.forall[A]
-
-  def exists(p: A => Boolean): Boolean =
-    macro GeneralArrayOps.exists[A]
-
-  def count(p: A => Boolean): Int =
-    macro GeneralArrayOps.count[A]
-
-  def choose[B](q: PartialFunction[A, B]): Maybe[B] =
-    macro GeneralArrayOps.choose[A, B]
-
-  def eagerly: StrictArrayOps[A, Array[_]] =
-    macro GeneralArrayOps.eagerly[A]
-
-  def lazily: NonStrictArrayOps[A] =
-    macro GeneralArrayOps.lazily[A]
+  def choose[B](q: PartialFunction[A, B]): Maybe[B]     = macro GeneralArrayOps.choose[A, B]
+  def count(p: A => Boolean): Int                       = macro GeneralArrayOps.count[A]
+  def eagerly: StrictArrayOps[A, Array[_]]              = macro GeneralArrayOps.eagerly[A]
+  def exists(p: A => Boolean): Boolean                  = macro GeneralArrayOps.exists[A]
+  def find(p: A => Boolean): Maybe[A]                   = macro GeneralArrayOps.find[A]
+  def foldLeft[B](z: B)(op: (B, A) => B): B             = macro GeneralArrayOps.foldLeft[A, B]
+  def foldRight[B](z: B)(op: (A, B) => B): B            = macro GeneralArrayOps.foldRight[A, B]
+  def fold[B >: A](z: B)(op: (B, B) => B): B            = macro GeneralArrayOps.foldLeft[A, B]
+  def forall(p: A => Boolean): Boolean                  = macro GeneralArrayOps.forall[A]
+  def foreach[U](f: A => U): Unit                       = macro GeneralArrayOps.foreach[A, U]
+  def isEmpty: Boolean                                  = macro GeneralArrayOps.isEmpty[A]
+  def lazily: NonStrictArrayOps[A]                      = macro GeneralArrayOps.lazily[A]
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B]  = macro GeneralArrayOps.mayReduceLeft[A, B]
+  def mayReduceRight[B >: A](op: (A, B) => B): Maybe[B] = macro GeneralArrayOps.mayReduceRight[A, B]
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B]      = macro GeneralArrayOps.mayReduceLeft[A, B]
+  def reduceLeft[B >: A](op: (B, A) => B): B            = macro GeneralArrayOps.reduceLeft[A, B]
+  def reduceRight[B >: A](op: (A, B) => B): B           = macro GeneralArrayOps.reduceRight[A, B]
+  def reduce[B >: A](op: (B, B) => B): B                = macro GeneralArrayOps.reduceLeft[A, B]
 }
 
 private[sequential] object GeneralArrayOps {
