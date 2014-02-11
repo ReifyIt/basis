@@ -50,8 +50,6 @@ final class HashSet[+A] private[collections] (
     * @group Updating */
   def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
 
-  private def knotMap: Int = treeMap & leafMap
-
   private def slotMap: Int = treeMap | leafMap
 
   private def choose(hash: Int, shift: Int): Int = 1 << ((hash >>> shift) & 0x1F)

@@ -36,9 +36,9 @@ trait BinaryForm { variant: Variant =>
       }
       var i = 0L
       while (canLoad(i + 2L)) {
-        val x = loadByte(i) & 0xFF
-        val y = loadByte(i + 1L) & 0xFF
-        val z = loadByte(i + 2L) & 0xFF
+        val x: Int = loadByte(i) & 0xFF
+        val y: Int = loadByte(i + 1L) & 0xFF
+        val z: Int = loadByte(i + 2L) & 0xFF
         builder.append(encodeDigit(x >>> 2))
         builder.append(encodeDigit(((x << 4) | (y >>> 4)) & 0x3F))
         builder.append(encodeDigit(((y << 2) | (z >>> 6)) & 0x3F))

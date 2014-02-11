@@ -62,8 +62,6 @@ final class HashMap[+A, +T] private[collections] (
     * @group Projecting */
   def values: Container[T] = new Values
 
-  private def knotMap: Int = treeMap & leafMap
-
   private def slotMap: Int = treeMap | leafMap
 
   private def choose(hash: Int, shift: Int): Int = 1 << ((hash >>> shift) & 0x1F)

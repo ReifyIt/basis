@@ -55,7 +55,7 @@ private[generic] object ArrayFactory {
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
 
-    import c.{ Expr, prefix, Tree, weakTypeOf, WeakTypeTag }
+    import c.{ Expr, prefix, weakTypeOf, WeakTypeTag }
     import c.universe._
 
     var b = Apply(TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: Nil), Nil)

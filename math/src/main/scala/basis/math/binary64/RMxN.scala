@@ -360,7 +360,7 @@ trait RMxN extends FMxN { RMxN =>
 
     override def hashCode: Int = {
       import scala.util.hashing.MurmurHash3._
-      var d = Col.dim * Row.dim
+      val d = Col.dim * Row.dim
       var h = -1997372447
       var k = 0
       while (k < d) {

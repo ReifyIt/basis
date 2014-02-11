@@ -40,7 +40,7 @@ private[generic] object MapFactory {
       (implicit CCTag: c.WeakTypeTag[CC[_, _]], ATag: c.WeakTypeTag[A], TTag: c.WeakTypeTag[T])
     : c.Expr[CC[A, T]] = {
 
-    import c.{ Expr, prefix, Tree, weakTypeOf, WeakTypeTag }
+    import c.{ Expr, prefix, weakTypeOf, WeakTypeTag }
     import c.universe._
 
     var b = Apply(TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: TypeTree(weakTypeOf[T]) :: Nil), Nil)

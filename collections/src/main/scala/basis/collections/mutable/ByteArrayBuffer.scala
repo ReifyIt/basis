@@ -245,7 +245,7 @@ private[collections] class ByteArrayBuffer private (
 
   override def expect(count: Int): this.type = {
     if (buffer == null || size + count > buffer.length) {
-      var array = new Array[Byte](size + count)
+      val array = new Array[Byte](size + count)
       if (buffer != null) java.lang.System.arraycopy(buffer, 0, array, 0, size)
       buffer = array
       aliased = false

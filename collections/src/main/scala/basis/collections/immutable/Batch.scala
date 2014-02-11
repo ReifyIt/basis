@@ -7,7 +7,6 @@
 package basis.collections
 package immutable
 
-import basis.collections.generic._
 import scala.Predef.<:<
 
 abstract class Batch[+A] private[collections]
