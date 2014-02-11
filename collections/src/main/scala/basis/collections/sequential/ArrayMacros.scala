@@ -17,150 +17,62 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
 
   val universe: context.universe.type = context.universe
 
-  def isEmpty[A](these: Expr[Array[A]]): Expr[Boolean] =
-    Expr[Boolean](
-      Apply(
-        Select(Select(these.tree, "length": TermName), ("==": TermName).encodedName),
-        Literal(Constant(0)) :: Nil))
+  def isEmpty[A](these: Expr[Array[A]]) = Expr[Boolean](q"$these.length == 0")
 
-  def foreach[A, U]
-      (these: Expr[Array[A]])
-      (f: Expr[A => U])
-    : Expr[Unit] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val n    = fresh("n$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Unit](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length": TermName)) :: Nil,
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            Block(
-              Apply(f.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Nil) ::
-              Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree))))
-  }
+  def foreach[A, U](these: Expr[Array[A]])(f: Expr[A => U]) = Expr[Unit](q"""{
+    var i = 0
+    val n = $these.length
+    while (i < n) {
+      $f($these(i))
+      i += 1
+    }
+  }""")
 
-  def foldLeft[A, B : WeakTypeTag]
-      (these: Expr[Array[A]])
-      (z: Expr[B])
-      (op: Expr[(B, A) => B])
-    : Expr[B] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val n    = fresh("n$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[B](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length": TermName)) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            Block(
-              Assign(Ident(r), Apply(op.tree, Ident(r) :: Apply(Ident(xs), Ident(i) :: Nil) :: Nil)) ::
-              Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def foldLeft[A, B : WeakTypeTag](these: Expr[Array[A]])(z: Expr[B])(op: Expr[(B, A) => B]) = Expr[B](q"""{
+    var i = 0
+    val n = $these.length
+    var acc = $z
+    while (i < n) {
+      acc = $op(acc, $these(i))
+      i += 1
+    }
+    acc
+  }""")
 
-  def reduceLeft[A, B >: A : WeakTypeTag]
-      (these: Expr[Array[A]])
-      (op: Expr[(B, A) => B])
-    : Expr[B] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val n    = fresh("n$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[B](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(1))) ::
-        ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length": TermName)) ::
-        If(
-          Apply(Select(Ident(n), ("<=": TermName).encodedName), Literal(Constant(0)) :: Nil),
-          Throw(
-            Apply(
-              Select(New(TypeTree(weakTypeOf[UnsupportedOperationException])), nme.CONSTRUCTOR),
-              Literal(Constant("empty reduce")) :: Nil)),
-          EmptyTree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Apply(Ident(xs), Literal(Constant(0)) :: Nil)) ::
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            Block(
-              Assign(Ident(r), Apply(op.tree, Ident(r) :: Apply(Ident(xs), Ident(i) :: Nil) :: Nil)) ::
-              Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  private def reduceCommon[A, B >: A : WeakTypeTag](these: Expr[Array[A]])(op: Expr[(B, A) => B]) = Expr[B](q"""{
+    var i = 1
+    val n = $these.length
+    var acc = $these(0)
+    while (i < n) {
+      acc = $op(acc, $these(i))
+      i += 1
+    }
+    acc
+  }""")
 
-  def mayReduceLeft[A, B >: A : WeakTypeTag]
-      (these: Expr[Array[A]])
-      (op: Expr[(B, A) => B])
-    : Expr[Maybe[B]] = {
-    val xs   = fresh("xs$"): TermName
-    val n    = fresh("n$"): TermName
-    val r    = fresh("r$"): TermName
-    val i    = fresh("i$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Maybe[B]](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length": TermName)) :: Nil,
-        If(
-          Apply(Select(Ident(n), ("<=": TermName).encodedName), Literal(Constant(0)) :: Nil),
-          Select(BasisUtil, "Trap": TermName),
-          Block(
-            ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Apply(Ident(xs), Literal(Constant(0)) :: Nil)) ::
-            ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(1))) ::
-            LabelDef(loop, Nil,
-              If(
-                Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-                Block(
-                  Assign(Ident(r), Apply(op.tree, Ident(r) :: Apply(Ident(xs), Ident(i) :: Nil) :: Nil)) ::
-                  Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-                  Apply(Ident(loop), Nil)),
-                EmptyTree)) :: Nil,
-            Apply(Select(BasisUtil, "Bind": TermName), Ident(r) :: Nil)))))
-  }
+  def reduceLeft[A, B >: A : WeakTypeTag](these: Expr[Array[A]])(op: Expr[(B, A) => B]) = Expr[B](q"""{
+    if ($these.isEmpty)
+      throw new UnsupportedOperationException("empty reduce")
+    else
+      ${reduceCommon[A, B](these)(op)}
+  }""")
 
-  def foldRight[A, B : WeakTypeTag]
-      (these: Expr[Array[A]])
-      (z: Expr[B])
-      (op: Expr[(A, B) => B])
-    : Expr[B] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[B](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(),
-          Apply(Select(Select(Ident(xs), "length": TermName), ("-": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), (">=": TermName).encodedName), Literal(Constant(0)) :: Nil),
-            Block(
-              Assign(Ident(r), Apply(op.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Ident(r) :: Nil)) ::
-              Assign(Ident(i), Apply(Select(Ident(i), ("-": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def mayReduceLeft[A, B >: A : WeakTypeTag](these: Expr[Array[A]])(op: Expr[(B, A) => B]) = Expr[Maybe[B]](q"""
+    if ($these.isEmpty)
+      basis.util.Trap
+    else
+      basis.util.Bind(${reduceCommon[A, B](these)(op)})
+  """)
+
+  def foldRight[A, B : WeakTypeTag](these: Expr[Array[A]])(z: Expr[B])(op: Expr[(A, B) => B]) = Expr[B](q"""{
+    var i = $these.length - 1
+    var acc = $z
+    while (i >= 0) {
+      acc = $op($these(i), acc)
+      i -= 1
+    }
+    acc
+  }""")
 
   def reduceRight[A, B >: A : WeakTypeTag]
       (these: Expr[Array[A]])
@@ -225,122 +137,38 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
             Apply(Select(BasisUtil, "Bind": TermName), Ident(r) :: Nil)))))
   }
 
-  def find[A : WeakTypeTag]
-      (these: Expr[Array[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Maybe[A]] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val n    = fresh("n$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    val x    = fresh("x$"): TermName
-    implicit val MaybeATag = MaybeTag[A]
-    Expr[Maybe[A]](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length": TermName)) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[A]]), Select(BasisUtil, "Trap": TermName)) ::
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            Block(
-              ValDef(NoMods, x, TypeTree(), Apply(Ident(xs), Ident(i) :: Nil)) :: Nil,
-              If(
-                Apply(p.tree, Ident(x) :: Nil),
-                Assign(Ident(r), Apply(Select(BasisUtil, "Bind": TermName), Ident(x) :: Nil)),
-                Block(
-                  Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-                  Apply(Ident(loop), Nil)))),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def find[A: WeakTypeTag](these: Expr[Array[A]])(p: Expr[A => Boolean]) = Expr[Maybe[A]](q"""{
+    val xs = $these
+    var i = 0
+    val n = xs.length
+    def loop(i: Int): basis.util.Maybe[${weakTypeOf[A]}] = (
+      if (i >= n) basis.util.Trap
+      else if ($p(xs(i))) basis.util.Bind(xs(i))
+      else loop(i + 1)
+    )
+    loop(0)
+  }""")
 
-  def forall[A]
-      (these: Expr[Array[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Boolean] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val n    = fresh("n$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Boolean](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length": TermName)) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            If(
-              Apply(p.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Nil),
-              Block(
-                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-                Apply(Ident(loop), Nil)),
-              Assign(Ident(r), Literal(Constant(false)))),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def forall[A: WeakTypeTag](these: Expr[Array[A]])(p: Expr[A => Boolean]) = Expr[Boolean](q"""{
+    val xs = $these
+    val n = xs.length
+    def loop(i: Int): Boolean = (i >= n) || ($p(xs(i)) && loop(i + 1))
+    loop(0)
+  }""")
 
-  def exists[A]
-      (these: Expr[Array[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Boolean] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val n    = fresh("n$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Boolean](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length": TermName)) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            If(
-              Apply(p.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Nil),
-              Assign(Ident(r), Literal(Constant(true))),
-              Block(
-                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-                Apply(Ident(loop), Nil))),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def exists[A](these: Expr[Array[A]])(p: Expr[A => Boolean]) = Expr[Boolean](q"""{
+    val xs = $these
+    val n = xs.length
+    def loop(i: Int): Boolean = (i < n) && ($p(xs(i)) || loop(i + 1))
+    loop(0)
+  }""")
 
-  def count[A]
-      (these: Expr[Array[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Int] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val n    = fresh("n$"): TermName
-    val t    = fresh("t$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Int](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(NoMods, n, TypeTree(), Select(Ident(xs), "length": TermName)) ::
-        ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            Block(
-              If(
-                Apply(p.tree, Apply(Ident(xs), Ident(i) :: Nil) :: Nil),
-                Assign(Ident(t), Apply(Select(Ident(t), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)),
-                EmptyTree) ::
-              Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Ident(t)))
-  }
+  def count[A](these: Expr[Array[A]])(p: Expr[A => Boolean]) = Expr[Int](q"""{
+    val xs = $these
+    val n = xs.length
+    def loop(i: Int, acc: Int): Boolean = if (i >= n) acc else loop(i + 1, acc + ( if ($p(xs(i))) 1 else 0 ))
+    loop(0, 0)
+  }""")
 
   def choose[A, B : WeakTypeTag]
       (these: Expr[Array[A]])
