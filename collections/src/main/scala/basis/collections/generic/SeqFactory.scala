@@ -7,15 +7,12 @@
 package basis.collections
 package generic
 
+import basis.util._
+
 trait SeqFactory[+CC[_]] extends CollectionFactory[CC] {
-  def fill[A](count: Int)(elem: => A): CC[A] =
-    macro SeqFactory.fill[CC, A]
-
-  def tabulate[A](count: Int)(f: Int => A): CC[A] =
-    macro SeqFactory.tabulate[CC, A]
-
-  def iterate[A](start: A, count: Int)(f: A => A): CC[A] =
-    macro SeqFactory.iterate[CC, A]
+  def fill[A](count: Int)(elem: => A): CC[A]             = macro SeqFactory.fill[CC, A]
+  def tabulate[A](count: Int)(f: Int => A): CC[A]        = macro SeqFactory.tabulate[CC, A]
+  def iterate[A](start: A, count: Int)(f: A => A): CC[A] = macro SeqFactory.iterate[CC, A]
 
   implicit override def Factory: SeqFactory[CC] = this
 }
@@ -25,7 +22,7 @@ private[generic] object SeqFactory {
   import scala.reflect.macros.Context
 
   def fill[CC[_], A]
-      (c: Context { type PrefixType <: SeqFactory[CC] })
+      (c: ContextWithPre[SeqFactory[CC]])
       (count: c.Expr[Int])
       (elem: c.Expr[A])
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
@@ -35,7 +32,7 @@ private[generic] object SeqFactory {
     val i    = fresh("i$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
-    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    implicit val CCATag = applied[CC, A](c)
     Expr[CC[A]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), count.tree) ::
@@ -55,7 +52,7 @@ private[generic] object SeqFactory {
   }
 
   def tabulate[CC[_], A]
-      (c: Context { type PrefixType <: SeqFactory[CC] })
+      (c: ContextWithPre[SeqFactory[CC]])
       (count: c.Expr[Int])
       (f: c.Expr[Int => A])
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
@@ -66,7 +63,7 @@ private[generic] object SeqFactory {
     val n    = fresh("n$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
-    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    implicit val CCATag = applied[CC, A](c)
     Expr[CC[A]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
@@ -87,7 +84,7 @@ private[generic] object SeqFactory {
   }
 
   def iterate[CC[_], A]
-      (c: Context { type PrefixType <: SeqFactory[CC] })
+      (c: ContextWithPre[SeqFactory[CC]])
       (start: c.Expr[A], count: c.Expr[Int])
       (f: c.Expr[A => A])
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
@@ -99,7 +96,7 @@ private[generic] object SeqFactory {
     val a    = fresh("a$"): TermName
     val i    = fresh("i$"): TermName
     val loop = fresh("loop$"): TermName
-    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    implicit val CCATag = applied[CC, A](c)
     Expr[CC[A]](
       Block(
         ValDef(NoMods, n, TypeTree(), count.tree) ::

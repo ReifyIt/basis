@@ -8,7 +8,7 @@ package basis.collections
 package generic
 
 import scala.reflect._
-import basis.util.applied
+import basis.util._
 
 trait ArrayFactory[+CC[_]] {
   def empty[A](implicit A: ClassTag[A]): CC[A] = Builder[A]().state
@@ -51,7 +51,7 @@ private[generic] object ArrayFactory {
   import scala.reflect.macros.Context
 
   def apply[CC[_], A]
-      (c: Context { type PrefixType <: ArrayFactory[CC] })
+      (c: ContextWithPre[ArrayFactory[CC]])
       (elems: c.Expr[A]*)
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {
@@ -70,7 +70,7 @@ private[generic] object ArrayFactory {
   }
 
   def fill[CC[_], A]
-      (c: Context { type PrefixType <: ArrayFactory[CC] })
+      (c: ContextWithPre[ArrayFactory[CC]])
       (count: c.Expr[Int])
       (elem: c.Expr[A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
@@ -100,7 +100,7 @@ private[generic] object ArrayFactory {
   }
 
   def tabulate[CC[_], A]
-      (c: Context { type PrefixType <: ArrayFactory[CC] })
+      (c: ContextWithPre[ArrayFactory[CC]])
       (count: c.Expr[Int])
       (f: c.Expr[Int => A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])
@@ -132,7 +132,7 @@ private[generic] object ArrayFactory {
   }
 
   def iterate[CC[_], A]
-      (c: Context { type PrefixType <: ArrayFactory[CC] })
+      (c: ContextWithPre[ArrayFactory[CC]])
       (start: c.Expr[A], count: c.Expr[Int])
       (f: c.Expr[A => A])
       (implicit CCTag : c.WeakTypeTag[CC[_]], ATag : c.WeakTypeTag[A])

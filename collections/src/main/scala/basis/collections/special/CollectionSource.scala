@@ -7,6 +7,8 @@
 package basis.collections
 package special
 
+import basis.util._
+
 trait CollectionSource[+CC, -A] {
   def empty: CC = Builder().state
 
@@ -33,7 +35,7 @@ private[special] object CollectionSource {
   import scala.reflect.macros.Context
 
   def apply[CC, A]
-      (c: Context { type PrefixType <: CollectionSource[CC, A] })
+      (c: ContextWithPre[CollectionSource[CC, A]])
       (elems: c.Expr[A]*)
       (implicit CCTag: c.WeakTypeTag[CC])
     : c.Expr[CC] = {

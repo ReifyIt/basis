@@ -7,12 +7,12 @@
 package basis.form
 package json
 
+import basis.util._
+
 class JsonStringContext[-V <: JsonVariant](variant: V, stringContext: StringContext) {
-  def json(args: V#AnyForm*): V#AnyForm = macro JsonStringContext.json[V]
-
+  def json(args: V#AnyForm*): V#AnyForm        = macro JsonStringContext.json[V]
   def jsobject(args: V#AnyForm*): V#ObjectForm = macro JsonStringContext.jsobject[V]
-
-  def jsarray(args: V#AnyForm*): V#SeqForm = macro JsonStringContext.jsarray[V]
+  def jsarray(args: V#AnyForm*): V#SeqForm     = macro JsonStringContext.jsarray[V]
 }
 
 private[json] object JsonStringContext {
@@ -20,7 +20,7 @@ private[json] object JsonStringContext {
   import scala.reflect.macros.Context
 
   def JsonStringContext[V <: JsonVariant]
-      (c: Context { type PrefixType <: V })
+      (c: ContextWithPre[V])
       (stringContext: c.Expr[StringContext])
     : c.Expr[JsonStringContext[V]] = {
     import c.{ Expr, mirror, prefix, weakTypeOf, WeakTypeTag }

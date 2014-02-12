@@ -7,6 +7,8 @@
 package basis.collections
 package generic
 
+import basis.util._
+
 trait MapFactory[+CC[_, _]] {
   def empty[A, T]: CC[A, T] = Builder[A, T]().state
 
@@ -35,7 +37,7 @@ private[generic] object MapFactory {
   import scala.reflect.macros.Context
 
   def apply[CC[_, _], A, T]
-      (c: Context { type PrefixType <: MapFactory[CC] })
+      (c: ContextWithPre[MapFactory[CC]])
       (entries: c.Expr[(A, T)]*)
       (implicit CCTag: c.WeakTypeTag[CC[_, _]], ATag: c.WeakTypeTag[A], TTag: c.WeakTypeTag[T])
     : c.Expr[CC[A, T]] = {

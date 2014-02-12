@@ -7,7 +7,8 @@
 package basis.collections
 package generic
 
-import basis.util.applied
+import basis.util._
+// applied
 
 trait CollectionFactory[+CC[_]] {
   def empty[A]: CC[A] = Builder[A]().state
@@ -37,7 +38,7 @@ private[generic] object CollectionFactory {
   import scala.reflect.macros.Context
 
   def apply[CC[_], A]
-      (c: Context { type PrefixType <: CollectionFactory[CC] })
+      (c: ContextWithPre[CollectionFactory[CC]])
       (elems: c.Expr[A]*)
       (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
     : c.Expr[CC[A]] = {

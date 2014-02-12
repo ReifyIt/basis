@@ -7,15 +7,12 @@
 package basis.collections
 package special
 
+import basis.util._
+
 trait SeqSource[+CC, -A] extends CollectionSource[CC, A] {
-  def fill(count: Int)(elem: => A): CC =
-    macro SeqSource.fill[CC, A]
-
-  def tabulate(count: Int)(f: Int => A): CC =
-    macro SeqSource.tabulate[CC, A]
-
-  def iterate(start: A, count: Int)(f: A => A): CC =
-    macro SeqSource.iterate[CC, A]
+  def fill(count: Int)(elem: => A): CC             = macro SeqSource.fill[CC, A]
+  def tabulate(count: Int)(f: Int => A): CC        = macro SeqSource.tabulate[CC, A]
+  def iterate(start: A, count: Int)(f: A => A): CC = macro SeqSource.iterate[CC, A]
 }
 
 private[special] object SeqSource {
@@ -23,7 +20,7 @@ private[special] object SeqSource {
   import scala.reflect.macros.Context
 
   def fill[CC, A]
-      (c: Context { type PrefixType <: SeqSource[CC, A] })
+      (c: ContextWithPre[SeqSource[CC, A]])
       (count: c.Expr[Int])
       (elem: c.Expr[A])
       (implicit CCTag: c.WeakTypeTag[CC])
@@ -52,7 +49,7 @@ private[special] object SeqSource {
   }
 
   def tabulate[CC, A]
-      (c: Context { type PrefixType <: SeqSource[CC, A] })
+      (c: ContextWithPre[SeqSource[CC, A]])
       (count: c.Expr[Int])
       (f: c.Expr[Int => A])
       (implicit CCTag: c.WeakTypeTag[CC])
@@ -83,7 +80,7 @@ private[special] object SeqSource {
   }
 
   def iterate[CC, A]
-      (c: Context { type PrefixType <: SeqSource[CC, A] })
+      (c: ContextWithPre[SeqSource[CC, A]])
       (start: c.Expr[A], count: c.Expr[Int])
       (f: c.Expr[A => A])
       (implicit CCTag: c.WeakTypeTag[CC])

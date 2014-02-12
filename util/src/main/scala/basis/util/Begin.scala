@@ -25,9 +25,8 @@ class Begin {
 
 private[util] object BeginMacros {
   import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
 
-  def apply(c: Context { type PrefixType <: Begin })(op: c.Expr[Unit]): c.Expr[Unit] = {
+  def apply(c: ContextWithPre[Begin])(op: c.Expr[Unit]): c.Expr[Unit] = {
     import c.{ Expr, fresh, prefix, WeakTypeTag }
     import c.universe._
     val signal = newTermName(fresh("signal$"))
@@ -45,7 +44,7 @@ private[util] object BeginMacros {
         EmptyTree))(WeakTypeTag.Unit)
   }
 
-  def break(c: Context { type PrefixType <: Begin })(): c.Expr[Nothing] = {
+  def break(c: ContextWithPre[Begin])(): c.Expr[Nothing] = {
     import c.{ Expr, prefix, WeakTypeTag }
     import c.universe._
     Expr[Nothing](Throw(Select(prefix.tree, "signal": TermName)))(WeakTypeTag.Nothing)
