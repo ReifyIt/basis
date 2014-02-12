@@ -16,7 +16,7 @@ package object util extends basis.util.Types {
   type Try[+A] = A Else Throwable
 
   def Try[A](expr: => A): Try[A] =
-    macro FuseMacros.Try[A]
+    macro FuseMacrosStatics.Try[A]
 
   type Truth = Boolean Else Any
 
@@ -28,10 +28,10 @@ package object util extends basis.util.Types {
   val begin: Begin = new Begin
 
   implicit def ElseToOps[A, B](self: A Else B): ElseOps[A, B] =
-    macro ElseMacros.ElseToOps[A, B]
+    macro ElseMacrosStatics.ElseToOps[A, B]
 
   implicit def MaybeToOps[A](self: A Else Nothing): ElseOps[A, Nothing] =
-    macro ElseMacros.ElseToOps[A, Nothing]
+    macro ElseMacrosStatics.ElseToOps[A, Nothing]
 
   implicit def TruthToOps(self: Truth): TruthOps =
     macro TruthOps.TruthToOps

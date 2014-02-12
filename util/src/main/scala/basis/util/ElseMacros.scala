@@ -212,7 +212,7 @@ private[util] class ElseMacros[C <: Context](val context: C) {
     Select(Select(Ident(nme.ROOTPKG), "scala": TermName), "PartialFunction": TermName)
 }
 
-private[util] object ElseMacros {
+private[util] object ElseMacrosStatics {
   private def unApply[A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context): c.Expr[A Else B] = {
     import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
     import c.universe._
@@ -313,7 +313,7 @@ private[util] object ElseMacros {
       (c: Context)
       (trip: c.Expr[Throwable => Trap[Y]])
     : c.Expr[FuseOps[A, Y]] =
-    FuseMacros.FuseToOps[A, Y](c)(unApply[A, Y](c))(trip)
+    FuseMacrosStatics.FuseToOps[A, Y](c)(unApply[A, Y](c))(trip)
 
   def fuseTry[A : c.WeakTypeTag]
       (c: Context)
@@ -321,6 +321,6 @@ private[util] object ElseMacros {
     : c.Expr[FuseOps[A, Throwable]] = {
     val ThrowableTpe = c.mirror.staticClass("java.lang.Throwable").toType
     implicit val ThrowableTag = c.WeakTypeTag[Throwable](ThrowableTpe)
-    FuseMacros.TryFuseToOps[A](c)(unApply[A, Throwable](c))
+    FuseMacrosStatics.TryFuseToOps[A](c)(unApply[A, Throwable](c))
   }
 }
