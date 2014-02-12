@@ -1,11 +1,12 @@
 def scalatestVer(scalaVersion: String): String = scalaVersion match {
+  case "2.11.0-M8" => "2.1.0-RC2"
   case "2.11.0-M7" => "2.0.1-SNAP4"
   case "2.10.3"    => "1.9.2"
 }
 
-scalaVersion in Global := "2.10.3"
+scalaVersion in Global := "2.11.0-M8"
 
-crossScalaVersions in Global := Seq(scalaVersion.value, "2.11.0-M7")
+crossScalaVersions in Global := Seq("2.10.3", "2.11.0-M7", "2.11.0-M8")
 
 scalacOptions in Global ++= Seq("-language:experimental.macros", "-Yno-predef")
 
