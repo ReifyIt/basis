@@ -49,6 +49,8 @@ trait DateForm { variant: Variant =>
   trait BaseDateFactory {
     def apply(millis: Long): DateForm
 
+    def now: DateForm = apply(System.currentTimeMillis)
+
     override def toString: String = "DateForm"
   }
 }
