@@ -84,7 +84,7 @@ private[util] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
     Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "util": TermName)
 }
 
-private[util] object FuseMacros {
+private[util] object FuseMacrosStatics {
   private def unApply[A : c.WeakTypeTag, B : c.WeakTypeTag](c: Context)
     : (c.Expr[A Else B], c.Expr[Throwable => Trap[B]]) = {
     import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
