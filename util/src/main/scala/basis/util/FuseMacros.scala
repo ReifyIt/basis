@@ -78,8 +78,7 @@ private[util] class FuseMacros[C <: Context](c: C) extends ElseMacros[C](c) {
     fuse[A, Throwable](BindExpr)(TrapNonFatal)
   }
 
-  implicit protected def ThrowableTag: WeakTypeTag[Throwable] =
-    WeakTypeTag[Throwable](mirror.staticClass("java.lang.Throwable").toType)
+  implicit protected def ThrowableTag: WeakTypeTag[Throwable] = applied[Throwable](context)
 
   private def BasisUtil: Tree =
     Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "util": TermName)
@@ -91,11 +90,8 @@ private[util] object FuseMacros {
     import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
     import c.universe._
     val Apply(_, self :: trip :: Nil) = prefix.tree
-    implicit val AElseBTag =
-      WeakTypeTag[A Else B](
-        appliedType(
-          mirror.staticClass("basis.util.Else").toType,
-          weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+    implicit val AElseBTag: c.WeakTypeTag[A Else B] = applied[Else, A, B](c)
+
     implicit val ThrowableToTrapBTag =
       WeakTypeTag[Throwable => Trap[B]](
         appliedType(
@@ -115,11 +111,8 @@ private[util] object FuseMacros {
     : c.Expr[FuseOps[A, B]] = {
     import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
     import c.universe._
-    implicit val FuseOpsABTag =
-      WeakTypeTag[FuseOps[A, B]](
-        appliedType(
-          mirror.staticClass("basis.util.FuseOps").toType,
-          weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+    implicit val FuseOpsABTag: c.WeakTypeTag[A FuseOps B] = applied[FuseOps, A, B](c)
+
     Expr[FuseOps[A, B]](
       Apply(
         Select(New(TypeTree(weakTypeOf[FuseOps[A, B]])), nme.CONSTRUCTOR),

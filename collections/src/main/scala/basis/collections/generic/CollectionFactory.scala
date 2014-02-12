@@ -7,6 +7,8 @@
 package basis.collections
 package generic
 
+import basis.util.applied
+
 trait CollectionFactory[+CC[_]] {
   def empty[A]: CC[A] = Builder[A]().state
 
@@ -49,7 +51,7 @@ private[generic] object CollectionFactory {
     val xs = elems.iterator
     while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
 
-    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    implicit val CCATag = applied[CC, A](c)
     Expr[CC[A]](Select(b, "state": TermName))
   }
 }

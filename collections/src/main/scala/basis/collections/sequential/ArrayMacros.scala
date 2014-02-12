@@ -740,14 +740,9 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
     WeakTypeTag[Maybe[A]](MaybeATpe)
   }
 
-  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
-    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
-    val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    WeakTypeTag[(A, B)](Tuple2ABTpe)
-  }
+  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = applied[Tuple2, A, B](context)
 
-  implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] =
-    WeakTypeTag(mirror.staticClass("java.lang.UnsupportedOperationException").toType)
+  implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] = applied[UnsupportedOperationException](context)
 
   private def BasisUtil: Tree =
     Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "util": TermName)
@@ -758,9 +753,12 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
   private def JavaLang: Tree =
     Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName)
 
-  private def max(x: Tree, y: Tree): Tree =
-    Apply(Select(Select(JavaLang, "Math": TermName), "max": TermName), x :: y :: Nil)
+  private def mathBinaryIntExpr(name: TermName)(x: Tree, y: Tree): Tree = {
+    val p1 = Expr[Int](x)
+    val p2 = Expr[Int](y)
+    q"java.lang.Math.$name($p1, $p2)"
+  }
 
-  private def min(x: Tree, y: Tree): Tree =
-    Apply(Select(Select(JavaLang, "Math": TermName), "min": TermName), x :: y :: Nil)
+  private def max(x: Tree, y: Tree): Tree = mathBinaryIntExpr("max")(x, y)
+  private def min(x: Tree, y: Tree): Tree = mathBinaryIntExpr("min")(x, y)
 }

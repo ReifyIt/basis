@@ -8,6 +8,7 @@ package basis.collections
 package generic
 
 import scala.reflect._
+import basis.util.applied
 
 trait ArrayFactory[+CC[_]] {
   def empty[A](implicit A: ClassTag[A]): CC[A] = Builder[A]().state
@@ -64,7 +65,7 @@ private[generic] object ArrayFactory {
     val xs = elems.iterator
     while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
 
-    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    implicit val CCATag = applied[CC, A](c)
     Expr[CC[A]](Select(b, "state": TermName))
   }
 
@@ -79,7 +80,7 @@ private[generic] object ArrayFactory {
     val i    = fresh("i$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
-    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    implicit val CCATag = applied[CC, A](c)
     Expr[CC[A]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), count.tree) ::
@@ -110,7 +111,7 @@ private[generic] object ArrayFactory {
     val n    = fresh("n$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
-    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    implicit val CCATag = applied[CC, A](c)
     Expr[CC[A]](
       Block(
         ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
@@ -143,7 +144,7 @@ private[generic] object ArrayFactory {
     val a    = fresh("a$"): TermName
     val i    = fresh("i$"): TermName
     val loop = fresh("loop$"): TermName
-    implicit val CCATag = WeakTypeTag[CC[A]](appliedType(weakTypeOf[CC[_]], weakTypeOf[A] :: Nil))
+    implicit val CCATag = applied[CC, A](c)
     Expr[CC[A]](
       Block(
         ValDef(NoMods, n, TypeTree(), count.tree) ::

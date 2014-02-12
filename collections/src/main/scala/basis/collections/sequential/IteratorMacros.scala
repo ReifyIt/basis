@@ -659,18 +659,8 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
     WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
 
-  implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {
-    val BasisUtil = mirror.staticPackage("basis.util").moduleClass
-    val MaybeTpc = BasisUtil.typeSignature.member("Maybe": TypeName).asType.toType
-    val MaybeATpe = appliedType(MaybeTpc, weakTypeOf[A] :: Nil)
-    WeakTypeTag[Maybe[A]](MaybeATpe)
-  }
-
-  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
-    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
-    val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    WeakTypeTag[(A, B)](Tuple2ABTpe)
-  }
+  implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = applied[basis.util.Maybe, A](context)
+  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = applied[Tuple2, A, B](context)
 
   implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] =
     WeakTypeTag(mirror.staticClass("java.lang.UnsupportedOperationException").toType)

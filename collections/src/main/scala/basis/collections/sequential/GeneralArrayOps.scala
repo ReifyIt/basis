@@ -38,11 +38,7 @@ private[sequential] object GeneralArrayOps {
     import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
     import c.universe._
     val Apply(_, these :: Nil) = prefix.tree
-    implicit val ArrayATag =
-      WeakTypeTag[Array[A]](
-        appliedType(
-          mirror.staticClass("scala.Array").toType,
-          weakTypeOf[A] :: Nil))
+    implicit val ArrayATag = applied[Array, A](c)
     Expr[Array[A]](typeCheck(these, weakTypeOf[Array[A]]))
   }
 
