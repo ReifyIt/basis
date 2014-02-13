@@ -12,7 +12,7 @@ import basis.util._
 final class String2(codeUnits: Array[Char]) extends Equals with Family[String2] with UTF16 {
   override def size: Int = codeUnits.length
 
-  override def get(index: Int): Int = codeUnits(index)
+  override def get(index: Int): Int = codeUnits(index).toInt
 }
 
 object String2 extends StringFactory[String2] {

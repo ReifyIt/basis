@@ -17,7 +17,6 @@ trait SeqSource[+CC, -A] extends CollectionSource[CC, A] {
 
 private[special] object SeqSource {
   import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
 
   def fill[CC, A]
       (c: ContextWithPre[SeqSource[CC, A]])

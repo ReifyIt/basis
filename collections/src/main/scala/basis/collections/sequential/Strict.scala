@@ -74,7 +74,6 @@ private[collections] object Strict {
     : c.Expr[StrictArrayOps[A, Array[_]]] = {
     import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
     import c.universe._
-    val ArrayTpe = appliedType(mirror.staticClass("scala.Array").toType, WildcardType :: Nil)
     implicit val StrictArrayOpsATag =
       WeakTypeTag[StrictArrayOps[A, Array[_]]](
         appliedType(

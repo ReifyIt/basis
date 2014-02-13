@@ -26,10 +26,10 @@ trait BinaryForm { variant: Variant =>
     def size: Long
 
     def writeBase64(builder: StringBuilder): Unit = {
-      def encodeDigit(digit: Int): Char = {
-        if      (digit >=  0 && digit < 26) (digit + 'A').toChar
-        else if (digit >= 26 && digit < 52) (digit + ('a' - 26)).toChar
-        else if (digit >= 52 && digit < 62) (digit + ('0' - 52)).toChar
+      def encodeDigit(digit: Int): Int = {
+        if      (digit >=  0 && digit < 26) digit + 'A'
+        else if (digit >= 26 && digit < 52) digit + ('a' - 26)
+        else if (digit >= 52 && digit < 62) digit + ('0' - 52)
         else if (digit == 62) '+'
         else if (digit == 63) '/'
         else throw new MatchError(digit.toString)
@@ -89,7 +89,7 @@ trait BinaryForm { variant: Variant =>
       var h = seed[BinaryForm]
       var i = 0L
       while (canLoad(i + 1L)) {
-        h = mix(h, loadByte(i))
+        h = mix(h, loadByte(i).toInt)
         i += 1L
       }
       mash(h)

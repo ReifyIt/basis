@@ -108,49 +108,49 @@ private[sequential] object StrictTraverserOps {
     new TraverserMacros[c.type](c).++[A](unApply[A](c), those)(builder)
 
   final class CollectInto[-A, B](q: PartialFunction[A, B])(builder: Builder[B]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = if (q.isDefinedAt(x)) builder += q(x)
+    override def apply(x: A): Unit = if (q.isDefinedAt(x)) builder.append(q(x))
   }
 
   final class MapInto[-A, +B](f: A => B)(builder: Builder[B]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = builder += f(x)
+    override def apply(x: A): Unit = builder.append(f(x))
   }
 
   final class FlatMapInto[-A, +B](f: A => Traverser[B])(builder: Builder[B]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = builder ++= f(x)
+    override def apply(x: A): Unit = builder.appendAll(f(x))
   }
 
   final class FilterInto[-A](p: A => Boolean)(builder: Builder[A]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = if (p(x)) builder += x
+    override def apply(x: A): Unit = if (p(x)) builder.append(x)
   }
 
   final class DropWhileInto[-A](p: A => Boolean)(builder: Builder[A]) extends AbstractFunction1[A, Unit] {
     private[this] var taking: Boolean = false
-    override def apply(x: A): Unit = if (taking || (!p(x) && { taking = true; true })) builder += x
+    override def apply(x: A): Unit = if (taking || (!p(x) && { taking = true; true })) builder.append(x)
   }
 
   final class TakeWhileInto[-A](p: A => Boolean)(builder: Builder[A]) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = if (p(x)) builder += x else begin.break()
+    override def apply(x: A): Unit = if (p(x)) builder.append(x) else begin.break()
   }
 
   final class SpanInto[-A](p: A => Boolean)(builder1: Builder[A], builder2: Builder[A]) extends AbstractFunction1[A, Unit] {
     private[this] var taking: Boolean = false
-    override def apply(x: A): Unit = if (!taking && (p(x) || { taking = true; false })) builder1 += x else builder2 += x
+    override def apply(x: A): Unit = if (!taking && (p(x) || { taking = true; false })) builder1.append(x) else builder2.append(x)
   }
 
   final class DropInto[-A](lower: Int)(builder: Builder[A]) extends AbstractFunction1[A, Unit] {
     private[this] var i: Int = 0
-    override def apply(x: A): Unit = if (i >= lower) builder += x else i += 1
+    override def apply(x: A): Unit = if (i >= lower) builder.append(x) else i += 1
   }
 
   final class TakeInto[-A](upper: Int)(builder: Builder[A]) extends AbstractFunction1[A, Unit] {
     private[this] var i: Int = 0
-    override def apply(x: A): Unit = if (i < upper) { builder += x; i += 1 } else begin.break()
+    override def apply(x: A): Unit = if (i < upper) { builder.append(x); i += 1 } else begin.break()
   }
 
   final class SliceInto[-A](lower: Int, upper: Int)(builder: Builder[A]) extends AbstractFunction1[A, Unit] {
     private[this] var l: Int = 0 max lower
     private[this] var u: Int = l max upper
     private[this] var i: Int = 0
-    override def apply(x: A): Unit = if (i < u) { if (i >= l) builder += x; i += 1 } else begin.break()
+    override def apply(x: A): Unit = if (i < u) { if (i >= l) builder.append(x); i += 1 } else begin.break()
   }
 }

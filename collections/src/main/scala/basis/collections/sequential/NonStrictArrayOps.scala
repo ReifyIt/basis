@@ -51,8 +51,6 @@ final class NonStrictArrayOps[A](val __ : Array[A]) extends AnyVal {
 }
 
 private[sequential] object NonStrictArrayOps {
-  import scala.annotation._
-
   final class Collect[-A, +B](these: Array[A], q: PartialFunction[A, B]) extends IndexedSeq[B] {
     private[this] var table: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {

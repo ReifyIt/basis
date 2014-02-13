@@ -34,7 +34,6 @@ trait MapFactory[+CC[_, _]] {
 
 private[generic] object MapFactory {
   import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
 
   def apply[CC[_, _], A, T]
       (c: ContextWithPre[MapFactory[CC]])

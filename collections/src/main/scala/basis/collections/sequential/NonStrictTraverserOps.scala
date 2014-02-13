@@ -160,7 +160,7 @@ private[sequential] object NonStrictTraverserOps {
     extends Traverser[A] {
 
     override def traverse(g: A => Unit): Unit = {
-      var l = 0 max lower
+      val l = 0 max lower
       val u = l max upper
       if (l < u) begin { these.traverse(new SliceTraverse(l, u, g)) }
     }

@@ -48,7 +48,6 @@ trait ArrayFactory[+CC[_]] {
 
 private[generic] object ArrayFactory {
   import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
 
   def apply[CC[_], A]
       (c: ContextWithPre[ArrayFactory[CC]])

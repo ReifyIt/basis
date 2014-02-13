@@ -37,68 +37,90 @@ private[memory] final class NioData(val buffer: java.nio.ByteBuffer) extends Dat
   override def loadByte(address: Long): Byte =
     buffer.get(address.toInt)
 
-  override def storeByte(address: Long, value: Byte): Unit =
+  override def storeByte(address: Long, value: Byte): Unit = {
     buffer.put(address.toInt, value)
+    ()
+  }
 
   override def loadShort(address: Long): Short =
     buffer.getShort(address.toInt & -2)
 
-  override def storeShort(address: Long, value: Short): Unit =
+  override def storeShort(address: Long, value: Short): Unit = {
     buffer.putShort(address.toInt & -2, value)
+    ()
+  }
 
   override def loadInt(address: Long): Int =
     buffer.getInt(address.toInt & -4)
 
-  override def storeInt(address: Long, value: Int): Unit =
+  override def storeInt(address: Long, value: Int): Unit = {
     buffer.putInt(address.toInt & -4, value)
+    ()
+  }
 
   override def loadLong(address: Long): Long =
     buffer.getLong(address.toInt & -8)
 
-  override def storeLong(address: Long, value: Long): Unit =
+  override def storeLong(address: Long, value: Long): Unit = {
     buffer.putLong(address.toInt & -8, value)
+    ()
+  }
 
   override def loadFloat(address: Long): Float =
     buffer.getFloat(address.toInt & -4)
 
-  override def storeFloat(address: Long, value: Float): Unit =
+  override def storeFloat(address: Long, value: Float): Unit = {
     buffer.putFloat(address.toInt & -4, value)
+    ()
+  }
 
   override def loadDouble(address: Long): Double =
     buffer.getDouble(address.toInt & -8)
 
-  override def storeDouble(address: Long, value: Double): Unit =
+  override def storeDouble(address: Long, value: Double): Unit = {
     buffer.putDouble(address.toInt & -8, value)
+    ()
+  }
 
   override def loadUnalignedShort(address: Long): Short =
     buffer.getShort(address.toInt)
 
-  override def storeUnalignedShort(address: Long, value: Short): Unit =
+  override def storeUnalignedShort(address: Long, value: Short): Unit = {
     buffer.putShort(address.toInt, value)
+    ()
+  }
 
   override def loadUnalignedInt(address: Long): Int =
     buffer.getInt(address.toInt)
 
-  override def storeUnalignedInt(address: Long, value: Int): Unit =
+  override def storeUnalignedInt(address: Long, value: Int): Unit = {
     buffer.putInt(address.toInt, value)
+    ()
+  }
 
   override def loadUnalignedLong(address: Long): Long =
     buffer.getLong(address.toInt)
 
-  override def storeUnalignedLong(address: Long, value: Long): Unit =
+  override def storeUnalignedLong(address: Long, value: Long): Unit = {
     buffer.putLong(address.toInt, value)
+    ()
+  }
 
   override def loadUnalignedFloat(address: Long): Float =
     buffer.getFloat(address.toInt)
 
-  override def storeUnalignedFloat(address: Long, value: Float): Unit =
+  override def storeUnalignedFloat(address: Long, value: Float): Unit = {
     buffer.putFloat(address.toInt, value)
+    ()
+  }
 
   override def loadUnalignedDouble(address: Long): Double =
     buffer.getDouble(address.toInt)
 
-  override def storeUnalignedDouble(address: Long, value: Double): Unit =
+  override def storeUnalignedDouble(address: Long, value: Double): Unit = {
     buffer.putDouble(address.toInt, value)
+    ()
+  }
 
   override def move(fromAddress: Long, toAddress: Long, size: Long): Unit = {
     val fromLimit = (fromAddress + size).toInt

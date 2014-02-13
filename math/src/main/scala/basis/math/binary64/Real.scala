@@ -173,7 +173,7 @@ object Real extends RealField with AffineSpace with RN with RMxN {
 
   override val unit: Real = new Real(1.0)
 
-  implicit def coerce(that: Integer): Real = new Real(that.value)
+  implicit def coerce(that: Integer): Real = new Real(that.value.toDouble)
 
   implicit def apply(value: Double): Real = new Real(value)
 

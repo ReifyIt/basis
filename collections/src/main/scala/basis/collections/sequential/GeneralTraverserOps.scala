@@ -90,7 +90,10 @@ private[sequential] object GeneralTraverserOps {
   import scala.runtime._
 
   final class Foreach[-A, +U](f: A => U) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = f(x)
+    override def apply(x: A): Unit = {
+      f(x)
+      ()
+    }
   }
 
   final class FoldLeft[-A, +B](z: B)(op: (B, A) => B) extends AbstractFunction1[A, Unit] {

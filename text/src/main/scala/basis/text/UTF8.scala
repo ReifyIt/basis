@@ -125,7 +125,7 @@ trait UTF8 extends Any with Equals with Family[UTF8] with UTF {
     * of any ill-formed subsequences. */
   override def traverse(f: Int => Unit): Unit = {
     var i = 0
-    var n = size
+    val n = size
     while (i < n) f {
       val c1 = get(i)
       i += 1

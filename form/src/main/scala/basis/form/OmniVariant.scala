@@ -269,9 +269,9 @@ class OmniVariant extends Variant with json.JsonVariant {
     extends OmniNumber with BaseDecimalString
 
   protected class OmniNumberFactory extends BaseNumberFactory {
-    override def apply(value: Byte): NumberForm = new OmniInt(value)
+    override def apply(value: Byte): NumberForm = new OmniInt(value.toInt)
 
-    override def apply(value: Short): NumberForm = new OmniInt(value)
+    override def apply(value: Short): NumberForm = new OmniInt(value.toInt)
 
     override def apply(value: Int): NumberForm = new OmniInt(value)
 

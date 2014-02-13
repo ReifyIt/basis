@@ -32,7 +32,6 @@ trait MapSource[+CC, -A, -T] {
 
 private[special] object MapSource {
   import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
 
   def apply[CC, A, T]
       (c: ContextWithPre[MapSource[CC, A, T]])

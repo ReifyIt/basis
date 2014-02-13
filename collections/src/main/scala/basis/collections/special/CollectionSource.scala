@@ -32,7 +32,6 @@ trait CollectionSource[+CC, -A] {
 
 private[special] object CollectionSource {
   import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
 
   def apply[CC, A]
       (c: ContextWithPre[CollectionSource[CC, A]])

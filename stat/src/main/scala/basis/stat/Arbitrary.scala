@@ -17,7 +17,7 @@ import scala.annotation._
   * @since    0.0
   */
 @implicitNotFound("No arbitrary generator available for type ${A}.")
-trait Arbitrary[@specialized(Specializable.Primitives) +A] extends (() => A) {
+trait Arbitrary[@specialized(Arbitrary.Specialized) +A] extends (() => A) {
   @unspecialized def map[B](f: A => B): Arbitrary[B] = new Map(f)
 
   @unspecialized def flatMap[B](f: A => Arbitrary[B]): Arbitrary[B] = new FlatMap(f)
@@ -52,70 +52,69 @@ trait Arbitrary[@specialized(Specializable.Primitives) +A] extends (() => A) {
 
 /** Contains builtin [[Arbitrary]] value generators. */
 object Arbitrary {
-  // Mask the package-level implicit or our own method paramters are ambiguous (thanks scala 2.11)
-  private val Random = null
+  protected final val Specialized = new Specializable.Group((scala.Byte, scala.Short, scala.Int, scala.Long, scala.Char, scala.Float, scala.Double, scala.Boolean))
 
   def apply[A](implicit A: Arbitrary[A]): A.type = A
 
-  def Constant[@specialized(Specializable.Primitives) A](value: A): Arbitrary[A] = new Constant(value)
+  def Constant[@specialized(Specialized) A](value: A): Arbitrary[A] = new Constant(value)
 
-  implicit def Byte(implicit S: Random): Arbitrary[Byte] = new RandomByte
+  implicit def Byte(implicit S: Random): Arbitrary[Byte] = new RandomByte(S)
 
-  def PositiveByte(implicit S: Random): Arbitrary[Byte] = new RandomPositiveByte
+  def PositiveByte(implicit S: Random): Arbitrary[Byte] = new RandomPositiveByte(S)
 
-  def ByteBelow(upper: Byte)(implicit S: Random): Arbitrary[Byte] = new RandomByteBelow(upper)
+  def ByteBelow(upper: Byte)(implicit S: Random): Arbitrary[Byte] = new RandomByteBelow(upper)(S)
 
-  def ByteBetween(lower: Byte, upper: Byte)(implicit S: Random): Arbitrary[Byte] = new RandomByteBetween(lower, upper)
+  def ByteBetween(lower: Byte, upper: Byte)(implicit S: Random): Arbitrary[Byte] = new RandomByteBetween(lower, upper)(S)
 
-  implicit def Short(implicit S: Random): Arbitrary[Short] = new RandomShort
+  implicit def Short(implicit S: Random): Arbitrary[Short] = new RandomShort(S)
 
-  def PositiveShort(implicit S: Random): Arbitrary[Short] = new RandomPositiveShort
+  def PositiveShort(implicit S: Random): Arbitrary[Short] = new RandomPositiveShort(S)
 
-  def ShortBelow(upper: Short)(implicit S: Random): Arbitrary[Short] = new RandomShortBelow(upper)
+  def ShortBelow(upper: Short)(implicit S: Random): Arbitrary[Short] = new RandomShortBelow(upper)(S)
 
-  def ShortBetween(lower: Short, upper: Short)(implicit S: Random): Arbitrary[Short] = new RandomShortBetween(lower, upper)
+  def ShortBetween(lower: Short, upper: Short)(implicit S: Random): Arbitrary[Short] = new RandomShortBetween(lower, upper)(S)
 
-  implicit def Int(implicit S: Random): Arbitrary[Int] = new RandomInt
+  implicit def Int(implicit S: Random): Arbitrary[Int] = new RandomInt(S)
 
-  def PositiveInt(implicit S: Random): Arbitrary[Int] = new RandomPositiveInt
+  def PositiveInt(implicit S: Random): Arbitrary[Int] = new RandomPositiveInt(S)
 
-  def IntBelow(upper: Int)(implicit S: Random): Arbitrary[Int] = new RandomIntBelow(upper)
+  def IntBelow(upper: Int)(implicit S: Random): Arbitrary[Int] = new RandomIntBelow(upper)(S)
 
-  def IntBetween(lower: Int, upper: Int)(implicit S: Random): Arbitrary[Int] = new RandomIntBetween(lower, upper)
+  def IntBetween(lower: Int, upper: Int)(implicit S: Random): Arbitrary[Int] = new RandomIntBetween(lower, upper)(S)
 
-  implicit def Long(implicit S: Random): Arbitrary[Long] = new RandomLong
+  implicit def Long(implicit S: Random): Arbitrary[Long] = new RandomLong(S)
 
-  def PositiveLong(implicit S: Random): Arbitrary[Long] = new RandomPositiveLong
+  def PositiveLong(implicit S: Random): Arbitrary[Long] = new RandomPositiveLong(S)
 
-  def LongBelow(upper: Long)(implicit S: Random): Arbitrary[Long] = new RandomLongBelow(upper)
+  def LongBelow(upper: Long)(implicit S: Random): Arbitrary[Long] = new RandomLongBelow(upper)(S)
 
-  def LongBetween(lower: Long, upper: Long)(implicit S: Random): Arbitrary[Long] = new RandomLongBetween(lower, upper)
+  def LongBetween(lower: Long, upper: Long)(implicit S: Random): Arbitrary[Long] = new RandomLongBetween(lower, upper)(S)
 
-  implicit def Float(implicit S: Random): Arbitrary[Float] = new RandomFloat
+  implicit def Float(implicit S: Random): Arbitrary[Float] = new RandomFloat(S)
 
-  def FloatBelow(upper: Float)(implicit S: Random): Arbitrary[Float] = new RandomFloatBelow(upper)
+  def FloatBelow(upper: Float)(implicit S: Random): Arbitrary[Float] = new RandomFloatBelow(upper)(S)
 
-  def FloatBetween(lower: Float, upper: Float)(implicit S: Random): Arbitrary[Float] = new RandomFloatBetween(lower, upper)
+  def FloatBetween(lower: Float, upper: Float)(implicit S: Random): Arbitrary[Float] = new RandomFloatBetween(lower, upper)(S)
 
-  implicit def Double(implicit S: Random): Arbitrary[Double] = new RandomDouble
+  implicit def Double(implicit S: Random): Arbitrary[Double] = new RandomDouble(S)
 
-  def DoubleBelow(upper: Double)(implicit S: Random): Arbitrary[Double] = new RandomDoubleBelow(upper)
+  def DoubleBelow(upper: Double)(implicit S: Random): Arbitrary[Double] = new RandomDoubleBelow(upper)(S)
 
-  def DoubleBetween(lower: Double, upper: Double)(implicit S: Random): Arbitrary[Double] = new RandomDoubleBetween(lower, upper)
+  def DoubleBetween(lower: Double, upper: Double)(implicit S: Random): Arbitrary[Double] = new RandomDoubleBetween(lower, upper)(S)
 
-  implicit def Boolean(implicit S: Random): Arbitrary[Boolean] = new RandomBoolean
+  implicit def Boolean(implicit S: Random): Arbitrary[Boolean] = new RandomBoolean(S)
 
   implicit def Unit: Arbitrary[Unit] = RandomUnit
 
-  def Lowercase(implicit S: Random): Arbitrary[Char] = new RandomLowercase
+  def Lowercase(implicit S: Random): Arbitrary[Char] = new RandomLowercase(S)
 
-  def Uppercase(implicit S: Random): Arbitrary[Char] = new RandomUppercase
+  def Uppercase(implicit S: Random): Arbitrary[Char] = new RandomUppercase(S)
 
-  def Letter(implicit S: Random): Arbitrary[Char] = new RandomLetter
+  def Letter(implicit S: Random): Arbitrary[Char] = new RandomLetter(S)
 
-  def Numeral(implicit S: Random): Arbitrary[Char] = new RandomNumeral
+  def Numeral(implicit S: Random): Arbitrary[Char] = new RandomNumeral(S)
 
-  implicit def Alphanumeric(implicit S: Random): Arbitrary[Char] = new RandomAlphanumeric
+  implicit def Alphanumeric(implicit S: Random): Arbitrary[Char] = new RandomAlphanumeric(S)
 
   implicit def String(implicit C: Arbitrary[Char]): Arbitrary[String] =
     new RandomString(IntBelow(64))(C)
@@ -195,120 +194,120 @@ object Arbitrary {
                 T4: Arbitrary[T4])
     : Arbitrary[R] = new RandomFunction4(f)
 
-  def pick[A](elems: Traverser[A])(implicit S: Random): Arbitrary[A] = new Pick(elems)
+  def pick[A](elems: Traverser[A])(implicit S: Random): Arbitrary[A] = new Pick(elems)(S)
 
-  def choose[A](count: Int, elems: Traverser[A])(implicit S: Random): Arbitrary[immutable.List[A]] = new Choose(count, elems)
+  def choose[A](count: Int, elems: Traverser[A])(implicit S: Random): Arbitrary[immutable.List[A]] = new Choose(count, elems)(S)
 
-  private final class Constant[@specialized(Specializable.Primitives) +A](value: A) extends Arbitrary[A] {
+  private final class Constant[@specialized(Specialized) +A](value: A) extends Arbitrary[A] {
     override def apply(): A = value
     override def toString: String = "Arbitrary"+"."+"Constant"+"("+ value +")"
   }
 
-  private final class RandomByte(implicit S: Random) extends Arbitrary[Byte] {
+  private final class RandomByte(S: Random) extends Arbitrary[Byte] {
     override def apply(): Byte = S.randomByte()
     override def toString: String = "Arbitrary"+"."+"Byte"
   }
 
-  private final class RandomPositiveByte(implicit S: Random) extends Arbitrary[Byte] {
+  private final class RandomPositiveByte(S: Random) extends Arbitrary[Byte] {
     override def apply(): Byte = (S.randomByte() >>> 1).toByte
     override def toString: String = "Arbitrary"+"."+"PositiveByte"
   }
 
-  private final class RandomByteBelow(upper: Byte)(implicit S: Random) extends Arbitrary[Byte] {
+  private final class RandomByteBelow(upper: Byte)(S: Random) extends Arbitrary[Byte] {
     if (upper < 0) throw new IllegalArgumentException("Invalid upper bound"+" "+"("+ upper +")"+".")
     override def apply(): Byte = (S.randomInt() % upper).abs.toByte
     override def toString: String = "Arbitrary"+"."+"ByteBelow"+"("+ upper +"."+"toByte"+")"
   }
 
-  private final class RandomByteBetween(lower: Byte, upper: Byte)(implicit S: Random) extends Arbitrary[Byte] {
+  private final class RandomByteBetween(lower: Byte, upper: Byte)(S: Random) extends Arbitrary[Byte] {
     if (upper < lower) throw new IllegalArgumentException("Invalid bounds"+" "+"["+ lower +", "+ upper+"]"+".")
     private[this] val size: Int = (upper - lower) + 1
     override def apply(): Byte = (lower + (S.randomInt() % size).abs).toByte
     override def toString: String = "Arbitrary"+"."+"ByteBetween"+"("+ lower +"."+"toByte"+", "+ upper +"."+"toByte"+")"
   }
 
-  private final class RandomShort(implicit S: Random) extends Arbitrary[Short] {
+  private final class RandomShort(S: Random) extends Arbitrary[Short] {
     override def apply(): Short = S.randomShort()
     override def toString: String = "Arbitrary"+"."+"Short"
   }
 
-  private final class RandomPositiveShort(implicit S: Random) extends Arbitrary[Short] {
+  private final class RandomPositiveShort(S: Random) extends Arbitrary[Short] {
     override def apply(): Short = (S.randomShort() >>> 1).toShort
     override def toString: String = "Arbitrary"+"."+"PositiveShort"
   }
 
-  private final class RandomShortBelow(upper: Short)(implicit S: Random) extends Arbitrary[Short] {
+  private final class RandomShortBelow(upper: Short)(S: Random) extends Arbitrary[Short] {
     if (upper < 0) throw new IllegalArgumentException("Invalid upper bound"+" "+"("+ upper +")"+".")
     override def apply(): Short = (S.randomInt() % upper).abs.toShort
     override def toString: String = "Arbitrary"+"."+"ShortBelow"+"("+ upper +"."+"toShort"+")"
   }
 
-  private final class RandomShortBetween(lower: Short, upper: Short)(implicit S: Random) extends Arbitrary[Short] {
+  private final class RandomShortBetween(lower: Short, upper: Short)(S: Random) extends Arbitrary[Short] {
     if (upper < lower) throw new IllegalArgumentException("Invalid bounds"+" "+"["+ lower +", "+ upper+"]"+".")
     private[this] val size: Int = (upper - lower) + 1
     override def apply(): Short = (lower + (S.randomInt() % size).abs).toShort
     override def toString: String = "Arbitrary"+"."+"ShortBetween"+"("+ lower +"."+"toShort"+", "+ upper +"."+"toShort"+")"
   }
 
-  private final class RandomInt(implicit S: Random) extends Arbitrary[Int] {
+  private final class RandomInt(S: Random) extends Arbitrary[Int] {
     override def apply(): Int = S.randomInt()
     override def toString: String = "Arbitrary"+"."+"Int"
   }
 
-  private final class RandomPositiveInt(implicit S: Random) extends Arbitrary[Int] {
+  private final class RandomPositiveInt(S: Random) extends Arbitrary[Int] {
     override def apply(): Int = S.randomInt() >>> 1
     override def toString: String = "Arbitrary"+"."+"PositiveInt"
   }
 
-  private final class RandomIntBelow(upper: Int)(implicit S: Random) extends Arbitrary[Int] {
+  private final class RandomIntBelow(upper: Int)(S: Random) extends Arbitrary[Int] {
     if (upper < 0) throw new IllegalArgumentException("Invalid upper bound"+" "+"("+ upper +")"+".")
     override def apply(): Int = (S.randomInt() % upper).abs
     override def toString: String = "Arbitrary"+"."+"IntBelow"+"("+ upper +")"
   }
 
-  private final class RandomIntBetween(lower: Int, upper: Int)(implicit S: Random) extends Arbitrary[Int] {
+  private final class RandomIntBetween(lower: Int, upper: Int)(S: Random) extends Arbitrary[Int] {
     private[this] val size: Int = (upper - lower) + 1
     if (upper < lower || size < 0) throw new IllegalArgumentException("Invalid bounds"+" "+"["+ lower +", "+ upper+"]"+".")
     override def apply(): Int = lower + (S.randomInt() % size).abs
     override def toString: String = "Arbitrary"+"."+"IntBetween"+"("+ lower +", "+ upper +")"
   }
 
-  private final class RandomLong(implicit S: Random) extends Arbitrary[Long] {
+  private final class RandomLong(S: Random) extends Arbitrary[Long] {
     override def apply(): Long = S.randomLong()
     override def toString: String = "Arbitrary"+"."+"Long"
   }
 
-  private final class RandomPositiveLong(implicit S: Random) extends Arbitrary[Long] {
+  private final class RandomPositiveLong(S: Random) extends Arbitrary[Long] {
     override def apply(): Long = S.randomLong() >>> 1
     override def toString: String = "Arbitrary"+"."+"PositiveLong"
   }
 
-  private final class RandomLongBelow(upper: Long)(implicit S: Random) extends Arbitrary[Long] {
+  private final class RandomLongBelow(upper: Long)(S: Random) extends Arbitrary[Long] {
     if (upper < 0L) throw new IllegalArgumentException("Invalid upper bound"+" "+"("+ upper +")"+".")
     override def apply(): Long = (S.randomLong() % upper).abs
     override def toString: String = "Arbitrary"+"."+"LongBelow"+"("+ upper +"L"+")"
   }
 
-  private final class RandomLongBetween(lower: Long, upper: Long)(implicit S: Random) extends Arbitrary[Long] {
+  private final class RandomLongBetween(lower: Long, upper: Long)(S: Random) extends Arbitrary[Long] {
     private[this] val size: Long = (upper - lower) + 1L
     if (upper < lower || size < 0L) throw new IllegalArgumentException("Invalid bounds"+" "+"["+ lower +", "+ upper+"]"+".")
     override def apply(): Long = lower + (S.randomLong() % size).abs
     override def toString: String = "Arbitrary"+"."+"LongBetween"+"("+ lower +"L"+", "+ upper +"L"+")"
   }
 
-  private final class RandomFloat(implicit S: Random) extends Arbitrary[Float] {
+  private final class RandomFloat(S: Random) extends Arbitrary[Float] {
     override def apply(): Float = S.randomFloat()
     override def toString: String = "Arbitrary"+"."+"Float"
   }
 
-  private final class RandomFloatBelow(upper: Float)(implicit S: Random) extends Arbitrary[Float] {
+  private final class RandomFloatBelow(upper: Float)(S: Random) extends Arbitrary[Float] {
     if (upper.isNaN || upper.isInfinite || upper < 0.0F)
       throw new IllegalArgumentException("Invalid upper bound"+" "+"("+ upper +")"+".")
     override def apply(): Float = S.randomFloat() * upper
     override def toString: String = "Arbitrary"+"."+"FloatBelow"+"("+ upper +"f"+")"
   }
 
-  private final class RandomFloatBetween(lower: Float, upper: Float)(implicit S: Random) extends Arbitrary[Float] {
+  private final class RandomFloatBetween(lower: Float, upper: Float)(S: Random) extends Arbitrary[Float] {
     private[this] val size: Float = upper - lower
     if (size.isNaN || size.isInfinite || size < 0.0F)
       throw new IllegalArgumentException("Invalid bounds"+" "+"["+ lower +", "+ upper+")"+".")
@@ -316,19 +315,19 @@ object Arbitrary {
     override def toString: String = "Arbitrary"+"."+"FloatBetween"+"("+ lower +"f"+", "+ upper +"f"+")"
   }
 
-  private final class RandomDouble(implicit S: Random) extends Arbitrary[Double] {
+  private final class RandomDouble(S: Random) extends Arbitrary[Double] {
     override def apply(): Double = S.randomDouble()
     override def toString: String = "Arbitrary"+"."+"Double"
   }
 
-  private final class RandomDoubleBelow(upper: Double)(implicit S: Random) extends Arbitrary[Double] {
+  private final class RandomDoubleBelow(upper: Double)(S: Random) extends Arbitrary[Double] {
     if (upper.isNaN || upper.isInfinite || upper < 0.0)
       throw new IllegalArgumentException("Invalid upper bound"+" "+"("+ upper +")"+".")
     override def apply(): Double = S.randomDouble() * upper
     override def toString: String = "Arbitrary"+"."+"DoubleBelow"+"("+ upper +")"
   }
 
-  private final class RandomDoubleBetween(lower: Double, upper: Double)(implicit S: Random) extends Arbitrary[Double] {
+  private final class RandomDoubleBetween(lower: Double, upper: Double)(S: Random) extends Arbitrary[Double] {
     private[this] val size: Double = upper - lower
     if (size.isNaN || size.isInfinite || size < 0.0)
       throw new IllegalArgumentException("Invalid bounds"+" "+"["+ lower +", "+ upper+")"+".")
@@ -336,7 +335,7 @@ object Arbitrary {
     override def toString: String = "Arbitrary"+"."+"DoubleBetween"+"("+ lower +", "+ upper +")"
   }
 
-  private final class RandomBoolean(implicit S: Random) extends Arbitrary[Boolean] {
+  private final class RandomBoolean(S: Random) extends Arbitrary[Boolean] {
     override def apply(): Boolean = S.randomBoolean()
     override def toString: String = "Arbitrary"+"."+"Boolean"
   }
@@ -346,19 +345,19 @@ object Arbitrary {
     override def toString: String = "Arbitrary"+"."+"Unit"
   }
 
-  private final class RandomLowercase(implicit S: Random) extends Arbitrary[Char] {
+  private final class RandomLowercase(S: Random) extends Arbitrary[Char] {
     private[this] val roll = new RandomIntBetween(97, 122)(S)
     override def apply(): Char = roll().toChar
     override def toString: String = "Arbitrary"+"."+"Lowercase"
   }
 
-  private final class RandomUppercase(implicit S: Random) extends Arbitrary[Char] {
+  private final class RandomUppercase(S: Random) extends Arbitrary[Char] {
     private[this] val roll = new RandomIntBetween(65, 90)(S)
     override def apply(): Char = roll().toChar
     override def toString: String = "Arbitrary"+"."+"Uppercase"
   }
 
-  private final class RandomLetter(implicit S: Random) extends Arbitrary[Char] {
+  private final class RandomLetter(S: Random) extends Arbitrary[Char] {
     private[this] val roll = new RandomIntBelow(52)(S)
     override def apply(): Char = (roll() match {
       case x if x < 26 => x + 'A'
@@ -367,13 +366,13 @@ object Arbitrary {
     override def toString: String = "Arbitrary"+"."+"Letter"
   }
 
-  private final class RandomNumeral(implicit S: Random) extends Arbitrary[Char] {
+  private final class RandomNumeral(S: Random) extends Arbitrary[Char] {
     private[this] val roll = new RandomIntBetween(48, 57)(S)
     override def apply(): Char = roll().toChar
     override def toString: String = "Arbitrary"+"."+"Numeral"
   }
 
-  private final class RandomAlphanumeric(implicit S: Random) extends Arbitrary[Char] {
+  private final class RandomAlphanumeric(S: Random) extends Arbitrary[Char] {
     private[this] val roll = new RandomIntBelow(62)(S)
     override def apply(): Char = (roll() match {
       case x if x < 26 => x + 'A'
@@ -505,8 +504,8 @@ object Arbitrary {
     override def toString: String = "<arbitrary4>"
   }
 
-  private final class Pick[+A](elems: IndexedSeq[A])(implicit S: Random) extends Arbitrary[A] {
-    def this(elems: Traverser[A])(implicit S: Random) =
+  private final class Pick[+A](elems: IndexedSeq[A])(S: Random) extends Arbitrary[A] {
+    def this(elems: Traverser[A])(S: Random) =
       this(immutable.ArraySeq.from(elems.asInstanceOf[Traverser[AnyRef]]).asInstanceOf[immutable.ArraySeq[A]])(S)
 
     if (elems.length == 0) throw new IllegalArgumentException("empty pick")
@@ -520,10 +519,10 @@ object Arbitrary {
 
   private final class Choose[+A]
       (count: Int, elems: mutable.ListBuffer[A])
-      (implicit S: Random)
+      (S: Random)
     extends Arbitrary[immutable.List[A]] {
 
-    def this(count: Int, elems: Traverser[A])(implicit S: Random) =
+    def this(count: Int, elems: Traverser[A])(S: Random) =
       this(count, mutable.ListBuffer.from(elems))(S)
 
     if (count < 0) throw new IllegalArgumentException("negative count")

@@ -8,7 +8,6 @@ package basis.collections
 package immutable
 
 import scala.annotation._
-import scala.Predef.<:<
 
 private[collections] final class DoubleBatch1(_1: Double) extends Batch[Double] {
   override def isEmpty: Boolean = false

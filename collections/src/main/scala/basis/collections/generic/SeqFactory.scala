@@ -19,7 +19,6 @@ trait SeqFactory[+CC[_]] extends CollectionFactory[CC] {
 
 private[generic] object SeqFactory {
   import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
 
   def fill[CC[_], A]
       (c: ContextWithPre[SeqFactory[CC]])

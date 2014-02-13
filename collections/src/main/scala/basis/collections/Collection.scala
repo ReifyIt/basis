@@ -44,6 +44,9 @@ object Collection extends generic.CollectionFactory[Collection] {
 
   private final class AddString(s: java.lang.StringBuilder) extends scala.runtime.AbstractFunction1[Any, Unit] {
     private[this] var e: Boolean = true
-    override def apply(x: Any): Unit = (if (e) { e = false; s } else s.append(", ")).show(x)
+    override def apply(x: Any): Unit = {
+      (if (e) { e = false; s } else s.append(", ")).show(x)
+      ()
+    }
   }
 }

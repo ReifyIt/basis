@@ -95,6 +95,7 @@ private[json] abstract class JsonParser {
         while (!isEOF && { val c = head; step(); c != '*'}) ()
       } while (!isEOF && !lookahead('/'))
       parse('/', describeInput("expected \"*/\" at end of block comment"))
+      ()
     }
     else syntaxError("expected comment")
   }
@@ -133,10 +134,9 @@ private[json] abstract class JsonParser {
 
   /** Parses and unescapes a double quoted JSON string. */
   protected def parseDoubleQuotedString(builder: StringBuilder): builder.State = {
-    val s = new java.lang.StringBuilder
     parse('\"', describeInput("expected double quoted string"))
     while (!isEOF && (head match {
-      case '\"' | '\n' | '\r' | '\0' => false
+      case '\"' | '\n' | '\r' | '\u0000' => false
       case _ => true
     })) next() match {
       case '\\' =>
@@ -166,7 +166,7 @@ private[json] abstract class JsonParser {
   protected def parseSingleQuotedString(builder: StringBuilder): builder.State = {
     parse('\'', describeInput("expected single quoted string"))
     while (!isEOF && (head match {
-      case '\'' | '\n' | '\r' | '\0' => false
+      case '\'' | '\n' | '\r' | '\u0000' => false
       case _ => true
     })) next() match {
       case '\\' =>

@@ -18,7 +18,7 @@ import basis.util._
 final class UString(val __ : String) extends AnyVal with Equals with Family[UString] with UTF16 {
   override def size: Int = __.length
 
-  override def get(index: Int): Int = __.charAt(index)
+  override def get(index: Int): Int = __.charAt(index).toInt
 
   /** Returns an iterator over the code points of this string. */
   override def iterator: Iterator[Int] = new UStringDecodingIterator(__)
@@ -123,7 +123,7 @@ private[text] final class UStringIterator(string: String, private[this] var inde
 
   override def head: Int = {
     if (index >= string.length) Iterator.empty.head
-    string.charAt(index)
+    string.charAt(index).toInt
   }
 
   override def step(): Unit = {

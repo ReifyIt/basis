@@ -35,7 +35,6 @@ trait CollectionFactory[+CC[_]] {
 
 private[generic] object CollectionFactory {
   import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
 
   def apply[CC[_], A]
       (c: ContextWithPre[CollectionFactory[CC]])

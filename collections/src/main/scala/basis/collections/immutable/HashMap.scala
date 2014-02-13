@@ -79,21 +79,11 @@ final class HashMap[+A, +T] private[collections] (
   private def getKey(branch: Int): A =
     slots(select(branch)).asInstanceOf[A]
 
-  private def setKey[B >: A](branch: Int, key: B): this.type = {
-    slots(select(branch)) = key.asInstanceOf[AnyRef]
-    this
-  }
-
   private[collections] def valueAt(index: Int): T =
     slots(slots.length - index - 1).asInstanceOf[T]
 
   private def getValue(branch: Int): T =
     slots(slots.length - lookup(branch) - 1).asInstanceOf[T]
-
-  private def setValue[U >: T](branch: Int, value: U): this.type = {
-    slots(slots.length - lookup(branch) - 1) = value.asInstanceOf[AnyRef]
-    this
-  }
 
   private def setLeaf[B >: A, U >: T](branch: Int, key: B, value: U): this.type = {
     slots(select(branch)) = key.asInstanceOf[AnyRef]

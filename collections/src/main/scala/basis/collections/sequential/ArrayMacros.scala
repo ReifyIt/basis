@@ -750,9 +750,6 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
   private def ScalaPartialFunction: Tree =
     Select(Select(Ident(nme.ROOTPKG), "scala": TermName), "PartialFunction": TermName)
 
-  private def JavaLang: Tree =
-    Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName)
-
   private def mathBinaryIntExpr(name: TermName)(x: Tree, y: Tree): Tree = {
     val p1 = Expr[Int](x)
     val p2 = Expr[Int](y)

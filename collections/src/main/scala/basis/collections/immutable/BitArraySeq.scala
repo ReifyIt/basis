@@ -7,8 +7,6 @@
 package basis.collections
 package immutable
 
-import basis.collections.generic._
-import basis.collections.mutable._
 import basis.util._
 import scala.reflect._
 

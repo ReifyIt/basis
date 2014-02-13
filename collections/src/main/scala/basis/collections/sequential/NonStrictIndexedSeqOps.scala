@@ -51,8 +51,6 @@ final class NonStrictIndexedSeqOps[+A](val __ : IndexedSeq[A]) extends AnyVal {
 }
 
 private[sequential] object NonStrictIndexedSeqOps {
-  import scala.annotation._
-
   final class Collect[-A, +B](these: IndexedSeq[A], q: PartialFunction[A, B]) extends IndexedSeq[B] {
     private[this] var table: Array[Int] = _
     private[this] def lookup: Array[Int] = synchronized {
