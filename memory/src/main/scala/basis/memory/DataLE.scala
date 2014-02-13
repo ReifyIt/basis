@@ -6,6 +6,8 @@
 
 package basis.memory
 
+import basis.collections._
+
 /** Little-endian data.
   *
   * @author Chris Sachs
@@ -64,7 +66,7 @@ trait DataLE extends Data {
 }
 
 /** An allocator for little-endian data backed by a primitive array. */
-private[memory] object DataLE extends Allocator with (Long => DataLE) {
+private[memory] object DataLE extends Allocator[DataLE] {
   override def MaxSize: Long = Int.MaxValue << 3
 
   override def Endian: Endianness = LittleEndian
@@ -90,6 +92,13 @@ private[memory] object DataLE extends Allocator with (Long => DataLE) {
   }
 
   override def apply(size: Long): DataLE = alloc[Byte](size)
+
+  override def realloc(data: Loader, size: Long): DataLE = {
+    if (data.isInstanceOf[DataLE]) data.asInstanceOf[DataLE].copy(size)
+    else super.realloc(data, size)
+  }
+
+  override def Framer(): Framer with State[DataLE] = new DataFramer(this)
 
   override def toString: String = "DataLE"
 }

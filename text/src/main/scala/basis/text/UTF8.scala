@@ -224,7 +224,7 @@ private[text] final class UTF8Builder[+Result](self: StringBuilder with State[Re
     val c1 = this.c1
     if (c1 <= 0x7F) appendCodePoint(c1) // U+0000..U+007F
     else if (c1 >= 0xC2 && c1 <= 0xF4) {
-      if (n >= 1) {
+      if (n > 1) {
         val c2 = this.c2
         if (c1 <= 0xDF) {
           if (c2 >= 0x80 && c2 <= 0xBF)// U+0080..U+07FF
@@ -234,7 +234,7 @@ private[text] final class UTF8Builder[+Result](self: StringBuilder with State[Re
             appendCodeUnit(c)
           }
         }
-        else if (n >= 2) {
+        else if (n > 2) {
           val c3 = this.c3
           if (c1 == 0xE0 &&
               c2 >= 0xA0 && c2 <= 0xBF
@@ -249,7 +249,7 @@ private[text] final class UTF8Builder[+Result](self: StringBuilder with State[Re
               appendCodeUnit(c)
             }
           }
-          else if (n >= 3) {
+          else if (n > 3) {
             val c4 = this.c4
             if ((c1 == 0xF0 &&
                  c2 >= 0x90 && c2 <= 0xBF
@@ -329,16 +329,24 @@ private[text] final class UTF8EncodingIterator(
     private[this] var c3: Int,
     private[this] var c4: Int,
     private[this] var i: Int,
-    private[this] var n: Int)
+    private[this] var n: Int,
+    private[this] val isModified: Boolean)
   extends Iterator[Int] {
 
-  def this(self: Iterator[Int]) = this(self, 0, 0, 0, 0, 0, 0)
+  def this(self: Iterator[Int]) = this(self, 0, 0, 0, 0, 0, 0, false)
+
+  def this(self: Iterator[Int], isModified: Boolean) = this(self, 0, 0, 0, 0, 0, 0, isModified)
 
   protected def encode(): Unit = {
     val c = self.head
     self.step()
     i = 0
-    if (c >= 0x0000 && c <= 0x007F) { // U+0000..U+007F
+    if (isModified && c == 0x0000) {
+      c1 = 0xC0
+      c2 = 0x80
+      n = 2
+    }
+    else if (c >= 0x0000 && c <= 0x007F) { // U+0000..U+007F
       c1 = c
       n = 1
     }
@@ -388,5 +396,5 @@ private[text] final class UTF8EncodingIterator(
     else Iterator.empty.step()
   }
 
-  override def dup: Iterator[Int] = new UTF8EncodingIterator(self.dup, c1, c2, c3, c4, i, n)
+  override def dup: Iterator[Int] = new UTF8EncodingIterator(self.dup, c1, c2, c3, c4, i, n, isModified)
 }

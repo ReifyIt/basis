@@ -6,6 +6,8 @@
 
 package basis.memory
 
+import basis.collections._
+
 /** Big-endian data.
   *
   * @author Chris Sachs
@@ -64,7 +66,7 @@ trait DataBE extends Data {
 }
 
 /** An allocator for big-endian data backed by a primitive array. */
-private[memory] object DataBE extends Allocator with (Long => DataBE) {
+private[memory] object DataBE extends Allocator[DataBE] {
   override def MaxSize: Long = Int.MaxValue.toLong << 3
 
   override def Endian: Endianness = BigEndian
@@ -88,6 +90,13 @@ private[memory] object DataBE extends Allocator with (Long => DataBE) {
     }
     else Data8BE(size)
   }
+
+  override def realloc(data: Loader, size: Long): DataBE = {
+    if (data.isInstanceOf[DataBE]) data.asInstanceOf[DataBE].copy(size)
+    else super.realloc(data, size)
+  }
+
+  override def Framer(): Framer with State[DataBE] = new DataFramer(this)
 
   override def apply(size: Long): DataBE = alloc[Byte](size)
 

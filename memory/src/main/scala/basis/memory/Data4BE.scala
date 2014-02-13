@@ -6,6 +6,7 @@
 
 package basis.memory
 
+import basis.collections._
 import basis.util._
 
 /** Big-endian data backed by an `Int` array.
@@ -69,7 +70,7 @@ private[memory] final class Data4BE(override val words: Array[Int]) extends Data
 }
 
 /** An allocator for big-endian data backed by an `Int` array. */
-private[memory] object Data4BE extends Allocator with (Long => Data4BE) {
+private[memory] object Data4BE extends Allocator[Data4BE] {
   override def MaxSize: Long = Int.MaxValue.toLong << 2
 
   override def Endian: Endianness = BigEndian
@@ -81,6 +82,13 @@ private[memory] object Data4BE extends Allocator with (Long => Data4BE) {
     val words = new Array[Int]((align(size, 4L) >> 2).toInt)
     new Data4BE(words)
   }
+
+  override def realloc(data: Loader, size: Long): Data4BE = {
+    if (data.isInstanceOf[Data4BE]) data.asInstanceOf[Data4BE].copy(size)
+    else super.realloc(data, size)
+  }
+
+  override def Framer(): Framer with State[Data4BE] = new DataFramer(this)
 
   override def toString: String = "Data4BE"
 }

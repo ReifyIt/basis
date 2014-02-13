@@ -16,7 +16,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
   import ShouldMatchers._
   import HexMatchers._
 
-  def PrimitiveData(allocator: Allocator): Unit = {
+  def PrimitiveData(allocator: Allocator[Data]): Unit = {
     import allocator.alloc
 
     it("should store Byte values") {
@@ -181,7 +181,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
     }
   }
 
-  def BigEndianData(allocator: Allocator): Unit = {
+  def BigEndianData(allocator: Allocator[Data]): Unit = {
     import allocator.alloc
 
     it("should be big-endian") {
@@ -292,7 +292,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
     }
   }
 
-  def LittleEndianData(allocator: Allocator): Unit = {
+  def LittleEndianData(allocator: Allocator[Data]): Unit = {
     import allocator.alloc
 
     it("should be little-endian") {
@@ -403,12 +403,12 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
     }
   }
 
-  def NativeEndianData(allocator: Allocator) = NativeEndian match {
+  def NativeEndianData(allocator: Allocator[Data]) = NativeEndian match {
     case BigEndian => BigEndianData(allocator)
     case LittleEndian => LittleEndianData(allocator)
   }
 
-  def StructuredData(allocator: Allocator): Unit = {
+  def StructuredData(allocator: Allocator[Data]): Unit = {
     describe("Packed Byte data") {
       val struct = Struct.PackedByte
       it should behave like ValueType(0x7F.toByte)(allocator, struct)

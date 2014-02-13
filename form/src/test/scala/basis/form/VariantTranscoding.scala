@@ -5,19 +5,20 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
 import basis.util._
 import org.scalatest._
 import org.scalatest.matchers._
 
-trait JsonVariantBehaviors { this: FunSpec =>
+trait VariantTranscoding { this: FunSpec =>
   import ShouldMatchers._
 
-  val variant: JsonVariant
+  val variant: Variant
   import variant._
 
-  def TranscodesJson() = describe("transcoding variant forms to JSON") {
+  protected def transcode: Matcher[AnyForm]
+
+  def Transcodes() = describe("transcoding $variant forms") {
     it("should transcode empty objects") {
       ObjectForm.empty should transcode
     }
@@ -121,19 +122,35 @@ trait JsonVariantBehaviors { this: FunSpec =>
       UndefinedForm should transcode
     }
 
+    it("should transcode empty objects in objects") {
+      ObjectForm("object" -> ObjectForm.empty) should transcode
+    }
+
+    it("should transcode non-empty objects in objects") {
+      ObjectForm("object" -> ObjectForm("true" -> TrueForm)) should transcode
+    }
+
+    it("should transcode empty arrays in objects") {
+      ObjectForm("array" -> SeqForm.empty) should transcode
+    }
+
+    it("should transcode non-empty arrays in objects") {
+      ObjectForm("array" -> SeqForm(TrueForm)) should transcode
+    }
+
     it("should transcode non-empty objects") {
       ObjectForm(
-        ("object", ObjectForm.empty),
-        ("array",  SeqForm.empty),
-        ("binary", BinaryForm.empty),
-        ("string", StringForm.empty),
-        ("int32",  NumberForm(0xF7F6F5F4)),
-        ("int64",  NumberForm(0xF7F6F5F4F3F2F1F0L)),
-        ("double", NumberForm(0.5)),
-        ("date",   DateForm.now),
-        ("true",   TrueForm),
-        ("false",  FalseForm),
-        ("null",   NullForm)
+        "object" -> ObjectForm.empty,
+        "array" -> SeqForm.empty,
+        "binary" -> BinaryForm.empty,
+        "string" -> StringForm.empty,
+        "int32" -> NumberForm(0xF7F6F5F4),
+        "int64" -> NumberForm(0xF7F6F5F4F3F2F1F0L),
+        "double" -> NumberForm(0.5),
+        "date" -> DateForm.now,
+        "true" -> TrueForm,
+        "false" -> FalseForm,
+        "null" -> NullForm
       ) should transcode
     }
 
@@ -198,18 +215,6 @@ trait JsonVariantBehaviors { this: FunSpec =>
       withClue("U+FFFFF")  (StringForm("\uDBBF\uDFFF") should transcode)
       withClue("U+100000") (StringForm("\uDBC0\uDC00") should transcode)
       withClue("U+10FFFF") (StringForm("\uDBFF\uDFFF") should transcode)
-    }
-  }
-
-
-  private object transcode extends Matcher[AnyForm] {
-    private def transcoded(x: AnyForm): AnyForm = AnyForm.parseJson(x.toJson)
-    def apply(x: AnyForm): MatchResult = {
-      val y = transcoded(x)
-      MatchResult(
-        x == y,
-        s"$x improperly transcoded to $y",
-        s"$x properly transcoded")
     }
   }
 }

@@ -29,6 +29,8 @@ final class DoubleOps(val __ : Double) extends AnyVal {
 
   def log: Double = macro DoubleOps.log
 
+  def log10: Double = macro DoubleOps.log10
+
   def sqrt: Double = macro DoubleOps.sqrt
 
   def cbrt: Double = macro DoubleOps.cbrt
@@ -147,6 +149,15 @@ private[util] object DoubleOps {
     Expr[Double](
       Apply(
         Select(JavaLangMath(c), "log": TermName),
+        unApply(c).tree :: Nil))
+  }
+
+  def log10(c: Context): c.Expr[Double] = {
+    import c.Expr
+    import c.universe._
+    Expr[Double](
+      Apply(
+        Select(JavaLangMath(c), "log10": TermName),
         unApply(c).tree :: Nil))
   }
 

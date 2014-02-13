@@ -11,12 +11,17 @@ import basis.memory._
 import basis.text._
 import scala.reflect._
 
-class OmniVariant extends Variant with json.JsonVariant {
+class OmniVariant
+  extends Variant
+  with json.JsonVariant
+  with bson.BsonVariant {
+
   override type AnyForm = OmniValue
 
   override lazy val AnyForm
     : BaseValueFactory with
-      JsonValueFactory =
+      JsonValueFactory with
+      BsonValueFactory =
     new OmniValueFactory
 
   implicit override lazy val AnyFormTag: ClassTag[AnyForm] =
@@ -25,17 +30,20 @@ class OmniVariant extends Variant with json.JsonVariant {
   abstract class OmniValue
     extends BaseValue
     with JsonValue
+    with BsonValue
 
   protected class OmniValueFactory
     extends BaseValueFactory
     with JsonValueFactory
+    with BsonValueFactory
 
 
   override type ObjectForm = OmniObject
 
   override lazy val ObjectForm
     : BaseObjectFactory with
-      JsonObjectFactory =
+      JsonObjectFactory with
+      BsonObjectFactory =
     new OmniObjectFactory
 
   implicit override lazy val ObjectFormTag: ClassTag[ObjectForm] =
@@ -44,14 +52,16 @@ class OmniVariant extends Variant with json.JsonVariant {
   class OmniObject(protected val underlying: Seq[(String, AnyForm)])
     extends OmniValue
     with BaseObject
-    with JsonObject {
+    with JsonObject
+    with BsonObject {
 
     override def iterator: Iterator[(String, AnyForm)] = underlying.iterator
   }
 
   protected class OmniObjectFactory
     extends BaseObjectFactory
-    with JsonObjectFactory {
+    with JsonObjectFactory
+    with BsonObjectFactory {
 
     override val empty: ObjectForm = new OmniObject(immutable.Vector.empty)
 
@@ -78,7 +88,8 @@ class OmniVariant extends Variant with json.JsonVariant {
 
   override lazy val SeqForm
     : BaseSeqFactory with
-      JsonSeqFactory =
+      JsonSeqFactory with
+      BsonSeqFactory =
     new OmniSeqFactory
 
   implicit override lazy val SeqFormTag: ClassTag[SeqForm] =
@@ -87,7 +98,8 @@ class OmniVariant extends Variant with json.JsonVariant {
   class OmniSeq(protected val underlying: IndexedSeq[AnyForm])
     extends OmniValue
     with BaseSeq
-    with JsonSeq {
+    with JsonSeq
+    with BsonSeq {
 
     override def length: Int = underlying.length
 
@@ -98,7 +110,8 @@ class OmniVariant extends Variant with json.JsonVariant {
 
   protected class OmniSeqFactory
     extends BaseSeqFactory
-    with JsonSeqFactory {
+    with JsonSeqFactory
+    with BsonSeqFactory {
 
     override val empty: SeqForm = new OmniSeq(immutable.Vector.empty)
 
@@ -125,7 +138,8 @@ class OmniVariant extends Variant with json.JsonVariant {
 
   override lazy val SetForm
     : BaseSetFactory with
-      JsonSetFactory =
+      JsonSetFactory with
+      BsonSetFactory =
     new OmniSetFactory
 
   implicit override lazy val SetFormTag: ClassTag[SetForm] =
@@ -134,14 +148,16 @@ class OmniVariant extends Variant with json.JsonVariant {
   class OmniSet(protected val underlying: Seq[AnyForm])
     extends OmniValue
     with BaseSet
-    with JsonSet {
+    with JsonSet
+    with BsonSet {
 
     override def iterator: Iterator[AnyForm] = underlying.iterator
   }
 
   protected class OmniSetFactory
     extends BaseSetFactory
-    with JsonSetFactory {
+    with JsonSetFactory
+    with BsonSetFactory {
 
     override val empty: SetForm = new OmniSet(immutable.Vector.empty)
 
@@ -176,6 +192,7 @@ class OmniVariant extends Variant with json.JsonVariant {
     extends OmniValue
     with BaseBinary
     with JsonBinary
+    with BsonBinary
     with ProxyLoader {
 
     override def size: Long = underlying.size
@@ -206,7 +223,8 @@ class OmniVariant extends Variant with json.JsonVariant {
   class OmniString(protected val underlying: UString)
     extends OmniValue
     with BaseString
-    with JsonString {
+    with JsonString
+    with BsonString {
 
     override def iterator: Iterator[Int] = underlying.iterator
 
@@ -252,6 +270,7 @@ class OmniVariant extends Variant with json.JsonVariant {
     extends OmniValue
     with BaseNumber
     with JsonNumber
+    with BsonNumber
 
   protected class OmniInt(override val toInt: Int)
     extends OmniNumber with BaseInt
@@ -297,6 +316,7 @@ class OmniVariant extends Variant with json.JsonVariant {
     extends OmniValue
     with BaseDate
     with JsonDate
+    with BsonDate
 
   protected class OmniDateFactory extends BaseDateFactory {
     override def apply(millis: Long): DateForm =
@@ -320,6 +340,7 @@ class OmniVariant extends Variant with json.JsonVariant {
     extends OmniValue
     with BaseBoolean
     with JsonBoolean
+    with BsonBoolean
 
   protected class OmniBooleanFactory extends BaseBooleanFactory
 
@@ -335,6 +356,7 @@ class OmniVariant extends Variant with json.JsonVariant {
     extends OmniValue
     with BaseNull
     with JsonNull
+    with BsonNull
 
 
   override type UndefinedForm = OmniUndefined
@@ -348,6 +370,7 @@ class OmniVariant extends Variant with json.JsonVariant {
     extends OmniValue
     with BaseUndefined
     with JsonUndefined
+    with BsonUndefined
 }
 
 object OmniVariant extends OmniVariant

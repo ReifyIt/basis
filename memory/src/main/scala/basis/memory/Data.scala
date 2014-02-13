@@ -6,6 +6,7 @@
 
 package basis.memory
 
+import basis.collections._
 import basis.util._
 
 /** A byte-addressed memory region.
@@ -285,7 +286,7 @@ abstract class Data extends Loader with Storer {
 }
 
 /** An allocator for native-endian data backed by a primitive array. */
-object Data extends Allocator {
+object Data extends Allocator[Data] {
   override def MaxSize: Long = Int.MaxValue.toLong << 3
 
   override def Endian: Endianness = NativeEndian
@@ -311,6 +312,13 @@ object Data extends Allocator {
   }
 
   override def apply(size: Long): Data = alloc[Byte](size)
+
+  override def realloc(data: Loader, size: Long): Data = {
+    if (data.isInstanceOf[Data]) data.asInstanceOf[Data].copy(size)
+    else super.realloc(data, size)
+  }
+
+  override def Framer(): Framer with State[Data] = new DataFramer(this)
 
   /** Copies a byte sequence from one `Data` object to another.
     *

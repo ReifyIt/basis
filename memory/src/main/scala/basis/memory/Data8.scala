@@ -6,6 +6,8 @@
 
 package basis.memory
 
+import basis.collections._
+
 /** Native-endian data backed by a `Long` array.
   *
   * @author Chris Sachs
@@ -64,7 +66,7 @@ abstract class Data8 extends Data {
 }
 
 /** An allocator for native-endian data backed by a `Long` array. */
-object Data8 extends Allocator with (Long => Data8) {
+object Data8 extends Allocator[Data8] {
   override def MaxSize: Long = Int.MaxValue.toLong << 3
 
   override def Endian: Endianness = NativeEndian
@@ -78,6 +80,13 @@ object Data8 extends Allocator with (Long => Data8) {
     case BigEndian    => Data8BE(size)
     case LittleEndian => Data8LE(size)
   }
+
+  override def realloc(data: Loader, size: Long): Data8 = {
+    if (data.isInstanceOf[Data8]) data.asInstanceOf[Data8].copy(size)
+    else super.realloc(data, size)
+  }
+
+  override def Framer(): Framer with State[Data8] = new DataFramer(this)
 
   override def toString: String = "Data8"
 }

@@ -29,8 +29,22 @@ private[util] object BeginMacros {
   def apply(c: ContextWithPre[Begin])(op: c.Expr[Unit]): c.Expr[Unit] = {
     import c.{ Expr, fresh, prefix, WeakTypeTag }
     import c.universe._
-    implicit val BreakType = typeOf[Break]
-    c.Expr[Unit](q"try $op catch { case signal: $BreakType if signal eq $prefix => }")
+    // Scala 2.10.3 can't find q
+    // implicit val BreakType = typeOf[Break]
+    // c.Expr[Unit](q"try $op catch { case signal: $BreakType if signal eq $prefix => }")
+    val signal = newTermName(fresh("signal$"))
+    Expr[Unit](
+      Try(
+        op.tree,
+        CaseDef(
+          Bind(
+            signal,
+            Typed(
+              Ident(nme.WILDCARD),
+              Select(Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "util": TermName), "Break": TypeName))),
+          Apply(Select(Ident(signal), "eq": TermName), Select(prefix.tree, "signal": TermName) :: Nil),
+          EmptyTree) :: Nil,
+        EmptyTree))(WeakTypeTag.Unit)
   }
 
   def break(c: ContextWithPre[Begin])(): c.Expr[Nothing] = {

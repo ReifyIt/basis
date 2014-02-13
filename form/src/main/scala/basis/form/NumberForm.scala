@@ -52,13 +52,29 @@ trait NumberForm { variant: Variant =>
     override def canEqual(other: Any): Boolean = other.isInstanceOf[BaseNumber]
 
     override def equals(other: Any): Boolean = eq(other.asInstanceOf[AnyRef]) || (other match {
-      case that: BaseNumber => that.canEqual(this) && toDecimalString.equals(that.toDecimalString)
+      case that: BaseNumber =>
+        that.canEqual(this) &&
+        isValidByte && that.isValidByte && toByte == that.toByte ||
+        isValidShort && that.isValidShort && toShort == that.toShort ||
+        isValidInt && that.isValidInt && toInt == that.toInt ||
+        isValidLong && that.isValidLong && toLong == that.toLong ||
+        isValidFloat && that.isValidFloat && toFloat == that.toFloat ||
+        isValidDouble && that.isValidDouble && toDouble == that.toDouble ||
+        toDecimalString.equals(that.toDecimalString)
       case _ => false
     })
 
     override def hashCode: Int = {
       import basis.util.MurmurHash3._
-      mash(mix(seed[NumberForm], toDecimalString.hashCode))
+      val h =
+        if (isValidByte) hash(toByte)
+        else if (isValidShort) hash(toShort)
+        else if (isValidInt) hash(toInt)
+        else if (isValidLong) hash(toLong)
+        else if (isValidFloat) hash(toFloat)
+        else if (isValidDouble) hash(toDouble)
+        else toDecimalString.hashCode
+      mash(mix(seed[NumberForm], h))
     }
 
     override def toString: String = {

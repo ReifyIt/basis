@@ -9,8 +9,8 @@ package basis.memory
 import basis.collections._
 import basis.util._
 
-private[memory] final class DataFramer(Alloc: Allocator) extends Framer with State[Data] {
-  private[this] var data: Data = _
+private[memory] final class DataFramer[DataType <: Data](Alloc: Allocator[DataType]) extends Framer with State[DataType] {
+  private[this] var data: DataType = _
 
   private[this] var address: Long = 0L
 
@@ -27,7 +27,7 @@ private[memory] final class DataFramer(Alloc: Allocator) extends Framer with Sta
   private[this] def prepare(size: Long): Unit = {
     if (aliased || size > data.size) {
       val newSize = expand(128L, size)
-      data = if (data != null) data.copy(newSize) else Alloc(newSize)
+      data = if (data != null) Alloc.realloc(data, newSize) else Alloc(newSize)
       aliased = false
     }
     if (size > length) length = size
@@ -199,25 +199,25 @@ private[memory] final class DataFramer(Alloc: Allocator) extends Framer with Sta
       aliased = false
     }
     else if (length + count > data.size) {
-      data = data.copy(length + count)
+      data = Alloc.realloc(data, length + count)
       aliased = false
     }
     this
   }
 
-  override def state: Data = {
+  override def state: DataType = {
     if (data == null) data = Alloc(0L)
-    else if (length != data.size) data = data.copy(length)
+    else if (length != data.size) data = Alloc.realloc(data, length)
     aliased = true
     data
   }
 
   override def clear(): Unit = {
-    data = null
+    data = null.asInstanceOf[DataType]
     aliased = true
     address = 0L
     length = 0L
   }
 
-  override def toString: String = Alloc.toString +"."+"Buffer"+"()"
+  override def toString: String = Alloc.toString +"."+"Framer"+"()"
 }

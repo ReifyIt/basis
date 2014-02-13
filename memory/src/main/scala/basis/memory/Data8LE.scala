@@ -6,6 +6,7 @@
 
 package basis.memory
 
+import basis.collections._
 import basis.util._
 
 /** Little-endian data backed by a `Long` array.
@@ -69,7 +70,7 @@ private[memory] final class Data8LE(override val words: Array[Long]) extends Dat
 }
 
 /** An allocator for little-endian data backed by a `Long` array. */
-private[memory] object Data8LE extends Allocator with (Long => Data8LE) {
+private[memory] object Data8LE extends Allocator[Data8LE] {
   override def MaxSize: Long = Int.MaxValue.toLong << 3
 
   override def Endian: Endianness = LittleEndian
@@ -81,6 +82,13 @@ private[memory] object Data8LE extends Allocator with (Long => Data8LE) {
     val words = new Array[Long]((align(size, 8L) >> 3).toInt)
     new Data8LE(words)
   }
+
+  override def realloc(data: Loader, size: Long): Data8LE = {
+    if (data.isInstanceOf[Data8LE]) data.asInstanceOf[Data8LE].copy(size)
+    else super.realloc(data, size)
+  }
+
+  override def Framer(): Framer with State[Data8LE] = new DataFramer(this)
 
   override def toString: String = "Data8LE"
 }

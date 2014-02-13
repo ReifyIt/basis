@@ -6,6 +6,7 @@
 
 package basis.memory
 
+import basis.collections._
 import basis.util._
 
 /** `ByteBuffer` backed data.
@@ -159,7 +160,7 @@ private[memory] final class NioData(val buffer: java.nio.ByteBuffer) extends Dat
 }
 
 /** An allocator for native-endian data backed by a `ByteBuffer`. */
-private[memory] object NioData extends Allocator with (Long => NioData) {
+private[memory] object NioData extends Allocator[NioData] {
   override def MaxSize: Long = Int.MaxValue.toLong
 
   override def Endian: Endianness = NativeEndian
@@ -173,6 +174,13 @@ private[memory] object NioData extends Allocator with (Long => NioData) {
       else java.nio.ByteOrder.LITTLE_ENDIAN
     ))
   }
+
+  override def realloc(data: Loader, size: Long): NioData = {
+    if (data.isInstanceOf[NioData]) data.asInstanceOf[NioData].copy(size)
+    else super.realloc(data, size)
+  }
+
+  override def Framer(): Framer with State[NioData] = new DataFramer(this)
 
   override def toString: String = "NioData"
 }

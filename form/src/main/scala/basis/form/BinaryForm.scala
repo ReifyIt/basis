@@ -72,25 +72,24 @@ trait BinaryForm { variant: Variant =>
 
     override def canEqual(other: Any): Boolean = other.isInstanceOf[BaseBinary]
 
-    override def equals(other: Any): Boolean = eq(other.asInstanceOf[AnyRef]) || (other match {
-      case that: BaseBinary =>
-        var i = 0L
-        var j = 1L
-        while (canLoad(j) && that.canLoad(j) && loadByte(i) == that.loadByte(i)) {
-          i += 1L
-          j += 1L
-        }
-        !canLoad(j) && !that.canLoad(j)
-      case _ => false
-    })
+    override def equals(other: Any): Boolean = eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[BaseBinary] && {
+      val that = other.asInstanceOf[BaseBinary]
+      val n = size
+      var i = 0
+      that.canEqual(this) && that.size == n && {
+        while (i < n && loadByte(i) == that.loadByte(i)) i += 1
+        i == n
+      }
+    }
 
     override def hashCode: Int = {
       import basis.util.MurmurHash3._
       var h = seed[BinaryForm]
-      var i = 0L
-      while (canLoad(i + 1L)) {
-        h = mix(h, loadByte(i).toInt)
-        i += 1L
+      var i = 0
+      val n = size
+      while (i < n) {
+        h = mix(h, loadByte(i.toLong).toInt)
+        i += 1
       }
       mash(h)
     }
@@ -109,6 +108,17 @@ trait BinaryForm { variant: Variant =>
 
   trait BaseBinaryFactory {
     def empty: BinaryForm = Framer().state
+
+    def apply(data: Array[Byte]): BinaryForm = {
+      var i = 0
+      val n = data.length
+      val framer = BinaryForm.Framer().expect(n.toLong)
+      while (i < n) {
+        framer.writeByte(data(i))
+        i += 1
+      }
+      framer.state
+    }
 
     def apply(base64: CharSequence): BinaryForm = {
       val framer = Framer()

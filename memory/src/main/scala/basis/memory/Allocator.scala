@@ -14,7 +14,7 @@ import basis.collections._
   * @version  0.0
   * @since    0.0
   */
-trait Allocator extends (Long => Data) {
+trait Allocator[+DataType] extends (Long => DataType) {
   /** Returns the maximum allocation size supported by this allocator. */
   def MaxSize: Long
 
@@ -22,32 +22,41 @@ trait Allocator extends (Long => Data) {
   def Endian: Endianness
 
   /** Returns `sizeOf[T] * count` bytes of newly allocated data.
-    * Implementations may return a `Data` class optimized for the given struct.
+    * Implementations may return a `DataType` optimized for the given struct.
     *
     * @tparam T       the struct instance type.
     * @param  count   the number of struct values to allocate.
     * @param  T       the implicit struct.
     * @return the allocated, zero-filled data.
     */
-  def alloc[T](count: Long)(implicit T: Struct[T]): Data
+  def alloc[T](count: Long)(implicit T: Struct[T]): DataType
 
   /** Returns `size` bytes of newly allocated data.
     *
     * @param  size  the number of bytes to allocate.
     * @return the allocated, zero-filled data.
     */
-  override def apply(size: Long): Data
+  override def apply(size: Long): DataType
 
-  /** Returns a new growable `Framer` fed by this allocator.  */
-  def Framer(): Framer with State[Data] = new DataFramer(this)
+  def realloc(data: Loader, size: Long): DataType = {
+    val framer = Framer()
+    var p = 0L
+    while (p < size && data.canLoad(p + 1L)) {
+      framer.storeByte(p, data.loadByte(p))
+      p += 1L
+    }
+    framer.state
+  }
+
+  def Framer(): Framer with State[DataType]
 }
 
 /** A factory for memory allocators. */
 object Allocator {
   /** Returns the default memory allocator. */
-  implicit def default: Allocator = Data
+  implicit def default: Allocator[Data] = Data
 
-  def apply[T](endian: Endianness)(implicit T: Struct[T]): Allocator = {
+  def apply[T](endian: Endianness)(implicit T: Struct[T]): Allocator[Data] = {
     if (endian eq BigEndian) {
       if (endian.isNative) T.alignment match {
         case 1L => Data1BE
