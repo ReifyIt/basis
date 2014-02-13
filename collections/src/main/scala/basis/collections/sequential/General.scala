@@ -23,6 +23,12 @@ class General {
   implicit def TraverserToGeneralOps[A](xs: Traverser[A]): GeneralTraverserOps[A]    = macro General.TraverserToGeneralOps[A]
 }
 private[collections] object General {
+  def typed[Required: c.WeakTypeTag](c: Context)(expr: c.universe.Tree): c.Expr[Required] = {
+    import c.universe._
+    implicit val RequiredType = weakTypeOf[Required]
+    c.Expr(q"$expr: $RequiredType")
+  }
+
   def new1[Construct: c.WeakTypeTag, Arg: c.WeakTypeTag](c: Context)(xs: c.Expr[Arg]): c.Expr[Construct] = {
     import c.universe._
     implicit val ConstructType = weakTypeOf[Construct]

@@ -33,5 +33,5 @@ private[collections] object NonStrict {
   def IndexedSeqToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[IndexedSeq[A]])        = General.new1[NonStrictIndexedSeqOps[A], IndexedSeq[A]](c)(xs)
   def LinearSeqToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[LinearSeq[A]])          = General.new1[NonStrictLinearSeqOps[A], LinearSeq[A]](c)(xs)
   def SetToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Set[A]])                      = General.new1[NonStrictSetOps[A], Set[A]](c)(xs)
-  def MapToNonStrictOps[A: c.WeakTypeTag, T: c.WeakTypeTag](c: Context)(xs: c.Expr[Map[A, T]]) = General.new1[NonStrictMapOps[A], Map[A, T]](c)(xs)
+  def MapToNonStrictOps[A: c.WeakTypeTag, T: c.WeakTypeTag](c: Context)(xs: c.Expr[Map[A, T]]) = General.new1[NonStrictMapOps[A, T], Map[A, T]](c)(xs)
 }
