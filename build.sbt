@@ -3,9 +3,12 @@ def scalatestVer(scalaVersion: String): String = scalaVersion match {
   case "2.11.0-M7" => "2.0.1-SNAP4"
   case "2.10.3"    => "1.9.2"
 }
-def quasiDependencies(scalaVersion: String) = scalaVersion match {
-  case "2.10.3" => List("org.scalamacros" % s"quasiquotes_$scalaVersion" % "2.0.0-M3", "org.scalamacros" % s"paradise_$scalaVersion" % "2.0.0-M3" % "plugin")
-  case _        => Nil
+
+lazy val quasiSettings: Seq[Setting[_]] = moduleSettings :+ {
+  libraryDependencies <++= (scalaVersion)(_ match {
+    case "2.10.3" => List("org.scalamacros" % s"quasiquotes_2.10.3" % "2.0.0-M3", "org.scalamacros" % s"paradise_2.10.3" % "2.0.0-M3" % "plugin")
+    case _        => Nil
+  })
 }
 
 scalaVersion in Global := "2.11.0-M8"
@@ -27,15 +30,11 @@ lazy val basis = (
 
 lazy val math = project settings (moduleSettings: _*)
 
-lazy val util = project settings (moduleSettings: _*) settings (
-  libraryDependencies <++= scalaVersion(quasiDependencies)
-)
+lazy val util = project settings (quasiSettings: _*)
 
-lazy val collections = project settings (moduleSettings: _*) dependsOn util settings (
-  libraryDependencies <++= scalaVersion(quasiDependencies)
-)
+lazy val collections = project settings (quasiSettings: _*) dependsOn util
 
-lazy val form = project settings (moduleSettings: _*) settings (libraryDependencies <++= scalaVersion(quasiDependencies)) dependsOn (collections, memory, text, util)
+lazy val form = project settings (quasiSettings: _*) dependsOn (collections, memory, text, util)
 
 lazy val memory, stat, text = project settings (moduleSettings: _*) dependsOn (collections, util)
 
