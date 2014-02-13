@@ -11,9 +11,10 @@ lazy val quasiSettings: Seq[Setting[_]] = moduleSettings :+ {
   })
 }
 
-scalaVersion in Global := "2.11.0-M8"
+scalaVersion in Global := "2.11.0-M7"
 
-crossScalaVersions in Global := Seq("2.10.3", "2.11.0-M7", "2.11.0-M8")
+// crossScalaVersions in Global := Seq("2.10.3", "2.11.0-M7", "2.11.0-M8")
+crossScalaVersions in Global := Seq("2.10.3", "2.11.0-M7")
 
 scalacOptions in Global ++= Seq("-language:experimental.macros", "-Yno-predef")
 
