@@ -23,19 +23,20 @@ class General {
   implicit def TraverserToGeneralOps[A](xs: Traverser[A]): GeneralTraverserOps[A]    = macro General.TraverserToGeneralOps[A]
 }
 private[collections] object General {
-  private def wrapGeneral[Arg: c.WeakTypeTag, Wrapper: c.WeakTypeTag](c: Context)(xs: c.Expr[Arg]): c.Expr[Wrapper] = {
+  private def new1[Construct: c.WeakTypeTag, Arg: c.WeakTypeTag](c: Context)(xs: c.Expr[Arg]): c.Expr[Construct] = {
     import c.universe._
-    implicit val WrapperType = weakTypeOf[Wrapper]
-    c.Expr(q"new $WrapperType($xs)")
+    implicit val ConstructType = weakTypeOf[Construct]
+    c.Expr(q"new $ConstructType($xs)")
   }
-  def ArrayToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Array[A]])                  = wrapGeneral[Array[A], GeneralArrayOps[A]](c)(xs)
-  def CollectionToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Collection[A]])        = wrapGeneral[Collection[A], GeneralCollectionOps[A]](c)(xs)
-  def ContainerToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Container[A]])          = wrapGeneral[Container[A], GeneralContainerOps[A]](c)(xs)
-  def IndexedSeqToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[IndexedSeq[A]])        = wrapGeneral[IndexedSeq[A], GeneralIndexedSeqOps[A]](c)(xs)
-  def IteratorToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Iterator[A]])            = wrapGeneral[Iterator[A], GeneralIteratorOps[A]](c)(xs)
-  def LinearSeqToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[LinearSeq[A]])          = wrapGeneral[LinearSeq[A], GeneralLinearSeqOps[A]](c)(xs)
-  def MapToGeneralOps[A: c.WeakTypeTag, T: c.WeakTypeTag](c: Context)(xs: c.Expr[Map[A, T]]) = wrapGeneral[Map[A, T], GeneralMapOps[A, T]](c)(xs)
-  def SeqToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Seq[A]])                      = wrapGeneral[Seq[A], GeneralSeqOps[A]](c)(xs)
-  def SetToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Set[A]])                      = wrapGeneral[Set[A], GeneralSetOps[A]](c)(xs)
-  def TraverserToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Traverser[A]])          = wrapGeneral[Traverser[A], GeneralTraverserOps[A]](c)(xs)
+
+  def ArrayToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Array[A]])                  = new1[GeneralArrayOps[A], Array[A]](c)(xs)
+  def CollectionToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Collection[A]])        = new1[GeneralCollectionOps[A], Collection[A]](c)(xs)
+  def ContainerToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Container[A]])          = new1[GeneralContainerOps[A], Container[A]](c)(xs)
+  def IndexedSeqToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[IndexedSeq[A]])        = new1[GeneralIndexedSeqOps[A], IndexedSeq[A]](c)(xs)
+  def IteratorToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Iterator[A]])            = new1[GeneralIteratorOps[A], Iterator[A]](c)(xs)
+  def LinearSeqToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[LinearSeq[A]])          = new1[GeneralLinearSeqOps[A], LinearSeq[A]](c)(xs)
+  def MapToGeneralOps[A: c.WeakTypeTag, T: c.WeakTypeTag](c: Context)(xs: c.Expr[Map[A, T]]) = new1[GeneralMapOps[A, T], Map[A, T]](c)(xs)
+  def SeqToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Seq[A]])                      = new1[GeneralSeqOps[A], Seq[A]](c)(xs)
+  def SetToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Set[A]])                      = new1[GeneralSetOps[A], Set[A]](c)(xs)
+  def TraverserToGeneralOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Traverser[A]])          = new1[GeneralTraverserOps[A], Traverser[A]](c)(xs)
 }
