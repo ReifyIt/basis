@@ -35,7 +35,7 @@ lazy val collections = project settings (moduleSettings: _*) dependsOn util sett
   libraryDependencies <++= scalaVersion(quasiDependencies)
 )
 
-lazy val form = project settings (moduleSettings: _*) dependsOn (collections, memory, text, util)
+lazy val form = project settings (moduleSettings: _*) settings (libraryDependencies <++= scalaVersion(quasiDependencies)) dependsOn (collections, memory, text, util)
 
 lazy val memory, stat, text = project settings (moduleSettings: _*) dependsOn (collections, util)
 
