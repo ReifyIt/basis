@@ -6,285 +6,146 @@
 
 package basis.util
 
-/** Extended `Double` operations.
-  *
-  * @author   Chris Sachs
-  * @version  0.1
-  * @since    0.0
-  */
+import scala.reflect.macros._
+
 final class DoubleOps(val __ : Double) extends AnyVal {
-  def isNaN: Boolean = macro DoubleOps.isNaN
-
-  def isInfinite: Boolean = macro DoubleOps.isInfinite
-
-  def abs: Double = macro DoubleOps.abs
-
-  def min(y: Double): Double = macro DoubleOps.min
-
-  def max(y: Double): Double = macro DoubleOps.max
-
-  def pow(y: Double): Double = macro DoubleOps.pow
-
-  def exp: Double = macro DoubleOps.exp
-
-  def log: Double = macro DoubleOps.log
-
-  def log10: Double = macro DoubleOps.log10
-
-  def sqrt: Double = macro DoubleOps.sqrt
-
-  def cbrt: Double = macro DoubleOps.cbrt
-
-  def sin: Double = macro DoubleOps.sin
-
-  def cos: Double = macro DoubleOps.cos
-
-  def tan: Double = macro DoubleOps.tan
-
-  def asin: Double = macro DoubleOps.asin
-
-  def acos: Double = macro DoubleOps.acos
-
-  def atan: Double = macro DoubleOps.atan
-
-  def atan(y: Double) = macro DoubleOps.atan2
-
-  def sinh: Double = macro DoubleOps.sinh
-
-  def cosh: Double = macro DoubleOps.cosh
-
-  def tanh: Double = macro DoubleOps.tanh
-
-  def toLongBits: Long = macro DoubleOps.toLongBits
+  def abs: Double            = macro DoubleMacros.abs
+  def acos: Double           = macro DoubleMacros.acos
+  def asin: Double           = macro DoubleMacros.asin
+  def atan: Double           = macro DoubleMacros.atan
+  def atan(y: Double)        = macro DoubleMacros.atan2
+  def cbrt: Double           = macro DoubleMacros.cbrt
+  def cos: Double            = macro DoubleMacros.cos
+  def cosh: Double           = macro DoubleMacros.cosh
+  def exp: Double            = macro DoubleMacros.exp
+  def isInfinite: Boolean    = macro DoubleMacros.isInfinite
+  def isNaN: Boolean         = macro DoubleMacros.isNaN
+  def log10: Double          = macro DoubleMacros.log10
+  def log: Double            = macro DoubleMacros.log
+  def max(y: Double): Double = macro DoubleMacros.max
+  def min(y: Double): Double = macro DoubleMacros.min
+  def pow(y: Double): Double = macro DoubleMacros.pow
+  def sin: Double            = macro DoubleMacros.sin
+  def sinh: Double           = macro DoubleMacros.sinh
+  def sqrt: Double           = macro DoubleMacros.sqrt
+  def tan: Double            = macro DoubleMacros.tan
+  def tanh: Double           = macro DoubleMacros.tanh
+  def toLongBits: Long       = macro DoubleMacros.toLongBits
 }
 
-private[util] object DoubleOps {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
-
-  private def unApply(c: Context): c.Expr[Double] = {
-    import c.{ Expr, prefix, typeCheck, weakTypeOf }
-    import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    Expr[Double](typeCheck(x, weakTypeOf[Double]))
-  }
-
+private[util] object DoubleMacros {
   def DoubleToOps(c: Context)(x: c.Expr[Double]): c.Expr[DoubleOps] = {
-    import c.{ Expr, mirror, WeakTypeTag }
     import c.universe._
-    implicit val DoubleOpsTag =
-      WeakTypeTag[DoubleOps](mirror.staticClass("basis.util.DoubleOps").toType)
-    Expr[DoubleOps](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[DoubleOps])), nme.CONSTRUCTOR),
-        x.tree :: Nil))
+    c.Expr[DoubleOps](q"new DoubleOps($x)")
   }
 
-  def isNaN(c: Context): c.Expr[Boolean] = {
-    import c.Expr
+  def abs(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Boolean](
-      Apply(
-        Select(JavaLangDouble(c), "isNaN": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.abs(${c.prefix}.__)")
   }
 
-  def isInfinite(c: Context): c.Expr[Boolean] = {
-    import c.Expr
+  def acos(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Boolean](
-      Apply(
-        Select(JavaLangDouble(c), "isInfinite": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.acos(${c.prefix}.__)")
   }
 
-  def abs(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def asin(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "abs": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.asin(${c.prefix}.__)")
   }
 
-  def min(c: Context)(y: c.Expr[Double]): c.Expr[Double] = {
-    import c.Expr
+  def atan(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "min": TermName),
-        unApply(c).tree :: y.tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.atan(${c.prefix}.__)")
   }
 
-  def max(c: Context)(y: c.Expr[Double]): c.Expr[Double] = {
-    import c.Expr
+  def atan2(c: ContextWithPre[DoubleOps])(y: c.Expr[Double]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "max": TermName),
-        unApply(c).tree :: y.tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.atan2(${c.prefix}.__, $y)")
   }
 
-  def pow(c: Context)(y: c.Expr[Double]): c.Expr[Double] = {
-    import c.Expr
+  def cbrt(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "pow": TermName),
-        unApply(c).tree :: y.tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.cbrt(${c.prefix}.__)")
   }
 
-  def exp(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def cos(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "exp": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.cose(${c.prefix}.__)")
   }
 
-  def log(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def cosh(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "log": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.cosh(${c.prefix}.__)")
   }
 
-  def log10(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def exp(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "log10": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.exp(${c.prefix}.__)")
   }
 
-  def sqrt(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def isInfinite(c: ContextWithPre[DoubleOps]): c.Expr[Boolean] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "sqrt": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Boolean](q"java.lang.Double.isInfinite(${c.prefix}.__)")
   }
 
-  def cbrt(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def isNaN(c: ContextWithPre[DoubleOps]): c.Expr[Boolean] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "cbrt": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Boolean](q"java.lang.Double.isNaN(${c.prefix}.__)")
   }
 
-  def sin(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def log10(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "sin": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.log10(${c.prefix}.__)")
   }
 
-  def cos(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def log(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "cos": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.log(${c.prefix}.__)")
   }
 
-  def tan(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def max(c: ContextWithPre[DoubleOps])(y: c.Expr[Double]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "tan": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.max(${c.prefix}.__, $y)")
   }
 
-  def asin(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def min(c: ContextWithPre[DoubleOps])(y: c.Expr[Double]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "asin": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.min(${c.prefix}.__, $y)")
   }
 
-  def acos(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def pow(c: ContextWithPre[DoubleOps])(y: c.Expr[Double]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "acos": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.pow(${c.prefix}.__, $y)")
   }
 
-  def atan(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def sin(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "atan": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.sin(${c.prefix}.__)")
   }
 
-  def atan2(c: Context)(y: c.Expr[Double]): c.Expr[Double] = {
-    import c.Expr
+  def sinh(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "atan2": TermName),
-        unApply(c).tree :: y.tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.sinh(${c.prefix}.__)")
   }
 
-  def sinh(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def sqrt(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "sinh": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.sqrt(${c.prefix}.__)")
   }
 
-  def cosh(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def tan(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "cosh": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.tan(${c.prefix}.__)")
   }
 
-  def tanh(c: Context): c.Expr[Double] = {
-    import c.Expr
+  def tanh(c: ContextWithPre[DoubleOps]): c.Expr[Double] = {
     import c.universe._
-    Expr[Double](
-      Apply(
-        Select(JavaLangMath(c), "tanh": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Double](q"java.lang.Math.tanh(${c.prefix}.__)")
   }
 
-  def toLongBits(c: Context): c.Expr[Long] = {
-    import c.Expr
+  def toLongBits(c: ContextWithPre[DoubleOps]): c.Expr[Long] = {
     import c.universe._
-    Expr[Long](
-      Apply(
-        Select(JavaLangDouble(c), "doubleToLongBits": TermName),
-        unApply(c).tree :: Nil))
-  }
-
-  private def JavaLangDouble(c: Context): c.Tree = {
-    import c.universe._
-    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Double": TermName)
-  }
-
-  private def JavaLangMath(c: Context): c.Tree = {
-    import c.universe._
-    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Math": TermName)
+    c.Expr[Long](q"java.lang.Double.doubleToLongBits(${c.prefix}.__)")
   }
 }

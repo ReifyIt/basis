@@ -24,7 +24,7 @@ package object util extends basis.util.Types {
 
   val False: Bind[Boolean] = new BindBoolean(false)
 
-  /** The standard breakable control-flow context. */
+  /** The default breakable control-flow context. */
   val begin: Begin = new Begin
 
   implicit def ElseToOps[A, B](self: A Else B): ElseOps[A, B] =
@@ -36,27 +36,12 @@ package object util extends basis.util.Types {
   implicit def TruthToOps(self: Truth): TruthOps =
     macro TruthOps.TruthToOps
 
-  /** Implicitly adds infix arrow (-> and →) associators to all values. */
-  implicit def ArrowToOps[A](left: A): ArrowOps[A] =
-    macro ArrowOps.ArrowToOps[A]
+  implicit def ArrowToOps[A](left: A): ArrowOps[A] = macro ArrowMacros.ArrowToOps[A]
+  implicit def IntToOps(a: Int): IntOps            = macro IntMacros.IntToOps
+  implicit def LongToOps(a: Long): LongOps         = macro LongMacros.LongToOps
+  implicit def FloatToOps(x: Float): FloatOps      = macro FloatMacros.FloatToOps
+  implicit def DoubleToOps(x: Double): DoubleOps   = macro DoubleMacros.DoubleToOps
 
-  /** Implicitly adds extended operations to `Int` values. */
-  implicit def IntToOps(a: Int): IntOps =
-    macro IntOps.IntToOps
-
-  /** Implicitly adds extended operations to `Long` values. */
-  implicit def LongToOps(a: Long): LongOps =
-    macro LongOps.LongToOps
-
-  /** Implicitly adds extended operations to `Float` values. */
-  implicit def FloatToOps(x: Float): FloatOps =
-    macro FloatOps.FloatToOps
-
-  /** Implicitly adds extended operations to `Double` values. */
-  implicit def DoubleToOps(x: Double): DoubleOps =
-    macro DoubleOps.DoubleToOps
-
-  /** Implicitly adds `show` method to `StringBuilder` that augments builtin `toString` formats. */
   private[basis] implicit def StringBuilderToShower(builder: java.lang.StringBuilder): StringShower =
     macro StringShower.StringBuilderToShower
 }

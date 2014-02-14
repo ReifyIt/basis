@@ -6,109 +6,50 @@
 
 package basis.util
 
-/** Extended `Float` operations.
-  *
-  * @author   Chris Sachs
-  * @version  0.1
-  * @since    0.0
-  */
+import scala.reflect.macros._
+
 final class FloatOps(val __ : Float) extends AnyVal {
-  def isNaN: Boolean = macro FloatOps.isNaN
-
-  def isInfinite: Boolean = macro FloatOps.isInfinite
-
-  def abs: Float = macro FloatOps.abs
-
-  def min(y: Float): Float = macro FloatOps.min
-
-  def max(y: Float): Float = macro FloatOps.max
-
-  def toIntBits: Int = macro FloatOps.toIntBits
+  def abs: Float           = macro FloatMacros.abs
+  def isInfinite: Boolean  = macro FloatMacros.isInfinite
+  def isNaN: Boolean       = macro FloatMacros.isNaN
+  def max(y: Float): Float = macro FloatMacros.max
+  def min(y: Float): Float = macro FloatMacros.min
+  def toIntBits: Int       = macro FloatMacros.toIntBits
 }
 
-private[util] object FloatOps {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
-
-  private def unApply(c: Context): c.Expr[Float] = {
-    import c.{ Expr, prefix, typeCheck, weakTypeOf }
-    import c.universe._
-    val Apply(_, x :: Nil) = prefix.tree
-    Expr[Float](typeCheck(x, weakTypeOf[Float]))
-  }
-
+private[util] object FloatMacros {
   def FloatToOps(c: Context)(x: c.Expr[Float]): c.Expr[FloatOps] = {
-    import c.{ Expr, mirror, WeakTypeTag }
     import c.universe._
-    implicit val FloatOpsTag =
-      WeakTypeTag[FloatOps](mirror.staticClass("basis.util.FloatOps").toType)
-    Expr[FloatOps](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[FloatOps])), nme.CONSTRUCTOR),
-        x.tree :: Nil))
+    c.Expr[FloatOps](q"new FloatOps($x)")
   }
 
-  def isNaN(c: Context): c.Expr[Boolean] = {
-    import c.Expr
+  def abs(c: ContextWithPre[FloatOps]): c.Expr[Float] = {
     import c.universe._
-    Expr[Boolean](
-      Apply(
-        Select(JavaLangFloat(c), "isNaN": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Float](q"java.lang.Math.abs(${c.prefix}.__)")
   }
 
-  def isInfinite(c: Context): c.Expr[Boolean] = {
-    import c.Expr
+  def isInfinite(c: ContextWithPre[FloatOps]): c.Expr[Boolean] = {
     import c.universe._
-    Expr[Boolean](
-      Apply(
-        Select(JavaLangFloat(c), "isInfinite": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Boolean](q"java.lang.Float.isInfinite(${c.prefix}.__)")
   }
 
-  def abs(c: Context): c.Expr[Float] = {
-    import c.Expr
+  def isNaN(c: ContextWithPre[FloatOps]): c.Expr[Boolean] = {
     import c.universe._
-    Expr[Float](
-      Apply(
-        Select(JavaLangMath(c), "abs": TermName),
-        unApply(c).tree :: Nil))
+    c.Expr[Boolean](q"java.lang.Float.isNaN(${c.prefix}.__)")
   }
 
-  def min(c: Context)(y: c.Expr[Float]): c.Expr[Float] = {
-    import c.Expr
+  def max(c: ContextWithPre[FloatOps])(y: c.Expr[Float]): c.Expr[Float] = {
     import c.universe._
-    Expr[Float](
-      Apply(
-        Select(JavaLangMath(c), "min": TermName),
-        unApply(c).tree :: y.tree :: Nil))
+    c.Expr[Float](q"java.lang.Math.max(${c.prefix}.__, $y)")
   }
 
-  def max(c: Context)(y: c.Expr[Float]): c.Expr[Float] = {
-    import c.Expr
+  def min(c: ContextWithPre[FloatOps])(y: c.Expr[Float]): c.Expr[Float] = {
     import c.universe._
-    Expr[Float](
-      Apply(
-        Select(JavaLangMath(c), "max": TermName),
-        unApply(c).tree :: y.tree :: Nil))
+    c.Expr[Float](q"java.lang.Math.min(${c.prefix}.__, $y)")
   }
 
-  def toIntBits(c: Context): c.Expr[Int] = {
-    import c.Expr
+  def toIntBits(c: ContextWithPre[FloatOps]): c.Expr[Int] = {
     import c.universe._
-    Expr[Int](
-      Apply(
-        Select(JavaLangFloat(c), "floatToIntBits": TermName),
-        unApply(c).tree :: Nil))
-  }
-
-  private def JavaLangFloat(c: Context): c.Tree = {
-    import c.universe._
-    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Float": TermName)
-  }
-
-  private def JavaLangMath(c: Context): c.Tree = {
-    import c.universe._
-    Select(Select(Select(Ident(nme.ROOTPKG), "java": TermName), "lang": TermName), "Math": TermName)
+    c.Expr[Int](q"java.lang.Float.floatToIntBits(${c.prefix}.__)")
   }
 }
