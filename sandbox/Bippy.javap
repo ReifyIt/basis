@@ -1,0 +1,241 @@
+
+public final class p.Bippy {
+  public boolean f0();
+    Code:
+       0: aload_0
+       1: getfield      #14                 // Field xs:[I
+       4: arraylength
+       5: iconst_0
+       6: if_icmpne     13
+       9: iconst_1
+      10: goto          14
+      13: iconst_0
+      14: ireturn
+
+  public void f1();
+    Code:
+       0: aload_0
+       1: getfield      #14                 // Field xs:[I
+       4: arraylength
+       5: istore_1
+       6: iconst_0
+       7: istore_2
+       8: iload_2
+       9: iload_1
+      10: if_icmpge     27
+      13: aload_0
+      14: getfield      #14                 // Field xs:[I
+      17: iload_2
+      18: iaload
+      19: pop
+      20: iload_2
+      21: iconst_1
+      22: iadd
+      23: istore_2
+      24: goto          8
+      27: return
+
+  public int f2();
+    Code:
+       0: aload_0
+       1: getfield      #14                 // Field xs:[I
+       4: arraylength
+       5: istore_1
+       6: iconst_0
+       7: istore_3
+       8: iconst_0
+       9: istore        4
+      11: iload_3
+      12: iload_1
+      13: if_icmpge     36
+      16: aload_0
+      17: getfield      #14                 // Field xs:[I
+      20: iload_3
+      21: iaload
+      22: istore_2
+      23: iload         4
+      25: iload_2
+      26: iadd
+      27: istore        4
+      29: iload_3
+      30: iconst_1
+      31: iadd
+      32: istore_3
+      33: goto          11
+      36: iload         4
+      38: ireturn
+
+  public int f3();
+    Code:
+       0: aload_0
+       1: getfield      #14                 // Field xs:[I
+       4: arraylength
+       5: iconst_0
+       6: if_icmpne     19
+       9: new           #27                 // class java/lang/UnsupportedOperationException
+      12: dup
+      13: ldc           #29                 // String empty reduce
+      15: invokespecial #33                 // Method java/lang/UnsupportedOperationException."<init>":(Ljava/lang/String;)V
+      18: athrow
+      19: aload_0
+      20: getfield      #14                 // Field xs:[I
+      23: arraylength
+      24: istore_1
+      25: iconst_1
+      26: istore_3
+      27: aload_0
+      28: getfield      #14                 // Field xs:[I
+      31: iconst_0
+      32: iaload
+      33: istore        4
+      35: iload_3
+      36: iload_1
+      37: if_icmpge     60
+      40: aload_0
+      41: getfield      #14                 // Field xs:[I
+      44: iload_3
+      45: iaload
+      46: istore_2
+      47: iload         4
+      49: iload_2
+      50: iadd
+      51: istore        4
+      53: iload_3
+      54: iconst_1
+      55: iadd
+      56: istore_3
+      57: goto          35
+      60: iload         4
+      62: ireturn
+
+  public basis.util.Else<java.lang.Object, java.lang.Object> f4();
+    Code:
+       0: aload_0
+       1: getfield      #14                 // Field xs:[I
+       4: astore_1
+       5: aload_1
+       6: arraylength
+       7: istore_2
+       8: aload_0
+       9: iconst_0
+      10: aload_1
+      11: iload_2
+      12: invokespecial #39                 // Method loop$1:(I[II)Lbasis/util/Else;
+      15: areturn
+
+  public basis.util.Else<java.lang.Object, java.lang.Object> g0();
+    Code:
+       0: aload_0
+       1: getfield      #14                 // Field xs:[I
+       4: arraylength
+       5: iconst_0
+       6: if_icmpne     15
+       9: getstatic     #47                 // Field basis/util/Trap$.MODULE$:Lbasis/util/Trap$;
+      12: goto          64
+      15: getstatic     #52                 // Field basis/util/Bind$.MODULE$:Lbasis/util/Bind$;
+      18: aload_0
+      19: getfield      #14                 // Field xs:[I
+      22: arraylength
+      23: istore_1
+      24: iconst_1
+      25: istore_3
+      26: aload_0
+      27: getfield      #14                 // Field xs:[I
+      30: iconst_0
+      31: iaload
+      32: istore        4
+      34: iload_3
+      35: iload_1
+      36: if_icmpge     59
+      39: aload_0
+      40: getfield      #14                 // Field xs:[I
+      43: iload_3
+      44: iaload
+      45: istore_2
+      46: iload         4
+      48: iload_2
+      49: iadd
+      50: istore        4
+      52: iload_3
+      53: iconst_1
+      54: iadd
+      55: istore_3
+      56: goto          34
+      59: iload         4
+      61: invokevirtual #56                 // Method basis/util/Bind$.apply:(I)Lbasis/util/Bind;
+      64: areturn
+
+  public java.lang.String toString();
+    Code:
+       0: new           #62                 // class scala/Tuple6
+       3: dup
+       4: aload_0
+       5: invokevirtual #64                 // Method f0:()Z
+       8: invokestatic  #70                 // Method scala/runtime/BoxesRunTime.boxToBoolean:(Z)Ljava/lang/Boolean;
+      11: aload_0
+      12: invokevirtual #72                 // Method f1:()V
+      15: getstatic     #78                 // Field scala/runtime/BoxedUnit.UNIT:Lscala/runtime/BoxedUnit;
+      18: aload_0
+      19: invokevirtual #80                 // Method f2:()I
+      22: invokestatic  #84                 // Method scala/runtime/BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer;
+      25: aload_0
+      26: invokevirtual #86                 // Method f3:()I
+      29: invokestatic  #84                 // Method scala/runtime/BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer;
+      32: aload_0
+      33: invokevirtual #88                 // Method f4:()Lbasis/util/Else;
+      36: aload_0
+      37: invokevirtual #90                 // Method g0:()Lbasis/util/Else;
+      40: invokespecial #93                 // Method scala/Tuple6."<init>":(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V
+      43: invokestatic  #99                 // Method java/lang/String.valueOf:(Ljava/lang/Object;)Ljava/lang/String;
+      46: areturn
+
+  public p.Bippy();
+    Code:
+       0: aload_0
+       1: invokespecial #103                // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: bipush        10
+       7: newarray       int
+       9: dup
+      10: iconst_0
+      11: iconst_1
+      12: iastore
+      13: dup
+      14: iconst_1
+      15: iconst_2
+      16: iastore
+      17: dup
+      18: iconst_2
+      19: iconst_3
+      20: iastore
+      21: dup
+      22: iconst_3
+      23: iconst_4
+      24: iastore
+      25: dup
+      26: iconst_4
+      27: iconst_5
+      28: iastore
+      29: dup
+      30: iconst_5
+      31: bipush        6
+      33: iastore
+      34: dup
+      35: bipush        6
+      37: bipush        7
+      39: iastore
+      40: dup
+      41: bipush        7
+      43: bipush        8
+      45: iastore
+      46: dup
+      47: bipush        8
+      49: bipush        9
+      51: iastore
+      52: dup
+      53: bipush        9
+      55: bipush        10
+      57: iastore
+      58: putfield      #14                 // Field xs:[I
+      61: return
+}

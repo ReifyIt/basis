@@ -2,18 +2,18 @@ package p {
   import basis._
   import basis.collections._
 
-  class Bippy {
-    val xs: Array[Int] = Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    val intFn: Int => Int = x => x
-    val intFn2: (Int, Int) => Int = _ + _
+  final class Bippy {
+    private[this] val xs: Array[Int] = Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
     def f0 = xs.isEmpty
-    def f1 = xs foreach intFn
-    def f2 = xs.foldLeft(0)(intFn2)
-    def f3 = xs reduceLeft intFn2
+    def f1 = xs foreach (x => x)
+    def f2 = xs.foldLeft(0)(_ + _)
+    def f3 = xs reduceLeft (_ + _)
     def f4 = xs find (_ > 5)
 
-    def g0 = xs mayReduceLeft intFn2
+    def g0 = xs mayReduceLeft (_ + _)
+
+    override def toString = "" + ((f0, f1, f2, f3, f4, g0))
   }
 }
 
@@ -25,18 +25,17 @@ package object p {
 }
 
 package q {
-  class Dingo {
-    val xs: Array[Int] = Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    val intFn: Int => Int = x => x
-    val intFn2: (Int, Int) => Int = _ + _
+  final class Dingo {
+    private[this] val xs: Array[Int] = Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
     def f0 = xs.isEmpty
-    def f1 = xs foreach intFn
-    def f2 = xs.foldLeft(0)(intFn2)
-    def f3 = xs reduceLeft intFn2
+    def f1 = xs foreach (x => x)
+    def f2 = xs.foldLeft(0)(_ + _)
+    def f3 = xs reduceLeft (_ + _)
     def f4 = xs find (_ > 5)
 
-    def g0 = xs reduceLeftOption intFn2
+    def g0 = xs reduceLeftOption (_ + _)
+
+    override def toString = "" + ((f0, f1, f2, f3, f4, g0))
   }
 }
-

@@ -12,57 +12,57 @@ import scala.collection.immutable.{ ::, Nil }
 import scala.reflect.macros.Context
 
 private[sequential] class ArrayMacros[C <: Context](val context: C) {
-  import context.{ Expr, fresh, mirror, WeakTypeTag }
+  val universe: context.universe.type = context.universe
+
+  import context.{ Expr, fresh, mirror, WeakTypeTag, literalUnit }
   import universe.{ Traverser => _, _ }
 
-  val universe: context.universe.type = context.universe
+  // This logic is to make it easy to use common code across methods
+  // which return Option/Maybe and methods which return the underlying
+  // type, without there being any penalty for the unwrapped case
+  // (i.e. we don't want to generate an identity closure and apply it.)
+  private val IdExprVal: Expr[Any] => Expr[Any] = x => x
+  private def IdExpr[A]: Expr[A] => Expr[A]  = IdExprVal.asInstanceOf[Expr[A] => Expr[A]]
+  private def isIdExpr(x: AnyRef) = x eq IdExprVal
 
   def isEmpty[A](these: Expr[Array[A]]) = Expr[Boolean](q"$these.length == 0")
 
-  def foreach[A, U](these: Expr[Array[A]])(f: Expr[A => U]) = Expr[Unit](q"""{
-    var i = 0
-    val n = $these.length
-    while (i < n) {
-      $f($these(i))
-      i += 1
-    }
-  }""")
-
-  def foldLeft[A, B : WeakTypeTag](these: Expr[Array[A]])(z: Expr[B])(op: Expr[(B, A) => B]) = Expr[B](q"""{
-    var i = 0
-    val n = $these.length
-    var acc = $z
-    while (i < n) {
-      acc = $op(acc, $these(i))
+  private def foldCommon[A, B](xs: Expr[Array[A]])(start: Int, zero: Expr[B])(op: Expr[(B, A) => B]) = Expr[B](q"""{
+    val len = $xs.length
+    var i = $start
+    var acc = $zero
+    while (i < len) {
+      acc = $op(acc, $xs(i))
       i += 1
     }
     acc
   }""")
 
-  private def reduceCommon[A, B >: A : WeakTypeTag](these: Expr[Array[A]])(op: Expr[(B, A) => B]) = Expr[B](q"""{
-    var i = 1
-    val n = $these.length
-    var acc = $these(0)
-    while (i < n) {
-      acc = $op(acc, $these(i))
+  // Expr[B] => Expr[C], now we're metaprogramming!
+  private def reduceCommon[A, B, C](xs: Expr[Array[A]])(none: Expr[C], some: Expr[B] => Expr[C])(op: Expr[(B, A) => B]) = {
+    def fold: Expr[B] = foldCommon[A, B](xs)(1, Expr(q"$xs(0)"))(op)
+    def result: Expr[C] = if (isIdExpr(some)) fold.asInstanceOf[Expr[C]] else some(fold)
+
+    Expr[C](q"if ($xs.length == 0) $none else $result")
+  }
+
+  def foreach[A: WeakTypeTag, U](xs: Expr[Array[A]])(f: Expr[A => U]) = Expr[Unit](q"""{
+    val len = $xs.length
+    var i = 0
+    while (i < len) {
+      $f($xs(i))
       i += 1
     }
-    acc
   }""")
 
-  def reduceLeft[A, B >: A : WeakTypeTag](these: Expr[Array[A]])(op: Expr[(B, A) => B]) = Expr[B](q"""{
-    if ($these.isEmpty)
-      throw new UnsupportedOperationException("empty reduce")
-    else
-      ${reduceCommon[A, B](these)(op)}
-  }""")
+  def foldLeft[A: WeakTypeTag, B : WeakTypeTag](xs: Expr[Array[A]])(z: Expr[B])(op: Expr[(B, A) => B]) =
+    foldCommon[A, B](xs)(0, z)(op)
 
-  def mayReduceLeft[A, B >: A : WeakTypeTag](these: Expr[Array[A]])(op: Expr[(B, A) => B]) = Expr[Maybe[B]](q"""
-    if ($these.isEmpty)
-      basis.util.Trap
-    else
-      basis.util.Bind(${reduceCommon[A, B](these)(op)})
-  """)
+  def reduceLeft[A, B >: A : WeakTypeTag](xs: Expr[Array[A]])(op: Expr[(B, A) => B]) =
+    reduceCommon[A, B, B](xs)(Expr[B](q"""throw new UnsupportedOperationException("empty reduce")"""), IdExpr[B])(op)
+
+  def mayReduceLeft[A, B >: A : WeakTypeTag](xs: Expr[Array[A]])(op: Expr[(B, A) => B]) =
+    reduceCommon[A, B, Maybe[B]](xs)(Expr[Maybe[B]](q"basis.util.Trap"), (res: Expr[B]) => Expr[Maybe[B]](q"basis.util.Bind($res)"))(op)
 
   def foldRight[A, B : WeakTypeTag](these: Expr[Array[A]])(z: Expr[B])(op: Expr[(A, B) => B]) = Expr[B](q"""{
     var i = $these.length - 1
