@@ -81,7 +81,7 @@ trait NumberForm { variant: Variant =>
       val s = UString.Builder()
       s.append("NumberForm")
       s.append('(')
-      new UString(toDecimalString).show(s)
+      s.append(toDecimalString)
       s.append(')')
       s.state.toString
     }

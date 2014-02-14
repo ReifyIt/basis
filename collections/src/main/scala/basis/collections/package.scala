@@ -6,8 +6,13 @@
 
 package basis
 
+import basis.util._
+
 /** Collections, containers, and macro operations.
   *
   * @contentDiagram hideNodes "basis.collections.Family" "basis.collections.From" "basis.collections.State"
   */
-package object collections extends basis.collections.sequential.Strict
+package object collections extends basis.collections.sequential.Strict {
+  implicit def MaybeCollection[A](maybe: Maybe[A]): Collection[A] =
+    if (maybe.canBind) maybe.bind :: immutable.Nil else immutable.Nil
+}

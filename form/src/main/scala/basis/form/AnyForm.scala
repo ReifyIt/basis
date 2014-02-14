@@ -6,6 +6,7 @@
 
 package basis.form
 
+import basis.util._
 import scala.reflect._
 
 trait AnyForm { variant: Variant =>
@@ -61,9 +62,16 @@ trait AnyForm { variant: Variant =>
     def / (key: String): AnyForm = UndefinedForm
 
     def / (index: Int): AnyForm = UndefinedForm
+
+    def cast[T](implicit T: Mold[T]): Maybe[T] = T.cast(variant)(this)
+
+    def coerce[@specialized(Mold.Specialized) T](implicit T: Mold[T]): T = T.cast(variant)(this).bindOrElse(T.identity)
   }
 
   trait BaseValueFactory {
+    /** Encodes a typed value as a variant form using an implicit `Mold`. */
+    def apply[@specialized(Mold.Specialized) T](value: T)(implicit T: Mold[T]): AnyForm = T.form(variant)(value)
+
     override def toString: String = "AnyForm"
   }
 }
