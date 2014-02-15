@@ -6,11 +6,8 @@
 
 package basis.memory
 
-import java.lang.Float.floatToRawIntBits
-import java.lang.Double.doubleToRawLongBits
-
-import org.scalatest.matchers.Matcher
-import org.scalatest.matchers.MatchResult
+import basis.util._
+import org.scalatest.matchers._
 
 trait HexMatchers {
   import Predef._
@@ -49,17 +46,17 @@ trait HexMatchers {
 
   def equalFloat(right: Float) = new Matcher[Float] {
     def apply(left: Float) = MatchResult(
-      floatToRawIntBits(left) == floatToRawIntBits(right),
-      f"0x${floatToRawIntBits(left)}%08X did not equal 0x${floatToRawIntBits(right)}%08X",
-      f"0x${floatToRawIntBits(left)}%08X equaled 0x${floatToRawIntBits(right)}%08X"
+      left.toRawIntBits == right.toRawIntBits,
+      f"0x${left.toRawIntBits}%08X did not equal 0x${right.toRawIntBits}%08X",
+      f"0x${left.toRawIntBits}%08X equaled 0x${right.toRawIntBits}%08X"
     )
   }
 
   def equalDouble(right: Double) = new Matcher[Double] {
     def apply(left: Double) = MatchResult(
-      doubleToRawLongBits(left) == doubleToRawLongBits(right),
-      f"0x${doubleToRawLongBits(left)}%016X did not equal 0x${doubleToRawLongBits(right)}%016X",
-      f"0x${doubleToRawLongBits(left)}%016X equaled 0x${doubleToRawLongBits(right)}%016X"
+      left.toRawLongBits == right.toRawLongBits,
+      f"0x${left.toRawLongBits}%016X did not equal 0x${right.toRawLongBits}%016X",
+      f"0x${left.toRawLongBits}%016X equaled 0x${right.toRawLongBits}%016X"
     )
   }
 }

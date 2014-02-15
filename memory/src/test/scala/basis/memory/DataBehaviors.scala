@@ -6,14 +6,11 @@
 
 package basis.memory
 
-import java.lang.Float.intBitsToFloat
-import java.lang.Double.longBitsToDouble
-
-import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
+import basis.util._
+import org.scalatest._
 
 trait DataBehaviors extends StructBehaviors { this: FunSpec =>
-  import ShouldMatchers._
+  import Matchers._
   import HexMatchers._
 
   def PrimitiveData(allocator: Allocator[Data]): Unit = {
@@ -124,60 +121,60 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store aligned Float values") {
       val data = alloc[Float](1L)
-      data.storeFloat(0L, intBitsToFloat(0xF7F6F5F4))
-      data.loadFloat(0L) should equalFloat (intBitsToFloat(0xF7F6F5F4))
+      data.storeFloat(0L, 0xF7F6F5F4.toFloatBits)
+      data.loadFloat(0L) should equalFloat (0xF7F6F5F4.toFloatBits)
     }
 
     it("should store unaligned Float values") {
       val data = alloc[Float](2L)
-      data.storeUnalignedFloat(3L, intBitsToFloat(0xF7F6F5F4))
-      data.loadUnalignedFloat(3L) should equalFloat (intBitsToFloat(0xF7F6F5F4))
+      data.storeUnalignedFloat(3L, 0xF7F6F5F4.toFloatBits)
+      data.loadUnalignedFloat(3L) should equalFloat (0xF7F6F5F4.toFloatBits)
     }
 
     it("should truncate unaligned addresses of aligned Float values") {
       val data = alloc[Float](2L)
-      data.storeFloat(3L, intBitsToFloat(0xF7F6F5F4))
-      withClue("unaligned address") (data.loadFloat(3L) should equalFloat (intBitsToFloat(0xF7F6F5F4)))
-      withClue("truncated address") (data.loadFloat(0L) should equalFloat (intBitsToFloat(0xF7F6F5F4)))
+      data.storeFloat(3L, 0xF7F6F5F4.toFloatBits)
+      withClue("unaligned address") (data.loadFloat(3L) should equalFloat (0xF7F6F5F4.toFloatBits))
+      withClue("truncated address") (data.loadFloat(0L) should equalFloat (0xF7F6F5F4.toFloatBits))
     }
 
     it("should store sequential Float values") {
       val data = alloc[Float](3L)
-      data.storeFloat(0L, intBitsToFloat(0xF7F6F5F4))
-      data.storeFloat(4L, intBitsToFloat(0xE7E6E5E4))
-      data.storeFloat(8L, intBitsToFloat(0xD7D6D5D4))
-      withClue("1st value") (data.loadFloat(0L) should equalFloat (intBitsToFloat(0xF7F6F5F4)))
-      withClue("2nd value") (data.loadFloat(4L) should equalFloat (intBitsToFloat(0xE7E6E5E4)))
-      withClue("3rd value") (data.loadFloat(8L) should equalFloat (intBitsToFloat(0xD7D6D5D4)))
+      data.storeFloat(0L, 0xF7F6F5F4.toFloatBits)
+      data.storeFloat(4L, 0xE7E6E5E4.toFloatBits)
+      data.storeFloat(8L, 0xD7D6D5D4.toFloatBits)
+      withClue("1st value") (data.loadFloat(0L) should equalFloat (0xF7F6F5F4.toFloatBits))
+      withClue("2nd value") (data.loadFloat(4L) should equalFloat (0xE7E6E5E4.toFloatBits))
+      withClue("3rd value") (data.loadFloat(8L) should equalFloat (0xD7D6D5D4.toFloatBits))
     }
 
     it("should store aligned Double values") {
       val data = alloc[Double](1L)
-      data.storeDouble(0L, longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
-      data.loadDouble(0L) should equalDouble(longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
+      data.storeDouble(0L, 0xF7F6F5F4F3F2F1F0L.toDoubleBits)
+      data.loadDouble(0L) should equalDouble (0xF7F6F5F4F3F2F1F0L.toDoubleBits)
     }
 
     it("should store unaligned Double values") {
       val data = alloc[Double](2L)
-      data.storeUnalignedDouble(7L, longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
-      data.loadUnalignedDouble(7L) should equalDouble (longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
+      data.storeUnalignedDouble(7L, 0xF7F6F5F4F3F2F1F0L.toDoubleBits)
+      data.loadUnalignedDouble(7L) should equalDouble (0xF7F6F5F4F3F2F1F0L.toDoubleBits)
     }
 
     it("should truncate unaligned addresses of aligned Double values") {
       val data = alloc[Double](2L)
-      data.storeDouble(7L, longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
-      withClue("unaligned address") (data.loadDouble(7L) should equalDouble (longBitsToDouble(0xF7F6F5F4F3F2F1F0L)))
-      withClue("truncated address") (data.loadDouble(0L) should equalDouble (longBitsToDouble(0xF7F6F5F4F3F2F1F0L)))
+      data.storeDouble(7L, 0xF7F6F5F4F3F2F1F0L.toDoubleBits)
+      withClue("unaligned address") (data.loadDouble(7L) should equalDouble (0xF7F6F5F4F3F2F1F0L.toDoubleBits))
+      withClue("truncated address") (data.loadDouble(0L) should equalDouble (0xF7F6F5F4F3F2F1F0L.toDoubleBits))
     }
 
     it("should store sequential Double values") {
       val data = alloc[Double](3L)
-      data.storeDouble(0L,  longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
-      data.storeDouble(8L,  longBitsToDouble(0xE7E6E5E4E3E2E1E0L))
-      data.storeDouble(16L, longBitsToDouble(0xD7D6D5D4D3D2D1D0L))
-      withClue("1st value") (data.loadDouble(0L)  should equalDouble (longBitsToDouble(0xF7F6F5F4F3F2F1F0L)))
-      withClue("2nd value") (data.loadDouble(8L)  should equalDouble (longBitsToDouble(0xE7E6E5E4E3E2E1E0L)))
-      withClue("3rd value") (data.loadDouble(16L) should equalDouble (longBitsToDouble(0xD7D6D5D4D3D2D1D0L)))
+      data.storeDouble(0L,  0xF7F6F5F4F3F2F1F0L.toDoubleBits)
+      data.storeDouble(8L,  0xE7E6E5E4E3E2E1E0L.toDoubleBits)
+      data.storeDouble(16L, 0xD7D6D5D4D3D2D1D0L.toDoubleBits)
+      withClue("1st value") (data.loadDouble(0L)  should equalDouble (0xF7F6F5F4F3F2F1F0L.toDoubleBits))
+      withClue("2nd value") (data.loadDouble(8L)  should equalDouble (0xE7E6E5E4E3E2E1E0L.toDoubleBits))
+      withClue("3rd value") (data.loadDouble(16L) should equalDouble (0xD7D6D5D4D3D2D1D0L.toDoubleBits))
     }
   }
 
@@ -249,7 +246,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store big-endian aligned Float values") {
       val data = alloc[Float](1L)
-      data.storeFloat(0L, java.lang.Float.intBitsToFloat(0xF7F6F5F4))
+      data.storeFloat(0L, 0xF7F6F5F4.toFloatBits)
       withClue("byte 0:") (data.loadByte(0L) should equalByte (0xF7.toByte))
       withClue("byte 1:") (data.loadByte(1L) should equalByte (0xF6.toByte))
       withClue("byte 2:") (data.loadByte(2L) should equalByte (0xF5.toByte))
@@ -258,7 +255,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store big-endian unaligned Float values") {
       val data = alloc[Float](1L)
-      data.storeUnalignedFloat(0L, java.lang.Float.intBitsToFloat(0xF7F6F5F4))
+      data.storeUnalignedFloat(0L, 0xF7F6F5F4.toFloatBits)
       withClue("byte 0:") (data.loadByte(0L) should equalByte (0xF7.toByte))
       withClue("byte 1:") (data.loadByte(1L) should equalByte (0xF6.toByte))
       withClue("byte 2:") (data.loadByte(2L) should equalByte (0xF5.toByte))
@@ -267,7 +264,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store big-endian aligned Double values") {
       val data = alloc[Double](1L)
-      data.storeDouble(0L, java.lang.Double.longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
+      data.storeDouble(0L, 0xF7F6F5F4F3F2F1F0L.toDoubleBits)
       withClue("byte 0:") (data.loadByte(0L) should equalByte (0xF7.toByte))
       withClue("byte 1:") (data.loadByte(1L) should equalByte (0xF6.toByte))
       withClue("byte 2:") (data.loadByte(2L) should equalByte (0xF5.toByte))
@@ -280,7 +277,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store big-endian unaligned Double values") {
       val data = alloc[Double](1L)
-      data.storeUnalignedDouble(0L, java.lang.Double.longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
+      data.storeUnalignedDouble(0L, 0xF7F6F5F4F3F2F1F0L.toDoubleBits)
       withClue("byte 0:") (data.loadByte(0L) should equalByte (0xF7.toByte))
       withClue("byte 1:") (data.loadByte(1L) should equalByte (0xF6.toByte))
       withClue("byte 2:") (data.loadByte(2L) should equalByte (0xF5.toByte))
@@ -360,7 +357,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store little-endian aligned Float values") {
       val data = alloc[Float](1L)
-      data.storeFloat(0L, java.lang.Float.intBitsToFloat(0xF7F6F5F4))
+      data.storeFloat(0L, 0xF7F6F5F4.toFloatBits)
       withClue("byte 0:") (data.loadByte(0L) should equalByte (0xF4.toByte))
       withClue("byte 1:") (data.loadByte(1L) should equalByte (0xF5.toByte))
       withClue("byte 2:") (data.loadByte(2L) should equalByte (0xF6.toByte))
@@ -369,7 +366,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store little-endian unaligned Float values") {
       val data = alloc[Float](1L)
-      data.storeUnalignedFloat(0L, java.lang.Float.intBitsToFloat(0xF7F6F5F4))
+      data.storeUnalignedFloat(0L, 0xF7F6F5F4.toFloatBits)
       withClue("byte 0:") (data.loadByte(0L) should equalByte (0xF4.toByte))
       withClue("byte 1:") (data.loadByte(1L) should equalByte (0xF5.toByte))
       withClue("byte 2:") (data.loadByte(2L) should equalByte (0xF6.toByte))
@@ -378,7 +375,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store little-endian aligned Double values") {
       val data = alloc[Double](1L)
-      data.storeDouble(0L, java.lang.Double.longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
+      data.storeDouble(0L, 0xF7F6F5F4F3F2F1F0L.toDoubleBits)
       withClue("byte 0:") (data.loadByte(0L) should equalByte (0xF0.toByte))
       withClue("byte 1:") (data.loadByte(1L) should equalByte (0xF1.toByte))
       withClue("byte 2:") (data.loadByte(2L) should equalByte (0xF2.toByte))
@@ -391,7 +388,7 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     it("should store little-endian unaligned Double values") {
       val data = alloc[Double](1L)
-      data.storeUnalignedDouble(0L, java.lang.Double.longBitsToDouble(0xF7F6F5F4F3F2F1F0L))
+      data.storeUnalignedDouble(0L, 0xF7F6F5F4F3F2F1F0L.toDoubleBits)
       withClue("byte 0:") (data.loadByte(0L) should equalByte (0xF0.toByte))
       withClue("byte 1:") (data.loadByte(1L) should equalByte (0xF1.toByte))
       withClue("byte 2:") (data.loadByte(2L) should equalByte (0xF2.toByte))
@@ -431,12 +428,12 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     describe("Packed Float data") {
       val struct = Struct.PackedFloat
-      it should behave like ValueType(intBitsToFloat(0x7F6F5F4F))(allocator, struct)
+      it should behave like ValueType(0x7F6F5F4F.toFloatBits)(allocator, struct)
     }
 
     describe("Packed Double data") {
       val struct = Struct.PackedDouble
-      it should behave like ValueType(longBitsToDouble(0x7F6F5F4F3F2F1F0FL))(allocator, struct)
+      it should behave like ValueType(0x7F6F5F4F3F2F1F0FL.toDoubleBits)(allocator, struct)
     }
 
     describe("Packed Boolean data") {
@@ -461,12 +458,12 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     describe("Padded Float data") {
       val struct = Struct.PaddedFloat
-      it should behave like ValueType(intBitsToFloat(0x7F6F5F4F))(allocator, struct)
+      it should behave like ValueType(0x7F6F5F4F.toFloatBits)(allocator, struct)
     }
 
     describe("Padded Double data") {
       val struct = Struct.PaddedDouble
-      it should behave like ValueType(longBitsToDouble(0x7F6F5F4F3F2F1F0FL))(allocator, struct)
+      it should behave like ValueType(0x7F6F5F4F3F2F1F0FL.toDoubleBits)(allocator, struct)
     }
 
     describe("Volatile Byte data") {
@@ -491,12 +488,12 @@ trait DataBehaviors extends StructBehaviors { this: FunSpec =>
 
     describe("Volatile Float data") {
       val struct = Struct.VolatileFloat
-      it should behave like ValueType(intBitsToFloat(0x7F6F5F4F))(allocator, struct)
+      it should behave like ValueType(0x7F6F5F4F.toFloatBits)(allocator, struct)
     }
 
     describe("Volatile Double data") {
       val struct = Struct.VolatileDouble
-      it should behave like ValueType(longBitsToDouble(0x7F6F5F4F3F2F1F0FL))(allocator, struct)
+      it should behave like ValueType(0x7F6F5F4F3F2F1F0FL.toDoubleBits)(allocator, struct)
     }
 
     describe("Volatile Boolean data") {

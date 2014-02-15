@@ -6,11 +6,10 @@
 
 package basis.memory
 
-import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest._
 
 trait StructBehaviors { this: FunSpec =>
-  import ShouldMatchers._
+  import Matchers._
 
   def ValueType[T](value: T)(implicit allocator: Allocator[Data], struct: Struct[T]): Unit = {
     import allocator.alloc

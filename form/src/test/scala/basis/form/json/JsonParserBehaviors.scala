@@ -9,10 +9,9 @@ package json
 
 import basis.util._
 import org.scalatest._
-import org.scalatest.matchers._
 
 trait JsonParserBehaviors { this: FunSpec =>
-  import ShouldMatchers._
+  import Matchers._
 
   val variant: JsonVariant
   import variant._
@@ -21,31 +20,38 @@ trait JsonParserBehaviors { this: FunSpec =>
   def ParsesJsonComments() = describe("parsing JSON comments") {
     it("should parse empty line comments") {
       Json("true //")
+      ()
     }
 
     it("should parse empty block comments") {
       Json("true /**/")
+      ()
     }
 
     it("should parse block comments containing slashes and asterisks") {
       Json("true /** /** /* / * // ** **/")
+      ()
     }
 
     it("should parse preceding line comments") {
       Json("""// comment
       true""")
+      ()
     }
 
     it("should parse succeeding line comments") {
       Json("true // comment")
+      ()
     }
 
     it("should parse preceding block comments") {
       Json("/* comment */ true")
+      ()
     }
 
     it("should parse succeeding block comments") {
       Json("true /* comment */")
+      ()
     }
 
     it("should parse line comments in objects") {
@@ -58,6 +64,7 @@ trait JsonParserBehaviors { this: FunSpec =>
         :         // here
         false     // and here
       } """)
+      ()
     }
 
     it("should parse line comments in arrays") {
@@ -66,6 +73,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       ,           // here
       false       // and here
       ] """)
+      ()
     }
 
     it("should parse block comments in objects") {
@@ -73,10 +81,12 @@ trait JsonParserBehaviors { this: FunSpec =>
         /* here */ "true"  /* here */ : /* here */ true  /* and here */ ,
         /* here */ "false" /* here */ : /* here */ false /* and here */
       } """)
+      ()
     }
 
     it("should parse block comments in arrays") {
       Json("[ /* here */ true /* here */ , /* here */ false /* and here */ ]")
+      ()
     }
   }
 
@@ -252,38 +262,47 @@ trait JsonParserBehaviors { this: FunSpec =>
   def RejectsInvalidJson() = describe("parsing invalid JSON") {
     it("should not parse sequential values") {
       evaluating(Json("true false")) should produce [JsonException]
+      ()
     }
 
     it("should not parse empty input") {
       evaluating(Json("")) should produce [JsonException]
+      ()
     }
 
     it("should not parse unclosed empty objects") {
       evaluating(Json("{")) should produce [JsonException]
+      ()
     }
 
     it("should not parse unclosed non-empty objects") {
       evaluating(Json("{\"true\":true")) should produce [JsonException]
+      ()
     }
 
     it("should not parse objects with trailing commas") {
       evaluating(Json("{\"true\":true,}")) should produce [JsonException]
+      ()
     }
 
     it("should not parse unclosed empty arrays") {
       evaluating(Json("[")) should produce [JsonException]
+      ()
     }
 
     it("should not parse unclosed non-empty arrays") {
       evaluating(Json("[true")) should produce [JsonException]
+      ()
     }
 
     it("should not parse arrays with trailing commas") {
       evaluating(Json("[true,]")) should produce [JsonException]
+      ()
     }
 
     it("should not parse unclosed empty strings") {
       evaluating(Json("\"")) should produce [JsonException]
+      ()
     }
 
     it("should not parse numbers with a leading zeros") {

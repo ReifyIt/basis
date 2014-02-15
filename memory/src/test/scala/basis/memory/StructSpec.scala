@@ -6,10 +6,11 @@
 
 package basis.memory
 
-import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest._
 
-class StructSpec extends FunSpec with ShouldMatchers {
+class StructSpec extends FunSpec {
+  import Matchers._
+
   override def suiteName = "Struct specification"
 
   describe("Packed Byte") {

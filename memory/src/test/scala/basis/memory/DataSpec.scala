@@ -6,10 +6,9 @@
 
 package basis.memory
 
-import org.scalatest.FunSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest._
 
-class DataSpec extends FunSpec with ShouldMatchers with DataBehaviors {
+class DataSpec extends FunSpec with DataBehaviors {
   override def suiteName = "Data specification"
 
   describe("Big-endian base-1 addressed data") {

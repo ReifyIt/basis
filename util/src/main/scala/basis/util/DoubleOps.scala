@@ -31,6 +31,7 @@ final class DoubleOps(val __ : Double) extends AnyVal {
   def tan: Double            = macro DoubleMacros.tan
   def tanh: Double           = macro DoubleMacros.tanh
   def toLongBits: Long       = macro DoubleMacros.toLongBits
+  def toRawLongBits: Long    = macro DoubleMacros.toRawLongBits
 }
 
 private[util] object DoubleMacros {
@@ -147,5 +148,10 @@ private[util] object DoubleMacros {
   def toLongBits(c: ContextWithPre[DoubleOps]): c.Expr[Long] = {
     import c.universe._
     c.Expr[Long](q"java.lang.Double.doubleToLongBits(${c.prefix}.__)")
+  }
+
+  def toRawLongBits(c: ContextWithPre[DoubleOps]): c.Expr[Long] = {
+    import c.universe._
+    c.Expr[Long](q"java.lang.Double.doubleToRawLongBits(${c.prefix}.__)")
   }
 }

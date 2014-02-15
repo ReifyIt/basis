@@ -9,10 +9,9 @@ package json
 
 import basis.util._
 import org.scalatest._
-import org.scalatest.matchers._
 
 trait JsonInterpolatorBehaviors { this: FunSpec =>
-  import ShouldMatchers._
+  import Matchers._
 
   val variant: JsonVariant
   import variant._
@@ -21,18 +20,22 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
     it("should parse preceding line comments") {
       json"""// comment
       true"""
+      ()
     }
 
     it("should parse succeeding line comments") {
       json"true // comment"
+      ()
     }
 
     it("should parse preceding block comments") {
       json"/* comment */ true"
+      ()
     }
 
     it("should parse succeeding block comments") {
       json"true /* comment */"
+      ()
     }
 
     it("should parse line comments in objects") {
@@ -45,6 +48,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
         :       // here
         false   // and here
       } """
+      ()
     }
 
     it("should parse line comments in arrays") {
@@ -53,6 +57,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       ,         // here
       false     // and here
       ] """
+      ()
     }
 
     it("should parse block comments in objects") {
@@ -60,10 +65,12 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
         /* here */ "true"  /* here */ : /* here */ true  /* and here */ ,
         /* here */ "false" /* here */ : /* here */ false /* and here */
       } """
+      ()
     }
 
     it("should parse block comments in arrays") {
       json"[ /* here */ true /* here */ , /* here */ false /* and here */ ]"
+      ()
     }
   }
 

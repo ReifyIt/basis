@@ -7,15 +7,12 @@
 package basis.form
 package bson
 
-import basis.memory._
 import org.scalatest._
 import org.scalatest.matchers._
 
 class BsonVariantSpec
   extends FunSpec
   with VariantTranscoding {
-
-  import ShouldMatchers._
 
   override val variant: BsonVariant = OmniVariant
   import variant._

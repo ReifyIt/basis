@@ -15,6 +15,7 @@ final class FloatOps(val __ : Float) extends AnyVal {
   def max(y: Float): Float = macro FloatMacros.max
   def min(y: Float): Float = macro FloatMacros.min
   def toIntBits: Int       = macro FloatMacros.toIntBits
+  def toRawIntBits: Int    = macro FloatMacros.toRawIntBits
 }
 
 private[util] object FloatMacros {
@@ -51,5 +52,10 @@ private[util] object FloatMacros {
   def toIntBits(c: ContextWithPre[FloatOps]): c.Expr[Int] = {
     import c.universe._
     c.Expr[Int](q"java.lang.Float.floatToIntBits(${c.prefix}.__)")
+  }
+
+  def toRawIntBits(c: ContextWithPre[FloatOps]): c.Expr[Int] = {
+    import c.universe._
+    c.Expr[Int](q"java.lang.Float.floatToRawIntBits(${c.prefix}.__)")
   }
 }

@@ -16,8 +16,6 @@ class JsonVariantSpec
   with JsonParserBehaviors
   with JsonInterpolatorBehaviors {
 
-  import ShouldMatchers._
-
   override val variant: JsonVariant = OmniVariant
   import variant._
 

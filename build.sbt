@@ -1,7 +1,7 @@
 def scalatestVer(scalaVersion: String): String = scalaVersion match {
   case "2.11.0-M8" => "2.1.0-RC2"
   case "2.11.0-M7" => "2.0.1-SNAP4"
-  case "2.10.3"    => "1.9.2"
+  case "2.10.3"    => "2.0"
 }
 
 lazy val quasiSettings: Seq[Setting[_]] = moduleSettings :+ {

@@ -11,14 +11,14 @@ import org.scalatest._
 import org.scalatest.matchers._
 
 trait VariantTranscoding { this: FunSpec =>
-  import ShouldMatchers._
+  import Matchers._
 
   val variant: Variant
   import variant._
 
   protected def transcode: Matcher[AnyForm]
 
-  def Transcodes() = describe("transcoding $variant forms") {
+  def Transcodes() = describe(s"transcoding $variant forms") {
     it("should transcode empty objects") {
       ObjectForm.empty should transcode
     }
