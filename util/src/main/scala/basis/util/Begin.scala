@@ -6,8 +6,6 @@
 
 package basis.util
 
-import scala.reflect.macros._
-
 /** A breakable control flow context. */
 class Begin {
   /** Returns this context's control-flow break exception. */

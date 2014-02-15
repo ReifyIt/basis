@@ -7,8 +7,6 @@
 package basis.collections
 package generic
 
-import basis.util._
-
 trait SeqFactory[+CC[_]] extends CollectionFactory[CC] {
   def fill[A](count: Int)(elem: => A): CC[A]             = macro SeqFactory.fill[CC, A]
   def tabulate[A](count: Int)(f: Int => A): CC[A]        = macro SeqFactory.tabulate[CC, A]
