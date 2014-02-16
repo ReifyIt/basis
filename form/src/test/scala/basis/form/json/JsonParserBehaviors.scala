@@ -310,6 +310,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       withClue("01")  (evaluating(Json("01"))  should produce [JsonException])
       withClue("-00") (evaluating(Json("-00")) should produce [JsonException])
       withClue("-01") (evaluating(Json("-01")) should produce [JsonException])
+      ()
     }
 
     it("should not parse numbers with a trailing decimal point") {
@@ -317,6 +318,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       withClue("1.")  (evaluating(Json("1."))  should produce [JsonException])
       withClue("-0.") (evaluating(Json("-0.")) should produce [JsonException])
       withClue("-1.") (evaluating(Json("-1.")) should produce [JsonException])
+      ()
     }
 
     it("should not parse numbers with an invalid exponent") {
@@ -326,6 +328,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       withClue("4.0E+") (evaluating(Json("4.0E+")) should produce [JsonException])
       withClue("4.0e-") (evaluating(Json("4.0e-")) should produce [JsonException])
       withClue("4.0E-") (evaluating(Json("4.0E-")) should produce [JsonException])
+      ()
     }
   }
 }

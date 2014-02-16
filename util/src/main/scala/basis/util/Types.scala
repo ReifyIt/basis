@@ -24,6 +24,11 @@ trait Types {
     c.WeakTypeTag[M[A1, A2]](typesApplied(c)(weakTypeOf[M[_, _]], weakTypeOf[A1], weakTypeOf[A2]))
   }
 
+  def depType[T](c: Context)(outer: c.Expr[T], name: String): c.universe.Type = {
+    import c.universe._
+    typeRef(outer.staticType, outer.staticType.member(name: TypeName), Nil).normalize
+  }
+
   def staticType[T](c: Context)(implicit tag: ClassTag[T]): c.universe.Type     = c.mirror.staticClass(tag.runtimeClass.getName).toType
   def staticTypeTag[T](c: Context)(implicit tag: ClassTag[T]): c.WeakTypeTag[T] = c.WeakTypeTag[T](staticType[T](c))
 }
