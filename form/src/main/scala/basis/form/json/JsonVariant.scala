@@ -27,7 +27,28 @@ trait JsonVariant
   implicit def JsonStringContext(stringContext: StringContext): JsonStringContext[variant.type] =
     macro json.JsonStringContext.JsonStringContext[variant.type]
 
-  def JsonObjectValue(form: ObjectForm): AnyForm = {
+  def JsonObjectValue(form: ObjectForm): AnyForm = decodeJsonObject(form)
+  def JsonArrayValue(form: SeqForm): AnyForm     = form
+  def JsonStringValue(form: StringForm): AnyForm = form
+
+  def JsonObjectBuilder(): Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder()
+  def JsonArrayBuilder(): Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder()
+  def JsonStringBuilder(): StringBuilder with State[StringForm]              = StringForm.Builder()
+
+  def JsonString(value: String): StringForm = StringForm(value)
+  def JsonNumber(value: Int): NumberForm    = NumberForm(value)
+  def JsonNumber(value: Long): NumberForm   = NumberForm(value)
+  def JsonNumber(value: Float): NumberForm  = NumberForm(value)
+  def JsonNumber(value: Double): NumberForm = NumberForm(value)
+  def JsonNumber(value: String): NumberForm = NumberForm(value)
+  def JsonTrue: BooleanForm                 = TrueForm
+  def JsonFalse: BooleanForm                = FalseForm
+  def JsonNull: NullForm                    = NullForm
+  def JsonUndefined: UndefinedForm          = UndefinedForm
+
+  def JsonNew(identifier: String, arguments: SeqForm): AnyForm = UndefinedForm
+
+  private[this] def decodeJsonObject(form: ObjectForm): AnyForm = {
     if (form.size == 1) {
       val field = form.iterator.head
       val value = field._2
@@ -42,36 +63,4 @@ trait JsonVariant
     }
     else form
   }
-
-  def JsonArrayValue(form: SeqForm): AnyForm = form
-
-  def JsonStringValue(form: StringForm): AnyForm = form
-
-  def JsonObjectBuilder(): Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder()
-
-  def JsonArrayBuilder(): Builder[AnyForm] with State[SeqForm] = SeqForm.Builder()
-
-  def JsonString(value: String): StringForm = StringForm(value)
-
-  def JsonStringBuilder(): StringBuilder with State[StringForm] = StringForm.Builder()
-
-  def JsonNumber(value: Int): NumberForm = NumberForm(value)
-
-  def JsonNumber(value: Long): NumberForm = NumberForm(value)
-
-  def JsonNumber(value: Float): NumberForm = NumberForm(value)
-
-  def JsonNumber(value: Double): NumberForm = NumberForm(value)
-
-  def JsonNumber(value: String): NumberForm = NumberForm(value)
-
-  def JsonTrue: BooleanForm = TrueForm
-
-  def JsonFalse: BooleanForm = FalseForm
-
-  def JsonNull: NullForm = NullForm
-
-  def JsonUndefined: UndefinedForm = UndefinedForm
-
-  def JsonNew(identifier: String, arguments: SeqForm): AnyForm = UndefinedForm
 }

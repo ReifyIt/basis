@@ -26,55 +26,33 @@ trait BsonVariant
   with BsonUndefined
   with BsonReader {
 
-  def BsonDouble(value: Double): AnyForm = NumberForm(value)
-
-  def BsonString(value: String): AnyForm = StringForm(value)
-
+  def BsonObjectValue(form: ObjectForm): AnyForm = form
+  def BsonArrayValue(form: SeqForm): AnyForm     = form
   def BsonStringValue(form: StringForm): AnyForm = form
 
-  def BsonStringBuilder(): StringBuilder with State[StringForm] = StringForm.Builder()
-
-  def BsonObjectValue(form: ObjectForm): AnyForm = form
-
   def BsonObjectBuilder(): Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder()
-
-  def BsonArrayValue(form: SeqForm): AnyForm = form
-
-  def BsonArrayBuilder(): Builder[AnyForm] with State[SeqForm] = SeqForm.Builder()
+  def BsonStringBuilder(): StringBuilder with State[StringForm]              = StringForm.Builder()
+  def BsonArrayBuilder(): Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder()
 
   def BsonBinary(subtype: Byte, data: Array[Byte]): AnyForm = BinaryForm(data)
-
-  def BsonUndefined: AnyForm = UndefinedForm
-
-  def BsonObjectId(id: Array[Byte]): AnyForm = UndefinedForm
-
-  def BsonBoolean(value: Boolean): AnyForm = BooleanForm(value)
-
-  def BsonDateTime(millis: Long): AnyForm = DateForm(millis)
-
-  def BsonNull: AnyForm = NullForm
-
-  def BsonRegex(pattern: String, options: String): AnyForm = UndefinedForm
-
+  def BsonBoolean(value: Boolean): AnyForm                  = BooleanForm(value)
+  def BsonDateTime(millis: Long): AnyForm                   = DateForm(millis)
   def BsonDBPointer(name: String, id: Array[Byte]): AnyForm = UndefinedForm
-
-  def BsonJSCode(js: String): AnyForm = UndefinedForm
-
-  def BsonSymbol(symbol: String): AnyForm = UndefinedForm
-
-  def BsonJSScope(js: String, scope: ObjectForm): AnyForm = UndefinedForm
-
-  def BsonInt32(value: Int): AnyForm = NumberForm(value)
-
-  def BsonTimeStamp(value: Long): AnyForm = UndefinedForm
-
-  def BsonInt64(value: Long): AnyForm = NumberForm(value)
-
-  def BsonMinKey: AnyForm = UndefinedForm
-
-  def BsonMaxKey: AnyForm = UndefinedForm
+  def BsonDouble(value: Double): AnyForm                    = NumberForm(value)
+  def BsonInt32(value: Int): AnyForm                        = NumberForm(value)
+  def BsonInt64(value: Long): AnyForm                       = NumberForm(value)
+  def BsonJSCode(js: String): AnyForm                       = UndefinedForm
+  def BsonJSScope(js: String, scope: ObjectForm): AnyForm   = UndefinedForm
+  def BsonMaxKey: AnyForm                                   = UndefinedForm
+  def BsonMinKey: AnyForm                                   = UndefinedForm
+  def BsonNull: AnyForm                                     = NullForm
+  def BsonObjectId(id: Array[Byte]): AnyForm                = UndefinedForm
+  def BsonRegex(pattern: String, options: String): AnyForm  = UndefinedForm
+  def BsonString(value: String): AnyForm                    = StringForm(value)
+  def BsonSymbol(symbol: String): AnyForm                   = UndefinedForm
+  def BsonTimeStamp(value: Long): AnyForm                   = UndefinedForm
+  def BsonUndefined: AnyForm                                = UndefinedForm
 
   private[bson] implicit def BsonReader(reader: Reader): BsonReader = new BsonReader(reader)
-
   private[bson] implicit def BsonWriter(writer: Writer): BsonWriter = new BsonWriter(writer)
 }
