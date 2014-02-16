@@ -5,12 +5,11 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
 import basis.collections._
 import basis.text._
 
-private[json] final class JsonVariantFactory[V <: JsonVariant](val variant: V) extends JsonFactory {
+private[form] final class JsonVariantFactory[V <: JsonVariant](val variant: V) extends JsonFactory {
   import variant._
 
   override type JsonValue     = AnyForm

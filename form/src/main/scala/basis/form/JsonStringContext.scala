@@ -5,17 +5,16 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
 import basis.util._
 
 class JsonStringContext[-V <: JsonVariant](variant: V, stringContext: StringContext) {
-  def json(args: V#AnyForm*): V#AnyForm        = macro JsonStringContext.json[V]
-  def jsobject(args: V#AnyForm*): V#ObjectForm = macro JsonStringContext.jsobject[V]
-  def jsarray(args: V#AnyForm*): V#SeqForm     = macro JsonStringContext.jsarray[V]
+  def json(args: V#AnyForm*): V#AnyForm        = macro JsonStringMacros.json[V]
+  def jsobject(args: V#AnyForm*): V#ObjectForm = macro JsonStringMacros.jsobject[V]
+  def jsarray(args: V#AnyForm*): V#SeqForm     = macro JsonStringMacros.jsarray[V]
 }
 
-private[json] object JsonStringContext {
+private[form] object JsonStringMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 
@@ -28,7 +27,7 @@ private[json] object JsonStringContext {
     implicit val JsonStringContextVTag =
       WeakTypeTag[JsonStringContext[V]](
         appliedType(
-          mirror.staticClass("basis.form.json.JsonStringContext").toType,
+          mirror.staticClass("basis.form.JsonStringContext").toType,
           prefix.actualType :: Nil))
     Expr[JsonStringContext[V]](
       Apply(

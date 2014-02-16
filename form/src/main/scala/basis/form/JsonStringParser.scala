@@ -5,9 +5,8 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
-private[json] final class JsonStringParser(input: String) extends JsonParser {
+private[form] final class JsonStringParser(input: String) extends JsonParser {
   private[this] var line: Int = 1
   private[this] var column: Int = 1
 

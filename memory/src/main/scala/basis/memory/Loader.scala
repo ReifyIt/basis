@@ -6,9 +6,10 @@
 
 package basis.memory
 
+import basis.text._
 import basis.util._
 
-trait Loader {
+trait Loader extends Equals {
   /** Returns the internal byte order.
     * @group General */
   def endian: Endianness
@@ -273,4 +274,88 @@ trait Loader {
       i += 1
     }
   }
+
+  def writeBase64(builder: StringBuilder): Unit = {
+    def encodeDigit(digit: Int): Int = {
+      if      (digit >=  0 && digit < 26) digit + 'A'
+      else if (digit >= 26 && digit < 52) digit + ('a' - 26)
+      else if (digit >= 52 && digit < 62) digit + ('0' - 52)
+      else if (digit == 62) '+'
+      else if (digit == 63) '/'
+      else throw new MatchError(digit.toString)
+    }
+    var i = 0L
+    while (canLoad(i + 2L)) {
+      val x: Int = loadByte(i) & 0xFF
+      val y: Int = loadByte(i + 1L) & 0xFF
+      val z: Int = loadByte(i + 2L) & 0xFF
+      builder.append(encodeDigit(x >>> 2))
+      builder.append(encodeDigit(((x << 4) | (y >>> 4)) & 0x3F))
+      builder.append(encodeDigit(((y << 2) | (z >>> 6)) & 0x3F))
+      builder.append(encodeDigit(z & 0x3F))
+      i += 3L
+    }
+    if (canLoad(i + 1L)) {
+      val x = loadByte(i) & 0xFF
+      val y = loadByte(i + 1L) & 0xFF
+      builder.append(encodeDigit(x >>> 2))
+      builder.append(encodeDigit(((x << 4) | (y >>> 4)) & 0x3F))
+      builder.append(encodeDigit((y << 2) & 0x3F))
+      builder.append('=')
+      i += 2L
+    }
+    else if (canLoad(i)) {
+      val x = loadByte(i) & 0xFF
+      builder.append(encodeDigit(x >>> 2))
+      builder.append(encodeDigit((x << 4) & 0x3F))
+      builder.append('=')
+      builder.append('=')
+      i += 1L
+    }
+  }
+
+  def toBase64: String = {
+    val s = UString.Builder()
+    writeBase64(s)
+    s.state.toString
+  }
+
+  override def canEqual(other: Any): Boolean = other.isInstanceOf[Loader]
+
+  override def equals(other: Any): Boolean = eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Loader] && {
+    val that = other.asInstanceOf[Loader]
+    that.canEqual(this) && {
+      var i = 0L
+      var j = 1L
+      while (canLoad(j) && that.canLoad(j) && loadByte(i) == that.loadByte(i)) {
+        i += 1L
+        j += 1L
+      }
+      !canLoad(j) && !that.canLoad(j)
+    }
+  }
+
+  override def hashCode: Int = {
+    import basis.util.MurmurHash3._
+    var h = seed[Loader]
+    var i = 0L
+    while (canLoad(i + 1L)) {
+      h = mix(h, loadByte(i).toInt)
+      i += 1L
+    }
+    mash(h)
+  }
+
+  override def toString: String = {
+    val s = UString.Builder()
+    s.append(stringPrefix)
+    s.append('(')
+    s.append('\"')
+    writeBase64(s)
+    s.append('\"')
+    s.append(')')
+    s.state.toString
+  }
+
+  protected def stringPrefix: String = getClass.getSimpleName
 }

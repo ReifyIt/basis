@@ -5,7 +5,6 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
 import org.scalatest._
 import org.scalatest.matchers._

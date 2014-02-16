@@ -5,6 +5,5 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package bson
 
 class BsonException(message: String) extends RuntimeException(message)

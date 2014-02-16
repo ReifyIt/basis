@@ -37,7 +37,9 @@ lazy val collections = project settings (quasiSettings: _*) dependsOn util
 
 lazy val form = project settings (quasiSettings: _*) dependsOn (collections, memory, text, util)
 
-lazy val memory, stat, text = project settings (moduleSettings: _*) dependsOn (collections, util)
+lazy val stat, text = project settings (moduleSettings: _*) dependsOn (collections, util)
+
+lazy val memory = project settings (moduleSettings: _*) dependsOn (collections, text, util)
 
 lazy val packageSettings = (
      Defaults.defaultSettings

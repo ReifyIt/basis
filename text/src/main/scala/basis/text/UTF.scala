@@ -72,14 +72,23 @@ trait UTF extends Any with Equals with Family[UTF] with Seq[Int] {
   /** Returns the number of UTF-32 code units required to encode this $collection. */
   def utf32Length: Int = utf32Iterator.length
 
-  /** Returns a Java String equivalent to this $collection. */
-  override def toString: String = {
-    val s = new java.lang.StringBuilder
+  /** Returns the Java String equivalent of this $collection. */
+  def toUString: UString = {
+    val s = UString.Builder()
     val cs = iterator
     while (!cs.isEmpty) {
-      s.appendCodePoint(cs.head)
+      s.append(cs.head)
       cs.step()
     }
-    s.toString
+    s.state
+  }
+
+  override def toString: String = {
+    val s = UString.Builder()
+    s.append(stringPrefix)
+    s.append('(')
+    show(s)
+    s.append(')')
+    s.state.toString
   }
 }

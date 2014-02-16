@@ -5,9 +5,8 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
-private[json] final class JsonInterpolator(parts: scala.Seq[String], args: scala.Iterator[Any]) extends JsonParser {
+private[form] final class JsonInterpolator(parts: scala.Seq[String], args: scala.Iterator[Any]) extends JsonParser {
   private[this] var partIndex: Int = 0
   private[this] var part: String = parts(0)
 

@@ -5,12 +5,11 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
 import basis.collections._
 import basis.text._
 
-private[json] trait JsonFactory {
+private[form] trait JsonFactory {
   type JsonValue
   type JsonObject    <: JsonValue
   type JsonArray     <: JsonValue

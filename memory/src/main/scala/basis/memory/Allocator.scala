@@ -6,15 +6,7 @@
 
 package basis.memory
 
-import basis.collections._
-
-/** A memory allocator.
-  *
-  * @author   Chris Sachs
-  * @version  0.0
-  * @since    0.0
-  */
-trait Allocator[+DataType] extends (Long => DataType) {
+trait Allocator[+DataType] extends (Long => DataType) with DataSource[DataType] {
   /** Returns the maximum allocation size supported by this allocator. */
   def MaxSize: Long
 
@@ -47,8 +39,6 @@ trait Allocator[+DataType] extends (Long => DataType) {
     }
     framer.state
   }
-
-  def Framer(): Framer with State[DataType]
 }
 
 /** A factory for memory allocators. */

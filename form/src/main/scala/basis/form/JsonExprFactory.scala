@@ -5,14 +5,13 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
 import basis.collections._
 import basis.text._
 import basis.util._
 import scala.reflect.macros._
 
-private[json] final class JsonExprFactory[C <: Context, V <: JsonVariant](val c: C)(v: C#Expr[V]) extends JsonFactory {
+private[form] final class JsonExprFactory[C <: Context, V <: JsonVariant](val c: C)(v: C#Expr[V]) extends JsonFactory {
   import c.{ Expr, Tree, WeakTypeTag }
 
   val universe: c.universe.type = c.universe

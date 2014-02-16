@@ -5,13 +5,12 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
 import basis.collections._
 import basis.text._
 import scala.annotation._
 
-private[json] abstract class JsonParser {
+private[form] abstract class JsonParser {
   /** Returns `true` if the parser has reached the end of input. */
   protected def isEOF: Boolean
 

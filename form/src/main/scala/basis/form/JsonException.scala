@@ -5,7 +5,6 @@
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
 package basis.form
-package json
 
 class JsonException(message: String, val part: Int, val offset: Int) extends RuntimeException(message) {
   def this(message: String) = this(message, 0, 0)
