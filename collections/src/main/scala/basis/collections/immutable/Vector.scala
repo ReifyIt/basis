@@ -827,6 +827,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
   }
 
   private[this] def gotoNode6(): Unit = {
+    if (length >= (1 << 30)) throw new UnsupportedOperationException("maximum length exceeded")
     if (aliased == 6 || length == (1 << 25)) {
       val oldNode6 = node6
       node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](32)
@@ -839,7 +840,6 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
   }
 
   override def append(elem: A): Unit = {
-    if (length >= (1 << 30)) throw new UnsupportedOperationException("maximum vector length exceeded")
     gotoNode1()
     node1(length & 0x1F) = elem.asInstanceOf[AnyRef]
     length += 1
@@ -990,6 +990,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
     node5 = null
     node6 = null
     length = 0
+    aliased = 0
   }
 
   override def expect(count: Int): this.type = this

@@ -23,7 +23,7 @@ class BsonVariantSpec
   protected object transcode extends Matcher[AnyForm] {
     private def transcoded(x: AnyForm): AnyForm = {
       val data = x.toBson
-      val input = data.pointer()
+      val input = data.reader(0L)
       x.bsonType match {
         case 0x01 => input.readBsonDouble()
         case 0x02 => input.readBsonString(BsonStringBuilder())

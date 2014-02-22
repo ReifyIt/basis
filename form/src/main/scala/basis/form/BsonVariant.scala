@@ -7,7 +7,7 @@
 package basis.form
 
 import basis.collections._
-import basis.memory._
+import basis.data._
 import basis.text._
 import basis.util._
 import scala.annotation._
@@ -72,8 +72,8 @@ trait BsonVariant extends Variant { variant =>
     def writeBson(output: Writer): Unit
 
     /** Returns the serialized BSON representation of this form. */
-    def toBson: Data1 = {
-      val output = Data1.LE.Framer().expect(bsonSize.toLong)
+    def toBson: Loader = {
+      val output = ByteVectorLE.Framer().expect(bsonSize.toLong)
       writeBson(output)
       output.state
     }
@@ -109,7 +109,7 @@ trait BsonVariant extends Variant { variant =>
     }
 
     override def writeBson(output: Writer): Unit = {
-      output.writeUnalignedInt(bsonSize) // document length
+      output.writeInt(bsonSize) // document length
       val fields = iterator
       while (!fields.isEmpty) {
         val field = fields.head
@@ -155,7 +155,7 @@ trait BsonVariant extends Variant { variant =>
     }
 
     override def writeBson(output: Writer): Unit = {
-      output.writeUnalignedInt(bsonSize) // document length
+      output.writeInt(bsonSize) // document length
       var i = 0
       val values = iterator
       while (!values.isEmpty) {
@@ -203,7 +203,7 @@ trait BsonVariant extends Variant { variant =>
     }
 
     override def writeBson(output: Writer): Unit = {
-      output.writeUnalignedInt(bsonSize) // document length
+      output.writeInt(bsonSize) // document length
       var i = 0
       val values = iterator
       while (!values.isEmpty) {
@@ -231,14 +231,9 @@ trait BsonVariant extends Variant { variant =>
     override def bsonSize: Int = 4 + 1 + size.toInt
 
     override def writeBson(output: Writer): Unit = {
-      output.writeUnalignedInt(size.toInt)
+      output.writeInt(size.toInt)
       output.writeByte(0x00) // generic subtype
-      var i = 0L
-      val n = size
-      while (i < n) {
-        output.writeByte(loadByte(i))
-        i += 1L
-      }
+      output.writeData(this)
     }
   }
 
@@ -253,7 +248,7 @@ trait BsonVariant extends Variant { variant =>
     }
 
     def writeBson(output: Writer): Unit = {
-      output.writeUnalignedInt(bsonSize - 4)
+      output.writeInt(bsonSize - 4)
       val cs = utf8Iterator
       while (!cs.isEmpty) {
         output.writeByte(cs.head.toByte)
@@ -278,9 +273,9 @@ trait BsonVariant extends Variant { variant =>
     }
 
     def writeBson(output: Writer): Unit = bsonType match {
-      case 0x01 => output.writeUnalignedDouble(toDouble) // double
-      case 0x12 => output.writeUnalignedLong(toLong) // int64
-      case 0x10 => output.writeUnalignedInt(toInt) // int32
+      case 0x01 => output.writeDouble(toDouble) // double
+      case 0x12 => output.writeLong(toLong) // int64
+      case 0x10 => output.writeInt(toInt) // int32
     }
   }
 
@@ -288,7 +283,7 @@ trait BsonVariant extends Variant { variant =>
   trait BsonDate extends BsonValue with BaseDate { this: DateForm =>
     override def bsonType: Byte         = 0x09
     override def bsonSize: Int          = 8
-    def writeBson(output: Writer): Unit = output.writeUnalignedLong(millis)
+    def writeBson(output: Writer): Unit = output.writeLong(millis)
   }
 
 
@@ -313,13 +308,22 @@ trait BsonVariant extends Variant { variant =>
   }
 
 
-  protected[form] class BsonReader(override protected val underlying: Reader) extends ProxyReader {
-    def readBsonDouble(): AnyForm = BsonDouble(readUnalignedDouble())
+  protected[form] class BsonReader(underlying: Reader) extends Reader {
+    override def endian: Endianness = underlying.endian
+
+    override def readByte(): Byte     = underlying.readByte()
+    override def readShort(): Short   = underlying.readShort()
+    override def readInt(): Int       = underlying.readInt()
+    override def readLong(): Long     = underlying.readLong()
+    override def readFloat(): Float   = underlying.readFloat()
+    override def readDouble(): Double = underlying.readDouble()
+
+    def readBsonDouble(): AnyForm = BsonDouble(readDouble())
 
     def readBsonString(implicit builder: StringBuilder): builder.State = {
       val utf8Builder = UTF8.Builder(builder)
       var i = 0
-      val n = readUnalignedInt() - 1
+      val n = readInt() - 1
       while (i < n) {
         utf8Builder.append(readByte() & 0xFF)
         i += 1
@@ -329,7 +333,7 @@ trait BsonVariant extends Variant { variant =>
     }
 
     def readBsonObject(implicit builder: Builder[(String, AnyForm)]): builder.State = {
-      readUnalignedInt() // size
+      readInt() // size
       var tag = readByte()
       while (tag != 0) {
         (tag: @switch) match {
@@ -361,7 +365,7 @@ trait BsonVariant extends Variant { variant =>
     }
 
     def readBsonArray(implicit builder: Builder[AnyForm]): builder.State = {
-      readUnalignedInt() // size
+      readInt() // size
       var tag = readByte()
       while (tag != 0) {
         (tag: @switch) match {
@@ -393,7 +397,7 @@ trait BsonVariant extends Variant { variant =>
     }
 
     def readBsonBinary(): AnyForm = {
-      val length = readUnalignedInt()
+      val length = readInt()
       val subtype = readByte()
       val data = readByteArray(length)
       BsonBinary(subtype, data)
@@ -405,7 +409,7 @@ trait BsonVariant extends Variant { variant =>
 
     def readBsonBoolean(): AnyForm = BsonBoolean(readByte() != 0)
 
-    def readBsonDateTime(): AnyForm = BsonDateTime(readUnalignedLong())
+    def readBsonDateTime(): AnyForm = BsonDateTime(readLong())
 
     def readBsonNull(): AnyForm = BsonNull
 
@@ -432,17 +436,17 @@ trait BsonVariant extends Variant { variant =>
     }
 
     def readBsonJSScope(): AnyForm = {
-      readUnalignedInt() // length
+      readInt() // length
       val js = readUTF8String()
       val scope = readBsonObject(ObjectForm.Builder())
       BsonJSScope(js, scope)
     }
 
-    def readBsonInt32(): AnyForm = BsonInt32(readUnalignedInt())
+    def readBsonInt32(): AnyForm = BsonInt32(readInt())
 
-    def readBsonTimeStamp(): AnyForm = BsonTimeStamp(readUnalignedLong())
+    def readBsonTimeStamp(): AnyForm = BsonTimeStamp(readLong())
 
-    def readBsonInt64(): AnyForm = BsonInt64(readUnalignedLong())
+    def readBsonInt64(): AnyForm = BsonInt64(readLong())
 
     def readBsonMinKey(): AnyForm = BsonMinKey
 
@@ -450,7 +454,7 @@ trait BsonVariant extends Variant { variant =>
 
     def readUTF8String(): String = {
       var i = 0
-      val n = readUnalignedInt() - 1
+      val n = readInt() - 1
       val builder = UTF8.Builder(UString.Builder())
       while (i < n) {
         builder.append(readByte() & 0xFF)

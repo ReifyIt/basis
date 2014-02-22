@@ -208,7 +208,7 @@ trait JsonVariant extends Variant { variant =>
       builder.append("\"$base64\"")
       builder.append(':')
       builder.append('"')
-      writeBase64(builder)
+      this.writeBase64(builder)
       builder.append('"')
       builder.append('}')
     }

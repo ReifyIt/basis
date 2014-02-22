@@ -7,7 +7,7 @@
 package basis.form
 
 import basis.collections._
-import basis.memory._
+import basis.data._
 import basis.text._
 import basis.util._
 import scala.reflect._
@@ -143,10 +143,9 @@ trait Variant { variant =>
     override def isBinaryForm: Boolean          = true
     override def asBinaryForm: BinaryForm       = this
     protected override def stringPrefix: String = "BinaryForm"
-    def size: Long
   }
 
-  trait BaseBinaryFactory extends DataSource[BinaryForm] {
+  trait BaseBinaryFactory extends ByteFactory[BinaryForm] {
     override def toString: String = "BinaryForm"
   }
 

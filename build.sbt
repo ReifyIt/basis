@@ -20,7 +20,7 @@ scalacOptions in Global ++= Seq("-language:experimental.macros", "-Yno-predef")
 
 retrieveManaged := true
 
-lazy val subprojects = List(collections, form, math, memory, stat, text, util)
+lazy val subprojects = List(collections, data, form, math, stat, text, util)
 
 lazy val basis = (
   project in file(".")
@@ -35,11 +35,11 @@ lazy val util = project settings (quasiSettings: _*)
 
 lazy val collections = project settings (quasiSettings: _*) dependsOn util
 
-lazy val form = project settings (quasiSettings: _*) dependsOn (collections, memory, text, util)
+lazy val form = project settings (quasiSettings: _*) dependsOn (collections, data, text, util)
+
+lazy val data = project settings (quasiSettings: _*) dependsOn (collections, text, util)
 
 lazy val stat, text = project settings (moduleSettings: _*) dependsOn (collections, util)
-
-lazy val memory = project settings (moduleSettings: _*) dependsOn (collections, text, util)
 
 lazy val packageSettings = (
      Defaults.defaultSettings

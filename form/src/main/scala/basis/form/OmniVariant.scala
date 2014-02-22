@@ -7,7 +7,7 @@
 package basis.form
 
 import basis.collections._
-import basis.memory._
+import basis.data._
 import basis.text._
 import scala.reflect._
 
@@ -117,17 +117,36 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  class OmniBinary(protected override val underlying: Data) extends OmniValue with BaseBinary with JsonBinary with BsonBinary with ProxyLoader {
-    override def size: Long = underlying.size
+  class OmniBinary(underlying: Loader) extends OmniValue with BaseBinary with JsonBinary with BsonBinary {
+    override def endian: Endianness                = underlying.endian
+    override def size: Long                        = underlying.size
+    override def loadByte(address: Long): Byte     = underlying.loadByte(address)
+    override def loadShort(address: Long): Short   = underlying.loadShort(address)
+    override def loadInt(address: Long): Int       = underlying.loadInt(address)
+    override def loadLong(address: Long): Long     = underlying.loadLong(address)
+    override def loadFloat(address: Long): Float   = underlying.loadFloat(address)
+    override def loadDouble(address: Long): Double = underlying.loadDouble(address)
+    override def reader(address: Long): Reader     = underlying.reader(address)
   }
 
   protected class OmniBinaryFactory extends BaseBinaryFactory {
-    override val empty: BinaryForm                       = new BinaryForm(Data(0L))
-    override def Framer(): Framer with State[BinaryForm] = new OmniBinaryFramer(Data.Framer())
+    override def endian: Endianness = NativeEndian
+    override val empty: BinaryForm                       = new BinaryForm(ByteVector.empty)
+    override def Framer(): Framer with State[BinaryForm] = new OmniBinaryFramer(ByteVector.Framer())
   }
 
-  protected final class OmniBinaryFramer(protected override val underlying: Framer with State[Data]) extends ProxyFramer with State[BinaryForm] {
-    override def state: BinaryForm = new OmniBinary(underlying.state)
+  protected final class OmniBinaryFramer(underlying: Framer with State[Loader]) extends Framer with State[BinaryForm] {
+    override def endian: Endianness               = underlying.endian
+    override def writeByte(value: Byte): Unit     = underlying.writeByte(value)
+    override def writeShort(value: Short): Unit   = underlying.writeShort(value)
+    override def writeInt(value: Int): Unit       = underlying.writeInt(value)
+    override def writeLong(value: Long): Unit     = underlying.writeLong(value)
+    override def writeFloat(value: Float): Unit   = underlying.writeFloat(value)
+    override def writeDouble(value: Double): Unit = underlying.writeDouble(value)
+    override def writeData(data: Loader): Unit    = underlying.writeData(data)
+    override def expect(count: Long): this.type   = { underlying.expect(count); this }
+    override def state: BinaryForm                = new OmniBinary(underlying.state)
+    override def clear(): Unit                    = underlying.clear()
   }
 
 
