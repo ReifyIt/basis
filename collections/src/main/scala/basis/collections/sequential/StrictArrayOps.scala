@@ -8,59 +8,26 @@ package basis.collections
 package sequential
 
 final class StrictArrayOps[A, -Family](val __ : Array[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictArrayOps.collect[A, B]
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictArrayMacros.collect[A, B]
+  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State                    = macro StrictArrayMacros.map[A, B]
+  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State     = macro StrictArrayMacros.flatMap[A, B]
+  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State              = macro StrictArrayMacros.filter[A]
+  def withFilter(p: A => Boolean): IndexedSeq[A]                                                          = new NonStrictArrayOps.Filter(__, p)
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictArrayMacros.dropWhile[A]
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictArrayMacros.takeWhile[A]
+  def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictArrayMacros.drop[A]
+  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictArrayMacros.take[A]
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State        = macro StrictArrayMacros.slice[A]
+  def reverse(implicit builder: Builder[A] with From[Family]): builder.State                              = macro StrictArrayMacros.reverse[A]
+  def zip[B](those: Array[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State         = macro StrictArrayMacros.zip[A, B]
+  def :+ (elem: A)(implicit builder: ArrayBuilder[A] with From[Family]): builder.State                    = macro StrictArrayMacros.:+[A]
+  def +: (elem: A)(implicit builder: ArrayBuilder[A] with From[Family]): builder.State                    = macro StrictArrayMacros.+:[A]
+  def ++ (those: Array[A])(implicit builder: ArrayBuilder[A] with From[Family]): builder.State            = macro StrictArrayMacros.++[A]
 
-  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictArrayOps.map[A, B]
-
-  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictArrayOps.flatMap[A, B]
-
-  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.filter[A]
-
-  def withFilter(p: A => Boolean): IndexedSeq[A] =
-    new NonStrictArrayOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.dropWhile[A]
-
-  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.takeWhile[A]
-
-  //FIXME: SI-6447
-  //def span(p: A => Boolean)
-  //    (implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family])
-  //  : (builder1.State, builder2.State) =
-  //  macro StrictArrayOps.span[A]
-
-  def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.drop[A]
-
-  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.take[A]
-
-  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.slice[A]
-
-  def reverse(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.reverse[A]
-
-  def zip[B](those: Array[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State =
-    macro StrictArrayOps.zip[A, B]
-
-  def :+ (elem: A)(implicit builder: ArrayBuilder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.:+[A]
-
-  def +: (elem: A)(implicit builder: ArrayBuilder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.+:[A]
-
-  def ++ (those: Array[A])(implicit builder: ArrayBuilder[A] with From[Family]): builder.State =
-    macro StrictArrayOps.++[A]
+  def span(p: A => Boolean)(implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family]): (builder1.State, builder2.State) = macro StrictArrayMacros.span[A]
 }
 
-private[sequential] object StrictArrayOps {
+private[sequential] object StrictArrayMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 

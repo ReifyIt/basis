@@ -1,22 +1,8 @@
-def scalatestVer(scalaVersion: String): String = scalaVersion match {
-  case "2.11.0-M8" => "2.1.0-RC2"
-  case "2.11.0-M7" => "2.0.1-SNAP4"
-  case "2.10.3"    => "2.0"
-}
+scalaVersion in Global := "2.11.0-RC1"
 
-lazy val quasiSettings: Seq[Setting[_]] = moduleSettings :+ {
-  libraryDependencies <++= (scalaVersion)(_ match {
-    case "2.10.3" => List("org.scalamacros" % s"quasiquotes_2.10.3" % "2.0.0-M3", "org.scalamacros" % s"paradise_2.10.3" % "2.0.0-M3" % "plugin")
-    case _        => Nil
-  })
-}
+crossScalaVersions in Global := Seq("2.11.0-RC1")
 
-scalaVersion in Global := "2.11.0-M7"
-
-// crossScalaVersions in Global := Seq("2.10.3", "2.11.0-M7", "2.11.0-M8")
-crossScalaVersions in Global := Seq("2.10.3", "2.11.0-M7")
-
-scalacOptions in Global ++= Seq("-language:experimental.macros", "-Yno-predef")
+scalacOptions in Global ++= Seq("-language:_", "-Yno-predef")
 
 retrieveManaged := true
 
@@ -31,13 +17,13 @@ lazy val basis = (
 
 lazy val math = project settings (moduleSettings: _*)
 
-lazy val util = project settings (quasiSettings: _*)
+lazy val util = project settings (moduleSettings: _*)
 
-lazy val collections = project settings (quasiSettings: _*) dependsOn util
+lazy val collections = project settings (moduleSettings: _*) dependsOn util
 
-lazy val form = project settings (quasiSettings: _*) dependsOn (collections, data, text, util)
+lazy val form = project settings (moduleSettings: _*) dependsOn (collections, data, text, util)
 
-lazy val data = project settings (quasiSettings: _*) dependsOn (collections, text, util)
+lazy val data = project settings (moduleSettings: _*) dependsOn (collections, text, util)
 
 lazy val stat, text = project settings (moduleSettings: _*) dependsOn (collections, util)
 
@@ -59,10 +45,10 @@ lazy val projectSettings = Seq(
 )
 
 lazy val compileSettings = Seq(
-  scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
+  scalacOptions in Compile ++= Seq("-optimise"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    "org.scalatest" %% "scalatest" % scalatestVer(scalaVersion.value) % "test"
+    "org.scalatest" %% "scalatest" % "2.1.0" % "test"
   )
 )
 

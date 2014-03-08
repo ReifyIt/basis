@@ -6,12 +6,7 @@
 
 package basis.util
 
-/** A control-flow break exception.
-  *
-  * @author   Chris Sachs
-  * @version  0.0
-  * @since    0.0
-  */
+/** A control-flow break exception. */
 class Break extends Throwable(null, null) {
   override def toString: String = "Break"
 }

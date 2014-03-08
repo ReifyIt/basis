@@ -44,25 +44,7 @@ private[basis] final class StringShower(val builder: java.lang.StringBuilder) ex
     builder.append('\"')
   }
 
-  private def showFloat(x: Float): java.lang.StringBuilder =
-    builder.append(x).append('F')
+  private def showFloat(x: Float): java.lang.StringBuilder = builder.append(x).append('F')
 
-  private def showLong(a: Long): java.lang.StringBuilder =
-    builder.append(a).append('L')
-}
-
-private[util] object StringShower {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
-
-  def StringBuilderToShower(c: Context)(builder: c.Expr[java.lang.StringBuilder]): c.Expr[StringShower] = {
-    import c.{ Expr, mirror, WeakTypeTag }
-    import c.universe._
-    implicit val StringShowerTag =
-      WeakTypeTag[StringShower](mirror.staticClass("basis.util.StringShower").toType)
-    Expr[StringShower](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StringShower])), nme.CONSTRUCTOR),
-        builder.tree :: Nil))
-  }
+  private def showLong(a: Long): java.lang.StringBuilder = builder.append(a).append('L')
 }

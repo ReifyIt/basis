@@ -10,50 +10,23 @@ package sequential
 import basis.util._
 
 final class GeneralLinearSeqOps[+A](val __ : LinearSeq[A]) extends AnyVal {
-  def foreach[U](f: A => U): Unit =
-    macro GeneralLinearSeqOps.foreach[A, U]
-
-  def fold[B >: A](z: B)(op: (B, B) => B): B =
-    macro GeneralLinearSeqOps.foldLeft[A, B]
-
-  def reduce[B >: A](op: (B, B) => B): B =
-    macro GeneralLinearSeqOps.reduceLeft[A, B]
-
-  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
-    macro GeneralLinearSeqOps.mayReduceLeft[A, B]
-
-  def foldLeft[B](z: B)(op: (B, A) => B): B =
-    macro GeneralLinearSeqOps.foldLeft[A, B]
-
-  def reduceLeft[B >: A](op: (B, A) => B): B =
-    macro GeneralLinearSeqOps.reduceLeft[A, B]
-
-  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
-    macro GeneralLinearSeqOps.mayReduceLeft[A, B]
-
-  def find(p: A => Boolean): Maybe[A] =
-    macro GeneralLinearSeqOps.find[A]
-
-  def forall(p: A => Boolean): Boolean =
-    macro GeneralLinearSeqOps.forall[A]
-
-  def exists(p: A => Boolean): Boolean =
-    macro GeneralLinearSeqOps.exists[A]
-
-  def count(p: A => Boolean): Int =
-    macro GeneralLinearSeqOps.count[A]
-
-  def choose[B](q: PartialFunction[A, B]): Maybe[B] =
-    macro GeneralLinearSeqOps.choose[A, B]
-
-  def eagerly: StrictLinearSeqOps[A, LinearSeq[_]] =
-    macro GeneralLinearSeqOps.eagerly[A]
-
-  def lazily: NonStrictLinearSeqOps[A] =
-    macro GeneralLinearSeqOps.lazily[A]
+  def foreach[U](f: A => U): Unit                      = macro GeneralLinearSeqMacros.foreach[A, U]
+  def fold[B >: A](z: B)(op: (B, B) => B): B           = macro GeneralLinearSeqMacros.foldLeft[A, B]
+  def reduce[B >: A](op: (B, B) => B): B               = macro GeneralLinearSeqMacros.reduceLeft[A, B]
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B]     = macro GeneralLinearSeqMacros.mayReduceLeft[A, B]
+  def foldLeft[B](z: B)(op: (B, A) => B): B            = macro GeneralLinearSeqMacros.foldLeft[A, B]
+  def reduceLeft[B >: A](op: (B, A) => B): B           = macro GeneralLinearSeqMacros.reduceLeft[A, B]
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] = macro GeneralLinearSeqMacros.mayReduceLeft[A, B]
+  def find(p: A => Boolean): Maybe[A]                  = macro GeneralLinearSeqMacros.find[A]
+  def forall(p: A => Boolean): Boolean                 = macro GeneralLinearSeqMacros.forall[A]
+  def exists(p: A => Boolean): Boolean                 = macro GeneralLinearSeqMacros.exists[A]
+  def count(p: A => Boolean): Int                      = macro GeneralLinearSeqMacros.count[A]
+  def choose[B](q: PartialFunction[A, B]): Maybe[B]    = macro GeneralLinearSeqMacros.choose[A, B]
+  def eagerly: StrictLinearSeqOps[A, LinearSeq[_]]     = macro GeneralLinearSeqMacros.eagerly[A]
+  def lazily: NonStrictLinearSeqOps[A]                 = macro GeneralLinearSeqMacros.lazily[A]
 }
 
-private[sequential] object GeneralLinearSeqOps {
+private[sequential] object GeneralLinearSeqMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 

@@ -18,44 +18,15 @@ final class FloatOps(val __ : Float) extends AnyVal {
   def toRawIntBits: Int    = macro FloatMacros.toRawIntBits
 }
 
-private[util] object FloatMacros {
-  def FloatToOps(c: Context)(x: c.Expr[Float]): c.Expr[FloatOps] = {
-    import c.universe._
-    c.Expr[FloatOps](q"new FloatOps($x)")
-  }
+private[util] class FloatMacros(val c: blackbox.Context { type PrefixType <: FloatOps }) {
+  import c.{ Expr, prefix }
+  import c.universe._
 
-  def abs(c: ContextWithPre[FloatOps]): c.Expr[Float] = {
-    import c.universe._
-    c.Expr[Float](q"java.lang.Math.abs(${c.prefix}.__)")
-  }
-
-  def isInfinite(c: ContextWithPre[FloatOps]): c.Expr[Boolean] = {
-    import c.universe._
-    c.Expr[Boolean](q"java.lang.Float.isInfinite(${c.prefix}.__)")
-  }
-
-  def isNaN(c: ContextWithPre[FloatOps]): c.Expr[Boolean] = {
-    import c.universe._
-    c.Expr[Boolean](q"java.lang.Float.isNaN(${c.prefix}.__)")
-  }
-
-  def max(c: ContextWithPre[FloatOps])(y: c.Expr[Float]): c.Expr[Float] = {
-    import c.universe._
-    c.Expr[Float](q"java.lang.Math.max(${c.prefix}.__, $y)")
-  }
-
-  def min(c: ContextWithPre[FloatOps])(y: c.Expr[Float]): c.Expr[Float] = {
-    import c.universe._
-    c.Expr[Float](q"java.lang.Math.min(${c.prefix}.__, $y)")
-  }
-
-  def toIntBits(c: ContextWithPre[FloatOps]): c.Expr[Int] = {
-    import c.universe._
-    c.Expr[Int](q"java.lang.Float.floatToIntBits(${c.prefix}.__)")
-  }
-
-  def toRawIntBits(c: ContextWithPre[FloatOps]): c.Expr[Int] = {
-    import c.universe._
-    c.Expr[Int](q"java.lang.Float.floatToRawIntBits(${c.prefix}.__)")
-  }
+  def abs: Expr[Float]                 = Expr[Float](q"_root_.java.lang.Math.abs($prefix.__)")
+  def isInfinite: Expr[Boolean]        = Expr[Boolean](q"_root_.java.lang.Float.isInfinite($prefix.__)")
+  def isNaN: Expr[Boolean]             = Expr[Boolean](q"_root_.java.lang.Float.isNaN($prefix.__)")
+  def max(y: Expr[Float]): Expr[Float] = Expr[Float](q"_root_.java.lang.Math.max($prefix.__, $y)")
+  def min(y: Expr[Float]): Expr[Float] = Expr[Float](q"_root_.java.lang.Math.min($prefix.__, $y)")
+  def toIntBits: Expr[Int]             = Expr[Int](q"_root_.java.lang.Float.floatToIntBits($prefix.__)")
+  def toRawIntBits: Expr[Int]          = Expr[Int](q"_root_.java.lang.Float.floatToRawIntBits($prefix.__)")
 }

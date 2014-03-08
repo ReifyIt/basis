@@ -26,6 +26,7 @@ trait Types {
 
   def depType[T](c: Context)(outer: c.Expr[T], name: String): c.universe.Type = {
     import c.universe._
+    import internal._
     typeRef(outer.staticType, outer.staticType.member(name: TypeName), Nil).normalize
   }
 

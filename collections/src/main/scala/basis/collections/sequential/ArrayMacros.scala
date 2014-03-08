@@ -16,6 +16,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
 
   import context.{ Expr, fresh, mirror, WeakTypeTag, literalUnit }
   import universe.{ Traverser => _, _ }
+  import internal._
 
   // This logic is to make it easy to use common code across methods
   // which return Option/Maybe and methods which return the underlying

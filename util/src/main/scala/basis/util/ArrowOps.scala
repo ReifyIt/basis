@@ -10,17 +10,14 @@ import scala.reflect.macros._
 
 final class ArrowOps[+A](val __ : A) extends AnyVal {
   def -> [B](right: B): (A, B) = macro ArrowMacros.->[A, B]
-  def → [B](right: B): (A, B)  = macro ArrowMacros.->[A, B]
+  def →  [B](right: B): (A, B) = macro ArrowMacros.->[A, B]
 }
 
 private[util] object ArrowMacros {
-  def ArrowToOps[A: c.WeakTypeTag](c: Context)(left: c.Expr[A]): c.Expr[ArrowOps[A]] = {
+  def -> [A: c.WeakTypeTag, B: c.WeakTypeTag](c: blackbox.Context { type PrefixType <: ArrowOps[A] })(right: c.Expr[B]): c.Expr[(A, B)] = {
+    import c.{ Expr, prefix, weakTypeOf, WeakTypeTag }
     import c.universe._
-    c.Expr[ArrowOps[A]](q"new ArrowOps($left)")
-  }
-
-  def -> [A: c.WeakTypeTag, B: c.WeakTypeTag](c: ContextWithPre[ArrowOps[A]])(right: c.Expr[B]): c.Expr[(A, B)] = {
-    import c.universe._
-    c.Expr[(A, B)](q"(${c.prefix}.__, $right)")
+    implicit val Tuple2ABTag = WeakTypeTag[(A, B)](appliedType(definitions.TupleClass(2), weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+    Expr[(A, B)](q"($prefix.__, $right)")
   }
 }

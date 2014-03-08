@@ -8,50 +8,23 @@ package basis.collections
 package sequential
 
 final class StrictIteratorOps[+A, -Family](val __ : Iterator[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictIteratorOps.collect[A, B]
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictIteratorMacros.collect[A, B]
+  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State                    = macro StrictIteratorMacros.map[A, B]
+  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State     = macro StrictIteratorMacros.flatMap[A, B]
+  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State              = macro StrictIteratorMacros.filter[A]
+  def withFilter(p: A => Boolean): Iterator[A]                                                            = new NonStrictIteratorOps.Filter(__, p)
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictIteratorMacros.dropWhile[A]
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictIteratorMacros.takeWhile[A]
+  def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictIteratorMacros.drop[A]
+  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictIteratorMacros.take[A]
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State        = macro StrictIteratorMacros.slice[A]
+  def zip[B](those: Iterator[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State      = macro StrictIteratorMacros.zip[A, B]
+  def ++ [B >: A](those: Iterator[B])(implicit builder: Builder[B] with From[Family]): builder.State      = macro StrictTraverserMacros.++[B]
 
-  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictIteratorOps.map[A, B]
-
-  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictIteratorOps.flatMap[A, B]
-
-  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIteratorOps.filter[A]
-
-  def withFilter(p: A => Boolean): Iterator[A] =
-    new NonStrictIteratorOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIteratorOps.dropWhile[A]
-
-  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIteratorOps.takeWhile[A]
-
-  //FIXME: SI-6447
-  //def span(p: A => Boolean)
-  //    (implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family])
-  //  : (builder1.State, builder2.State) =
-  //  macro StrictIteratorOps.span[A]
-
-  def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIteratorOps.drop[A]
-
-  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIteratorOps.take[A]
-
-  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIteratorOps.slice[A]
-
-  def zip[B](those: Iterator[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State =
-    macro StrictIteratorOps.zip[A, B]
-
-  def ++ [B >: A](those: Iterator[B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictTraverserOps.++[B]
+  def span(p: A => Boolean)(implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family]): (builder1.State, builder2.State) = macro StrictIteratorMacros.span[A]
 }
 
-private[sequential] object StrictIteratorOps {
+private[sequential] object StrictIteratorMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 

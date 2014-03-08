@@ -6,6 +6,8 @@
 
 package basis.util
 
+import scala.reflect.macros._
+
 /** Implements Austin Appleby's MurmurHash 3 algorithm, specifically
   * sMurmurHash3_x86_32 revision 136.
   *
@@ -154,17 +156,20 @@ object MurmurHash3 {
   }
 }
 
-private[util] object MurmurHash3Macros {
-  import scala.reflect.macros.Context
+private[util] class MurmurHash3Macros(val c: blackbox.Context) {
+  import c.{ Expr, WeakTypeTag }
+  import c.universe._
 
-  def seedString(c: Context)(string: c.Expr[String]): c.Expr[Int] = {
-    import c.universe._
-    c.literal(MurmurHash3.hash(string.tree match {
+  def seedString(string: Expr[String]): Expr[Int] = {
+    val h = MurmurHash3.hash(string.tree match {
       case Literal(Constant(s: String)) => s
-      case t => c.abort(t.pos, "Seed string not a compile-time constant.")
-    }))
+      case t => c.abort(t.pos, "Seed string not a compile-time constant")
+    })
+    Expr[Int](q"$h")
   }
 
-  def seedType[T](c: Context)(implicit T: c.WeakTypeTag[T]): c.Expr[Int] =
-    c.literal(MurmurHash3.hash(T.tpe.typeSymbol.fullName))
+  def seedType[T](implicit T: WeakTypeTag[T]): Expr[Int] = {
+    val h = MurmurHash3.hash(T.tpe.typeSymbol.fullName)
+    Expr[Int](q"$h")
+  }
 }

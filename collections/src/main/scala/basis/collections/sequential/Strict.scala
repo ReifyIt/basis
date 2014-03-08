@@ -241,6 +241,7 @@ private[collections] object Strict {
   private def FamilyTag(c: Context)(these: c.Expr[Family[_]]): c.WeakTypeTag[these.value.Family] = {
     import c.{ mirror, WeakTypeTag }
     import c.universe._
+    import internal._
     val TheseTpe = these.tree.symbol match {
       case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
       case _ => these.actualType

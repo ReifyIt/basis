@@ -19,49 +19,16 @@ final class LongOps(val __ : Long) extends AnyVal {
   def toDoubleBits: Double    = macro LongMacros.toDoubleBits
 }
 
-private[util] object LongMacros {
-  def LongToOps(c: Context)(a: c.Expr[Long]): c.Expr[LongOps] = {
-    import c.universe._
-    c.Expr[LongOps](q"new LongOps($a)")
-  }
+private[util] class LongMacros(val c: blackbox.Context { type PrefixType <: LongOps }) {
+  import c.{ Expr, prefix }
+  import c.universe._
 
-  def abs(c: ContextWithPre[LongOps]): c.Expr[Long] = {
-    import c.universe._
-    c.Expr[Long](q"java.lang.Math.abs(${c.prefix}.__)")
-  }
-
-  def countLeadingZeros(c: ContextWithPre[LongOps]): c.Expr[Int] = {
-    import c.universe._
-    c.Expr[Int](q"java.lang.Long.numberOfLeadingZeros(${c.prefix}.__)")
-  }
-
-  def countSetBits(c: ContextWithPre[LongOps]): c.Expr[Int] = {
-    import c.universe._
-    c.Expr[Int](q"java.lang.Long.bitCount(${c.prefix}.__)")
-  }
-
-  def countTrailingZeros(c: ContextWithPre[LongOps]): c.Expr[Int] = {
-    import c.universe._
-    c.Expr[Int](q"java.lang.Long.numberOfTrailingZeros(${c.prefix}.__)")
-  }
-
-  def max(c: ContextWithPre[LongOps])(b: c.Expr[Long]): c.Expr[Long] = {
-    import c.universe._
-    c.Expr[Long](q"java.lang.Math.max(${c.prefix}.__, $b)")
-  }
-
-  def min(c: ContextWithPre[LongOps])(b: c.Expr[Long]): c.Expr[Long] = {
-    import c.universe._
-    c.Expr[Long](q"java.lang.Math.min(${c.prefix}.__, $b)")
-  }
-
-  def signum(c: ContextWithPre[LongOps]): c.Expr[Int] = {
-    import c.universe._
-    c.Expr[Int](q"java.lang.Long.signum(${c.prefix}.__)")
-  }
-
-  def toDoubleBits(c: Context): c.Expr[Double] = {
-    import c.universe._
-    c.Expr[Double](q"java.lang.Double.longBitsToDouble(${c.prefix}.__)")
-  }
+  def abs: Expr[Long]                = Expr[Long](q"_root_.java.lang.Math.abs($prefix.__)")
+  def countLeadingZeros: Expr[Int]   = Expr[Int](q"_root_.java.lang.Long.numberOfLeadingZeros($prefix.__)")
+  def countSetBits: Expr[Int]        = Expr[Int](q"_root_.java.lang.Long.bitCount($prefix.__)")
+  def countTrailingZeros: Expr[Int]  = Expr[Int](q"_root_.java.lang.Long.numberOfTrailingZeros($prefix.__)")
+  def max(b: Expr[Long]): Expr[Long] = Expr[Long](q"_root_.java.lang.Math.max($prefix.__, $b)")
+  def min(b: Expr[Long]): Expr[Long] = Expr[Long](q"_root_.java.lang.Math.min($prefix.__, $b)")
+  def signum: Expr[Int]              = Expr[Int](q"_root_.java.lang.Long.signum($prefix.__)")
+  def toDoubleBits: Expr[Double]     = Expr[Double](q"_root_.java.lang.Double.longBitsToDouble($prefix.__)")
 }

@@ -10,59 +10,26 @@ package sequential
 import basis.util._
 
 final class GeneralIndexedSeqOps[+A](val __ : IndexedSeq[A]) extends AnyVal {
-  def foreach[U](f: A => U): Unit =
-    macro GeneralIndexedSeqOps.foreach[A, U]
-
-  def fold[B >: A](z: B)(op: (B, B) => B): B =
-    macro GeneralIndexedSeqOps.foldLeft[A, B]
-
-  def reduce[B >: A](op: (B, B) => B): B =
-    macro GeneralIndexedSeqOps.reduceLeft[A, B]
-
-  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
-    macro GeneralIndexedSeqOps.mayReduceLeft[A, B]
-
-  def foldLeft[B](z: B)(op: (B, A) => B): B =
-    macro GeneralIndexedSeqOps.foldLeft[A, B]
-
-  def reduceLeft[B >: A](op: (B, A) => B): B =
-    macro GeneralIndexedSeqOps.reduceLeft[A, B]
-
-  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
-    macro GeneralIndexedSeqOps.mayReduceLeft[A, B]
-
-  def foldRight[B](z: B)(op: (A, B) => B): B =
-    macro GeneralIndexedSeqOps.foldRight[A, B]
-
-  def reduceRight[B >: A](op: (A, B) => B): B =
-    macro GeneralIndexedSeqOps.reduceRight[A, B]
-
-  def mayReduceRight[B >: A](op: (A, B) => B): Maybe[B] =
-    macro GeneralIndexedSeqOps.mayReduceRight[A, B]
-
-  def find(p: A => Boolean): Maybe[A] =
-    macro GeneralIndexedSeqOps.find[A]
-
-  def forall(p: A => Boolean): Boolean =
-    macro GeneralIndexedSeqOps.forall[A]
-
-  def exists(p: A => Boolean): Boolean =
-    macro GeneralIndexedSeqOps.exists[A]
-
-  def count(p: A => Boolean): Int =
-    macro GeneralIndexedSeqOps.count[A]
-
-  def choose[B](q: PartialFunction[A, B]): Maybe[B] =
-    macro GeneralIndexedSeqOps.choose[A, B]
-
-  def eagerly: StrictIndexedSeqOps[A, IndexedSeq[_]] =
-    macro GeneralIndexedSeqOps.eagerly[A]
-
-  def lazily: NonStrictIndexedSeqOps[A] =
-    macro GeneralIndexedSeqOps.lazily[A]
+  def foreach[U](f: A => U): Unit                       = macro GeneralIndexedSeqMacros.foreach[A, U]
+  def fold[B >: A](z: B)(op: (B, B) => B): B            = macro GeneralIndexedSeqMacros.foldLeft[A, B]
+  def reduce[B >: A](op: (B, B) => B): B                = macro GeneralIndexedSeqMacros.reduceLeft[A, B]
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B]      = macro GeneralIndexedSeqMacros.mayReduceLeft[A, B]
+  def foldLeft[B](z: B)(op: (B, A) => B): B             = macro GeneralIndexedSeqMacros.foldLeft[A, B]
+  def reduceLeft[B >: A](op: (B, A) => B): B            = macro GeneralIndexedSeqMacros.reduceLeft[A, B]
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B]  = macro GeneralIndexedSeqMacros.mayReduceLeft[A, B]
+  def foldRight[B](z: B)(op: (A, B) => B): B            = macro GeneralIndexedSeqMacros.foldRight[A, B]
+  def reduceRight[B >: A](op: (A, B) => B): B           = macro GeneralIndexedSeqMacros.reduceRight[A, B]
+  def mayReduceRight[B >: A](op: (A, B) => B): Maybe[B] = macro GeneralIndexedSeqMacros.mayReduceRight[A, B]
+  def find(p: A => Boolean): Maybe[A]                   = macro GeneralIndexedSeqMacros.find[A]
+  def forall(p: A => Boolean): Boolean                  = macro GeneralIndexedSeqMacros.forall[A]
+  def exists(p: A => Boolean): Boolean                  = macro GeneralIndexedSeqMacros.exists[A]
+  def count(p: A => Boolean): Int                       = macro GeneralIndexedSeqMacros.count[A]
+  def choose[B](q: PartialFunction[A, B]): Maybe[B]     = macro GeneralIndexedSeqMacros.choose[A, B]
+  def eagerly: StrictIndexedSeqOps[A, IndexedSeq[_]]    = macro GeneralIndexedSeqMacros.eagerly[A]
+  def lazily: NonStrictIndexedSeqOps[A]                 = macro GeneralIndexedSeqMacros.lazily[A]
 }
 
-private[sequential] object GeneralIndexedSeqOps {
+private[sequential] object GeneralIndexedSeqMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 

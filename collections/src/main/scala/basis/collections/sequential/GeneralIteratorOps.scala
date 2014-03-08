@@ -19,50 +19,23 @@ final class GeneralIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
     count
   }
 
-  def foreach[U](f: A => U): Unit =
-    macro GeneralIteratorOps.foreach[A, U]
-
-  def fold[B >: A](z: B)(op: (B, B) => B): B =
-    macro GeneralIteratorOps.foldLeft[A, B]
-
-  def reduce[B >: A](op: (B, B) => B): B =
-    macro GeneralIteratorOps.reduceLeft[A, B]
-
-  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
-    macro GeneralIteratorOps.mayReduceLeft[A, B]
-
-  def foldLeft[B](z: B)(op: (B, A) => B): B =
-    macro GeneralIteratorOps.foldLeft[A, B]
-
-  def reduceLeft[B >: A](op: (B, A) => B): B =
-    macro GeneralIteratorOps.reduceLeft[A, B]
-
-  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
-    macro GeneralIteratorOps.mayReduceLeft[A, B]
-
-  def find(p: A => Boolean): Maybe[A] =
-    macro GeneralIteratorOps.find[A]
-
-  def forall(p: A => Boolean): Boolean =
-    macro GeneralIteratorOps.forall[A]
-
-  def exists(p: A => Boolean): Boolean =
-    macro GeneralIteratorOps.exists[A]
-
-  def count(p: A => Boolean): Int =
-    macro GeneralIteratorOps.count[A]
-
-  def choose[B](q: PartialFunction[A, B]): Maybe[B] =
-    macro GeneralIteratorOps.choose[A, B]
-
-  def eagerly: StrictIteratorOps[A, Iterator[_]] =
-    macro GeneralIteratorOps.eagerly[A]
-
-  def lazily: NonStrictIteratorOps[A] =
-    macro GeneralIteratorOps.lazily[A]
+  def foreach[U](f: A => U): Unit                      = macro GeneralIteratorMacros.foreach[A, U]
+  def fold[B >: A](z: B)(op: (B, B) => B): B           = macro GeneralIteratorMacros.foldLeft[A, B]
+  def reduce[B >: A](op: (B, B) => B): B               = macro GeneralIteratorMacros.reduceLeft[A, B]
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B]     = macro GeneralIteratorMacros.mayReduceLeft[A, B]
+  def foldLeft[B](z: B)(op: (B, A) => B): B            = macro GeneralIteratorMacros.foldLeft[A, B]
+  def reduceLeft[B >: A](op: (B, A) => B): B           = macro GeneralIteratorMacros.reduceLeft[A, B]
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] = macro GeneralIteratorMacros.mayReduceLeft[A, B]
+  def find(p: A => Boolean): Maybe[A]                  = macro GeneralIteratorMacros.find[A]
+  def forall(p: A => Boolean): Boolean                 = macro GeneralIteratorMacros.forall[A]
+  def exists(p: A => Boolean): Boolean                 = macro GeneralIteratorMacros.exists[A]
+  def count(p: A => Boolean): Int                      = macro GeneralIteratorMacros.count[A]
+  def choose[B](q: PartialFunction[A, B]): Maybe[B]    = macro GeneralIteratorMacros.choose[A, B]
+  def eagerly: StrictIteratorOps[A, Iterator[_]]       = macro GeneralIteratorMacros.eagerly[A]
+  def lazily: NonStrictIteratorOps[A]                  = macro GeneralIteratorMacros.lazily[A]
 }
 
-private[sequential] object GeneralIteratorOps {
+private[sequential] object GeneralIteratorMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 

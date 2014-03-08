@@ -6,43 +6,100 @@
 
 package basis.util
 
-final class FuseOps[+A, +B](__ : A Else B, trip: Throwable => Trap[B]) {
+import scala.reflect.macros._
+
+final class FuseOps[+A, +B](val __ : A Else B, val trip: Throwable => Trap[B]) {
   /** Binds the result of a function applied to the value of this `Bind`,
     * otherwise returns this `Trap` or a tripped exception.
     * @group Composing */
-  def map[X](f: A => X): X Else B =
-    macro FuseMacrosStatics.map[A, X, B]
+  def map[X](f: A => X): X Else B = macro FuseMacros.map[A, X, B]
 
   /** Returns the binding of a function applied to the value of this `Bind`,
     * otherwise returns this `Trap` or a tripped exception.
     * @group Composing */
-  def flatMap[X, Y >: B](f: A => (X Else Y)): X Else Y =
-    macro FuseMacrosStatics.flatMap[A, X, Y]
+  def flatMap[X, Y >: B](f: A => (X Else Y)): X Else Y = macro FuseMacros.flatMap[A, X, Y]
 
   /** Binds the result of a function applied to the value of this `Trap`,
     * if defined, otherwise returns this or a tripped exception.
     * @group Recovering */
-  def recover[X >: A](q: PartialFunction[B, X]): X Else B =
-    macro FuseMacrosStatics.recover[X, B]
+  def recover[X >: A](q: PartialFunction[B, X]): X Else B = macro FuseMacros.recover[X, B]
 
   /** Returns the binding of a function applied to the value of this `Trap`,
     * if defined, otherwise returns this or a tripped exception.
     * @group Recovering */
-  def recoverWith[X >: A, Y >: B](q: PartialFunction[B, X Else Y]): X Else Y =
-    macro FuseMacrosStatics.recoverWith[X, B, Y]
+  def recoverWith[X >: A, Y >: B](q: PartialFunction[B, X Else Y]): X Else Y = macro FuseMacros.recoverWith[X, B, Y]
 
   /** Returns this `Bind` if its value satisfies a predicate,
     * returns the unit `Trap` if its value does not satisfy the predicate,
     * otherwise returns this `Trap` or a tripped exception.
     * @group Composing */
-  def filter(p: A => Boolean): A Else B =
-    macro FuseMacrosStatics.filter[A, B]
+  def filter(p: A => Boolean): A Else B = macro FuseMacros.filter[A, B]
 
   /** Returns this `Bind` if its value satisfies the predicate,
     * returns the unit `Trap` if its value does not satisfy the predicate,
     * otherwise returns this `Trap` or a tripped exception;
     * equivalent to `filter`.
     * @group Composing */
-  def withFilter(p: A => Boolean): A Else B =
-    macro FuseMacrosStatics.filter[A, B]
+  def withFilter(p: A => Boolean): A Else B = macro FuseMacros.filter[A, B]
+}
+
+private[util] class FuseMacros(val c: blackbox.Context { type PrefixType <: FuseOps[_, _] }) {
+  import c.{ Expr, mirror, prefix, TERMmode, typecheck, weakTypeOf, WeakTypeTag }
+  import c.universe._
+
+  protected def unApply[A : WeakTypeTag, B : WeakTypeTag]: (Tree, Tree) = {
+    val Apply(_, self :: trip :: Nil) = prefix.tree
+    (typecheck(self, TERMmode, weakTypeOf[A Else B]), typecheck(trip, TERMmode, weakTypeOf[Throwable => Trap[B]]))
+  }
+
+  def map[A : WeakTypeTag, X : WeakTypeTag, B : WeakTypeTag](f: Expr[A => X]): Expr[X Else B] = {
+    val (self, trip) = unApply[A, B]
+    Expr[X Else B](q"""{
+      val r = $self
+      try if (r.canBind) _root_.basis.util.Bind($f(r.bind)) else r.asInstanceOf[Nothing Else B]
+      catch { case e: Throwable => $trip(e) }
+    }""")
+  }
+
+  def flatMap[A : WeakTypeTag, X : WeakTypeTag, Y : WeakTypeTag](f: Expr[A => (X Else Y)]): Expr[X Else Y] = {
+    val (self, trip) = unApply[A, Y]
+    Expr[X Else Y](q"""{
+      val r = $self
+      try if (r.canBind) $f(r.bind) else r.asInstanceOf[Nothing Else Y]
+      catch { case e: Throwable => $trip(e) }
+    }""")
+  }
+
+  def recover[X : WeakTypeTag, B : WeakTypeTag](q: Expr[PartialFunction[B, X]]): Expr[X Else B] = {
+    val (self, trip) = unApply[X, B]
+    Expr[X Else B](q"""{
+      val r = $self
+      val q = $q
+      try if (r.canSafelyTrap && q.isDefinedAt(r.trap)) _root_.basis.util.Bind(q.applyOrElse(r.trap, _root_.scala.PartialFunction.empty)) else r
+      catch { case e: Throwable => $trip(e) }
+    }""")
+  }
+
+  def recoverWith[X : WeakTypeTag, B : WeakTypeTag, Y : WeakTypeTag](q: Expr[PartialFunction[B, X Else Y]]): Expr[X Else Y] = {
+    val (self, trip) = unApply[X, B]
+    Expr[X Else Y](q"""{
+      val r = $self
+      try if (r.canSafelyTrap) $q.applyOrElse(r.trap, (_: B) => r) else r
+      catch { case e: Throwable => $trip(e) }
+    }""")
+  }
+
+  def filter[A : WeakTypeTag, B : WeakTypeTag](p: Expr[A => Boolean]): Expr[A Else B] = {
+    val (self, trip) = unApply[A, B]
+    Expr[A Else B](q"""{
+      val r = $self
+      try if (r.canTrap || $p(r.bind)) r else _root_.basis.util.Trap
+      catch { case e: Throwable => $trip(e) }
+    }""")
+  }
+
+  implicit protected def ElseTag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[A Else B]       = WeakTypeTag(appliedType(mirror.staticClass("basis.util.Else").toType, weakTypeOf[A] :: weakTypeOf[B] :: Nil))
+  implicit protected def TrapTag[B : WeakTypeTag]: WeakTypeTag[Trap[B]]                         = WeakTypeTag(appliedType(mirror.staticClass("basis.util.Trap").toType, weakTypeOf[B] :: Nil))
+  implicit protected def ThrowableToTrapTag[B : WeakTypeTag]: WeakTypeTag[Throwable => Trap[B]] = WeakTypeTag(appliedType(definitions.FunctionClass(1).asType.toType, weakTypeOf[Throwable] :: weakTypeOf[Trap[B]] :: Nil))
+  implicit protected def ThrowableTag: WeakTypeTag[Throwable]                                   = WeakTypeTag(mirror.staticClass("java.lang.Throwable").toType)
 }

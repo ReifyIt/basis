@@ -8,59 +8,26 @@ package basis.collections
 package sequential
 
 final class StrictIndexedSeqOps[+A, -Family](val __ : IndexedSeq[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.collect[A, B]
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictIndexedSeqMacros.collect[A, B]
+  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State                    = macro StrictIndexedSeqMacros.map[A, B]
+  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State     = macro StrictIndexedSeqMacros.flatMap[A, B]
+  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State              = macro StrictIndexedSeqMacros.filter[A]
+  def withFilter(p: A => Boolean): IndexedSeq[A]                                                          = new NonStrictIndexedSeqOps.Filter(__, p)
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictIndexedSeqMacros.dropWhile[A]
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictIndexedSeqMacros.takeWhile[A]
+  def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictIndexedSeqMacros.drop[A]
+  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictIndexedSeqMacros.take[A]
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State        = macro StrictIndexedSeqMacros.slice[A]
+  def reverse(implicit builder: Builder[A] with From[Family]): builder.State                              = macro StrictIndexedSeqMacros.reverse[A]
+  def zip[B](those: IndexedSeq[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State    = macro StrictIndexedSeqMacros.zip[A, B]
+  def :+ (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                         = macro StrictIndexedSeqMacros.:+[A]
+  def +: (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                         = macro StrictIndexedSeqMacros.+:[A]
+  def ++ [B >: A](those: IndexedSeq[B])(implicit builder: Builder[B] with From[Family]): builder.State    = macro StrictIndexedSeqMacros.++[B]
 
-  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.map[A, B]
-
-  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.flatMap[A, B]
-
-  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.filter[A]
-
-  def withFilter(p: A => Boolean): IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.dropWhile[A]
-
-  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.takeWhile[A]
-
-  //FIXME: SI-6447
-  //def span(p: A => Boolean)
-  //    (implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family])
-  //  : (builder1.State, builder2.State) =
-  //  macro StrictIndexedSeqOps.span[A]
-
-  def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.drop[A]
-
-  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.take[A]
-
-  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.slice[A]
-
-  def reverse(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.reverse[A]
-
-  def zip[B](those: IndexedSeq[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.zip[A, B]
-
-  def :+ (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.:+[A]
-
-  def +: (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.+:[A]
-
-  def ++ [B >: A](those: IndexedSeq[B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictIndexedSeqOps.++[B]
+  def span(p: A => Boolean)(implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family]): (builder1.State, builder2.State) = macro StrictIndexedSeqMacros.span[A]
 }
 
-private[sequential] object StrictIndexedSeqOps {
+private[sequential] object StrictIndexedSeqMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 

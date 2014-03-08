@@ -14,6 +14,7 @@ import scala.reflect.macros.Context
 private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
   import context.{ Expr, fresh, mirror, WeakTypeTag }
   import universe.{ Traverser => _, _ }
+  import internal._
 
   val universe: context.universe.type = context.universe
 

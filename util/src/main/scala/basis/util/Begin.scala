@@ -6,6 +6,8 @@
 
 package basis.util
 
+import scala.reflect.macros._
+
 /** A breakable control flow context. */
 class Begin {
   /** Returns this context's control-flow break exception. */
@@ -18,15 +20,12 @@ class Begin {
   def break(): Nothing = macro BeginMacros.break
 }
 
-private[util] object BeginMacros {
-  def apply(c: ContextWithPre[Begin])(op: c.Expr[Unit]): c.Expr[Unit] = {
-    import c.universe._
-    implicit val BreakType = typeOf[Break]
-    c.Expr[Unit](q"try $op catch { case signal: $BreakType if signal eq ${c.prefix} => }")
-  }
+private[util] class BeginMacros(val c: blackbox.Context { type PrefixType <: Begin }) {
+  import c.{ Expr, mirror, prefix, weakTypeOf, WeakTypeTag }
+  import c.universe._
 
-  def break(c: ContextWithPre[Begin])(): c.Expr[Nothing] = {
-    import c.universe._
-    c.Expr[Nothing](q"throw ${c.prefix}.signal")
-  }
+  def apply(op: Expr[Unit]): Expr[Unit] = Expr[Unit](q"try $op catch { case signal: ${weakTypeOf[Break]} if signal eq $prefix.signal => }")
+  def break(): Expr[Nothing]            = Expr[Nothing](q"throw $prefix.signal")
+
+  implicit protected def BreakTag: WeakTypeTag[Break] = WeakTypeTag(mirror.staticClass("basis.util.Break").toType)
 }

@@ -10,24 +10,23 @@ package sequential
 import basis.util._
 
 final class GeneralMapOps[+A, +T](val __ : Map[A, T]) extends AnyVal {
-  def eagerly: StrictMapOps[A, T, Map[_, _]]                     = macro GeneralMapOps.eagerly[A, T]
-  def lazily: NonStrictMapOps[A, T]                              = macro GeneralMapOps.lazily[A, T]
-
-  def choose[B](q: PartialFunction[(A, T), B]): Maybe[B]         = macro GeneralContainerOps.choose[(A, T), B]
-  def count(p: ((A, T)) => Boolean): Int                         = macro GeneralContainerOps.count[(A, T)]
-  def exists(p: ((A, T)) => Boolean): Boolean                    = macro GeneralContainerOps.exists[(A, T)]
-  def find(p: ((A, T)) => Boolean): Maybe[(A, T)]                = macro GeneralContainerOps.find[(A, T)]
-  def foldLeft[B](z: B)(op: (B, (A, T)) => B): B                 = macro GeneralContainerOps.foldLeft[(A, T), B]
-  def fold[B >: (A, T)](z: B)(op: (B, B) => B): B                = macro GeneralContainerOps.foldLeft[(A, T), B]
-  def forall(p: ((A, T)) => Boolean): Boolean                    = macro GeneralContainerOps.forall[(A, T)]
-  def foreach[U](f: ((A, T)) => U): Unit                         = macro GeneralContainerOps.foreach[(A, T), U]
-  def mayReduceLeft[B >: (A, T)](op: (B, (A, T)) => B): Maybe[B] = macro GeneralContainerOps.mayReduceLeft[(A, T), B]
-  def mayReduce[B >: (A, T)](op: (B, B) => B): Maybe[B]          = macro GeneralContainerOps.mayReduceLeft[(A, T), B]
-  def reduceLeft[B >: (A, T)](op: (B, (A, T)) => B): B           = macro GeneralContainerOps.reduceLeft[(A, T), B]
-  def reduce[B >: (A, T)](op: (B, B) => B): B                    = macro GeneralContainerOps.reduceLeft[(A, T), B]
+  def choose[B](q: PartialFunction[(A, T), B]): Maybe[B]         = macro GeneralContainerMacros.choose[(A, T), B]
+  def count(p: ((A, T)) => Boolean): Int                         = macro GeneralContainerMacros.count[(A, T)]
+  def exists(p: ((A, T)) => Boolean): Boolean                    = macro GeneralContainerMacros.exists[(A, T)]
+  def find(p: ((A, T)) => Boolean): Maybe[(A, T)]                = macro GeneralContainerMacros.find[(A, T)]
+  def foldLeft[B](z: B)(op: (B, (A, T)) => B): B                 = macro GeneralContainerMacros.foldLeft[(A, T), B]
+  def fold[B >: (A, T)](z: B)(op: (B, B) => B): B                = macro GeneralContainerMacros.foldLeft[(A, T), B]
+  def forall(p: ((A, T)) => Boolean): Boolean                    = macro GeneralContainerMacros.forall[(A, T)]
+  def foreach[U](f: ((A, T)) => U): Unit                         = macro GeneralContainerMacros.foreach[(A, T), U]
+  def mayReduceLeft[B >: (A, T)](op: (B, (A, T)) => B): Maybe[B] = macro GeneralContainerMacros.mayReduceLeft[(A, T), B]
+  def mayReduce[B >: (A, T)](op: (B, B) => B): Maybe[B]          = macro GeneralContainerMacros.mayReduceLeft[(A, T), B]
+  def reduceLeft[B >: (A, T)](op: (B, (A, T)) => B): B           = macro GeneralContainerMacros.reduceLeft[(A, T), B]
+  def reduce[B >: (A, T)](op: (B, B) => B): B                    = macro GeneralContainerMacros.reduceLeft[(A, T), B]
+  def eagerly: StrictMapOps[A, T, Map[_, _]]                     = macro GeneralMapMacros.eagerly[A, T]
+  def lazily: NonStrictMapOps[A, T]                              = macro GeneralMapMacros.lazily[A, T]
 }
 
-private[sequential] object GeneralMapOps {
+private[sequential] object GeneralMapMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 

@@ -8,56 +8,25 @@ package basis.collections
 package sequential
 
 final class StrictLinearSeqOps[+A, -Family](val __ : LinearSeq[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.collect[A, B]
+  def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictLinearSeqMacros.collect[A, B]
+  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State                    = macro StrictLinearSeqMacros.map[A, B]
+  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State     = macro StrictLinearSeqMacros.flatMap[A, B]
+  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State              = macro StrictLinearSeqMacros.filter[A]
+  def withFilter(p: A => Boolean): LinearSeq[A]                                                           = new NonStrictLinearSeqOps.Filter(__, p)
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictLinearSeqMacros.dropWhile[A]
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictLinearSeqMacros.takeWhile[A]
+  def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictLinearSeqMacros.drop[A]
+  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictLinearSeqMacros.take[A]
+  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State        = macro StrictLinearSeqMacros.slice[A]
+  def zip[B](those: LinearSeq[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State     = macro StrictLinearSeqMacros.zip[A, B]
+  def :+ (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                         = macro StrictTraverserMacros.:+[A]
+  def +: (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                         = macro StrictTraverserMacros.+:[A]
+  def ++ [B >: A](those: LinearSeq[B])(implicit builder: Builder[B] with From[Family]): builder.State     = macro StrictTraverserMacros.++[B]
 
-  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.map[A, B]
-
-  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.flatMap[A, B]
-
-  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.filter[A]
-
-  def withFilter(p: A => Boolean): LinearSeq[A] =
-    new NonStrictLinearSeqOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.dropWhile[A]
-
-  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.takeWhile[A]
-
-  //FIXME: SI-6447
-  //def span(p: A => Boolean)
-  //    (implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family])
-  //  : (builder1.State, builder2.State) =
-  //  macro StrictLinearSeqOps.span[A]
-
-  def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.drop[A]
-
-  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.take[A]
-
-  def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.slice[A]
-
-  def zip[B](those: LinearSeq[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State =
-    macro StrictLinearSeqOps.zip[A, B]
-
-  def :+ (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictTraverserOps.:+[A]
-
-  def +: (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State =
-    macro StrictTraverserOps.+:[A]
-
-  def ++ [B >: A](those: LinearSeq[B])(implicit builder: Builder[B] with From[Family]): builder.State =
-    macro StrictTraverserOps.++[B]
+  def span(p: A => Boolean)(implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family]): (builder1.State, builder2.State) = macro StrictLinearSeqMacros.span[A]
 }
 
-private[sequential] object StrictLinearSeqOps {
+private[sequential] object StrictLinearSeqMacros {
   import scala.collection.immutable.{ ::, Nil }
   import scala.reflect.macros.Context
 

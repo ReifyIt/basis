@@ -70,42 +70,7 @@ final class StrictTraverserOps[+A, -Family](val __ : Traverser[A]) extends AnyVa
 }
 
 private[sequential] object StrictTraverserOps {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
   import scala.runtime._
-
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Traverser[A]] = {
-    import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
-    import c.universe.{ Traverser => _, _ }
-    val Apply(_, these :: Nil) = prefix.tree
-    implicit val TraverserATag =
-      WeakTypeTag[Traverser[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Traverser").toType,
-          weakTypeOf[A] :: Nil))
-    Expr[Traverser[A]](typeCheck(these, weakTypeOf[Traverser[A]]))
-  }
-
-  def :+ [A : c.WeakTypeTag]
-      (c: Context)
-      (elem: c.Expr[A])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new TraverserMacros[c.type](c).:+[A](unApply[A](c), elem)(builder)
-
-  def +: [A : c.WeakTypeTag]
-      (c: Context)
-      (elem: c.Expr[A])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new TraverserMacros[c.type](c).+:[A](elem, unApply[A](c))(builder)
-
-  def ++ [A : c.WeakTypeTag]
-      (c: Context)
-      (those: c.Expr[Traverser[A]])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new TraverserMacros[c.type](c).++[A](unApply[A](c), those)(builder)
 
   final class CollectInto[-A, B](q: PartialFunction[A, B])(builder: Builder[B]) extends AbstractFunction1[A, Unit] {
     override def apply(x: A): Unit = if (q.isDefinedAt(x)) builder.append(q(x))
@@ -153,4 +118,42 @@ private[sequential] object StrictTraverserOps {
     private[this] var i: Int = 0
     override def apply(x: A): Unit = if (i < u) { if (i >= l) builder.append(x); i += 1 } else begin.break()
   }
+}
+
+private[sequential] object StrictTraverserMacros {
+  import scala.collection.immutable.{ ::, Nil }
+  import scala.reflect.macros.Context
+
+  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Traverser[A]] = {
+    import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
+    import c.universe.{ Traverser => _, _ }
+    val Apply(_, these :: Nil) = prefix.tree
+    implicit val TraverserATag =
+      WeakTypeTag[Traverser[A]](
+        appliedType(
+          mirror.staticClass("basis.collections.Traverser").toType,
+          weakTypeOf[A] :: Nil))
+    Expr[Traverser[A]](typeCheck(these, weakTypeOf[Traverser[A]]))
+  }
+
+  def :+ [A : c.WeakTypeTag]
+      (c: Context)
+      (elem: c.Expr[A])
+      (builder: c.Expr[Builder[A]])
+    : c.Expr[builder.value.State] =
+    new TraverserMacros[c.type](c).:+[A](unApply[A](c), elem)(builder)
+
+  def +: [A : c.WeakTypeTag]
+      (c: Context)
+      (elem: c.Expr[A])
+      (builder: c.Expr[Builder[A]])
+    : c.Expr[builder.value.State] =
+    new TraverserMacros[c.type](c).+:[A](elem, unApply[A](c))(builder)
+
+  def ++ [A : c.WeakTypeTag]
+      (c: Context)
+      (those: c.Expr[Traverser[A]])
+      (builder: c.Expr[Builder[A]])
+    : c.Expr[builder.value.State] =
+    new TraverserMacros[c.type](c).++[A](unApply[A](c), those)(builder)
 }
