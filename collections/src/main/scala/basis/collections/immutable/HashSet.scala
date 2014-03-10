@@ -230,7 +230,7 @@ object HashSet extends SetFactory[HashSet] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[HashSet[A]] =
+  implicit override def Builder[A]: Builder[A] with State[HashSet[A]] =
     new HashSetBuilder[A]
 
   override def toString: String = "HashSet"

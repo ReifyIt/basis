@@ -63,7 +63,7 @@ object Batch extends generic.SeqFactory[Batch] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Batch[A]] =
+  implicit override def Builder[A]: Builder[A] with State[Batch[A]] =
     new BatchBuilder[A]
 
   override def toString: String = "Batch"

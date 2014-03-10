@@ -8,6 +8,7 @@ package basis.collections
 package sequential
 
 import basis.util._
+import scala.reflect.macros._
 
 final class GeneralContainerOps[+A](val __ : Container[A]) extends AnyVal {
   def foreach[U](f: A => U): Unit                      = macro GeneralContainerMacros.foreach[A, U]
@@ -22,95 +23,32 @@ final class GeneralContainerOps[+A](val __ : Container[A]) extends AnyVal {
   def exists(p: A => Boolean): Boolean                 = macro GeneralContainerMacros.exists[A]
   def count(p: A => Boolean): Int                      = macro GeneralContainerMacros.count[A]
   def choose[B](q: PartialFunction[A, B]): Maybe[B]    = macro GeneralContainerMacros.choose[A, B]
-  def eagerly: StrictContainerOps[A, Container[_]]     = macro GeneralContainerMacros.eagerly[A]
-  def lazily: NonStrictContainerOps[A]                 = macro GeneralContainerMacros.lazily[A]
+//def eagerly: StrictContainerOps[A, Container[_]]     = macro GeneralContainerMacros.eagerly[A]
+//def lazily: NonStrictContainerOps[A]                 = macro GeneralContainerMacros.lazily[A]
 }
 
-private[sequential] object GeneralContainerMacros {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
+private[sequential] class GeneralContainerMacros(val c: whitebox.Context { type PrefixType <: GeneralContainerOps[_] }) {
+  import c.{ Expr, mirror, prefix, WeakTypeTag }
+  import c.universe._
 
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Container[A]] = {
-    import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    val Apply(_, these :: Nil) = prefix.tree
-    implicit val ContainerATag =
-      WeakTypeTag[Container[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Container").toType,
-          weakTypeOf[A] :: Nil))
-    Expr[Container[A]](typeCheck(these, weakTypeOf[Container[A]]))
-  }
+  def foreach[A : WeakTypeTag, U : WeakTypeTag](f: Expr[A => U]): Expr[Unit]                      = new IteratorMacros[c.type](c).foreach[A, U](iterator[A])(f)
+  def foldLeft[A : WeakTypeTag, B : WeakTypeTag](z: Expr[B])(op: Expr[(B, A) => B]): Expr[B]      = new IteratorMacros[c.type](c).foldLeft[A, B](iterator[A])(z)(op)
+  def reduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[B]           = new IteratorMacros[c.type](c).reduceLeft[A, B](iterator[A])(op)
+  def mayReduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[Maybe[B]] = new IteratorMacros[c.type](c).mayReduceLeft[A, B](iterator[A])(op)
+  def find[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Maybe[A]]                                = new IteratorMacros[c.type](c).find[A](iterator[A])(p)
+  def forall[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Boolean]                               = new IteratorMacros[c.type](c).forall[A](iterator[A])(p)
+  def exists[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Boolean]                               = new IteratorMacros[c.type](c).exists[A](iterator[A])(p)
+  def count[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Int]                                    = new IteratorMacros[c.type](c).count[A](iterator[A])(p)
+  def choose[A : WeakTypeTag, B : WeakTypeTag](q: Expr[PartialFunction[A, B]]): Expr[Maybe[B]]    = new IteratorMacros[c.type](c).choose[A, B](iterator[A])(q)
 
-  private def iterator[A : c.WeakTypeTag](c: Context)(these: c.Expr[Container[A]]): c.Expr[Iterator[A]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val IteratorATag =
-      WeakTypeTag[Iterator[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Iterator").toType,
-          weakTypeOf[A] :: Nil))
-    Expr[Iterator[A]](Select(these.tree, "iterator": TermName))
-  }
+//def eagerly[A : WeakTypeTag](c: Context): Expr[StrictContainerOps[A, Container[_]]] =
+//  Strict.ContainerToStrictOps[A](c)(unApply[A](c))
 
-  def foreach[A : c.WeakTypeTag, U : c.WeakTypeTag]
-      (c: Context)
-      (f: c.Expr[A => U])
-    : c.Expr[Unit] =
-    new IteratorMacros[c.type](c).foreach[A, U](iterator(c)(unApply[A](c)))(f)
+//def lazily[A : WeakTypeTag](c: Context): Expr[NonStrictContainerOps[A]] =
+//  NonStrict.ContainerToNonStrictOps[A](c)(unApply[A](c))
 
-  def foldLeft[A : c.WeakTypeTag, B : c.WeakTypeTag]
-      (c: Context)
-      (z: c.Expr[B])
-      (op: c.Expr[(B, A) => B])
-    : c.Expr[B] =
-    new IteratorMacros[c.type](c).foldLeft[A, B](iterator(c)(unApply[A](c)))(z)(op)
+  protected def iterator[A : WeakTypeTag]: Expr[Iterator[A]] = Expr[Iterator[A]](q"$prefix.__.iterator")
 
-  def reduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
-      (c: Context)
-      (op: c.Expr[(B, A) => B])
-    : c.Expr[B] =
-    new IteratorMacros[c.type](c).reduceLeft[A, B](iterator(c)(unApply[A](c)))(op)
-
-  def mayReduceLeft[A : c.WeakTypeTag, B >: A : c.WeakTypeTag]
-      (c: Context)
-      (op: c.Expr[(B, A) => B])
-    : c.Expr[Maybe[B]] =
-    new IteratorMacros[c.type](c).mayReduceLeft[A, B](iterator(c)(unApply[A](c)))(op)
-
-  def find[A : c.WeakTypeTag]
-      (c: Context)
-      (p: c.Expr[A => Boolean])
-    : c.Expr[Maybe[A]] =
-    new IteratorMacros[c.type](c).find[A](iterator(c)(unApply[A](c)))(p)
-
-  def forall[A : c.WeakTypeTag]
-      (c: Context)
-      (p: c.Expr[A => Boolean])
-    : c.Expr[Boolean] =
-    new IteratorMacros[c.type](c).forall[A](iterator(c)(unApply[A](c)))(p)
-
-  def exists[A : c.WeakTypeTag]
-      (c: Context)
-      (p: c.Expr[A => Boolean])
-    : c.Expr[Boolean] =
-    new IteratorMacros[c.type](c).exists[A](iterator(c)(unApply[A](c)))(p)
-
-  def count[A : c.WeakTypeTag]
-      (c: Context)
-      (p: c.Expr[A => Boolean])
-    : c.Expr[Int] =
-    new IteratorMacros[c.type](c).count[A](iterator(c)(unApply[A](c)))(p)
-
-  def choose[A : c.WeakTypeTag, B : c.WeakTypeTag]
-      (c: Context)
-      (q: c.Expr[PartialFunction[A, B]])
-    : c.Expr[Maybe[B]] =
-    new IteratorMacros[c.type](c).choose[A, B](iterator(c)(unApply[A](c)))(q)
-
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictContainerOps[A, Container[_]]] =
-    Strict.ContainerToStrictOps[A](c)(unApply[A](c))
-
-  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictContainerOps[A]] =
-    NonStrict.ContainerToNonStrictOps[A](c)(unApply[A](c))
+  implicit protected def IteratorTag[A](implicit A: WeakTypeTag[A]): WeakTypeTag[Iterator[A]] = WeakTypeTag(appliedType(mirror.staticClass(s"basis.collections.Iterator").toTypeConstructor, A.tpe :: Nil))
+  implicit protected def MaybeTag[A](implicit A: WeakTypeTag[A]): WeakTypeTag[Maybe[A]] = WeakTypeTag(appliedType(mirror.staticClass(s"basis.collections.Maybe").toTypeConstructor, A.tpe :: Nil))
 }

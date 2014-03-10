@@ -73,8 +73,8 @@ object LinearSeq extends generic.SeqFactory[LinearSeq] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[LinearSeq[A]] =
-    immutable.List.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[LinearSeq[A]] =
+    immutable.List.Builder[A]
 
   override def toString: String = "LinearSeq"
 }

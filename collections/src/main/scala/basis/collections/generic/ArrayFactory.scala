@@ -11,31 +11,31 @@ import scala.reflect._
 import basis.util._
 
 trait ArrayFactory[+CC[_]] {
-  def empty[A](implicit A: ClassTag[A]): CC[A]           = Builder[A]().state
+  def empty[A](implicit A: ClassTag[A]): CC[A]           = Builder[A].state
   def apply[A](elems: A*): CC[A]                         = macro ArrayFactory.apply[CC, A]
   def fill[A](count: Int)(elem: => A): CC[A]             = macro ArrayFactory.fill[CC, A]
   def tabulate[A](count: Int)(f: Int => A): CC[A]        = macro ArrayFactory.tabulate[CC, A]
   def iterate[A](start: A, count: Int)(f: A => A): CC[A] = macro ArrayFactory.iterate[CC, A]
 
   def coerce[A](elems: Traverser[A]): CC[A] = {
-    val builder = Builder[A]()(ClassTag.AnyRef.asInstanceOf[ClassTag[A]])
+    val builder = Builder[A](ClassTag.AnyRef.asInstanceOf[ClassTag[A]])
     elems.traverse(new Buffer.Append(builder))
     builder.state
   }
 
   def from[A](elems: Traverser[A])(implicit A: ClassTag[A]): CC[A] = {
-    val builder = Builder[A]()
+    val builder = Builder[A]
     elems.traverse(new Buffer.Append(builder))
     builder.state
   }
 
   def from[A](elems: scala.collection.TraversableOnce[A])(implicit A: ClassTag[A]): CC[A] = {
-    val builder = Builder[A]()
+    val builder = Builder[A]
     elems.foreach(new Buffer.Append(builder))
     builder.state
   }
 
-  implicit def Builder[A]()(implicit A: ClassTag[A]): Builder[A] with State[CC[A]]
+  implicit def Builder[A](implicit A: ClassTag[A]): Builder[A] with State[CC[A]]
 }
 
 private[generic] object ArrayFactory extends FactoryMacros[ArrayFactory] {
@@ -50,7 +50,7 @@ private[generic] object ArrayFactory extends FactoryMacros[ArrayFactory] {
     import c.{ Expr, prefix, weakTypeOf, WeakTypeTag }
     import c.universe._
 
-    var b = Apply(TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: Nil), Nil)
+    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: Nil)
     b = Apply(Select(b, "expect": TermName), Literal(Constant(elems.length)) :: Nil)
 
     val xs = elems.iterator

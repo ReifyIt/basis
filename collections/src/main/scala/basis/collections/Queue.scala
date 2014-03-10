@@ -20,8 +20,8 @@ object Queue extends generic.SeqFactory[Queue] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Queue[A]] =
-    immutable.Batch.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[Queue[A]] =
+    immutable.Batch.Builder[A]
 
   override def toString: String = "Queue"
 }

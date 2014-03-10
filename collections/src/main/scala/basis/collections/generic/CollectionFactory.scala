@@ -11,24 +11,24 @@ import basis.util._
 // applied
 
 trait CollectionFactory[+CC[_]] {
-  def empty[A]: CC[A] = Builder[A]().state
+  def empty[A]: CC[A] = Builder[A].state
 
   def apply[A](elems: A*): CC[A] =
     macro CollectionFactory.apply[CC, A]
 
   def from[A](elems: Traverser[A]): CC[A] = {
-    val builder = Builder[A]()
+    val builder = Builder[A]
     elems.traverse(new Buffer.Append(builder))
     builder.state
   }
 
   def from[A](elems: scala.collection.TraversableOnce[A]): CC[A] = {
-    val builder = Builder[A]()
+    val builder = Builder[A]
     elems.foreach(new Buffer.Append(builder))
     builder.state
   }
 
-  implicit def Builder[A](): Builder[A] with State[CC[A]]
+  implicit def Builder[A]: Builder[A] with State[CC[A]]
 
   implicit def Factory: CollectionFactory[CC] = this
 }
@@ -45,7 +45,7 @@ private[generic] object CollectionFactory {
     import c.{ Expr, prefix, weakTypeOf, WeakTypeTag }
     import c.universe._
 
-    var b = Apply(TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: Nil), Nil)
+    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: Nil)
     b = Apply(Select(b, "expect": TermName), Literal(Constant(elems.length)) :: Nil)
 
     val xs = elems.iterator

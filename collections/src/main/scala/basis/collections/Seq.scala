@@ -56,8 +56,8 @@ object Seq extends generic.SeqFactory[Seq] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Seq[A]] =
-    immutable.List.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[Seq[A]] =
+    immutable.List.Builder[A]
 
   override def toString: String = "Seq"
 }

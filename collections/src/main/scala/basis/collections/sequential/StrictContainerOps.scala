@@ -31,6 +31,8 @@ private[sequential] object StrictContainerMacros {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Container[A]] = {
     import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
     import c.universe._
+    Expr[Container[A]](q"$prefix.__")
+/*
     val Apply(_, these :: Nil) = prefix.tree
     implicit val ContainerATag =
       WeakTypeTag[Container[A]](
@@ -38,6 +40,7 @@ private[sequential] object StrictContainerMacros {
           mirror.staticClass("basis.collections.Container").toType,
           weakTypeOf[A] :: Nil))
     Expr[Container[A]](typeCheck(these, weakTypeOf[Container[A]]))
+*/
   }
 
   private def iterator[A : c.WeakTypeTag](c: Context)(these: c.Expr[Container[A]]): c.Expr[Iterator[A]] = {

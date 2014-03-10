@@ -10,19 +10,19 @@ package special
 import basis.util._
 
 trait MapSource[+CC, -A, -T] {
-  def empty: CC = Builder().state
+  def empty: CC = Builder.state
 
   def apply(entries: (A, T)*): CC =
     macro MapSource.apply[CC, A, T]
 
   def from(entries: Traverser[(A, T)]): CC = {
-    val builder = Builder()
+    val builder = Builder
     entries.traverse(new Buffer.Append(builder))
     builder.state
   }
 
   def from(entries: scala.collection.TraversableOnce[(A, T)]): CC = {
-    val builder = Builder()
+    val builder = Builder
     entries.foreach(new Buffer.Append(builder))
     builder.state
   }
@@ -42,7 +42,7 @@ private[special] object MapSource {
     import c.{ Expr, prefix }
     import c.universe._
 
-    var b = Apply(Select(prefix.tree, "Builder": TermName), Nil)
+    var b: Tree = Select(prefix.tree, "Builder": TermName)
     b = Apply(Select(b, "expect": TermName), Literal(Constant(entries.length)) :: Nil)
 
     val xs = entries.iterator

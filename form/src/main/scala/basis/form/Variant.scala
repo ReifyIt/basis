@@ -40,10 +40,10 @@ trait Variant { variant =>
   def UndefinedForm: UndefinedForm
   def NullForm: NullForm
 
-  implicit def ObjectFormBuilder(): Builder[(String, AnyForm)] with From[ObjectForm] with State[ObjectForm] = ObjectForm.Builder()
-  implicit def SeqFormBuilder(): Builder[AnyForm] with From[SeqForm] with State[SeqForm]                    = SeqForm.Builder()
-  implicit def SetFormBuilder(): Builder[SetForm] with From[SetForm] with State[SetForm]                    = SetForm.Builder()
-  implicit def StringFormBuilder(): StringBuilder with From[StringForm] with State[StringForm]              = StringForm.Builder()
+  implicit def ObjectFormBuilder: Builder[(String, AnyForm)] with From[ObjectForm] with State[ObjectForm] = ObjectForm.Builder
+  implicit def SeqFormBuilder: Builder[AnyForm] with From[SeqForm] with State[SeqForm]                    = SeqForm.Builder
+  implicit def SetFormBuilder: Builder[SetForm] with From[SetForm] with State[SetForm]                    = SetForm.Builder
+  implicit def StringFormBuilder: StringBuilder with From[StringForm] with State[StringForm]              = StringForm.Builder
 
   implicit def StringToForm(value: String): StringForm    = StringForm(value)
   implicit def IntToForm(value: Int): NumberForm          = NumberForm(value)

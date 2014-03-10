@@ -25,9 +25,9 @@ private[form] final class JsonVariantFactory[V <: JsonVariant](val variant: V) e
   override def JsonArrayValue(json: JsonArray): JsonValue   = variant.JsonArrayValue(json)
   override def JsonStringValue(json: JsonString): JsonValue = variant.JsonStringValue(json)
 
-  override def JsonObjectBuilder(): Builder[(String, JsonValue)] with State[JsonObject] = variant.JsonObjectBuilder()
-  override def JsonArrayBuilder(): Builder[JsonValue] with State[JsonArray]             = variant.JsonArrayBuilder()
-  override def JsonStringBuilder(): StringBuilder with State[JsonString]                = variant.JsonStringBuilder()
+  override def JsonObjectBuilder: Builder[(String, JsonValue)] with State[JsonObject] = variant.JsonObjectBuilder
+  override def JsonArrayBuilder: Builder[JsonValue] with State[JsonArray]             = variant.JsonArrayBuilder
+  override def JsonStringBuilder: StringBuilder with State[JsonString]                = variant.JsonStringBuilder
 
   override def JsonString(value: String): JsonString  = variant.JsonString(value)
   override def JsonNumber(value: String): JsonNumber  = variant.JsonNumber(value)

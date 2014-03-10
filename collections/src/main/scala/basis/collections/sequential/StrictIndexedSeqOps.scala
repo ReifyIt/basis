@@ -34,6 +34,8 @@ private[sequential] object StrictIndexedSeqMacros {
   private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[IndexedSeq[A]] = {
     import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
     import c.universe._
+    Expr[IndexedSeq[A]](q"$prefix.__")
+    /*
     val Apply(_, these :: Nil) = prefix.tree
     implicit val IndexATag =
       WeakTypeTag[IndexedSeq[A]](
@@ -41,6 +43,7 @@ private[sequential] object StrictIndexedSeqMacros {
           mirror.staticClass("basis.collections.IndexedSeq").toType,
           weakTypeOf[A] :: Nil))
     Expr[IndexedSeq[A]](typeCheck(these, weakTypeOf[IndexedSeq[A]]))
+    */
   }
 
   def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]

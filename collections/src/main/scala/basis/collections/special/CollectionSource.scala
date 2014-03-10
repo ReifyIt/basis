@@ -10,24 +10,24 @@ package special
 import basis.util._
 
 trait CollectionSource[+CC, -A] {
-  def empty: CC = Builder().state
+  def empty: CC = Builder.state
 
   def apply(elems: A*): CC =
     macro CollectionSource.apply[CC, A]
 
   def from(elems: Traverser[A]): CC = {
-    val builder = Builder()
+    val builder = Builder
     elems.traverse(new Buffer.Append(builder))
     builder.state
   }
 
   def from(elems: scala.collection.TraversableOnce[A]): CC = {
-    val builder = Builder()
+    val builder = Builder
     elems.foreach(new Buffer.Append(builder))
     builder.state
   }
 
-  implicit def Builder(): Builder[A] with State[CC]
+  implicit def Builder: Builder[A] with State[CC]
 }
 
 private[special] object CollectionSource {
@@ -41,7 +41,7 @@ private[special] object CollectionSource {
     import c.{ Expr, prefix }
     import c.universe._
 
-    var b = Apply(Select(prefix.tree, "Builder": TermName), Nil)
+    var b: Tree = Select(prefix.tree, "Builder": TermName)
     b = Apply(Select(b, "expect": TermName), Literal(Constant(elems.length)) :: Nil)
 
     val xs = elems.iterator

@@ -238,10 +238,10 @@ private[form] abstract class JsonParser {
   def parseValue(factory: JsonFactory): factory.JsonValue = {
     import factory._
     (head: @switch) match {
-      case '{' => JsonObjectValue(parseObject(factory)(JsonObjectBuilder()))
-      case '[' => JsonArrayValue(parseArray(factory)(JsonArrayBuilder()))
-      case '\"' => JsonStringValue(parseDoubleQuotedString(JsonStringBuilder()))
-      case '\'' => JsonStringValue(parseSingleQuotedString(JsonStringBuilder()))
+      case '{' => JsonObjectValue(parseObject(factory)(JsonObjectBuilder))
+      case '[' => JsonArrayValue(parseArray(factory)(JsonArrayBuilder))
+      case '\"' => JsonStringValue(parseDoubleQuotedString(JsonStringBuilder))
+      case '\'' => JsonStringValue(parseSingleQuotedString(JsonStringBuilder))
       case '+' | '-' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => parseNumber(factory)
       case 't' => parse("true", "expected \"true\""); JsonTrue
       case 'f' => parse("false", "expected \"false\""); JsonFalse
@@ -377,7 +377,7 @@ private[form] abstract class JsonParser {
     parseWhitespace()
     val identifier = parseIdentifier()
     skipWhitespace()
-    val arguments = parseArgumentList(factory)(JsonArrayBuilder())
+    val arguments = parseArgumentList(factory)(JsonArrayBuilder)
     JsonNew(identifier, arguments)
   }
 

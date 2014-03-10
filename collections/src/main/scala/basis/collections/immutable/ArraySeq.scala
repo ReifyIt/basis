@@ -155,7 +155,7 @@ abstract class ArraySeq[+A]
 }
 
 object ArraySeq extends ArrayFactory[ArraySeq] {
-  implicit override def Builder[A]()(implicit A: ClassTag[A])
+  implicit override def Builder[A](implicit A: ClassTag[A])
     : ArrayBuilder[A] with State[ArraySeq[A]] = (A match {
     case ClassTag.Byte    => new ByteArraySeqBuilder
     case ClassTag.Short   => new ShortArraySeqBuilder

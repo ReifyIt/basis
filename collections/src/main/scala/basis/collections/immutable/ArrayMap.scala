@@ -156,7 +156,7 @@ private[collections] object ArrayMap extends MapFactory[ArrayMap] {
     new ArrayMap(slots)
   }
 
-  implicit override def Builder[A, T](): Builder[(A, T)] with State[ArrayMap[A, T]] =
+  implicit override def Builder[A, T]: Builder[(A, T)] with State[ArrayMap[A, T]] =
     new ArrayMapBuilder[A, T]
 
   override def toString: String = "ArrayMap"

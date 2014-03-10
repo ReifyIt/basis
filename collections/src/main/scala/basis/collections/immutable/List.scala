@@ -73,7 +73,7 @@ object List extends SeqFactory[List] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[List[A]] =
+  implicit override def Builder[A]: Builder[A] with State[List[A]] =
     new ListBuilder[A]
 
   override def toString: String = "List"

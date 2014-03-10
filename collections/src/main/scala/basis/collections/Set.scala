@@ -69,8 +69,8 @@ object Set extends generic.SetFactory[Set] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Set[A]] =
-    immutable.HashSet.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[Set[A]] =
+    immutable.HashSet.Builder[A]
 
   override def toString: String = "Set"
 }

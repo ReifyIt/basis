@@ -375,7 +375,7 @@ object HashMap extends MapFactory[HashMap] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A, T](): Builder[(A, T)] with State[HashMap[A, T]] =
+  implicit override def Builder[A, T]: Builder[(A, T)] with State[HashMap[A, T]] =
     new HashMapBuilder[A, T]
 
   override def toString: String = "HashMap"

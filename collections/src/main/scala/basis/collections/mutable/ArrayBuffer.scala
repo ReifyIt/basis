@@ -72,7 +72,7 @@ abstract class ArrayBuffer[A]
 }
 
 object ArrayBuffer extends ArrayFactory[ArrayBuffer] {
-  implicit override def Builder[A]()(implicit A: ClassTag[A])
+  implicit override def Builder[A](implicit A: ClassTag[A])
     : ArrayBuilder[A] with State[ArrayBuffer[A]] = (A match {
     case ClassTag.Byte   => new ByteArrayBufferBuilder
     case ClassTag.Short  => new ShortArrayBufferBuilder

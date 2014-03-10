@@ -31,9 +31,9 @@ trait JsonVariant extends Variant { variant =>
   def JsonArrayValue(form: SeqForm): AnyForm     = form
   def JsonStringValue(form: StringForm): AnyForm = form
 
-  def JsonObjectBuilder(): Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder()
-  def JsonArrayBuilder(): Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder()
-  def JsonStringBuilder(): StringBuilder with State[StringForm]              = StringForm.Builder()
+  def JsonObjectBuilder: Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder
+  def JsonArrayBuilder: Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder
+  def JsonStringBuilder: StringBuilder with State[StringForm]              = StringForm.Builder
 
   def JsonString(value: String): StringForm = StringForm(value)
   def JsonNumber(value: Int): NumberForm    = NumberForm(value)
@@ -158,7 +158,7 @@ trait JsonVariant extends Variant { variant =>
       val factory = new JsonVariantFactory[variant.type](variant)
       val parser = new JsonStringParser(json)
       parser.skipWhitespace()
-      val value = parser.parseArray(factory)(Builder())
+      val value = parser.parseArray(factory)(Builder)
       parser.skipWhitespace()
       parser.parseEOF()
       value
@@ -194,7 +194,7 @@ trait JsonVariant extends Variant { variant =>
       val factory = new JsonVariantFactory[variant.type](variant)
       val parser = new JsonStringParser(json)
       parser.skipWhitespace()
-      val value = parser.parseArray(factory)(Builder())
+      val value = parser.parseArray(factory)(Builder)
       parser.skipWhitespace()
       parser.parseEOF()
       value

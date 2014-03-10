@@ -263,17 +263,17 @@ object Mold extends CollectionMolds {
     override def identity: CC[A] = CC.empty[A]
 
     override def form(variant: Variant)(elems: CC[A]): variant.AnyForm =
-      elems.map(A.form(variant)(_))(variant.SeqForm.Builder())
+      elems.map(A.form(variant)(_))(variant.SeqForm.Builder)
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[CC[A]] = {
-      if (form.isSeqForm) Bind(form.asSeqForm.flatMap(A.cast(variant)(_))(CC.Builder[A]()))
+      if (form.isSeqForm) Bind(form.asSeqForm.flatMap(A.cast(variant)(_))(CC.Builder[A]))
       else if (form.isSetForm) Bind(form.asSetForm.flatMap(A.cast(variant)(_))(CC.Builder[A]))
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
-      if (form.isSeqForm) form.asSeqForm.map(A.norm(variant)(_))(variant.SeqForm.Builder())
-      else if (form.isSetForm) form.asSetForm.map(A.norm(variant)(_))(variant.SeqForm.Builder())
+      if (form.isSeqForm) form.asSeqForm.map(A.norm(variant)(_))(variant.SeqForm.Builder)
+      else if (form.isSetForm) form.asSetForm.map(A.norm(variant)(_))(variant.SeqForm.Builder)
       else variant.SeqForm.empty
     }
 
@@ -284,17 +284,17 @@ object Mold extends CollectionMolds {
     override def identity: CC[A] = CC.empty[A]
 
     override def form(variant: Variant)(elems: CC[A]): variant.AnyForm =
-      elems.map(A.form(variant)(_))(variant.SetForm.Builder())
+      elems.map(A.form(variant)(_))(variant.SetForm.Builder)
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[CC[A]] = {
-      if (form.isSetForm) Bind(form.asSetForm.flatMap(A.cast(variant)(_))(CC.Builder[A]()))
-      else if (form.isSeqForm) Bind(form.asSeqForm.flatMap(A.cast(variant)(_))(CC.Builder[A]()))
+      if (form.isSetForm) Bind(form.asSetForm.flatMap(A.cast(variant)(_))(CC.Builder[A]))
+      else if (form.isSeqForm) Bind(form.asSeqForm.flatMap(A.cast(variant)(_))(CC.Builder[A]))
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
-      if (form.isSetForm) form.asSetForm.map(A.norm(variant)(_))(variant.SetForm.Builder())
-      else if (form.isSeqForm) form.asSeqForm.map(A.norm(variant)(_))(variant.SetForm.Builder())
+      if (form.isSetForm) form.asSetForm.map(A.norm(variant)(_))(variant.SetForm.Builder)
+      else if (form.isSeqForm) form.asSeqForm.map(A.norm(variant)(_))(variant.SetForm.Builder)
       else variant.SetForm.empty
     }
 
@@ -305,15 +305,15 @@ object Mold extends CollectionMolds {
     override def identity: CC[String, T] = CC.empty[String, T]
 
     override def form(variant: Variant)(fields: CC[String, T]): variant.AnyForm =
-      fields.map(field => field._1 -> T.form(variant)(field._2))(variant.ObjectForm.Builder())
+      fields.map(field => field._1 -> T.form(variant)(field._2))(variant.ObjectForm.Builder)
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[CC[String, T]] = {
-      if (form.isObjectForm) Bind(form.asObjectForm.flatMap(field => T.cast(variant)(field._2).map(field._1 -> _))(CC.Builder[String, T]()))
+      if (form.isObjectForm) Bind(form.asObjectForm.flatMap(field => T.cast(variant)(field._2).map(field._1 -> _))(CC.Builder[String, T]))
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
-      if (form.isObjectForm) form.asObjectForm.map(field => field._1 -> T.norm(variant)(field._2))(variant.ObjectForm.Builder())
+      if (form.isObjectForm) form.asObjectForm.map(field => field._1 -> T.norm(variant)(field._2))(variant.ObjectForm.Builder)
       else variant.ObjectForm.empty
     }
 

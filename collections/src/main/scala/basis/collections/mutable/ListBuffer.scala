@@ -274,7 +274,7 @@ object ListBuffer extends SeqFactory[ListBuffer] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[ListBuffer[A]] =
+  implicit override def Builder[A]: Builder[A] with State[ListBuffer[A]] =
     new ListBufferBuilder[A]
 
   override def toString: String = "ListBuffer"

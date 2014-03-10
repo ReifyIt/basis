@@ -104,7 +104,7 @@ private[collections] object ArraySet extends SetFactory[ArraySet] {
     }
   }
 
-  implicit override def Builder[A](): Builder[A] with State[ArraySet[A]] =
+  implicit override def Builder[A]: Builder[A] with State[ArraySet[A]] =
     new ArraySetBuilder[A]
 
   override def toString: String = "ArraySet"

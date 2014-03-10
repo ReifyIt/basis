@@ -69,8 +69,8 @@ object Buffer extends generic.SeqFactory[Buffer] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Buffer[A]] =
-    mutable.ListBuffer.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[Buffer[A]] =
+    mutable.ListBuffer.Builder[A]
 
   private[collections] final class Append[-A](b: Builder[A]) extends scala.runtime.AbstractFunction1[A, Unit] {
     override def apply(elem: A): Unit = b.append(elem)

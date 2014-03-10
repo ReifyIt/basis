@@ -41,9 +41,9 @@ private[form] final class JsonExprFactory[C <: Context, V <: JsonVariant](val c:
   override def JsonArrayValue(expr: Expr[V#SeqForm])     = Expr[V#AnyForm](q"$variant.JsonArrayValue($expr)")
   override def JsonStringValue(expr: Expr[V#StringForm]) = Expr[V#AnyForm](q"$variant.JsonStringValue($expr)")
 
-  override def JsonObjectBuilder(): Builder[(String, Expr[V#AnyForm])] with State[Expr[V#ObjectForm]] = new JsonObjectBuilder
-  override def JsonArrayBuilder(): Builder[Expr[V#AnyForm]] with State[Expr[V#SeqForm]]               = new JsonArrayBuilder
-  override def JsonStringBuilder(): StringBuilder with State[Expr[V#StringForm]]                      = new JsonStringBuilder
+  override def JsonObjectBuilder: Builder[(String, Expr[V#AnyForm])] with State[Expr[V#ObjectForm]] = new JsonObjectBuilder
+  override def JsonArrayBuilder: Builder[Expr[V#AnyForm]] with State[Expr[V#SeqForm]]               = new JsonArrayBuilder
+  override def JsonStringBuilder: StringBuilder with State[Expr[V#StringForm]]                      = new JsonStringBuilder
 
   override def JsonString(value: String)  = Expr[V#StringForm](if (value.length == 0) q"$variant.StringForm.empty" else q"$variant.JsonString($value)")
   override def JsonNumber(value: String)  = Expr[V#NumberForm](q"$variant.JsonNumber(${JsonNumberLiteral(value)})")

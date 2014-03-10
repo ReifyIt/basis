@@ -407,7 +407,7 @@ object Arbitrary {
     override def apply(): CC[A] = {
       var i = 0
       val n = length()
-      val b = CC.Builder[A]().expect(n)
+      val b = CC.Builder[A].expect(n)
       while (i < n) {
         b.append(A())
         i += 1
@@ -428,7 +428,7 @@ object Arbitrary {
     override def apply(): CC[A, T] = {
       var i = 0
       val n = length()
-      val b = CC.Builder[A, T]().expect(n)
+      val b = CC.Builder[A, T].expect(n)
       while (i < n) {
         b.append((A(), T()))
         i += 1

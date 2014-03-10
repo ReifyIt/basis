@@ -72,8 +72,8 @@ object IndexedSeq extends generic.SeqFactory[IndexedSeq] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[IndexedSeq[A]] =
-    immutable.Vector.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[IndexedSeq[A]] =
+    immutable.Vector.Builder[A]
 
   override def toString: String = "IndexedSeq"
 }

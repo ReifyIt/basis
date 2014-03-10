@@ -18,7 +18,7 @@ final class String4(codeUnits: Array[Int]) extends Equals with Family[String4] w
 object String4 extends StringFactory[String4] {
   override val empty: String4 = new String4(new Array[Int](0))
 
-  implicit override def Builder(): StringBuilder with State[String4] = new String4Builder
+  implicit override def Builder: StringBuilder with State[String4] = new String4Builder
 
   override def toString: String = "String4"
 }

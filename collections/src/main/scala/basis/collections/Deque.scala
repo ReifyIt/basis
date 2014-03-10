@@ -24,8 +24,8 @@ object Deque extends generic.SeqFactory[Deque] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Deque[A]] =
-    immutable.Batch.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[Deque[A]] =
+    immutable.Batch.Builder[A]
 
   override def toString: String = "Deque"
 }

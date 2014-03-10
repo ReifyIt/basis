@@ -23,9 +23,9 @@ private[form] trait JsonFactory {
   def JsonArrayValue(json: JsonArray): JsonValue
   def JsonStringValue(json: JsonString): JsonValue
 
-  def JsonObjectBuilder(): Builder[(String, JsonValue)] with State[JsonObject]
-  def JsonArrayBuilder(): Builder[JsonValue] with State[JsonArray]
-  def JsonStringBuilder(): StringBuilder with State[JsonString]
+  def JsonObjectBuilder: Builder[(String, JsonValue)] with State[JsonObject]
+  def JsonArrayBuilder: Builder[JsonValue] with State[JsonArray]
+  def JsonStringBuilder: StringBuilder with State[JsonString]
 
   def JsonString(value: String): JsonString
   def JsonNumber(value: String): JsonNumber

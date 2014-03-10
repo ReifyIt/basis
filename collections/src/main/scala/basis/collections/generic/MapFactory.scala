@@ -10,24 +10,24 @@ package generic
 import basis.util._
 
 trait MapFactory[+CC[_, _]] {
-  def empty[A, T]: CC[A, T] = Builder[A, T]().state
+  def empty[A, T]: CC[A, T] = Builder[A, T].state
 
   def apply[A, T](entries: (A, T)*): CC[A, T] =
     macro MapFactory.apply[CC, A, T]
 
   def from[A, T](entries: Traverser[(A, T)]): CC[A, T] = {
-    val builder = Builder[A, T]()
+    val builder = Builder[A, T]
     entries traverse new Buffer.Append(builder)
     builder.state
   }
 
   def from[A, T](entries: TraversableOnce[(A, T)]): CC[A, T] = {
-    val builder = Builder[A, T]()
+    val builder = Builder[A, T]
     entries foreach new Buffer.Append(builder)
     builder.state
   }
 
-  implicit def Builder[A, T](): Builder[(A, T)] with State[CC[A, T]]
+  implicit def Builder[A, T]: Builder[(A, T)] with State[CC[A, T]]
 
   implicit def Factory: MapFactory[CC] = this
 }
@@ -44,7 +44,7 @@ private[generic] object MapFactory {
     import c.{ Expr, prefix, weakTypeOf, WeakTypeTag }
     import c.universe._
 
-    var b = Apply(TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: TypeTree(weakTypeOf[T]) :: Nil), Nil)
+    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: TypeTree(weakTypeOf[T]) :: Nil)
     b = Apply(Select(b, "expect": TermName), Literal(Constant(entries.length)) :: Nil)
 
     val xs = entries.iterator

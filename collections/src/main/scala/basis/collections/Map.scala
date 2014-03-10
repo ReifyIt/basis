@@ -117,7 +117,7 @@ object Map extends generic.MapFactory[Map] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A, T](): Builder[(A, T)] with State[Map[A, T]] =
+  implicit override def Builder[A, T]: Builder[(A, T)] with State[Map[A, T]] =
     immutable.HashMap.Builder[A, T]
 
   override def toString: String = "Map"

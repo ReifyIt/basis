@@ -2,7 +2,7 @@ package basis
 package util
 
 import scala.reflect.{ ClassTag, classTag }
-import scala.reflect.macros.Context
+import scala.reflect.macros._
 
 trait Types {
   type ContextWithPre[+T] = Context { type PrefixType <: T }

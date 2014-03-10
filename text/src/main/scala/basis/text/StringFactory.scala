@@ -9,13 +9,13 @@ package basis.text
 import basis.collections._
 
 trait StringFactory[+S] {
-  def empty: S = Builder().state
+  def empty: S = Builder.state
 
   def apply(chars: CharSequence): S = {
-    val s = Builder()
+    val s = Builder
     s.append(chars)
     s.state
   }
 
-  implicit def Builder(): StringBuilder with State[S]
+  implicit def Builder: StringBuilder with State[S]
 }

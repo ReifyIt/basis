@@ -33,8 +33,8 @@ object Collection extends generic.CollectionFactory[Collection] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Collection[A]] =
-    immutable.List.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[Collection[A]] =
+    immutable.List.Builder[A]
 
   override def toString: String = "Collection"
 

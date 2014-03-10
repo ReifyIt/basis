@@ -20,8 +20,8 @@ object Stack extends generic.SeqFactory[Stack] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Stack[A]] =
-    immutable.List.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[Stack[A]] =
+    immutable.List.Builder[A]
 
   override def toString: String = "Stack"
 }

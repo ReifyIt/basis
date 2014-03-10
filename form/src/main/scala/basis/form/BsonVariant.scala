@@ -34,9 +34,9 @@ trait BsonVariant extends Variant { variant =>
   def BsonArrayValue(form: SeqForm): AnyForm     = form
   def BsonStringValue(form: StringForm): AnyForm = form
 
-  def BsonObjectBuilder(): Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder()
-  def BsonStringBuilder(): StringBuilder with State[StringForm]              = StringForm.Builder()
-  def BsonArrayBuilder(): Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder()
+  def BsonObjectBuilder: Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder
+  def BsonStringBuilder: StringBuilder with State[StringForm]              = StringForm.Builder
+  def BsonArrayBuilder: Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder
 
   def BsonBinary(subtype: Byte, data: Array[Byte]): AnyForm = BinaryForm(data)
   def BsonBoolean(value: Boolean): AnyForm                  = BooleanForm(value)
@@ -81,7 +81,7 @@ trait BsonVariant extends Variant { variant =>
 
   trait BsonValueFactory extends BaseValueFactory {
     /** Reads a variant from BSON encoded `input`. */
-    def readBson(input: Reader): AnyForm = BsonObjectValue(input.readBsonObject(BsonObjectBuilder()))
+    def readBson(input: Reader): AnyForm = BsonObjectValue(input.readBsonObject(BsonObjectBuilder))
   }
 
 
@@ -173,7 +173,7 @@ trait BsonVariant extends Variant { variant =>
   }
 
   trait BsonSeqFactory extends BaseSeqFactory {
-    def readBson(input: Reader): SeqForm = input.readBsonArray(Builder())
+    def readBson(input: Reader): SeqForm = input.readBsonArray(Builder)
   }
 
 
@@ -221,7 +221,7 @@ trait BsonVariant extends Variant { variant =>
   }
 
   trait BsonSetFactory extends BaseSetFactory {
-    def readBson(input: Reader): SetForm = input.readBsonArray(Builder())
+    def readBson(input: Reader): SetForm = input.readBsonArray(Builder)
   }
 
 
@@ -338,9 +338,9 @@ trait BsonVariant extends Variant { variant =>
       while (tag != 0) {
         (tag: @switch) match {
           case 0x01 => builder.append(readCString() -> readBsonDouble())
-          case 0x02 => builder.append(readCString() -> BsonStringValue(readBsonString(BsonStringBuilder())))
-          case 0x03 => builder.append(readCString() -> BsonObjectValue(readBsonObject(BsonObjectBuilder())))
-          case 0x04 => builder.append(readCString() -> BsonArrayValue(readBsonArray(BsonArrayBuilder())))
+          case 0x02 => builder.append(readCString() -> BsonStringValue(readBsonString(BsonStringBuilder)))
+          case 0x03 => builder.append(readCString() -> BsonObjectValue(readBsonObject(BsonObjectBuilder)))
+          case 0x04 => builder.append(readCString() -> BsonArrayValue(readBsonArray(BsonArrayBuilder)))
           case 0x05 => builder.append(readCString() -> readBsonBinary())
           case 0x06 => builder.append(readCString() -> readBsonUndefined())
           case 0x07 => builder.append(readCString() -> readBsonObjectId())
@@ -370,9 +370,9 @@ trait BsonVariant extends Variant { variant =>
       while (tag != 0) {
         (tag: @switch) match {
           case 0x01 => skipCString(); builder.append(readBsonDouble())
-          case 0x02 => skipCString(); builder.append(BsonStringValue(readBsonString(BsonStringBuilder())))
-          case 0x03 => skipCString(); builder.append(BsonObjectValue(readBsonObject(BsonObjectBuilder())))
-          case 0x04 => skipCString(); builder.append(BsonArrayValue(readBsonArray(BsonArrayBuilder())))
+          case 0x02 => skipCString(); builder.append(BsonStringValue(readBsonString(BsonStringBuilder)))
+          case 0x03 => skipCString(); builder.append(BsonObjectValue(readBsonObject(BsonObjectBuilder)))
+          case 0x04 => skipCString(); builder.append(BsonArrayValue(readBsonArray(BsonArrayBuilder)))
           case 0x05 => skipCString(); builder.append(readBsonBinary())
           case 0x06 => skipCString(); builder.append(readBsonUndefined())
           case 0x07 => skipCString(); builder.append(readBsonObjectId())

@@ -517,7 +517,7 @@ object Vector extends SeqFactory[Vector] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Vector[A]] =
+  implicit override def Builder[A]: Builder[A] with State[Vector[A]] =
     new VectorBuilder[A]
 
   private[collections] def traverse1[A](node1: Array[AnyRef])(f: A => Unit): Unit = {

@@ -40,8 +40,8 @@ object Container extends generic.CollectionFactory[Container] {
     else super.from(elems)
   }
 
-  implicit override def Builder[A](): Builder[A] with State[Container[A]] =
-    immutable.List.Builder[A]()
+  implicit override def Builder[A]: Builder[A] with State[Container[A]] =
+    immutable.List.Builder[A]
 
   override def toString: String = "Container"
 }
