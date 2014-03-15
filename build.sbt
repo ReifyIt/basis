@@ -1,26 +1,17 @@
-def scalatestVer(scalaVersion: String): String = scalaVersion match {
-  case "2.11.0-M8" => "2.1.0-RC2"
-  case "2.11.0-M7" => "2.0.1-SNAP4"
-  case "2.10.3"    => "2.0"
-}
-
 lazy val quasiSettings: Seq[Setting[_]] = moduleSettings :+ {
   libraryDependencies <++= (scalaVersion)(_ match {
-    case "2.10.3" => List("org.scalamacros" % s"quasiquotes_2.10.3" % "2.0.0-M3", "org.scalamacros" % s"paradise_2.10.3" % "2.0.0-M3" % "plugin")
+    case "2.10.3" => List("org.scalamacros" % "quasiquotes_2.10.3" % "2.0.0-M3", "org.scalamacros" % "paradise_2.10.3" % "2.0.0-M3" % "plugin")
     case _        => Nil
   })
 }
 
-scalaVersion in Global := "2.11.0-M7"
-
-// crossScalaVersions in Global := Seq("2.10.3", "2.11.0-M7", "2.11.0-M8")
-crossScalaVersions in Global := Seq("2.10.3", "2.11.0-M7")
+scalaVersion in Global := "2.10.3"
 
 scalacOptions in Global ++= Seq("-language:experimental.macros", "-Yno-predef")
 
 retrieveManaged := true
 
-lazy val subprojects = List(collections, data, form, math, stat, text, util)
+lazy val subprojects = List(`basis-collections`, `basis-data`, `basis-form`, `basis-math`, `basis-stat`, `basis-text`, `basis-util`)
 
 lazy val basis = (
   project in file(".")
@@ -29,17 +20,19 @@ lazy val basis = (
     aggregate (subprojects map (x => x: ProjectReference): _*)
 )
 
-lazy val math = project settings (moduleSettings: _*)
+lazy val `basis-collections` = project in file("collections") settings (quasiSettings: _*) dependsOn `basis-util`
 
-lazy val util = project settings (quasiSettings: _*)
+lazy val `basis-data` = project in file("data") settings (quasiSettings: _*) dependsOn (`basis-collections`, `basis-text`, `basis-util`)
 
-lazy val collections = project settings (quasiSettings: _*) dependsOn util
+lazy val `basis-form` = project in file("form") settings (quasiSettings: _*) dependsOn (`basis-collections`, `basis-data`, `basis-text`, `basis-util`)
 
-lazy val form = project settings (quasiSettings: _*) dependsOn (collections, data, text, util)
+lazy val `basis-math` = project in file("math") settings (moduleSettings: _*)
 
-lazy val data = project settings (quasiSettings: _*) dependsOn (collections, text, util)
+lazy val `basis-stat` = project in file("stat") settings (moduleSettings: _*) dependsOn (`basis-collections`, `basis-util`)
 
-lazy val stat, text = project settings (moduleSettings: _*) dependsOn (collections, util)
+lazy val `basis-text` = project in file("text") settings (moduleSettings: _*) dependsOn (`basis-collections`, `basis-util`)
+
+lazy val `basis-util` = project in file("util") settings (quasiSettings: _*)
 
 lazy val packageSettings = (
      Defaults.defaultSettings
@@ -62,7 +55,7 @@ lazy val compileSettings = Seq(
   scalacOptions in Compile ++= Seq("-optimise", "-Xno-forwarders", "-Ywarn-all"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    "org.scalatest" %% "scalatest" % scalatestVer(scalaVersion.value) % "test"
+    "org.scalatest" %% "scalatest" % "2.1.0" % "test"
   )
 )
 
@@ -72,10 +65,6 @@ lazy val docSettings = Seq(
     val tagOrBranch = if (version.value.endsWith("-SNAPSHOT")) "master" else "v" + version.value
     val docSourceUrl = "https://github.com/reifyit/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
     Seq("-groups",
-        "-implicits",
-        "-implicits-hide:basis.util.ArrowOps,basis.util.MaybeOps,.",
-        "-implicits-show-all",
-        "-diagrams",
         "-sourcepath", (baseDirectory in LocalProject("basis")).value.getAbsolutePath,
         "-doc-source-url", docSourceUrl)
   })
