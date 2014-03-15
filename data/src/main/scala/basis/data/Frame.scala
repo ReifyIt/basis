@@ -23,6 +23,7 @@ object Frame {
   implicit lazy val Int64: Frame[Long]     = new Int64
   implicit lazy val Float32: Frame[Float]  = new Float32
   implicit lazy val Float64: Frame[Double] = new Float64
+  implicit lazy val Bool: Frame[Boolean]   = new Bool
 
   implicit lazy val CString: Frame[String] = new CString
 
@@ -60,6 +61,12 @@ object Frame {
     override def read(data: Reader): Double               = data.readDouble()
     override def write(data: Writer, value: Double): Unit = data.writeDouble(value)
     override def toString: String                         = "Float64"
+  }
+
+  private final class Bool extends Frame[Boolean] {
+    override def read(data: Reader): Boolean               = data.readByte() == 0
+    override def write(data: Writer, value: Boolean): Unit = data.writeByte(if (value) 0 else -1)
+    override def toString: String                          = "Bool"
   }
 
   private final class CString extends Frame[String] {
