@@ -8,44 +8,19 @@ package basis.collections
 package sequential
 
 final class NonStrictContainerOps[+A](val __ : Container[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B]): Container[B] =
-    new NonStrictContainerOps.Collect(__, q)
-
-  def map[B](f: A => B): Container[B] =
-    new NonStrictContainerOps.Map(__, f)
-
-  def flatMap[B](f: A => Container[B]): Container[B] =
-    new NonStrictContainerOps.FlatMap(__, f)
-
-  def filter(p: A => Boolean): Container[A] =
-    new NonStrictContainerOps.Filter(__, p)
-
-  def withFilter(p: A => Boolean): Container[A] =
-    new NonStrictContainerOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean): Container[A] =
-    new NonStrictContainerOps.DropWhile(__, p)
-
-  def takeWhile(p: A => Boolean): Container[A] =
-    new NonStrictContainerOps.TakeWhile(__, p)
-
-  def span(p: A => Boolean): (Container[A], Container[A]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): Container[A] =
-    new NonStrictContainerOps.Drop(__, lower)
-
-  def take(upper: Int): Container[A] =
-    new NonStrictContainerOps.Take(__, upper)
-
-  def slice(lower: Int, upper: Int): Container[A] =
-    new NonStrictContainerOps.Slice(__, lower, upper)
-
-  def zip[B](those: Container[B]): Container[(A, B)] =
-    new NonStrictContainerOps.Zip(__, those)
-
-  def ++ [B >: A](those: Container[B]): Container[B] =
-    new NonStrictContainerOps.++(__, those)
+  def ++ [B >: A](those: Container[B]): Container[B]      = new NonStrictContainerOps.++(__, those)
+  def collect[B](q: PartialFunction[A, B]): Container[B]  = new NonStrictContainerOps.Collect(__, q)
+  def drop(lower: Int): Container[A]                      = new NonStrictContainerOps.Drop(__, lower)
+  def dropWhile(p: A => Boolean): Container[A]            = new NonStrictContainerOps.DropWhile(__, p)
+  def filter(p: A => Boolean): Container[A]               = new NonStrictContainerOps.Filter(__, p)
+  def flatMap[B](f: A => Container[B]): Container[B]      = new NonStrictContainerOps.FlatMap(__, f)
+  def map[B](f: A => B): Container[B]                     = new NonStrictContainerOps.Map(__, f)
+  def slice(lower: Int, upper: Int): Container[A]         = new NonStrictContainerOps.Slice(__, lower, upper)
+  def span(p: A => Boolean): (Container[A], Container[A]) = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): Container[A]                      = new NonStrictContainerOps.Take(__, upper)
+  def takeWhile(p: A => Boolean): Container[A]            = new NonStrictContainerOps.TakeWhile(__, p)
+  def withFilter(p: A => Boolean): Container[A]           = new NonStrictContainerOps.Filter(__, p)
+  def zip[B](those: Container[B]): Container[(A, B)]      = new NonStrictContainerOps.Zip(__, those)
 }
 
 private[sequential] object NonStrictContainerOps {

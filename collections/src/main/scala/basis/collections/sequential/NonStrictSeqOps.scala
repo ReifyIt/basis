@@ -8,44 +8,19 @@ package basis.collections
 package sequential
 
 final class NonStrictSeqOps[+A](val __ : Seq[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B]): Seq[B] =
-    new NonStrictSeqOps.Collect(__, q)
-
-  def map[B](f: A => B): Seq[B] =
-    new NonStrictSeqOps.Map(__, f)
-
-  def flatMap[B](f: A => Seq[B]): Seq[B] =
-    new NonStrictSeqOps.FlatMap(__, f)
-
-  def filter(p: A => Boolean): Seq[A] =
-    new NonStrictSeqOps.Filter(__, p)
-
-  def withFilter(p: A => Boolean): Seq[A] =
-    new NonStrictSeqOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean): Seq[A] =
-    new NonStrictSeqOps.DropWhile(__, p)
-
-  def takeWhile(p: A => Boolean): Seq[A] =
-    new NonStrictSeqOps.TakeWhile(__, p)
-
-  def span(p: A => Boolean): (Seq[A], Seq[A]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): Seq[A] =
-    new NonStrictSeqOps.Drop(__, lower)
-
-  def take(upper: Int): Seq[A] =
-    new NonStrictSeqOps.Take(__, upper)
-
-  def slice(lower: Int, upper: Int): Seq[A] =
-    new NonStrictSeqOps.Slice(__, lower, upper)
-
-  def zip[B](those: Seq[B]): Seq[(A, B)] =
-    new NonStrictSeqOps.Zip(__, those)
-
-  def ++ [B >: A](those: Seq[B]): Seq[B] =
-    new NonStrictSeqOps.++(__, those)
+  def ++ [B >: A](those: Seq[B]): Seq[B]           = new NonStrictSeqOps.++(__, those)
+  def collect[B](q: PartialFunction[A, B]): Seq[B] = new NonStrictSeqOps.Collect(__, q)
+  def drop(lower: Int): Seq[A]                     = new NonStrictSeqOps.Drop(__, lower)
+  def dropWhile(p: A => Boolean): Seq[A]           = new NonStrictSeqOps.DropWhile(__, p)
+  def filter(p: A => Boolean): Seq[A]              = new NonStrictSeqOps.Filter(__, p)
+  def flatMap[B](f: A => Seq[B]): Seq[B]           = new NonStrictSeqOps.FlatMap(__, f)
+  def map[B](f: A => B): Seq[B]                    = new NonStrictSeqOps.Map(__, f)
+  def slice(lower: Int, upper: Int): Seq[A]        = new NonStrictSeqOps.Slice(__, lower, upper)
+  def span(p: A => Boolean): (Seq[A], Seq[A])      = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): Seq[A]                     = new NonStrictSeqOps.Take(__, upper)
+  def takeWhile(p: A => Boolean): Seq[A]           = new NonStrictSeqOps.TakeWhile(__, p)
+  def withFilter(p: A => Boolean): Seq[A]          = new NonStrictSeqOps.Filter(__, p)
+  def zip[B](those: Seq[B]): Seq[(A, B)]           = new NonStrictSeqOps.Zip(__, those)
 }
 
 private[sequential] object NonStrictSeqOps {

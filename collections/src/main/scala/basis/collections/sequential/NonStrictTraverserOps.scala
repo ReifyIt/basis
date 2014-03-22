@@ -10,41 +10,18 @@ package sequential
 import basis.util._
 
 final class NonStrictTraverserOps[+A](val __ : Traverser[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B]): Traverser[B] =
-    new NonStrictTraverserOps.Collect(__, q)
-
-  def map[B](f: A => B): Traverser[B] =
-    new NonStrictTraverserOps.Map(__, f)
-
-  def flatMap[B](f: A => Traverser[B]): Traverser[B] =
-    new NonStrictTraverserOps.FlatMap(__, f)
-
-  def filter(p: A => Boolean): Traverser[A] =
-    new NonStrictTraverserOps.Filter(__, p)
-
-  def withFilter(p: A => Boolean): Traverser[A] =
-    new NonStrictTraverserOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean): Traverser[A] =
-    new NonStrictTraverserOps.DropWhile(__, p)
-
-  def takeWhile(p: A => Boolean): Traverser[A] =
-    new NonStrictTraverserOps.TakeWhile(__, p)
-
-  def span(p: A => Boolean): (Traverser[A], Traverser[A]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): Traverser[A] =
-    new NonStrictTraverserOps.Drop(__, lower)
-
-  def take(upper: Int): Traverser[A] =
-    new NonStrictTraverserOps.Take(__, upper)
-
-  def slice(lower: Int, upper: Int): Traverser[A] =
-    new NonStrictTraverserOps.Slice(__, lower, upper)
-
-  def ++ [B >: A](those: Traverser[B]): Traverser[B] =
-    new NonStrictTraverserOps.++(__, those)
+  def ++ [B >: A](those: Traverser[B]): Traverser[B]      = new NonStrictTraverserOps.++(__, those)
+  def collect[B](q: PartialFunction[A, B]): Traverser[B]  = new NonStrictTraverserOps.Collect(__, q)
+  def drop(lower: Int): Traverser[A]                      = new NonStrictTraverserOps.Drop(__, lower)
+  def dropWhile(p: A => Boolean): Traverser[A]            = new NonStrictTraverserOps.DropWhile(__, p)
+  def filter(p: A => Boolean): Traverser[A]               = new NonStrictTraverserOps.Filter(__, p)
+  def flatMap[B](f: A => Traverser[B]): Traverser[B]      = new NonStrictTraverserOps.FlatMap(__, f)
+  def map[B](f: A => B): Traverser[B]                     = new NonStrictTraverserOps.Map(__, f)
+  def slice(lower: Int, upper: Int): Traverser[A]         = new NonStrictTraverserOps.Slice(__, lower, upper)
+  def span(p: A => Boolean): (Traverser[A], Traverser[A]) = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): Traverser[A]                      = new NonStrictTraverserOps.Take(__, upper)
+  def takeWhile(p: A => Boolean): Traverser[A]            = new NonStrictTraverserOps.TakeWhile(__, p)
+  def withFilter(p: A => Boolean): Traverser[A]           = new NonStrictTraverserOps.Filter(__, p)
 }
 
 private[sequential] object NonStrictTraverserOps {

@@ -7,115 +7,31 @@
 package basis.collections
 package sequential
 
+import scala.reflect.macros._
+
 final class StrictLinearSeqOps[+A, -Family](val __ : LinearSeq[A]) extends AnyVal {
   def collect[B](q: PartialFunction[A, B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictLinearSeqMacros.collect[A, B]
-  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State                    = macro StrictLinearSeqMacros.map[A, B]
-  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State     = macro StrictLinearSeqMacros.flatMap[A, B]
-  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State              = macro StrictLinearSeqMacros.filter[A]
-  def withFilter(p: A => Boolean): LinearSeq[A]                                                           = new NonStrictLinearSeqOps.Filter(__, p)
-  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictLinearSeqMacros.dropWhile[A]
-  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictLinearSeqMacros.takeWhile[A]
   def drop(lower: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictLinearSeqMacros.drop[A]
-  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictLinearSeqMacros.take[A]
+  def dropWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictLinearSeqMacros.dropWhile[A]
+  def filter(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State              = macro StrictLinearSeqMacros.filter[A]
+  def flatMap[B](f: A => Traverser[B])(implicit builder: Builder[B] with From[Family]): builder.State     = macro StrictLinearSeqMacros.flatMap[A, B]
+  def map[B](f: A => B)(implicit builder: Builder[B] with From[Family]): builder.State                    = macro StrictLinearSeqMacros.map[A, B]
   def slice(lower: Int, upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State        = macro StrictLinearSeqMacros.slice[A]
+  def take(upper: Int)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictLinearSeqMacros.take[A]
+  def takeWhile(p: A => Boolean)(implicit builder: Builder[A] with From[Family]): builder.State           = macro StrictLinearSeqMacros.takeWhile[A]
+  def withFilter(p: A => Boolean): LinearSeq[A]                                                           = new NonStrictLinearSeqOps.Filter(__, p)
   def zip[B](those: LinearSeq[B])(implicit builder: Builder[(A, B)] with From[Family]): builder.State     = macro StrictLinearSeqMacros.zip[A, B]
-  def :+ (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                         = macro StrictTraverserMacros.:+[A]
-  def +: (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                         = macro StrictTraverserMacros.+:[A]
-  def ++ [B >: A](those: LinearSeq[B])(implicit builder: Builder[B] with From[Family]): builder.State     = macro StrictTraverserMacros.++[B]
 
   def span(p: A => Boolean)(implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family]): (builder1.State, builder2.State) = macro StrictLinearSeqMacros.span[A]
+
+  def ++ [B >: A](those: LinearSeq[B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictLinearSeqMacros.++[B]
+  def +: (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictLinearSeqMacros.+:[A]
+  def :+ (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                     = macro StrictLinearSeqMacros.:+[A]
 }
 
-private[sequential] object StrictLinearSeqMacros {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
+private[sequential] class StrictLinearSeqMacros(override val c: blackbox.Context { type PrefixType <: StrictLinearSeqOps[_, _] }) extends LinearSeqMacros(c) {
+  import c.{ Expr, prefix }
+  import c.universe._
 
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[LinearSeq[A]] = {
-    import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    val Apply(_, these :: Nil) = prefix.tree
-    implicit val LinkATag =
-      WeakTypeTag[LinearSeq[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.LinearSeq").toType,
-          weakTypeOf[A] :: Nil))
-    Expr[LinearSeq[A]](typeCheck(these, weakTypeOf[LinearSeq[A]]))
-  }
-
-  def collect[A : c.WeakTypeTag, B : c.WeakTypeTag]
-      (c: Context)
-      (q: c.Expr[PartialFunction[A, B]])
-      (builder: c.Expr[Builder[B]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).collect[A, B](unApply[A](c))(q)(builder)
-
-  def map[A : c.WeakTypeTag, B : c.WeakTypeTag]
-      (c: Context)
-      (f: c.Expr[A => B])
-      (builder: c.Expr[Builder[B]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).map[A, B](unApply[A](c))(f)(builder)
-
-  def flatMap[A : c.WeakTypeTag, B : c.WeakTypeTag]
-      (c: Context)
-      (f: c.Expr[A => Traverser[B]])
-      (builder: c.Expr[Builder[B]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).flatMap[A, B](unApply[A](c))(f)(builder)
-
-  def filter[A : c.WeakTypeTag]
-      (c: Context)
-      (p: c.Expr[A => Boolean])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).filter[A](unApply[A](c))(p)(builder)
-
-  def dropWhile[A : c.WeakTypeTag]
-      (c: Context)
-      (p: c.Expr[A => Boolean])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).dropWhile[A](unApply[A](c))(p)(builder)
-
-  def takeWhile[A : c.WeakTypeTag]
-      (c: Context)
-      (p: c.Expr[A => Boolean])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).takeWhile[A](unApply[A](c))(p)(builder)
-
-  def span[A : c.WeakTypeTag]
-      (c: Context)
-      (p: c.Expr[A => Boolean])
-      (builder1: c.Expr[Builder[A]], builder2: c.Expr[Builder[A]])
-    : c.Expr[(builder1.value.State, builder2.value.State)] =
-    new LinearSeqMacros[c.type](c).span[A](unApply[A](c))(p)(builder1, builder2)
-
-  def drop[A : c.WeakTypeTag]
-      (c: Context)
-      (lower: c.Expr[Int])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).drop[A](unApply[A](c))(lower)(builder)
-
-  def take[A : c.WeakTypeTag]
-      (c: Context)
-      (upper: c.Expr[Int])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).take[A](unApply[A](c))(upper)(builder)
-
-  def slice[A : c.WeakTypeTag]
-      (c: Context)
-      (lower: c.Expr[Int], upper: c.Expr[Int])
-      (builder: c.Expr[Builder[A]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).slice[A](unApply[A](c))(lower, upper)(builder)
-
-  def zip[A : c.WeakTypeTag, B : c.WeakTypeTag]
-      (c: Context)
-      (those: c.Expr[LinearSeq[B]])
-      (builder: c.Expr[Builder[(A, B)]])
-    : c.Expr[builder.value.State] =
-    new LinearSeqMacros[c.type](c).zip[A, B](unApply[A](c), those)(builder)
+  override def these: Expr[LinearSeq[_]] = Expr[LinearSeq[Any]](q"$prefix.__")
 }

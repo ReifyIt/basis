@@ -8,15 +8,14 @@ package basis.collections
 package sequential
 
 import basis.util._
-import scala.collection.immutable.{ ::, Nil }
-import scala.reflect.macros.Context
+import scala.reflect.macros._
 
-private[sequential] class ArrayMacros[C <: Context](val context: C) {
-  val universe: context.universe.type = context.universe
+private[sequential] abstract class ArrayMacros(val c: blackbox.Context) {
+  import c.{ Expr, fresh, mirror, WeakTypeTag, literalUnit }
+  import c.universe.{ Traverser => _, _ }
+  import c.universe.internal._
 
-  import context.{ Expr, fresh, mirror, WeakTypeTag, literalUnit }
-  import universe.{ Traverser => _, _ }
-  import internal._
+  def these: Expr[Array[_]]
 
   // This logic is to make it easy to use common code across methods
   // which return Option/Maybe and methods which return the underlying
@@ -26,9 +25,9 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
   private def IdExpr[A]: Expr[A] => Expr[A]  = IdExprVal.asInstanceOf[Expr[A] => Expr[A]]
   private def isIdExpr(x: AnyRef) = x eq IdExprVal
 
-  def isEmpty[A](these: Expr[Array[A]]) = Expr[Boolean](q"$these.length == 0")
+  def isEmpty[A] = Expr[Boolean](q"$these.length == 0")
 
-  private def foldCommon[A, B](xs: Expr[Array[A]])(start: Int, zero: Expr[B])(op: Expr[(B, A) => B]) = Expr[B](q"""{
+  private def foldCommon[A, B](xs: Expr[Array[_]])(start: Int, zero: Expr[B])(op: Expr[(B, A) => B]) = Expr[B](q"""{
     val len = $xs.length
     var i = $start
     var acc = $zero
@@ -40,32 +39,32 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
   }""")
 
   // Expr[B] => Expr[C], now we're metaprogramming!
-  private def reduceCommon[A, B, C](xs: Expr[Array[A]])(none: Expr[C], some: Expr[B] => Expr[C])(op: Expr[(B, A) => B]) = {
+  private def reduceCommon[A, B, C](xs: Expr[Array[_]])(none: Expr[C], some: Expr[B] => Expr[C])(op: Expr[(B, A) => B]) = {
     def fold: Expr[B] = foldCommon[A, B](xs)(1, Expr(q"$xs(0)"))(op)
     def result: Expr[C] = if (isIdExpr(some)) fold.asInstanceOf[Expr[C]] else some(fold)
 
     Expr[C](q"if ($xs.length == 0) $none else $result")
   }
 
-  def foreach[A: WeakTypeTag, U](xs: Expr[Array[A]])(f: Expr[A => U]) = Expr[Unit](q"""{
-    val len = $xs.length
+  def foreach[A: WeakTypeTag, U](f: Expr[A => U]) = Expr[Unit](q"""{
+    val len = $these.length
     var i = 0
     while (i < len) {
-      $f($xs(i))
+      $f($these(i))
       i += 1
     }
   }""")
 
-  def foldLeft[A: WeakTypeTag, B : WeakTypeTag](xs: Expr[Array[A]])(z: Expr[B])(op: Expr[(B, A) => B]) =
-    foldCommon[A, B](xs)(0, z)(op)
+  def foldLeft[A: WeakTypeTag, B : WeakTypeTag](z: Expr[B])(op: Expr[(B, A) => B]) =
+    foldCommon[A, B](these)(0, z)(op)
 
-  def reduceLeft[A, B >: A : WeakTypeTag](xs: Expr[Array[A]])(op: Expr[(B, A) => B]) =
-    reduceCommon[A, B, B](xs)(Expr[B](q"""throw new UnsupportedOperationException("empty reduce")"""), IdExpr[B])(op)
+  def reduceLeft[A, B >: A : WeakTypeTag](op: Expr[(B, A) => B]) =
+    reduceCommon[A, B, B](these)(Expr[B](q"""throw new UnsupportedOperationException("empty reduce")"""), IdExpr[B])(op)
 
-  def mayReduceLeft[A, B >: A : WeakTypeTag](xs: Expr[Array[A]])(op: Expr[(B, A) => B]) =
-    reduceCommon[A, B, Maybe[B]](xs)(Expr[Maybe[B]](q"basis.util.Trap"), (res: Expr[B]) => Expr[Maybe[B]](q"basis.util.Bind($res)"))(op)
+  def mayReduceLeft[A, B >: A : WeakTypeTag](op: Expr[(B, A) => B]) =
+    reduceCommon[A, B, Maybe[B]](these)(Expr[Maybe[B]](q"basis.util.Trap"), (res: Expr[B]) => Expr[Maybe[B]](q"basis.util.Bind($res)"))(op)
 
-  def foldRight[A, B : WeakTypeTag](these: Expr[Array[A]])(z: Expr[B])(op: Expr[(A, B) => B]) = Expr[B](q"""{
+  def foldRight[A, B : WeakTypeTag](z: Expr[B])(op: Expr[(A, B) => B]) = Expr[B](q"""{
     var i = $these.length - 1
     var acc = $z
     while (i >= 0) {
@@ -75,10 +74,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
     acc
   }""")
 
-  def reduceRight[A, B >: A : WeakTypeTag]
-      (these: Expr[Array[A]])
-      (op: Expr[(A, B) => B])
-    : Expr[B] = {
+  def reduceRight[A, B >: A : WeakTypeTag](op: Expr[(A, B) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val r    = fresh("r$"): TermName
@@ -108,10 +104,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def mayReduceRight[A, B >: A : WeakTypeTag]
-      (these: Expr[Array[A]])
-      (op: Expr[(A, B) => B])
-    : Expr[Maybe[B]] = {
+  def mayReduceRight[A, B >: A : WeakTypeTag](op: Expr[(A, B) => B]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val r    = fresh("r$"): TermName
@@ -138,7 +131,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
             Apply(Select(BasisUtil, "Bind": TermName), Ident(r) :: Nil)))))
   }
 
-  def find[A: WeakTypeTag](these: Expr[Array[A]])(p: Expr[A => Boolean]) = Expr[Maybe[A]](q"""{
+  def find[A: WeakTypeTag](p: Expr[A => Boolean]) = Expr[Maybe[A]](q"""{
     val xs = $these
     var i = 0
     val n = xs.length
@@ -150,31 +143,28 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
     loop(0)
   }""")
 
-  def forall[A: WeakTypeTag](these: Expr[Array[A]])(p: Expr[A => Boolean]) = Expr[Boolean](q"""{
+  def forall[A: WeakTypeTag](p: Expr[A => Boolean]) = Expr[Boolean](q"""{
     val xs = $these
     val n = xs.length
     def loop(i: Int): Boolean = (i >= n) || ($p(xs(i)) && loop(i + 1))
     loop(0)
   }""")
 
-  def exists[A](these: Expr[Array[A]])(p: Expr[A => Boolean]) = Expr[Boolean](q"""{
+  def exists[A](p: Expr[A => Boolean]) = Expr[Boolean](q"""{
     val xs = $these
     val n = xs.length
     def loop(i: Int): Boolean = (i < n) && ($p(xs(i)) || loop(i + 1))
     loop(0)
   }""")
 
-  def count[A](these: Expr[Array[A]])(p: Expr[A => Boolean]) = Expr[Int](q"""{
+  def count[A](p: Expr[A => Boolean]) = Expr[Int](q"""{
     val xs = $these
     val n = xs.length
     def loop(i: Int, acc: Int): Boolean = if (i >= n) acc else loop(i + 1, acc + ( if ($p(xs(i))) 1 else 0 ))
     loop(0, 0)
   }""")
 
-  def choose[A, B : WeakTypeTag]
-      (these: Expr[Array[A]])
-      (q: Expr[PartialFunction[A, B]])
-    : Expr[Maybe[B]] = {
+  def choose[A, B : WeakTypeTag](q: Expr[PartialFunction[A, B]]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -211,11 +201,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def collect[A, B]
-      (these: Expr[Array[A]])
-      (q: Expr[PartialFunction[A, B]])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def collect[A, B](q: Expr[PartialFunction[A, B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -251,11 +237,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def map[A, B]
-      (these: Expr[Array[A]])
-      (f: Expr[A => B])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def map[A, B](f: Expr[A => B])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -283,11 +265,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def flatMap[A, B]
-      (these: Expr[Array[A]])
-      (f: Expr[A => Traverser[B]])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def flatMap[A, B](f: Expr[A => Traverser[B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -314,11 +292,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def filter[A]
-      (these: Expr[Array[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def filter[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -348,11 +322,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def dropWhile[A]
-      (these: Expr[Array[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def dropWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs    = fresh("xs$"): TermName
     val i     = fresh("i$"): TermName
     val n     = fresh("n$"): TermName
@@ -390,11 +360,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def takeWhile[A]
-      (these: Expr[Array[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def takeWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -425,11 +391,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def span[A]
-      (these: Expr[Array[A]])
-      (p: Expr[A => Boolean])
-      (builder1: Expr[Builder[A]], builder2: Expr[Builder[A]])
-    : Expr[(builder1.value.State, builder2.value.State)] = {
+  def span[A](p: Expr[A => Boolean])(builder1: Expr[Builder[A]], builder2: Expr[Builder[A]]): Expr[(builder1.value.State, builder2.value.State)] = {
     val xs    = fresh("xs$"): TermName
     val i     = fresh("i$"): TermName
     val n     = fresh("n$"): TermName
@@ -473,11 +435,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
           Select(Ident(a), "state": TermName) :: Select(Ident(b), "state": TermName) :: Nil)))
   }
 
-  def drop[A]
-      (these: Expr[Array[A]])
-      (lower: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def drop[A](lower: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val n    = fresh("n$"): TermName
     val i    = fresh("i$"): TermName
@@ -506,11 +464,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def take[A]
-      (these: Expr[Array[A]])
-      (upper: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def take[A](upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -536,11 +490,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def slice[A]
-      (these: Expr[Array[A]])
-      (lower: Expr[Int], upper: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def slice[A](lower: Expr[Int], upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val n    = fresh("n$"): TermName
     val i    = fresh("i$"): TermName
@@ -570,10 +520,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def reverse[A]
-      (these: Expr[Array[A]])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def reverse[A](builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val b    = fresh("b$"): TermName
@@ -598,10 +545,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def zip[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Array[A]], those: Expr[Array[B]])
-      (builder: Expr[Builder[(A, B)]])
-    : Expr[builder.value.State] = {
+  def zip[A : WeakTypeTag, B : WeakTypeTag](those: Expr[Array[B]])(builder: Expr[Builder[(A, B)]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val ys   = fresh("ys$"): TermName
     val i    = fresh("i$"): TermName
@@ -633,10 +577,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def :+ [A]
-      (these: Expr[Array[A]], elem: Expr[A])
-      (builder: Expr[ArrayBuilder[A]])
-    : Expr[builder.value.State] = {
+  def :+ [A](elem: Expr[A])(builder: Expr[ArrayBuilder[A]]): Expr[builder.value.State] = {
     val xs = fresh("xs$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
@@ -660,10 +601,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
           "state": TermName)))
   }
 
-  def +: [A]
-      (elem: Expr[A], these: Expr[Array[A]])
-      (builder: Expr[ArrayBuilder[A]])
-    : Expr[builder.value.State] = {
+  def +: [A](elem: Expr[A])(builder: Expr[ArrayBuilder[A]]): Expr[builder.value.State] = {
     val xs = fresh("xs$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
@@ -687,10 +625,7 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
           "state": TermName)))
   }
 
-  def ++ [A]
-      (these: Expr[Array[A]], those: Expr[Array[A]])
-      (builder: Expr[ArrayBuilder[A]])
-    : Expr[builder.value.State] = {
+  def ++ [A](those: Expr[Array[A]])(builder: Expr[ArrayBuilder[A]]): Expr[builder.value.State] = {
     val xs = fresh("xs$"): TermName
     val ys = fresh("ys$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
@@ -732,6 +667,12 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
     WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
 
+  implicit protected def ArrayTag[A](implicit A: WeakTypeTag[A]): WeakTypeTag[Array[A]] =
+    WeakTypeTag(appliedType(definitions.ArrayClass.toTypeConstructor, A.tpe :: Nil))
+
+  implicit protected def IteratorTag[A](implicit A: WeakTypeTag[A]): WeakTypeTag[Iterator[A]] =
+    WeakTypeTag(appliedType(mirror.staticClass(s"basis.collections.Iterator").toTypeConstructor, A.tpe :: Nil))
+
   implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {
     val BasisUtil = mirror.staticPackage("basis.util").moduleClass
     val MaybeTpc = BasisUtil.typeSignature.member("Maybe": TypeName).asType.toType
@@ -739,9 +680,14 @@ private[sequential] class ArrayMacros[C <: Context](val context: C) {
     WeakTypeTag[Maybe[A]](MaybeATpe)
   }
 
-  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = applied[Tuple2, A, B](context)
+  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
+    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
+    val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
+    WeakTypeTag[(A, B)](Tuple2ABTpe)
+  }
 
-  implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] = applied[UnsupportedOperationException](context)
+  implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] =
+    WeakTypeTag(mirror.staticClass("java.lang.UnsupportedOperationException").toType)
 
   private def BasisUtil: Tree =
     Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "util": TermName)

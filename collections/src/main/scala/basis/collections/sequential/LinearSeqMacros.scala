@@ -8,20 +8,16 @@ package basis.collections
 package sequential
 
 import basis.util._
-import scala.collection.immutable.{ ::, Nil }
-import scala.reflect.macros.Context
+import scala.reflect.macros._
 
-private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
-  import context.{ Expr, fresh, mirror, WeakTypeTag }
-  import universe.{ Traverser => _, _ }
-  import internal._
+private[sequential] abstract class LinearSeqMacros(override val c: blackbox.Context) extends TraverserMacros {
+  import c.{ Expr, fresh, mirror, WeakTypeTag }
+  import c.universe.{ Traverser => _, _ }
+  import c.universe.internal._
 
-  val universe: context.universe.type = context.universe
+  override def these: Expr[LinearSeq[_]]
 
-  def foreach[A : WeakTypeTag, U]
-      (these: Expr[LinearSeq[A]])
-      (f: Expr[A => U])
-    : Expr[Unit] = {
+  def foreach[A : WeakTypeTag, U](f: Expr[A => U]): Expr[Unit] = {
     val xs   = fresh("xs$"): TermName
     val loop = fresh("loop$"): TermName
     Expr[Unit](
@@ -37,11 +33,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
             EmptyTree))))
   }
 
-  def foldLeft[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (z: Expr[B])
-      (op: Expr[(B, A) => B])
-    : Expr[B] = {
+  def foldLeft[A : WeakTypeTag, B : WeakTypeTag](z: Expr[B])(op: Expr[(B, A) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -60,10 +52,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def reduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (op: Expr[(B, A) => B])
-    : Expr[B] = {
+  def reduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -90,10 +79,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def mayReduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (op: Expr[(B, A) => B])
-    : Expr[Maybe[B]] = {
+  def mayReduceLeft[A : WeakTypeTag, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -117,10 +103,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
             Apply(Select(BasisUtil, "Bind": TermName), Ident(r) :: Nil)))))
   }
 
-  def find[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Maybe[A]] = {
+  def find[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Maybe[A]] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -145,10 +128,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def forall[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Boolean] = {
+  def forall[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Boolean] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -169,10 +149,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def exists[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Boolean] = {
+  def exists[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Boolean] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -193,10 +170,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def count[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Int] = {
+  def count[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Int] = {
     val xs   = fresh("xs$"): TermName
     val t    = fresh("t$"): TermName
     val loop = fresh("loop$"): TermName
@@ -218,10 +192,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Ident(t)))
   }
 
-  def choose[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (q: Expr[PartialFunction[A, B]])
-    : Expr[Maybe[B]] = {
+  def choose[A : WeakTypeTag, B : WeakTypeTag](q: Expr[PartialFunction[A, B]]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val f    = fresh("q$"): TermName
@@ -254,11 +225,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def collect[A : WeakTypeTag, B]
-      (these: Expr[LinearSeq[A]])
-      (q: Expr[PartialFunction[A, B]])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def collect[A : WeakTypeTag, B](q: Expr[PartialFunction[A, B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val f    = fresh("q$"): TermName
@@ -290,11 +257,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def map[A : WeakTypeTag, B]
-      (these: Expr[LinearSeq[A]])
-      (f: Expr[A => B])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def map[A : WeakTypeTag, B](f: Expr[A => B])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
@@ -317,11 +280,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def flatMap[A : WeakTypeTag, B]
-      (these: Expr[LinearSeq[A]])
-      (f: Expr[A => Traverser[B]])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def flatMap[A : WeakTypeTag, B](f: Expr[A => Traverser[B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
@@ -344,11 +303,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def filter[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def filter[A : WeakTypeTag](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
@@ -374,11 +329,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def dropWhile[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def dropWhile[A : WeakTypeTag](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs    = fresh("xs$"): TermName
     val b     = fresh("b$"): TermName
     val loop1 = fresh("loop$"): TermName
@@ -412,11 +363,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def takeWhile[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def takeWhile[A : WeakTypeTag](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
@@ -443,11 +390,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def span[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (p: Expr[A => Boolean])
-      (builder1: Expr[Builder[A]], builder2: Expr[Builder[A]])
-    : Expr[(builder1.value.State, builder2.value.State)] = {
+  def span[A : WeakTypeTag](p: Expr[A => Boolean])(builder1: Expr[Builder[A]], builder2: Expr[Builder[A]]): Expr[(builder1.value.State, builder2.value.State)] = {
     val xs    = fresh("xs$"): TermName
     val a     = fresh("b$"): TermName
     val b     = fresh("b$"): TermName
@@ -487,11 +430,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
           Select(Ident(a), "state": TermName) :: Select(Ident(b), "state": TermName) :: Nil)))
   }
 
-  def drop[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (lower: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def drop[A : WeakTypeTag](lower: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs    = fresh("xs$"): TermName
     val i     = fresh("i$"): TermName
     val n     = fresh("n$"): TermName
@@ -528,11 +467,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def take[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (upper: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def take[A : WeakTypeTag](upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -561,11 +496,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def slice[A : WeakTypeTag]
-      (these: Expr[LinearSeq[A]])
-      (lower: Expr[Int], upper: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def slice[A : WeakTypeTag](lower: Expr[Int], upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs    = fresh("xs$"): TermName
     val i     = fresh("i$"): TermName
     val n     = fresh("n$"): TermName
@@ -607,10 +538,7 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def zip[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[LinearSeq[A]], those: Expr[LinearSeq[B]])
-      (builder: Expr[Builder[(A, B)]])
-    : Expr[builder.value.State] = {
+  def zip[A : WeakTypeTag, B : WeakTypeTag](those: Expr[LinearSeq[B]])(builder: Expr[Builder[(A, B)]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val ys   = fresh("ys$"): TermName
     val b    = fresh("b$"): TermName
@@ -642,13 +570,13 @@ private[sequential] class LinearSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  protected def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
+  protected override def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
     WeakTypeTag[builder.value.type](builder.tree.symbol match {
       case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
       case _ => builder.actualType
     })
 
-  protected def BuilderStateTag
+  protected override def BuilderStateTag
       (builder: Expr[Builder[_]])
       (implicit BuilderTypeTag: WeakTypeTag[builder.value.type])
     : WeakTypeTag[builder.value.State] = {

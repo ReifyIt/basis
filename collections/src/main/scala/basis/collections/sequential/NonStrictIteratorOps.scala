@@ -10,44 +10,19 @@ package sequential
 import basis.util._
 
 final class NonStrictIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B]): Iterator[B] =
-    new NonStrictIteratorOps.Collect(__.dup, q)
-
-  def map[B](f: A => B): Iterator[B] =
-    new NonStrictIteratorOps.Map(__.dup, f)
-
-  def flatMap[B](f: A => Iterator[B]): Iterator[B] =
-    new NonStrictIteratorOps.FlatMap(__.dup, f)
-
-  def filter(p: A => Boolean): Iterator[A] =
-    new NonStrictIteratorOps.Filter(__.dup, p)
-
-  def withFilter(p: A => Boolean): Iterator[A] =
-    new NonStrictIteratorOps.Filter(__.dup, p)
-
-  def dropWhile(p: A => Boolean): Iterator[A] =
-    new NonStrictIteratorOps.DropWhile(__.dup, p)
-
-  def takeWhile(p: A => Boolean): Iterator[A] =
-    new NonStrictIteratorOps.TakeWhile(__.dup, p)
-
-  def span(p: A => Boolean): (Iterator[A], Iterator[A]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): Iterator[A] =
-    new NonStrictIteratorOps.Drop(__.dup, lower)
-
-  def take(upper: Int): Iterator[A] =
-    new NonStrictIteratorOps.Take(__.dup, upper)
-
-  def slice(lower: Int, upper: Int): Iterator[A] =
-    new NonStrictIteratorOps.Slice(__.dup, lower, upper)
-
-  def zip[B](those: Iterator[B]): Iterator[(A, B)] =
-    new NonStrictIteratorOps.Zip(__.dup, those.dup)
-
-  def ++ [B >: A](those: Iterator[B]): Iterator[B] =
-    new NonStrictIteratorOps.++(__.dup, those.dup)
+  def ++ [B >: A](those: Iterator[B]): Iterator[B]      = new NonStrictIteratorOps.++(__.dup, those.dup)
+  def collect[B](q: PartialFunction[A, B]): Iterator[B] = new NonStrictIteratorOps.Collect(__.dup, q)
+  def drop(lower: Int): Iterator[A]                     = new NonStrictIteratorOps.Drop(__.dup, lower)
+  def dropWhile(p: A => Boolean): Iterator[A]           = new NonStrictIteratorOps.DropWhile(__.dup, p)
+  def filter(p: A => Boolean): Iterator[A]              = new NonStrictIteratorOps.Filter(__.dup, p)
+  def flatMap[B](f: A => Iterator[B]): Iterator[B]      = new NonStrictIteratorOps.FlatMap(__.dup, f)
+  def map[B](f: A => B): Iterator[B]                    = new NonStrictIteratorOps.Map(__.dup, f)
+  def slice(lower: Int, upper: Int): Iterator[A]        = new NonStrictIteratorOps.Slice(__.dup, lower, upper)
+  def span(p: A => Boolean): (Iterator[A], Iterator[A]) = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): Iterator[A]                     = new NonStrictIteratorOps.Take(__.dup, upper)
+  def takeWhile(p: A => Boolean): Iterator[A]           = new NonStrictIteratorOps.TakeWhile(__.dup, p)
+  def withFilter(p: A => Boolean): Iterator[A]          = new NonStrictIteratorOps.Filter(__.dup, p)
+  def zip[B](those: Iterator[B]): Iterator[(A, B)]      = new NonStrictIteratorOps.Zip(__.dup, those.dup)
 }
 
 private[sequential] object NonStrictIteratorOps {

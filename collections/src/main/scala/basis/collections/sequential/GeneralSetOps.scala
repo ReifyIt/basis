@@ -8,43 +8,29 @@ package basis.collections
 package sequential
 
 import basis.util._
+import scala.reflect.macros._
 
 final class GeneralSetOps[+A](val __ : Set[A]) extends AnyVal {
-  def foreach[U](f: A => U): Unit                      = macro GeneralContainerMacros.foreach[A, U]
-  def fold[B >: A](z: B)(op: (B, B) => B): B           = macro GeneralContainerMacros.foldLeft[A, B]
-  def reduce[B >: A](op: (B, B) => B): B               = macro GeneralContainerMacros.reduceLeft[A, B]
-  def mayReduce[B >: A](op: (B, B) => B): Maybe[B]     = macro GeneralContainerMacros.mayReduceLeft[A, B]
-  def foldLeft[B](z: B)(op: (B, A) => B): B            = macro GeneralContainerMacros.foldLeft[A, B]
-  def reduceLeft[B >: A](op: (B, A) => B): B           = macro GeneralContainerMacros.reduceLeft[A, B]
-  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] = macro GeneralContainerMacros.mayReduceLeft[A, B]
-  def find(p: A => Boolean): Maybe[A]                  = macro GeneralContainerMacros.find[A]
-  def forall(p: A => Boolean): Boolean                 = macro GeneralContainerMacros.forall[A]
-  def exists(p: A => Boolean): Boolean                 = macro GeneralContainerMacros.exists[A]
-  def count(p: A => Boolean): Int                      = macro GeneralContainerMacros.count[A]
-  def choose[B](q: PartialFunction[A, B]): Maybe[B]    = macro GeneralContainerMacros.choose[A, B]
-  def eagerly: StrictSetOps[A, Set[_]]                 = macro GeneralSetMacros.eagerly[A]
-  def lazily: NonStrictSetOps[A]                       = macro GeneralSetMacros.lazily[A]
+  def choose[B](q: PartialFunction[A, B]): Maybe[B]    = macro GeneralSetMacros.choose[A, B]
+  def count(p: A => Boolean): Int                      = macro GeneralSetMacros.count[A]
+  def exists(p: A => Boolean): Boolean                 = macro GeneralSetMacros.exists[A]
+  def find(p: A => Boolean): Maybe[A]                  = macro GeneralSetMacros.find[A]
+  def fold[B >: A](z: B)(op: (B, B) => B): B           = macro GeneralSetMacros.foldLeft[A, B]
+  def foldLeft[B](z: B)(op: (B, A) => B): B            = macro GeneralSetMacros.foldLeft[A, B]
+  def forall(p: A => Boolean): Boolean                 = macro GeneralSetMacros.forall[A]
+  def foreach[U](f: A => U): Unit                      = macro GeneralSetMacros.foreach[A, U]
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B]     = macro GeneralSetMacros.mayReduceLeft[A, B]
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] = macro GeneralSetMacros.mayReduceLeft[A, B]
+  def reduce[B >: A](op: (B, B) => B): B               = macro GeneralSetMacros.reduceLeft[A, B]
+  def reduceLeft[B >: A](op: (B, A) => B): B           = macro GeneralSetMacros.reduceLeft[A, B]
+
+//def eagerly: StrictSetOps[A, Set[_]]                 = macro GeneralSetMacros.eagerly[A]
+//def lazily: NonStrictSetOps[A]                       = macro GeneralSetMacros.lazily[A]
 }
 
-private[sequential] object GeneralSetMacros {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
+private[sequential] class GeneralSetMacros(override val c: blackbox.Context { type PrefixType <: GeneralSetOps[_] }) extends IteratorMacros(c) {
+  import c.{ Expr, prefix }
+  import c.universe._
 
-  private def unApply[A : c.WeakTypeTag](c: Context): c.Expr[Set[A]] = {
-    import c.{ Expr, mirror, prefix, typeCheck, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    val Apply(_, these :: Nil) = prefix.tree
-    implicit val SetATag =
-      WeakTypeTag[Set[A]](
-        appliedType(
-          mirror.staticClass("basis.collections.Set").toType,
-          weakTypeOf[A] :: Nil))
-    Expr[Set[A]](typeCheck(these, weakTypeOf[Set[A]]))
-  }
-
-  def eagerly[A : c.WeakTypeTag](c: Context): c.Expr[StrictSetOps[A, Set[_]]] =
-    Strict.SetToStrictOps[A](c)(unApply[A](c))
-
-  def lazily[A : c.WeakTypeTag](c: Context): c.Expr[NonStrictSetOps[A]] =
-    NonStrict.SetToNonStrictOps[A](c)(unApply[A](c))
+  override def these: Expr[Iterator[_]] = Expr[Iterator[Any]](q"$prefix.__.iterator")
 }

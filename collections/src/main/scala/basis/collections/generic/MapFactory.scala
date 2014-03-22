@@ -7,13 +7,12 @@
 package basis.collections
 package generic
 
-import basis.util._
+import scala.reflect.macros._
 
 trait MapFactory[+CC[_, _]] {
   def empty[A, T]: CC[A, T] = Builder[A, T].state
 
-  def apply[A, T](entries: (A, T)*): CC[A, T] =
-    macro MapFactory.apply[CC, A, T]
+  def apply[A, T](entries: (A, T)*): CC[A, T] = macro MapFactoryMacros.apply[CC, A, T]
 
   def from[A, T](entries: Traverser[(A, T)]): CC[A, T] = {
     val builder = Builder[A, T]
@@ -32,25 +31,18 @@ trait MapFactory[+CC[_, _]] {
   implicit def Factory: MapFactory[CC] = this
 }
 
-private[generic] object MapFactory {
-  import scala.collection.immutable.{ ::, Nil }
+private[generic] class MapFactoryMacros(val c: blackbox.Context { type PrefixType <: MapFactory[CC] forSome { type CC[_, _] } }) {
+  import c.{ Expr, prefix, WeakTypeTag }
+  import c.universe._
 
-  def apply[CC[_, _], A, T]
-      (c: ContextWithPre[MapFactory[CC]])
-      (entries: c.Expr[(A, T)]*)
-      (implicit CCTag: c.WeakTypeTag[CC[_, _]], ATag: c.WeakTypeTag[A], TTag: c.WeakTypeTag[T])
-    : c.Expr[CC[A, T]] = {
-
-    import c.{ Expr, prefix, weakTypeOf, WeakTypeTag }
-    import c.universe._
-
-    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: TypeTree(weakTypeOf[T]) :: Nil)
+  def apply[CC[_, _], A, T](entries: Expr[(A, T)]*)(implicit CC: WeakTypeTag[CC[_, _]], A: WeakTypeTag[A], T: WeakTypeTag[T]): Expr[CC[A, T]] = {
+    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(A.tpe) :: TypeTree(weakTypeOf[T]) :: Nil)
     b = Apply(Select(b, "expect": TermName), Literal(Constant(entries.length)) :: Nil)
 
     val xs = entries.iterator
     while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
 
-    implicit val CCATTag = WeakTypeTag[CC[A, T]](appliedType(weakTypeOf[CC[_, _]], weakTypeOf[A] :: weakTypeOf[T] :: Nil))
+    implicit val CCAT = WeakTypeTag[CC[A, T]](appliedType(CC.tpe, A.tpe :: T.tpe :: Nil))
     Expr[CC[A, T]](Select(b, "state": TermName))
   }
 }

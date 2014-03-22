@@ -7,14 +7,12 @@
 package basis.collections
 package generic
 
-import basis.util._
-// applied
+import scala.reflect.macros._
 
 trait CollectionFactory[+CC[_]] {
   def empty[A]: CC[A] = Builder[A].state
 
-  def apply[A](elems: A*): CC[A] =
-    macro CollectionFactory.apply[CC, A]
+  def apply[A](elems: A*): CC[A] = macro CollectionFactoryMacros.apply[CC, A]
 
   def from[A](elems: Traverser[A]): CC[A] = {
     val builder = Builder[A]
@@ -33,25 +31,18 @@ trait CollectionFactory[+CC[_]] {
   implicit def Factory: CollectionFactory[CC] = this
 }
 
-private[generic] object CollectionFactory {
-  import scala.collection.immutable.{ ::, Nil }
+private[generic] class CollectionFactoryMacros(val c: blackbox.Context { type PrefixType <: CollectionFactory[CC] forSome { type CC[_] } }) {
+  import c.{ Expr, prefix, WeakTypeTag }
+  import c.universe._
 
-  def apply[CC[_], A]
-      (c: ContextWithPre[CollectionFactory[CC]])
-      (elems: c.Expr[A]*)
-      (implicit CCTag: c.WeakTypeTag[CC[_]], ATag: c.WeakTypeTag[A])
-    : c.Expr[CC[A]] = {
-
-    import c.{ Expr, prefix, weakTypeOf, WeakTypeTag }
-    import c.universe._
-
-    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(weakTypeOf[A]) :: Nil)
+  def apply[CC[_], A](elems: Expr[A]*)(implicit CC: WeakTypeTag[CC[_]], A: WeakTypeTag[A]): Expr[CC[A]] = {
+    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(A.tpe) :: Nil)
     b = Apply(Select(b, "expect": TermName), Literal(Constant(elems.length)) :: Nil)
 
     val xs = elems.iterator
     while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
 
-    implicit val CCATag = applied[CC, A](c)
+    implicit val CCA = WeakTypeTag[CC[A]](appliedType(CC.tpe, A.tpe :: Nil))
     Expr[CC[A]](Select(b, "state": TermName))
   }
 }

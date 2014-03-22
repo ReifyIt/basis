@@ -7,31 +7,57 @@
 package basis.collections
 package sequential
 
+import scala.reflect.macros._
+
 class NonStrict extends General {
-  implicit def ArrayToNonStrictOps[A](xs: Array[A]): NonStrictArrayOps[A]                = macro NonStrict.ArrayToNonStrictOps[A]
-  implicit def TraverserToNonStrictOps[A](xs: Traverser[A]): NonStrictTraverserOps[A]    = macro NonStrict.TraverserToNonStrictOps[A]
-  implicit def IteratorToNonStrictOps[A](xs: Iterator[A]): NonStrictIteratorOps[A]       = macro NonStrict.IteratorToNonStrictOps[A]
-  implicit def CollectionToNonStrictOps[A](xs: Collection[A]): NonStrictCollectionOps[A] = macro NonStrict.CollectionToNonStrictOps[A]
-  implicit def ContainerToNonStrictOps[A](xs: Container[A]): NonStrictContainerOps[A]    = macro NonStrict.ContainerToNonStrictOps[A]
-  implicit def SeqToNonStrictOps[A](xs: Seq[A]): NonStrictSeqOps[A]                      = macro NonStrict.SeqToNonStrictOps[A]
-  implicit def IndexedSeqToNonStrictOps[A](xs: IndexedSeq[A]): NonStrictIndexedSeqOps[A] = macro NonStrict.IndexedSeqToNonStrictOps[A]
-  implicit def LinearSeqToNonStrictOps[A](xs: LinearSeq[A]): NonStrictLinearSeqOps[A]    = macro NonStrict.LinearSeqToNonStrictOps[A]
-  implicit def BilinearSeqToNonStrictOps[A](xs: BilinearSeq[A]): NonStrictSeqOps[A]      = macro NonStrict.SeqToNonStrictOps[A]
-  implicit def SetToNonStrictOps[A](xs: Set[A]): NonStrictSetOps[A]                      = macro NonStrict.SetToNonStrictOps[A]
-  implicit def MapToNonStrictOps[A, T](xs: Map[A, T]): NonStrictMapOps[A, T]             = macro NonStrict.MapToNonStrictOps[A, T]
+  implicit def ArrayToNonStrictOps[A](xs: Array[A]): NonStrictArrayOps[A]                = macro NonStrictMacros.ArrayToNonStrictOps[A]
+  implicit def BilinearSeqToNonStrictOps[A](xs: BilinearSeq[A]): NonStrictSeqOps[A]      = macro NonStrictMacros.SeqToNonStrictOps[A]
+  implicit def CollectionToNonStrictOps[A](xs: Collection[A]): NonStrictCollectionOps[A] = macro NonStrictMacros.CollectionToNonStrictOps[A]
+  implicit def ContainerToNonStrictOps[A](xs: Container[A]): NonStrictContainerOps[A]    = macro NonStrictMacros.ContainerToNonStrictOps[A]
+  implicit def IndexedSeqToNonStrictOps[A](xs: IndexedSeq[A]): NonStrictIndexedSeqOps[A] = macro NonStrictMacros.IndexedSeqToNonStrictOps[A]
+  implicit def IteratorToNonStrictOps[A](xs: Iterator[A]): NonStrictIteratorOps[A]       = macro NonStrictMacros.IteratorToNonStrictOps[A]
+  implicit def LinearSeqToNonStrictOps[A](xs: LinearSeq[A]): NonStrictLinearSeqOps[A]    = macro NonStrictMacros.LinearSeqToNonStrictOps[A]
+  implicit def MapToNonStrictOps[A, T](xs: Map[A, T]): NonStrictMapOps[A, T]             = macro NonStrictMacros.MapToNonStrictOps[A, T]
+  implicit def SeqToNonStrictOps[A](xs: Seq[A]): NonStrictSeqOps[A]                      = macro NonStrictMacros.SeqToNonStrictOps[A]
+  implicit def SetToNonStrictOps[A](xs: Set[A]): NonStrictSetOps[A]                      = macro NonStrictMacros.SetToNonStrictOps[A]
+  implicit def TraverserToNonStrictOps[A](xs: Traverser[A]): NonStrictTraverserOps[A]    = macro NonStrictMacros.TraverserToNonStrictOps[A]
 }
 
-private[collections] object NonStrict {
-  import scala.reflect.macros.Context
+private[collections] class NonStrictMacros(val c: blackbox.Context) {
+  import c.{ Expr, mirror, WeakTypeTag }
+  import c.universe.{ Traverser => _, _ }
 
-  def ArrayToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Array[A]])                  = General.new1[NonStrictArrayOps[A], Array[A]](c)(xs)
-  def TraverserToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Traverser[A]])          = General.new1[NonStrictTraverserOps[A], Traverser[A]](c)(xs)
-  def IteratorToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Iterator[A]])            = General.new1[NonStrictIteratorOps[A], Iterator[A]](c)(xs)
-  def CollectionToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Collection[A]])        = General.new1[NonStrictCollectionOps[A], Collection[A]](c)(xs)
-  def ContainerToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Container[A]])          = General.new1[NonStrictContainerOps[A], Container[A]](c)(xs)
-  def SeqToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Seq[A]])                      = General.new1[NonStrictSeqOps[A], Seq[A]](c)(xs)
-  def IndexedSeqToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[IndexedSeq[A]])        = General.new1[NonStrictIndexedSeqOps[A], IndexedSeq[A]](c)(xs)
-  def LinearSeqToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[LinearSeq[A]])          = General.new1[NonStrictLinearSeqOps[A], LinearSeq[A]](c)(xs)
-  def SetToNonStrictOps[A: c.WeakTypeTag](c: Context)(xs: c.Expr[Set[A]])                      = General.new1[NonStrictSetOps[A], Set[A]](c)(xs)
-  def MapToNonStrictOps[A: c.WeakTypeTag, T: c.WeakTypeTag](c: Context)(xs: c.Expr[Map[A, T]]) = General.new1[NonStrictMapOps[A, T], Map[A, T]](c)(xs)
+  def ArrayToNonStrictOps[A : WeakTypeTag](xs: Expr[Array[A]]): Expr[NonStrictArrayOps[A]]                  = NonStrictOps1[NonStrictArrayOps, A](xs)
+  def CollectionToNonStrictOps[A : WeakTypeTag](xs: Expr[Collection[A]]): Expr[NonStrictCollectionOps[A]]   = NonStrictOps1[NonStrictCollectionOps, A](xs)
+  def ContainerToNonStrictOps[A : WeakTypeTag](xs: Expr[Container[A]]): Expr[NonStrictContainerOps[A]]      = NonStrictOps1[NonStrictContainerOps, A](xs)
+  def IndexedSeqToNonStrictOps[A : WeakTypeTag](xs: Expr[IndexedSeq[A]]): Expr[NonStrictIndexedSeqOps[A]]   = NonStrictOps1[NonStrictIndexedSeqOps, A](xs)
+  def IteratorToNonStrictOps[A : WeakTypeTag](xs: Expr[Iterator[A]]): Expr[NonStrictIteratorOps[A]]         = NonStrictOps1[NonStrictIteratorOps, A](xs)
+  def LinearSeqToNonStrictOps[A : WeakTypeTag](xs: Expr[LinearSeq[A]]): Expr[NonStrictLinearSeqOps[A]]      = NonStrictOps1[NonStrictLinearSeqOps, A](xs)
+  def MapToNonStrictOps[A : WeakTypeTag, T : WeakTypeTag](xs: Expr[Map[A, T]]): Expr[NonStrictMapOps[A, T]] = NonStrictOps2[NonStrictMapOps, A, T](xs)
+  def SeqToNonStrictOps[A : WeakTypeTag](xs: Expr[Seq[A]]): Expr[NonStrictSeqOps[A]]                        = NonStrictOps1[NonStrictSeqOps, A](xs)
+  def SetToNonStrictOps[A : WeakTypeTag](xs: Expr[Set[A]]): Expr[NonStrictSetOps[A]]                        = NonStrictOps1[NonStrictSetOps, A](xs)
+  def TraverserToNonStrictOps[A : WeakTypeTag](xs: Expr[Traverser[A]]): Expr[NonStrictTraverserOps[A]]      = NonStrictOps1[NonStrictTraverserOps, A](xs)
+
+  implicit protected def NonStrictArrayOpsTag: WeakTypeTag[NonStrictArrayOps[_]]           = NonStrictOpsTag[NonStrictArrayOps[_]]("NonStrictArrayOps")
+  implicit protected def NonStrictCollectionOpsTag: WeakTypeTag[NonStrictCollectionOps[_]] = NonStrictOpsTag[NonStrictCollectionOps[_]]("NonStrictCollectionOps")
+  implicit protected def NonStrictContainerOpsTag: WeakTypeTag[NonStrictContainerOps[_]]   = NonStrictOpsTag[NonStrictContainerOps[_]]("NonStrictContainerOps")
+  implicit protected def NonStrictIndexedSeqOpsTag: WeakTypeTag[NonStrictIndexedSeqOps[_]] = NonStrictOpsTag[NonStrictIndexedSeqOps[_]]("NonStrictIndexedSeqOps")
+  implicit protected def NonStrictIteratorOpsTag: WeakTypeTag[NonStrictIteratorOps[_]]     = NonStrictOpsTag[NonStrictIteratorOps[_]]("NonStrictIteratorOps")
+  implicit protected def NonStrictLinearSeqOpsTag: WeakTypeTag[NonStrictLinearSeqOps[_]]   = NonStrictOpsTag[NonStrictLinearSeqOps[_]]("NonStrictLinearSeqOps")
+  implicit protected def NonStrictMapOpsTag: WeakTypeTag[NonStrictMapOps[_, _]]            = NonStrictOpsTag[NonStrictMapOps[_, _]]("NonStrictMapOps")
+  implicit protected def NonStrictSeqOpsTag: WeakTypeTag[NonStrictSeqOps[_]]               = NonStrictOpsTag[NonStrictSeqOps[_]]("NonStrictSeqOps")
+  implicit protected def NonStrictSetOpsTag: WeakTypeTag[NonStrictSetOps[_]]               = NonStrictOpsTag[NonStrictSetOps[_]]("NonStrictSetOps")
+  implicit protected def NonStrictTraverserOpsTag: WeakTypeTag[NonStrictTraverserOps[_]]   = NonStrictOpsTag[NonStrictTraverserOps[_]]("NonStrictTraverserOps")
+
+  protected def NonStrictOps1[CC[_], A](xs: Expr[_])(implicit CC: WeakTypeTag[CC[_]], A: WeakTypeTag[A]): Expr[CC[A]] = {
+    implicit val NonStrictOps = WeakTypeTag[CC[A]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: Nil))
+    Expr[CC[A]](q"new $NonStrictOps($xs)")
+  }
+
+  protected def NonStrictOps2[CC[_, _], A, T](xs: Expr[_])(implicit CC: WeakTypeTag[CC[_, _]], A: WeakTypeTag[A], T: WeakTypeTag[T]): Expr[CC[A, T]] = {
+    implicit val NonStrictOps = WeakTypeTag[CC[A, T]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: T.tpe :: Nil))
+    Expr[CC[A, T]](q"new $NonStrictOps($xs)")
+  }
+
+  protected def NonStrictOpsTag[CC](name: String): WeakTypeTag[CC] = WeakTypeTag(mirror.staticClass(s"basis.collections.sequential.$name").toTypeConstructor)
 }

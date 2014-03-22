@@ -8,32 +8,15 @@ package basis.collections
 package sequential
 
 final class NonStrictSetOps[+A](val __ : Set[A]) extends AnyVal {
-  def filter(p: A => Boolean): Set[A] =
-    new NonStrictSetOps.Filter(__, p)
-
-  def withFilter(p: A => Boolean): Set[A] =
-    new NonStrictSetOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean): Set[A] =
-    new NonStrictSetOps.DropWhile(__, p)
-
-  def takeWhile(p: A => Boolean): Set[A] =
-    new NonStrictSetOps.TakeWhile(__, p)
-
-  def span(p: A => Boolean): (Set[A], Set[A]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): Set[A] =
-    new NonStrictSetOps.Drop(__, lower)
-
-  def take(upper: Int): Set[A] =
-    new NonStrictSetOps.Take(__, upper)
-
-  def slice(lower: Int, upper: Int): Set[A] =
-    new NonStrictSetOps.Slice(__, lower, upper)
-
-  def ++ [B >: A](those: Set[B]): Set[B] =
-    new NonStrictSetOps.++(__, those)
+  def ++ [B >: A](those: Set[B]): Set[B]      = new NonStrictSetOps.++(__, those)
+  def drop(lower: Int): Set[A]                = new NonStrictSetOps.Drop(__, lower)
+  def dropWhile(p: A => Boolean): Set[A]      = new NonStrictSetOps.DropWhile(__, p)
+  def filter(p: A => Boolean): Set[A]         = new NonStrictSetOps.Filter(__, p)
+  def slice(lower: Int, upper: Int): Set[A]   = new NonStrictSetOps.Slice(__, lower, upper)
+  def span(p: A => Boolean): (Set[A], Set[A]) = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): Set[A]                = new NonStrictSetOps.Take(__, upper)
+  def takeWhile(p: A => Boolean): Set[A]      = new NonStrictSetOps.TakeWhile(__, p)
+  def withFilter(p: A => Boolean): Set[A]     = new NonStrictSetOps.Filter(__, p)
 }
 
 private[sequential] object NonStrictSetOps {

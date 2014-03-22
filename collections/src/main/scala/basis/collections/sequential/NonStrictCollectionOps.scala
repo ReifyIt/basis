@@ -8,41 +8,18 @@ package basis.collections
 package sequential
 
 final class NonStrictCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B]): Collection[B] =
-    new NonStrictCollectionOps.Collect(__, q)
-
-  def map[B](f: A => B): Collection[B] =
-    new NonStrictCollectionOps.Map(__, f)
-
-  def flatMap[B](f: A => Collection[B]): Collection[B] =
-    new NonStrictCollectionOps.FlatMap(__, f)
-
-  def filter(p: A => Boolean): Collection[A] =
-    new NonStrictCollectionOps.Filter(__, p)
-
-  def withFilter(p: A => Boolean): Collection[A] =
-    new NonStrictCollectionOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean): Collection[A] =
-    new NonStrictCollectionOps.DropWhile(__, p)
-
-  def takeWhile(p: A => Boolean): Collection[A] =
-    new NonStrictCollectionOps.TakeWhile(__, p)
-
-  def span(p: A => Boolean): (Collection[A], Collection[A]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): Collection[A] =
-    new NonStrictCollectionOps.Drop(__, lower)
-
-  def take(upper: Int): Collection[A] =
-    new NonStrictCollectionOps.Take(__, upper)
-
-  def slice(lower: Int, upper: Int): Collection[A] =
-    new NonStrictCollectionOps.Slice(__, lower, upper)
-
-  def ++ [B >: A](those: Collection[B]): Collection[B] =
-    new NonStrictCollectionOps.++(__, those)
+  def ++ [B >: A](those: Collection[B]): Collection[B]      = new NonStrictCollectionOps.++(__, those)
+  def collect[B](q: PartialFunction[A, B]): Collection[B]   = new NonStrictCollectionOps.Collect(__, q)
+  def drop(lower: Int): Collection[A]                       = new NonStrictCollectionOps.Drop(__, lower)
+  def dropWhile(p: A => Boolean): Collection[A]             = new NonStrictCollectionOps.DropWhile(__, p)
+  def filter(p: A => Boolean): Collection[A]                = new NonStrictCollectionOps.Filter(__, p)
+  def flatMap[B](f: A => Collection[B]): Collection[B]      = new NonStrictCollectionOps.FlatMap(__, f)
+  def map[B](f: A => B): Collection[B]                      = new NonStrictCollectionOps.Map(__, f)
+  def slice(lower: Int, upper: Int): Collection[A]          = new NonStrictCollectionOps.Slice(__, lower, upper)
+  def span(p: A => Boolean): (Collection[A], Collection[A]) = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): Collection[A]                       = new NonStrictCollectionOps.Take(__, upper)
+  def takeWhile(p: A => Boolean): Collection[A]             = new NonStrictCollectionOps.TakeWhile(__, p)
+  def withFilter(p: A => Boolean): Collection[A]            = new NonStrictCollectionOps.Filter(__, p)
 }
 
 private[sequential] object NonStrictCollectionOps {

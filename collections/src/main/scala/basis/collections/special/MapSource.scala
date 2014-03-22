@@ -7,13 +7,12 @@
 package basis.collections
 package special
 
-import basis.util._
+import scala.reflect.macros._
 
 trait MapSource[+CC, -A, -T] {
   def empty: CC = Builder.state
 
-  def apply(entries: (A, T)*): CC =
-    macro MapSource.apply[CC, A, T]
+  def apply(entries: (A, T)*): CC = macro MapSourceMacros.apply[CC, A, T]
 
   def from(entries: Traverser[(A, T)]): CC = {
     val builder = Builder
@@ -30,18 +29,11 @@ trait MapSource[+CC, -A, -T] {
   implicit def Builder(): Builder[(A, T)] with State[CC]
 }
 
-private[special] object MapSource {
-  import scala.collection.immutable.{ ::, Nil }
+private[special] class MapSourceMacros(val c: blackbox.Context { type PrefixType <: MapSource[_, _, _] }) {
+  import c.{ Expr, prefix }
+  import c.universe._
 
-  def apply[CC, A, T]
-      (c: ContextWithPre[MapSource[CC, A, T]])
-      (entries: c.Expr[(A, T)]*)
-      (implicit CCTag: c.WeakTypeTag[CC])
-    : c.Expr[CC] = {
-
-    import c.{ Expr, prefix }
-    import c.universe._
-
+  def apply[CC, A, T](entries: Expr[(A, T)]*)(implicit CC: WeakTypeTag[CC]): Expr[CC] = {
     var b: Tree = Select(prefix.tree, "Builder": TermName)
     b = Apply(Select(b, "expect": TermName), Literal(Constant(entries.length)) :: Nil)
 

@@ -10,45 +10,19 @@ package sequential
 import basis.util._
 
 final class GeneralCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
-  def foreach[U](f: A => U): Unit =
-    new GeneralTraverserOps(__).foreach(f)
+  def choose[B](q: PartialFunction[A, B]): Maybe[B]    = new GeneralTraverserOps(__).choose(q)
+  def count(p: A => Boolean): Int                      = new GeneralTraverserOps(__).count(p)
+  def exists(p: A => Boolean): Boolean                 = new GeneralTraverserOps(__).exists(p)
+  def find(p: A => Boolean): Maybe[A]                  = new GeneralTraverserOps(__).find(p)
+  def fold[B >: A](z: B)(op: (B, B) => B): B           = new GeneralTraverserOps(__).fold(z)(op)
+  def foldLeft[B](z: B)(op: (B, A) => B): B            = new GeneralTraverserOps(__).foldLeft(z)(op)
+  def forall(p: A => Boolean): Boolean                 = new GeneralTraverserOps(__).forall(p)
+  def foreach[U](f: A => U): Unit                      = new GeneralTraverserOps(__).foreach(f)
+  def mayReduce[B >: A](op: (B, B) => B): Maybe[B]     = new GeneralTraverserOps(__).mayReduce(op)
+  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] = new GeneralTraverserOps(__).mayReduceLeft(op)
+  def reduce[B >: A](op: (B, B) => B): B               = new GeneralTraverserOps(__).reduce(op)
+  def reduceLeft[B >: A](op: (B, A) => B): B           = new GeneralTraverserOps(__).reduceLeft(op)
 
-  def fold[B >: A](z: B)(op: (B, B) => B): B =
-    new GeneralTraverserOps(__).fold(z)(op)
-
-  def reduce[B >: A](op: (B, B) => B): B =
-    new GeneralTraverserOps(__).reduce(op)
-
-  def mayReduce[B >: A](op: (B, B) => B): Maybe[B] =
-    new GeneralTraverserOps(__).mayReduce(op)
-
-  def foldLeft[B](z: B)(op: (B, A) => B): B =
-    new GeneralTraverserOps(__).foldLeft(z)(op)
-
-  def reduceLeft[B >: A](op: (B, A) => B): B =
-    new GeneralTraverserOps(__).reduceLeft(op)
-
-  def mayReduceLeft[B >: A](op: (B, A) => B): Maybe[B] =
-    new GeneralTraverserOps(__).mayReduceLeft(op)
-
-  def find(p: A => Boolean): Maybe[A] =
-    new GeneralTraverserOps(__).find(p)
-
-  def forall(p: A => Boolean): Boolean =
-    new GeneralTraverserOps(__).forall(p)
-
-  def exists(p: A => Boolean): Boolean =
-    new GeneralTraverserOps(__).exists(p)
-
-  def count(p: A => Boolean): Int =
-    new GeneralTraverserOps(__).count(p)
-
-  def choose[B](q: PartialFunction[A, B]): Maybe[B] =
-    new GeneralTraverserOps(__).choose(q)
-
-  def eagerly: StrictCollectionOps[A, Collection[_]] =
-    new StrictCollectionOps[A, Collection[_]](__)
-
-  def lazily: NonStrictCollectionOps[A] =
-    new NonStrictCollectionOps[A](__)
+  def eagerly: StrictCollectionOps[A, Collection[_]] = new StrictCollectionOps[A, Collection[_]](__)
+  def lazily: NonStrictCollectionOps[A]              = new NonStrictCollectionOps[A](__)
 }

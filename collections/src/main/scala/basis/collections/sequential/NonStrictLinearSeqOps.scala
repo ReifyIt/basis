@@ -10,44 +10,19 @@ package sequential
 import basis.util._
 
 final class NonStrictLinearSeqOps[+A](val __ : LinearSeq[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B]): LinearSeq[B] =
-    new NonStrictLinearSeqOps.Collect(__, q)
-
-  def map[B](f: A => B): LinearSeq[B] =
-    new NonStrictLinearSeqOps.Map(__, f)
-
-  def flatMap[B](f: A => LinearSeq[B]): LinearSeq[B] =
-    new NonStrictLinearSeqOps.FlatMap(__, f)
-
-  def filter(p: A => Boolean): LinearSeq[A] =
-    new NonStrictLinearSeqOps.Filter(__, p)
-
-  def withFilter(p: A => Boolean): LinearSeq[A] =
-    new NonStrictLinearSeqOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean): LinearSeq[A] =
-    new NonStrictLinearSeqOps.DropWhile(__, p)
-
-  def takeWhile(p: A => Boolean): LinearSeq[A] =
-    new NonStrictLinearSeqOps.TakeWhile(__, p)
-
-  def span(p: A => Boolean): (LinearSeq[A], LinearSeq[A]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): LinearSeq[A] =
-    new NonStrictLinearSeqOps.Drop(__, lower)
-
-  def take(upper: Int): LinearSeq[A] =
-    new NonStrictLinearSeqOps.Take(__, upper)
-
-  def slice(lower: Int, upper: Int): LinearSeq[A] =
-    new NonStrictLinearSeqOps.Slice(__, lower, upper)
-
-  def zip[B](those: LinearSeq[B]): LinearSeq[(A, B)] =
-    new NonStrictLinearSeqOps.Zip(__, those)
-
-  def ++ [B >: A](those: LinearSeq[B]): LinearSeq[B] =
-    new NonStrictLinearSeqOps.++(__, those)
+  def ++ [B >: A](those: LinearSeq[B]): LinearSeq[B]      = new NonStrictLinearSeqOps.++(__, those)
+  def collect[B](q: PartialFunction[A, B]): LinearSeq[B]  = new NonStrictLinearSeqOps.Collect(__, q)
+  def drop(lower: Int): LinearSeq[A]                      = new NonStrictLinearSeqOps.Drop(__, lower)
+  def dropWhile(p: A => Boolean): LinearSeq[A]            = new NonStrictLinearSeqOps.DropWhile(__, p)
+  def filter(p: A => Boolean): LinearSeq[A]               = new NonStrictLinearSeqOps.Filter(__, p)
+  def flatMap[B](f: A => LinearSeq[B]): LinearSeq[B]      = new NonStrictLinearSeqOps.FlatMap(__, f)
+  def map[B](f: A => B): LinearSeq[B]                     = new NonStrictLinearSeqOps.Map(__, f)
+  def slice(lower: Int, upper: Int): LinearSeq[A]         = new NonStrictLinearSeqOps.Slice(__, lower, upper)
+  def span(p: A => Boolean): (LinearSeq[A], LinearSeq[A]) = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): LinearSeq[A]                      = new NonStrictLinearSeqOps.Take(__, upper)
+  def takeWhile(p: A => Boolean): LinearSeq[A]            = new NonStrictLinearSeqOps.TakeWhile(__, p)
+  def withFilter(p: A => Boolean): LinearSeq[A]           = new NonStrictLinearSeqOps.Filter(__, p)
+  def zip[B](those: LinearSeq[B]): LinearSeq[(A, B)]      = new NonStrictLinearSeqOps.Zip(__, those)
 }
 
 private[sequential] object NonStrictLinearSeqOps {

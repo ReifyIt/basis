@@ -8,20 +8,16 @@ package basis.collections
 package sequential
 
 import basis.util._
-import scala.collection.immutable.{ ::, Nil }
-import scala.reflect.macros.Context
+import scala.reflect.macros._
 
-private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
-  import context.{ Expr, fresh, mirror, WeakTypeTag }
-  import universe.{ Traverser => _, _ }
-  import internal._
+private[sequential] abstract class IndexedSeqMacros(val c: blackbox.Context) {
+  import c.{ Expr, fresh, mirror, WeakTypeTag }
+  import c.universe.{ Traverser => _, _ }
+  import c.universe.internal._
 
-  val universe: context.universe.type = context.universe
+  def these: Expr[IndexedSeq[_]]
 
-  def foreach[A, U]
-      (these: Expr[IndexedSeq[A]])
-      (f: Expr[A => U])
-    : Expr[Unit] = {
+  def foreach[A, U](f: Expr[A => U]): Expr[Unit] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -41,11 +37,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
             EmptyTree))))
   }
 
-  def foldLeft[A, B : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]])
-      (z: Expr[B])
-      (op: Expr[(B, A) => B])
-    : Expr[B] = {
+  def foldLeft[A, B : WeakTypeTag](z: Expr[B])(op: Expr[(B, A) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -68,10 +60,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def reduceLeft[A, B >: A : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]])
-      (op: Expr[(B, A) => B])
-    : Expr[B] = {
+  def reduceLeft[A, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -101,10 +90,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def mayReduceLeft[A, B >: A : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]])
-      (op: Expr[(B, A) => B])
-    : Expr[Maybe[B]] = {
+  def mayReduceLeft[A, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -131,11 +117,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
             Apply(Select(BasisUtil, "Bind": TermName), Ident(r) :: Nil)))))
   }
 
-  def foldRight[A, B : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]])
-      (z: Expr[B])
-      (op: Expr[(A, B) => B])
-    : Expr[B] = {
+  def foldRight[A, B : WeakTypeTag](z: Expr[B])(op: Expr[(A, B) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val r    = fresh("r$"): TermName
@@ -157,10 +139,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def reduceRight[A, B >: A : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]])
-      (op: Expr[(A, B) => B])
-    : Expr[B] = {
+  def reduceRight[A, B >: A : WeakTypeTag](op: Expr[(A, B) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val r    = fresh("r$"): TermName
@@ -190,10 +169,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def mayReduceRight[A, B >: A : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]])
-      (op: Expr[(A, B) => B])
-    : Expr[Maybe[B]] = {
+  def mayReduceRight[A, B >: A : WeakTypeTag](op: Expr[(A, B) => B]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val r    = fresh("r$"): TermName
@@ -220,10 +196,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
             Apply(Select(BasisUtil, "Bind": TermName), Ident(r) :: Nil)))))
   }
 
-  def find[A : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Maybe[A]] = {
+  def find[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Maybe[A]] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -252,10 +225,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def forall[A]
-      (these: Expr[IndexedSeq[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Boolean] = {
+  def forall[A](p: Expr[A => Boolean]): Expr[Boolean] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -280,10 +250,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def exists[A]
-      (these: Expr[IndexedSeq[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Boolean] = {
+  def exists[A](p: Expr[A => Boolean]): Expr[Boolean] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -308,10 +275,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def count[A]
-      (these: Expr[IndexedSeq[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Int] = {
+  def count[A](p: Expr[A => Boolean]): Expr[Int] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -337,10 +301,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(t)))
   }
 
-  def choose[A, B : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]])
-      (q: Expr[PartialFunction[A, B]])
-    : Expr[Maybe[B]] = {
+  def choose[A, B : WeakTypeTag](q: Expr[PartialFunction[A, B]]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -377,11 +338,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def collect[A, B]
-      (these: Expr[IndexedSeq[A]])
-      (q: Expr[PartialFunction[A, B]])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def collect[A, B](q: Expr[PartialFunction[A, B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -417,11 +374,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def map[A, B]
-      (these: Expr[IndexedSeq[A]])
-      (f: Expr[A => B])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def map[A, B](f: Expr[A => B])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -449,11 +402,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def flatMap[A, B]
-      (these: Expr[IndexedSeq[A]])
-      (f: Expr[A => Traverser[B]])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def flatMap[A, B](f: Expr[A => Traverser[B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -480,11 +429,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def filter[A]
-      (these: Expr[IndexedSeq[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def filter[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -514,11 +459,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def dropWhile[A]
-      (these: Expr[IndexedSeq[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def dropWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs    = fresh("xs$"): TermName
     val i     = fresh("i$"): TermName
     val n     = fresh("n$"): TermName
@@ -556,11 +497,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def takeWhile[A]
-      (these: Expr[IndexedSeq[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def takeWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -591,11 +528,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def span[A]
-      (these: Expr[IndexedSeq[A]])
-      (p: Expr[A => Boolean])
-      (builder1: Expr[Builder[A]], builder2: Expr[Builder[A]])
-    : Expr[(builder1.value.State, builder2.value.State)] = {
+  def span[A](p: Expr[A => Boolean])(builder1: Expr[Builder[A]], builder2: Expr[Builder[A]]): Expr[(builder1.value.State, builder2.value.State)] = {
     val xs    = fresh("xs$"): TermName
     val i     = fresh("i$"): TermName
     val n     = fresh("n$"): TermName
@@ -641,11 +574,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
           Select(Ident(a), "state": TermName) :: Select(Ident(b), "state": TermName) :: Nil)))
   }
 
-  def drop[A]
-      (these: Expr[IndexedSeq[A]])
-      (lower: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def drop[A](lower: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val n    = fresh("n$"): TermName
     val i    = fresh("i$"): TermName
@@ -674,11 +603,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def take[A]
-      (these: Expr[IndexedSeq[A]])
-      (upper: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def take[A](upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -704,11 +629,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def slice[A]
-      (these: Expr[IndexedSeq[A]])
-      (lower: Expr[Int], upper: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def slice[A](lower: Expr[Int], upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val n    = fresh("n$"): TermName
     val i    = fresh("i$"): TermName
@@ -738,10 +659,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def reverse[A]
-      (these: Expr[IndexedSeq[A]])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def reverse[A](builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val b    = fresh("b$"): TermName
@@ -766,10 +684,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def zip[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[IndexedSeq[A]], those: Expr[IndexedSeq[B]])
-      (builder: Expr[Builder[(A, B)]])
-    : Expr[builder.value.State] = {
+  def zip[A : WeakTypeTag, B : WeakTypeTag](those: Expr[IndexedSeq[B]])(builder: Expr[Builder[(A, B)]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val ys   = fresh("ys$"): TermName
     val i    = fresh("i$"): TermName
@@ -801,10 +716,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def :+ [A]
-      (these: Expr[IndexedSeq[A]], elem: Expr[A])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def :+ [A](elem: Expr[A])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs = fresh("xs$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
@@ -828,10 +740,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
           "state": TermName)))
   }
 
-  def +: [A]
-      (elem: Expr[A], these: Expr[IndexedSeq[A]])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def +: [A](elem: Expr[A])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs = fresh("xs$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
     implicit val builderStateTag = BuilderStateTag(builder)
@@ -855,10 +764,7 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
           "state": TermName)))
   }
 
-  def ++ [A]
-      (these: Expr[IndexedSeq[A]], those: Expr[IndexedSeq[A]])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def ++ [A](those: Expr[IndexedSeq[A]])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs = fresh("xs$"): TermName
     val ys = fresh("ys$"): TermName
     implicit val builderTypeTag = BuilderTypeTag(builder)
@@ -899,6 +805,9 @@ private[sequential] class IndexedSeqMacros[C <: Context](val context: C) {
     val BuilderStateTpe = typeRef(BuilderTypeTag.tpe, BuilderStateSym, Nil).normalize
     WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
+
+  implicit protected def IndexedSeqTag[A](implicit A: WeakTypeTag[A]): WeakTypeTag[IndexedSeq[A]] =
+    WeakTypeTag(appliedType(mirror.staticClass(s"basis.collections.IndexedSeq").toTypeConstructor, A.tpe :: Nil))
 
   implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {
     val BasisUtil = mirror.staticPackage("basis.util").moduleClass

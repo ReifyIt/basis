@@ -8,20 +8,16 @@ package basis.collections
 package sequential
 
 import basis.util._
-import scala.collection.immutable.{ ::, Nil }
-import scala.reflect.macros.Context
+import scala.reflect.macros._
 
-private[sequential] class IteratorMacros[C <: Context](val context: C) {
-  import context.{ Expr, fresh, mirror, WeakTypeTag }
-  import universe.{ Traverser => _, _ }
-  import internal._
+private[sequential] abstract class IteratorMacros(override val c: blackbox.Context) extends TraverserMacros {
+  import c.{ Expr, fresh, mirror, WeakTypeTag }
+  import c.universe.{ Traverser => _, _ }
+  import c.universe.internal._
 
-  val universe: context.universe.type = context.universe
+  override def these: Expr[Iterator[_]]
 
-  def foreach[A, U]
-      (these: Expr[Iterator[A]])
-      (f: Expr[A => U])
-    : Expr[Unit] = {
+  def foreach[A, U](f: Expr[A => U]): Expr[Unit] = {
     val xs   = fresh("xs$"): TermName
     val loop = fresh("loop$"): TermName
     Expr[Unit](
@@ -37,11 +33,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
             EmptyTree))))
   }
 
-  def foldLeft[A, B : WeakTypeTag]
-      (these: Expr[Iterator[A]])
-      (z: Expr[B])
-      (op: Expr[(B, A) => B])
-    : Expr[B] = {
+  def foldLeft[A, B : WeakTypeTag](z: Expr[B])(op: Expr[(B, A) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -60,10 +52,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def reduceLeft[A, B >: A : WeakTypeTag]
-      (these: Expr[Iterator[A]])
-      (op: Expr[(B, A) => B])
-    : Expr[B] = {
+  def reduceLeft[A, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[B] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -90,10 +79,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def mayReduceLeft[A, B >: A : WeakTypeTag]
-      (these: Expr[Iterator[A]])
-      (op: Expr[(B, A) => B])
-    : Expr[Maybe[B]] = {
+  def mayReduceLeft[A, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -117,10 +103,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
             Apply(Select(BasisUtil, "Bind": TermName), Ident(r) :: Nil)))))
   }
 
-  def find[A : WeakTypeTag]
-      (these: Expr[Iterator[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Maybe[A]] = {
+  def find[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Maybe[A]] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -145,10 +128,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def forall[A]
-      (these: Expr[Iterator[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Boolean] = {
+  def forall[A](p: Expr[A => Boolean]): Expr[Boolean] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -169,10 +149,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def exists[A]
-      (these: Expr[Iterator[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Boolean] = {
+  def exists[A](p: Expr[A => Boolean]): Expr[Boolean] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val loop = fresh("loop$"): TermName
@@ -193,10 +170,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def count[A]
-      (these: Expr[Iterator[A]])
-      (p: Expr[A => Boolean])
-    : Expr[Int] = {
+  def count[A](p: Expr[A => Boolean]): Expr[Int] = {
     val xs   = fresh("xs$"): TermName
     val t    = fresh("t$"): TermName
     val loop = fresh("loop$"): TermName
@@ -218,10 +192,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Ident(t)))
   }
 
-  def choose[A, B : WeakTypeTag]
-      (these: Expr[Iterator[A]])
-      (q: Expr[PartialFunction[A, B]])
-    : Expr[Maybe[B]] = {
+  def choose[A, B : WeakTypeTag](q: Expr[PartialFunction[A, B]]): Expr[Maybe[B]] = {
     val xs   = fresh("xs$"): TermName
     val r    = fresh("r$"): TermName
     val f    = fresh("q$"): TermName
@@ -254,11 +225,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Ident(r)))
   }
 
-  def collect[A, B]
-      (these: Expr[Iterator[A]])
-      (q: Expr[PartialFunction[A, B]])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def collect[A, B](q: Expr[PartialFunction[A, B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val f    = fresh("q$"): TermName
@@ -290,11 +257,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def map[A, B]
-      (these: Expr[Iterator[A]])
-      (f: Expr[A => B])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def map[A, B](f: Expr[A => B])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
@@ -317,11 +280,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def flatMap[A, B]
-      (these: Expr[Iterator[A]])
-      (f: Expr[A => Traverser[B]])
-      (builder: Expr[Builder[B]])
-    : Expr[builder.value.State] = {
+  def flatMap[A, B](f: Expr[A => Traverser[B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
@@ -344,11 +303,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def filter[A]
-      (these: Expr[Iterator[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def filter[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
@@ -374,11 +329,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def dropWhile[A]
-      (these: Expr[Iterator[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def dropWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs    = fresh("xs$"): TermName
     val b     = fresh("b$"): TermName
     val loop1 = fresh("loop$"): TermName
@@ -412,11 +363,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def takeWhile[A]
-      (these: Expr[Iterator[A]])
-      (p: Expr[A => Boolean])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def takeWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val b    = fresh("b$"): TermName
     val loop = fresh("loop$"): TermName
@@ -443,11 +390,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def span[A]
-      (these: Expr[Iterator[A]])
-      (p: Expr[A => Boolean])
-      (builder1: Expr[Builder[A]], builder2: Expr[Builder[A]])
-    : Expr[(builder1.value.State, builder2.value.State)] = {
+  def span[A](p: Expr[A => Boolean])(builder1: Expr[Builder[A]], builder2: Expr[Builder[A]]): Expr[(builder1.value.State, builder2.value.State)] = {
     val xs    = fresh("xs$"): TermName
     val a     = fresh("b$"): TermName
     val b     = fresh("b$"): TermName
@@ -487,11 +430,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
           Select(Ident(a), "state": TermName) :: Select(Ident(b), "state": TermName) :: Nil)))
   }
 
-  def drop[A]
-      (these: Expr[Iterator[A]])
-      (lower: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def drop[A](lower: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs    = fresh("xs$"): TermName
     val i     = fresh("i$"): TermName
     val n     = fresh("n$"): TermName
@@ -528,11 +467,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def take[A]
-      (these: Expr[Iterator[A]])
-      (upper: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def take[A](upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val i    = fresh("i$"): TermName
     val n    = fresh("n$"): TermName
@@ -561,11 +496,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def slice[A]
-      (these: Expr[Iterator[A]])
-      (lower: Expr[Int], upper: Expr[Int])
-      (builder: Expr[Builder[A]])
-    : Expr[builder.value.State] = {
+  def slice[A](lower: Expr[Int], upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     val xs    = fresh("xs$"): TermName
     val i     = fresh("i$"): TermName
     val n     = fresh("n$"): TermName
@@ -607,10 +538,7 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  def zip[A : WeakTypeTag, B : WeakTypeTag]
-      (these: Expr[Iterator[A]], those: Expr[Iterator[B]])
-      (builder: Expr[Builder[(A, B)]])
-    : Expr[builder.value.State] = {
+  def zip[A : WeakTypeTag, B : WeakTypeTag](those: Expr[Iterator[B]])(builder: Expr[Builder[(A, B)]]): Expr[builder.value.State] = {
     val xs   = fresh("xs$"): TermName
     val ys   = fresh("ys$"): TermName
     val b    = fresh("b$"): TermName
@@ -642,13 +570,16 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
         Select(Ident(b), "state": TermName)))
   }
 
-  protected def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
+  def zipContainer[A : WeakTypeTag, B : WeakTypeTag](those: Expr[Container[B]])(builder: Expr[Builder[(A, B)]]): Expr[builder.value.State] =
+    zip[A, B](Expr[Iterator[B]](q"$those.iterator"))(builder)
+
+  protected override def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
     WeakTypeTag[builder.value.type](builder.tree.symbol match {
       case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
       case _ => builder.actualType
     })
 
-  protected def BuilderStateTag
+  protected override def BuilderStateTag
       (builder: Expr[Builder[_]])
       (implicit BuilderTypeTag: WeakTypeTag[builder.value.type])
     : WeakTypeTag[builder.value.State] = {
@@ -658,8 +589,21 @@ private[sequential] class IteratorMacros[C <: Context](val context: C) {
     WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
 
-  implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = applied[basis.util.Maybe, A](context)
-  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = applied[Tuple2, A, B](context)
+  implicit protected def IteratorTag[A](implicit A: WeakTypeTag[A]): WeakTypeTag[Iterator[A]] =
+    WeakTypeTag(appliedType(mirror.staticClass(s"basis.collections.Iterator").toTypeConstructor, A.tpe :: Nil))
+
+  implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {
+    val BasisUtil = mirror.staticPackage("basis.util").moduleClass
+    val MaybeTpc = BasisUtil.typeSignature.member("Maybe": TypeName).asType.toTypeConstructor
+    val MaybeATpe = appliedType(MaybeTpc, weakTypeOf[A] :: Nil)
+    WeakTypeTag[Maybe[A]](MaybeATpe)
+  }
+
+  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
+    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toTypeConstructor
+    val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
+    WeakTypeTag[(A, B)](Tuple2ABTpe)
+  }
 
   implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] =
     WeakTypeTag(mirror.staticClass("java.lang.UnsupportedOperationException").toType)

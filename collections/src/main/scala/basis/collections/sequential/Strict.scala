@@ -53,19 +53,19 @@ private[collections] class StrictMacros(val c: blackbox.Context) {
   implicit protected def ArrayTag: WeakTypeTag[Array[_]] = WeakTypeTag(definitions.ArrayClass.toTypeConstructor)
 
   protected def StrictOpsFamily1[CC[_, _], A, Family](xs: Expr[_])(implicit CC: WeakTypeTag[CC[_, _]], A: WeakTypeTag[A], Family: WeakTypeTag[Family]): Expr[CC[A, Family]] = {
-    implicit val StrictOps: WeakTypeTag[CC[A, Family]] = WeakTypeTag(appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toType, A.tpe :: Family.tpe :: Nil))
+    implicit val StrictOps: WeakTypeTag[CC[A, Family]] = WeakTypeTag(appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: Family.tpe :: Nil))
     Expr[CC[A, Family]](q"new $StrictOps($xs)")
   }
 
   protected def StrictOps1[CC[_, _], A](xs: Expr[Family[_]])(implicit CC: WeakTypeTag[CC[_, _]], A: WeakTypeTag[A]): Expr[CC[A, xs.value.Family]] = {
     implicit val Family: WeakTypeTag[xs.value.Family] = FamilyTag(xs)
-    implicit val StrictOps = WeakTypeTag[CC[A, xs.value.Family]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toType, A.tpe :: Family.tpe :: Nil))
+    implicit val StrictOps = WeakTypeTag[CC[A, xs.value.Family]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: Family.tpe :: Nil))
     Expr[CC[A, xs.value.Family]](q"new $StrictOps($xs)")
   }
 
   protected def StrictOps2[CC[_, _, _], A, T](xs: Expr[Family[_]])(implicit CC: WeakTypeTag[CC[_, _, _]], A: WeakTypeTag[A], T: WeakTypeTag[T]): Expr[CC[A, T, xs.value.Family]] = {
     implicit val Family: WeakTypeTag[xs.value.Family] = FamilyTag(xs)
-    implicit val StrictOps = WeakTypeTag[CC[A, T, xs.value.Family]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toType, A.tpe :: T.tpe :: Family.tpe :: Nil))
+    implicit val StrictOps = WeakTypeTag[CC[A, T, xs.value.Family]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: T.tpe :: Family.tpe :: Nil))
     Expr[CC[A, T, xs.value.Family]](q"new $StrictOps($xs)")
   }
 
@@ -81,194 +81,5 @@ private[collections] class StrictMacros(val c: blackbox.Context) {
     val FamilySym = FamilyTpc.member("Family": TypeName)
     val FamilyTpe = typeRef(TheseTpe, FamilySym, Nil).dealias
     WeakTypeTag[xs.value.Family](FamilyTpe)
-  }
-}
-
-private[collections] object Strict {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
-
-  def ArrayToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[Array[A]])
-    : c.Expr[StrictArrayOps[A, Array[_]]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictArrayOpsATag =
-      WeakTypeTag[StrictArrayOps[A, Array[_]]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictArrayOps").toType,
-          weakTypeOf[A] :: appliedType(mirror.staticClass("scala.Array").toType, WildcardType :: Nil) :: Nil))
-    Expr[StrictArrayOps[A, Array[_]]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictArrayOps[A, Array[_]]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def TraverserToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[Traverser[A]])
-    : c.Expr[StrictTraverserOps[A, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictTraverserOpsATag =
-      WeakTypeTag[StrictTraverserOps[A, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictTraverserOps").toType,
-          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictTraverserOps[A, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictTraverserOps[A, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def IteratorToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[Iterator[A]])
-    : c.Expr[StrictIteratorOps[A, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictIteratorOpsATag =
-      WeakTypeTag[StrictIteratorOps[A, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictIteratorOps").toType,
-          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictIteratorOps[A, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictIteratorOps[A, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def CollectionToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[Collection[A]])
-    : c.Expr[StrictCollectionOps[A, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictCollectionOpsATag =
-      WeakTypeTag[StrictCollectionOps[A, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictCollectionOps").toType,
-          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictCollectionOps[A, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictCollectionOps[A, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def ContainerToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[Container[A]])
-    : c.Expr[StrictContainerOps[A, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictContainerOpsATag =
-      WeakTypeTag[StrictContainerOps[A, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictContainerOps").toType,
-          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictContainerOps[A, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictContainerOps[A, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def SeqToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[Seq[A]])
-    : c.Expr[StrictSeqOps[A, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictSeqOpsATag =
-      WeakTypeTag[StrictSeqOps[A, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictSeqOps").toType,
-          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictSeqOps[A, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictSeqOps[A, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def IndexedSeqToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[IndexedSeq[A]])
-    : c.Expr[StrictIndexedSeqOps[A, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictIndexedSeqOpsATag =
-      WeakTypeTag[StrictIndexedSeqOps[A, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictIndexedSeqOps").toType,
-          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictIndexedSeqOps[A, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictIndexedSeqOps[A, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def LinearSeqToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[LinearSeq[A]])
-    : c.Expr[StrictLinearSeqOps[A, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictLinearSeqOpsATag =
-      WeakTypeTag[StrictLinearSeqOps[A, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictLinearSeqOps").toType,
-          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictLinearSeqOps[A, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictLinearSeqOps[A, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def SetToStrictOps[A : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[Set[A]])
-    : c.Expr[StrictSetOps[A, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictSetOpsATag =
-      WeakTypeTag[StrictSetOps[A, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictSetOps").toType,
-          weakTypeOf[A] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictSetOps[A, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictSetOps[A, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  def MapToStrictOps[A : c.WeakTypeTag, T : c.WeakTypeTag]
-      (c: Context)
-      (these: c.Expr[Map[A, T]])
-    : c.Expr[StrictMapOps[A, T, these.value.Family]] = {
-    import c.{ Expr, mirror, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val StrictMapOpsATTag =
-      WeakTypeTag[StrictMapOps[A, T, these.value.Family]](
-        appliedType(
-          mirror.staticClass("basis.collections.sequential.StrictMapOps").toType,
-          weakTypeOf[A] :: weakTypeOf[T] :: FamilyTag(c)(these).tpe :: Nil))
-    Expr[StrictMapOps[A, T, these.value.Family]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[StrictMapOps[A, T, these.value.Family]])), nme.CONSTRUCTOR),
-        these.tree :: Nil))
-  }
-
-  private def FamilyTag(c: Context)(these: c.Expr[Family[_]]): c.WeakTypeTag[these.value.Family] = {
-    import c.{ mirror, WeakTypeTag }
-    import c.universe._
-    import internal._
-    val TheseTpe = these.tree.symbol match {
-      case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
-      case _ => these.actualType
-    }
-    val FamilyTpc = mirror.staticClass("basis.collections.Family").toType
-    val FamilySym = FamilyTpc.member("Family": TypeName)
-    val FamilyTpe = typeRef(TheseTpe, FamilySym, Nil).normalize
-    WeakTypeTag[these.value.Family](FamilyTpe)
   }
 }

@@ -7,18 +7,18 @@
 package basis.collections
 package sequential
 
-import scala.collection.immutable.{ ::, Nil }
-import scala.reflect.macros.Context
+import scala.reflect.macros._
 
-private[sequential] final class TraverserMacros[C <: Context](val context: C) {
-  import context.{ Expr, fresh, mirror, WeakTypeTag }
-  import universe.{ Traverser => _, _ }
-  import internal._
+private[sequential] trait TraverserMacros {
+  val c: blackbox.Context
+  import c.{ Expr, fresh, mirror, WeakTypeTag }
+  import c.universe.{ Traverser => _, _ }
+  import c.universe.internal._
 
-  val universe: context.universe.type = context.universe
+  def these: Expr[Traverser[_]]
 
   def :+ [A]
-      (these: Expr[Traverser[A]], elem: Expr[A])
+      (elem: Expr[A])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     implicit val builderTypeTag = BuilderTypeTag(builder)
@@ -38,7 +38,7 @@ private[sequential] final class TraverserMacros[C <: Context](val context: C) {
   }
 
   def +: [A]
-      (elem: Expr[A], these: Expr[Traverser[A]])
+      (elem: Expr[A])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     implicit val builderTypeTag = BuilderTypeTag(builder)
@@ -58,7 +58,7 @@ private[sequential] final class TraverserMacros[C <: Context](val context: C) {
   }
 
   def ++ [A]
-      (these: Expr[Traverser[A]], those: Expr[Traverser[A]])
+      (those: Expr[Traverser[A]])
       (builder: Expr[Builder[A]])
     : Expr[builder.value.State] = {
     implicit val builderTypeTag = BuilderTypeTag(builder)
@@ -92,4 +92,7 @@ private[sequential] final class TraverserMacros[C <: Context](val context: C) {
     val BuilderStateTpe = typeRef(BuilderTypeTag.tpe, BuilderStateSym, Nil).normalize
     WeakTypeTag[builder.value.State](BuilderStateTpe)
   }
+
+  implicit protected def TraverserTag[A](implicit A: WeakTypeTag[A]): WeakTypeTag[Traverser[A]] =
+    WeakTypeTag(appliedType(mirror.staticClass(s"basis.collections.Traverser").toTypeConstructor, A.tpe :: Nil))
 }

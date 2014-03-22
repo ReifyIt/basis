@@ -10,44 +10,19 @@ package sequential
 import basis.util._
 
 final class NonStrictIndexedSeqOps[+A](val __ : IndexedSeq[A]) extends AnyVal {
-  def collect[B](q: PartialFunction[A, B]): IndexedSeq[B] =
-    new NonStrictIndexedSeqOps.Collect(__, q)
-
-  def map[B](f: A => B): IndexedSeq[B] =
-    new NonStrictIndexedSeqOps.Map(__, f)
-
-  def filter(p: A => Boolean): IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.Filter(__, p)
-
-  def withFilter(p: A => Boolean): IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.Filter(__, p)
-
-  def dropWhile(p: A => Boolean): IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.DropWhile(__, p)
-
-  def takeWhile(p: A => Boolean): IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.TakeWhile(__, p)
-
-  def span(p: A => Boolean): (IndexedSeq[A], IndexedSeq[A]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.Drop(__, lower)
-
-  def take(upper: Int): IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.Take(__, upper)
-
-  def slice(lower: Int, upper: Int): IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.Slice(__, lower, upper)
-
-  def reverse: IndexedSeq[A] =
-    new NonStrictIndexedSeqOps.Reverse(__)
-
-  def zip[B](those: IndexedSeq[B]): IndexedSeq[(A, B)] =
-    new NonStrictIndexedSeqOps.Zip(__, those)
-
-  def ++ [B >: A](those: IndexedSeq[B]): IndexedSeq[B] =
-    new NonStrictIndexedSeqOps.++(__, those)
+  def ++ [B >: A](those: IndexedSeq[B]): IndexedSeq[B]      = new NonStrictIndexedSeqOps.++(__, those)
+  def collect[B](q: PartialFunction[A, B]): IndexedSeq[B]   = new NonStrictIndexedSeqOps.Collect(__, q)
+  def drop(lower: Int): IndexedSeq[A]                       = new NonStrictIndexedSeqOps.Drop(__, lower)
+  def dropWhile(p: A => Boolean): IndexedSeq[A]             = new NonStrictIndexedSeqOps.DropWhile(__, p)
+  def filter(p: A => Boolean): IndexedSeq[A]                = new NonStrictIndexedSeqOps.Filter(__, p)
+  def map[B](f: A => B): IndexedSeq[B]                      = new NonStrictIndexedSeqOps.Map(__, f)
+  def reverse: IndexedSeq[A]                                = new NonStrictIndexedSeqOps.Reverse(__)
+  def slice(lower: Int, upper: Int): IndexedSeq[A]          = new NonStrictIndexedSeqOps.Slice(__, lower, upper)
+  def span(p: A => Boolean): (IndexedSeq[A], IndexedSeq[A]) = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): IndexedSeq[A]                       = new NonStrictIndexedSeqOps.Take(__, upper)
+  def takeWhile(p: A => Boolean): IndexedSeq[A]             = new NonStrictIndexedSeqOps.TakeWhile(__, p)
+  def withFilter(p: A => Boolean): IndexedSeq[A]            = new NonStrictIndexedSeqOps.Filter(__, p)
+  def zip[B](those: IndexedSeq[B]): IndexedSeq[(A, B)]      = new NonStrictIndexedSeqOps.Zip(__, those)
 }
 
 private[sequential] object NonStrictIndexedSeqOps {

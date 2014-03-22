@@ -8,32 +8,15 @@ package basis.collections
 package sequential
 
 final class NonStrictMapOps[+A, +T](val __ : Map[A, T]) extends AnyVal {
-  def filter(p: ((A, T)) => Boolean): Map[A, T] =
-    new NonStrictMapOps.Filter(__, p)
-
-  def withFilter(p: ((A, T)) => Boolean): Map[A, T] =
-    new NonStrictMapOps.Filter(__, p)
-
-  def dropWhile(p: ((A, T)) => Boolean): Map[A, T] =
-    new NonStrictMapOps.DropWhile(__, p)
-
-  def takeWhile(p: ((A, T)) => Boolean): Map[A, T] =
-    new NonStrictMapOps.TakeWhile(__, p)
-
-  def span(p: ((A, T)) => Boolean): (Map[A, T], Map[A, T]) =
-    (takeWhile(p), dropWhile(p))
-
-  def drop(lower: Int): Map[A, T] =
-    new NonStrictMapOps.Drop(__, lower)
-
-  def take(upper: Int): Map[A, T] =
-    new NonStrictMapOps.Take(__, upper)
-
-  def slice(lower: Int, upper: Int): Map[A, T] =
-    new NonStrictMapOps.Slice(__, lower, upper)
-
-  def ++ [B >: A, U >: T](those: Map[B, U]): Map[B, U] =
-    new NonStrictMapOps.++(__, those)
+  def ++ [B >: A, U >: T](those: Map[B, U]): Map[B, U]     = new NonStrictMapOps.++(__, those)
+  def drop(lower: Int): Map[A, T]                          = new NonStrictMapOps.Drop(__, lower)
+  def dropWhile(p: ((A, T)) => Boolean): Map[A, T]         = new NonStrictMapOps.DropWhile(__, p)
+  def filter(p: ((A, T)) => Boolean): Map[A, T]            = new NonStrictMapOps.Filter(__, p)
+  def slice(lower: Int, upper: Int): Map[A, T]             = new NonStrictMapOps.Slice(__, lower, upper)
+  def span(p: ((A, T)) => Boolean): (Map[A, T], Map[A, T]) = (takeWhile(p), dropWhile(p))
+  def take(upper: Int): Map[A, T]                          = new NonStrictMapOps.Take(__, upper)
+  def takeWhile(p: ((A, T)) => Boolean): Map[A, T]         = new NonStrictMapOps.TakeWhile(__, p)
+  def withFilter(p: ((A, T)) => Boolean): Map[A, T]        = new NonStrictMapOps.Filter(__, p)
 }
 
 private[sequential] object NonStrictMapOps {
