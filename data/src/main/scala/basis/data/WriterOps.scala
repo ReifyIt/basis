@@ -6,7 +6,6 @@
 
 package basis.data
 
-import basis.util._
 import scala.reflect.macros._
 
 final class WriterOps(val __ : Writer) extends AnyVal {
@@ -14,33 +13,21 @@ final class WriterOps(val __ : Writer) extends AnyVal {
   def writeArray[T](array: Array[T], start: Int, count: Int)(implicit T: Frame[T]): Unit = macro WriterMacros.writeArray[T]
 }
 
-private[data] object WriterMacros {
-  def WriterToOps(c: Context)(data: c.Expr[Writer]): c.Expr[WriterOps] = {
-    import c.universe._
-    c.Expr[WriterOps](q"new basis.data.WriterOps($data)")
-  }
+private[data] class WriterMacros(val c: blackbox.Context { type PrefixType <: WriterOps }) {
+  import c.{ Expr, prefix }
+  import c.universe._
 
-  def write[T](c: ContextWithPre[WriterOps])(value: c.Expr[T])(T: c.Expr[Frame[T]]): c.Expr[Unit] = {
-    import c.universe._
-    c.Expr[Unit](q"$T.write(${c.prefix}.__, $value)")
-  }
+  def write[T](value: Expr[T])(T: Expr[Frame[T]]): Expr[Unit] = Expr[Unit](q"$T.write($prefix.__, $value)")
 
-  def writeArray[T]
-      (c: ContextWithPre[WriterOps])
-      (array: c.Expr[Array[T]], start: c.Expr[Int], count: c.Expr[Int])
-      (T: c.Expr[Frame[T]])
-    : c.Expr[Unit] = {
-    import c.universe._
-    c.Expr[Unit](q"""{
-      val data = ${c.prefix}.__
-      val T = $T
-      val xs = $array
-      var i = $start
-      val n = i + $count
-      while (i < n) {
-        T.write(data, xs(i))
-        i += 1
-      }
-    }""")
-  }
+  def writeArray[T](array: Expr[Array[T]], start: Expr[Int], count: Expr[Int])(T: Expr[Frame[T]]): Expr[Unit] = Expr[Unit](q"""{
+    val data = $prefix.__
+    val T = $T
+    val xs = $array
+    var i = $start
+    val n = i + $count
+    while (i < n) {
+      T.write(data, xs(i))
+      i += 1
+    }
+  }""")
 }

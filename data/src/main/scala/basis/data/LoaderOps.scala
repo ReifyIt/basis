@@ -7,7 +7,6 @@
 package basis.data
 
 import basis.text._
-import basis.util._
 import scala.reflect.macros._
 
 final class LoaderOps(val __ : Loader) extends AnyVal {
@@ -15,7 +14,7 @@ final class LoaderOps(val __ : Loader) extends AnyVal {
   def loadArray[T](address: Long, count: Int)(implicit T: Struct[T]): Array[T]                            = macro LoaderMacros.loadArray[T]
   def loadToArray[T](address: Long, array: Array[T], start: Int, count: Int)(implicit T: Struct[T]): Unit = macro LoaderMacros.loadToArray[T]
 
-  private[basis] def writeBase64(builder: StringBuilder): Unit = {
+  def writeBase64(builder: StringBuilder): Unit = {
     def encodeDigit(digit: Int): Int = {
       if      (digit >=  0 && digit < 26) digit + ('A'     )
       else if (digit >= 26 && digit < 52) digit + ('a' - 26)
@@ -62,57 +61,40 @@ final class LoaderOps(val __ : Loader) extends AnyVal {
   }
 }
 
-private[data] object LoaderMacros {
-  def LoaderToOps(c: Context)(data: c.Expr[Loader]): c.Expr[LoaderOps] = {
-    import c.universe._
-    c.Expr[LoaderOps](q"new basis.data.LoaderOps($data)")
-  }
+private[data] class LoaderMacros(val c: blackbox.Context { type PrefixType <: LoaderOps }) {
+  import c.{ Expr, prefix, WeakTypeTag }
+  import c.universe._
 
-  def load[T: c.WeakTypeTag](c: ContextWithPre[LoaderOps])(address: c.Expr[Long])(T: c.Expr[Struct[T]]): c.Expr[T] = {
-    import c.universe._
-    c.Expr[T](q"$T.load(${c.prefix}.__, $address)")
-  }
+  def load[T](address: Expr[Long])(T: Expr[Struct[T]])(implicit TTag: WeakTypeTag[T]): Expr[T] = Expr[T](q"$T.load($prefix.__, $address)")
 
-  def loadArray[T]
-      (c: ContextWithPre[LoaderOps])
-      (address: c.Expr[Long], count: c.Expr[Int])
-      (T: c.Expr[Struct[T]])
-      (implicit TTag: c.WeakTypeTag[T])
-    : c.Expr[Array[T]] = {
-    import c.universe._
-    c.Expr[Array[T]](q"""{
-      val data = ${c.prefix}.__
-      val T = $T
-      val xs = new Array[$TTag]($count)
-      var p = $address
-      var i = 0
-      while (i < count) {
-        xs(i) = T.load(data, p)
-        p += T.size
-        i += 1
-      }
-      xs
-    }""")
-  }
+  def loadArray[T](address: Expr[Long], count: Expr[Int])(T: Expr[Struct[T]])(implicit TTag: WeakTypeTag[T]): Expr[Array[T]] = Expr[Array[T]](q"""{
+    val data = $prefix.__
+    val T = $T
+    val xs = new Array[$TTag]($count)
+    var p = $address
+    var i = 0
+    while (i < count) {
+      xs(i) = T.load(data, p)
+      p += T.size
+      i += 1
+    }
+    xs
+  }""")
 
-  def loadToArray[T]
-      (c: ContextWithPre[LoaderOps])
-      (address: c.Expr[Long], array: c.Expr[Array[T]], start: c.Expr[Int], count: c.Expr[Int])
-      (T: c.Expr[Struct[T]])
-    : c.Expr[Unit] = {
-    import c.universe._
-    c.Expr[Unit](q"""{
-      val data = ${c.prefix}.__
-      val T = $T
-      val xs = $array
-      var p = $address
-      var i = $start
-      val n = i + $count
-      while (i < n) {
-        xs(i) = T.load(data, p)
-        p += T.size
-        i += 1
-      }
-    }""")
-  }
+  def loadToArray[T](address: Expr[Long], array: Expr[Array[T]], start: Expr[Int], count: Expr[Int])(T: Expr[Struct[T]]): Expr[Unit] = Expr[Unit](q"""{
+    val data = $prefix.__
+    val T = $T
+    val xs = $array
+    var p = $address
+    var i = $start
+    val n = i + $count
+    while (i < n) {
+      xs(i) = T.load(data, p)
+      p += T.size
+      i += 1
+    }
+  }""")
+
+  implicit protected def ArrayTag[A](implicit A: WeakTypeTag[A]): WeakTypeTag[Array[A]] =
+    WeakTypeTag(appliedType(definitions.ArrayClass.toTypeConstructor, A.tpe :: Nil))
 }

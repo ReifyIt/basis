@@ -19,10 +19,10 @@ package object data {
     else throw new AssertionError
   }
 
-  implicit def LoaderToOps(data: Loader): LoaderOps = macro LoaderMacros.LoaderToOps
-  implicit def StorerToOps(data: Storer): StorerOps = macro StorerMacros.StorerToOps
-  implicit def ReaderToOps(data: Reader): ReaderOps = macro ReaderMacros.ReaderToOps
-  implicit def WriterToOps(data: Writer): WriterOps = macro WriterMacros.WriterToOps
+  implicit def LoaderToOps(data: Loader): LoaderOps = macro DataMacros.LoaderToOps
+  implicit def ReaderToOps(data: Reader): ReaderOps = macro DataMacros.ReaderToOps
+  implicit def StorerToOps(data: Storer): StorerOps = macro DataMacros.StorerToOps
+  implicit def WriterToOps(data: Writer): WriterOps = macro DataMacros.WriterToOps
 
   /** Returns an address aligned to a power-of-two alignment.
     *

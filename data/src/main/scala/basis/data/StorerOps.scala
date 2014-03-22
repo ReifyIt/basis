@@ -6,7 +6,6 @@
 
 package basis.data
 
-import basis.util._
 import scala.reflect.macros._
 
 final class StorerOps(val __ : Storer) extends AnyVal {
@@ -14,35 +13,23 @@ final class StorerOps(val __ : Storer) extends AnyVal {
   def storeArray[T](address: Long, array: Array[T], start: Int, count: Int)(implicit T: Struct[T]): Unit = macro StorerMacros.storeArray[T]
 }
 
-private[data] object StorerMacros {
-  def StorerToOps(c: Context)(data: c.Expr[Storer]): c.Expr[StorerOps] = {
-    import c.universe._
-    c.Expr[StorerOps](q"new basis.data.StorerOps($data)")
-  }
+private[data] class StorerMacros(val c: blackbox.Context { type PrefixType <: StorerOps }) {
+  import c.{ Expr, prefix }
+  import c.universe._
 
-  def store[T](c: ContextWithPre[StorerOps])(address: c.Expr[Long], value: c.Expr[T])(T: c.Expr[Struct[T]]): c.Expr[Unit] = {
-    import c.universe._
-    c.Expr[Unit](q"$T.store(${c.prefix}.__, $address, $value)")
-  }
+  def store[T](address: Expr[Long], value: Expr[T])(T: Expr[Struct[T]]): Expr[Unit] =  Expr[Unit](q"$T.store($prefix.__, $address, $value)")
 
-  def storeArray[T]
-      (c: ContextWithPre[StorerOps])
-      (address: c.Expr[Long], array: c.Expr[Array[T]], start: c.Expr[Int], count: c.Expr[Int])
-      (T: c.Expr[Struct[T]])
-    : c.Expr[Unit] = {
-    import c.universe._
-    c.Expr[Unit](q"""{
-      val data = ${c.prefix}.__
-      val T = $T
-      val xs = $array
-      var p = $address
-      var i = $start
-      val n = i + $count
-      while (i < n) {
-        T.store(data, p, xs(i))
-        p += T.size
-        i += 1
-      }
-    }""")
-  }
+  def storeArray[T](address: Expr[Long], array: Expr[Array[T]], start: Expr[Int], count: Expr[Int])(T: Expr[Struct[T]]): Expr[Unit] = Expr[Unit](q"""{
+    val data = $prefix.__
+    val T = $T
+    val xs = $array
+    var p = $address
+    var i = $start
+    val n = i + $count
+    while (i < n) {
+      T.store(data, p, xs(i))
+      p += T.size
+      i += 1
+    }
+  }""")
 }
