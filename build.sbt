@@ -1,12 +1,10 @@
-scalaVersion in Global := "2.11.0-RC1"
-
-crossScalaVersions in Global := Seq("2.11.0-RC1")
+scalaVersion in Global := "2.11.0-RC3"
 
 scalacOptions in Global ++= Seq("-language:_", "-Yno-predef")
 
 retrieveManaged := true
 
-lazy val subprojects = List(collections, data, form, math, stat, text, util)
+lazy val subprojects = List(`basis-collections`, `basis-data`, `basis-form`, `basis-math`, `basis-stat`, `basis-text`, `basis-util`)
 
 lazy val basis = (
   project in file(".")
@@ -15,17 +13,19 @@ lazy val basis = (
     aggregate (subprojects map (x => x: ProjectReference): _*)
 )
 
-lazy val math = project settings (moduleSettings: _*)
+lazy val `basis-collections` = project in file("collections") settings (moduleSettings: _*) dependsOn `basis-util`
 
-lazy val util = project settings (moduleSettings: _*)
+lazy val `basis-data` = project in file("data") settings (moduleSettings: _*) dependsOn (`basis-collections`, `basis-text`, `basis-util`)
 
-lazy val collections = project settings (moduleSettings: _*) dependsOn util
+lazy val `basis-form` = project in file("form") settings (moduleSettings: _*) dependsOn (`basis-collections`, `basis-data`, `basis-text`, `basis-util`)
 
-lazy val form = project settings (moduleSettings: _*) dependsOn (collections, data, text, util)
+lazy val `basis-math` = project in file("math") settings (moduleSettings: _*)
 
-lazy val data = project settings (moduleSettings: _*) dependsOn (collections, text, util)
+lazy val `basis-stat` = project in file("stat") settings (moduleSettings: _*) dependsOn (`basis-collections`, `basis-util`)
 
-lazy val stat, text = project settings (moduleSettings: _*) dependsOn (collections, util)
+lazy val `basis-text` = project in file("text") settings (moduleSettings: _*) dependsOn (`basis-collections`, `basis-util`)
+
+lazy val `basis-util` = project in file("util") settings (moduleSettings: _*)
 
 lazy val packageSettings = (
      Defaults.defaultSettings
@@ -48,7 +48,7 @@ lazy val compileSettings = Seq(
   scalacOptions in Compile ++= Seq("-optimise"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    "org.scalatest" %% "scalatest" % "2.1.0" % "test"
+    "org.scalatest" %% "scalatest" % "2.1.2" % "test"
   )
 )
 

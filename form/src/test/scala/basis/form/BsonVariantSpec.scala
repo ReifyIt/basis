@@ -26,9 +26,9 @@ class BsonVariantSpec
       val input = data.reader(0L)
       x.bsonType match {
         case 0x01 => input.readBsonDouble()
-        case 0x02 => input.readBsonString(BsonStringBuilder())
-        case 0x03 => input.readBsonObject(BsonObjectBuilder())
-        case 0x04 => input.readBsonArray(BsonArrayBuilder())
+        case 0x02 => input.readBsonString(BsonStringBuilder)
+        case 0x03 => input.readBsonObject(BsonObjectBuilder)
+        case 0x04 => input.readBsonArray(BsonArrayBuilder)
         case 0x05 => input.readBsonBinary()
         case 0x06 => input.readBsonUndefined()
         case 0x07 => input.readBsonObjectId()

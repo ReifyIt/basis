@@ -19,7 +19,7 @@ trait CollectionBehaviors { this: FunSpec =>
     }
 
     it("should build and traverse unary collections") {
-      val xs = (CC.Builder[String]() += "unit").state
+      val xs = (CC.Builder[String] += "unit").state
       var q = false
       xs.traverse {
         case "unit" if !q => q = true

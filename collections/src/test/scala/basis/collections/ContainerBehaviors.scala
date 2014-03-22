@@ -19,7 +19,7 @@ trait ContainerBehaviors extends CollectionBehaviors { this: FunSpec =>
     }
 
     it("should build and iterate over unary containers") {
-      val xs = (CC.Builder[String]() += "unit").state.iterator
+      val xs = (CC.Builder[String] += "unit").state.iterator
       var q = false
       while (!xs.isEmpty) {
         xs.head match {

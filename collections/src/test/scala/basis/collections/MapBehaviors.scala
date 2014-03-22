@@ -24,7 +24,7 @@ trait MapBehaviors { this: FunSpec =>
     }
 
     it("should build and traverse unary maps") {
-      val xs = (CC.Builder[String, Int]() += "one" -> 1).state
+      val xs = (CC.Builder[String, Int] += "one" -> 1).state
       var q = false
       xs.traverse(_ match {
         case ("one", 1) if !q => q = true
@@ -35,7 +35,7 @@ trait MapBehaviors { this: FunSpec =>
     }
 
     it("should build and iterate over unary maps") {
-      val xs = (CC.Builder[String, Int]() += "one" -> 1).state.iterator
+      val xs = (CC.Builder[String, Int] += "one" -> 1).state.iterator
       var q = false
       while (!xs.isEmpty) {
         xs.head match {
