@@ -1,4 +1,4 @@
-scalaVersion in Global := "2.11.0-RC3"
+scalaVersion in Global := "2.11.0-SNAPSHOT"
 
 scalacOptions in Global ++= Seq("-language:_", "-Yno-predef")
 
@@ -8,7 +8,7 @@ lazy val subprojects = List(`basis-collections`, `basis-data`, `basis-form`, `ba
 
 lazy val basis = (
   project in file(".")
-     settings (packageSettings ++ unidocSettings: _*)
+     settings (packageSettings: _*)
     dependsOn (subprojects map (x => x: ClasspathDep[ProjectReference]): _*)
     aggregate (subprojects map (x => x: ProjectReference): _*)
 )
@@ -41,14 +41,15 @@ lazy val projectSettings = Seq(
   organization := "it.reify",
   description := "A foundation library for Scala focussed on efficiency and clean design",
   homepage := Some(url("http://basis.reify.it")),
-  licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+  licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+  resolvers += Resolver.sonatypeRepo("snapshots")
 )
 
 lazy val compileSettings = Seq(
-  scalacOptions in Compile ++= Seq("-optimise"),
+  scalacOptions in Compile ++= Seq("-optimise", "-Xfuture"),
   libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    "org.scalatest" %% "scalatest" % "2.1.2" % "test"
+    "org.scala-lang" % "scala-reflect" % scalaVersion.value
+  //"org.scalatest" % "scalatest_2.11.0-RC3" % "2.1.2" % "test"
   )
 )
 

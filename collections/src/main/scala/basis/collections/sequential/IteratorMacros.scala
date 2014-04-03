@@ -17,316 +17,160 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
 
   override def these: Expr[Iterator[_]]
 
-  def foreach[A, U](f: Expr[A => U]): Expr[Unit] = {
-    val xs   = fresh("xs$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Unit](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) :: Nil,
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              Apply(f.tree, Select(Ident(xs), "head": TermName) :: Nil) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree))))
-  }
+  def foreach[A, U](f: Expr[A => U]): Expr[Unit] = Expr[Unit](q"""{
+    val xs = $these
+    while (!xs.isEmpty) {
+      $f(xs.head)
+      xs.step()
+    }
+  }""")
 
-  def foldLeft[A, B : WeakTypeTag](z: Expr[B])(op: Expr[(B, A) => B]): Expr[B] = {
-    val xs   = fresh("xs$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[B](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), z.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head": TermName) :: Nil)) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def foldLeft[A, B : WeakTypeTag](z: Expr[B])(op: Expr[(B, A) => B]): Expr[B] = Expr[B](q"""{
+    val xs = $these
+    var r = $z
+    while (!xs.isEmpty) {
+      r = $op(r, xs.head)
+      xs.step()
+    }
+    r
+  }""")
 
-  def reduceLeft[A, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[B] = {
-    val xs   = fresh("xs$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[B](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        If(
-          Select(Ident(xs), "isEmpty": TermName),
-          Throw(
-            Apply(
-              Select(New(TypeTree(weakTypeOf[UnsupportedOperationException])), nme.CONSTRUCTOR),
-              Literal(Constant("empty reduce")) :: Nil)),
-          EmptyTree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Select(Ident(xs), "head": TermName)) ::
-        Apply(Select(Ident(xs), "step": TermName), Nil) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head": TermName) :: Nil)) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def reduceLeft[A, B >: A](op: Expr[(B, A) => B])(implicit B: WeakTypeTag[B]): Expr[B] = Expr[B](q"""{
+    val xs = $these
+    if (xs.isEmpty) throw new _root_.java.lang.UnsupportedOperationException("empty reduce")
+    else {
+      var r = xs.head: $B
+      xs.step()
+      while (!xs.isEmpty) {
+        r = $op(r, xs.head)
+        xs.step()
+      }
+      r
+    }
+  }""")
 
-  def mayReduceLeft[A, B >: A : WeakTypeTag](op: Expr[(B, A) => B]): Expr[Maybe[B]] = {
-    val xs   = fresh("xs$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Maybe[B]](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) :: Nil,
-        If(
-          Select(Ident(xs), "isEmpty": TermName),
-          Select(BasisUtil, "Trap": TermName),
-          Block(
-            ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[B]), Select(Ident(xs), "head": TermName)) ::
-            Apply(Select(Ident(xs), "step": TermName), Nil) ::
-            LabelDef(loop, Nil,
-              If(
-                Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-                Block(
-                  Assign(Ident(r), Apply(op.tree, Ident(r) :: Select(Ident(xs), "head": TermName) :: Nil)) ::
-                  Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                  Apply(Ident(loop), Nil)),
-                EmptyTree)) :: Nil,
-            Apply(Select(BasisUtil, "Bind": TermName), Ident(r) :: Nil)))))
-  }
+  def mayReduceLeft[A, B >: A](op: Expr[(B, A) => B])(implicit B: WeakTypeTag[B]): Expr[Maybe[B]] = Expr[Maybe[B]](q"""{
+    val xs = $these
+    if (xs.isEmpty) _root_.basis.util.Trap
+    else {
+      var r = xs.head: $B
+      xs.step()
+      while (!xs.isEmpty) {
+        r = $op(r, xs.head)
+        xs.step()
+      }
+      _root_.basis.util.Bind(r)
+    }
+  }""")
 
   def find[A : WeakTypeTag](p: Expr[A => Boolean]): Expr[Maybe[A]] = {
-    val xs   = fresh("xs$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    val x    = fresh("x$"): TermName
-    implicit val MaybeATag = MaybeTag[A]
-    Expr[Maybe[A]](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[A]]), Select(BasisUtil, "Trap": TermName)) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) :: Nil,
-              If(
-                Apply(p.tree, Ident(x) :: Nil),
-                Assign(Ident(r), Apply(Select(BasisUtil, "Bind": TermName), Ident(x) :: Nil)),
-                Block(
-                  Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                  Apply(Ident(loop), Nil)))),
-            EmptyTree)) :: Nil,
-        Ident(r)))
+    implicit val MaybeA = MaybeTag[A]
+    Expr[Maybe[A]](q"""{
+      val xs = $these
+      var r = _root_.basis.util.Trap: $MaybeA
+      while (!xs.isEmpty && {
+        val x = xs.head
+        !$p(x) && { xs.step(); true } || { r = _root_.basis.util.Bind(x); false }
+      }) ()
+      r
+    }""")
   }
 
-  def forall[A](p: Expr[A => Boolean]): Expr[Boolean] = {
-    val xs   = fresh("xs$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Boolean](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(true))) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            If(
-              Apply(p.tree, Select(Ident(xs), "head": TermName) :: Nil),
-              Block(
-                Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                Apply(Ident(loop), Nil)),
-              Assign(Ident(r), Literal(Constant(false)))),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def forall[A](p: Expr[A => Boolean]): Expr[Boolean] = Expr[Boolean](q"""{
+    val xs = $these
+    var r = true
+    while (!xs.isEmpty && ($p(xs.head) && { xs.step(); true } || { r = false; false })) ()
+    r
+  }""")
 
-  def exists[A](p: Expr[A => Boolean]): Expr[Boolean] = {
-    val xs   = fresh("xs$"): TermName
-    val r    = fresh("r$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Boolean](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(), Literal(Constant(false))) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            If(
-              Apply(p.tree, Select(Ident(xs), "head": TermName) :: Nil),
-              Assign(Ident(r), Literal(Constant(true))),
-              Block(
-                Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                Apply(Ident(loop), Nil))),
-            EmptyTree)) :: Nil,
-        Ident(r)))
-  }
+  def exists[A](p: Expr[A => Boolean]): Expr[Boolean] = Expr[Boolean](q"""{
+    val xs = $these
+    var r = false
+    while (!xs.isEmpty && ($p(xs.head) && { r = true; false } || { xs.step(); true })) ()
+    r
+  }""")
 
-  def count[A](p: Expr[A => Boolean]): Expr[Int] = {
-    val xs   = fresh("xs$"): TermName
-    val t    = fresh("t$"): TermName
-    val loop = fresh("loop$"): TermName
-    Expr[Int](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), t, TypeTree(), Literal(Constant(0))) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              If(
-                Apply(p.tree, Select(Ident(xs), "head": TermName) :: Nil),
-                Assign(Ident(t), Apply(Select(Ident(t), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)),
-                EmptyTree) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Ident(t)))
-  }
+  def count[A](p: Expr[A => Boolean]): Expr[Int] = Expr[Int](q"""{
+    val xs = $these
+    var t = 0
+    while (!xs.isEmpty) {
+      if ($p(xs.head)) t += 1
+      xs.step()
+    }
+    t
+  }""")
 
   def choose[A, B : WeakTypeTag](q: Expr[PartialFunction[A, B]]): Expr[Maybe[B]] = {
-    val xs   = fresh("xs$"): TermName
-    val r    = fresh("r$"): TermName
-    val f    = fresh("q$"): TermName
-    val loop = fresh("loop$"): TermName
-    val x    = fresh("x$"): TermName
-    implicit val MaybeBTag = MaybeTag[B]
-    Expr[Maybe[B]](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), r, TypeTree(weakTypeOf[Maybe[B]]), Select(BasisUtil, "Trap": TermName)) ::
-        ValDef(NoMods, f, TypeTree(), q.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) :: Nil,
-              If(
-                Apply(Select(Ident(f), "isDefinedAt": TermName), Ident(x) :: Nil),
-                Assign(
-                  Ident(r),
-                  Apply(
-                    Select(BasisUtil, "Bind": TermName),
-                    Apply(
-                      Select(Ident(f), "applyOrElse": TermName),
-                      Ident(x) :: Select(ScalaPartialFunction, "empty": TermName) :: Nil) :: Nil)),
-                Block(
-                  Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                  Apply(Ident(loop), Nil)))),
-            EmptyTree)) :: Nil,
-        Ident(r)))
+    implicit val MaybeB = MaybeTag[B]
+    Expr[Maybe[B]](q"""{
+      val xs = $these
+      var r = _root_.basis.util.Trap: $MaybeB
+      val f = $q
+      while (!xs.isEmpty && {
+        val x = xs.head
+        f.isDefinedAt(x) && { r = _root_.basis.util.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { xs.step(); true }
+      }) ()
+      r
+    }""")
   }
 
   def collect[A, B](q: Expr[PartialFunction[A, B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
-    val xs   = fresh("xs$"): TermName
-    val b    = fresh("b$"): TermName
-    val f    = fresh("q$"): TermName
-    val loop = fresh("loop$"): TermName
-    val x    = fresh("x$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        ValDef(NoMods, f, TypeTree(), q.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
-              If(
-                Apply(Select(Ident(f), "isDefinedAt": TermName), Ident(x) :: Nil),
-                Apply(
-                  Select(Ident(b), "append": TermName),
-                  Apply(
-                    Select(Ident(f), "applyOrElse": TermName),
-                    Ident(x) :: Select(ScalaPartialFunction, "empty": TermName) :: Nil) :: Nil),
-                EmptyTree) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      val f = $q
+      while (!xs.isEmpty) {
+        val x = xs.head
+        if (f.isDefinedAt(x)) b.append(f.applyOrElse(x, _root_.scala.PartialFunction.empty))
+        xs.step()
+      }
+      b.state
+    }""")
   }
 
   def map[A, B](f: Expr[A => B])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
-    val xs   = fresh("xs$"): TermName
-    val b    = fresh("b$"): TermName
-    val loop = fresh("loop$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              Apply(
-                Select(Ident(b), "append": TermName),
-                Apply(f.tree, Select(Ident(xs), "head": TermName) :: Nil) :: Nil) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      while (!xs.isEmpty) {
+        b.append($f(xs.head))
+        xs.step()
+      }
+      b.state
+    }""")
   }
 
   def flatMap[A, B](f: Expr[A => Traverser[B]])(builder: Expr[Builder[B]]): Expr[builder.value.State] = {
-    val xs   = fresh("xs$"): TermName
-    val b    = fresh("b$"): TermName
-    val loop = fresh("loop$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              Apply(
-                Select(Ident(b), "appendAll": TermName),
-                Apply(f.tree, Select(Ident(xs), "head": TermName) :: Nil) :: Nil) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      while (!xs.isEmpty) {
+        b.appendAll($f(xs.head))
+        xs.step()
+      }
+      b.state
+    }""")
   }
 
   def filter[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
-    val xs   = fresh("xs$"): TermName
-    val b    = fresh("b$"): TermName
-    val loop = fresh("loop$"): TermName
-    val x    = fresh("x$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
-              If(
-                Apply(p.tree, Ident(x) :: Nil),
-                Apply(Select(Ident(b), "append": TermName), Ident(x) :: Nil),
-                EmptyTree) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop), Nil)),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      while (!xs.isEmpty) {
+        val x = xs.head
+        if ($p(x)) b.append(x)
+        xs.step()
+      }
+      b.state
+    }""")
   }
 
   def dropWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
