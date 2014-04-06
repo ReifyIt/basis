@@ -1,4 +1,4 @@
-scalaVersion in Global := "2.11.0-SNAPSHOT"
+scalaVersion in Global := "2.11.0-RC4"
 
 scalacOptions in Global ++= Seq("-language:_", "-Yno-predef")
 
@@ -41,15 +41,14 @@ lazy val projectSettings = Seq(
   organization := "it.reify",
   description := "A foundation library for Scala focussed on efficiency and clean design",
   homepage := Some(url("http://basis.reify.it")),
-  licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
-  resolvers += Resolver.sonatypeRepo("snapshots")
+  licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 )
 
 lazy val compileSettings = Seq(
   scalacOptions in Compile ++= Seq("-optimise", "-Xfuture"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value
-  //"org.scalatest" % "scalatest_2.11.0-RC3" % "2.1.2" % "test"
+  //"org.scalatest" % "scalatest_2.11.0-RC4" % "2.1.3" % "test"
   )
 )
 

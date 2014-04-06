@@ -11,7 +11,7 @@ import basis.util._
 import scala.reflect.macros._
 
 private[sequential] abstract class IteratorMacros(override val c: blackbox.Context) extends TraverserMacros {
-  import c.{ Expr, fresh, mirror, WeakTypeTag }
+  import c.{ Expr, mirror, WeakTypeTag }
   import c.universe.{ Traverser => _, _ }
   import c.universe.internal._
 
@@ -174,244 +174,134 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
   }
 
   def dropWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
-    val xs    = fresh("xs$"): TermName
-    val b     = fresh("b$"): TermName
-    val loop1 = fresh("loop$"): TermName
-    val x     = fresh("x$"): TermName
-    val loop2 = fresh("loop$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop1, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              If(
-                Apply(p.tree, Ident(x) :: Nil),
-                Apply(Ident(loop1), Nil),
-                Apply(Select(Ident(b), "append": TermName), Ident(x) :: Nil))),
-            EmptyTree)) ::
-        LabelDef(loop2, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop2), Nil)),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      while (!xs.isEmpty && {
+        val x = xs.head
+        xs.step()
+        $p(x) || { b.append(x); false }
+      }) ()
+      while (!xs.isEmpty) {
+        b.append(xs.head)
+        xs.step()
+      }
+      b.state
+    }""")
   }
 
   def takeWhile[A](p: Expr[A => Boolean])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
-    val xs   = fresh("xs$"): TermName
-    val b    = fresh("b$"): TermName
-    val loop = fresh("loop$"): TermName
-    val x    = fresh("x$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              If(
-                Apply(p.tree, Ident(x) :: Nil),
-                Block(
-                  Apply(Select(Ident(b), "append": TermName), Ident(x) :: Nil) :: Nil,
-                  Apply(Ident(loop), Nil)),
-                EmptyTree)),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      while (!xs.isEmpty && {
+        val x = xs.head
+        xs.step()
+        $p(x) && { b.append(x); true }
+      }) ()
+    b.state
+    }""")
   }
 
   def span[A](p: Expr[A => Boolean])(builder1: Expr[Builder[A]], builder2: Expr[Builder[A]]): Expr[(builder1.value.State, builder2.value.State)] = {
-    val xs    = fresh("xs$"): TermName
-    val a     = fresh("b$"): TermName
-    val b     = fresh("b$"): TermName
-    val loop1 = fresh("loop$"): TermName
-    val x     = fresh("x$"): TermName
-    val loop2 = fresh("loop$"): TermName
-    implicit val builder1TypeTag = BuilderTypeTag(builder1)
-    implicit val builder2TypeTag = BuilderTypeTag(builder2)
-    Expr[(builder1.value.State, builder2.value.State)](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, a, TypeTree(builder1TypeTag.tpe), builder1.tree) ::
-        ValDef(NoMods, b, TypeTree(builder2TypeTag.tpe), builder2.tree) ::
-        LabelDef(loop1, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              ValDef(NoMods, x, TypeTree(), Select(Ident(xs), "head": TermName)) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              If(
-                Apply(p.tree, Ident(x) :: Nil),
-                Block(
-                  Apply(Select(Ident(a), "append": TermName), Ident(x) :: Nil) :: Nil,
-                  Apply(Ident(loop1), Nil)),
-                Apply(Select(Ident(b), "append": TermName), Ident(x) :: Nil))),
-            EmptyTree)) ::
-        LabelDef(loop2, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop2), Nil)),
-            EmptyTree)) :: Nil,
-        Apply(
-          Select(New(TypeTree(weakTypeOf[(builder1.value.State, builder2.value.State)])), nme.CONSTRUCTOR),
-          Select(Ident(a), "state": TermName) :: Select(Ident(b), "state": TermName) :: Nil)))
+    implicit val builder1Type = BuilderTypeTag(builder1)
+    implicit val builder2Type = BuilderTypeTag(builder2)
+    implicit val builder1State = BuilderStateTag(builder1)
+    implicit val builder2State = BuilderStateTag(builder2)
+    Expr[(builder1.value.State, builder2.value.State)](q"""{
+      val xs = $these
+      val b1 = $builder1: $builder1Type
+      val b2 = $builder2: $builder2Type
+      while (!xs.isEmpty && {
+        val x = xs.head
+        xs.step()
+        if ($p(x)) { b1.append(x); true } else { b2.append(x); false }
+      }) ()
+      while (!xs.isEmpty) {
+        b2.append(xs.head)
+        xs.step()
+      }
+      (b1.state: $builder1State, b2.state: $builder2State)
+    }""")
   }
 
   def drop[A](lower: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
-    val xs    = fresh("xs$"): TermName
-    val i     = fresh("i$"): TermName
-    val n     = fresh("n$"): TermName
-    val b     = fresh("b$"): TermName
-    val loop1 = fresh("loop$"): TermName
-    val loop2 = fresh("loop$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(NoMods, n, TypeTree(), lower.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop1, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            If(
-              Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-              Block(
-                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
-                Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                Apply(Ident(loop1), Nil)),
-              EmptyTree),
-            EmptyTree)) ::
-        LabelDef(loop2, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            Block(
-              Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
-              Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-              Apply(Ident(loop2), Nil)),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      val n = $lower
+      var i = 0
+      while (i < n && !xs.isEmpty) {
+        xs.step()
+        i += 1
+      }
+      while (!xs.isEmpty) {
+        b.append(xs.head)
+        xs.step()
+      }
+      b.state
+    }""")
   }
 
   def take[A](upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
-    val xs   = fresh("xs$"): TermName
-    val i    = fresh("i$"): TermName
-    val n    = fresh("n$"): TermName
-    val b    = fresh("b$"): TermName
-    val loop = fresh("loop$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(NoMods, n, TypeTree(), upper.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            If(
-              Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-              Block(
-                Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
-                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
-                Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                Apply(Ident(loop), Nil)),
-              EmptyTree),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      val n = $upper
+      var i = 0
+      while (i < n && !xs.isEmpty) {
+        b.append(xs.head)
+        xs.step()
+        i += 1
+      }
+      b.state
+    }""")
   }
 
   def slice[A](lower: Expr[Int], upper: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {
-    val xs    = fresh("xs$"): TermName
-    val i     = fresh("i$"): TermName
-    val n     = fresh("n$"): TermName
-    val b     = fresh("b$"): TermName
-    val loop1 = fresh("loop$"): TermName
-    val loop2 = fresh("loop$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(Modifiers(Flag.MUTABLE), i, TypeTree(), Literal(Constant(0))) ::
-        ValDef(Modifiers(Flag.MUTABLE), n, TypeTree(), lower.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop1, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            If(
-              Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-              Block(
-                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
-                Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                Apply(Ident(loop1), Nil)),
-              EmptyTree),
-            EmptyTree)) ::
-        Assign(Ident(n), upper.tree) ::
-        LabelDef(loop2, Nil,
-          If(
-            Apply(Select(Ident(i), ("<": TermName).encodedName), Ident(n) :: Nil),
-            If(
-              Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-              Block(
-                Apply(Select(Ident(b), "append": TermName), Select(Ident(xs), "head": TermName) :: Nil) ::
-                Assign(Ident(i), Apply(Select(Ident(i), ("+": TermName).encodedName), Literal(Constant(1)) :: Nil)) ::
-                Apply(Select(Ident(xs), "step": TermName), Nil) :: Nil,
-                Apply(Ident(loop2), Nil)),
-              EmptyTree),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val b = $builder: $builderType
+      var n = $lower
+      var i = 0
+      while (i < n && !xs.isEmpty) {
+        xs.step()
+        i += 1
+      }
+      n = $upper
+      while (i < n && !xs.isEmpty) {
+        b.append(xs.head)
+        xs.step()
+        i += 1
+      }
+      b.state
+    }""")
   }
 
-  def zip[A : WeakTypeTag, B : WeakTypeTag](those: Expr[Iterator[B]])(builder: Expr[Builder[(A, B)]]): Expr[builder.value.State] = {
-    val xs   = fresh("xs$"): TermName
-    val ys   = fresh("ys$"): TermName
-    val b    = fresh("b$"): TermName
-    val loop = fresh("loop$"): TermName
-    implicit val builderTypeTag = BuilderTypeTag(builder)
-    implicit val builderStateTag = BuilderStateTag(builder)
-    Expr[builder.value.State](
-      Block(
-        ValDef(NoMods, xs, TypeTree(), these.tree) ::
-        ValDef(NoMods, ys, TypeTree(), those.tree) ::
-        ValDef(NoMods, b, TypeTree(builderTypeTag.tpe), builder.tree) ::
-        LabelDef(loop, Nil,
-          If(
-            Select(Select(Ident(xs), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-            If(
-              Select(Select(Ident(ys), "isEmpty": TermName), ("unary_!": TermName).encodedName),
-              Block(
-                Apply(
-                  Select(Ident(b), "append": TermName),
-                  Apply(
-                    Select(New(TypeTree(weakTypeOf[(A, B)])), nme.CONSTRUCTOR),
-                    Select(Ident(xs), "head": TermName) ::
-                    Select(Ident(ys), "head": TermName) :: Nil) :: Nil) ::
-                Apply(Select(Ident(xs), "step": TermName), Nil) ::
-                Apply(Select(Ident(ys), "step": TermName), Nil) :: Nil,
-                Apply(Ident(loop), Nil)),
-              EmptyTree),
-            EmptyTree)) :: Nil,
-        Select(Ident(b), "state": TermName)))
+  def zip[A, B](those: Expr[Iterator[B]])(builder: Expr[Builder[(A, B)]])(implicit A: WeakTypeTag[A], B: WeakTypeTag[B]): Expr[builder.value.State] = {
+    implicit val builderType = BuilderTypeTag(builder)
+    implicit val builderState = BuilderStateTag(builder)
+    Expr[builder.value.State](q"""{
+      val xs = $these
+      val ys = $those
+      val b = $builder: $builderType
+      while (!xs.isEmpty && !ys.isEmpty) {
+        b.append((xs.head: $A, ys.head: $B))
+        xs.step()
+        ys.step()
+      }
+      b.state
+    }""")
   }
 
   def zipContainer[A : WeakTypeTag, B : WeakTypeTag](those: Expr[Container[B]])(builder: Expr[Builder[(A, B)]]): Expr[builder.value.State] =
@@ -451,10 +341,4 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
 
   implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] =
     WeakTypeTag(mirror.staticClass("java.lang.UnsupportedOperationException").toType)
-
-  private def BasisUtil: Tree =
-    Select(Select(Ident(nme.ROOTPKG), "basis": TermName), "util": TermName)
-
-  private def ScalaPartialFunction: Tree =
-    Select(Select(Ident(nme.ROOTPKG), "scala": TermName), "PartialFunction": TermName)
 }
