@@ -33,9 +33,9 @@ object ByteVector extends ByteOrder[NativeEndian] with ByteFactory[ByteVector wi
     else throw new MatchError(endian)
   }.asInstanceOf[ByteVector with ByteOrder[NativeEndian]]
 
-  implicit override def Framer(): Framer with ByteOrder[NativeEndian] with State[ByteVector with ByteOrder[NativeEndian]] = {
-    if (endian.isBig) ByteVectorBE.Framer()
-    else if (endian.isLittle) ByteVectorLE.Framer()
+  implicit override def Framer: Framer with ByteOrder[NativeEndian] with State[ByteVector with ByteOrder[NativeEndian]] = {
+    if (endian.isBig) ByteVectorBE.Framer
+    else if (endian.isLittle) ByteVectorLE.Framer
     else throw new MatchError(endian)
   }.asInstanceOf[Framer with ByteOrder[NativeEndian] with State[ByteVector with ByteOrder[NativeEndian]]]
 

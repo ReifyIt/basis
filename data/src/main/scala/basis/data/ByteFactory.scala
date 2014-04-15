@@ -9,11 +9,11 @@ package basis.data
 import basis.collections._
 
 trait ByteFactory[+Data] extends ByteOrder[Endianness] {
-  def empty: Data = Framer().state
+  def empty: Data = Framer.state
 
   def apply(data: Array[Byte]): Data = {
     val size = data.length
-    val framer = Framer().expect(size.toLong)
+    val framer = Framer.expect(size.toLong)
     var i = 0
     while (i < size) {
       framer.writeByte(data(i))
@@ -23,7 +23,7 @@ trait ByteFactory[+Data] extends ByteOrder[Endianness] {
   }
 
   def apply(base64: CharSequence): Data = {
-    val framer = Framer()
+    val framer = Framer
     val n = base64.length
     var i = 0
     def decodeDigit(c: Char): Int = {
@@ -63,5 +63,5 @@ trait ByteFactory[+Data] extends ByteOrder[Endianness] {
     framer.state
   }
 
-  implicit def Framer(): Framer with ByteOrder[Endian] with State[Data]
+  implicit def Framer: Framer with ByteOrder[Endian] with State[Data]
 }

@@ -102,7 +102,7 @@ final class ByteBufferBE(val __ : Array[Byte]) extends AnyVal with ByteBuffer wi
       java.lang.System.arraycopy(data, 0, buffer, __.length, data.length)
       new ByteBufferBE(buffer)
     case _ =>
-      val framer = ByteBufferBE.Framer().expect(size + that.size)
+      val framer = ByteBufferBE.Framer.expect(size + that.size)
       framer.writeData(this)
       framer.writeData(that)
       framer.state
@@ -122,7 +122,9 @@ object ByteBufferBE extends ByteOrder[BigEndian] with ByteFactory[ByteBufferBE] 
 
   override def apply(data: Array[Byte]): ByteBufferBE = new ByteBufferBE(data)
 
-  implicit override def Framer(): Framer with ByteOrder[BigEndian] with State[ByteBufferBE] = new ByteBufferBEFramer
+  def apply(size: Int): ByteBufferBE = new ByteBufferBE(new Array[Byte](size))
+
+  implicit override def Framer: Framer with ByteOrder[BigEndian] with State[ByteBufferBE] = new ByteBufferBEFramer
 
   override def toString: String = "ByteBufferBE"
 }

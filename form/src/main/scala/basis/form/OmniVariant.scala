@@ -131,8 +131,8 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
 
   protected class OmniBinaryFactory extends BaseBinaryFactory {
     override def endian: Endianness = NativeEndian
-    override val empty: BinaryForm                       = new BinaryForm(ByteVector.empty)
-    override def Framer(): Framer with State[BinaryForm] = new OmniBinaryFramer(ByteVector.Framer())
+    override val empty: BinaryForm                     = new BinaryForm(ByteVector.empty)
+    override def Framer: Framer with State[BinaryForm] = new OmniBinaryFramer(ByteVector.Framer)
   }
 
   protected final class OmniBinaryFramer(underlying: Framer with State[Loader]) extends Framer with State[BinaryForm] {

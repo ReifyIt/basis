@@ -170,7 +170,7 @@ sealed abstract class ByteVectorBE extends ByteVector with ByteOrder[BigEndian] 
   override def mutateDouble(address: Long, value: Double): ByteVectorBE = mutateLong(address, value.toLongBits)
 
   override def ++ (that: Loader): ByteVectorBE = {
-    val framer = ByteVectorBE.Framer()
+    val framer = ByteVectorBE.Framer
     framer.writeData(this)
     framer.writeData(that)
     framer.state
@@ -195,7 +195,7 @@ object ByteVectorBE extends ByteOrder[BigEndian] with ByteFactory[ByteVectorBE] 
 
   override val empty: ByteVectorBE = new ByteVectorBE0
 
-  implicit override def Framer(): Framer with ByteOrder[BigEndian] with State[ByteVectorBE] = new ByteVectorBEFramer
+  implicit override def Framer: Framer with ByteOrder[BigEndian] with State[ByteVectorBE] = new ByteVectorBEFramer
 
   override def toString: String = "ByteVectorBE"
 }

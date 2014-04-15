@@ -23,9 +23,21 @@ object ByteBuffer extends ByteOrder[NativeEndian] with ByteFactory[ByteBuffer wi
     else throw new MatchError(endian)
   }.asInstanceOf[ByteBuffer with ByteOrder[NativeEndian]]
 
-  implicit override def Framer(): Framer with ByteOrder[NativeEndian] with State[ByteBuffer with ByteOrder[NativeEndian]] = {
-    if (endian.isBig) ByteBufferBE.Framer()
-    else if (endian.isLittle) ByteBufferLE.Framer()
+  override def apply(data: Array[Byte]): ByteBuffer with ByteOrder[NativeEndian] = {
+    if (endian.isBig) ByteBufferBE(data)
+    else if (endian.isLittle) ByteBufferLE(data)
+    else throw new MatchError(endian)
+  }.asInstanceOf[ByteBuffer with ByteOrder[NativeEndian]]
+
+  def apply(size: Int): ByteBuffer with ByteOrder[NativeEndian] = {
+    if (endian.isBig) ByteBufferBE(size)
+    else if (endian.isLittle) ByteBufferLE(size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[ByteBuffer with ByteOrder[NativeEndian]]
+
+  implicit override def Framer: Framer with ByteOrder[NativeEndian] with State[ByteBuffer with ByteOrder[NativeEndian]] = {
+    if (endian.isBig) ByteBufferBE.Framer
+    else if (endian.isLittle) ByteBufferLE.Framer
     else throw new MatchError(endian)
   }.asInstanceOf[Framer with ByteOrder[NativeEndian] with State[ByteBuffer with ByteOrder[NativeEndian]]]
 
