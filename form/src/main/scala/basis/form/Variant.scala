@@ -213,7 +213,7 @@ trait Variant { variant =>
     }
 
     override def toString: String = {
-      val s = UString.Builder()
+      val s = UString.Builder
       s.append("NumberForm")
       s.append('(')
       s.append(toDecimalString)
@@ -328,7 +328,7 @@ trait Variant { variant =>
     }
 
     override def toString: String = {
-      val s = UString.Builder()
+      val s = UString.Builder
       s.append("DateForm")
       s.append('(')
       s.append(java.lang.Long.toString(millis))

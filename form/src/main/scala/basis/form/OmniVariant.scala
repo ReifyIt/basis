@@ -85,8 +85,8 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
   protected class OmniSeqFactory extends BaseSeqFactory with JsonSeqFactory with BsonSeqFactory {
-    override val empty: SeqForm                                           = new OmniSeq(immutable.Vector.empty)
-    implicit override def Builder(): Builder[AnyForm] with State[SeqForm] = new OmniSeqBuilder(immutable.Vector.Builder[AnyForm])
+    override val empty: SeqForm                                         = new OmniSeq(immutable.Vector.empty)
+    implicit override def Builder: Builder[AnyForm] with State[SeqForm] = new OmniSeqBuilder(immutable.Vector.Builder[AnyForm])
   }
 
   protected final class OmniSeqBuilder(underlying: Builder[AnyForm] with State[IndexedSeq[AnyForm]]) extends Builder[AnyForm] with State[SeqForm] {
@@ -104,8 +104,8 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
   protected class OmniSetFactory extends BaseSetFactory with JsonSetFactory with BsonSetFactory {
-    override val empty: SetForm                                           = new OmniSet(immutable.Vector.empty)
-    implicit override def Builder(): Builder[AnyForm] with State[SetForm] = new OmniSetBuilder(immutable.Vector.Builder[AnyForm])
+    override val empty: SetForm                                         = new OmniSet(immutable.Vector.empty)
+    implicit override def Builder: Builder[AnyForm] with State[SetForm] = new OmniSetBuilder(immutable.Vector.Builder[AnyForm])
   }
 
   protected final class OmniSetBuilder(underlying: Builder[AnyForm] with State[Seq[AnyForm]]) extends Builder[AnyForm] with State[SetForm] {
@@ -156,8 +156,8 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
   protected class OmniStringFactory extends BaseStringFactory {
-    override val empty: StringForm                                        = new OmniString(new UString(""))
-    implicit override def Builder(): StringBuilder with State[StringForm] = new OmniStringBuilder(UString.Builder())
+    override val empty: StringForm                                      = new OmniString(new UString(""))
+    implicit override def Builder: StringBuilder with State[StringForm] = new OmniStringBuilder(UString.Builder)
   }
 
   protected final class OmniStringBuilder(underlying: StringBuilder with State[UString]) extends StringBuilder with State[StringForm] {

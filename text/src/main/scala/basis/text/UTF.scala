@@ -12,7 +12,7 @@ import scala.annotation._
 trait UTF extends Any with Equals with Family[UTF] with Seq[Int] {
   /** Returns this string, quoted and escaped. */
   def show: String = {
-    val builder = UString.Builder()
+    val builder = UString.Builder
     show(builder)
     builder.state.toString
   }
@@ -74,7 +74,7 @@ trait UTF extends Any with Equals with Family[UTF] with Seq[Int] {
 
   /** Returns the Java String equivalent of this $collection. */
   def toUString: UString = {
-    val s = UString.Builder()
+    val s = UString.Builder
     val cs = iterator
     while (!cs.isEmpty) {
       s.append(cs.head)
@@ -84,7 +84,7 @@ trait UTF extends Any with Equals with Family[UTF] with Seq[Int] {
   }
 
   override def toString: String = {
-    val s = UString.Builder()
+    val s = UString.Builder
     s.append(stringPrefix)
     s.append('(')
     show(s)

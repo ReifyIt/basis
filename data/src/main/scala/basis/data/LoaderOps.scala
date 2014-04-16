@@ -55,7 +55,7 @@ final class LoaderOps(val __ : Loader) extends AnyVal {
   }
 
   def toBase64: String = {
-    val s = UString.Builder()
+    val s = UString.Builder
     writeBase64(s)
     s.state.toString
   }

@@ -106,7 +106,7 @@ private[form] final class JsonExprFactory[C <: Context, V <: JsonVariant](val c:
   }
 
   private final class JsonStringBuilder extends StringBuilder with State[Expr[V#StringForm]] {
-    private[this] val underlying                = UString.Builder()
+    private[this] val underlying                = UString.Builder
     override def clear(): Unit                  = underlying.clear()
     override def expect(count: Int): this.type  = { underlying.expect(count); this }
     override def append(c: Int): Unit           = underlying.append(c)

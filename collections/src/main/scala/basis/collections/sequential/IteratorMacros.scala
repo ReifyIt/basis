@@ -338,7 +338,4 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
     WeakTypeTag[(A, B)](Tuple2ABTpe)
   }
-
-  implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] =
-    WeakTypeTag(mirror.staticClass("java.lang.UnsupportedOperationException").toType)
 }

@@ -9,7 +9,6 @@ package generic
 
 import scala.reflect._
 import scala.reflect.macros._
-import basis.util._
 
 trait ArrayFactory[+CC[_]] {
   def empty[A](implicit A: ClassTag[A]): CC[A]           = Builder[A].state

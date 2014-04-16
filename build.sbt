@@ -1,6 +1,6 @@
 scalaVersion in Global := "2.11.0-RC4"
 
-scalacOptions in Global ++= Seq("-language:_", "-Yno-predef")
+scalacOptions in Global ++= Seq("-language:_", "-Yno-predef", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard")
 
 retrieveManaged := true
 

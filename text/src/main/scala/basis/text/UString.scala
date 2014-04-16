@@ -49,7 +49,7 @@ object UString extends StringFactory[UString] {
 
   override def apply(chars: CharSequence): UString = new UString(chars.toString)
 
-  implicit override def Builder(): StringBuilder with State[UString] = new UStringBuilder
+  implicit override def Builder: StringBuilder with State[UString] = new UStringBuilder
 
   override def toString: String = "UString"
 }

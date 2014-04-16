@@ -538,8 +538,8 @@ private[sequential] abstract class IndexedSeqMacros(val c: blackbox.Context) {
     val x     = fresh("x$"): TermName
     val loop2 = fresh("loop$"): TermName
     implicit val builder1TypeTag = BuilderTypeTag(builder1)
-    implicit val builder1StateTag = BuilderStateTag(builder1)
     implicit val builder2TypeTag = BuilderTypeTag(builder2)
+    implicit val builder1StateTag = BuilderStateTag(builder1)
     implicit val builder2StateTag = BuilderStateTag(builder2)
     Expr[(builder1.value.State, builder2.value.State)](
       Block(
@@ -571,7 +571,7 @@ private[sequential] abstract class IndexedSeqMacros(val c: blackbox.Context) {
             EmptyTree)) :: Nil,
         Apply(
           Select(New(TypeTree(weakTypeOf[(builder1.value.State, builder2.value.State)])), nme.CONSTRUCTOR),
-          Select(Ident(a), "state": TermName) :: Select(Ident(b), "state": TermName) :: Nil)))
+          Select(Ident(a), "state": TermName) :: Select(Ident(b), "state": TermName) :: Nil)))(Tuple2Tag(builder1StateTag, builder2StateTag))
   }
 
   def drop[A](lower: Expr[Int])(builder: Expr[Builder[A]]): Expr[builder.value.State] = {

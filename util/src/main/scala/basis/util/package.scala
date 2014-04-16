@@ -6,8 +6,6 @@
 
 package basis
 
-import scala.reflect.macros._
-
 /** General utility functions. */
 package object util extends basis.util.Types {
   type Maybe[+A] = A Else Any

@@ -229,7 +229,7 @@ trait Loader extends Any with Equals with ByteOrder[Endianness] {
   }
 
   override def toString: String = {
-    val s = UString.Builder()
+    val s = UString.Builder
     s.append(stringPrefix)
     s.append('(')
     s.append('\"')

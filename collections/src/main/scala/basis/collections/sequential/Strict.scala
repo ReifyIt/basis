@@ -7,7 +7,6 @@
 package basis.collections
 package sequential
 
-import basis.util._
 import scala.reflect.macros._
 
 class Strict extends General {
