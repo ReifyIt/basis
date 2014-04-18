@@ -86,7 +86,7 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
   def exists[A](p: Expr[A => Boolean]): Expr[Boolean] = Expr[Boolean](q"""{
     val xs = $these
     var r = false
-    while (!xs.isEmpty && ($p(xs.head) && { r = true; false } || { xs.step(); true })) ()
+    while (!xs.isEmpty && (!$p(xs.head) && { xs.step(); true } || { r = true; false })) ()
     r
   }""")
 
@@ -200,10 +200,9 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
       val b = $builder: $builderType
       while (!xs.isEmpty && {
         val x = xs.head
-        xs.step()
-        $p(x) && { b.append(x); true }
+        $p(x) && { b.append(x); xs.step(); true }
       }) ()
-    b.state
+      b.state
     }""")
   }
 
@@ -234,9 +233,9 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      val b = $builder: $builderType
-      val n = $lower
       var i = 0
+      val n = $lower
+      val b = $builder: $builderType
       while (i < n && !xs.isEmpty) {
         xs.step()
         i += 1
@@ -254,9 +253,9 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      val b = $builder: $builderType
-      val n = $upper
       var i = 0
+      val n = $upper
+      val b = $builder: $builderType
       while (i < n && !xs.isEmpty) {
         b.append(xs.head)
         xs.step()
@@ -271,9 +270,9 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      val b = $builder: $builderType
-      var n = $lower
       var i = 0
+      var n = $lower
+      val b = $builder: $builderType
       while (i < n && !xs.isEmpty) {
         xs.step()
         i += 1

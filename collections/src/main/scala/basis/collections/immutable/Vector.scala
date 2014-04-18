@@ -852,7 +852,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       if (length == (1 << 5)) node2(0) = node1
       node1 = elems.node1
       node2(length >>> 5 & 0x1F) = node1
-      length += (1 << 5)
+      length += elems.length
       if (elems.length < (1 << 5)) aliased = 1
     case elems: Vector2[A] if (length & 0x3FF) == 0 =>
       gotoNode3()
@@ -860,7 +860,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node2 = elems.node2
       node1 = node2(node2.length - 1)
       node3(length >>> 10 & 0x1F) = node2
-      length += (1 << 10)
+      length += elems.length
       if (elems.length < (1 << 10)) aliased = 2
     case elems: Vector3[A] if (length & 0x7FFF) == 0 =>
       gotoNode4()
@@ -869,7 +869,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
       node4(length >>> 15 & 0x1F) = node3
-      length += (1 << 15)
+      length += elems.length
       if (elems.length < (1 << 15)) aliased = 3
     case elems: Vector4[A] if (length & 0xFFFFF) == 0 =>
       gotoNode5()
@@ -879,7 +879,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
       node5(length >>> 20 & 0x1F) = node4
-      length += (1 << 20)
+      length += elems.length
       if (elems.length < (1 << 20)) aliased = 4
     case elems: Vector5[A] if (length & 0x1FFFFFF) == 0 =>
       gotoNode6()
@@ -890,7 +890,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
       node6(length >>> 25 & 0x1F) = node5
-      length += (1 << 25)
+      length += elems.length
       if (elems.length < (1 << 25)) aliased = 5
     case elems: Vector6[A] if length == 0 =>
       node6 = elems.node6

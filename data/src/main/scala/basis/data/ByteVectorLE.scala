@@ -838,7 +838,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       if (length == (1L << 8)) node2(0) = node1
       node1 = data.node1
       node2((length >>> 8).toInt & 0xFF) = node1
-      length += (1L << 8)
+      length += data.size
       if (data.size < (1L << 8)) aliased = 1
     case data: ByteVectorLE2 if (length & 0x000000000000FFFFL) == 0L =>
       gotoNode3()
@@ -846,7 +846,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node2 = data.node2
       node1 = node2(node2.length - 1)
       node3((length >>> 16).toInt & 0xFF) = node2
-      length += (1L << 16)
+      length += data.size
       if (data.size < (1L << 16)) aliased = 2
     case data: ByteVectorLE3 if (length & 0x0000000000FFFFFFL) == 0L =>
       gotoNode4()
@@ -855,7 +855,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
       node4((length >>> 24).toInt & 0xFF) = node3
-      length += (1L << 24)
+      length += data.size
       if (data.size < (1L << 24)) aliased = 3
     case data: ByteVectorLE4 if (length & 0x00000000FFFFFFFFL) == 0L =>
       gotoNode5()
@@ -865,7 +865,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
       node5((length >>> 32).toInt & 0xFF) = node4
-      length += (1L << 32)
+      length += data.size
       if (data.size < (1L << 32)) aliased = 4
     case data: ByteVectorLE5 if (length & 0x000000FFFFFFFFFFL) == 0L =>
       gotoNode6()
@@ -876,7 +876,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
       node6((length >>> 40).toInt & 0xFF) = node5
-      length += (1L << 40)
+      length += data.size
       if (data.size < (1L << 40)) aliased = 5
     case data: ByteVectorLE6 if length == 0L =>
       node6 = data.node6
