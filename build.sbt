@@ -2,8 +2,6 @@ scalaVersion in Global := "2.11.0-RC4"
 
 scalacOptions in Global ++= Seq("-language:_", "-Yno-predef", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard")
 
-retrieveManaged := true
-
 lazy val subprojects = List(`basis-collections`, `basis-data`, `basis-form`, `basis-math`, `basis-stat`, `basis-text`, `basis-util`)
 
 lazy val basis = (
@@ -63,7 +61,8 @@ lazy val docSettings = Seq(
         "-implicits-show-all",
         "-diagrams",
         "-sourcepath", (baseDirectory in LocalProject("basis")).value.getAbsolutePath,
-        "-doc-source-url", docSourceUrl)
+        "-doc-source-url", docSourceUrl,
+        "-Ymacro-no-expand")
   })
 
 lazy val publishSettings = Seq(
