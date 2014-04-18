@@ -316,5 +316,5 @@ private[immutable] final class RefListIterator[+A](private[this] var xs: List[A]
 
 private[collections] final class ListBuilder[A] extends ListBuffer[A] with State[List[A]] {
   override def state: List[A] = toList
-  override def toString: String = "List"+"."+"Builder"+"()"
+  override def toString: String = "List"+"."+"Builder"
 }

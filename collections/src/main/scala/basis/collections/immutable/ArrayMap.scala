@@ -250,5 +250,5 @@ private[collections] final class ArrayMapBuilder[A, T] extends Builder[(A, T)] w
     size = 0
   }
 
-  override def toString: String = "ArrayMap"+"."+"Builder"+"()"
+  override def toString: String = "ArrayMap"+"."+"Builder"
 }

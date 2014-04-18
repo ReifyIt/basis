@@ -128,5 +128,5 @@ private[collections] final class BatchBuilder[A] extends Builder[A] with State[B
 
   override def clear(): Unit = these = Batch.empty
 
-  override def toString: String = "Batch"+"."+"Builder"+"()"
+  override def toString: String = "Batch"+"."+"Builder"
 }

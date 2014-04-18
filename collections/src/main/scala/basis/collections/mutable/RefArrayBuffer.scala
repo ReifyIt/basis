@@ -292,5 +292,5 @@ private[collections] final class RefArrayBufferIterator[+A] private (
 
 private[collections] final class RefArrayBufferBuilder[A] extends RefArrayBuffer[A] with State[ArrayBuffer[A]] {
   override def state: ArrayBuffer[A] = copy
-  override def toString: String = "ArrayBuffer"+"."+"Builder"+"()"
+  override def toString: String = "ArrayBuffer"+"."+"Builder"
 }

@@ -316,5 +316,5 @@ private[collections] final class ListBufferIterator[+A] private (
 
 private[mutable] final class ListBufferBuilder[A] extends ListBuffer[A] with State[ListBuffer[A]] {
   override def state: ListBuffer[A] = copy
-  override def toString: String = "ListBuffer"+"."+"Builder"+"()"
+  override def toString: String = "ListBuffer"+"."+"Builder"
 }

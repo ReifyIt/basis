@@ -84,5 +84,5 @@ private[text] final class String4Builder extends StringBuilder with State[String
     size = 0
   }
 
-  override def toString: String = "String4"+"."+"Builder"+"()"
+  override def toString: String = "String4"+"."+"Builder"
 }

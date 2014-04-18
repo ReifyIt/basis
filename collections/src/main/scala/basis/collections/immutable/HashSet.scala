@@ -382,5 +382,5 @@ private[collections] final class HashSetBuilder[A] extends Builder[A] with State
 
   override def clear(): Unit = these = HashSet.empty[A]
 
-  override def toString: String = "HashSet"+"."+"Builder"+"()"
+  override def toString: String = "HashSet"+"."+"Builder"
 }

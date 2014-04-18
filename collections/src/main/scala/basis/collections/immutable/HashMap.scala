@@ -621,5 +621,5 @@ private[collections] final class HashMapBuilder[A, T] extends Builder[(A, T)] wi
 
   override def clear(): Unit = these = HashMap.empty[A, T]
 
-  override def toString: String = "HashMap"+"."+"Builder"+"()"
+  override def toString: String = "HashMap"+"."+"Builder"
 }

@@ -145,5 +145,5 @@ private[collections] final class RefArraySeqIterator[A]
 
 private[collections] final class RefArraySeqBuilder[A] extends RefArrayBuffer[A] with State[ArraySeq[A]] {
   override def state: ArraySeq[A] = toArraySeq
-  override def toString: String = "ArraySeq"+"."+"Builder"+"()"
+  override def toString: String = "ArraySeq"+"."+"Builder"
 }

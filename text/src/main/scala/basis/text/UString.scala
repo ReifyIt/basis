@@ -113,7 +113,7 @@ private[text] final class UStringBuilder extends StringBuilder with State[UStrin
     size = 0
   }
 
-  override def toString: String = "UString"+"."+"Builder"+"()"
+  override def toString: String = "UString"+"."+"Builder"
 }
 
 private[text] final class UStringIterator(string: String, private[this] var index: Int) extends Iterator[Int] {

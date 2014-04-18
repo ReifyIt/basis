@@ -187,5 +187,5 @@ private[collections] final class ArraySetBuilder[A] extends Builder[A] with Stat
     size = 0
   }
 
-  override def toString: String = "ArraySet"+"."+"Builder"+"()"
+  override def toString: String = "ArraySet"+"."+"Builder"
 }

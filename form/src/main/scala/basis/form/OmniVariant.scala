@@ -74,7 +74,7 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
     override def clear(): Unit                          = underlying.clear()
     override def expect(count: Int): this.type          = { underlying.expect(count); this }
     override def state: ObjectForm                      = new OmniObject(underlying.state)
-    override def toString: String                       = "ObjectForm"+"."+"Builder"+"()"
+    override def toString: String                       = "ObjectForm"+"."+"Builder"
   }
 
 
@@ -94,7 +94,7 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
     override def clear(): Unit                 = underlying.clear()
     override def expect(count: Int): this.type = { underlying.expect(count); this }
     override def state: SeqForm                = new OmniSeq(underlying.state)
-    override def toString: String              = "SeqForm"+"."+"Builder"+"()"
+    override def toString: String              = "SeqForm"+"."+"Builder"
   }
 
 
@@ -113,7 +113,7 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
     override def clear(): Unit                 = underlying.clear()
     override def expect(count: Int): this.type = { underlying.expect(count); this }
     override def state: SetForm                = new OmniSet(underlying.state)
-    override def toString: String              = "SetForm"+"."+"Builder"+"()"
+    override def toString: String              = "SetForm"+"."+"Builder"
   }
 
 
@@ -166,7 +166,7 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
     override def clear(): Unit                  = underlying.clear()
     override def expect(count: Int): this.type  = { underlying.expect(count); this }
     override def state: StringForm              = new OmniString(underlying.state)
-    override def toString: String               = "StringForm"+"."+"Builder"+"()"
+    override def toString: String               = "StringForm"+"."+"Builder"
   }
 
 

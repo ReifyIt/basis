@@ -995,5 +995,5 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
 
   override def expect(count: Int): this.type = this
 
-  override def toString: String = "Vector"+"."+"Builder"+"()"
+  override def toString: String = "Vector"+"."+"Builder"
 }
