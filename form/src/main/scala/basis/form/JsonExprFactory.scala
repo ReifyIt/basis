@@ -8,14 +8,12 @@ package basis.form
 
 import basis.collections._
 import basis.text._
-import basis.util._
 import scala.reflect.macros._
 
-private[form] final class JsonExprFactory[C <: Context, V <: JsonVariant](val c: C)(v: C#Expr[V]) extends JsonFactory {
+private[form] final class JsonExprFactory[C <: blackbox.Context, V <: JsonVariant](val c: C)(v: C#Expr[V]) extends JsonFactory {
   import c.{ Expr, Tree, WeakTypeTag }
-
-  val universe: c.universe.type = c.universe
-  import universe._
+  import c.universe._
+  import c.universe.internal._
 
   protected val variant: Expr[V] = v.asInstanceOf[Expr[V]]
 
@@ -28,14 +26,14 @@ private[form] final class JsonExprFactory[C <: Context, V <: JsonVariant](val c:
   override type JsonNull      = Expr[V#NullForm]
   override type JsonUndefined = Expr[V#UndefinedForm]
 
-  implicit protected def AnyFormTag       = WeakTypeTag[V#AnyForm](depType(c)(variant, "AnyForm"))
-  implicit protected def ObjectFormTag    = WeakTypeTag[V#ObjectForm](depType(c)(variant, "ObjectForm"))
-  implicit protected def SeqFormTag       = WeakTypeTag[V#SeqForm](depType(c)(variant, "SeqForm"))
-  implicit protected def StringFormTag    = WeakTypeTag[V#StringForm](depType(c)(variant, "StringForm"))
-  implicit protected def NumberFormTag    = WeakTypeTag[V#NumberForm](depType(c)(variant, "NumberForm"))
-  implicit protected def BooleanFormTag   = WeakTypeTag[V#BooleanForm](depType(c)(variant, "BooleanForm"))
-  implicit protected def NullFormTag      = WeakTypeTag[V#NullForm](depType(c)(variant, "NullForm"))
-  implicit protected def UndefinedFormTag = WeakTypeTag[V#UndefinedForm](depType(c)(variant, "UndefinedForm"))
+  implicit protected def AnyFormTag       = WeakTypeTag[V#AnyForm](VariantType("AnyForm"))
+  implicit protected def ObjectFormTag    = WeakTypeTag[V#ObjectForm](VariantType("ObjectForm"))
+  implicit protected def SeqFormTag       = WeakTypeTag[V#SeqForm](VariantType("SeqForm"))
+  implicit protected def StringFormTag    = WeakTypeTag[V#StringForm](VariantType("StringForm"))
+  implicit protected def NumberFormTag    = WeakTypeTag[V#NumberForm](VariantType("NumberForm"))
+  implicit protected def BooleanFormTag   = WeakTypeTag[V#BooleanForm](VariantType("BooleanForm"))
+  implicit protected def NullFormTag      = WeakTypeTag[V#NullForm](VariantType("NullForm"))
+  implicit protected def UndefinedFormTag = WeakTypeTag[V#UndefinedForm](VariantType("UndefinedForm"))
 
   override def JsonObjectValue(expr: Expr[V#ObjectForm]) = Expr[V#AnyForm](q"$variant.JsonObjectValue($expr)")
   override def JsonArrayValue(expr: Expr[V#SeqForm])     = Expr[V#AnyForm](q"$variant.JsonArrayValue($expr)")
@@ -113,4 +111,7 @@ private[form] final class JsonExprFactory[C <: Context, V <: JsonVariant](val c:
     override def append(cs: CharSequence): Unit = underlying.append(cs)
     override def state: Expr[V#StringForm]      = JsonString(underlying.state.toString)
   }
+
+  protected def VariantType(name: String): Type =
+    typeRef(variant.staticType, variant.staticType.member(TypeName(name)), Nil).dealias
 }

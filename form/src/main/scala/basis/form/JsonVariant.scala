@@ -49,7 +49,7 @@ trait JsonVariant extends Variant { variant =>
   def JsonNew(identifier: String, arguments: SeqForm): AnyForm = UndefinedForm
 
   implicit def JsonStringContext(stringContext: StringContext): JsonStringContext[variant.type] =
-    macro JsonStringMacros.JsonStringContext[variant.type]
+    macro JsonVariantMacros.JsonStringContext[variant.type]
 
   private[this] def decodeJsonObject(form: ObjectForm): AnyForm = {
     if (form.size == 1) {

@@ -308,7 +308,8 @@ object Mold extends CollectionMolds {
       fields.map(field => field._1 -> T.form(variant)(field._2))(variant.ObjectForm.Builder)
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[CC[String, T]] = {
-      if (form.isObjectForm) Bind(form.asObjectForm.flatMap(field => T.cast(variant)(field._2).map(field._1 -> _))(CC.Builder[String, T]))
+      def castField(field: (String, variant.AnyForm)): Maybe[(String, T)] = T.cast(variant)(field._2).map(field._1 -> _)
+      if (form.isObjectForm) Bind(form.asObjectForm.flatMap(castField)(CC.Builder[String, T]))
       else Trap
     }
 

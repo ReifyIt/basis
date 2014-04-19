@@ -7,7 +7,7 @@
 package basis
 
 /** General utility functions. */
-package object util extends basis.util.Types {
+package object util {
   type Maybe[+A] = A Else Any
 
   def Maybe[A](value: A): A Else Nothing = if (value != null) Bind(value) else Trap

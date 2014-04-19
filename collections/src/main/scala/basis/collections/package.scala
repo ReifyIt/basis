@@ -13,6 +13,6 @@ import basis.util._
   * @contentDiagram hideNodes "basis.collections.Family" "basis.collections.From" "basis.collections.State"
   */
 package object collections extends basis.collections.sequential.Strict {
-  implicit def MaybeCollection[A](maybe: Maybe[A]): Collection[A] =
+  implicit def MaybeContainer[A](maybe: Maybe[A]): Container[A] =
     if (maybe.canBind) maybe.bind :: immutable.Nil else immutable.Nil
 }

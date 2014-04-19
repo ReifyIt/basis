@@ -6,57 +6,50 @@
 
 package basis.form
 
-import basis.util._
+import scala.reflect.macros._
 
 class JsonStringContext[-V <: JsonVariant](variant: V, stringContext: StringContext) {
-  def json(args: V#AnyForm*): V#AnyForm        = macro JsonStringMacros.json[V]
-  def jsobject(args: V#AnyForm*): V#ObjectForm = macro JsonStringMacros.jsobject[V]
-  def jsarray(args: V#AnyForm*): V#SeqForm     = macro JsonStringMacros.jsarray[V]
+  def json(args: V#AnyForm*): V#AnyForm        = macro JsonStringContextMacros.json[V]
+  def jsobject(args: V#AnyForm*): V#ObjectForm = macro JsonStringContextMacros.jsobject[V]
+  def jsarray(args: V#AnyForm*): V#SeqForm     = macro JsonStringContextMacros.jsarray[V]
 }
 
-private[form] object JsonStringMacros {
-  import scala.collection.immutable.{ ::, Nil }
-  import scala.reflect.macros.Context
+private[form] class JsonVariantMacros(val c: blackbox.Context { type PrefixType <: JsonVariant }) {
+  import c.{ Expr, mirror, prefix, WeakTypeTag }
+  import c.universe._
 
-  def JsonStringContext[V <: JsonVariant]
-      (c: ContextWithPre[V])
-      (stringContext: c.Expr[StringContext])
-    : c.Expr[JsonStringContext[V]] = {
-    import c.{ Expr, mirror, prefix, weakTypeOf, WeakTypeTag }
-    import c.universe._
-    implicit val JsonStringContextVTag =
-      WeakTypeTag[JsonStringContext[V]](
-        appliedType(
-          mirror.staticClass("basis.form.JsonStringContext").toType,
-          prefix.actualType :: Nil))
-    Expr[JsonStringContext[V]](
-      Apply(
-        Select(New(TypeTree(weakTypeOf[JsonStringContext[V]])), nme.CONSTRUCTOR),
-        prefix.tree :: stringContext.tree :: Nil))
+  def JsonStringContext[V <: JsonVariant](stringContext: Expr[StringContext]): Expr[JsonStringContext[V]] = {
+    implicit val JsonStringContextV = JsonStringContextTag[V]
+    Expr[JsonStringContext[V]](q"new $JsonStringContextV($prefix, $stringContext)")
   }
 
-  def json[V <: JsonVariant : c.WeakTypeTag]
-      (c: Context)
-      (args: c.Expr[V#AnyForm]*)
-    : c.Expr[V#AnyForm] = {
-    import c.{ abort, Expr, prefix }
-    import c.universe._
+  implicit private def JsonStringContextTag[V <: JsonVariant]: WeakTypeTag[JsonStringContext[V]] =
+    WeakTypeTag[JsonStringContext[V]](
+      appliedType(
+        mirror.staticClass("basis.form.JsonStringContext").toTypeConstructor,
+        prefix.actualType :: Nil))
+}
 
-    val Apply(_, variant :: stringContext :: Nil) = prefix.tree
+private[form] class JsonStringContextMacros(val c: blackbox.Context { type PrefixType <: JsonStringContext[_] }) {
+  import c.{ abort, Expr, prefix }
+  import c.universe._
+
+  @inline private def interpolate[V <: JsonVariant : WeakTypeTag, T](args: Seq[Expr[V#AnyForm]])(parse: (JsonInterpolator, JsonExprFactory[c.type, V]) => Expr[T]): Expr[T] = {
+    val Typed(Apply(_, variant :: stringContext :: Nil), _) = prefix.tree
     val Apply(_, stringLiterals) = stringContext
-    val parts = new scala.collection.mutable.ArrayBuffer[String]
-    val iter = stringLiterals.iterator
-    while (iter.hasNext) {
-      val Literal(Constant(string: String)) = iter.next()
-      parts += string
+    val strings = scala.collection.mutable.ListBuffer.empty[String]
+    val literals = stringLiterals.iterator
+    while (literals.hasNext) {
+      val Literal(Constant(string: String)) = literals.next()
+      strings += string
     }
 
     val factory = new JsonExprFactory[c.type, V](c)(Expr[V](variant))
-    val parser = new JsonInterpolator(parts, args.iterator)
+    val parser = new JsonInterpolator(strings, args.iterator)
 
     try {
       parser.skipWhitespace()
-      val expr = parser.parseValue(factory)
+      val expr = parse(parser, factory)
       parser.skipWhitespace()
       parser.parseEOF()
       expr
@@ -69,71 +62,12 @@ private[form] object JsonStringMacros {
     }
   }
 
-  def jsobject[V <: JsonVariant : c.WeakTypeTag]
-      (c: Context)
-      (args: c.Expr[V#AnyForm]*)
-    : c.Expr[V#ObjectForm] = {
-    import c.{ abort, Expr, prefix }
-    import c.universe._
+  def json[V <: JsonVariant : WeakTypeTag](args: Expr[V#AnyForm]*): Expr[V#AnyForm] =
+    interpolate[V, V#AnyForm](args)((parser, factory) => parser.parseValue(factory))
 
-    val Apply(_, variant :: stringContext :: Nil) = prefix.tree
-    val Apply(_, stringLiterals) = stringContext
-    val parts = new scala.collection.mutable.ArrayBuffer[String]
-    val iter = stringLiterals.iterator
-    while (iter.hasNext) {
-      val Literal(Constant(string: String)) = iter.next()
-      parts += string
-    }
+  def jsobject[V <: JsonVariant : WeakTypeTag](args: Expr[V#AnyForm]*): Expr[V#ObjectForm] =
+    interpolate[V, V#ObjectForm](args)((parser, factory) => parser.parseObject(factory)(factory.JsonObjectBuilder))
 
-    val factory = new JsonExprFactory[c.type, V](c)(Expr[V](variant))
-    val parser = new JsonInterpolator(parts, args.iterator)
-
-    try {
-      parser.skipWhitespace()
-      val expr = parser.parseObject(factory)(factory.JsonObjectBuilder)
-      parser.skipWhitespace()
-      parser.parseEOF()
-      expr
-    }
-    catch {
-      case e: JsonException =>
-        val partPos = stringLiterals(e.part).pos
-        val errorPos = partPos.withPoint(partPos.point + e.offset)
-        abort(errorPos, e.getMessage)
-    }
-  }
-
-  def jsarray[V <: JsonVariant : c.WeakTypeTag]
-      (c: Context)
-      (args: c.Expr[V#AnyForm]*)
-    : c.Expr[V#SeqForm] = {
-    import c.{ abort, Expr, prefix }
-    import c.universe._
-
-    val Apply(_, variant :: stringContext :: Nil) = prefix.tree
-    val Apply(_, stringLiterals) = stringContext
-    val parts = new scala.collection.mutable.ArrayBuffer[String]
-    val iter = stringLiterals.iterator
-    while (iter.hasNext) {
-      val Literal(Constant(string: String)) = iter.next()
-      parts += string
-    }
-
-    val factory = new JsonExprFactory[c.type, V](c)(Expr[V](variant))
-    val parser = new JsonInterpolator(parts, args.iterator)
-
-    try {
-      parser.skipWhitespace()
-      val expr = parser.parseArray(factory)(factory.JsonArrayBuilder)
-      parser.skipWhitespace()
-      parser.parseEOF()
-      expr
-    }
-    catch {
-      case e: JsonException =>
-        val partPos = stringLiterals(e.part).pos
-        val errorPos = partPos.withPoint(partPos.point + e.offset)
-        abort(errorPos, e.getMessage)
-    }
-  }
+  def jsarray[V <: JsonVariant : WeakTypeTag](args: Expr[V#AnyForm]*): Expr[V#SeqForm] =
+    interpolate[V, V#SeqForm](args)((parser, factory) => parser.parseArray(factory)(factory.JsonArrayBuilder))
 }
