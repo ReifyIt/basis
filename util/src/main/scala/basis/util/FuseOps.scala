@@ -52,20 +52,20 @@ private[util] class FuseMacros(val c: blackbox.Context { type PrefixType <: Fuse
     (typecheck(self, TERMmode, weakTypeOf[A Else B]), typecheck(trip, TERMmode, weakTypeOf[Throwable => Trap[B]]))
   }
 
-  def map[A : WeakTypeTag, X : WeakTypeTag, B : WeakTypeTag](f: Expr[A => X]): Expr[X Else B] = {
+  def map[A, X, B](f: Expr[A => X])(implicit A: WeakTypeTag[A], X: WeakTypeTag[X], B: WeakTypeTag[B]): Expr[X Else B] = {
     val (self, trip) = unApply[A, B]
     Expr[X Else B](q"""{
       val r = $self
-      try if (r.canBind) _root_.basis.util.Bind($f(r.bind)) else r.asInstanceOf[Nothing Else B]
+      try if (r.canBind) _root_.basis.util.Bind($f(r.bind)) else r.asInstanceOf[Nothing Else $B]
       catch { case e: Throwable => $trip(e) }
     }""")
   }
 
-  def flatMap[A : WeakTypeTag, X : WeakTypeTag, Y : WeakTypeTag](f: Expr[A => (X Else Y)]): Expr[X Else Y] = {
+  def flatMap[A, X, Y](f: Expr[A => (X Else Y)])(implicit A: WeakTypeTag[A], X: WeakTypeTag[X], Y: WeakTypeTag[Y]): Expr[X Else Y] = {
     val (self, trip) = unApply[A, Y]
     Expr[X Else Y](q"""{
       val r = $self
-      try if (r.canBind) $f(r.bind) else r.asInstanceOf[Nothing Else Y]
+      try if (r.canBind) $f(r.bind) else r.asInstanceOf[Nothing Else $Y]
       catch { case e: Throwable => $trip(e) }
     }""")
   }

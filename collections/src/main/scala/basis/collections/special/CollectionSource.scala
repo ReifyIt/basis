@@ -29,17 +29,4 @@ trait CollectionSource[+CC, -A] {
   implicit def Builder: Builder[A] with State[CC]
 }
 
-private[special] class CollectionSourceMacros(val c: blackbox.Context { type PrefixType <: CollectionSource[_, _] }) {
-  import c.{ Expr, prefix }
-  import c.universe._
-
-  def apply[CC, A](elems: Expr[A]*)(implicit CC: WeakTypeTag[CC]): Expr[CC] = {
-    var b: Tree = Select(prefix.tree, "Builder": TermName)
-    b = Apply(Select(b, "expect": TermName), Literal(Constant(elems.length)) :: Nil)
-
-    val xs = elems.iterator
-    while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
-
-    Expr[CC](Select(b, "state": TermName))
-  }
-}
+private[special] class CollectionSourceMacros(override val c: blackbox.Context { type PrefixType <: CollectionSource[_, _] }) extends SourceMacros(c)

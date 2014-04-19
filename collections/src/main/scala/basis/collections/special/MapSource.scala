@@ -34,12 +34,12 @@ private[special] class MapSourceMacros(val c: blackbox.Context { type PrefixType
   import c.universe._
 
   def apply[CC, A, T](entries: Expr[(A, T)]*)(implicit CC: WeakTypeTag[CC]): Expr[CC] = {
-    var b: Tree = Select(prefix.tree, "Builder": TermName)
-    b = Apply(Select(b, "expect": TermName), Literal(Constant(entries.length)) :: Nil)
+    val n = q"${entries.length}"
+    var b = q"$prefix.Builder.expect($n)"
 
     val xs = entries.iterator
-    while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
+    while (xs.hasNext) b = q"$b += ${xs.next()}"
 
-    Expr[CC](Select(b, "state": TermName))
+    Expr[CC](q"$b.state")
   }
 }

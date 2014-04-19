@@ -81,14 +81,14 @@ private[util] class ElseMacros(val c: blackbox.Context { type PrefixType <: Else
   import c.{ Expr, mirror, prefix, weakTypeOf, WeakTypeTag }
   import c.universe._
 
-  def bindOrElse[X : WeakTypeTag, B : WeakTypeTag](default: Expr[X]): Expr[X] = Expr[X](q"""{
+  def bindOrElse[X : WeakTypeTag, B](default: Expr[X]): Expr[X] = Expr[X](q"""{
     val r = $prefix.__
     if (r.canBind) r.bind else $default
   }""")
 
-  def orElse[X : WeakTypeTag, Y : WeakTypeTag](other: Expr[X Else Y]): Expr[X Else Y] = Expr[X Else Y](q"""{
+  def orElse[X, Y](other: Expr[X Else Y])(implicit X: WeakTypeTag[X], Y: WeakTypeTag[Y]): Expr[X Else Y] = Expr[X Else Y](q"""{
     val r = $prefix.__
-    if (r.canBind) r.asInstanceOf[${weakTypeOf[X]} Else Nothing] else other
+    if (r.canBind) r.asInstanceOf[$X Else Nothing] else $other
   }""")
 
   def orNull[X : WeakTypeTag](isNullable: Expr[Null <:< X]): Expr[X] = Expr[X](q"""{
@@ -111,14 +111,14 @@ private[util] class ElseMacros(val c: blackbox.Context { type PrefixType <: Else
     if (r.canBind) $f(r.bind)
   }""")
 
-  def map[A, X : WeakTypeTag, B : WeakTypeTag](f: Expr[A => X]): Expr[X Else B] = Expr[X Else B](q"""{
+  def map[A, X, B](f: Expr[A => X])(implicit X: WeakTypeTag[X], B: WeakTypeTag[B]): Expr[X Else B] = Expr[X Else B](q"""{
     val r = $prefix.__
-    if (r.canBind) _root_.basis.util.Bind($f(r.bind)) else r.asInstanceOf[Nothing Else B]
+    if (r.canBind) _root_.basis.util.Bind($f(r.bind)) else r.asInstanceOf[Nothing Else $B]
   }""")
 
-  def flatMap[A, X : WeakTypeTag, Y : WeakTypeTag](f: Expr[A => (X Else Y)]): Expr[X Else Y] = Expr[X Else Y](q"""{
+  def flatMap[A, X, Y](f: Expr[A => (X Else Y)])(implicit X: WeakTypeTag[X], Y: WeakTypeTag[Y]): Expr[X Else Y] = Expr[X Else Y](q"""{
     val r = $prefix.__
-    if (r.canBind) $f(r.bind) else r.asInstanceOf[Nothing Else Y]
+    if (r.canBind) $f(r.bind) else r.asInstanceOf[Nothing Else $Y]
   }""")
 
   def recover[X : WeakTypeTag, B : WeakTypeTag](q: Expr[PartialFunction[B, X]]): Expr[X Else B] = Expr[X Else B](q"""{

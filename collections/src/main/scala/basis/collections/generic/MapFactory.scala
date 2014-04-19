@@ -36,13 +36,13 @@ private[generic] class MapFactoryMacros(val c: blackbox.Context { type PrefixTyp
   import c.universe._
 
   def apply[CC[_, _], A, T](entries: Expr[(A, T)]*)(implicit CC: WeakTypeTag[CC[_, _]], A: WeakTypeTag[A], T: WeakTypeTag[T]): Expr[CC[A, T]] = {
-    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(A.tpe) :: TypeTree(weakTypeOf[T]) :: Nil)
-    b = Apply(Select(b, "expect": TermName), Literal(Constant(entries.length)) :: Nil)
+    val n = q"${entries.length}"
+    var b = q"$prefix.Builder[$A, $T].expect($n)"
 
     val xs = entries.iterator
-    while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
+    while (xs.hasNext) b = q"$b += ${xs.next()}"
 
     implicit val CCAT = WeakTypeTag[CC[A, T]](appliedType(CC.tpe, A.tpe :: T.tpe :: Nil))
-    Expr[CC[A, T]](Select(b, "state": TermName))
+    Expr[CC[A, T]](q"$b.state")
   }
 }

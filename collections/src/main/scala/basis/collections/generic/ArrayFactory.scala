@@ -38,18 +38,4 @@ trait ArrayFactory[+CC[_]] {
   implicit def Builder[A](implicit A: ClassTag[A]): Builder[A] with State[CC[A]]
 }
 
-private[generic] class ArrayFactoryMacros(override val c: blackbox.Context { type PrefixType <: ArrayFactory[CC] forSome { type CC[_] } }) extends FactoryMacros(c) {
-  import c.{ Expr, prefix, WeakTypeTag }
-  import c.universe._
-
-  def apply[CC[_], A](elems: Expr[A]*)(implicit CC: WeakTypeTag[CC[_]], A: WeakTypeTag[A]): Expr[CC[A]] = {
-    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(A.tpe) :: Nil)
-    b = Apply(Select(b, "expect": TermName), Literal(Constant(elems.length)) :: Nil)
-
-    val xs = elems.iterator
-    while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
-
-    implicit val CCA = WeakTypeTag[CC[A]](appliedType(CC.tpe, A.tpe :: Nil))
-    Expr[CC[A]](Select(b, "state": TermName))
-  }
-}
+private[generic] class ArrayFactoryMacros(override val c: blackbox.Context { type PrefixType <: ArrayFactory[CC] forSome { type CC[_] } }) extends FactoryMacros(c)

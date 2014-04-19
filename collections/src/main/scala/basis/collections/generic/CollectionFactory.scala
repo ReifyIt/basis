@@ -31,18 +31,4 @@ trait CollectionFactory[+CC[_]] {
   implicit def Factory: CollectionFactory[CC] = this
 }
 
-private[generic] class CollectionFactoryMacros(val c: blackbox.Context { type PrefixType <: CollectionFactory[CC] forSome { type CC[_] } }) {
-  import c.{ Expr, prefix, WeakTypeTag }
-  import c.universe._
-
-  def apply[CC[_], A](elems: Expr[A]*)(implicit CC: WeakTypeTag[CC[_]], A: WeakTypeTag[A]): Expr[CC[A]] = {
-    var b: Tree = TypeApply(Select(prefix.tree, "Builder": TermName), TypeTree(A.tpe) :: Nil)
-    b = Apply(Select(b, "expect": TermName), Literal(Constant(elems.length)) :: Nil)
-
-    val xs = elems.iterator
-    while (xs.hasNext) b = Apply(Select(b, ("+=": TermName).encodedName), xs.next().tree :: Nil)
-
-    implicit val CCA = WeakTypeTag[CC[A]](appliedType(CC.tpe, A.tpe :: Nil))
-    Expr[CC[A]](Select(b, "state": TermName))
-  }
-}
+private[generic] class CollectionFactoryMacros(override val c: blackbox.Context { type PrefixType <: CollectionFactory[CC] forSome { type CC[_] } }) extends FactoryMacros(c)

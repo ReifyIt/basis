@@ -300,7 +300,7 @@ object Mold extends CollectionMolds {
 
     override def toString: String = "Mold"+"."+"Set"+"("+ CC +", "+ A +")"
   }
-  /*
+
   private[form] final class MapMold[CC[X, Y] <: Map[X, Y], T](implicit CC: generic.MapFactory[CC], T: Mold[T]) extends Mold[CC[String, T]] {
     override def identity: CC[String, T] = CC.empty[String, T]
 
@@ -319,12 +319,12 @@ object Mold extends CollectionMolds {
 
     override def toString: String = "Mold"+"."+"Map"+"("+ CC +", "+ T +")"
   }
-  */
+
   protected[form] final val Specialized = new Specializable.Group((scala.Byte, scala.Short, scala.Int, scala.Long, scala.Float, scala.Double, scala.Boolean))
 }
 
 private[form] class CollectionMolds {
   import Mold._
   implicit def Container[CC[X] <: Container[X], A](implicit CC: generic.CollectionFactory[CC], A: Mold[A]): Mold[CC[A]] = new ContainerMold[CC, A]
-//implicit def Map[CC[X, Y] <: Map[X, Y], T](implicit CC: generic.MapFactory[CC], T: Mold[T]): Mold[CC[String, T]] = new MapMold[CC, T]
+  implicit def Map[CC[X, Y] <: Map[X, Y], T](implicit CC: generic.MapFactory[CC], T: Mold[T]): Mold[CC[String, T]] = new MapMold[CC, T]
 }
