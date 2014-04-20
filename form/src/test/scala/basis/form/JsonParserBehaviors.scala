@@ -260,73 +260,73 @@ trait JsonParserBehaviors { this: FunSpec =>
 
   def RejectsInvalidJson() = describe("parsing invalid JSON") {
     it("should not parse sequential values") {
-      evaluating(Json("true false")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json("true false"))
       ()
     }
 
     it("should not parse empty input") {
-      evaluating(Json("")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json(""))
       ()
     }
 
     it("should not parse unclosed empty objects") {
-      evaluating(Json("{")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json("{"))
       ()
     }
 
     it("should not parse unclosed non-empty objects") {
-      evaluating(Json("{\"true\":true")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json("{\"true\":true"))
       ()
     }
 
     it("should not parse objects with trailing commas") {
-      evaluating(Json("{\"true\":true,}")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json("{\"true\":true,}"))
       ()
     }
 
     it("should not parse unclosed empty arrays") {
-      evaluating(Json("[")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json("["))
       ()
     }
 
     it("should not parse unclosed non-empty arrays") {
-      evaluating(Json("[true")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json("[true"))
       ()
     }
 
     it("should not parse arrays with trailing commas") {
-      evaluating(Json("[true,]")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json("[true,]"))
       ()
     }
 
     it("should not parse unclosed empty strings") {
-      evaluating(Json("\"")) should produce [JsonException]
+      a [JsonException] should be thrownBy (Json("\""))
       ()
     }
 
     it("should not parse numbers with a leading zeros") {
-      withClue("00")  (evaluating(Json("00"))  should produce [JsonException])
-      withClue("01")  (evaluating(Json("01"))  should produce [JsonException])
-      withClue("-00") (evaluating(Json("-00")) should produce [JsonException])
-      withClue("-01") (evaluating(Json("-01")) should produce [JsonException])
+      withClue("00")  (a [JsonException] should be thrownBy (Json("00")))
+      withClue("01")  (a [JsonException] should be thrownBy (Json("01")))
+      withClue("-00") (a [JsonException] should be thrownBy (Json("-00")))
+      withClue("-01") (a [JsonException] should be thrownBy (Json("-01")))
       ()
     }
 
     it("should not parse numbers with a trailing decimal point") {
-      withClue("0.")  (evaluating(Json("0."))  should produce [JsonException])
-      withClue("1.")  (evaluating(Json("1."))  should produce [JsonException])
-      withClue("-0.") (evaluating(Json("-0.")) should produce [JsonException])
-      withClue("-1.") (evaluating(Json("-1.")) should produce [JsonException])
+      withClue("0.")  (a [JsonException] should be thrownBy (Json("0.")))
+      withClue("1.")  (a [JsonException] should be thrownBy (Json("1.")))
+      withClue("-0.") (a [JsonException] should be thrownBy (Json("-0.")))
+      withClue("-1.") (a [JsonException] should be thrownBy (Json("-1.")))
       ()
     }
 
     it("should not parse numbers with an invalid exponent") {
-      withClue("4.0e")  (evaluating(Json("4.0e"))  should produce [JsonException])
-      withClue("4.0E")  (evaluating(Json("4.0E"))  should produce [JsonException])
-      withClue("4.0e+") (evaluating(Json("4.0e+")) should produce [JsonException])
-      withClue("4.0E+") (evaluating(Json("4.0E+")) should produce [JsonException])
-      withClue("4.0e-") (evaluating(Json("4.0e-")) should produce [JsonException])
-      withClue("4.0E-") (evaluating(Json("4.0E-")) should produce [JsonException])
+      withClue("4.0e")  (a [JsonException] should be thrownBy (Json("4.0e")))
+      withClue("4.0E")  (a [JsonException] should be thrownBy (Json("4.0E")))
+      withClue("4.0e+") (a [JsonException] should be thrownBy (Json("4.0e+")))
+      withClue("4.0E+") (a [JsonException] should be thrownBy (Json("4.0E+")))
+      withClue("4.0e-") (a [JsonException] should be thrownBy (Json("4.0e-")))
+      withClue("4.0E-") (a [JsonException] should be thrownBy (Json("4.0E-")))
       ()
     }
   }

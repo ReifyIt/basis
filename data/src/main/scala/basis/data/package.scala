@@ -6,6 +6,10 @@
 
 package basis
 
+/** Low-level memory model.
+  *
+  * @contentDiagram hideNodes "basis.data.ByteOrder" "basis.data.ByteFactory"
+  */
 package object data {
   val BigEndian: BigEndian = new BigEndian
   val LittleEndian: LittleEndian = new LittleEndian

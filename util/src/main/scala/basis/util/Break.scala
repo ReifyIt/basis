@@ -7,6 +7,6 @@
 package basis.util
 
 /** A control-flow break exception. */
-class Break extends Throwable(null, null) {
+class Break extends Throwable(null, null, false, false) {
   override def toString: String = "Break"
 }

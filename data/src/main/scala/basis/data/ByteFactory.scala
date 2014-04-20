@@ -6,7 +6,7 @@
 
 package basis.data
 
-import basis.collections._
+import basis._
 
 trait ByteFactory[+Data] extends ByteOrder[Endianness] {
   def empty: Data = Framer.state

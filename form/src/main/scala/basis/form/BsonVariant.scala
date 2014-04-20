@@ -6,6 +6,7 @@
 
 package basis.form
 
+import basis._
 import basis.collections._
 import basis.data._
 import basis.text._

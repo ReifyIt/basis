@@ -6,7 +6,7 @@
 
 package basis.data
 
-import basis.collections._
+import basis._
 
 trait Framer extends State[Any] with Writer {
   def expect(count: Long): this.type = this

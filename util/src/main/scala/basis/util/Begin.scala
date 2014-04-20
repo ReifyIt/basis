@@ -21,10 +21,10 @@ class Begin {
 }
 
 private[util] class BeginMacros(val c: blackbox.Context { type PrefixType <: Begin }) {
-  import c.{ Expr, mirror, prefix, weakTypeOf, WeakTypeTag }
+  import c.{ Expr, mirror, prefix, WeakTypeTag }
   import c.universe._
 
-  def apply(op: Expr[Unit]): Expr[Unit] = Expr[Unit](q"try $op catch { case signal: ${weakTypeOf[Break]} if signal eq $prefix.signal => }")
+  def apply(op: Expr[Unit]): Expr[Unit] = Expr[Unit](q"try $op catch { case signal: $BreakTag if signal eq $prefix.signal => }")
   def break(): Expr[Nothing]            = Expr[Nothing](q"throw $prefix.signal")
 
   implicit protected def BreakTag: WeakTypeTag[Break] = WeakTypeTag(mirror.staticClass("basis.util.Break").toType)

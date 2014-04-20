@@ -6,7 +6,7 @@
 
 package basis.data
 
-import basis.collections._
+import basis._
 
 trait ByteBuffer extends Any with Loader with Storer {
   def ++ (that: Loader): ByteBuffer with ByteOrder[Endian]

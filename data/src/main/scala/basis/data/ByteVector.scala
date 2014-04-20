@@ -6,7 +6,7 @@
 
 package basis.data
 
-import basis.collections._
+import basis._
 
 abstract class ByteVector extends Loader {
   def mutateByte(address: Long, value: Byte): ByteVector with ByteOrder[Endian]

@@ -6,7 +6,7 @@
 
 package basis.data
 
-import basis.collections._
+import basis._
 import basis.util._
 
 final class ByteBufferBE(val __ : Array[Byte]) extends AnyVal with ByteBuffer with ByteOrder[BigEndian] {

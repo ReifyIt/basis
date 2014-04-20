@@ -6,7 +6,7 @@
 
 package basis.data
 
-import basis.collections._
+import basis._
 import basis.util._
 
 sealed abstract class ByteVectorBE extends ByteVector with ByteOrder[BigEndian] {

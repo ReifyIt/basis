@@ -6,23 +6,59 @@
 
 package basis.form
 
+import basis._
 import basis.collections._
 import basis.data._
 import basis.text._
-import basis.util._
 import scala.reflect._
 
+/** A loosely structured abstract data model.
+  *
+  * @contentDiagram hideNodes "basis.form.Variant.BaseValue" "basis.form.Variant.BaseObject" "basis.form.Variant.BaseSeq" "basis.form.Variant.BaseSet" "basis.form.Variant.BaseBinary" "basis.form.Variant.BaseString" "basis.form.Variant.BaseNumber" "basis.form.Variant.BaseDate" "basis.form.Variant.BaseBoolean" "basis.form.Variant.BaseNull" "basis.form.Variant.BaseUndefined"
+  */
 trait Variant { variant =>
-  type AnyForm       <: BaseValue
-  type ObjectForm    <: BaseObject with AnyForm
-  type SeqForm       <: BaseSeq with AnyForm
-  type SetForm       <: BaseSet with AnyForm
-  type BinaryForm    <: BaseBinary with AnyForm
-  type StringForm    <: BaseString with AnyForm
-  type NumberForm    <: BaseNumber with AnyForm
-  type DateForm      <: BaseDate with AnyForm
-  type BooleanForm   <: BaseBoolean with AnyForm
-  type NullForm      <: BaseNull with AnyForm
+  /** The variant top type.
+    * @template */
+  type AnyForm <: BaseValue
+
+  /** An association from string keys to variant forms.
+    * @template */
+  type ObjectForm <: BaseObject with AnyForm
+
+  /** A sequence of variant forms.
+    * @template */
+  type SeqForm <: BaseSeq with AnyForm
+
+  /** A set of variant forms.
+    * @template */
+  type SetForm <: BaseSet with AnyForm
+
+  /** A binary data variant forms.
+    * @template */
+  type BinaryForm <: BaseBinary with AnyForm
+
+  /** A Unicode® character sequence variant form.
+    * @template */
+  type StringForm <: BaseString with AnyForm
+
+  /** A numeric variant form.
+    * @template */
+  type NumberForm <: BaseNumber with AnyForm
+
+  /** A date variant form.
+    * @template */
+  type DateForm <: BaseDate with AnyForm
+
+  /** A boolean variant form.
+    * @template */
+  type BooleanForm <: BaseBoolean with AnyForm
+
+  /** A null variant form.
+    * @template */
+  type NullForm <: BaseNull with AnyForm
+
+  /** An undefined variant form.
+    * @template */
   type UndefinedForm <: BaseUndefined with AnyForm
 
   val AnyForm: BaseValueFactory
