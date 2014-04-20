@@ -11,7 +11,7 @@ import basis.util._
 import scala.reflect.macros._
 
 private[sequential] abstract class IteratorMacros(override val c: blackbox.Context) extends TraverserMacros(c) {
-  import c.{ Expr, mirror, WeakTypeTag }
+  import c.{ Expr, WeakTypeTag }
   import c.universe.{ Traverser => _, _ }
 
   override def these: Expr[Iterator[_]]
