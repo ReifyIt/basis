@@ -27,7 +27,7 @@ private[form] class JsonVariantMacros(val c: blackbox.Context { type PrefixType 
     WeakTypeTag[JsonStringContext[V]](
       appliedType(
         mirror.staticClass("basis.form.JsonStringContext").toTypeConstructor,
-        prefix.actualType :: Nil))
+        (if (prefix.actualType != null) prefix.actualType else prefix.staticType) :: Nil))
 }
 
 private[form] class JsonStringContextMacros(val c: blackbox.Context { type PrefixType <: JsonStringContext[_] }) {

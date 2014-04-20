@@ -24,13 +24,17 @@ final class GeneralSetOps[+A](val __ : Set[A]) extends AnyVal {
   def reduce[B >: A](op: (B, B) => B): B               = macro GeneralSetMacros.reduceLeft[A, B]
   def reduceLeft[B >: A](op: (B, A) => B): B           = macro GeneralSetMacros.reduceLeft[A, B]
 
-//def eagerly: StrictSetOps[A, Set[_]]                 = macro GeneralSetMacros.eagerly[A]
-//def lazily: NonStrictSetOps[A]                       = macro GeneralSetMacros.lazily[A]
+  def eagerly: StrictSetOps[A, Set[_]]                 = macro GeneralSetMacros.eagerly[A]
+  def lazily: NonStrictSetOps[A]                       = macro GeneralSetMacros.lazily[A]
 }
 
 private[sequential] class GeneralSetMacros(override val c: blackbox.Context { type PrefixType <: GeneralSetOps[_] }) extends IteratorMacros(c) {
-  import c.{ Expr, prefix }
+  import c.{ Expr, prefix, WeakTypeTag }
   import c.universe._
 
   override def these: Expr[Iterator[_]] = Expr[Iterator[Any]](q"$prefix.__.iterator")
+  private def self: Expr[Set[_]] = Expr[Set[Any]](q"$prefix.__")
+
+  def eagerly[A : WeakTypeTag]: Expr[StrictSetOps[A, Set[_]]] = StrictOps1[StrictSetOps, A](self)
+  def lazily[A : WeakTypeTag]: Expr[NonStrictSetOps[A]]       = NonStrictOps1[NonStrictSetOps, A](self)
 }

@@ -23,8 +23,8 @@ class General {
   implicit def TraverserToGeneralOps[A](xs: Traverser[A]): GeneralTraverserOps[A]    = macro GeneralMacros.TraverserToGeneralOps[A]
 }
 
-private[collections] class GeneralMacros(val c: blackbox.Context) {
-  import c.{ Expr, mirror, WeakTypeTag }
+private[collections] class GeneralMacros(override val c: blackbox.Context) extends CollectionMacros(c) {
+  import c.{ Expr, WeakTypeTag }
   import c.universe.{ Traverser => _, _ }
 
   def ArrayToGeneralOps[A : WeakTypeTag](xs: Expr[Array[A]]): Expr[GeneralArrayOps[A]]                  = GeneralOps1[GeneralArrayOps, A](xs)
@@ -37,41 +37,4 @@ private[collections] class GeneralMacros(val c: blackbox.Context) {
   def SeqToGeneralOps[A : WeakTypeTag](xs: Expr[Seq[A]]): Expr[GeneralSeqOps[A]]                        = GeneralOps1[GeneralSeqOps, A](xs)
   def SetToGeneralOps[A : WeakTypeTag](xs: Expr[Set[A]]): Expr[GeneralSetOps[A]]                        = GeneralOps1[GeneralSetOps, A](xs)
   def TraverserToGeneralOps[A : WeakTypeTag](xs: Expr[Traverser[A]]): Expr[GeneralTraverserOps[A]]      = GeneralOps1[GeneralTraverserOps, A](xs)
-
-  implicit protected def GeneralArrayOpsTag: WeakTypeTag[GeneralArrayOps[_]]           = GeneralOpsTag[GeneralArrayOps[_]]("GeneralArrayOps")
-  implicit protected def GeneralCollectionOpsTag: WeakTypeTag[GeneralCollectionOps[_]] = GeneralOpsTag[GeneralCollectionOps[_]]("GeneralCollectionOps")
-  implicit protected def GeneralContainerOpsTag: WeakTypeTag[GeneralContainerOps[_]]   = GeneralOpsTag[GeneralContainerOps[_]]("GeneralContainerOps")
-  implicit protected def GeneralIndexedSeqOpsTag: WeakTypeTag[GeneralIndexedSeqOps[_]] = GeneralOpsTag[GeneralIndexedSeqOps[_]]("GeneralIndexedSeqOps")
-  implicit protected def GeneralIteratorOpsTag: WeakTypeTag[GeneralIteratorOps[_]]     = GeneralOpsTag[GeneralIteratorOps[_]]("GeneralIteratorOps")
-  implicit protected def GeneralLinearSeqOpsTag: WeakTypeTag[GeneralLinearSeqOps[_]]   = GeneralOpsTag[GeneralLinearSeqOps[_]]("GeneralLinearSeqOps")
-  implicit protected def GeneralMapOpsTag: WeakTypeTag[GeneralMapOps[_, _]]            = GeneralOpsTag[GeneralMapOps[_, _]]("GeneralMapOps")
-  implicit protected def GeneralSeqOpsTag: WeakTypeTag[GeneralSeqOps[_]]               = GeneralOpsTag[GeneralSeqOps[_]]("GeneralSeqOps")
-  implicit protected def GeneralSetOpsTag: WeakTypeTag[GeneralSetOps[_]]               = GeneralOpsTag[GeneralSetOps[_]]("GeneralSetOps")
-  implicit protected def GeneralTraverserOpsTag: WeakTypeTag[GeneralTraverserOps[_]]   = GeneralOpsTag[GeneralTraverserOps[_]]("GeneralTraverserOps")
-
-  protected def GeneralOps1[CC[_], A](xs: Expr[_])(implicit CC: WeakTypeTag[CC[_]], A: WeakTypeTag[A]): Expr[CC[A]] = {
-    implicit val GeneralOps = WeakTypeTag[CC[A]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: Nil))
-    Expr[CC[A]](q"new $GeneralOps($xs)")
-  }
-
-  protected def GeneralOps2[CC[_, _], A, T](xs: Expr[_])(implicit CC: WeakTypeTag[CC[_, _]], A: WeakTypeTag[A], T: WeakTypeTag[T]): Expr[CC[A, T]] = {
-    implicit val GeneralOps = WeakTypeTag[CC[A, T]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: T.tpe :: Nil))
-    Expr[CC[A, T]](q"new $GeneralOps($xs)")
-  }
-
-  protected def GeneralOpsTag[CC](name: String): WeakTypeTag[CC] = WeakTypeTag(mirror.staticClass(s"basis.collections.sequential.$name").toTypeConstructor)
-}
-
-private[collections] object General {
-  def typed[Required: c.WeakTypeTag](c: Context)(expr: c.universe.Tree): c.Expr[Required] = {
-    import c.universe._
-    implicit val RequiredType = weakTypeOf[Required]
-    c.Expr(q"$expr: $RequiredType")
-  }
-
-  def new1[Construct: c.WeakTypeTag, Arg: c.WeakTypeTag](c: Context)(xs: c.Expr[Arg]): c.Expr[Construct] = {
-    import c.universe._
-    implicit val ConstructType = weakTypeOf[Construct]
-    c.Expr(q"new $ConstructType($xs)")
-  }
 }

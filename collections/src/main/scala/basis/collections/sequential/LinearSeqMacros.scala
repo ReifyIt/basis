@@ -10,10 +10,9 @@ package sequential
 import basis.util._
 import scala.reflect.macros._
 
-private[sequential] abstract class LinearSeqMacros(override val c: blackbox.Context) extends TraverserMacros {
+private[sequential] abstract class LinearSeqMacros(override val c: blackbox.Context) extends TraverserMacros(c) {
   import c.{ Expr, fresh, mirror, WeakTypeTag }
   import c.universe.{ Traverser => _, _ }
-  import c.universe.internal._
 
   override def these: Expr[LinearSeq[_]]
 
@@ -568,41 +567,6 @@ private[sequential] abstract class LinearSeqMacros(override val c: blackbox.Cont
               EmptyTree),
             EmptyTree)) :: Nil,
         Select(Ident(b), "state": TermName)))
-  }
-
-  protected override def BuilderTypeTag(builder: Expr[Builder[_]]): WeakTypeTag[builder.value.type] =
-    WeakTypeTag[builder.value.type](builder.tree.symbol match {
-      case sym: TermSymbol if sym.isStable => singleType(NoPrefix, sym)
-      case _ => builder.actualType
-    })
-
-  protected override def BuilderStateTag
-      (builder: Expr[Builder[_]])
-      (implicit BuilderTypeTag: WeakTypeTag[builder.value.type])
-    : WeakTypeTag[builder.value.State] = {
-    val BuilderTpc = mirror.staticClass("basis.collections.Builder").toType
-    val BuilderStateSym = BuilderTpc.member("State": TypeName)
-    val BuilderStateTpe = typeRef(BuilderTypeTag.tpe, BuilderStateSym, Nil).normalize
-    WeakTypeTag[builder.value.State](BuilderStateTpe)
-  }
-
-  implicit protected def LinearSeqTag[A : WeakTypeTag]: WeakTypeTag[LinearSeq[A]] = {
-    val LinkTpc = mirror.staticClass("basis.collections.LinearSeq").toType
-    val LinkTpe = appliedType(LinkTpc, weakTypeOf[A] :: Nil)
-    WeakTypeTag[LinearSeq[A]](LinkTpe)
-  }
-
-  implicit protected def MaybeTag[A : WeakTypeTag]: WeakTypeTag[Maybe[A]] = {
-    val BasisUtil = mirror.staticPackage("basis.util").moduleClass
-    val MaybeTpc = BasisUtil.typeSignature.member("Maybe": TypeName).asType.toType
-    val MaybeATpe = appliedType(MaybeTpc, weakTypeOf[A] :: Nil)
-    WeakTypeTag[Maybe[A]](MaybeATpe)
-  }
-
-  implicit private def Tuple2Tag[A : WeakTypeTag, B : WeakTypeTag]: WeakTypeTag[(A, B)] = {
-    val Tuple2Tpc = mirror.staticClass("scala.Tuple2").toType
-    val Tuple2ABTpe = appliedType(Tuple2Tpc, weakTypeOf[A] :: weakTypeOf[B] :: Nil)
-    WeakTypeTag[(A, B)](Tuple2ABTpe)
   }
 
   implicit private def UnsupportedOperationExceptionTag: WeakTypeTag[UnsupportedOperationException] =

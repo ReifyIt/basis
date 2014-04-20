@@ -27,13 +27,16 @@ final class GeneralIndexedSeqOps[+A](val __ : IndexedSeq[A]) extends AnyVal {
   def reduceLeft[B >: A](op: (B, A) => B): B            = macro GeneralIndexedSeqMacros.reduceLeft[A, B]
   def reduceRight[B >: A](op: (A, B) => B): B           = macro GeneralIndexedSeqMacros.reduceRight[A, B]
 
-//def eagerly: StrictIndexedSeqOps[A, IndexedSeq[_]]    = macro GeneralIndexedSeqMacros.eagerly[A]
-//def lazily: NonStrictIndexedSeqOps[A]                 = macro GeneralIndexedSeqMacros.lazily[A]
+  def eagerly: StrictIndexedSeqOps[A, IndexedSeq[_]]    = macro GeneralIndexedSeqMacros.eagerly[A]
+  def lazily: NonStrictIndexedSeqOps[A]                 = macro GeneralIndexedSeqMacros.lazily[A]
 }
 
 private[sequential] class GeneralIndexedSeqMacros(override val c: blackbox.Context { type PrefixType <: GeneralIndexedSeqOps[_] }) extends IndexedSeqMacros(c) {
-  import c.{ Expr, prefix }
+  import c.{ Expr, prefix, WeakTypeTag }
   import c.universe._
 
   override def these: Expr[IndexedSeq[_]] = Expr[IndexedSeq[Any]](q"$prefix.__")
+
+  def eagerly[A : WeakTypeTag]: Expr[StrictIndexedSeqOps[A, IndexedSeq[_]]] = StrictOps1[StrictIndexedSeqOps, A](these)
+  def lazily[A : WeakTypeTag]: Expr[NonStrictIndexedSeqOps[A]]              = NonStrictOps1[NonStrictIndexedSeqOps, A](these)
 }

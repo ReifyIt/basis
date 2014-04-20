@@ -33,13 +33,16 @@ final class GeneralIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
   def reduce[B >: A](op: (B, B) => B): B               = macro GeneralIteratorMacros.reduceLeft[A, B]
   def reduceLeft[B >: A](op: (B, A) => B): B           = macro GeneralIteratorMacros.reduceLeft[A, B]
 
-//def eagerly: StrictIteratorOps[A, Iterator[_]]       = macro GeneralIteratorMacros.eagerly[A]
-//def lazily: NonStrictIteratorOps[A]                  = macro GeneralIteratorMacros.lazily[A]
+  def eagerly: StrictIteratorOps[A, Iterator[_]]       = macro GeneralIteratorMacros.eagerly[A]
+  def lazily: NonStrictIteratorOps[A]                  = macro GeneralIteratorMacros.lazily[A]
 }
 
 private[sequential] class GeneralIteratorMacros(override val c: blackbox.Context { type PrefixType <: GeneralIteratorOps[_] }) extends IteratorMacros(c) {
-  import c.{ Expr, prefix }
+  import c.{ Expr, prefix, WeakTypeTag }
   import c.universe._
 
   override def these: Expr[Iterator[_]] = Expr[Iterator[Any]](q"$prefix.__")
+
+  def eagerly[A : WeakTypeTag]: Expr[StrictIteratorOps[A, Iterator[_]]] = StrictOps1[StrictIteratorOps, A](these)
+  def lazily[A : WeakTypeTag]: Expr[NonStrictIteratorOps[A]]            = NonStrictOps1[NonStrictIteratorOps, A](these)
 }

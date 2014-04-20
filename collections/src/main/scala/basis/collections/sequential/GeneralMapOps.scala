@@ -24,13 +24,17 @@ final class GeneralMapOps[+A, +T](val __ : Map[A, T]) extends AnyVal {
   def reduce[B >: (A, T)](op: (B, B) => B): B                    = macro GeneralMapMacros.reduceLeft[(A, T), B]
   def reduceLeft[B >: (A, T)](op: (B, (A, T)) => B): B           = macro GeneralMapMacros.reduceLeft[(A, T), B]
 
-//def eagerly: StrictMapOps[A, T, Map[_, _]]                     = macro GeneralMapMacros.eagerly[A, T]
-//def lazily: NonStrictMapOps[A, T]                              = macro GeneralMapMacros.lazily[A, T]
+  def eagerly: StrictMapOps[A, T, Map[_, _]]                     = macro GeneralMapMacros.eagerly[A, T]
+  def lazily: NonStrictMapOps[A, T]                              = macro GeneralMapMacros.lazily[A, T]
 }
 
 private[sequential] class GeneralMapMacros(override val c: blackbox.Context { type PrefixType <: GeneralMapOps[_, _] }) extends IteratorMacros(c) {
-  import c.{ Expr, prefix }
+  import c.{ Expr, prefix, WeakTypeTag }
   import c.universe._
 
   override def these: Expr[Iterator[_]] = Expr[Iterator[Any]](q"$prefix.__.iterator")
+  private def self: Expr[Map[_, _]] = Expr[Map[Any, Any]](q"$prefix.__")
+
+  def eagerly[A : WeakTypeTag, T : WeakTypeTag]: Expr[StrictMapOps[A, T, Map[_, _]]] = StrictOps2[StrictMapOps, A, T](self)
+  def lazily[A : WeakTypeTag, T : WeakTypeTag]: Expr[NonStrictMapOps[A, T]]          = NonStrictOps2[NonStrictMapOps, A, T](self)
 }

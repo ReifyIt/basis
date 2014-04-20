@@ -23,6 +23,6 @@ final class GeneralCollectionOps[+A](val __ : Collection[A]) extends AnyVal {
   def reduce[B >: A](op: (B, B) => B): B               = new GeneralTraverserOps(__).reduce(op)
   def reduceLeft[B >: A](op: (B, A) => B): B           = new GeneralTraverserOps(__).reduceLeft(op)
 
-  def eagerly: StrictCollectionOps[A, Collection[_]] = new StrictCollectionOps[A, Collection[_]](__)
-  def lazily: NonStrictCollectionOps[A]              = new NonStrictCollectionOps[A](__)
+  def eagerly: StrictCollectionOps[A, Collection[_]]   = new StrictCollectionOps[A, Collection[_]](__)
+  def lazily: NonStrictCollectionOps[A]                = new NonStrictCollectionOps[A](__)
 }

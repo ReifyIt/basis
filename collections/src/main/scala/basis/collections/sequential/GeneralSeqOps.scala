@@ -24,13 +24,17 @@ final class GeneralSeqOps[+A](val __ : Seq[A]) extends AnyVal {
   def reduce[B >: A](op: (B, B) => B): B               = macro GeneralSeqMacros.reduceLeft[A, B]
   def reduceLeft[B >: A](op: (B, A) => B): B           = macro GeneralSeqMacros.reduceLeft[A, B]
 
-//def eagerly: StrictSeqOps[A, Seq[_]]                 = macro GeneralSeqMacros.eagerly[A]
-//def lazily: NonStrictSeqOps[A]                       = macro GeneralSeqMacros.lazily[A]
+  def eagerly: StrictSeqOps[A, Seq[_]]                 = macro GeneralSeqMacros.eagerly[A]
+  def lazily: NonStrictSeqOps[A]                       = macro GeneralSeqMacros.lazily[A]
 }
 
 private[sequential] class GeneralSeqMacros(override val c: blackbox.Context { type PrefixType <: GeneralSeqOps[_] }) extends IteratorMacros(c) {
-  import c.{ Expr, prefix }
+  import c.{ Expr, prefix, WeakTypeTag }
   import c.universe._
 
   override def these: Expr[Iterator[_]] = Expr[Iterator[Any]](q"$prefix.__.iterator")
+  private def self: Expr[Seq[_]] = Expr[Seq[Any]](q"$prefix.__")
+
+  def eagerly[A : WeakTypeTag]: Expr[StrictSeqOps[A, Seq[_]]] = StrictOps1[StrictSeqOps, A](self)
+  def lazily[A : WeakTypeTag]: Expr[NonStrictSeqOps[A]]       = NonStrictOps1[NonStrictSeqOps, A](self)
 }

@@ -10,39 +10,44 @@ package sequential
 import basis.util._
 import scala.reflect.macros._
 
-private[sequential] abstract class IteratorMacros(override val c: blackbox.Context) extends TraverserMacros(c) {
-  import c.{ Expr, mirror, WeakTypeTag }
+private[sequential] abstract class ArrayLikeMacros(override val c: blackbox.Context) extends CollectionMacros(c) {
+  import c.{ Expr, WeakTypeTag }
   import c.universe.{ Traverser => _, _ }
 
-  override def these: Expr[Iterator[_]]
+  def these: Expr[_]
 
   def foreach[A, U](f: Expr[A => U]): Expr[Unit] = Expr[Unit](q"""{
     val xs = $these
-    while (!xs.isEmpty) {
-      $f(xs.head)
-      xs.step()
+    var i = 0
+    val n = xs.length
+    while (i < n) {
+      $f(xs(i))
+      i += 1
     }
   }""")
 
   def foldLeft[A, B : WeakTypeTag](z: Expr[B])(op: Expr[(B, A) => B]): Expr[B] = Expr[B](q"""{
     val xs = $these
     var r = $z
-    while (!xs.isEmpty) {
-      r = $op(r, xs.head)
-      xs.step()
+    var i = 0
+    val n = xs.length
+    while (i < n) {
+      r = $op(r, xs(i))
+      i += 1
     }
     r
   }""")
 
   def reduceLeft[A, B >: A](op: Expr[(B, A) => B])(implicit B: WeakTypeTag[B]): Expr[B] = Expr[B](q"""{
     val xs = $these
-    if (xs.isEmpty) throw new _root_.java.lang.UnsupportedOperationException("empty reduce")
+    val n = xs.length
+    if (n <= 0) throw new _root_.java.lang.UnsupportedOperationException("empty reduce")
     else {
-      var r = xs.head: $B
-      xs.step()
-      while (!xs.isEmpty) {
-        r = $op(r, xs.head)
-        xs.step()
+      var r = xs(0): $B
+      var i = 1
+      while (i < n) {
+        r = $op(r, xs(i))
+        i += 1
       }
       r
     }
@@ -50,13 +55,55 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
 
   def mayReduceLeft[A, B >: A](op: Expr[(B, A) => B])(implicit B: WeakTypeTag[B]): Expr[Maybe[B]] = Expr[Maybe[B]](q"""{
     val xs = $these
-    if (xs.isEmpty) _root_.basis.util.Trap
+    val n = xs.length
+    if (n <= 0) _root_.basis.util.Trap
     else {
-      var r = xs.head: $B
-      xs.step()
-      while (!xs.isEmpty) {
-        r = $op(r, xs.head)
-        xs.step()
+      var r = xs(0): $B
+      var i = 1
+      while (i < n) {
+        r = $op(r, xs(i))
+        i += 1
+      }
+      _root_.basis.util.Bind(r)
+    }
+  }""")
+
+  def foldRight[A, B : WeakTypeTag](z: Expr[B])(op: Expr[(A, B) => B]): Expr[B] = Expr[B](q"""{
+    val xs = $these
+    var r = $z
+    var i = xs.length - 1
+    while (i >= 0) {
+      r = $op(xs(i), r)
+      i -= 1
+    }
+    r
+  }""")
+
+  def reduceRight[A, B >: A](op: Expr[(A, B) => B])(implicit B: WeakTypeTag[B]): Expr[B] = Expr[B](q"""{
+    val xs = $these
+    var i = xs.length - 1
+    if (i < 0) throw new _root_.java.lang.UnsupportedOperationException("empty reduce")
+    else {
+      var r = xs(i): $B
+      i -= 1
+      while (i >= 0) {
+        r = $op(xs(i), r)
+        i -= 1
+      }
+      r
+    }
+  }""")
+
+  def mayReduceRight[A, B >: A](op: Expr[(A, B) => B])(implicit B: WeakTypeTag[B]): Expr[Maybe[B]] = Expr[Maybe[B]](q"""{
+    val xs = $these
+    var i = xs.length - 1
+    if (i < 0) _root_.basis.util.Trap
+    else {
+      var r = xs(i): $B
+      i -= 1
+      while (i >= 0) {
+        r = $op(xs(i), r)
+        i -= 1
       }
       _root_.basis.util.Bind(r)
     }
@@ -67,9 +114,11 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     Expr[Maybe[A]](q"""{
       val xs = $these
       var r = _root_.basis.util.Trap: $MaybeA
-      while (!xs.isEmpty && {
-        val x = xs.head
-        !$p(x) && { xs.step(); true } || { r = _root_.basis.util.Bind(x); false }
+      var i = 0
+      val n = xs.length
+      while (i < n && {
+        val x = xs(i)
+        !$p(x) && { i += 1; true } || { r = _root_.basis.util.Bind(x); false }
       }) ()
       r
     }""")
@@ -78,23 +127,29 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
   def forall[A](p: Expr[A => Boolean]): Expr[Boolean] = Expr[Boolean](q"""{
     val xs = $these
     var r = true
-    while (!xs.isEmpty && ($p(xs.head) && { xs.step(); true } || { r = false; false })) ()
+    var i = 0
+    val n = xs.length
+    while (i < n && ($p(xs(i)) && { i += 1; true } || { r = false; false })) ()
     r
   }""")
 
   def exists[A](p: Expr[A => Boolean]): Expr[Boolean] = Expr[Boolean](q"""{
     val xs = $these
     var r = false
-    while (!xs.isEmpty && (!$p(xs.head) && { xs.step(); true } || { r = true; false })) ()
+    var i = 0
+    val n = xs.length
+    while (i < n && (!$p(xs(i)) && { i += 1; true } || { r = true; false })) ()
     r
   }""")
 
   def count[A](p: Expr[A => Boolean]): Expr[Int] = Expr[Int](q"""{
     val xs = $these
     var t = 0
-    while (!xs.isEmpty) {
-      if ($p(xs.head)) t += 1
-      xs.step()
+    var i = 0
+    val n = xs.length
+    while (i < n) {
+      if ($p(xs(i))) t += 1
+      i += 1
     }
     t
   }""")
@@ -104,10 +159,12 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     Expr[Maybe[B]](q"""{
       val xs = $these
       var r = _root_.basis.util.Trap: $MaybeB
+      var i = 0
+      val n = xs.length
       val f = $q
-      while (!xs.isEmpty && {
-        val x = xs.head
-        f.isDefinedAt(x) && { r = _root_.basis.util.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { xs.step(); true }
+      while (i < n && {
+        val x = xs(i)
+        f.isDefinedAt(x) && { r = _root_.basis.util.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { i += 1; true }
       }) ()
       r
     }""")
@@ -118,12 +175,14 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
+      var i = 0
+      val n = xs.length
       val b = $builder: $builderType
       val f = $q
-      while (!xs.isEmpty) {
-        val x = xs.head
+      while (i < n) {
+        val x = xs(i)
         if (f.isDefinedAt(x)) b.append(f.applyOrElse(x, _root_.scala.PartialFunction.empty))
-        xs.step()
+        i += 1
       }
       b.state
     }""")
@@ -134,10 +193,12 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      val b = $builder: $builderType
-      while (!xs.isEmpty) {
-        b.append($f(xs.head))
-        xs.step()
+      var i = 0
+      val n = xs.length
+      val b = $builder.expect(n): $builderType
+      while (i < n) {
+        b.append($f(xs(i)))
+        i += 1
       }
       b.state
     }""")
@@ -148,10 +209,12 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
+      var i = 0
+      val n = xs.length
       val b = $builder: $builderType
-      while (!xs.isEmpty) {
-        b.appendAll($f(xs.head))
-        xs.step()
+      while (i < n) {
+        b.appendAll($f(xs(i)))
+        i += 1
       }
       b.state
     }""")
@@ -162,11 +225,13 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
+      var i = 0
+      val n = xs.length
       val b = $builder: $builderType
-      while (!xs.isEmpty) {
-        val x = xs.head
+      while (i < n) {
+        val x = xs(i)
         if ($p(x)) b.append(x)
-        xs.step()
+        i += 1
       }
       b.state
     }""")
@@ -177,15 +242,17 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
+      var i = 0
+      val n = xs.length
       val b = $builder: $builderType
-      while (!xs.isEmpty && {
-        val x = xs.head
-        xs.step()
+      while (i < n && {
+        val x = xs(i)
+        i += 1
         $p(x) || { b.append(x); false }
       }) ()
-      while (!xs.isEmpty) {
-        b.append(xs.head)
-        xs.step()
+      while (i < n) {
+        b.append(xs(i))
+        i += 1
       }
       b.state
     }""")
@@ -196,10 +263,12 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
+      var i = 0
+      val n = xs.length
       val b = $builder: $builderType
-      while (!xs.isEmpty && {
-        val x = xs.head
-        $p(x) && { b.append(x); xs.step(); true }
+      while (i < n && {
+        val x = xs(i)
+        $p(x) && { b.append(x); i += 1; true }
       }) ()
       b.state
     }""")
@@ -212,16 +281,18 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builder2State = BuilderStateTag(builder2)
     Expr[(builder1.value.State, builder2.value.State)](q"""{
       val xs = $these
+      var i = 0
+      val n = xs.length
       val b1 = $builder1: $builder1Type
       val b2 = $builder2: $builder2Type
-      while (!xs.isEmpty && {
-        val x = xs.head
-        xs.step()
+      while (i < n && {
+        val x = xs(i)
+        i += 1
         if ($p(x)) { b1.append(x); true } else { b2.append(x); false }
       }) ()
-      while (!xs.isEmpty) {
-        b2.append(xs.head)
-        xs.step()
+      while (i < n) {
+        b2.append(xs(i))
+        i += 1
       }
       (b1.state: $builder1State, b2.state: $builder2State)
     }""")
@@ -232,16 +303,12 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      var i = 0
-      val n = $lower
-      val b = $builder: $builderType
-      while (i < n && !xs.isEmpty) {
-        xs.step()
+      val n = xs.length
+      var i = _root_.java.lang.Math.min(_root_.java.lang.Math.max(0, $lower), n)
+      val b = $builder.expect(n - i): $builderType
+      while (i < n) {
+        b.append(xs(i))
         i += 1
-      }
-      while (!xs.isEmpty) {
-        b.append(xs.head)
-        xs.step()
       }
       b.state
     }""")
@@ -253,11 +320,10 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     Expr[builder.value.State](q"""{
       val xs = $these
       var i = 0
-      val n = $upper
-      val b = $builder: $builderType
-      while (i < n && !xs.isEmpty) {
-        b.append(xs.head)
-        xs.step()
+      val n = _root_.java.lang.Math.min(_root_.java.lang.Math.max(0, $upper), xs.length)
+      val b = $builder.expect(n): $builderType
+      while (i < n) {
+        b.append(xs(i))
         i += 1
       }
       b.state
@@ -269,39 +335,30 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      var i = 0
-      var n = $lower
-      val b = $builder: $builderType
-      while (i < n && !xs.isEmpty) {
-        xs.step()
-        i += 1
-      }
-      n = $upper
-      while (i < n && !xs.isEmpty) {
-        b.append(xs.head)
-        xs.step()
+      val n = _root_.java.lang.Math.min(_root_.java.lang.Math.max(0, $upper), xs.length)
+      var i = _root_.java.lang.Math.min(_root_.java.lang.Math.max(0, $lower), n)
+      val b = $builder.expect(n - i): $builderType
+      while (i < n) {
+        b.append(xs(i))
         i += 1
       }
       b.state
     }""")
   }
 
-  def zip[A, B](those: Expr[Iterator[B]])(builder: Expr[Builder[(A, B)]])(implicit A: WeakTypeTag[A], B: WeakTypeTag[B]): Expr[builder.value.State] = {
+  def reverse[A](builder: Expr[Builder[A]]): Expr[builder.value.State] = {
     implicit val builderType = BuilderTypeTag(builder)
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      val ys = $those
-      val b = $builder: $builderType
-      while (!xs.isEmpty && !ys.isEmpty) {
-        b.append((xs.head: $A, ys.head: $B))
-        xs.step()
-        ys.step()
+      var i = xs.length
+      val b = $builder.expect(i): $builderType
+      i -= 1
+      while (i >= 0) {
+        b.append(xs(i))
+        i -= 1
       }
       b.state
     }""")
   }
-
-  def zipContainer[A : WeakTypeTag, B : WeakTypeTag](those: Expr[Container[B]])(builder: Expr[Builder[(A, B)]]): Expr[builder.value.State] =
-    zip[A, B](Expr[Iterator[B]](q"$those.iterator"))(builder)
 }

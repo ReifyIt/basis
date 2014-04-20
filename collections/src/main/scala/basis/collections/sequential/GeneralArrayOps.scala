@@ -28,8 +28,8 @@ final class GeneralArrayOps[A](val __ : Array[A]) extends AnyVal {
   @inline def reduceRight[B >: A](op: (A, B) => B): B           = macro GeneralArrayMacros.reduceRight[A, B]
   @inline def reduce[B >: A](op: (B, B) => B): B                = macro GeneralArrayMacros.reduceLeft[A, B]
 
-//@inline def eagerly: StrictArrayOps[A, Array[_]]              = macro GeneralArrayMacros.eagerly[A]
-//@inline def lazily: NonStrictArrayOps[A]                      = macro GeneralArrayMacros.lazily[A]
+  @inline def eagerly: StrictArrayOps[A, Array[_]]              = macro GeneralArrayMacros.eagerly[A]
+  @inline def lazily: NonStrictArrayOps[A]                      = macro GeneralArrayMacros.lazily[A]
 }
 
 private[sequential] class GeneralArrayMacros(override val c: blackbox.Context { type PrefixType <: GeneralArrayOps[_] }) extends ArrayMacros(c) {
@@ -37,4 +37,7 @@ private[sequential] class GeneralArrayMacros(override val c: blackbox.Context { 
   import c.universe._
 
   override def these: Expr[Array[_]] = Expr[Array[Any]](q"$prefix.__")
+
+  def eagerly[A : WeakTypeTag]: Expr[StrictArrayOps[A, Array[_]]] = StrictOpsFamily1[StrictArrayOps, A, Array[_]](these)
+  def lazily[A : WeakTypeTag]: Expr[NonStrictArrayOps[A]]         = NonStrictOps1[NonStrictArrayOps, A](these)
 }

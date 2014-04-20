@@ -24,8 +24,8 @@ final class GeneralLinearSeqOps[+A](val __ : LinearSeq[A]) extends AnyVal {
   def reduce[B >: A](op: (B, B) => B): B               = macro GeneralLinearSeqMacros.reduceLeft[A, B]
   def reduceLeft[B >: A](op: (B, A) => B): B           = macro GeneralLinearSeqMacros.reduceLeft[A, B]
 
-//def eagerly: StrictLinearSeqOps[A, LinearSeq[_]]     = macro GeneralLinearSeqMacros.eagerly[A]
-//def lazily: NonStrictLinearSeqOps[A]                 = macro GeneralLinearSeqMacros.lazily[A]
+  def eagerly: StrictLinearSeqOps[A, LinearSeq[_]]     = macro GeneralLinearSeqMacros.eagerly[A]
+  def lazily: NonStrictLinearSeqOps[A]                 = macro GeneralLinearSeqMacros.lazily[A]
 }
 
 private[sequential] class GeneralLinearSeqMacros(override val c: blackbox.Context { type PrefixType <: GeneralLinearSeqOps[_] }) extends LinearSeqMacros(c) {
@@ -33,4 +33,7 @@ private[sequential] class GeneralLinearSeqMacros(override val c: blackbox.Contex
   import c.universe._
 
   override def these: Expr[LinearSeq[_]] = Expr[LinearSeq[Any]](q"$prefix.__")
+
+  def eagerly[A : WeakTypeTag]: Expr[StrictLinearSeqOps[A, LinearSeq[_]]] = StrictOps1[StrictLinearSeqOps, A](these)
+  def lazily[A : WeakTypeTag]: Expr[NonStrictLinearSeqOps[A]]             = NonStrictOps1[NonStrictLinearSeqOps, A](these)
 }

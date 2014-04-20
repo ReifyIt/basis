@@ -23,8 +23,8 @@ class NonStrict extends General {
   implicit def TraverserToNonStrictOps[A](xs: Traverser[A]): NonStrictTraverserOps[A]    = macro NonStrictMacros.TraverserToNonStrictOps[A]
 }
 
-private[collections] class NonStrictMacros(val c: blackbox.Context) {
-  import c.{ Expr, mirror, WeakTypeTag }
+private[collections] class NonStrictMacros(override val c: blackbox.Context) extends CollectionMacros(c) {
+  import c.{ Expr, WeakTypeTag }
   import c.universe.{ Traverser => _, _ }
 
   def ArrayToNonStrictOps[A : WeakTypeTag](xs: Expr[Array[A]]): Expr[NonStrictArrayOps[A]]                  = NonStrictOps1[NonStrictArrayOps, A](xs)
@@ -37,27 +37,4 @@ private[collections] class NonStrictMacros(val c: blackbox.Context) {
   def SeqToNonStrictOps[A : WeakTypeTag](xs: Expr[Seq[A]]): Expr[NonStrictSeqOps[A]]                        = NonStrictOps1[NonStrictSeqOps, A](xs)
   def SetToNonStrictOps[A : WeakTypeTag](xs: Expr[Set[A]]): Expr[NonStrictSetOps[A]]                        = NonStrictOps1[NonStrictSetOps, A](xs)
   def TraverserToNonStrictOps[A : WeakTypeTag](xs: Expr[Traverser[A]]): Expr[NonStrictTraverserOps[A]]      = NonStrictOps1[NonStrictTraverserOps, A](xs)
-
-  implicit protected def NonStrictArrayOpsTag: WeakTypeTag[NonStrictArrayOps[_]]           = NonStrictOpsTag[NonStrictArrayOps[_]]("NonStrictArrayOps")
-  implicit protected def NonStrictCollectionOpsTag: WeakTypeTag[NonStrictCollectionOps[_]] = NonStrictOpsTag[NonStrictCollectionOps[_]]("NonStrictCollectionOps")
-  implicit protected def NonStrictContainerOpsTag: WeakTypeTag[NonStrictContainerOps[_]]   = NonStrictOpsTag[NonStrictContainerOps[_]]("NonStrictContainerOps")
-  implicit protected def NonStrictIndexedSeqOpsTag: WeakTypeTag[NonStrictIndexedSeqOps[_]] = NonStrictOpsTag[NonStrictIndexedSeqOps[_]]("NonStrictIndexedSeqOps")
-  implicit protected def NonStrictIteratorOpsTag: WeakTypeTag[NonStrictIteratorOps[_]]     = NonStrictOpsTag[NonStrictIteratorOps[_]]("NonStrictIteratorOps")
-  implicit protected def NonStrictLinearSeqOpsTag: WeakTypeTag[NonStrictLinearSeqOps[_]]   = NonStrictOpsTag[NonStrictLinearSeqOps[_]]("NonStrictLinearSeqOps")
-  implicit protected def NonStrictMapOpsTag: WeakTypeTag[NonStrictMapOps[_, _]]            = NonStrictOpsTag[NonStrictMapOps[_, _]]("NonStrictMapOps")
-  implicit protected def NonStrictSeqOpsTag: WeakTypeTag[NonStrictSeqOps[_]]               = NonStrictOpsTag[NonStrictSeqOps[_]]("NonStrictSeqOps")
-  implicit protected def NonStrictSetOpsTag: WeakTypeTag[NonStrictSetOps[_]]               = NonStrictOpsTag[NonStrictSetOps[_]]("NonStrictSetOps")
-  implicit protected def NonStrictTraverserOpsTag: WeakTypeTag[NonStrictTraverserOps[_]]   = NonStrictOpsTag[NonStrictTraverserOps[_]]("NonStrictTraverserOps")
-
-  protected def NonStrictOps1[CC[_], A](xs: Expr[_])(implicit CC: WeakTypeTag[CC[_]], A: WeakTypeTag[A]): Expr[CC[A]] = {
-    implicit val NonStrictOps = WeakTypeTag[CC[A]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: Nil))
-    Expr[CC[A]](q"new $NonStrictOps($xs)")
-  }
-
-  protected def NonStrictOps2[CC[_, _], A, T](xs: Expr[_])(implicit CC: WeakTypeTag[CC[_, _]], A: WeakTypeTag[A], T: WeakTypeTag[T]): Expr[CC[A, T]] = {
-    implicit val NonStrictOps = WeakTypeTag[CC[A, T]](appliedType(mirror.staticClass(CC.tpe.typeSymbol.fullName).toTypeConstructor, A.tpe :: T.tpe :: Nil))
-    Expr[CC[A, T]](q"new $NonStrictOps($xs)")
-  }
-
-  protected def NonStrictOpsTag[CC](name: String): WeakTypeTag[CC] = WeakTypeTag(mirror.staticClass(s"basis.collections.sequential.$name").toTypeConstructor)
 }
