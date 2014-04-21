@@ -1,6 +1,5 @@
 import sbt._
 import sbt.Keys._
-import sbt.Project.Initialize
 
 object Unidoc {
   val unidocDirectory = SettingKey[File]("unidoc-directory")
@@ -9,44 +8,31 @@ object Unidoc {
   val unidocSources = TaskKey[Seq[File]]("unidoc-sources")
   val unidocAllClasspaths = TaskKey[Seq[Classpath]]("unidoc-all-classpaths")
   val unidocClasspath = TaskKey[Seq[File]]("unidoc-classpath")
-  val unidoc = TaskKey[File]("unidoc", "Create unified scaladoc for all aggregates")
+  val unidoc = TaskKey[File]("unidoc", "Generate unified scaladocs for all aggregated projects")
 
   lazy val settings = Seq(
-    unidocDirectory <<= crossTarget / "unidoc",
+    unidocDirectory := crossTarget.value / "api",
     unidocExclude := Seq.empty,
-    unidocAllSources <<= (thisProjectRef, buildStructure, unidocExclude) flatMap allSources(Compile),
-    unidocSources <<= unidocAllSources map { _.flatten },
-    unidocAllClasspaths <<= (thisProjectRef, buildStructure, unidocExclude) flatMap allClasspaths,
-    unidocClasspath <<= unidocAllClasspaths map { _.flatten.map(_.data).distinct },
-    unidoc <<= unidocTask
-  )
+    unidocAllSources := unidocAllSourcesTask.value,
+    unidocSources := unidocAllSources.value.flatten,
+    unidocAllClasspaths := unidocAllClasspathsTask.value,
+    unidocClasspath := unidocAllClasspaths.value.flatten.map(_.data).distinct,
+    unidoc := unidocTask.value)
 
-  def allSources(conf: Configuration)(projectRef: ProjectRef, structure: Load.BuildStructure, exclude: Seq[String]): Task[Seq[Seq[File]]] = {
-    val projects = aggregated(projectRef, structure, exclude)
-    projects flatMap { sources in conf in LocalProject(_) get structure.data } join
+  private lazy val unidocAllSourcesTask = Def.settingDyn {
+    val excludeProjects = unidocExclude.value.map(LocalProject)
+    sources.all(ScopeFilter(inAggregates(thisProjectRef.value) -- inProjects(excludeProjects: _*), inConfigurations(Compile)))
   }
 
-  def allClasspaths(projectRef: ProjectRef, structure: Load.BuildStructure, exclude: Seq[String]): Task[Seq[Classpath]] = {
-    val projects = aggregated(projectRef, structure, exclude)
-    projects flatMap { dependencyClasspath in Compile in LocalProject(_) get structure.data } join
+  private lazy val unidocAllClasspathsTask = Def.settingDyn {
+    val excludeProjects = unidocExclude.value.map(LocalProject)
+    dependencyClasspath.all(ScopeFilter(inAggregates(thisProjectRef.value) -- inProjects(excludeProjects: _*), inConfigurations(Compile)))
   }
 
-  def aggregated(projectRef: ProjectRef, structure: Load.BuildStructure, exclude: Seq[String]): Seq[String] = {
-    val aggregate = Project.getProject(projectRef, structure).toSeq.flatMap(_.aggregate)
-    aggregate flatMap { ref =>
-      if (exclude contains ref.project) Seq.empty
-      else ref.project +: aggregated(ref, structure, exclude)
-    }
-  }
-
-  def unidocTask: Initialize[Task[File]] = {
-    (compilers, cacheDirectory, unidocSources, unidocClasspath, unidocDirectory, scalacOptions in (Compile, doc), apiMappings in (Compile, doc), streams) map {
-      (compilers, cache, sources, classpath, target, options, api, s) => {
-        val scaladoc = new Scaladoc(100, compilers.scalac)
-        val opts1 = options ++ Opts.doc.externalAPI(api)
-        scaladoc.cached(cache / "unidoc", "main", sources, classpath, target, opts1, s.log)
-        target
-      }
-    }
+  private lazy val unidocTask = Def.task {
+    val scaladoc = Doc.scaladoc("main", streams.value.cacheDirectory / "api", compilers.value.scalac)
+    val scaladocOptions = (scalacOptions in (Compile, doc)).value ++ Opts.doc.externalAPI((apiMappings in (Compile, doc)).value)
+    scaladoc(unidocSources.value, unidocClasspath.value, unidocDirectory.value, scaladocOptions, 100, streams.value.log)
+    unidocDirectory.value
   }
 }

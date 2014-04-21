@@ -1,6 +1,6 @@
 lazy val modules = Seq(`basis-core`, `basis-data`, `basis-form`, `basis-math`, `basis-stat`, `basis-util`)
 
-lazy val basis = project in file(".") settings (moduleSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*) aggregate (modules map (x => x: ProjectReference): _*)
+lazy val basis = project in file(".") settings (Unidoc.settings ++ moduleSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*) aggregate (modules map (x => x: ProjectReference): _*)
 
 lazy val `basis-core` = project in file("core") settings (moduleSettings: _*) dependsOn (`basis-util`)
 
@@ -14,7 +14,7 @@ lazy val `basis-stat` = project in file("stat") settings (moduleSettings: _*) de
 
 lazy val `basis-util` = project in file("util") settings (moduleSettings: _*)
 
-lazy val moduleSettings = projectSettings ++ compileSettings ++ docSettings ++ publishSettings ++ Unidoc.settings
+lazy val moduleSettings = projectSettings ++ compileSettings ++ docSettings ++ publishSettings
 
 lazy val projectSettings = Seq(
   version := "0.1-SNAPSHOT",
@@ -37,7 +37,7 @@ lazy val docSettings = Seq(
     val docSourceUrl = "https://github.com/reifyit/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
     Seq("-groups",
         "-implicits",
-        "-implicits-hide:basis.MaybeOps,basis.util.ArrowOps,.",
+        "-implicits-hide:basis.MaybeToOps,basis.util.ArrowToOps,.",
         "-implicits-show-all",
         "-diagrams",
         "-diagrams-dot-restart", "20",
