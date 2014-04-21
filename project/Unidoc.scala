@@ -17,7 +17,8 @@ object Unidoc {
     unidocSources := unidocAllSources.value.flatten,
     unidocAllClasspaths := unidocAllClasspathsTask.value,
     unidocClasspath := unidocAllClasspaths.value.flatten.map(_.data).distinct,
-    unidoc := unidocTask.value)
+    unidoc := unidocTask.value,
+    doc := unidoc.value)
 
   private lazy val unidocAllSourcesTask = Def.settingDyn {
     val excludeProjects = unidocExclude.value.map(LocalProject)
