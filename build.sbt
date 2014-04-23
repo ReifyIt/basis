@@ -17,14 +17,14 @@ lazy val `basis-util` = project in file("util") settings (moduleSettings: _*)
 lazy val moduleSettings = projectSettings ++ compileSettings ++ docSettings ++ publishSettings
 
 lazy val projectSettings = Seq(
-  version := "0.1-SNAPSHOT",
+  version := "0.1.0-SNAPSHOT",
   organization := "it.reify",
   description := "A foundation library for Scala focussed on efficiency and clean design",
   licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   homepage := Some(url("http://basis.reify.it")))
 
 lazy val compileSettings = Seq(
-  scalaVersion := "2.11.0-RC4",
+  scalaVersion := "2.11.0",
   scalacOptions ++= Seq("-optimise", "-language:_", "-deprecation", "-Yno-predef", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
@@ -40,8 +40,6 @@ lazy val docSettings = Seq(
         "-implicits-hide:basis.MaybeToOps,basis.util.ArrowToOps,.",
         "-implicits-show-all",
         "-diagrams",
-        "-diagrams-dot-restart", "20",
-        "-diagrams-dot-timeout", "30",
         "-sourcepath", (baseDirectory in LocalProject("basis")).value.getAbsolutePath,
         "-doc-source-url", docSourceUrl,
         "-Ymacro-expand:none")
