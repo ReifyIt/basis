@@ -9,7 +9,7 @@ package basis.util
 import scala.reflect.macros._
 
 /** Implements Austin Appleby's MurmurHash 3 algorithm, specifically
-  * sMurmurHash3_x86_32 revision 136.
+  * MurmurHash3_x86_32 revision 136.
   *
   * @example {{{
   * import MurmurHash3._
