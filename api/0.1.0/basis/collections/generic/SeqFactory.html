@@ -1,0 +1,530 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>SeqFactory - basis.collections.generic.SeqFactory</title>
+          <meta name="description" content="SeqFactory - basis.collections.generic.SeqFactory" />
+          <meta name="keywords" content="SeqFactory basis.collections.generic.SeqFactory" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'basis.collections.generic.SeqFactory';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="basis">basis</a>.<a href="../package.html" class="extype" name="basis.collections">collections</a>.<a href="package.html" class="extype" name="basis.collections.generic">generic</a></p>
+        <h1>SeqFactory</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SeqFactory</span><span class="tparams">[<span name="CC">+CC<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a>[<span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/0.1.0/core/src/main/scala/basis/collections/generic/SeqFactory.scala" target="_blank">SeqFactory.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a>[<span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="../immutable/Batch$.html" class="extype" name="basis.collections.immutable.Batch">Batch</a>, <a href="../BilinearSeq$.html" class="extype" name="basis.collections.BilinearSeq">BilinearSeq</a>, <a href="../Buffer$.html" class="extype" name="basis.collections.Buffer">Buffer</a>, <a href="../Deque$.html" class="extype" name="basis.collections.Deque">Deque</a>, <a href="../IndexedSeq$.html" class="extype" name="basis.collections.IndexedSeq">IndexedSeq</a>, <a href="../LinearSeq$.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>, <a href="../immutable/List$.html" class="extype" name="basis.collections.immutable.List">List</a>, <a href="../mutable/ListBuffer$.html" class="extype" name="basis.collections.mutable.ListBuffer">ListBuffer</a>, <a href="../Queue$.html" class="extype" name="basis.collections.Queue">Queue</a>, <a href="../Seq$.html" class="extype" name="basis.collections.Seq">Seq</a>, <a href="../Stack$.html" class="extype" name="basis.collections.Stack">Stack</a>, <a href="../immutable/Vector$.html" class="extype" name="basis.collections.immutable.Vector">Vector</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph279" viewBox="0.00 0.00 1117.50 155.00" height="155pt" width="1118pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 1113.5,-151 1113.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph279_0"><g id="a_this trait|graph279_0"><a xlink:title="basis.collections.generic.SeqFactory (this trait)" xlink:href="#inheritance-diagram"><polygon points="641.5,-86 527.5,-86 527.5,-61 641.5,-61 641.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../../lib/trait_diagram.png" y="-80.5" x="537.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="558.044" text-anchor="start">SeqFactory[CC]</text></a></g></g><!-- node1 --><g class="node object" id="graph279_1"><g id="a_object|graph279_1"><a xlink:title="basis.collections.immutable.Batch" xlink:href="../immutable/Batch$.html#inheritance-diagram"><polygon points="69,-25 0,-25 0,-0 69,-0 69,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="31.3252" text-anchor="start">Batch</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph279_0_1"><g id="a_inheritance|graph279_0_1"><a xlink:title="Batch is a subtype of SeqFactory[CC]"><path d="M522.124,-69.8999C426.172,-65.1695 236.851,-52.936 78.5,-25 75.5453,-24.4787 72.4984,-23.8588 69.4516,-23.1811" stroke="#d4d4d4" fill="none"></path><polygon points="522.104,-71.651 527.184,-70.1467 522.275,-68.1551 522.104,-71.651" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node object" id="graph279_2"><g id="a_object|graph279_2"><a xlink:title="basis.collections.BilinearSeq" xlink:href="../BilinearSeq$.html#inheritance-diagram"><polygon points="181.5,-25 87.5,-25 87.5,-0 181.5,-0 181.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="97.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="118.04" text-anchor="start">BilinearSeq</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph279_0_2"><g id="a_inheritance|graph279_0_2"><a xlink:title="BilinearSeq is a subtype of SeqFactory[CC]"><path d="M522.157,-66.5899C444.293,-58.8397 307.117,-43.9704 190.5,-25 187.561,-24.5219 184.542,-23.998 181.502,-23.4454" stroke="#d4d4d4" fill="none"></path><polygon points="522.051,-68.3379 527.199,-67.0901 522.397,-64.855 522.051,-68.3379" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node object" id="graph279_3"><g id="a_object|graph279_3"><a xlink:title="basis.collections.Buffer" xlink:href="../Buffer$.html#inheritance-diagram"><polygon points="269.5,-25 199.5,-25 199.5,-0 269.5,-0 269.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="209.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="230.361" text-anchor="start">Buffer</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph279_0_3"><g id="a_inheritance|graph279_0_3"><a xlink:title="Buffer is a subtype of SeqFactory[CC]"><path d="M522.077,-64.7021C460.002,-56.5041 362.209,-42.3893 278.5,-25 275.717,-24.4219 272.847,-23.7789 269.969,-23.1008" stroke="#d4d4d4" fill="none"></path><polygon points="522.041,-66.4624 527.227,-65.3795 522.498,-62.9923 522.041,-66.4624" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node object" id="graph279_4"><g id="a_object|graph279_4"><a xlink:title="basis.collections.Deque" xlink:href="../Deque$.html#inheritance-diagram"><polygon points="361,-25 288,-25 288,-0 361,-0 361,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="298.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="319.377" text-anchor="start">Deque</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph279_0_4"><g id="a_inheritance|graph279_0_4"><a xlink:title="Deque is a subtype of SeqFactory[CC]"><path d="M525.121,-59.9285C481.884,-50.6413 421.956,-37.4938 369.5,-25 366.833,-24.3648 364.081,-23.6954 361.313,-23.0123" stroke="#d4d4d4" fill="none"></path><polygon points="524.789,-61.6469 530.045,-60.9848 525.523,-58.2248 524.789,-61.6469" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node object" id="graph279_5"><g id="a_object|graph279_5"><a xlink:title="basis.collections.IndexedSeq" xlink:href="../IndexedSeq$.html#inheritance-diagram"><polygon points="476,-25 379,-25 379,-0 476,-0 476,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="389.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="410.421" text-anchor="start">IndexedSeq</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph279_0_5"><g id="a_inheritance|graph279_0_5"><a xlink:title="IndexedSeq is a subtype of SeqFactory[CC]"><path d="M548.883,-59.1152C521.601,-48.8627 484.348,-34.8634 458.334,-25.0875" stroke="#d4d4d4" fill="none"></path><polygon points="548.56,-60.8633 553.856,-60.9841 549.791,-57.5871 548.56,-60.8633" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node object" id="graph279_6"><g id="a_object|graph279_6"><a xlink:title="basis.collections.LinearSeq" xlink:href="../LinearSeq$.html#inheritance-diagram"><polygon points="583,-25 494,-25 494,-0 583,-0 583,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="504.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="525.315" text-anchor="start">LinearSeq</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph279_0_6"><g id="a_inheritance|graph279_0_6"><a xlink:title="LinearSeq is a subtype of SeqFactory[CC]"><path d="M572.231,-56.7633C564.475,-46.8155 554.621,-34.1764 547.569,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="570.957,-57.9763 575.412,-60.8435 573.718,-55.8243 570.957,-57.9763" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node object" id="graph279_7"><g id="a_object|graph279_7"><a xlink:title="basis.collections.immutable.List" xlink:href="../immutable/List$.html#inheritance-diagram"><polygon points="660,-25 601,-25 601,-0 660,-0 660,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="611.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="632.33" text-anchor="start">List</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph279_0_7"><g id="a_inheritance|graph279_0_7"><a xlink:title="List is a subtype of SeqFactory[CC]"><path d="M596.769,-56.7633C604.525,-46.8155 614.379,-34.1764 621.431,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="595.282,-55.8243 593.588,-60.8435 598.043,-57.9763 595.282,-55.8243" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node object" id="graph279_8"><g id="a_object|graph279_8"><a xlink:title="basis.collections.mutable.ListBuffer" xlink:href="../mutable/ListBuffer$.html#inheritance-diagram"><polygon points="763,-25 678,-25 678,-0 763,-0 763,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="688.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="709.081" text-anchor="start">ListBuffer</text></a></g></g><!-- node0&#45;&gt;node8 --><g class="edge inheritance" id="graph279_0_8"><g id="a_inheritance|graph279_0_8"><a xlink:title="ListBuffer is a subtype of SeqFactory[CC]"><path d="M615.632,-58.9941C639.158,-48.788 671.123,-34.921 693.557,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="614.935,-57.3887 611.045,-60.9841 616.328,-60.5996 614.935,-57.3887" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node object" id="graph279_9"><g id="a_object|graph279_9"><a xlink:title="basis.collections.Queue" xlink:href="../Queue$.html#inheritance-diagram"><polygon points="854,-25 781,-25 781,-0 854,-0 854,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="791.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="812.099" text-anchor="start">Queue</text></a></g></g><!-- node0&#45;&gt;node9 --><g class="edge inheritance" id="graph279_0_9"><g id="a_inheritance|graph279_0_9"><a xlink:title="Queue is a subtype of SeqFactory[CC]"><path d="M635.482,-59.6589C673.304,-50.1225 726.13,-36.783 772.5,-25 775.157,-24.3248 777.902,-23.6261 780.665,-22.922" stroke="#d4d4d4" fill="none"></path><polygon points="634.9,-58.0006 630.48,-60.9199 635.756,-61.3944 634.9,-58.0006" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node object" id="graph279_10"><g id="a_object|graph279_10"><a xlink:title="basis.collections.Seq" xlink:href="../Seq$.html#inheritance-diagram"><polygon points="933,-25 872,-25 872,-0 933,-0 933,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="882.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="903.214" text-anchor="start">Seq</text></a></g></g><!-- node0&#45;&gt;node10 --><g class="edge inheritance" id="graph279_0_10"><g id="a_inheritance|graph279_0_10"><a xlink:title="Seq is a subtype of SeqFactory[CC]"><path d="M646.596,-64.076C703.413,-55.8608 789.622,-42.118 863.5,-25 866.251,-24.3626 869.094,-23.6437 871.934,-22.8842" stroke="#d4d4d4" fill="none"></path><polygon points="646.233,-62.3602 641.533,-64.8047 646.731,-65.8245 646.233,-62.3602" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node object" id="graph279_11"><g id="a_object|graph279_11"><a xlink:title="basis.collections.Stack" xlink:href="../Stack$.html#inheritance-diagram"><polygon points="1019.5,-25 951.5,-25 951.5,-0 1019.5,-0 1019.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="961.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="982.106" text-anchor="start">Stack</text></a></g></g><!-- node0&#45;&gt;node11 --><g class="edge inheritance" id="graph279_0_11"><g id="a_inheritance|graph279_0_11"><a xlink:title="Stack is a subtype of SeqFactory[CC]"><path d="M646.685,-66.716C718.41,-59.4756 839.667,-45.4835 942.5,-25 945.38,-24.4263 948.352,-23.7696 951.326,-23.0671" stroke="#d4d4d4" fill="none"></path><polygon points="646.407,-64.985 641.607,-67.2257 646.757,-68.4675 646.407,-64.985" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node object" id="graph279_12"><g id="a_object|graph279_12"><a xlink:title="basis.collections.immutable.Vector" xlink:href="../immutable/Vector$.html#inheritance-diagram"><polygon points="1109.5,-25 1037.5,-25 1037.5,-0 1109.5,-0 1109.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../../lib/object_diagram.png" y="-19.5" x="1047.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1068.44" text-anchor="start">Vector</text></a></g></g><!-- node0&#45;&gt;node12 --><g class="edge inheritance" id="graph279_0_12"><g id="a_inheritance|graph279_0_12"><a xlink:title="Vector is a subtype of SeqFactory[CC]"><path d="M646.708,-68.675C732.951,-62.7306 893.481,-49.3447 1028.5,-25 1031.36,-24.4849 1034.3,-23.8873 1037.25,-23.2405" stroke="#d4d4d4" fill="none"></path><polygon points="646.513,-66.9342 641.644,-69.0214 646.751,-70.426 646.513,-66.9342" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node13 --><g class="node trait" id="graph279_13"><g id="a_trait|graph279_13"><a xlink:title="basis.collections.generic.CollectionFactory" xlink:href="CollectionFactory.html#inheritance-diagram"><polygon points="655,-147 514,-147 514,-122 655,-122 655,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../../lib/trait_diagram.png" y="-141.5" x="524.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="545.485" text-anchor="start">CollectionFactory[CC]</text></a></g></g><!-- node13&#45;&gt;node0 --><g class="edge inheritance" id="graph279_13_0"><g id="a_inheritance|graph279_13_0"><a xlink:title="SeqFactory[CC] is a subtype of CollectionFactory[CC]"><path d="M584.5,-116.687C584.5,-106.917 584.5,-94.8534 584.5,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="582.75,-116.843 584.5,-121.843 586.25,-116.844 582.75,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.collections.generic.SeqFactory"><span>SeqFactory</span></li><li class="in" name="basis.collections.generic.CollectionFactory"><span>CollectionFactory</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="basis.collections.generic.CollectionFactory#Builder" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Builder[A]:basis.collections.Builder[A]withbasis.State[CC[A]]"></a>
+      <a id="Builder[A]:Builder[A]withState[CC[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Builder</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.generic.CollectionFactory.Builder.A">A</span>] with <a href="../../State.html" class="extype" name="basis.State">State</a>[<span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>[<span class="extype" name="basis.collections.generic.CollectionFactory.Builder.A">A</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.collections.generic.SeqFactory#Factory" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Factory:basis.collections.generic.SeqFactory[CC]"></a>
+      <a id="Factory:SeqFactory[CC]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Factory</span><span class="result">: <a href="" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a> → <a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a></dd></dl></div>
+    </li><li name="basis.collections.generic.CollectionFactory#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[A](elems:A*):CC[A]"></a>
+      <a id="apply[A](A*):CC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="basis.collections.generic.CollectionFactory.apply.A">A</span>*</span>)</span><span class="result">: <span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>[<span class="extype" name="basis.collections.generic.CollectionFactory.apply.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.collections.generic.CollectionFactory#empty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="empty[A]:CC[A]"></a>
+      <a id="empty[A]:CC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">empty</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>[<span class="extype" name="basis.collections.generic.CollectionFactory.empty.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.collections.generic.SeqFactory#fill" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fill[A](count:Int)(elem:=&gt;A):CC[A]"></a>
+      <a id="fill[A](Int)(⇒A):CC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fill</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="elem">elem: ⇒ <span class="extype" name="basis.collections.generic.SeqFactory.fill.A">A</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>[<span class="extype" name="basis.collections.generic.SeqFactory.fill.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.collections.generic.CollectionFactory#from" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="from[A](elems:scala.collection.TraversableOnce[A]):CC[A]"></a>
+      <a id="from[A](TraversableOnce[A]):CC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">from</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="basis.collections.generic.CollectionFactory.from.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>[<span class="extype" name="basis.collections.generic.CollectionFactory.from.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a></dd></dl></div>
+    </li><li name="basis.collections.generic.CollectionFactory#from" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="from[A](elems:basis.collections.Traverser[A]):CC[A]"></a>
+      <a id="from[A](Traverser[A]):CC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">from</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="elems">elems: <a href="../Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.generic.CollectionFactory.from.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>[<span class="extype" name="basis.collections.generic.CollectionFactory.from.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a></dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.generic.SeqFactory#iterate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="iterate[A](start:A,count:Int)(f:A=&gt;A):CC[A]"></a>
+      <a id="iterate[A](A,Int)((A)⇒A):CC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="start">start: <span class="extype" name="basis.collections.generic.SeqFactory.iterate.A">A</span></span>, <span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.generic.SeqFactory.iterate.A">A</span>) ⇒ <span class="extype" name="basis.collections.generic.SeqFactory.iterate.A">A</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>[<span class="extype" name="basis.collections.generic.SeqFactory.iterate.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.collections.generic.SeqFactory#tabulate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="tabulate[A](count:Int)(f:Int=&gt;A):CC[A]"></a>
+      <a id="tabulate[A](Int)((Int)⇒A):CC[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tabulate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="count">count: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="basis.collections.generic.SeqFactory.tabulate.A">A</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>[<span class="extype" name="basis.collections.generic.SeqFactory.tabulate.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.collections.generic.CollectionFactory">
+              <h3>Inherited from <a href="CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a>[<span class="extype" name="basis.collections.generic.SeqFactory.CC">CC</span>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>StrictContainerOps - basis.collections.sequential.StrictContainerOps</title>
+          <meta name="description" content="StrictContainerOps - basis.collections.sequential.StrictContainerOps" />
+          <meta name="keywords" content="StrictContainerOps basis.collections.sequential.StrictContainerOps" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'basis.collections.sequential.StrictContainerOps';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../../lib/class_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="basis">basis</a>.<a href="../package.html" class="extype" name="basis.collections">collections</a>.<a href="package.html" class="extype" name="basis.collections.sequential">sequential</a></p>
+        <h1>StrictContainerOps</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StrictContainerOps</span><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/0.1.0/core/src/main/scala/basis/collections/sequential/StrictContainerOps.scala" target="_blank">StrictContainerOps.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyVal">AnyVal</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph241" viewBox="0.00 0.00 395.00 125.00" height="125pt" width="395pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 121)" class="graph" id="graph0"><polygon points="-4,4 -4,-121 391,-121 391,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust3"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this class" id="graph241_0"><g id="a_this class|graph241_0"><a xlink:title="basis.collections.sequential.StrictContainerOps (this class)" xlink:href="#inheritance-diagram"><polygon points="199.5,-49 24.5,-49 24.5,-24 199.5,-24 199.5,-49" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-43.5" x="35" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="55.7588" text-anchor="start">StrictContainerOps[A, Family]</text></a></g></g><!-- node2 --><g class="node implicit-incoming" id="graph241_2"><g id="a_implicit-incoming|graph241_2"><a xlink:title="BaseString, BaseSet, BaseSeq, BaseObject, OmniString, OmniSet, OmniSeq, OmniObject, JsonString, JsonSet, JsonSeq, JsonObject, BsonString, BsonSet, BsonSeq, BsonObject, UTF8, UTF32, UTF16, UTF, UString, String4, String2, String1, ListBuffer[A], ArrayBuffer[A], Vector[A], List[A], HashSet[A], HashMap[A, T], Batch[A], ArraySeq[A], ::[A], Stack[A], Set[A], Seq[A], Queue[A], Map[A, T], LinearSeq[A], IndexedSeq[A], Deque[A], Container[A], Buffer[A], BilinearSeq[A], Trap[B], Else[A, B], Bind[A]"><polygon points="362.5,-47 271.5,-47 271.5,-26 362.5,-26 362.5,-47" stroke="#ababab" fill="#e1e1e1"></polygon><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33.5" x="281.653" text-anchor="start">47 classes/traits</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge implicit-incoming" id="2_0"><g id="a_implicit-incoming|2_0"><a xlink:title="47 classes/traits can be implicitly converted to StrictContainerOps[A, Family]"><path d="M263.361,-36.5C247.835,-36.5 230.355,-36.5 212.936,-36.5" stroke="#d4d4d4" fill="none"></path><polygon points="212.74,-34.7501 207.74,-36.5 212.74,-38.2501 212.74,-34.7501" stroke="#d4d4d4" fill="#d4d4d4"></polygon></a></g><text fill="#aaaaaa" font-size="10.00" font-family="Arial" y="-42.999" x="235.5" text-anchor="middle">implicitly</text></g><!-- node1 --><g class="node class" id="graph241_1"><g id="a_class|graph241_1"><a xlink:title="scala.AnyVal"><polygon points="149,-117 75,-117 75,-92 149,-92 149,-117" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-111.5" x="85" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-101.75" x="105.64" text-anchor="start">AnyVal</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph241_1_0"><g id="a_inheritance|graph241_1_0"><a xlink:title="StrictContainerOps[A, Family] is a subtype of AnyVal"><path d="M112,-86.6005C112,-74.8849 112,-59.583 112,-49.1973" stroke="#d4d4d4" fill="none"></path><polygon points="110.25,-86.7005 112,-91.7005 113.75,-86.7006 110.25,-86.7005" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.collections.sequential.StrictContainerOps"><span>StrictContainerOps</span></li><li class="in" name="scala.AnyVal"><span>AnyVal</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="basis.collections.sequential.StrictContainerOps#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(__:basis.collections.Container[A]):basis.collections.sequential.StrictContainerOps[A,Family]"></a>
+      <a id="&lt;init&gt;:StrictContainerOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StrictContainerOps</span><span class="params">(<span name="__">__: <a href="../Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>]</span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.StrictContainerOps#++" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="++[B&gt;:A](those:basis.collections.Container[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="++[B&gt;:A](Container[B])(Builder[B]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus" class="name">++</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span></span>]</span><span class="params">(<span name="those">those: <a href="../Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.++.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.++.B">B</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.++.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.StrictContainerOps#__" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="__:basis.collections.Container[A]"></a>
+      <a id="__:Container[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">__</span><span class="result">: <a href="../Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.StrictContainerOps#collect" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="collect[B](PartialFunction[A,B])(Builder[B]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>, <span class="extype" name="basis.collections.sequential.StrictContainerOps.collect.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.collect.B">B</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.collect.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#drop" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="drop(lower:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="drop(Int)(Builder[A]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.drop.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#dropWhile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="dropWhile((A)⇒Boolean)(Builder[A]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dropWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.dropWhile.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="filter((A)⇒Boolean)(Builder[A]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.filter.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#flatMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flatMap[B](f:A=&gt;basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="flatMap[B]((A)⇒Traverser[B])(Builder[B]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>) ⇒ <a href="../Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.flatMap.B">B</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.flatMap.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.AnyVal#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_&lt;:AnyVal]"></a>
+      <a id="getClass():Class[_&lt;:AnyVal]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="scala.AnyVal">AnyVal</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyVal → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.StrictContainerOps#map" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="map[B]((A)⇒B)(Builder[B]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.StrictContainerOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.map.B">B</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.map.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#slice" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="slice(Int,Int)(Builder[A]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.slice.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#span" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[A]withbasis.From[Family],implicitbuilder2:basis.collections.Builder[A]withbasis.From[Family]):(builder1.State,builder2.State)"></a>
+      <a id="span((A)⇒Boolean)(Builder[A]withFrom[Family],Builder[A]withFrom[Family]):((builder1)#State,(builder2)#State)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">span</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder1">builder1: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>, <span name="builder2">builder2: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: ((<span class="extype" name="basis.collections.sequential.StrictContainerOps.span.builder1">builder1</span>)#<span class="extype" name="basis.State.State">State</span>, (<span class="extype" name="basis.collections.sequential.StrictContainerOps.span.builder2">builder2</span>)#<span class="extype" name="basis.State.State">State</span>)</span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#take" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="take(upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="take(Int)(Builder[A]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.take.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#takeWhile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="takeWhile((A)⇒Boolean)(Builder[A]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">takeWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.takeWhile.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.StrictContainerOps#withFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="withFilter(p:A=&gt;Boolean):basis.collections.Container[A]"></a>
+      <a id="withFilter((A)⇒Boolean):Container[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps#zip" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="zip[B](those:basis.collections.Container[B])(implicitbuilder:basis.collections.Builder[(A,B)]withbasis.From[Family]):builder.State"></a>
+      <a id="zip[B](Container[B])(Builder[(A,B)]withFrom[Family]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zip</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="those">those: <a href="../Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.zip.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[(<span class="extype" name="basis.collections.sequential.StrictContainerOps.A">A</span>, <span class="extype" name="basis.collections.sequential.StrictContainerOps.zip.B">B</span>)] with <a href="../../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="basis.collections.sequential.StrictContainerOps.Family">Family</span>]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictContainerOps.zip.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyVal">
+              <h3>Inherited from <span class="extype" name="scala.AnyVal">AnyVal</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

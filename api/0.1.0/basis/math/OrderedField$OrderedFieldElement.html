@@ -1,0 +1,424 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>OrderedFieldElement - basis.math.OrderedField.OrderedFieldElement</title>
+          <meta name="description" content="OrderedFieldElement - basis.math.OrderedField.OrderedFieldElement" />
+          <meta name="keywords" content="OrderedFieldElement basis.math.OrderedField.OrderedFieldElement" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.math.OrderedField$OrderedFieldElement';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../lib/trait_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.math">math</a>.<a href="OrderedField.html" class="extype" name="basis.math.OrderedField">OrderedField</a></p>
+        <h1>OrderedFieldElement</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">OrderedFieldElement</span><span class="result"> extends <a href="OrderedField.html#OrderedRingElementextendsAnywithOrderedRing.this.RingElement" class="extmbr" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a> with <a href="OrderedField.html#FieldElementextendsAnywithField.this.RingElement" class="extmbr" name="basis.math.Field.FieldElement">FieldElement</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/0.1.0/math/src/main/scala/basis/math/OrderedField.scala" target="_blank">OrderedField.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="OrderedField.html#FieldElementextendsAnywithField.this.RingElement" class="extmbr" name="basis.math.Field.FieldElement">OrderedField.FieldElement</a>, <a href="OrderedField.html#OrderedRingElementextendsAnywithOrderedRing.this.RingElement" class="extmbr" name="basis.math.OrderedRing.OrderedRingElement">OrderedField.OrderedRingElement</a>, <a href="OrderedField.html#RingElementextendsAny" class="extmbr" name="basis.math.Ring.RingElement">OrderedField.RingElement</a>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="binary64/Real.html" class="extype" name="basis.math.binary64.Real">Real</a>, <a href="RealField$RealFieldElement.html" class="extype" name="basis.math.RealField.RealFieldElement">RealFieldElement</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph49" viewBox="0.00 0.00 265.50 155.00" height="155pt" width="266pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 261.5,-151 261.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph49_0"><g id="a_this trait|graph49_0"><a xlink:title="basis.math.OrderedField.OrderedFieldElement (this trait)" xlink:href="#inheritance-diagram"><polygon points="206.5,-86 68.5,-86 68.5,-61 206.5,-61 206.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="78.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="99.0889" text-anchor="start">OrderedFieldElement</text></a></g></g><!-- node1 --><g class="node trait" id="graph49_1"><g id="a_trait|graph49_1"><a xlink:title="basis.math.RealField.RealFieldElement" xlink:href="RealField$RealFieldElement.html#inheritance-diagram"><polygon points="198.5,-25 76.5,-25 76.5,-0 198.5,-0 198.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="86.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="107.148" text-anchor="start">RealFieldElement</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph49_0_1"><g id="a_inheritance|graph49_0_1"><a xlink:title="RealFieldElement is a subtype of OrderedFieldElement"><path d="M137.5,-55.6874C137.5,-45.9173 137.5,-33.8534 137.5,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="135.75,-55.8435 137.5,-60.8435 139.25,-55.8435 135.75,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph49_2"><g id="a_trait|graph49_2"><a xlink:title="basis.math.OrderedRing.OrderedRingElement" xlink:href="OrderedRing$OrderedRingElement.html#inheritance-diagram"><polygon points="137,-147 0,-147 0,-122 137,-122 137,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="31.1431" text-anchor="start">OrderedRingElement</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph49_2_0"><g id="a_inheritance|graph49_2_0"><a xlink:title="OrderedFieldElement is a subtype of OrderedRingElement"><path d="M85.976,-118.557C97.743,-108.495 113.036,-95.4187 123.896,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="84.7951,-117.264 82.1322,-121.843 87.0697,-119.924 84.7951,-117.264" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph49_3"><g id="a_trait|graph49_3"><a xlink:title="basis.math.Field.FieldElement" xlink:href="Field$FieldElement.html#inheritance-diagram"><polygon points="257.5,-147 155.5,-147 155.5,-122 257.5,-122 257.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="165.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="186.431" text-anchor="start">FieldElement</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph49_3_0"><g id="a_inheritance|graph49_3_0"><a xlink:title="OrderedFieldElement is a subtype of FieldElement"><path d="M189.024,-118.557C177.257,-108.495 161.964,-95.4187 151.104,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="187.93,-119.924 192.868,-121.843 190.205,-117.264 187.93,-119.924" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.math.OrderedField.OrderedFieldElement"><span>OrderedFieldElement</span></li><li class="in" name="basis.math.Field.FieldElement"><span>FieldElement</span></li><li class="in" name="basis.math.OrderedRing.OrderedRingElement"><span>OrderedRingElement</span></li><li class="in" name="basis.math.Ring.RingElement"><span>RingElement</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="basis.math.OrderedField.OrderedFieldElement#*" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="*(that:OrderedField.this.Element):OrderedField.this.Element"></a>
+      <a id="*(Element):Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the product of this element times another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the product of this element times another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="Field$FieldElement.html" class="extype" name="basis.math.Field.FieldElement">FieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a> → <a href="Ring$RingElement.html" class="extype" name="basis.math.Ring.RingElement">RingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#+" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="+(that:OrderedField.this.Element):OrderedField.this.Element"></a>
+      <a id="+(Element):Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the sum of this element and another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the sum of this element and another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="Field$FieldElement.html" class="extype" name="basis.math.Field.FieldElement">FieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a> → <a href="Ring$RingElement.html" class="extype" name="basis.math.Ring.RingElement">RingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#-" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="-(that:OrderedField.this.Element):OrderedField.this.Element"></a>
+      <a id="-(Element):Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $minus" class="name">-</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the difference between this element and another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the difference between this element and another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="Field$FieldElement.html" class="extype" name="basis.math.Field.FieldElement">FieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a> → <a href="Ring$RingElement.html" class="extype" name="basis.math.Ring.RingElement">RingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#/" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="/(that:OrderedField.this.Element):OrderedField.this.Element"></a>
+      <a id="/(Element):Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the quotient of this element divided by another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the quotient of this element divided by another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="Field$FieldElement.html" class="extype" name="basis.math.Field.FieldElement">FieldElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#&lt;" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="&lt;(that:OrderedField.this.Element):Boolean"></a>
+      <a id="&lt;(Element):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less" class="name">&lt;</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if and only if this element is strictly less than another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if and only if this element is strictly less than another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#&lt;=" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="&lt;=(that:OrderedField.this.Element):Boolean"></a>
+      <a id="&lt;=(Element):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less$eq" class="name">&lt;=</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if and only if this element is less than or equal to another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if and only if this element is less than or equal to another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#&gt;" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="&gt;(that:OrderedField.this.Element):Boolean"></a>
+      <a id="&gt;(Element):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if and only if this element is strictly greater than another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if and only if this element is strictly greater than another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#&gt;=" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="&gt;=(that:OrderedField.this.Element):Boolean"></a>
+      <a id="&gt;=(Element):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater$eq" class="name">&gt;=</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns <code>true</code> if and only if this element is greater than or equal to another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> if and only if this element is greater than or equal to another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#abs" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="abs:OrderedField.this.Element"></a>
+      <a id="abs:Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">abs</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the absolute value of this element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the absolute value of this element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a></dd></dl></div>
+    </li><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#inverse" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="inverse:OrderedField.this.Element"></a>
+      <a id="inverse:Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inverse</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the multiplicative inverse of this element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the multiplicative inverse of this element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="Field$FieldElement.html" class="extype" name="basis.math.Field.FieldElement">FieldElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#max" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="max(that:OrderedField.this.Element):OrderedField.this.Element"></a>
+      <a id="max(Element):Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">max</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the greater of this element and another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the greater of this element and another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#min" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="min(that:OrderedField.this.Element):OrderedField.this.Element"></a>
+      <a id="min(Element):Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">min</span><span class="params">(<span name="that">that: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>)</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the lesser of this element and another element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the lesser of this element and another element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a></dd></dl></div>
+    </li><li name="basis.math.OrderedField.OrderedFieldElement#unary_-" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="unary_-:OrderedField.this.Element"></a>
+      <a id="unary_-:Element"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: unary_$minus" class="name">unary_-</span><span class="result">: <a href="OrderedField.html#Element&lt;:OrderedField.this.OrderedFieldElement" class="extmbr" name="basis.math.OrderedField.Element">Element</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the additive inverse of this element.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the additive inverse of this element.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.math.OrderedField.OrderedFieldElement">OrderedFieldElement</a> → <a href="Field$FieldElement.html" class="extype" name="basis.math.Field.FieldElement">FieldElement</a> → <a href="OrderedRing$OrderedRingElement.html" class="extype" name="basis.math.OrderedRing.OrderedRingElement">OrderedRingElement</a> → <a href="Ring$RingElement.html" class="extype" name="basis.math.Ring.RingElement">RingElement</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.math.Field.FieldElement">
+              <h3>Inherited from <a href="OrderedField.html#FieldElementextendsAnywithField.this.RingElement" class="extmbr" name="basis.math.Field.FieldElement">OrderedField.FieldElement</a></h3>
+            </div><div class="parent" name="basis.math.OrderedRing.OrderedRingElement">
+              <h3>Inherited from <a href="OrderedField.html#OrderedRingElementextendsAnywithOrderedRing.this.RingElement" class="extmbr" name="basis.math.OrderedRing.OrderedRingElement">OrderedField.OrderedRingElement</a></h3>
+            </div><div class="parent" name="basis.math.Ring.RingElement">
+              <h3>Inherited from <a href="OrderedField.html#RingElementextendsAny" class="extmbr" name="basis.math.Ring.RingElement">OrderedField.RingElement</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

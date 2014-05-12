@@ -1,0 +1,281 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>ByteOrder - basis.data.ByteOrder</title>
+          <meta name="description" content="ByteOrder - basis.data.ByteOrder" />
+          <meta name="keywords" content="ByteOrder basis.data.ByteOrder" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.data.ByteOrder';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../lib/trait_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.data">data</a></p>
+        <h1>ByteOrder</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ByteOrder</span><span class="tparams">[<span name="E">+E &lt;: <a href="Endianness.html" class="extype" name="basis.data.Endianness">Endianness</a></span>]</span><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/0.1.0/data/src/main/scala/basis/data/ByteOrder.scala" target="_blank">ByteOrder.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="../form/Variant$BaseBinary.html" class="extype" name="basis.form.Variant.BaseBinary">BaseBinary</a>, <a href="../form/Variant$BaseBinaryFactory.html" class="extype" name="basis.form.Variant.BaseBinaryFactory">BaseBinaryFactory</a>, BinaryForm, BinaryForm, BinaryForm, BinaryForm, <a href="../form/BsonVariant$BsonBinary.html" class="extype" name="basis.form.BsonVariant.BsonBinary">BsonBinary</a>, <a href="../form/BsonVariant$BsonReader.html" class="extype" name="basis.form.BsonVariant.BsonReader">BsonReader</a>, <a href="ByteBuffer.html" class="extype" name="basis.data.ByteBuffer">ByteBuffer</a>, <a href="ByteBuffer$.html" class="extype" name="basis.data.ByteBuffer">ByteBuffer</a>, <a href="ByteBufferBE$.html" class="extype" name="basis.data.ByteBufferBE">ByteBufferBE</a>, <a href="ByteBufferBE.html" class="extype" name="basis.data.ByteBufferBE">ByteBufferBE</a>, <a href="ByteBufferLE$.html" class="extype" name="basis.data.ByteBufferLE">ByteBufferLE</a>, <a href="ByteBufferLE.html" class="extype" name="basis.data.ByteBufferLE">ByteBufferLE</a>, <a href="ByteFactory.html" class="extype" name="basis.data.ByteFactory">ByteFactory</a>, <a href="ByteVector.html" class="extype" name="basis.data.ByteVector">ByteVector</a>, <a href="ByteVector$.html" class="extype" name="basis.data.ByteVector">ByteVector</a>, <a href="ByteVectorBE.html" class="extype" name="basis.data.ByteVectorBE">ByteVectorBE</a>, <a href="ByteVectorBE$.html" class="extype" name="basis.data.ByteVectorBE">ByteVectorBE</a>, <a href="ByteVectorLE$.html" class="extype" name="basis.data.ByteVectorLE">ByteVectorLE</a>, <a href="ByteVectorLE.html" class="extype" name="basis.data.ByteVectorLE">ByteVectorLE</a>, <a href="Framer.html" class="extype" name="basis.data.Framer">Framer</a>, <a href="../form/JsonVariant$JsonBinary.html" class="extype" name="basis.form.JsonVariant.JsonBinary">JsonBinary</a>, <a href="Loader.html" class="extype" name="basis.data.Loader">Loader</a>, <a href="../form/OmniVariant$OmniBinary.html" class="extype" name="basis.form.OmniVariant.OmniBinary">OmniBinary</a>, <a href="../form/OmniVariant$OmniBinaryFactory.html" class="extype" name="basis.form.OmniVariant.OmniBinaryFactory">OmniBinaryFactory</a>, <a href="../form/OmniVariant$OmniBinaryFramer.html" class="extype" name="basis.form.OmniVariant.OmniBinaryFramer">OmniBinaryFramer</a>, <a href="Reader.html" class="extype" name="basis.data.Reader">Reader</a>, <a href="Storer.html" class="extype" name="basis.data.Storer">Storer</a>, <a href="Writer.html" class="extype" name="basis.data.Writer">Writer</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph202" viewBox="0.00 0.00 1688.00 155.00" height="155pt" width="1688pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 1684,-151 1684,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph202_0"><g id="a_this trait|graph202_0"><a xlink:title="basis.data.ByteOrder (this trait)" xlink:href="#inheritance-diagram"><polygon points="946.5,-86 845.5,-86 845.5,-61 946.5,-61 946.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="856" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="876.712" text-anchor="start">ByteOrder[E]</text></a></g></g><!-- node1 --><g class="node object" id="graph202_1"><g id="a_object|graph202_1"><a xlink:title="basis.data.ByteBuffer" xlink:href="ByteBuffer$.html#inheritance-diagram"><polygon points="90,-25 0,-25 0,-0 90,-0 90,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="30.8564" text-anchor="start">ByteBuffer</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph202_0_1"><g id="a_inheritance|graph202_0_1"><a xlink:title="ByteBuffer is a subtype of ByteOrder[E]"><path d="M840.086,-72.0502C709.66,-70.3735 375.38,-62.4491 99,-25 96.1505,-24.6139 93.2272,-24.1604 90.2867,-23.6605" stroke="#d4d4d4" fill="none"></path><polygon points="840.37,-73.8037 845.391,-72.1163 840.414,-70.304 840.37,-73.8037" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph202_2"><g id="a_class|graph202_2"><a xlink:title="basis.data.ByteBufferBE" xlink:href="ByteBufferBE.html#inheritance-diagram"><polygon points="211.5,-25 108.5,-25 108.5,-0 211.5,-0 211.5,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="119" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="139.687" text-anchor="start">ByteBufferBE</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph202_0_2"><g id="a_inheritance|graph202_0_2"><a xlink:title="ByteBufferBE is a subtype of ByteOrder[E]"><path d="M840.275,-70.8326C724.371,-66.8708 449.043,-54.8887 220,-25 217.266,-24.6432 214.468,-24.2402 211.647,-23.8041" stroke="#d4d4d4" fill="none"></path><polygon points="840.281,-72.5838 845.337,-71.004 840.4,-69.0858 840.281,-72.5838" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node object" id="graph202_3"><g id="a_object|graph202_3"><a xlink:title="basis.data.ByteBufferBE" xlink:href="ByteBufferBE$.html#inheritance-diagram"><polygon points="332.5,-25 229.5,-25 229.5,-0 332.5,-0 332.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="240" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="260.687" text-anchor="start">ByteBufferBE</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph202_0_3"><g id="a_inheritance|graph202_0_3"><a xlink:title="ByteBufferBE is a subtype of ByteOrder[E]"><path d="M840.133,-69.5776C739.97,-63.9227 523.346,-49.8041 342,-25 338.904,-24.5765 335.726,-24.1013 332.525,-23.5917" stroke="#d4d4d4" fill="none"></path><polygon points="840.307,-71.34 845.397,-69.873 840.503,-67.8455 840.307,-71.34" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node class" id="graph202_4"><g id="a_class|graph202_4"><a xlink:title="basis.data.ByteBufferLE" xlink:href="ByteBufferLE.html#inheritance-diagram"><polygon points="453,-25 351,-25 351,-0 453,-0 453,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="361" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="381.741" text-anchor="start">ByteBufferLE</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph202_0_4"><g id="a_inheritance|graph202_0_4"><a xlink:title="ByteBufferLE is a subtype of ByteOrder[E]"><path d="M840.035,-67.8237C757.189,-60.5736 597.138,-45.3124 462,-25 459.063,-24.5586 456.051,-24.0761 453.015,-23.567" stroke="#d4d4d4" fill="none"></path><polygon points="840.247,-69.5987 845.38,-68.2896 840.551,-66.1119 840.247,-69.5987" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node object" id="graph202_5"><g id="a_object|graph202_5"><a xlink:title="basis.data.ByteBufferLE" xlink:href="ByteBufferLE$.html#inheritance-diagram"><polygon points="573,-25 471,-25 471,-0 573,-0 573,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="481" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="501.741" text-anchor="start">ByteBufferLE</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph202_0_5"><g id="a_inheritance|graph202_0_5"><a xlink:title="ByteBufferLE is a subtype of ByteOrder[E]"><path d="M840.124,-64.7224C777.249,-55.8139 672.119,-40.4466 582,-25 579.073,-24.4983 576.068,-23.9688 573.038,-23.4235" stroke="#d4d4d4" fill="none"></path><polygon points="840.129,-66.4905 845.325,-65.4582 840.619,-63.025 840.129,-66.4905" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph202_6"><g id="a_trait|graph202_6"><a xlink:title="basis.data.ByteFactory" xlink:href="ByteFactory.html#inheritance-diagram"><polygon points="714.5,-25 591.5,-25 591.5,-0 714.5,-0 714.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="602" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="622.596" text-anchor="start">ByteFactory[Data]</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph202_0_6"><g id="a_inheritance|graph202_0_6"><a xlink:title="ByteFactory[Data] is a subtype of ByteOrder[E]"><path d="M843.481,-59.7485C801.046,-49.4454 741.824,-35.0662 700.725,-25.0875" stroke="#d4d4d4" fill="none"></path><polygon points="843.299,-61.5049 848.57,-60.9841 844.124,-58.1038 843.299,-61.5049" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node object" id="graph202_7"><g id="a_object|graph202_7"><a xlink:title="basis.data.ByteVector" xlink:href="ByteVector$.html#inheritance-diagram"><polygon points="825,-25 733,-25 733,-0 825,-0 825,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="743" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="763.931" text-anchor="start">ByteVector</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph202_0_7"><g id="a_inheritance|graph202_0_7"><a xlink:title="ByteVector is a subtype of ByteOrder[E]"><path d="M868.455,-58.6096C848.292,-48.4419 821.238,-34.7994 802.179,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="867.911,-60.2953 873.163,-60.9841 869.487,-57.1702 867.911,-60.2953" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node class" id="graph202_8"><g id="a_class|graph202_8"><a xlink:title="basis.data.ByteVectorBE" xlink:href="ByteVectorBE.html#inheritance-diagram"><polygon points="948.5,-25 843.5,-25 843.5,-0 948.5,-0 948.5,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="854" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="874.761" text-anchor="start">ByteVectorBE</text></a></g></g><!-- node0&#45;&gt;node8 --><g class="edge inheritance" id="graph202_0_8"><g id="a_inheritance|graph202_0_8"><a xlink:title="ByteVectorBE is a subtype of ByteOrder[E]"><path d="M896,-55.6874C896,-45.9173 896,-33.8534 896,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="894.25,-55.8435 896,-60.8435 897.75,-55.8435 894.25,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node object" id="graph202_9"><g id="a_object|graph202_9"><a xlink:title="basis.data.ByteVectorBE" xlink:href="ByteVectorBE$.html#inheritance-diagram"><polygon points="1071.5,-25 966.5,-25 966.5,-0 1071.5,-0 1071.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="977" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="997.761" text-anchor="start">ByteVectorBE</text></a></g></g><!-- node0&#45;&gt;node9 --><g class="edge inheritance" id="graph202_0_9"><g id="a_inheritance|graph202_0_9"><a xlink:title="ByteVectorBE is a subtype of ByteOrder[E]"><path d="M924.69,-58.7381C945.915,-48.5571 974.512,-34.8399 994.633,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="923.759,-57.2438 920.008,-60.9841 925.273,-60.3995 923.759,-57.2438" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node class" id="graph202_10"><g id="a_class|graph202_10"><a xlink:title="basis.data.ByteVectorLE" xlink:href="ByteVectorLE.html#inheritance-diagram"><polygon points="1194,-25 1090,-25 1090,-0 1194,-0 1194,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="1100" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1120.82" text-anchor="start">ByteVectorLE</text></a></g></g><!-- node0&#45;&gt;node10 --><g class="edge inheritance" id="graph202_0_10"><g id="a_inheritance|graph202_0_10"><a xlink:title="ByteVectorLE is a subtype of ByteOrder[E]"><path d="M948.906,-59.8112C991.882,-49.5039 1052,-35.0865 1093.69,-25.0875" stroke="#d4d4d4" fill="none"></path><polygon points="948.469,-58.1162 944.015,-60.9841 949.286,-61.5197 948.469,-58.1162" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node object" id="graph202_11"><g id="a_object|graph202_11"><a xlink:title="basis.data.ByteVectorLE" xlink:href="ByteVectorLE$.html#inheritance-diagram"><polygon points="1316,-25 1212,-25 1212,-0 1316,-0 1316,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="1222" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1242.82" text-anchor="start">ByteVectorLE</text></a></g></g><!-- node0&#45;&gt;node11 --><g class="edge inheritance" id="graph202_0_11"><g id="a_inheritance|graph202_0_11"><a xlink:title="ByteVectorLE is a subtype of ByteOrder[E]"><path d="M951.7,-64.4434C1013.28,-55.4059 1115.36,-40.0362 1203,-25 1205.87,-24.5079 1208.81,-23.9918 1211.78,-23.462" stroke="#d4d4d4" fill="none"></path><polygon points="951.298,-62.7336 946.604,-65.1904 951.805,-66.1966 951.298,-62.7336" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node trait" id="graph202_12"><g id="a_trait|graph202_12"><a xlink:title="basis.data.Loader" xlink:href="Loader.html#inheritance-diagram"><polygon points="1408,-25 1334,-25 1334,-0 1408,-0 1408,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1344" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1364.54" text-anchor="start">Loader</text></a></g></g><!-- node0&#45;&gt;node12 --><g class="edge inheritance" id="graph202_0_12"><g id="a_inheritance|graph202_0_12"><a xlink:title="Loader is a subtype of ByteOrder[E]"><path d="M951.813,-68.7327C1034,-62.6411 1192.21,-48.8389 1325,-25 1327.92,-24.4764 1330.92,-23.8726 1333.94,-23.2216" stroke="#d4d4d4" fill="none"></path><polygon points="951.369,-67.0106 946.511,-69.1228 951.626,-70.5012 951.369,-67.0106" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node13 --><g class="node trait" id="graph202_13"><g id="a_trait|graph202_13"><a xlink:title="basis.data.Reader" xlink:href="Reader.html#inheritance-diagram"><polygon points="1502,-25 1426,-25 1426,-0 1502,-0 1502,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1436" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1456.71" text-anchor="start">Reader</text></a></g></g><!-- node0&#45;&gt;node13 --><g class="edge inheritance" id="graph202_0_13"><g id="a_inheritance|graph202_0_13"><a xlink:title="Reader is a subtype of ByteOrder[E]"><path d="M951.647,-70.1521C1047.31,-65.5092 1248.9,-53.0678 1417,-25 1419.9,-24.5158 1422.89,-23.949 1425.88,-23.3313" stroke="#d4d4d4" fill="none"></path><polygon points="951.524,-68.4059 946.614,-70.3939 951.692,-71.9019 951.524,-68.4059" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node14 --><g class="node trait" id="graph202_14"><g id="a_trait|graph202_14"><a xlink:title="basis.data.Storer" xlink:href="Storer.html#inheritance-diagram"><polygon points="1591.5,-25 1520.5,-25 1520.5,-0 1591.5,-0 1591.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1531" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1552" text-anchor="start">Storer</text></a></g></g><!-- node0&#45;&gt;node14 --><g class="edge inheritance" id="graph202_0_14"><g id="a_inheritance|graph202_0_14"><a xlink:title="Storer is a subtype of ByteOrder[E]"><path d="M951.632,-71.4221C1059.99,-68.6142 1306.63,-58.7459 1511,-25 1514.02,-24.5008 1517.14,-23.8964 1520.26,-23.2291" stroke="#d4d4d4" fill="none"></path><polygon points="951.531,-69.674 946.577,-71.5506 951.62,-73.1729 951.531,-69.674" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node15 --><g class="node trait" id="graph202_15"><g id="a_trait|graph202_15"><a xlink:title="basis.data.Writer" xlink:href="Writer.html#inheritance-diagram"><polygon points="1680,-25 1610,-25 1610,-0 1680,-0 1680,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1620" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1640.87" text-anchor="start">Writer</text></a></g></g><!-- node0&#45;&gt;node15 --><g class="edge inheritance" id="graph202_0_15"><g id="a_inheritance|graph202_0_15"><a xlink:title="Writer is a subtype of ByteOrder[E]"><path d="M952.042,-72.2952C1071.92,-71.0767 1361.8,-63.9611 1601,-25 1603.81,-24.5431 1606.69,-23.9872 1609.58,-23.3693" stroke="#d4d4d4" fill="none"></path><polygon points="951.792,-70.5474 946.81,-72.3457 951.826,-74.0472 951.792,-70.5474" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node16 --><g class="node class" id="graph202_16"><g id="a_class|graph202_16"><a xlink:title="scala.Any"><polygon points="926.5,-147 865.5,-147 865.5,-122 926.5,-122 926.5,-147" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-141.5" x="876" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="896.995" text-anchor="start">Any</text></a></g></g><!-- node16&#45;&gt;node0 --><g class="edge inheritance" id="graph202_16_0"><g id="a_inheritance|graph202_16_0"><a xlink:title="ByteOrder[E] is a subtype of Any"><path d="M896,-116.687C896,-106.917 896,-94.8534 896,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="894.25,-116.843 896,-121.843 897.75,-116.844 894.25,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                <li class="group out"><span>Grouped</span></li>
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.data.ByteOrder"><span>ByteOrder</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.data.ByteOrder.Endian" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Endian=E@scala.annotation.unchecked.uncheckedVariance"></a>
+      <a id="Endian:Endian"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Endian</span><span class="result"> = <span class="extype" name="basis.data.ByteOrder.E">E</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="basis.data.ByteOrder#endian" visbl="pub" data-isabs="true" fullComment="no" group="General">
+      <a id="endian:ByteOrder.this.Endian"></a>
+      <a id="endian:Endian"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">endian</span><span class="result">: <a href="#Endian=E@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.data.ByteOrder.Endian">Endian</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns the internal byte order.</p>
+    </li><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="General">
+              <h3>General</h3>
+              
+            </div><div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
