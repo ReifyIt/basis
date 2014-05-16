@@ -78,7 +78,7 @@ trait Variant { variant =>
 
   implicit def ObjectFormBuilder: Builder[(String, AnyForm)] with From[ObjectForm] with State[ObjectForm] = ObjectForm.Builder
   implicit def SeqFormBuilder: Builder[AnyForm] with From[SeqForm] with State[SeqForm]                    = SeqForm.Builder
-  implicit def SetFormBuilder: Builder[SetForm] with From[SetForm] with State[SetForm]                    = SetForm.Builder
+  implicit def SetFormBuilder: Builder[AnyForm] with From[SetForm] with State[SetForm]                    = SetForm.Builder
   implicit def StringFormBuilder: StringBuilder with From[StringForm] with State[StringForm]              = StringForm.Builder
 
   implicit def StringToForm(value: String): StringForm    = StringForm(value)
@@ -86,7 +86,7 @@ trait Variant { variant =>
   implicit def LongToForm(value: Long): NumberForm        = NumberForm(value)
   implicit def FloatToForm(value: Float): NumberForm      = NumberForm(value)
   implicit def DoubleToForm(value: Double): NumberForm    = NumberForm(value)
-  implicit def BooleanToForm(value: Boolean): BooleanForm = if (value) TrueForm else FalseForm
+  implicit def BooleanToForm(value: Boolean): BooleanForm = BooleanForm(value)
 
   implicit def AnyFormTag: ClassTag[AnyForm]
   implicit def ObjectFormTag: ClassTag[ObjectForm]
@@ -332,13 +332,13 @@ trait Variant { variant =>
     def apply(value: Float): NumberForm
     def apply(value: Double): NumberForm
     def apply(value: String): NumberForm =
-      try java.lang.Integer.parseInt(value)
+      try apply(java.lang.Integer.parseInt(value))
       catch {
         case _: NumberFormatException =>
-          try java.lang.Long.parseLong(value)
+          try apply(java.lang.Long.parseLong(value))
           catch {
             case _: NumberFormatException =>
-              java.lang.Double.parseDouble(value)
+              apply(java.lang.Double.parseDouble(value))
           }
       }
     override def toString: String = "NumberForm"

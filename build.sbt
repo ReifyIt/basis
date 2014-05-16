@@ -17,7 +17,7 @@ lazy val `basis-util` = project in file("util") settings (moduleSettings: _*)
 lazy val moduleSettings = projectSettings ++ compileSettings ++ docSettings ++ publishSettings
 
 lazy val projectSettings = Seq(
-  version := "0.1.0",
+  version := "0.1.1-SNAPSHOT",
   organization := "it.reify",
   description := "A foundation library for Scala focussed on efficiency and clean design",
   licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
@@ -33,7 +33,7 @@ lazy val compileSettings = Seq(
 lazy val docSettings = Seq(
   apiURL := Some(url("http://basis.reify.it/api/")),
   scalacOptions in (Compile, doc) ++= {
-    val tagOrBranch = if (version.value.endsWith("-SNAPSHOT")) "master" else version.value
+    val tagOrBranch = if (version.value.endsWith("-SNAPSHOT")) "master" else "v" + version.value
     val docSourceUrl = "https://github.com/reifyit/basis/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
     Seq("-groups",
         "-implicits",
