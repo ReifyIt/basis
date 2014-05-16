@@ -13,7 +13,7 @@ class Begin {
   /** Returns this context's control-flow break exception. */
   val signal: Break = new Break
 
-  /** Enters a dynamically-breakable scope. */
+  /** Enters a dynamically breakable scope. */
   def apply(op: Unit): Unit = macro BeginMacros.apply
 
   /** Exits the most recently entered scope. */

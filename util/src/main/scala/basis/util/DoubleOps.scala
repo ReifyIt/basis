@@ -44,7 +44,7 @@ private[util] class DoubleMacros(val c: blackbox.Context { type PrefixType <: Do
   def atan: Expr[Double]                   = Expr[Double](q"_root_.java.lang.Math.atan($prefix.__)")
   def atan2(y: Expr[Double]): Expr[Double] = Expr[Double](q"_root_.java.lang.Math.atan2($prefix.__, $y)")
   def cbrt: Expr[Double]                   = Expr[Double](q"_root_.java.lang.Math.cbrt($prefix.__)")
-  def cos: Expr[Double]                    = Expr[Double](q"_root_.java.lang.Math.cose($prefix.__)")
+  def cos: Expr[Double]                    = Expr[Double](q"_root_.java.lang.Math.cos($prefix.__)")
   def cosh: Expr[Double]                   = Expr[Double](q"_root_.java.lang.Math.cosh($prefix.__)")
   def exp: Expr[Double]                    = Expr[Double](q"_root_.java.lang.Math.exp($prefix.__)")
   def isInfinite: Expr[Boolean]            = Expr[Boolean](q"_root_.java.lang.Double.isInfinite($prefix.__)")
