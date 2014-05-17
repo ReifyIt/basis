@@ -17,7 +17,7 @@ final class HashMap[+A, +T] private[collections] (
     private[collections] val treeMap: Int,
     private[collections] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Equals with Immutable with Family[HashMap[_, _]] with Map[A, T] { self =>
+  extends Equals with Immutable with Family[HashMap[_, _]] with SubMap[A, T] { self =>
 
   import HashMap.{ VOID, LEAF, TREE, KNOT }
 
@@ -47,20 +47,12 @@ final class HashMap[+A, +T] private[collections] (
 
   override def get(key: A @uncheckedVariance): Maybe[T] = get(key, key.##, 0)
 
-  /** Returns a copy of this $collection that associates the given value with the given key.
-    * @group Updating */
-  def + [B >: A, U >: T](key: B, value: U): HashMap[B, U] = update(key, key.##, value, 0)
+  override def + [B >: A, U >: T](key: B, value: U): HashMap[B, U] = update(key, key.##, value, 0)
 
-  /** Returns a copy of this $collection that associates nothing with the given key.
-    * @group Updating */
-  def - (key: A @uncheckedVariance): HashMap[A, T] = remove(key, key.##, 0)
+  override def - (key: A @uncheckedVariance): HashMap[A, T] = remove(key, key.##, 0)
 
-  /** Returns the set of keys with associations in this $collection.
-    * @group Projecting */
   def keys: Set[A] = new Keys
 
-  /** Returns the associated values in this $collection.
-    * @group Projecting */
   def values: Container[T] = new Values
 
   private def slotMap: Int = treeMap | leafMap

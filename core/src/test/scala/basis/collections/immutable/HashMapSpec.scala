@@ -9,8 +9,9 @@ package immutable
 
 import org.scalatest._
 
-class HashMapSpec extends FunSpec with MapBehaviors {
+class HashMapSpec extends FunSpec with SubMapBehaviors {
   override def suiteName = "HashMap specification"
 
   it should behave like GenericMap(HashMap)
+  it should behave like GenericSubMap(HashMap)
 }

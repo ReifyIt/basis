@@ -73,13 +73,13 @@ trait CollectionBehaviors { this: FunSpec =>
     }
 
     def concatLarge(alias: Boolean): Unit = {
-      var i = 2
-      while (i <= 20) {
-        val k = 1 << i
-        concat(1, k, alias)
-        concat(k, 1, alias)
-        concat(k, k, alias)
-        i += 1
+      var k = 2
+      while (k <= 20) {
+        val n = 1 << k
+        concat(1, n, alias)
+        concat(n, 1, alias)
+        concat(n, n, alias)
+        k += 1
       }
     }
 

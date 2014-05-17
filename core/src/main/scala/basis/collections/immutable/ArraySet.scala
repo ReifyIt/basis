@@ -13,7 +13,7 @@ import basis.util._
 import scala.annotation.unchecked._
 
 private[collections] final class ArraySet[+A] private[collections] (slots: Array[AnyRef])
-  extends Equals with Immutable with Family[ArraySet[_]] with Set[A] {
+  extends Equals with Immutable with Family[ArraySet[_]] with SubSet[A] {
 
   override def isEmpty: Boolean = slots.length == 0
 
@@ -29,9 +29,7 @@ private[collections] final class ArraySet[+A] private[collections] (slots: Array
     false
   }
 
-  /** Returns a copy of this $collection that contains the given element.
-    * @group Updating */
-  def + [B >: A](elem: B): ArraySet[B] = {
+  override def + [B >: A](elem: B): ArraySet[B] = {
     var i = 0
     val n = slots.length
     while (i < n && elem != slots(i)) i += 1
@@ -44,9 +42,7 @@ private[collections] final class ArraySet[+A] private[collections] (slots: Array
     }
   }
 
-  /** Returns a copy of this $collection that excludes the given element.
-    * @group Updating */
-  def - (elem: A @uncheckedVariance): ArraySet[A] = {
+  override def - (elem: A @uncheckedVariance): ArraySet[A] = {
     var i = 0
     val n = slots.length
     while (i < n && elem != slots(i)) i += 1

@@ -24,7 +24,8 @@ final class StrictMapOps[+A, +T, -Family](val __ : Map[A, T]) extends AnyVal {
 
   def span(p: ((A, T)) => Boolean)(implicit builder1: Builder[(A, T)] with From[Family], builder2: Builder[(A, T)] with From[Family]): (builder1.State, builder2.State) = macro StrictMapMacros.span[(A, T)]
 
-  def ++ [B >: A, U >: T](those: Map[B, U])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictMapMacros.++[(B, U)]
+  def ++ [B >: A, U >: T](those: Map[B, U])(implicit builder: Builder[(B, U)] with From[Family]): builder.State = macro StrictMapMacros.++[(B, U)]
+  def + [B >: A, U >: T](elem: (B, U))(implicit builder: Builder[(B, U)] with From[Family]): builder.State     = macro StrictMapMacros.:+[(B, U)]
 }
 
 private[sequential] class StrictMapMacros(override val c: blackbox.Context { type PrefixType <: StrictMapOps[_, _, _] }) extends IteratorMacros(c) {

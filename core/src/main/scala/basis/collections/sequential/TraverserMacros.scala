@@ -20,7 +20,7 @@ private[sequential] abstract class TraverserMacros(override val c: blackbox.Cont
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      (($builder.expect(xs.length + 1): $builderType) ++= xs += $elem).state
+      (($builder: $builderType) ++= xs += $elem).state
     }""")
   }
 
@@ -29,7 +29,7 @@ private[sequential] abstract class TraverserMacros(override val c: blackbox.Cont
     implicit val builderState = BuilderStateTag(builder)
     Expr[builder.value.State](q"""{
       val xs = $these
-      (($builder.expect(1 + xs.length): $builderType) += $elem ++= xs).state
+      (($builder: $builderType) += $elem ++= xs).state
     }""")
   }
 
@@ -39,7 +39,7 @@ private[sequential] abstract class TraverserMacros(override val c: blackbox.Cont
     Expr[builder.value.State](q"""{
       val xs = $these
       val ys = $those
-      (($builder.expect(xs.length + ys.length): $builderType) ++= xs ++= ys).state
+      (($builder: $builderType) ++= xs ++= ys).state
     }""")
   }
 }

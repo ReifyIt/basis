@@ -26,8 +26,8 @@ final class StrictSeqOps[+A, -Family](val __ : Seq[A]) extends AnyVal {
   def span(p: A => Boolean)(implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family]): (builder1.State, builder2.State) = macro StrictSeqMacros.span[A]
 
   def ++ [B >: A](those: Seq[B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictSeqMacros.++[B]
-  def +: (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State               = macro StrictSeqMacros.+:[A]
-  def :+ (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State               = macro StrictSeqMacros.:+[A]
+  def +: [B >: A](elem: B)(implicit builder: Builder[B] with From[Family]): builder.State       = macro StrictSeqMacros.+:[B]
+  def :+ [B >: A](elem: B)(implicit builder: Builder[B] with From[Family]): builder.State       = macro StrictSeqMacros.:+[B]
 }
 
 private[sequential] class StrictSeqMacros(override val c: blackbox.Context { type PrefixType <: StrictSeqOps[_, _] }) extends IteratorMacros(c) {

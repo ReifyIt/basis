@@ -13,7 +13,7 @@ import basis.util._
 import scala.annotation.unchecked._
 
 private[collections] final class ArrayMap[+A, +T] private[collections] (slots: Array[AnyRef])
-  extends Equals with Immutable with Family[ArrayMap[_, _]] with Map[A, T] {
+  extends Equals with Immutable with Family[ArrayMap[_, _]] with SubMap[A, T] {
 
   override def isEmpty: Boolean = slots.length == 0
 
@@ -49,9 +49,7 @@ private[collections] final class ArrayMap[+A, +T] private[collections] (slots: A
     Trap
   }
 
-  /** Returns a copy of this $collection that associates the given value with the given key.
-    * @group Updating */
-  def + [B >: A, U >: T](key: B, value: U): ArrayMap[B, U] = {
+  override def + [B >: A, U >: T](key: B, value: U): ArrayMap[B, U] = {
     var i = 0
     val n = slots.length
     while (i < n && key != slots(i)) i += 2
@@ -65,9 +63,7 @@ private[collections] final class ArrayMap[+A, +T] private[collections] (slots: A
     }
   }
 
-  /** Returns a copy of this $collection that associates nothing with the given key.
-    * @group Updating */
-  def - (key: A @uncheckedVariance): ArrayMap[A, T] = {
+  override def - (key: A @uncheckedVariance): ArrayMap[A, T] = {
     var i = 0
     val n = slots.length
     while (i < n && key != slots(i)) i += 2

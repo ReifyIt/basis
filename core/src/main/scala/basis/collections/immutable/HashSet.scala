@@ -17,7 +17,7 @@ final class HashSet[+A] private[collections] (
     private[collections] val treeMap: Int,
     private[collections] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Equals with Immutable with Family[HashSet[_]] with Set[A] {
+  extends Equals with Immutable with Family[HashSet[_]] with SubSet[A] {
 
   import HashSet.{ VOID, LEAF, TREE, KNOT }
 
@@ -43,13 +43,9 @@ final class HashSet[+A] private[collections] (
 
   override def contains(elem: A @uncheckedVariance): Boolean = contains(elem, elem.##, 0)
 
-  /** Returns a copy of this $collection that contains the given element.
-    * @group Updating */
-  def + [B >: A](elem: B): HashSet[B] = update(elem, elem.##, 0)
+  override def + [B >: A](elem: B): HashSet[B] = update(elem, elem.##, 0)
 
-  /** Returns a copy of this $collection that excludes the given element.
-    * @group Updating */
-  def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
+  override def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
 
   private def slotMap: Int = treeMap | leafMap
 

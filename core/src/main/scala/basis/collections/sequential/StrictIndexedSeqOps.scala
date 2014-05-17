@@ -27,8 +27,8 @@ final class StrictIndexedSeqOps[+A, -Family](val __ : IndexedSeq[A]) extends Any
   def span(p: A => Boolean)(implicit builder1: Builder[A] with From[Family], builder2: Builder[A] with From[Family]): (builder1.State, builder2.State) = macro StrictIndexedSeqMacros.span[A]
 
   def ++ [B >: A](those: IndexedSeq[B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictIndexedSeqMacros.++[B]
-  def +: (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                      = macro StrictIndexedSeqMacros.+:[A]
-  def :+ (elem: A)(implicit builder: Builder[A] with From[Family]): builder.State                      = macro StrictIndexedSeqMacros.:+[A]
+  def +: [B >: A](elem: B)(implicit builder: Builder[B] with From[Family]): builder.State              = macro StrictIndexedSeqMacros.+:[B]
+  def :+ [B >: A](elem: B)(implicit builder: Builder[B] with From[Family]): builder.State              = macro StrictIndexedSeqMacros.:+[B]
 }
 
 private[sequential] class StrictIndexedSeqMacros(override val c: blackbox.Context { type PrefixType <: StrictIndexedSeqOps[_, _] }) extends IndexedSeqMacros(c) {
