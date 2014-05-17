@@ -593,8 +593,6 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
   private[this] var node5: Array[Array[Array[Array[Array[Byte]]]]] = _
   private[this] var node6: Array[Array[Array[Array[Array[Array[Byte]]]]]] = _
 
-  private[this] var result: ByteVectorLE = _
-
   private[this] var length: Long = 0
 
   private[this] var aliased: Int = 0
@@ -606,8 +604,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node1 = new Array[Byte](256)
       if (aliased == 1) {
         java.lang.System.arraycopy(oldNode1, 0, node1, 0, oldNode1.length)
-        aliased = 2
-        result = null
+        aliased = 0
       }
       if (length == (1L << 8)) node2(0) = oldNode1
       if (length >= (1L << 8)) node2((length >>> 8).toInt & 0xFF) = node1
@@ -621,8 +618,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node2 = new Array[Array[Byte]](256)
       if (aliased == 2) {
         java.lang.System.arraycopy(oldNode2, 0, node2, 0, oldNode2.length)
-        aliased = 3
-        result = null
+        aliased = 1
       }
       if (length == (1L << 16)) node3(0) = oldNode2
       if (length >= (1L << 16)) node3((length >>> 16).toInt & 0xFF) = node2
@@ -636,8 +632,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node3 = new Array[Array[Array[Byte]]](256)
       if (aliased == 3) {
         java.lang.System.arraycopy(oldNode3, 0, node3, 0, oldNode3.length)
-        aliased = 4
-        result = null
+        aliased = 2
       }
       if (length == (1L << 24)) node4(0) = oldNode3
       if (length >= (1L << 24)) node4((length >>> 24).toInt & 0xFF) = node3
@@ -651,8 +646,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node4 = new Array[Array[Array[Array[Byte]]]](256)
       if (aliased == 4) {
         java.lang.System.arraycopy(oldNode4, 0, node4, 0, oldNode4.length)
-        aliased = 5
-        result = null
+        aliased = 3
       }
       if (length == (1L << 32)) node5(0) = oldNode4
       if (length >= (1L << 32)) node5((length >>> 32).toInt & 0xFF) = node4
@@ -666,8 +660,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node5 = new Array[Array[Array[Array[Array[Byte]]]]](256)
       if (aliased == 5) {
         java.lang.System.arraycopy(oldNode5, 0, node5, 0, oldNode5.length)
-        aliased == 6
-        result = null
+        aliased = 4
       }
       if (length == (1L << 40)) node6(0) = oldNode5
       if (length >= (1L << 40)) node6((length >>> 40).toInt & 0xFF) = node5
@@ -681,8 +674,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node6 = new Array[Array[Array[Array[Array[Array[Byte]]]]]](256)
       if (aliased == 6) {
         java.lang.System.arraycopy(oldNode6, 0, node6, 0, oldNode6.length)
-        aliased == 7
-        result = null
+        aliased = 5
       }
     }
   }
@@ -701,7 +693,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
   }
 
   private[this] def alias2: ByteVectorLE = {
-    if (((length >>> 8).toInt & 0xFF) != 0) {
+    if (aliased == 1 || ((length >>> 8).toInt & 0xFF) != 0) {
       val last2 = ((length - 1L) >>> 8).toInt & 0xFF
       val oldNode2 = node2
       node2 = new Array[Array[Byte]](last2 + 1)
@@ -713,7 +705,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
   }
 
   private[this] def alias3: ByteVectorLE = {
-    if (((length >>> 16).toInt & 0xFF) != 0) {
+    if (aliased == 2 || ((length >>> 16).toInt & 0xFF) != 0) {
       val last3 = ((length - 1L) >>> 16).toInt & 0xFF
       val oldNode3 = node3
       node3 = new Array[Array[Array[Byte]]](last3 + 1)
@@ -725,7 +717,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
   }
 
   private[this] def alias4: ByteVectorLE = {
-    if (((length >>> 24).toInt & 0xFF) != 0) {
+    if (aliased == 3 || ((length >>> 24).toInt & 0xFF) != 0) {
       val last4 = ((length - 1L) >>> 24).toInt & 0xFF
       val oldNode4 = node4
       node4 = new Array[Array[Array[Array[Byte]]]](last4 + 1)
@@ -737,7 +729,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
   }
 
   private[this] def alias5: ByteVectorLE = {
-    if (((length >>> 32).toInt & 0xFF) != 0) {
+    if (aliased == 4 || ((length >>> 32).toInt & 0xFF) != 0) {
       val last5 = ((length - 1L) >>> 32).toInt & 0xFF
       val oldNode5 = node5
       node5 = new Array[Array[Array[Array[Array[Byte]]]]](last5 + 1)
@@ -749,7 +741,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
   }
 
   private[this] def alias6: ByteVectorLE = {
-    if (((length >>> 40).toInt & 0xFF) != 0) {
+    if (aliased == 5 || ((length >>> 40).toInt & 0xFF) != 0) {
       val last6 = ((length - 1L) >>> 40).toInt & 0xFF
       val oldNode6 = node6
       node6 = new Array[Array[Array[Array[Array[Array[Byte]]]]]](last6 + 1)
@@ -890,10 +882,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
     case _ => super.writeData(data)
   }
 
-  override def state: ByteVectorLE = {
-    if (result == null) result = alias
-    result
-  }
+  override def state: ByteVectorLE = alias
 
   override def clear(): Unit = {
     node1 = null

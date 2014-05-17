@@ -13,7 +13,7 @@ trait ContainerBehaviors extends CollectionBehaviors { this: FunSpec =>
   import CollectionGenerators._
   import Matchers._
 
-  def GenericContainer[CC[X] <: Container[X]](CC: generic.CollectionFactory[CC]) = describe(s"generic $CC containers") {
+  def GenericContainer[CC[X] <: Container[X]](CC: generic.CollectionFactory[CC]) = describe(s"Generic $CC containers") {
     it("should have an empty container") {
       CC.empty.iterator shouldBe empty
     }
@@ -34,16 +34,14 @@ trait ContainerBehaviors extends CollectionBehaviors { this: FunSpec =>
 
     it("should build and iterate over n-ary containers") {
       var n = 2
-      while (n <= 1024) {
-        val ns = FirstNIntegers(CC, n).iterator
+      while (n <= 1024) withClue(s"sum of first $n integers") {
+        val ns = CC.range(1, n).iterator
         var sum = 0
         while (!ns.isEmpty) {
           sum += ns.head
           ns.step()
         }
-        withClue(s"sum of first $n integers") {
-          sum should equal (n * (n + 1) / 2)
-        }
+        sum should equal (n * (n + 1) / 2)
         n += 1
       }
     }

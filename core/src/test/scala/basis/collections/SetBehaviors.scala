@@ -12,7 +12,7 @@ trait SetBehaviors extends ContainerBehaviors { this: FunSpec =>
   import CollectionEnablers._
   import Matchers._
 
-  def GenericSet[CC[X] <: Set[X]](CC: generic.SetFactory[CC]) = describe(s"generic $CC sets") {
+  def GenericSet[CC[X] <: Set[X]](CC: generic.SetFactory[CC]) = describe(s"Generic $CC sets") {
     it("should have a zero size set") {
       (CC.empty: Set[Any]) should have size 0
     }

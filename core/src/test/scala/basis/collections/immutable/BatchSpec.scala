@@ -15,4 +15,6 @@ class BatchSpec extends FunSpec with SeqBehaviors {
   it should behave like GenericCollection(Batch)
   it should behave like GenericContainer(Batch)
   it should behave like GenericSeq(Batch)
+
+  it should behave like GenericCollectionBuilder(Batch)
 }

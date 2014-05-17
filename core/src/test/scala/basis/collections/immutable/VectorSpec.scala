@@ -15,4 +15,6 @@ class VectorSpec extends FunSpec with SeqBehaviors {
   it should behave like GenericCollection(Vector)
   it should behave like GenericContainer(Vector)
   it should behave like GenericSeq(Vector)
+
+  it should behave like GenericCollectionBuilder(Vector)
 }

@@ -746,8 +746,6 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
   private[this] var node5: Array[Array[Array[Array[Array[AnyRef]]]]] = _
   private[this] var node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]] = _
 
-  private[this] var result: Vector[A] = _
-
   private[this] var length: Int = 0
 
   private[this] var aliased: Int = 0
@@ -759,8 +757,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node1 = new Array[AnyRef](32)
       if (aliased == 1) {
         java.lang.System.arraycopy(oldNode1, 0, node1, 0, oldNode1.length)
-        aliased = 2
-        result = null
+        aliased = 0
       }
       if (length == (1 << 5)) node2(0) = oldNode1
       if (length >= (1 << 5)) node2(length >>> 5 & 0x1F) = node1
@@ -774,8 +771,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node2 = new Array[Array[AnyRef]](32)
       if (aliased == 2) {
         java.lang.System.arraycopy(oldNode2, 0, node2, 0, oldNode2.length)
-        aliased = 3
-        result = null
+        aliased = 1
       }
       if (length == (1 << 10)) node3(0) = oldNode2
       if (length >= (1 << 10)) node3(length >>> 10 & 0x1F) = node2
@@ -789,8 +785,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node3 = new Array[Array[Array[AnyRef]]](32)
       if (aliased == 3) {
         java.lang.System.arraycopy(oldNode3, 0, node3, 0, oldNode3.length)
-        aliased = 4
-        result = null
+        aliased = 2
       }
       if (length == (1 << 15)) node4(0) = oldNode3
       if (length >= (1 << 15)) node4(length >>> 15 & 0x1F) = node3
@@ -804,8 +799,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node4 = new Array[Array[Array[Array[AnyRef]]]](32)
       if (aliased == 4) {
         java.lang.System.arraycopy(oldNode4, 0, node4, 0, oldNode4.length)
-        aliased = 5
-        result = null
+        aliased = 3
       }
       if (length == (1 << 20)) node5(0) = oldNode4
       if (length >= (1 << 20)) node5(length >>> 20 & 0x1F) = node4
@@ -819,8 +813,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](32)
       if (aliased == 5) {
         java.lang.System.arraycopy(oldNode5, 0, node5, 0, oldNode5.length)
-        aliased == 6
-        result = null
+        aliased = 4
       }
       if (length == (1 << 25)) node6(0) = oldNode5
       if (length >= (1 << 25)) node6(length >>> 25 & 0x1F) = node5
@@ -834,8 +827,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
       node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](32)
       if (aliased == 6) {
         java.lang.System.arraycopy(oldNode6, 0, node6, 0, oldNode6.length)
-        aliased == 7
-        result = null
+        aliased = 5
       }
     }
   }
@@ -919,7 +911,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
   }
 
   private[this] def alias2: Vector[A] = {
-    if ((length >>> 5 & 0x1F) != 0) {
+    if (aliased == 1 || (length >>> 5 & 0x1F) != 0) {
       val last2 = (length - 1) >>> 5 & 0x1F
       val oldNode2 = node2
       node2 = new Array[Array[AnyRef]](last2 + 1)
@@ -931,7 +923,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
   }
 
   private[this] def alias3: Vector[A] = {
-    if ((length >>> 10 & 0x1F) != 0) {
+    if (aliased == 2 || (length >>> 10 & 0x1F) != 0) {
       val last3 = (length - 1) >>> 10 & 0x1F
       val oldNode3 = node3
       node3 = new Array[Array[Array[AnyRef]]](last3 + 1)
@@ -943,7 +935,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
   }
 
   private[this] def alias4: Vector[A] = {
-    if ((length >>> 15 & 0x1F) != 0) {
+    if (aliased == 3 || (length >>> 15 & 0x1F) != 0) {
       val last4 = (length - 1) >>> 15 & 0x1F
       val oldNode4 = node4
       node4 = new Array[Array[Array[Array[AnyRef]]]](last4 + 1)
@@ -955,7 +947,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
   }
 
   private[this] def alias5: Vector[A] = {
-    if ((length >>> 20 & 0x1F) != 0) {
+    if (aliased == 4 || (length >>> 20 & 0x1F) != 0) {
       val last5 = (length - 1) >>> 20 & 0x1F
       val oldNode5 = node5
       node5 = new Array[Array[Array[Array[Array[AnyRef]]]]](last5 + 1)
@@ -967,7 +959,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
   }
 
   private[this] def alias6: Vector[A] = {
-    if ((length >>> 25 & 0x1F) != 0) {
+    if (aliased == 5 || (length >>> 25 & 0x1F) != 0) {
       val last6 = (length - 1) >>> 25 & 0x1F
       val oldNode6 = node6
       node6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](last6 + 1)
@@ -978,10 +970,7 @@ private[collections] final class VectorBuilder[A] extends Builder[A] with State[
     new Vector6(node6, length)
   }
 
-  override def state: Vector[A] = {
-    if (result == null) result = alias
-    result
-  }
+  override def state: Vector[A] = alias
 
   override def clear(): Unit = {
     node1 = null

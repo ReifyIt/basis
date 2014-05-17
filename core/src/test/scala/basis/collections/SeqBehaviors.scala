@@ -13,7 +13,7 @@ trait SeqBehaviors extends ContainerBehaviors { this: FunSpec =>
   import CollectionGenerators._
   import Matchers._
 
-  def GenericSeq[CC[X] <: Seq[X]](CC: generic.SeqFactory[CC]) = describe(s"generic $CC sequences") {
+  def GenericSeq[CC[X] <: Seq[X]](CC: generic.SeqFactory[CC]) = describe(s"Generic $CC sequences") {
     it("should have a zero length sequence") {
       (CC.empty: Seq[Any]) should have length 0
     }
@@ -21,7 +21,7 @@ trait SeqBehaviors extends ContainerBehaviors { this: FunSpec =>
     it("should sequentially traverse elements") {
       var n = 1
       while (n <= 1024) {
-        val ns = FirstNIntegers(CC, n)
+        val ns = CC.range(1, n)
         var i = 1
         ns.traverse { x =>
           withClue(s"element $i") (x should equal (i))
@@ -35,7 +35,7 @@ trait SeqBehaviors extends ContainerBehaviors { this: FunSpec =>
     it("should sequentially iterate elements") {
       var n = 1
       while (n <= 1024) {
-        val ns = FirstNIntegers(CC, n).iterator
+        val ns = CC.range(1, n).iterator
         var i = 1
         while (!ns.isEmpty) {
           withClue(s"element $i") (ns.head should equal (i))

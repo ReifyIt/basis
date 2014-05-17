@@ -15,4 +15,6 @@ class ListSpec extends FunSpec with SeqBehaviors {
   it should behave like GenericCollection(List)
   it should behave like GenericContainer(List)
   it should behave like GenericSeq(List)
+
+  it should behave like GenericCollectionBuilder(List)
 }

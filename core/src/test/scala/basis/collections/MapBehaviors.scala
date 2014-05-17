@@ -14,7 +14,7 @@ trait MapBehaviors { this: FunSpec =>
   import CollectionGenerators._
   import Matchers._
 
-  def GenericMap[CC[X, Y] <: Map[X, Y]](CC: generic.MapFactory[CC]) = describe(s"generic $CC maps") {
+  def GenericMap[CC[X, Y] <: Map[X, Y]](CC: generic.MapFactory[CC]) = describe(s"Generic $CC maps") {
     it("should have an empty map") {
       CC.empty shouldBe empty
     }
@@ -50,24 +50,22 @@ trait MapBehaviors { this: FunSpec =>
 
     it("should build and traverse n-ary maps") {
       var n = 2
-      while (n <= 1024) {
-        val ns = FirstNIntegers(CC, n)
+      while (n <= 1024) withClue(s"sum of first $n integers") {
+        val ns = CC.range(1, n)
         var sum = 0
         ns.traverse { entry =>
           withClue(entry.toString) (entry._1 should equal (entry._2))
           sum += entry._2
         }
-        withClue(s"sum of first $n integers") {
-          sum should equal (n * (n + 1) / 2)
-        }
+        sum should equal (n * (n + 1) / 2)
         n += 1
       }
     }
 
     it("should build and iterate over n-ary maps") {
       var n = 2
-      while (n <= 1024) {
-        val ns = FirstNIntegers(CC, n).iterator
+      while (n <= 1024) withClue(s"sum of first $n integers") {
+        val ns = CC.range(1, n).iterator
         var sum = 0
         while (!ns.isEmpty) {
           val entry = ns.head
@@ -75,9 +73,7 @@ trait MapBehaviors { this: FunSpec =>
           sum += entry._2
           ns.step()
         }
-        withClue(s"sum of first $n integers") {
-          sum should equal (n * (n + 1) / 2)
-        }
+        sum should equal (n * (n + 1) / 2)
         n += 1
       }
     }

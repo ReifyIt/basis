@@ -6,26 +6,28 @@
 
 package basis.collections
 
-import basis.util._
-
 object CollectionGenerators {
-  def FirstNIntegers[CC[X] <: Collection[X]](CC: generic.CollectionFactory[CC], n: Int): CC[Int] = {
-    val b = CC.Builder[Int]
-    var i = 1
-    while (i <= n) {
-      b.append(i)
-      i += 1
+  implicit class CollectionFactoryGenerators[CC[X] <: Collection[X]](val CC: generic.CollectionFactory[CC]) extends AnyVal {
+    def range(lower: Int, upper: Int): CC[Int] = {
+      val b = CC.Builder[Int]
+      var i = lower
+      while (i <= upper) {
+        b.append(i)
+        i += 1
+      }
+      b.state
     }
-    b.state
   }
 
-  def FirstNIntegers[CC[X, Y] <: Map[X, Y]](CC: generic.MapFactory[CC], n: Int): CC[Int, Int] = {
-    val b = CC.Builder[Int, Int]
-    var i = 1
-    while (i <= n) {
-      b.append(i -> i)
-      i += 1
+  implicit class MapFactoryGenerators[CC[X, Y] <: Map[X, Y]](val CC: generic.MapFactory[CC]) extends AnyVal {
+    def range(lower: Int, upper: Int): CC[Int, Int] = {
+      val b = CC.Builder[Int, Int]
+      var i = lower
+      while (i <= upper) {
+        b.append((i, i))
+        i += 1
+      }
+      b.state
     }
-    b.state
   }
 }

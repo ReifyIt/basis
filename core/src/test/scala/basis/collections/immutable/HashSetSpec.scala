@@ -15,4 +15,6 @@ class HashSetSpec extends FunSpec with SetBehaviors {
   it should behave like GenericCollection(HashSet)
   it should behave like GenericContainer(HashSet)
   it should behave like GenericSet(HashSet)
+
+  it should behave like GenericCollectionBuilder(HashSet)
 }
