@@ -63,9 +63,9 @@ trait Writer extends ByteOrder[Endianness] {
     else throw new MatchError(endian)
   }
 
-  def writeFloat(value: Float): Unit = writeInt(value.toIntBits)
+  def writeFloat(value: Float): Unit = writeInt(value.toRawIntBits)
 
-  def writeDouble(value: Double): Unit = writeLong(value.toLongBits)
+  def writeDouble(value: Double): Unit = writeLong(value.toRawLongBits)
 
   def writeData(data: Loader): Unit = {
     var p = 0L

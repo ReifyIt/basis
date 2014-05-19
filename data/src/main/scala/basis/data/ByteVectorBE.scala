@@ -165,9 +165,9 @@ sealed abstract class ByteVectorBE extends ByteVector with ByteOrder[BigEndian] 
       mutateByte(address + 7L, (value      ).toByte)
   }
 
-  override def mutateFloat(address: Long, value: Float): ByteVectorBE = mutateInt(address, value.toIntBits)
+  override def mutateFloat(address: Long, value: Float): ByteVectorBE = mutateInt(address, value.toRawIntBits)
 
-  override def mutateDouble(address: Long, value: Double): ByteVectorBE = mutateLong(address, value.toLongBits)
+  override def mutateDouble(address: Long, value: Double): ByteVectorBE = mutateLong(address, value.toRawLongBits)
 
   override def ++ (that: Loader): ByteVectorBE = {
     val framer = ByteVectorBE.Framer
@@ -599,7 +599,7 @@ private[data] final class ByteVectorBEFramer extends State[ByteVectorBE] with By
 
   private[this] def gotoNode1(): Unit = {
     if (length >= (1L << 8)) gotoNode2()
-    if (aliased == 1 || (length & 0x000000000000FFFFL) == 0L) {
+    if (aliased == 1 || (length & 0x00000000000000FFL) == 0L) {
       val oldNode1 = node1
       node1 = new Array[Byte](256)
       if (aliased == 1) {
@@ -613,7 +613,7 @@ private[data] final class ByteVectorBEFramer extends State[ByteVectorBE] with By
 
   private[this] def gotoNode2(): Unit = {
     if (length >= (1L << 16)) gotoNode3()
-    if (aliased == 2 || (length & 0x0000000000FFFFFFL) == 0L || length == (1L << 8)) {
+    if (aliased == 2 || (length & 0x000000000000FFFFL) == 0L || length == (1L << 8)) {
       val oldNode2 = node2
       node2 = new Array[Array[Byte]](256)
       if (aliased == 2) {
@@ -627,7 +627,7 @@ private[data] final class ByteVectorBEFramer extends State[ByteVectorBE] with By
 
   private[this] def gotoNode3(): Unit = {
     if (length >= (1L << 24)) gotoNode4()
-    if (aliased == 3 || (length & 0x00000000FFFFFFFFL) == 0L || length == (1L << 16)) {
+    if (aliased == 3 || (length & 0x0000000000FFFFFFL) == 0L || length == (1L << 16)) {
       val oldNode3 = node3
       node3 = new Array[Array[Array[Byte]]](256)
       if (aliased == 3) {
@@ -641,7 +641,7 @@ private[data] final class ByteVectorBEFramer extends State[ByteVectorBE] with By
 
   private[this] def gotoNode4(): Unit = {
     if (length >= (1L << 32)) gotoNode5()
-    if (aliased == 4 || (length & 0x000000FFFFFFFFFFL) == 0L || length == (1L << 24)) {
+    if (aliased == 4 || (length & 0x00000000FFFFFFFFL) == 0L || length == (1L << 24)) {
       val oldNode4 = node4
       node4 = new Array[Array[Array[Array[Byte]]]](256)
       if (aliased == 4) {
@@ -655,7 +655,7 @@ private[data] final class ByteVectorBEFramer extends State[ByteVectorBE] with By
 
   private[this] def gotoNode5(): Unit = {
     if (length >= (1L << 40)) gotoNode6()
-    if (aliased == 5 || (length & 0x0000FFFFFFFFFFFFL) == 0L || length == (1L << 32)) {
+    if (aliased == 5 || (length & 0x000000FFFFFFFFFFL) == 0L || length == (1L << 32)) {
       val oldNode5 = node5
       node5 = new Array[Array[Array[Array[Array[Byte]]]]](256)
       if (aliased == 5) {
@@ -819,9 +819,9 @@ private[data] final class ByteVectorBEFramer extends State[ByteVectorBE] with By
     }
   }
 
-  override def writeFloat(value: Float): Unit = writeInt(value.toIntBits)
+  override def writeFloat(value: Float): Unit = writeInt(value.toRawIntBits)
 
-  override def writeDouble(value: Double): Unit = writeLong(value.toLongBits)
+  override def writeDouble(value: Double): Unit = writeLong(value.toRawLongBits)
 
   override def writeData(data: Loader): Unit = data match {
     case data: ByteVectorBE0 if length == 0L => ()

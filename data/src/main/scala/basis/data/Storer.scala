@@ -97,7 +97,7 @@ trait Storer extends Any with ByteOrder[Endianness] {
     * @param  value     the `Float` value to store.
     * @group  Unaligned
     */
-  def storeFloat(address: Long, value: Float): Unit = storeInt(address, value.toIntBits)
+  def storeFloat(address: Long, value: Float): Unit = storeInt(address, value.toRawIntBits)
 
   /** Stores a native-endian `Double` value as an 8-byte `endian` ordered word.
     *
@@ -105,7 +105,7 @@ trait Storer extends Any with ByteOrder[Endianness] {
     * @param  value     the `Double` value to store.
     * @group  Unaligned
     */
-  def storeDouble(address: Long, value: Double): Unit = storeLong(address, value.toLongBits)
+  def storeDouble(address: Long, value: Double): Unit = storeLong(address, value.toRawLongBits)
 
   /** Stores a native-endian `Short` value as a 2-byte `endian` ordered word.
     * Truncates `address` to 2-byte alignment.

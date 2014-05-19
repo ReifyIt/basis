@@ -79,8 +79,8 @@ final class ByteBufferLE(val __ : Array[Byte]) extends AnyVal with ByteBuffer wi
   override def loadFloat(address: Long): Float   = loadInt(address).toFloatBits
   override def loadDouble(address: Long): Double = loadLong(address).toDoubleBits
 
-  override def storeFloat(address: Long, value: Float): Unit   = storeInt(address, value.toIntBits)
-  override def storeDouble(address: Long, value: Double): Unit = storeLong(address, value.toLongBits)
+  override def storeFloat(address: Long, value: Float): Unit   = storeInt(address, value.toRawIntBits)
+  override def storeDouble(address: Long, value: Double): Unit = storeLong(address, value.toRawLongBits)
 
   override def loadAlignedShort(address: Long): Short   = loadShort(address & -2L)
   override def loadAlignedInt(address: Long): Int       = loadInt(address & -4L)
@@ -91,8 +91,8 @@ final class ByteBufferLE(val __ : Array[Byte]) extends AnyVal with ByteBuffer wi
   override def storeAlignedShort(address: Long, value: Short): Unit   = storeShort(address & -2L, value)
   override def storeAlignedInt(address: Long, value: Int): Unit       = storeInt(address & -4L, value)
   override def storeAlignedLong(address: Long, value: Long): Unit     = storeLong(address & -8L, value)
-  override def storeAlignedFloat(address: Long, value: Float): Unit   = storeFloat(address & ~4L, value)
-  override def storeAlignedDouble(address: Long, value: Double): Unit = storeDouble(address & ~8L, value)
+  override def storeAlignedFloat(address: Long, value: Float): Unit   = storeFloat(address & -4L, value)
+  override def storeAlignedDouble(address: Long, value: Double): Unit = storeDouble(address & -8L, value)
 
   override def ++ (that: Loader): ByteBufferLE = that match {
     case that: ByteBuffer =>
@@ -115,14 +115,14 @@ final class ByteBufferLE(val __ : Array[Byte]) extends AnyVal with ByteBuffer wi
   protected override def stringPrefix: String = "ByteBufferLE"
 }
 
-object ByteBufferLE extends ByteOrder[LittleEndian] with ByteFactory[ByteBufferLE] {
+object ByteBufferLE extends ByteOrder[LittleEndian] with Allocator[ByteBufferLE] {
   override def endian: LittleEndian = LittleEndian
 
   override val empty: ByteBufferLE = new ByteBufferLE(new Array[Byte](0))
 
   override def apply(data: Array[Byte]): ByteBufferLE = new ByteBufferLE(data)
 
-  def apply(size: Int): ByteBufferLE = new ByteBufferLE(new Array[Byte](size))
+  override def apply(size: Long): ByteBufferLE = new ByteBufferLE(new Array[Byte](size.toInt))
 
   implicit override def Framer: Framer with ByteOrder[LittleEndian] with State[ByteBufferLE] = new ByteBufferLEFramer
 
@@ -234,9 +234,9 @@ private[data] final class ByteBufferLEFramer extends State[ByteBufferLE] with By
     offset += 8
   }
 
-  override def writeFloat(value: Float): Unit = writeInt(value.toIntBits)
+  override def writeFloat(value: Float): Unit = writeInt(value.toRawIntBits)
 
-  override def writeDouble(value: Double): Unit = writeLong(value.toLongBits)
+  override def writeDouble(value: Double): Unit = writeLong(value.toRawLongBits)
 
   override def writeData(data: Loader): Unit = data match {
     case data: ByteBuffer if offset == 0 =>

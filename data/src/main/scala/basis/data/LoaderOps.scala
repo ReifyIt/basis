@@ -14,6 +14,22 @@ final class LoaderOps(val __ : Loader) extends AnyVal {
   def loadArray[T](address: Long, count: Int)(implicit T: Struct[T]): Array[T]                            = macro LoaderMacros.loadArray[T]
   def loadToArray[T](address: Long, array: Array[T], start: Int, count: Int)(implicit T: Struct[T]): Unit = macro LoaderMacros.loadToArray[T]
 
+  def writeBase16(builder: StringBuilder): Unit = {
+    def encodeDigit(digit: Int): Int = {
+      if      (digit >=  0 && digit < 10) digit + ('0'     )
+      else if (digit >= 10 && digit < 16) digit + ('A' - 10)
+      else throw new MatchError(digit.toString)
+    }
+    var i = 0L
+    val n = __.size
+    while (i < n) {
+      val x = __.loadByte(i) & 0xFF
+      builder.append(encodeDigit(x >>> 4))
+      builder.append(encodeDigit(x & 0xF))
+      i += 1L
+    }
+  }
+
   def writeBase64(builder: StringBuilder): Unit = {
     def encodeDigit(digit: Int): Int = {
       if      (digit >=  0 && digit < 26) digit + ('A'     )
@@ -26,9 +42,9 @@ final class LoaderOps(val __ : Loader) extends AnyVal {
     var i = 0L
     val n = __.size
     while (i + 2L < n) {
-      val x: Int = __.loadByte(i     ) & 0xFF
-      val y: Int = __.loadByte(i + 1L) & 0xFF
-      val z: Int = __.loadByte(i + 2L) & 0xFF
+      val x = __.loadByte(i     ) & 0xFF
+      val y = __.loadByte(i + 1L) & 0xFF
+      val z = __.loadByte(i + 2L) & 0xFF
       builder.append(encodeDigit(x >>> 2))
       builder.append(encodeDigit(((x << 4) | (y >>> 4)) & 0x3F))
       builder.append(encodeDigit(((y << 2) | (z >>> 6)) & 0x3F))
@@ -52,6 +68,12 @@ final class LoaderOps(val __ : Loader) extends AnyVal {
       builder.append('=')
       i += 1L
     }
+  }
+
+  def toBase16: String = {
+    val s = UString.Builder
+    writeBase16(s)
+    s.state.toString
   }
 
   def toBase64: String = {

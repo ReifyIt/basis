@@ -58,7 +58,7 @@ trait JsonVariant extends Variant { variant =>
       val value = field._2
       field._1 match {
         case "$base64" if value.isStringForm =>
-          try BinaryForm(value.asStringForm.toUString.toString)
+          try BinaryForm.fromBase64(value.asStringForm.toUString.toString)
           catch { case _: IllegalArgumentException => form }
         case "$date" if value.isNumberForm =>
           DateForm(value.asNumberForm.toLong)

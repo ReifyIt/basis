@@ -183,7 +183,7 @@ trait VariantTranscoding { this: FunSpec =>
     }
 
     it("should transcode non-empty binary data") {
-      BinaryForm("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/-_") should transcode
+      BinaryForm.fromBase64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/-_") should transcode
     }
 
     it("should transcode escaped characters") {

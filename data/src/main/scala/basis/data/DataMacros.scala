@@ -12,6 +12,11 @@ private[data] class DataMacros(val c: blackbox.Context) {
   import c.{ Expr, mirror, WeakTypeTag }
   import c.universe._
 
+  def ByteFactoryToOps[Data](factory: Expr[ByteFactory[Data]])(implicit Data: WeakTypeTag[Data]): Expr[ByteFactoryOps[Data]] = {
+    implicit val ByteFactoryOpsTag = WeakTypeTag[ByteFactory[Data]](appliedType(mirror.staticClass("basis.data.ByteFactoryOps").toTypeConstructor, Data.tpe :: Nil))
+    Expr[ByteFactoryOps[Data]](q"new $ByteFactoryOpsTag($factory)")
+  }
+
   def LoaderToOps(data: Expr[Loader]): Expr[LoaderOps] = Expr[LoaderOps](q"new _root_.basis.data.LoaderOps($data)")
   def ReaderToOps(data: Expr[Reader]): Expr[ReaderOps] = Expr[ReaderOps](q"new _root_.basis.data.ReaderOps($data)")
   def StorerToOps(data: Expr[Storer]): Expr[StorerOps] = Expr[StorerOps](q"new _root_.basis.data.StorerOps($data)")

@@ -23,6 +23,8 @@ package object data {
     else throw new AssertionError
   }
 
+  implicit def ByteFactoryToOps[Data](factory: ByteFactory[Data]): ByteFactoryOps[Data] = macro DataMacros.ByteFactoryToOps[Data]
+
   implicit def LoaderToOps(data: Loader): LoaderOps = macro DataMacros.LoaderToOps
   implicit def ReaderToOps(data: Reader): ReaderOps = macro DataMacros.ReaderToOps
   implicit def StorerToOps(data: Storer): StorerOps = macro DataMacros.StorerToOps
