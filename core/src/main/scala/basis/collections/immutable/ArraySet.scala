@@ -13,7 +13,7 @@ import basis.util._
 import scala.annotation.unchecked._
 
 private[collections] final class ArraySet[+A] private[collections] (slots: Array[AnyRef])
-  extends Equals with Immutable with Family[ArraySet[_]] with SubSet[A] {
+  extends Equals with Immutable with Family[ArraySet[_]] with Subset[A] {
 
   override def isEmpty: Boolean = slots.length == 0
 

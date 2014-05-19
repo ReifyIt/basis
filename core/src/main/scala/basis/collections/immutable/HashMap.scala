@@ -17,7 +17,7 @@ final class HashMap[+A, +T] private[collections] (
     private[collections] val treeMap: Int,
     private[collections] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Equals with Immutable with Family[HashMap[_, _]] with SubMap[A, T] { self =>
+  extends Equals with Immutable with Family[HashMap[_, _]] with Submap[A, T] { self =>
 
   import HashMap.{ VOID, LEAF, TREE, KNOT }
 

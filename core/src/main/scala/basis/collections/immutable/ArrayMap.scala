@@ -13,7 +13,7 @@ import basis.util._
 import scala.annotation.unchecked._
 
 private[collections] final class ArrayMap[+A, +T] private[collections] (slots: Array[AnyRef])
-  extends Equals with Immutable with Family[ArrayMap[_, _]] with SubMap[A, T] {
+  extends Equals with Immutable with Family[ArrayMap[_, _]] with Submap[A, T] {
 
   override def isEmpty: Boolean = slots.length == 0
 

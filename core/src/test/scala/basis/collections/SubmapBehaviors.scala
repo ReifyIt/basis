@@ -8,31 +8,31 @@ package basis.collections
 
 import org.scalatest._
 
-trait SubSetBehaviors extends SetBehaviors { this: FlatSpec =>
+trait SubmapBehaviors extends MapBehaviors { this: FlatSpec =>
   import CollectionGenerators._
 
-  override type Coll[X] <: SubSet[X]
+  override type Coll[X, Y] <: Submap[X, Y]
 
-  def GenericSubSet(): Unit = {
-    it should "remove elements from small sets" in {
+  def GenericSubmap(): Unit = {
+    it should "remove entries from small maps" in {
       var n = 1
       while (n <= 1024) {
-        decomposeSubSet(n)
+        decomposeSubmap(n)
         n += 1
       }
     }
 
-    it should "remove entries from large sets" in {
-      decomposeSubSet(1 << 15)
+    it should "remove entries from large maps" in {
+      decomposeSubmap(1 << 15)
     }
   }
 
-  private def decomposeSubSet(n: Int): Unit = {
-    var xs = Coll.range(1, n): SubSet[Int]
+  private def decomposeSubmap(n: Int): Unit = {
+    var xs = Coll.range(1, n): Submap[Int, Int]
     var i = n
-    while (i > 0) {
+    while (i > 0) withClue(s"sum of first $i of $n entries:") {
       var sum = 0L
-      xs.traverse(sum += _)
+      xs.traverse(sum += _._2)
       val expected = i.toLong * (i.toLong + 1L) / 2L
       if (sum != expected) fail(s"sum of remaining $i of $n entries was $sum; expected $expected:")
       xs -= i
