@@ -9,12 +9,15 @@ package immutable
 
 import org.scalatest._
 
-class VectorSpec extends FunSpec with SeqBehaviors {
+class VectorSpec extends FlatSpec with SeqBehaviors {
   override def suiteName = "Vector specification"
 
-  it should behave like GenericCollection(Vector)
-  it should behave like GenericContainer(Vector)
-  it should behave like GenericSeq(Vector)
+  override type Coll[X] = Vector[X]
+  override val Coll = Vector
 
-  it should behave like GenericCollectionBuilder(Vector)
+  it should behave like GenericCollection()
+  it should behave like GenericContainer()
+  it should behave like GenericSeq()
+
+  it should behave like GenericCollectionBuilder()
 }

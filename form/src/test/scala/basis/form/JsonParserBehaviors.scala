@@ -9,51 +9,51 @@ package basis.form
 import basis.util._
 import org.scalatest._
 
-trait JsonParserBehaviors { this: FunSpec =>
+trait JsonParserBehaviors { this: FlatSpec =>
   import Matchers._
 
   val variant: JsonVariant
   import variant._
   import AnyForm.{ parseJson => Json }
 
-  def ParsesJsonComments() = describe("parsing JSON comments") {
-    it("should parse empty line comments") {
+  def ParsesJsonComments(): Unit = {
+    it should "parse empty line comments" in {
       Json("true //")
       ()
     }
 
-    it("should parse empty block comments") {
+    it should "parse empty block comments" in {
       Json("true /**/")
       ()
     }
 
-    it("should parse block comments containing slashes and asterisks") {
+    it should "parse block comments containing slashes and asterisks" in {
       Json("true /** /** /* / * // ** **/")
       ()
     }
 
-    it("should parse preceding line comments") {
+    it should "parse preceding line comments" in {
       Json("""// comment
       true""")
       ()
     }
 
-    it("should parse succeeding line comments") {
+    it should "parse succeeding line comments" in {
       Json("true // comment")
       ()
     }
 
-    it("should parse preceding block comments") {
+    it should "parse preceding block comments" in {
       Json("/* comment */ true")
       ()
     }
 
-    it("should parse succeeding block comments") {
+    it should "parse succeeding block comments" in {
       Json("true /* comment */")
       ()
     }
 
-    it("should parse line comments in objects") {
+    it should "parse line comments in objects" in {
       Json(""" { // here
         "true"    // here
         :         // here
@@ -66,7 +66,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       ()
     }
 
-    it("should parse line comments in arrays") {
+    it should "parse line comments in arrays" in {
       Json(""" [ // here
       true        // here
       ,           // here
@@ -75,7 +75,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       ()
     }
 
-    it("should parse block comments in objects") {
+    it should "parse block comments in objects" in {
       Json(""" {
         /* here */ "true"  /* here */ : /* here */ true  /* and here */ ,
         /* here */ "false" /* here */ : /* here */ false /* and here */
@@ -83,26 +83,26 @@ trait JsonParserBehaviors { this: FunSpec =>
       ()
     }
 
-    it("should parse block comments in arrays") {
+    it should "parse block comments in arrays" in {
       Json("[ /* here */ true /* here */ , /* here */ false /* and here */ ]")
       ()
     }
   }
 
-  def ParsesJsonLiterals() = describe("parsing JSON literals") {
-    it("should parse empty objects") {
+  def ParsesJsonLiterals(): Unit = {
+    it should "parse empty objects" in {
       Json("{ }") should equal (ObjectForm.empty)
     }
 
-    it("should parse empty arrays") {
+    it should "parse empty arrays" in {
       Json("[ ]") should equal (SeqForm.empty)
     }
 
-    it("should parse empty strings") {
+    it should "parse empty strings" in {
       Json("\"\"") should equal (StringForm.empty)
     }
 
-    it("should parse positive integers") {
+    it should "parse positive integers" in {
       Json("0")  should equal (NumberForm(0))
       Json("1")  should equal (NumberForm(1))
       Json("5")  should equal (NumberForm(5))
@@ -111,7 +111,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       Json("15") should equal (NumberForm(15))
     }
 
-    it("should parse negative integers") {
+    it should "parse negative integers" in {
       Json("-1")  should equal (NumberForm(-1))
       Json("-5")  should equal (NumberForm(-5))
       Json("-10") should equal (NumberForm(-10))
@@ -119,7 +119,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       Json("-15") should equal (NumberForm(-15))
     }
 
-    it("should parse positive decimals") {
+    it should "parse positive decimals" in {
       Json("0.0")   should equal (NumberForm(0.0))
       Json("0.5")   should equal (NumberForm(0.5))
       Json("1.0")   should equal (NumberForm(1.0))
@@ -130,7 +130,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       Json("10.50") should equal (NumberForm("10.50"))
     }
 
-    it("should parse negative decimals") {
+    it should "parse negative decimals" in {
       Json("-0.0")   should equal (NumberForm(-0.0))
       Json("-0.5")   should equal (NumberForm(-0.5))
       Json("-1.0")   should equal (NumberForm(-1.0))
@@ -141,7 +141,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       Json("-10.50") should equal (NumberForm("-10.50"))
     }
 
-    it("should parse positive decimals with exponents") {
+    it should "parse positive decimals with exponents" in {
       Json("4e2")    should equal (NumberForm("4e2"))
       Json("4E2")    should equal (NumberForm("4E2"))
       Json("4e+2")   should equal (NumberForm("4e+2"))
@@ -156,7 +156,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       Json("4.0E-2") should equal (NumberForm("4.0E-2"))
     }
 
-    it("should parse negative decimals with exponents") {
+    it should "parse negative decimals with exponents" in {
       Json("-4e2")    should equal (NumberForm("-4e2"))
       Json("-4E2")    should equal (NumberForm("-4E2"))
       Json("-4e+2")   should equal (NumberForm("-4e+2"))
@@ -171,23 +171,23 @@ trait JsonParserBehaviors { this: FunSpec =>
       Json("-4.0E-2") should equal (NumberForm("-4.0E-2"))
     }
 
-    it("should parse \"true\"") {
+    it should "parse \"true\"" in {
       Json("true") should equal (TrueForm)
     }
 
-    it("should parse \"false\"") {
+    it should "parse \"false\"" in {
       Json("false") should equal (FalseForm)
     }
 
-    it("should parse \"null\"") {
+    it should "parse \"null\"" in {
       Json("null") should equal (NullForm)
     }
 
-    it("should parse \"undefined\"") {
+    it should "parse \"undefined\"" in {
       Json("undefined") should equal (UndefinedForm)
     }
 
-    it("should orderly parse non-empty objects") {
+    it should "parse non-empty objects" in {
       Json(""" {
         "object"    : {},
         "array"     : [],
@@ -213,7 +213,7 @@ trait JsonParserBehaviors { this: FunSpec =>
       )
     }
 
-    it("should orderly parse non-empty arrays") {
+    it should "parse non-empty arrays" in {
       Json(""" [{}, [], "", 0, 0.0, true, false, null, undefined] """) should equal (
         SeqForm(
           ObjectForm.empty,
@@ -229,23 +229,23 @@ trait JsonParserBehaviors { this: FunSpec =>
       )
     }
 
-    it("should parse objects nested in arrays") {
+    it should "parse objects nested in arrays" in {
       Json(""" [{ "true" : true }, { "false" : false }] """) should equal (
         SeqForm(ObjectForm("true" -> TrueForm), ObjectForm("false" -> FalseForm))
       )
     }
 
-    it("should parse arrays nested in objects") {
+    it should "parse arrays nested in objects" in {
       Json(""" { "a" : [true], "b" : [false] } """) should equal (
         ObjectForm("a" -> SeqForm(TrueForm), "b" -> SeqForm(FalseForm))
       )
     }
 
-    it("should parse non-empty strings") {
+    it should "parse non-empty strings" in {
       Json("\"test\"") should equal (StringForm("test"))
     }
 
-    it("should unescape parsed strings") {
+    it should "unescape parsed strings" in {
       Json("\"\\\"\"") should equal (StringForm("\""))
       Json("\"\\\'\"") should equal (StringForm("\'"))
       Json("\"\\\\\"") should equal (StringForm("\\"))
@@ -258,75 +258,75 @@ trait JsonParserBehaviors { this: FunSpec =>
     }
   }
 
-  def RejectsInvalidJson() = describe("parsing invalid JSON") {
-    it("should not parse sequential values") {
+  def RejectsInvalidJson(): Unit = {
+    it should "not parse sequential values" in {
       a [JsonException] should be thrownBy (Json("true false"))
       ()
     }
 
-    it("should not parse empty input") {
+    it should "not parse empty input" in {
       a [JsonException] should be thrownBy (Json(""))
       ()
     }
 
-    it("should not parse unclosed empty objects") {
+    it should "not parse unclosed empty objects" in {
       a [JsonException] should be thrownBy (Json("{"))
       ()
     }
 
-    it("should not parse unclosed non-empty objects") {
+    it should "not parse unclosed non-empty objects" in {
       a [JsonException] should be thrownBy (Json("{\"true\":true"))
       ()
     }
 
-    it("should not parse objects with trailing commas") {
+    it should "not parse objects with trailing commas" in {
       a [JsonException] should be thrownBy (Json("{\"true\":true,}"))
       ()
     }
 
-    it("should not parse unclosed empty arrays") {
+    it should "not parse unclosed empty arrays" in {
       a [JsonException] should be thrownBy (Json("["))
       ()
     }
 
-    it("should not parse unclosed non-empty arrays") {
+    it should "not parse unclosed non-empty arrays" in {
       a [JsonException] should be thrownBy (Json("[true"))
       ()
     }
 
-    it("should not parse arrays with trailing commas") {
+    it should "not parse arrays with trailing commas" in {
       a [JsonException] should be thrownBy (Json("[true,]"))
       ()
     }
 
-    it("should not parse unclosed empty strings") {
+    it should "not parse unclosed empty strings" in {
       a [JsonException] should be thrownBy (Json("\""))
       ()
     }
 
-    it("should not parse numbers with a leading zeros") {
-      withClue("00")  (a [JsonException] should be thrownBy (Json("00")))
-      withClue("01")  (a [JsonException] should be thrownBy (Json("01")))
-      withClue("-00") (a [JsonException] should be thrownBy (Json("-00")))
-      withClue("-01") (a [JsonException] should be thrownBy (Json("-01")))
+    it should "not parse numbers with a leading zeros" in {
+      withClue("\"00\"")  (a [JsonException] should be thrownBy (Json("00")))
+      withClue("\"01\"")  (a [JsonException] should be thrownBy (Json("01")))
+      withClue("\"-00\"") (a [JsonException] should be thrownBy (Json("-00")))
+      withClue("\"-01\"") (a [JsonException] should be thrownBy (Json("-01")))
       ()
     }
 
-    it("should not parse numbers with a trailing decimal point") {
-      withClue("0.")  (a [JsonException] should be thrownBy (Json("0.")))
-      withClue("1.")  (a [JsonException] should be thrownBy (Json("1.")))
-      withClue("-0.") (a [JsonException] should be thrownBy (Json("-0.")))
-      withClue("-1.") (a [JsonException] should be thrownBy (Json("-1.")))
+    it should "not parse numbers with a trailing decimal point" in {
+      withClue("\"0.\"")  (a [JsonException] should be thrownBy (Json("0.")))
+      withClue("\"1.\"")  (a [JsonException] should be thrownBy (Json("1.")))
+      withClue("\"-0.\"") (a [JsonException] should be thrownBy (Json("-0.")))
+      withClue("\"-1.\"") (a [JsonException] should be thrownBy (Json("-1.")))
       ()
     }
 
-    it("should not parse numbers with an invalid exponent") {
-      withClue("4.0e")  (a [JsonException] should be thrownBy (Json("4.0e")))
-      withClue("4.0E")  (a [JsonException] should be thrownBy (Json("4.0E")))
-      withClue("4.0e+") (a [JsonException] should be thrownBy (Json("4.0e+")))
-      withClue("4.0E+") (a [JsonException] should be thrownBy (Json("4.0E+")))
-      withClue("4.0e-") (a [JsonException] should be thrownBy (Json("4.0e-")))
-      withClue("4.0E-") (a [JsonException] should be thrownBy (Json("4.0E-")))
+    it should "not parse numbers with an invalid exponent" in {
+      withClue("\"4.0e\"")  (a [JsonException] should be thrownBy (Json("4.0e")))
+      withClue("\"4.0E\"")  (a [JsonException] should be thrownBy (Json("4.0E")))
+      withClue("\"4.0e+\"") (a [JsonException] should be thrownBy (Json("4.0e+")))
+      withClue("\"4.0E+\"") (a [JsonException] should be thrownBy (Json("4.0E+")))
+      withClue("\"4.0e-\"") (a [JsonException] should be thrownBy (Json("4.0e-")))
+      withClue("\"4.0E-\"") (a [JsonException] should be thrownBy (Json("4.0E-")))
       ()
     }
   }

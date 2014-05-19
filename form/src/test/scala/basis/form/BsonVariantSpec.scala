@@ -9,10 +9,7 @@ package basis.form
 import org.scalatest._
 import org.scalatest.matchers._
 
-class BsonVariantSpec
-  extends FunSpec
-  with VariantTranscoding {
-
+class BsonVariantSpec extends FlatSpec with VariantTranscoding {
   override val variant: BsonVariant = OmniVariant
   import variant._
 

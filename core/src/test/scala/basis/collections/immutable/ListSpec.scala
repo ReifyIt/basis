@@ -9,12 +9,16 @@ package immutable
 
 import org.scalatest._
 
-class ListSpec extends FunSpec with SeqBehaviors {
+class ListSpec extends FlatSpec with SeqBehaviors {
   override def suiteName = "List specification"
 
-  it should behave like GenericCollection(List)
-  it should behave like GenericContainer(List)
-  it should behave like GenericSeq(List)
+  override type Coll[X] = List[X]
+  override val Coll = List
 
-  it should behave like GenericCollectionBuilder(List)
+  it should behave like GenericCollection()
+  it should behave like GenericContainer()
+  it should behave like GenericSeq()
+  it should behave like SpecializedSeq()
+
+  it should behave like GenericCollectionBuilder()
 }

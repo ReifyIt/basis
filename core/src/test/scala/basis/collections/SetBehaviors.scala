@@ -8,13 +8,16 @@ package basis.collections
 
 import org.scalatest._
 
-trait SetBehaviors extends ContainerBehaviors { this: FunSpec =>
+trait SetBehaviors extends ContainerBehaviors { this: FlatSpec =>
   import CollectionEnablers._
   import Matchers._
 
-  def GenericSet[CC[X] <: Set[X]](CC: generic.SetFactory[CC]) = describe(s"Generic $CC sets") {
-    it("should have a zero size set") {
-      (CC.empty: Set[Any]) should have size 0
+  override type Coll[X] <: Set[X]
+  override val Coll: generic.SetFactory[Coll]
+
+  def GenericSet(): Unit = {
+    it should "have a zero size set" in {
+      (Coll.empty: Set[Any]) should have size 0
     }
   }
 }

@@ -9,33 +9,36 @@ package basis.collections
 import basis.util._
 import org.scalatest._
 
-trait MapBehaviors { this: FunSpec =>
+trait MapBehaviors { this: FlatSpec =>
   import CollectionEnablers._
   import CollectionGenerators._
   import Matchers._
 
-  def GenericMap[CC[X, Y] <: Map[X, Y]](CC: generic.MapFactory[CC]) = describe(s"Generic $CC maps") {
-    it("should have an empty map") {
-      CC.empty shouldBe empty
+  type Coll[X, Y] <: Map[X, Y]
+  val Coll: generic.MapFactory[Coll]
+
+  def GenericMap(): Unit = {
+    it should "have an empty map" in {
+      Coll.empty shouldBe empty
     }
 
-    it("should have a zero size map") {
-      (CC.empty: Map[Any, Any]) should have size 0
+    it should "have a zero size map" in {
+      (Coll.empty: Map[Any, Any]) should have size 0
     }
 
-    it("should build and traverse unary maps") {
-      val xs = (CC.Builder[String, Int] += "one" -> 1).state
+    it should "build and traverse unary maps" in {
+      val xs = (Coll.Builder[String, Int] += "one" -> 1).state
       var q = false
       xs.traverse(_ match {
         case ("one", 1) if !q => q = true
         case ("one", 1) => fail("Traversed expected entry more than once")
         case entry => fail(s"Traversed unexpected entry $entry")
       })
-      withClue("traversed element") (q should be (true))
+      withClue("traversed element:") (q should be (true))
     }
 
-    it("should build and iterate over unary maps") {
-      val xs = (CC.Builder[String, Int] += "one" -> 1).state.iterator
+    it should "build and iterate over unary maps" in {
+      val xs = (Coll.Builder[String, Int] += "one" -> 1).state.iterator
       var q = false
       while (!xs.isEmpty) {
         xs.head match {
@@ -45,37 +48,59 @@ trait MapBehaviors { this: FunSpec =>
         }
         xs.step()
       }
-      withClue("traversed element") (q should be (true))
+      withClue("traversed element:") (q should be (true))
     }
 
-    it("should build and traverse n-ary maps") {
-      var n = 2
-      while (n <= 1024) withClue(s"sum of first $n integers") {
-        val ns = CC.range(1, n)
-        var sum = 0
-        ns.traverse { entry =>
-          withClue(entry.toString) (entry._1 should equal (entry._2))
-          sum += entry._2
-        }
-        sum should equal (n * (n + 1) / 2)
-        n += 1
-      }
+    it should "build and traverse n-ary maps" in {
+      traverseMaps()
     }
 
-    it("should build and iterate over n-ary maps") {
-      var n = 2
-      while (n <= 1024) withClue(s"sum of first $n integers") {
-        val ns = CC.range(1, n).iterator
-        var sum = 0
-        while (!ns.isEmpty) {
-          val entry = ns.head
-          withClue(entry.toString) (entry._1 should equal (entry._2))
-          sum += entry._2
-          ns.step()
-        }
-        sum should equal (n * (n + 1) / 2)
-        n += 1
-      }
+    it should "build and iterate over n-ary maps" in {
+      iterateMaps()
+    }
+  }
+
+  private def traverseMap(n: Int): Unit = withClue(s"sum of first $n integers:") {
+    val xs = Coll.range(1, n)
+    var sum = 0L
+    xs.traverse { entry =>
+      if (entry._1 != entry._2) entry._1 should equal (entry._2)
+      sum += entry._2
+    }
+    sum should equal (n.toLong * (n.toLong + 1L) / 2L)
+  }
+
+  private def traverseMaps(): Unit = {
+    var k = 4
+    while (k <= 20) {
+      val n = 1 << k
+      traverseMap(n - 1)
+      traverseMap(n)
+      traverseMap(n + 1)
+      k += 4
+    }
+  }
+
+  private def iterateMap(n: Int): Unit = withClue(s"sum of first $n integers:") {
+    val xs = Coll.range(1, n).iterator
+    var sum = 0L
+    while (!xs.isEmpty) {
+      val entry = xs.head
+      if (entry._1 != entry._2) entry._1 should equal (entry._2)
+      sum += entry._2
+      xs.step()
+    }
+    sum should equal (n.toLong * (n.toLong + 1L) / 2L)
+  }
+
+  private def iterateMaps(): Unit = {
+    var k = 4
+    while (k <= 20) {
+      val n = 1 << k
+      iterateMap(n - 1)
+      iterateMap(n)
+      iterateMap(n + 1)
+      k += 4
     }
   }
 }

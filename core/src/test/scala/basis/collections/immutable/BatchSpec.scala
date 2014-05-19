@@ -9,12 +9,16 @@ package immutable
 
 import org.scalatest._
 
-class BatchSpec extends FunSpec with SeqBehaviors {
+class BatchSpec extends FlatSpec with SeqBehaviors {
   override def suiteName = "Batch specification"
 
-  it should behave like GenericCollection(Batch)
-  it should behave like GenericContainer(Batch)
-  it should behave like GenericSeq(Batch)
+  override type Coll[X] = Batch[X]
+  override val Coll = Batch
 
-  it should behave like GenericCollectionBuilder(Batch)
+  it should behave like GenericCollection()
+  it should behave like GenericContainer()
+  it should behave like GenericSeq()
+  it should behave like SpecializedSeq()
+
+  it should behave like GenericCollectionBuilder()
 }

@@ -9,12 +9,7 @@ package basis.form
 import org.scalatest._
 import org.scalatest.matchers._
 
-class JsonVariantSpec
-  extends FunSpec
-  with VariantTranscoding
-  with JsonParserBehaviors
-  with JsonInterpolatorBehaviors {
-
+class JsonVariantSpec extends FlatSpec with VariantTranscoding with JsonParserBehaviors with JsonInterpolatorBehaviors {
   override val variant: JsonVariant = OmniVariant
   import variant._
 

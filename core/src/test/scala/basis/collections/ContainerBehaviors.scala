@@ -8,18 +8,20 @@ package basis.collections
 
 import org.scalatest._
 
-trait ContainerBehaviors extends CollectionBehaviors { this: FunSpec =>
+trait ContainerBehaviors extends CollectionBehaviors { this: FlatSpec =>
   import CollectionEnablers._
   import CollectionGenerators._
   import Matchers._
 
-  def GenericContainer[CC[X] <: Container[X]](CC: generic.CollectionFactory[CC]) = describe(s"Generic $CC containers") {
-    it("should have an empty container") {
-      CC.empty.iterator shouldBe empty
+  override type Coll[X] <: Container[X]
+
+  def GenericContainer(): Unit = {
+    it should "have an empty container" in {
+      Coll.empty.iterator shouldBe empty
     }
 
-    it("should build and iterate over unary containers") {
-      val xs = (CC.Builder[String] += "unit").state.iterator
+    it should "build and iterate over unary containers" in {
+      val xs = (Coll.Builder[String] += "unit").state.iterator
       var q = false
       while (!xs.isEmpty) {
         xs.head match {
@@ -29,21 +31,32 @@ trait ContainerBehaviors extends CollectionBehaviors { this: FunSpec =>
         }
         xs.step()
       }
-      withClue("traversed element") (q should be (true))
+      withClue("traversed element:") (q should be (true))
     }
 
-    it("should build and iterate over n-ary containers") {
-      var n = 2
-      while (n <= 1024) withClue(s"sum of first $n integers") {
-        val ns = CC.range(1, n).iterator
-        var sum = 0
-        while (!ns.isEmpty) {
-          sum += ns.head
-          ns.step()
-        }
-        sum should equal (n * (n + 1) / 2)
-        n += 1
-      }
+    it should "build and iterate over n-ary containers" in {
+      iterateContainers()
+    }
+  }
+
+  private def iterateContainer(n: Int): Unit = withClue(s"sum of first $n integers:") {
+    val xs = Coll.range(1, n).iterator
+    var sum = 0L
+    while (!xs.isEmpty) {
+      sum += xs.head
+      xs.step()
+    }
+    sum should equal (n.toLong * (n.toLong + 1L) / 2L)
+  }
+
+  private def iterateContainers(): Unit = {
+    var k = 4
+    while (k <= 20) {
+      val n = 1 << k
+      iterateContainer(n - 1)
+      iterateContainer(n)
+      iterateContainer(n + 1)
+      k += 4
     }
   }
 }

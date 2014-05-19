@@ -9,13 +9,16 @@ package immutable
 
 import org.scalatest._
 
-class HashSetSpec extends FunSpec with SubSetBehaviors {
+class HashSetSpec extends FlatSpec with SubSetBehaviors {
   override def suiteName = "HashSet specification"
 
-  it should behave like GenericCollection(HashSet)
-  it should behave like GenericContainer(HashSet)
-  it should behave like GenericSet(HashSet)
-  it should behave like GenericSubSet(HashSet)
+  override type Coll[X] = HashSet[X]
+  override val Coll = HashSet
 
-  it should behave like GenericCollectionBuilder(HashSet)
+  it should behave like GenericCollection()
+  it should behave like GenericContainer()
+  it should behave like GenericSet()
+  it should behave like GenericSubSet()
+
+  it should behave like GenericCollectionBuilder()
 }

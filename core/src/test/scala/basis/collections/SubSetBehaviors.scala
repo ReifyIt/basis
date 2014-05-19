@@ -8,33 +8,35 @@ package basis.collections
 
 import org.scalatest._
 
-trait SubSetBehaviors extends SetBehaviors { this: FunSpec =>
+trait SubSetBehaviors extends SetBehaviors { this: FlatSpec =>
   import CollectionGenerators._
-  import Matchers._
 
-  def GenericSubSet[CC[X] <: SubSet[X]](CC: generic.SetFactory[CC]) = describe(s"Generic $CC subsets") {
-    def decompose(n: Int): Unit = {
-      var ns = CC.range(1, n): SubSet[Int]
-      var i = n
-      while (i > 0) withClue(s"sum of first $i of $n elements") {
-        var sum = 0L
-        ns.traverse(sum += _)
-        sum should equal (i.toLong * (i.toLong + 1L) / 2L)
-        ns -= i
-        i -= 1
-      }
-    }
+  override type Coll[X] <: SubSet[X]
 
-    it("should remove elements from small sets") {
+  def GenericSubSet(): Unit = {
+    it should "remove elements from small sets" in {
       var n = 1
       while (n <= 1024) {
-        decompose(n)
+        decomposeSubSet(n)
         n += 1
       }
     }
 
-    it("should remove entries from large sets") {
-      decompose(1 << 15)
+    it should "remove entries from large sets" in {
+      decomposeSubSet(1 << 15)
+    }
+  }
+
+  private def decomposeSubSet(n: Int): Unit = {
+    var xs = Coll.range(1, n): SubSet[Int]
+    var i = n
+    while (i > 0) {
+      var sum = 0L
+      xs.traverse(sum += _)
+      val expected = i.toLong * (i.toLong + 1L) / 2L
+      if (sum != expected) fail(s"sum of remaining $i of $n entries was $sum; expected $expected:")
+      xs -= i
+      i -= 1
     }
   }
 }

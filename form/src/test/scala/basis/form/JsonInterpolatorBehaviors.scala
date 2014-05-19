@@ -9,35 +9,35 @@ package basis.form
 import basis.util._
 import org.scalatest._
 
-trait JsonInterpolatorBehaviors { this: FunSpec =>
+trait JsonInterpolatorBehaviors { this: FlatSpec =>
   import Matchers._
 
   val variant: JsonVariant
   import variant._
 
-  def InterpolatesJsonComments() = describe("interpolating json\"\" comments") {
-    it("should parse preceding line comments") {
+  def InterpolatesJsonComments(): Unit = {
+    it should "interpolate preceding line comments" in {
       json"""// comment
       true"""
       ()
     }
 
-    it("should parse succeeding line comments") {
+    it should "interpolate succeeding line comments" in {
       json"true // comment"
       ()
     }
 
-    it("should parse preceding block comments") {
+    it should "interpolate preceding block comments" in {
       json"/* comment */ true"
       ()
     }
 
-    it("should parse succeeding block comments") {
+    it should "interpolate succeeding block comments" in {
       json"true /* comment */"
       ()
     }
 
-    it("should parse line comments in objects") {
+    it should "interpolate line comments in objects" in {
       json""" { // here
         "true"  // here
         :       // here
@@ -50,7 +50,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       ()
     }
 
-    it("should parse line comments in arrays") {
+    it should "interpolate line comments in arrays" in {
       json""" [ // here
       true      // here
       ,         // here
@@ -59,7 +59,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       ()
     }
 
-    it("should parse block comments in objects") {
+    it should "interpolate block comments in objects" in {
       json""" {
         /* here */ "true"  /* here */ : /* here */ true  /* and here */ ,
         /* here */ "false" /* here */ : /* here */ false /* and here */
@@ -67,26 +67,26 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       ()
     }
 
-    it("should parse block comments in arrays") {
+    it should "interpolate block comments in arrays" in {
       json"[ /* here */ true /* here */ , /* here */ false /* and here */ ]"
       ()
     }
   }
 
-  def InterpolatesJsonLiterals() = describe("interpolating json\"\" literals") {
-    it("should parse empty objects") {
+  def InterpolatesJsonLiterals(): Unit = {
+    it should "interpolate empty objects" in {
       json"{}" should equal (ObjectForm.empty)
     }
 
-    it("should parse empty arrays") {
+    it should "interpolate empty arrays" in {
       json"[]" should equal (SeqForm.empty)
     }
 
-    it("should parse empty strings") {
+    it should "interpolate empty strings" in {
       json""" "" """ should equal (StringForm.empty)
     }
 
-    it("should parse positive integers") {
+    it should "interpolate positive integers" in {
       json"0"  should equal (NumberForm(0))
       json"1"  should equal (NumberForm(1))
       json"5"  should equal (NumberForm(5))
@@ -95,7 +95,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       json"15" should equal (NumberForm(15))
     }
 
-    it("should parse negative integers") {
+    it should "interpolate negative integers" in {
       json"-0"  should equal (NumberForm(-0))
       json"-1"  should equal (NumberForm(-1))
       json"-5"  should equal (NumberForm(-5))
@@ -104,7 +104,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       json"-15" should equal (NumberForm(-15))
     }
 
-    it("should parse positive decimals") {
+    it should "interpolate positive decimals" in {
       json"0.0"   should equal (NumberForm(0.0))
       json"0.5"   should equal (NumberForm(0.5))
       json"1.0"   should equal (NumberForm(1.0))
@@ -113,7 +113,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       json"10.5"  should equal (NumberForm(10.5))
     }
 
-    it("should parse negative decimals") {
+    it should "interpolate negative decimals" in {
       json"-0.0"   should equal (NumberForm(-0.0))
       json"-0.5"   should equal (NumberForm(-0.5))
       json"-1.0"   should equal (NumberForm(-1.0))
@@ -122,7 +122,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       json"-10.5"  should equal (NumberForm(-10.5))
     }
 
-    it("should parse positive decimals with exponents") {
+    it should "interpolate positive decimals with exponents" in {
       json"4e2"    should equal (NumberForm(400.0))
       json"4E2"    should equal (NumberForm(400.0))
       json"4e+2"   should equal (NumberForm(400.0))
@@ -137,7 +137,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       json"4.0E-2" should equal (NumberForm(0.04))
     }
 
-    it("should parse negative decimals with exponents") {
+    it should "interpolate negative decimals with exponents" in {
       json"-4e2"    should equal (NumberForm(-400.0))
       json"-4E2"    should equal (NumberForm(-400.0))
       json"-4e+2"   should equal (NumberForm(-400.0))
@@ -152,23 +152,23 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       json"-4.0E-2" should equal (NumberForm(-0.04))
     }
 
-    it("should parse \"true\"") {
+    it should "interpolate \"true\"" in {
       json"true" should equal (TrueForm)
     }
 
-    it("should parse \"false\"") {
+    it should "interpolate \"false\"" in {
       json"false" should equal (FalseForm)
     }
 
-    it("should parse \"null\"") {
+    it should "interpolate \"null\"" in {
       json"null" should equal (NullForm)
     }
 
-    it("should parse \"undefined\"") {
+    it should "interpolate \"undefined\"" in {
       json"undefined" should equal (UndefinedForm)
     }
 
-    it("should orderly parse non-empty objects") {
+    it should "interpolate non-empty objects in order" in {
       json""" {
         "object"    : {},
         "array"     : [],
@@ -194,7 +194,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       )
     }
 
-    it("should orderly parse non-empty arrays") {
+    it should "interpolate non-empty arrays" in {
       json""" [{}, [], "", 0, 0.0, true, false, null, undefined] """ should equal (
         SeqForm(
           ObjectForm.empty,
@@ -210,23 +210,23 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       )
     }
 
-    it("should parse objects nested in arrays") {
+    it should "interpolate objects nested in arrays" in {
       json""" [{ "true" : true }, { "false" : false }] """ should equal {
         SeqForm(ObjectForm("true" -> TrueForm), ObjectForm("false" -> FalseForm))
       }
     }
 
-    it("should parse arrays nested in objects") {
+    it should "interpolate arrays nested in objects" in {
       json""" { "a" : [true], "b" : [false] } """ should equal {
         ObjectForm("a" -> SeqForm(TrueForm), "b" -> SeqForm(FalseForm))
       }
     }
 
-    it("should parse non-empty strings") {
+    it should "interpolate non-empty strings" in {
       json""" "test" """ should equal (StringForm("test"))
     }
 
-    it("should unescape parsed strings") {
+    it should "unescape interpolated strings" in {
       json""" " \" " """ should equal (StringForm(""" " """))
       json""" " \' " """ should equal (StringForm(""" ' """))
       json""" " \\ " """ should equal (StringForm(""" \ """))
@@ -239,73 +239,73 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
     }
   }
 
-  def InterpolatesJsonArguments() = describe("interpolating json\"\" arguments") {
-    it("should interpolate ObjectForm") {
+  def InterpolatesJsonArguments(): Unit = {
+    it should "interpolate ObjectForm variables" in {
       val x = ObjectForm.empty
       json"$x" should equal (x)
     }
 
-    it("should interpolate SeqForm") {
+    it should "interpolate SeqForm variables" in {
       val x = SeqForm.empty
       json"$x" should equal (x)
     }
 
-    it("should interpolate StringForm") {
+    it should "interpolate StringForm variables" in {
       val x = StringForm.empty
       json"$x" should equal (x)
     }
 
-    it("should interpolate NumberForm") {
+    it should "interpolate NumberForm variables" in {
       val x = NumberForm(0.0)
       json"$x" should equal (x)
     }
 
-    it("should interpolate BooleanForm") {
+    it should "interpolate BooleanForm variables" in {
       val x = TrueForm
       json"$x" should equal (x)
     }
 
-    it("should interpolate NullForm") {
+    it should "interpolate NullForm variables" in {
       val x = NullForm
       json"$x" should equal (x)
     }
 
-    it("should interpolate UndefinedForm") {
+    it should "interpolate UndefinedForm variables" in {
       val x = UndefinedForm
       json"$x" should equal (x)
     }
 
-    it("should interpolate String like StringForm") {
+    it should "interpolate String variables as StringForm values" in {
       val x = ""
       (json"$x": AnyForm) should equal (StringForm.empty)
     }
 
-    it("should interpolate Int like NumberForm") {
+    it should "interpolate Int variables as NumberForm values" in {
       val x = 0
       (json"$x": AnyForm) should equal (NumberForm(x))
     }
 
-    it("should interpolate Long like NumberForm") {
+    it should "interpolate Long variables as NumberForm values" in {
       val x = 0L
       (json"$x": AnyForm) should equal (NumberForm(x))
     }
 
-    it("should interpolate Float like NumberForm") {
+    it should "interpolate Float variables as NumberForm values" in {
       val x = 0.0F
       (json"$x": AnyForm) should equal (NumberForm(x))
     }
 
-    it("should interpolate Double like NumberForm") {
+    it should "interpolate Double variables as NumberForm values" in {
       val x = 0.0
       (json"$x": AnyForm) should equal (NumberForm(x))
     }
 
-    it("should interpolate Boolean like BooleanForm") {
+    it should "interpolate Boolean variables as BooleanForm values" in {
       val x = true
       (json"$x": AnyForm) should equal (TrueForm)
     }
 
-    it("should interpolate values into objects") {
+    it should "interpolate values into objects" in {
       json""" {
         "object"    : ${ObjectForm.empty},
         "array"     : ${SeqForm.empty},
@@ -331,7 +331,7 @@ trait JsonInterpolatorBehaviors { this: FunSpec =>
       )
     }
 
-    it("should interpolate values into arrays") {
+    it should "interpolate values into arrays" in {
       json""" [
         ${ObjectForm.empty},
         ${SeqForm.empty},
