@@ -9,8 +9,8 @@ package basis.data
 import basis._
 import basis.util._
 
-final class ByteBufferLE(val __ : Array[Byte]) extends AnyVal with ByteBuffer with ByteOrder[LittleEndian] {
-  override def endian: LittleEndian = LittleEndian
+final class ByteArrayBE(val __ : Array[Byte]) extends AnyVal with ByteArray with ByteOrder[BigEndian] {
+  override def endian: BigEndian = BigEndian
 
   override def size: Long = __.length.toLong
 
@@ -26,54 +26,54 @@ final class ByteBufferLE(val __ : Array[Byte]) extends AnyVal with ByteBuffer wi
 
   override def loadShort(address: Long): Short = {
     val offset = address.toInt
-    ((__(offset    ) & 0xFF)     ) |
-    ((__(offset + 1)       ) << 8)
+    ((__(offset    )       ) << 8) |
+    ((__(offset + 1) & 0xFF)     )
   }.toShort
 
   override def storeShort(address: Long, value: Short): Unit = {
     val offset = address.toInt
-    __(offset    ) = (value     ).toByte
-    __(offset + 1) = (value >> 8).toByte
+    __(offset    ) = (value >> 8).toByte
+    __(offset + 1) = (value     ).toByte
   }
 
   override def loadInt(address: Long): Int = {
     val offset = address.toInt
-    ((__(offset    ) & 0xFF)      ) |
-    ((__(offset + 1) & 0xFF) <<  8) |
-    ((__(offset + 2) & 0xFF) << 16) |
-    ((__(offset + 3)       ) << 24)
+    ((__(offset    )       ) << 24) |
+    ((__(offset + 1) & 0xFF) << 16) |
+    ((__(offset + 2) & 0xFF) <<  8) |
+    ((__(offset + 3) & 0xFF)      )
   }
 
   override def storeInt(address: Long, value: Int): Unit = {
     val offset = address.toInt
-    __(offset    ) = (value      ).toByte
-    __(offset + 1) = (value >>  8).toByte
-    __(offset + 2) = (value >> 16).toByte
-    __(offset + 3) = (value >> 24).toByte
+    __(offset    ) = (value >> 24).toByte
+    __(offset + 1) = (value >> 16).toByte
+    __(offset + 2) = (value >>  8).toByte
+    __(offset + 3) = (value      ).toByte
   }
 
   override def loadLong(address: Long): Long = {
     val offset = address.toInt
-    ((__(offset    ) & 0xFF).toLong      ) |
-    ((__(offset + 1) & 0xFF).toLong <<  8) |
-    ((__(offset + 2) & 0xFF).toLong << 16) |
-    ((__(offset + 3) & 0xFF).toLong << 24) |
-    ((__(offset + 4) & 0xFF).toLong << 32) |
-    ((__(offset + 5) & 0xFF).toLong << 40) |
-    ((__(offset + 6) & 0xFF).toLong << 48) |
-    ((__(offset + 7)       ).toLong << 56)
+    ((__(offset    )       ).toLong << 56) |
+    ((__(offset + 1) & 0xFF).toLong << 48) |
+    ((__(offset + 2) & 0xFF).toLong << 40) |
+    ((__(offset + 3) & 0xFF).toLong << 32) |
+    ((__(offset + 4) & 0xFF).toLong << 24) |
+    ((__(offset + 5) & 0xFF).toLong << 16) |
+    ((__(offset + 6) & 0xFF).toLong <<  8) |
+    ((__(offset + 7) & 0xFF).toLong      )
   }
 
   override def storeLong(address: Long, value: Long): Unit = {
     val offset = address.toInt
-    __(offset    ) = (value      ).toByte
-    __(offset + 1) = (value >>  8).toByte
-    __(offset + 2) = (value >> 16).toByte
-    __(offset + 3) = (value >> 24).toByte
-    __(offset + 4) = (value >> 32).toByte
-    __(offset + 5) = (value >> 40).toByte
-    __(offset + 6) = (value >> 48).toByte
-    __(offset + 7) = (value >> 56).toByte
+    __(offset    ) = (value >> 56).toByte
+    __(offset + 1) = (value >> 48).toByte
+    __(offset + 2) = (value >> 40).toByte
+    __(offset + 3) = (value >> 32).toByte
+    __(offset + 4) = (value >> 24).toByte
+    __(offset + 5) = (value >> 16).toByte
+    __(offset + 6) = (value >>  8).toByte
+    __(offset + 7) = (value      ).toByte
   }
 
   override def loadFloat(address: Long): Float   = loadInt(address).toFloatBits
@@ -94,43 +94,43 @@ final class ByteBufferLE(val __ : Array[Byte]) extends AnyVal with ByteBuffer wi
   override def storeAlignedFloat(address: Long, value: Float): Unit   = storeFloat(address & -4L, value)
   override def storeAlignedDouble(address: Long, value: Double): Unit = storeDouble(address & -8L, value)
 
-  override def ++ (that: Loader): ByteBufferLE = that match {
-    case that: ByteBuffer =>
+  override def ++ (that: Loader): ByteArrayBE = that match {
+    case that: ByteArray =>
       val data = that.toArray
       val buffer = new Array[Byte](__.length + data.length)
       java.lang.System.arraycopy(__, 0, buffer, 0, __.length)
       java.lang.System.arraycopy(data, 0, buffer, __.length, data.length)
-      new ByteBufferLE(buffer)
+      new ByteArrayBE(buffer)
     case _ =>
-      val framer = ByteBufferLE.Framer.expect(size + that.size)
+      val framer = ByteArrayBE.Framer.expect(size + that.size)
       framer.writeData(this)
       framer.writeData(that)
       framer.state
   }
 
-  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ByteBufferLEReader(__, address.toInt)
+  override def reader(address: Long): Reader with ByteOrder[BigEndian] = new ByteArrayBEReader(__, address.toInt)
 
   override def toArray: Array[Byte] = __
 
-  protected override def stringPrefix: String = "ByteBufferLE"
+  protected override def stringPrefix: String = "ByteArrayBE"
 }
 
-object ByteBufferLE extends ByteOrder[LittleEndian] with Allocator[ByteBufferLE] {
-  override def endian: LittleEndian = LittleEndian
+object ByteArrayBE extends ByteOrder[BigEndian] with Allocator[ByteArrayBE] {
+  override def endian: BigEndian = BigEndian
 
-  override val empty: ByteBufferLE = new ByteBufferLE(new Array[Byte](0))
+  override val empty: ByteArrayBE = new ByteArrayBE(new Array[Byte](0))
 
-  override def apply(data: Array[Byte]): ByteBufferLE = new ByteBufferLE(data)
+  override def apply(data: Array[Byte]): ByteArrayBE = new ByteArrayBE(data)
 
-  override def apply(size: Long): ByteBufferLE = new ByteBufferLE(new Array[Byte](size.toInt))
+  override def apply(size: Long): ByteArrayBE = new ByteArrayBE(new Array[Byte](size.toInt))
 
-  implicit override def Framer: Framer with ByteOrder[LittleEndian] with State[ByteBufferLE] = new ByteBufferLEFramer
+  implicit override def Framer: Framer with ByteOrder[BigEndian] with State[ByteArrayBE] = new ByteArrayBEFramer
 
-  override def toString: String = "ByteBufferLE"
+  override def toString: String = "ByteArrayBE"
 }
 
-private[data] final class ByteBufferLEReader(buffer: Array[Byte], private[this] var offset: Int) extends ByteOrder[LittleEndian] with Reader {
-  override def endian: LittleEndian = LittleEndian
+private[data] final class ByteArrayBEReader(buffer: Array[Byte], private[this] var offset: Int) extends ByteOrder[BigEndian] with Reader {
+  override def endian: BigEndian = BigEndian
 
   override def readByte(): Byte = {
     val value = buffer(offset)
@@ -140,32 +140,32 @@ private[data] final class ByteBufferLEReader(buffer: Array[Byte], private[this] 
 
   override def readShort(): Short = {
     val value =
-      ((buffer(offset    ) & 0xFF)     ) |
-      ((buffer(offset + 1)       ) << 8)
+      ((buffer(offset    )       ) << 8) |
+      ((buffer(offset + 1) & 0xFF)     )
     offset += 2
     value.toShort
   }
 
   override def readInt(): Int = {
     val value =
-      ((buffer(offset    ) & 0xFF)      ) |
-      ((buffer(offset + 1) & 0xFF) <<  8) |
-      ((buffer(offset + 2) & 0xFF) << 16) |
-      ((buffer(offset + 3)       ) << 24)
+      ((buffer(offset    )       ) << 24) |
+      ((buffer(offset + 1) & 0xFF) << 16) |
+      ((buffer(offset + 2) & 0xFF) <<  8) |
+      ((buffer(offset + 3) & 0xFF)      )
     offset += 4
     value
   }
 
   override def readLong(): Long = {
     val value =
-      ((buffer(offset    ) & 0xFF).toLong      ) |
-      ((buffer(offset + 1) & 0xFF).toLong <<  8) |
-      ((buffer(offset + 2) & 0xFF).toLong << 16) |
-      ((buffer(offset + 3) & 0xFF).toLong << 24) |
-      ((buffer(offset + 4) & 0xFF).toLong << 32) |
-      ((buffer(offset + 5) & 0xFF).toLong << 40) |
-      ((buffer(offset + 6) & 0xFF).toLong << 48) |
-      ((buffer(offset + 7)       ).toLong << 56)
+      ((buffer(offset    )       ).toLong << 56) |
+      ((buffer(offset + 1) & 0xFF).toLong << 48) |
+      ((buffer(offset + 2) & 0xFF).toLong << 40) |
+      ((buffer(offset + 3) & 0xFF).toLong << 32) |
+      ((buffer(offset + 4) & 0xFF).toLong << 24) |
+      ((buffer(offset + 5) & 0xFF).toLong << 16) |
+      ((buffer(offset + 6) & 0xFF).toLong <<  8) |
+      ((buffer(offset + 7) & 0xFF).toLong      )
     offset += 8
     value
   }
@@ -175,7 +175,7 @@ private[data] final class ByteBufferLEReader(buffer: Array[Byte], private[this] 
   override def readDouble(): Double = readLong().toDoubleBits
 }
 
-private[data] final class ByteBufferLEFramer extends State[ByteBufferLE] with ByteOrder[LittleEndian] with Framer {
+private[data] final class ByteArrayBEFramer extends State[ByteArrayBE] with ByteOrder[BigEndian] with Framer {
   private[this] var buffer: Array[Byte] = _
 
   private[this] var offset: Int = 0
@@ -197,7 +197,7 @@ private[data] final class ByteBufferLEFramer extends State[ByteBufferLE] with By
     }
   }
 
-  override def endian: LittleEndian = LittleEndian
+  override def endian: BigEndian = BigEndian
 
   override def writeByte(value: Byte): Unit = {
     prepare(offset + 1)
@@ -207,30 +207,30 @@ private[data] final class ByteBufferLEFramer extends State[ByteBufferLE] with By
 
   override def writeShort(value: Short): Unit = {
     prepare(offset + 2)
-    buffer(offset    ) = (value     ).toByte
-    buffer(offset + 1) = (value >> 8).toByte
+    buffer(offset    ) = (value >> 8).toByte
+    buffer(offset + 1) = (value     ).toByte
     offset += 2
   }
 
   override def writeInt(value: Int): Unit = {
     prepare(offset + 4)
-    buffer(offset    ) = (value      ).toByte
-    buffer(offset + 1) = (value >>  8).toByte
-    buffer(offset + 2) = (value >> 16).toByte
-    buffer(offset + 3) = (value >> 24).toByte
+    buffer(offset    ) = (value >> 24).toByte
+    buffer(offset + 1) = (value >> 16).toByte
+    buffer(offset + 2) = (value >>  8).toByte
+    buffer(offset + 3) = (value      ).toByte
     offset += 4
   }
 
   override def writeLong(value: Long): Unit = {
     prepare(offset + 8)
-    buffer(offset    ) = (value      ).toByte
-    buffer(offset + 1) = (value >>  8).toByte
-    buffer(offset + 2) = (value >> 16).toByte
-    buffer(offset + 3) = (value >> 24).toByte
-    buffer(offset + 4) = (value >> 32).toByte
-    buffer(offset + 5) = (value >> 40).toByte
-    buffer(offset + 6) = (value >> 48).toByte
-    buffer(offset + 7) = (value >> 56).toByte
+    buffer(offset    ) = (value >> 56).toByte
+    buffer(offset + 1) = (value >> 48).toByte
+    buffer(offset + 2) = (value >> 40).toByte
+    buffer(offset + 3) = (value >> 32).toByte
+    buffer(offset + 4) = (value >> 24).toByte
+    buffer(offset + 5) = (value >> 16).toByte
+    buffer(offset + 6) = (value >>  8).toByte
+    buffer(offset + 7) = (value      ).toByte
     offset += 8
   }
 
@@ -239,11 +239,11 @@ private[data] final class ByteBufferLEFramer extends State[ByteBufferLE] with By
   override def writeDouble(value: Double): Unit = writeLong(value.toRawLongBits)
 
   override def writeData(data: Loader): Unit = data match {
-    case data: ByteBuffer if offset == 0 =>
+    case data: ByteArray if offset == 0 =>
       buffer = data.toArray
       offset = buffer.length
       aliased = true
-    case data: ByteBuffer =>
+    case data: ByteArray =>
       val array = data.toArray
       prepare(offset + array.length)
       java.lang.System.arraycopy(array, 0, buffer, offset, array.length)
@@ -265,15 +265,15 @@ private[data] final class ByteBufferLEFramer extends State[ByteBufferLE] with By
     this
   }
 
-  override def state: ByteBufferLE = {
-    if (buffer == null) buffer = ByteBufferLE.empty.__
+  override def state: ByteArrayBE = {
+    if (buffer == null) buffer = ByteArrayBE.empty.__
     else if (buffer.length != offset) {
       val array = new Array[Byte](offset)
       java.lang.System.arraycopy(buffer, 0, array, 0, offset)
       buffer = array
     }
     aliased = true
-    new ByteBufferLE(buffer)
+    new ByteArrayBE(buffer)
   }
 
   override def clear(): Unit = {
@@ -282,5 +282,5 @@ private[data] final class ByteBufferLEFramer extends State[ByteBufferLE] with By
     aliased = true
   }
 
-  override def toString: String = "ByteBufferLE"+"."+"Framer"+"()"
+  override def toString: String = "ByteArrayBE"+"."+"Framer"+"()"
 }
