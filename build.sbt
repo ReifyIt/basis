@@ -24,7 +24,7 @@ lazy val projectSettings = Seq(
   homepage := Some(url("http://basis.reify.it")))
 
 lazy val compileSettings = Seq(
-  scalaVersion := "2.11.0",
+  scalaVersion := "2.11.1",
   scalacOptions ++= Seq("-optimise", "-language:_", "-deprecation", "-Yno-predef", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
