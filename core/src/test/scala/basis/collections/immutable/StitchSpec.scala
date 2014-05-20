@@ -9,11 +9,11 @@ package immutable
 
 import org.scalatest._
 
-class BatchSpec extends FlatSpec with SeqBehaviors {
-  override def suiteName = "Batch specification"
+class StitchSpec extends FlatSpec with SeqBehaviors {
+  override def suiteName = "Stitch specification"
 
-  override type Coll[X] = Batch[X]
-  override val Coll = Batch
+  override type Coll[X] = Stitch[X]
+  override val Coll = Stitch
 
   it should behave like GenericCollection()
   it should behave like GenericContainer()

@@ -19,7 +19,7 @@ trait Deque[+A] extends Any with Equals with Family[Deque[_]] with BilinearSeq[A
 }
 
 object Deque extends generic.SeqFactory[Deque] {
-  override def empty[A]: Deque[A] = immutable.Batch.empty[A]
+  override def empty[A]: Deque[A] = immutable.Stitch.empty[A]
 
   override def from[A](elems: Traverser[A]): Deque[A] = {
     if (elems.isInstanceOf[Deque[_]]) elems.asInstanceOf[Deque[A]]
@@ -27,7 +27,7 @@ object Deque extends generic.SeqFactory[Deque] {
   }
 
   implicit override def Builder[A]: Builder[A] with State[Deque[A]] =
-    immutable.Batch.Builder[A]
+    immutable.Stitch.Builder[A]
 
   override def toString: String = "Deque"
 }

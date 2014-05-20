@@ -88,7 +88,7 @@ class ListBuffer[A] private (
     if (size == 0) appendAll(elems)
     else {
       val f = new Prepend
-      elems traverse f
+      elems.traverse(f)
       f.splice()
     }
   }
@@ -127,7 +127,7 @@ class ListBuffer[A] private (
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index.toString)
     if (index == size) appendAll(elems)
     else if (index == 0) prependAll(elems)
-    else elems traverse new Insert(index)
+    else elems.traverse(new Insert(index))
   }
 
   private final class Insert(index: Int) extends scala.runtime.AbstractFunction1[A, Unit] {

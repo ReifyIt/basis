@@ -59,7 +59,7 @@ private[sequential] object NonStrictTraverserOps {
   }
 
   final class FlatMapTraverse[-A, +B](f: A => Traverser[B], g: B => Unit) extends AbstractFunction1[A, Unit] {
-    override def apply(x: A): Unit = f(x) traverse g
+    override def apply(x: A): Unit = f(x).traverse(g)
   }
 
   class Filter[+A](

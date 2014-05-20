@@ -17,13 +17,13 @@ trait MapFactory[+CC[_, _]] {
 
   def from[A, T](entries: Traverser[(A, T)]): CC[A, T] = {
     val builder = Builder[A, T]
-    entries traverse new Buffer.Append(builder)
+    entries.traverse(new Buffer.Append(builder))
     builder.state
   }
 
   def from[A, T](entries: TraversableOnce[(A, T)]): CC[A, T] = {
     val builder = Builder[A, T]
-    entries foreach new Buffer.Append(builder)
+    entries.foreach(new Buffer.Append(builder))
     builder.state
   }
 
