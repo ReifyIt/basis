@@ -17,7 +17,7 @@ lazy val `basis-util` = project in file("util") settings (moduleSettings: _*)
 lazy val moduleSettings = projectSettings ++ compileSettings ++ docSettings ++ publishSettings
 
 lazy val projectSettings = Seq(
-  version := "0.1.1-SNAPSHOT",
+  version := "0.2.0-SNAPSHOT",
   organization := "it.reify",
   description := "A foundation library for Scala focussed on efficiency and clean design",
   licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
