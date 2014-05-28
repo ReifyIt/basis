@@ -55,7 +55,7 @@ trait Seq[+A] extends Any with Equals with Family[Seq[_]] with Container[A] {
 }
 
 object Seq extends generic.SeqFactory[Seq] {
-  override def empty[A]: Seq[A] = immutable.List.empty[A]
+  override def empty[A]: Seq[A] = immutable.FingerTrieSeq.empty[A]
 
   override def from[A](elems: Traverser[A]): Seq[A] = {
     if (elems.isInstanceOf[Seq[_]]) elems.asInstanceOf[Seq[A]]
@@ -63,7 +63,7 @@ object Seq extends generic.SeqFactory[Seq] {
   }
 
   implicit override def Builder[A]: Builder[A] with State[Seq[A]] =
-    immutable.List.Builder[A]
+    immutable.FingerTrieSeq.Builder[A]
 
   override def toString: String = "Seq"
 }

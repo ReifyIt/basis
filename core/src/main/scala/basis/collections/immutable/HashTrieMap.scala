@@ -13,13 +13,13 @@ import basis.util._
 import scala.annotation._
 import scala.annotation.unchecked._
 
-final class HashMap[+A, +T] private[collections] (
+final class HashTrieMap[+A, +T] private[collections] (
     private[collections] val treeMap: Int,
     private[collections] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Equals with Immutable with Family[HashMap[_, _]] with Submap[A, T] { self =>
+  extends Equals with Immutable with Family[HashTrieMap[_, _]] with Submap[A, T] { self =>
 
-  import HashMap.{ VOID, LEAF, TREE, KNOT }
+  import HashTrieMap.{ VOID, LEAF, TREE, KNOT }
 
   override def isEmpty: Boolean = slotMap == 0
 
@@ -47,9 +47,9 @@ final class HashMap[+A, +T] private[collections] (
 
   override def get(key: A @uncheckedVariance): Maybe[T] = get(key, key.##, 0)
 
-  override def + [B >: A, U >: T](key: B, value: U): HashMap[B, U] = update(key, key.##, value, 0)
+  override def + [B >: A, U >: T](key: B, value: U): HashTrieMap[B, U] = update(key, key.##, value, 0)
 
-  override def - (key: A @uncheckedVariance): HashMap[A, T] = remove(key, key.##, 0)
+  override def - (key: A @uncheckedVariance): HashTrieMap[A, T] = remove(key, key.##, 0)
 
   def keys: Set[A] = new Keys
 
@@ -84,13 +84,13 @@ final class HashMap[+A, +T] private[collections] (
     this
   }
 
-  private[collections] def treeAt(index: Int): HashMap[A, T] =
-    slots(index).asInstanceOf[HashMap[A, T]]
+  private[collections] def treeAt(index: Int): HashTrieMap[A, T] =
+    slots(index).asInstanceOf[HashTrieMap[A, T]]
 
-  private def getTree(branch: Int): HashMap[A, T] =
-    slots(select(branch)).asInstanceOf[HashMap[A, T]]
+  private def getTree(branch: Int): HashTrieMap[A, T] =
+    slots(select(branch)).asInstanceOf[HashTrieMap[A, T]]
 
-  private def setTree[B >: A, U >: T](branch: Int, tree: HashMap[B, U]): this.type = {
+  private def setTree[B >: A, U >: T](branch: Int, tree: HashTrieMap[B, U]): this.type = {
     slots(select(branch)) = tree
     this
   }
@@ -112,13 +112,13 @@ final class HashMap[+A, +T] private[collections] (
 
   private def unaryValue: T = slots(1).asInstanceOf[T]
 
-  private def remap(treeMap: Int, leafMap: Int): HashMap[A, T] = {
+  private def remap(treeMap: Int, leafMap: Int): HashTrieMap[A, T] = {
     var oldLeafMap = this.leafMap
     var newLeafMap = leafMap
     var oldSlotMap = this.treeMap | this.leafMap
     var newSlotMap = treeMap | leafMap
     if (oldLeafMap == newLeafMap && oldSlotMap == newSlotMap)
-      new HashMap(treeMap, leafMap, this.slots.clone)
+      new HashTrieMap(treeMap, leafMap, this.slots.clone)
     else {
       var i = 0
       var j = 0
@@ -139,7 +139,7 @@ final class HashMap[+A, +T] private[collections] (
         oldLeafMap >>>= 1
         newLeafMap >>>= 1
       }
-      new HashMap(treeMap, leafMap, slots)
+      new HashTrieMap(treeMap, leafMap, slots)
     }
   }
 
@@ -175,7 +175,7 @@ final class HashMap[+A, +T] private[collections] (
     }
   }
 
-  private def update[B >: A, U >: T](key: B, keyHash: Int, value: U, shift: Int): HashMap[B, U] = {
+  private def update[B >: A, U >: T](key: B, keyHash: Int, value: U, shift: Int): HashTrieMap[B, U] = {
     val branch = choose(keyHash, shift)
     (follow(branch): @switch) match {
       case VOID => remap(treeMap, leafMap | branch).setLeaf(branch, key, value)
@@ -205,7 +205,7 @@ final class HashMap[+A, +T] private[collections] (
     }
   }
 
-  private def remove(key: A @uncheckedVariance, keyHash: Int, shift: Int): HashMap[A, T] = {
+  private def remove(key: A @uncheckedVariance, keyHash: Int, shift: Int): HashTrieMap[A, T] = {
     val branch = choose(keyHash, shift)
     (follow(branch): @switch) match {
       case VOID => this
@@ -237,7 +237,7 @@ final class HashMap[+A, +T] private[collections] (
       key0: B, hash0: Int, value0: U,
       key1: B, hash1: Int, value1: U,
       shift: Int)
-    : HashMap[B, U] = {
+    : HashTrieMap[B, U] = {
     // assume(hash0 != hash1)
     val branch0 = choose(hash0, shift)
     val branch1 = choose(hash1, shift)
@@ -245,7 +245,7 @@ final class HashMap[+A, +T] private[collections] (
     if (branch0 == branch1) {
       val slots = new Array[AnyRef](1)
       slots(0) = merge(key0, hash0, value0, key1, hash1, value1, shift + 5)
-      new HashMap(slotMap, 0, slots)
+      new HashTrieMap(slotMap, 0, slots)
     }
     else {
       val slots = new Array[AnyRef](4)
@@ -261,7 +261,7 @@ final class HashMap[+A, +T] private[collections] (
         slots(2) = value0.asInstanceOf[AnyRef]
         slots(3) = value1.asInstanceOf[AnyRef]
       }
-      new HashMap(0, slotMap, slots)
+      new HashTrieMap(0, slotMap, slots)
     }
   }
 
@@ -332,9 +332,9 @@ final class HashMap[+A, +T] private[collections] (
     }
   }
 
-  override def iterator: Iterator[(A, T)] = new HashMapIterator(this)
+  override def iterator: Iterator[(A, T)] = new HashTrieMapEntryIterator(this)
 
-  protected override def stringPrefix: String = "HashMap"
+  protected override def stringPrefix: String = "HashTrieMap"
 
   private final class Keys extends Set[A] {
     override def isEmpty: Boolean = self.isEmpty
@@ -345,33 +345,33 @@ final class HashMap[+A, +T] private[collections] (
 
     override def traverse(f: A => Unit): Unit = self.traverseKeys(f)
 
-    override def iterator: Iterator[A] = new HashMapKeyIterator(self)
+    override def iterator: Iterator[A] = new HashTrieMapKeyIterator(self)
 
-    protected override def stringPrefix: String = "HashMap"+"."+"Keys"
+    protected override def stringPrefix: String = "HashTrieMap"+"."+"Keys"
   }
 
   private final class Values extends Container[T] {
     override def traverse(f: T => Unit): Unit = self.traverseValues(f)
 
-    override def iterator: Iterator[T] = new HashMapValueIterator(self)
+    override def iterator: Iterator[T] = new HashTrieMapValueIterator(self)
 
-    protected override def stringPrefix: String = "HashMap"+"."+"Values"
+    protected override def stringPrefix: String = "HashTrieMap"+"."+"Values"
   }
 }
 
-object HashMap extends MapFactory[HashMap] {
-  private[this] val Empty = new HashMap[Nothing, Nothing](0, 0, new Array[AnyRef](0))
-  override def empty[A, T]: HashMap[A, T] = Empty
+object HashTrieMap extends MapFactory[HashTrieMap] {
+  private[this] val Empty = new HashTrieMap[Nothing, Nothing](0, 0, new Array[AnyRef](0))
+  override def empty[A, T]: HashTrieMap[A, T] = Empty
 
-  override def from[A, T](elems: Traverser[(A, T)]): HashMap[A, T] = {
-    if (elems.isInstanceOf[HashMap[_, _]]) elems.asInstanceOf[HashMap[A, T]]
+  override def from[A, T](elems: Traverser[(A, T)]): HashTrieMap[A, T] = {
+    if (elems.isInstanceOf[HashTrieMap[_, _]]) elems.asInstanceOf[HashTrieMap[A, T]]
     else super.from(elems)
   }
 
-  implicit override def Builder[A, T]: Builder[(A, T)] with State[HashMap[A, T]] =
-    new HashMapBuilder[A, T]
+  implicit override def Builder[A, T]: Builder[(A, T)] with State[HashTrieMap[A, T]] =
+    new HashTrieMapBuilder[A, T]
 
-  override def toString: String = "HashMap"
+  override def toString: String = "HashTrieMap"
 
   private[collections] final val VOID = 0
   private[collections] final val LEAF = 1
@@ -383,9 +383,9 @@ private[collections] sealed abstract class HashTrieMapIterator[+A, +T] protected
     protected[this] final val nodes: Array[AnyRef], protected[this] final var depth: Int,
     protected[this] final val stack: Array[Int], protected[this] final var stackPointer: Int) {
 
-  import HashMap.{ VOID, LEAF, TREE, KNOT }
+  import HashTrieMap.{ VOID, LEAF, TREE, KNOT }
 
-  protected[this] final def init(tree: HashMap[A, T]): Unit = {
+  protected[this] final def init(tree: HashTrieMap[A, T]): Unit = {
     node = tree
     i = 0
     j = 0
@@ -410,7 +410,7 @@ private[collections] sealed abstract class HashTrieMapIterator[+A, +T] protected
 
   protected[this] final def follow: Int = leafMap & 1 | (treeMap & 1) << 1
 
-  protected[this] final def push(tree: HashMap[A, T]): Unit = {
+  protected[this] final def push(tree: HashTrieMap[A, T]): Unit = {
     depth += 1
     node = tree
 
@@ -445,7 +445,7 @@ private[collections] sealed abstract class HashTrieMapIterator[+A, +T] protected
   }
 
   @tailrec final def isEmpty: Boolean = node match {
-    case node: HashMap[A, T] =>
+    case node: HashTrieMap[A, T] =>
       if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
@@ -467,7 +467,7 @@ private[collections] sealed abstract class HashTrieMapIterator[+A, +T] protected
   }
 
   @tailrec final def entry: (A, T) = node match {
-    case node: HashMap[A, T] =>
+    case node: HashTrieMap[A, T] =>
       if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
@@ -489,7 +489,7 @@ private[collections] sealed abstract class HashTrieMapIterator[+A, +T] protected
   }
 
   @tailrec final def key: A = node match {
-    case node: HashMap[A, T] =>
+    case node: HashTrieMap[A, T] =>
       if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
@@ -511,7 +511,7 @@ private[collections] sealed abstract class HashTrieMapIterator[+A, +T] protected
   }
 
   @tailrec final def value: T = node match {
-    case node: HashMap[A, T] =>
+    case node: HashTrieMap[A, T] =>
       if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
@@ -533,7 +533,7 @@ private[collections] sealed abstract class HashTrieMapIterator[+A, +T] protected
   }
 
   @tailrec final def step(): Unit = node match {
-    case node: HashMap[A, T] =>
+    case node: HashTrieMap[A, T] =>
       val slotMap = treeMap | leafMap
       if (slotMap != 0) {
         if ((slotMap & 1) == 1) i += 1
@@ -549,12 +549,12 @@ private[collections] sealed abstract class HashTrieMapIterator[+A, +T] protected
   }
 }
 
-private[collections] final class HashMapIterator[+A, +T] private (
+private[collections] final class HashTrieMapEntryIterator[+A, +T] private (
     _nodes: Array[AnyRef], _depth: Int,
     _stack: Array[Int], _stackPointer: Int)
   extends HashTrieMapIterator[A, T](_nodes, _depth, _stack, _stackPointer) with Iterator[(A, T)] {
 
-  def this(tree: HashMap[A, T]) = {
+  def this(tree: HashTrieMap[A, T]) = {
     this(new Array[AnyRef](7), 0, new Array[Int](28), 0)
     init(tree)
   }
@@ -562,15 +562,15 @@ private[collections] final class HashMapIterator[+A, +T] private (
   override def head: (A, T) = entry
 
   override def dup: Iterator[(A, T)] =
-    new HashMapIterator(nodes.clone, depth, stack.clone, stackPointer)
+    new HashTrieMapEntryIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
-private[collections] final class HashMapKeyIterator[+A] private (
+private[collections] final class HashTrieMapKeyIterator[+A] private (
     _nodes: Array[AnyRef], _depth: Int,
     _stack: Array[Int], _stackPointer: Int)
   extends HashTrieMapIterator[A, Any](_nodes, _depth, _stack, _stackPointer) with Iterator[A] {
 
-  def this(tree: HashMap[A, Any]) = {
+  def this(tree: HashTrieMap[A, Any]) = {
     this(new Array[AnyRef](7), 0, new Array[Int](28), 0)
     init(tree)
   }
@@ -578,15 +578,15 @@ private[collections] final class HashMapKeyIterator[+A] private (
   override def head: A = key
 
   override def dup: Iterator[A] =
-    new HashMapKeyIterator(nodes.clone, depth, stack.clone, stackPointer)
+    new HashTrieMapKeyIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
-private[collections] final class HashMapValueIterator[+T] private (
+private[collections] final class HashTrieMapValueIterator[+T] private (
     _nodes: Array[AnyRef], _depth: Int,
     _stack: Array[Int], _stackPointer: Int)
   extends HashTrieMapIterator[Any, T](_nodes, _depth, _stack, _stackPointer) with Iterator[T] {
 
-  def this(tree: HashMap[Any, T]) = {
+  def this(tree: HashTrieMap[Any, T]) = {
     this(new Array[AnyRef](7), 0, new Array[Int](28), 0)
     init(tree)
   }
@@ -594,25 +594,25 @@ private[collections] final class HashMapValueIterator[+T] private (
   override def head: T = value
 
   override def dup: Iterator[T] =
-    new HashMapValueIterator(nodes.clone, depth, stack.clone, stackPointer)
+    new HashTrieMapValueIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
-private[collections] final class HashMapBuilder[A, T] extends Builder[(A, T)] with State[HashMap[A, T]] {
-  private[this] var these: HashMap[A, T] = HashMap.empty[A, T]
+private[collections] final class HashTrieMapBuilder[A, T] extends Builder[(A, T)] with State[HashTrieMap[A, T]] {
+  private[this] var these: HashTrieMap[A, T] = HashTrieMap.empty[A, T]
 
   override def append(entry: (A, T)): Unit = these += (entry._1, entry._2)
 
   override def appendAll(elems: Traverser[(A, T)]): Unit = {
-    if (these.isEmpty && elems.isInstanceOf[HashMap[_, _]])
-      these = elems.asInstanceOf[HashMap[A, T]]
+    if (these.isEmpty && elems.isInstanceOf[HashTrieMap[_, _]])
+      these = elems.asInstanceOf[HashTrieMap[A, T]]
     else super.appendAll(elems)
   }
 
   override def expect(count: Int): this.type = this
 
-  override def state: HashMap[A, T] = these
+  override def state: HashTrieMap[A, T] = these
 
-  override def clear(): Unit = these = HashMap.empty[A, T]
+  override def clear(): Unit = these = HashTrieMap.empty[A, T]
 
-  override def toString: String = "HashMap"+"."+"Builder"
+  override def toString: String = "HashTrieMap"+"."+"Builder"
 }

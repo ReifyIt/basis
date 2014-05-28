@@ -9,11 +9,11 @@ package immutable
 
 import org.scalatest._
 
-class TrieSeqSpec extends FlatSpec with SeqBehaviors {
-  override def suiteName = "TrieSeq specification"
+class IndexTrieSeqSpec extends FlatSpec with SeqBehaviors {
+  override def suiteName = "IndexTrieSeq specification"
 
-  override type Coll[X] = TrieSeq[X]
-  override val Coll = TrieSeq
+  override type Coll[X] = IndexTrieSeq[X]
+  override val Coll = IndexTrieSeq
 
   it should behave like GenericCollection()
   it should behave like GenericContainer()

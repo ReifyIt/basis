@@ -121,7 +121,7 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[_, _]] with Container[
 }
 
 object Map extends generic.MapFactory[Map] {
-  override def empty[A, T]: Map[A, T] = immutable.HashMap.empty[A, T]
+  override def empty[A, T]: Map[A, T] = immutable.HashTrieMap.empty[A, T]
 
   override def from[A, T](elems: Traverser[(A, T)]): Map[A, T] = {
     if (elems.isInstanceOf[Map[_, _]]) elems.asInstanceOf[Map[A, T]]
@@ -129,7 +129,7 @@ object Map extends generic.MapFactory[Map] {
   }
 
   implicit override def Builder[A, T]: Builder[(A, T)] with State[Map[A, T]] =
-    immutable.HashMap.Builder[A, T]
+    immutable.HashTrieMap.Builder[A, T]
 
   override def toString: String = "Map"
 }

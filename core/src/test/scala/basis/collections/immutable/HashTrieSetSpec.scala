@@ -9,11 +9,11 @@ package immutable
 
 import org.scalatest._
 
-class HashSetSpec extends FlatSpec with SubsetBehaviors {
-  override def suiteName = "HashSet specification"
+class HashTrieSetSpec extends FlatSpec with SubsetBehaviors {
+  override def suiteName = "HashTrieSet specification"
 
-  override type Coll[X] = HashSet[X]
-  override val Coll = HashSet
+  override type Coll[X] = HashTrieSet[X]
+  override val Coll = HashTrieSet
 
   it should behave like GenericCollection()
   it should behave like GenericContainer()

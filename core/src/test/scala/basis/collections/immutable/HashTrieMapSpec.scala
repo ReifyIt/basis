@@ -9,11 +9,11 @@ package immutable
 
 import org.scalatest._
 
-class HashMapSpec extends FlatSpec with SubmapBehaviors {
-  override def suiteName = "HashMap specification"
+class HashTrieMapSpec extends FlatSpec with SubmapBehaviors {
+  override def suiteName = "HashTrieMap specification"
 
-  override type Coll[X, Y] = HashMap[X, Y]
-  override val Coll = HashMap
+  override type Coll[X, Y] = HashTrieMap[X, Y]
+  override val Coll = HashTrieMap
 
   it should behave like GenericMap()
   it should behave like GenericSubmap()

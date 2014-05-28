@@ -20,7 +20,7 @@ trait Subset[+A] extends Any with Equals with Family[Subset[_]] with Set[A] {
 }
 
 object Subset extends generic.SetFactory[Subset] {
-  override def empty[A]: Subset[A] = immutable.HashSet.empty[A]
+  override def empty[A]: Subset[A] = immutable.HashTrieSet.empty[A]
 
   override def from[A](elems: Traverser[A]): Subset[A] = {
     if (elems.isInstanceOf[Subset[_]]) elems.asInstanceOf[Subset[A]]
@@ -28,7 +28,7 @@ object Subset extends generic.SetFactory[Subset] {
   }
 
   implicit override def Builder[A]: Builder[A] with State[Subset[A]] =
-    immutable.HashSet.Builder[A]
+    immutable.HashTrieSet.Builder[A]
 
   override def toString: String = "Subset"
 }

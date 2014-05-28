@@ -67,7 +67,7 @@ trait Set[+A] extends Any with Equals with Family[Set[_]] with Container[A] {
 }
 
 object Set extends generic.SetFactory[Set] {
-  override def empty[A]: Set[A] = immutable.HashSet.empty[A]
+  override def empty[A]: Set[A] = immutable.HashTrieSet.empty[A]
 
   override def from[A](elems: Traverser[A]): Set[A] = {
     if (elems.isInstanceOf[Set[_]]) elems.asInstanceOf[Set[A]]
@@ -75,7 +75,7 @@ object Set extends generic.SetFactory[Set] {
   }
 
   implicit override def Builder[A]: Builder[A] with State[Set[A]] =
-    immutable.HashSet.Builder[A]
+    immutable.HashTrieSet.Builder[A]
 
   override def toString: String = "Set"
 }

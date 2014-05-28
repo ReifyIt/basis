@@ -127,7 +127,7 @@ private[collections] final class ArraySetIterator[+A]
 }
 
 private[collections] final class ArraySetBuilder[A] extends Builder[A] with State[ArraySet[A]] {
-  private[this] var seen: HashSet[A] = HashSet.empty[A]
+  private[this] var seen: HashTrieSet[A] = HashTrieSet.empty[A]
 
   private[this] var slots: Array[AnyRef] = _
 
@@ -178,7 +178,7 @@ private[collections] final class ArraySetBuilder[A] extends Builder[A] with Stat
   }
 
   override def clear(): Unit = {
-    seen = HashSet.empty[A]
+    seen = HashTrieSet.empty[A]
     slots = null
     aliased = true
     size = 0

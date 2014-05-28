@@ -29,7 +29,7 @@ trait BilinearSeq[@specialized(Int, Long, Float, Double, Boolean) +A]
 }
 
 object BilinearSeq extends generic.SeqFactory[BilinearSeq] {
-  override def empty[A]: BilinearSeq[A] = immutable.Vector.empty[A]
+  override def empty[A]: BilinearSeq[A] = immutable.FingerTrieSeq.empty[A]
 
   override def from[A](elems: Traverser[A]): BilinearSeq[A] = {
     if (elems.isInstanceOf[BilinearSeq[_]]) elems.asInstanceOf[BilinearSeq[A]]
@@ -37,7 +37,7 @@ object BilinearSeq extends generic.SeqFactory[BilinearSeq] {
   }
 
   implicit override def Builder[A]: Builder[A] with State[BilinearSeq[A]] =
-    immutable.Vector.Builder[A]
+    immutable.FingerTrieSeq.Builder[A]
 
   override def toString: String = "BilinearSeq"
 }

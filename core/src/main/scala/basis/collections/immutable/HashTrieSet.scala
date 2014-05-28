@@ -13,13 +13,13 @@ import basis.util._
 import scala.annotation._
 import scala.annotation.unchecked._
 
-final class HashSet[+A] private[collections] (
+final class HashTrieSet[+A] private[collections] (
     private[collections] val treeMap: Int,
     private[collections] val leafMap: Int,
     slots: Array[AnyRef])
-  extends Equals with Immutable with Family[HashSet[_]] with Subset[A] {
+  extends Equals with Immutable with Family[HashTrieSet[_]] with Subset[A] {
 
-  import HashSet.{ VOID, LEAF, TREE, KNOT }
+  import HashTrieSet.{ VOID, LEAF, TREE, KNOT }
 
   override def isEmpty: Boolean = slotMap == 0
 
@@ -43,9 +43,9 @@ final class HashSet[+A] private[collections] (
 
   override def contains(elem: A @uncheckedVariance): Boolean = contains(elem, elem.##, 0)
 
-  override def + [B >: A](elem: B): HashSet[B] = update(elem, elem.##, 0)
+  override def + [B >: A](elem: B): HashTrieSet[B] = update(elem, elem.##, 0)
 
-  override def - (elem: A @uncheckedVariance): HashSet[A] = remove(elem, elem.##, 0)
+  override def - (elem: A @uncheckedVariance): HashTrieSet[A] = remove(elem, elem.##, 0)
 
   private def slotMap: Int = treeMap | leafMap
 
@@ -67,13 +67,13 @@ final class HashSet[+A] private[collections] (
     this
   }
 
-  private[collections] def treeAt(index: Int): HashSet[A] =
-    slots(index).asInstanceOf[HashSet[A]]
+  private[collections] def treeAt(index: Int): HashTrieSet[A] =
+    slots(index).asInstanceOf[HashTrieSet[A]]
 
-  private def getTree(branch: Int): HashSet[A] =
-    slots(select(branch)).asInstanceOf[HashSet[A]]
+  private def getTree(branch: Int): HashTrieSet[A] =
+    slots(select(branch)).asInstanceOf[HashTrieSet[A]]
 
-  private def setTree[B >: A](branch: Int, tree: HashSet[B]): this.type = {
+  private def setTree[B >: A](branch: Int, tree: HashTrieSet[B]): this.type = {
     slots(select(branch)) = tree
     this
   }
@@ -93,10 +93,10 @@ final class HashSet[+A] private[collections] (
 
   private def unaryElement: A = slots(0).asInstanceOf[A]
 
-  private def remap(treeMap: Int, leafMap: Int): HashSet[A] = {
+  private def remap(treeMap: Int, leafMap: Int): HashTrieSet[A] = {
     var oldSlotMap = this.treeMap | this.leafMap
     var newSlotMap = treeMap | leafMap
-    if (oldSlotMap == newSlotMap) new HashSet(treeMap, leafMap, this.slots.clone)
+    if (oldSlotMap == newSlotMap) new HashTrieSet(treeMap, leafMap, this.slots.clone)
     else {
       var i = 0
       var j = 0
@@ -108,7 +108,7 @@ final class HashSet[+A] private[collections] (
         oldSlotMap >>>= 1
         newSlotMap >>>= 1
       }
-      new HashSet(treeMap, leafMap, slots)
+      new HashTrieSet(treeMap, leafMap, slots)
     }
   }
 
@@ -122,7 +122,7 @@ final class HashSet[+A] private[collections] (
     }
   }
 
-  private def update[B >: A](elem: B, elemHash: Int, shift: Int): HashSet[B] = {
+  private def update[B >: A](elem: B, elemHash: Int, shift: Int): HashTrieSet[B] = {
     val branch = choose(elemHash, shift)
     (follow(branch): @switch) match {
       case VOID => remap(treeMap, leafMap | branch).setLeaf(branch, elem)
@@ -147,7 +147,7 @@ final class HashSet[+A] private[collections] (
     }
   }
 
-  private def remove(elem: A @uncheckedVariance, elemHash: Int, shift: Int): HashSet[A] = {
+  private def remove(elem: A @uncheckedVariance, elemHash: Int, shift: Int): HashTrieSet[A] = {
     val branch = choose(elemHash, shift)
     (follow(branch): @switch) match {
       case VOID => this
@@ -171,7 +171,7 @@ final class HashSet[+A] private[collections] (
     }
   }
 
-  private def merge[B >: A](elem0: B, hash0: Int, elem1: B, hash1: Int, shift: Int): HashSet[B] = {
+  private def merge[B >: A](elem0: B, hash0: Int, elem1: B, hash1: Int, shift: Int): HashTrieSet[B] = {
     // assume(hash0 != hash1)
     val branch0 = choose(hash0, shift)
     val branch1 = choose(hash1, shift)
@@ -179,7 +179,7 @@ final class HashSet[+A] private[collections] (
     if (branch0 == branch1) {
       val slots = new Array[AnyRef](1)
       slots(0) = merge(elem0, hash0, elem1, hash1, shift + 5)
-      new HashSet(slotMap, 0, slots)
+      new HashTrieSet(slotMap, 0, slots)
     }
     else {
       val slots = new Array[AnyRef](2)
@@ -191,7 +191,7 @@ final class HashSet[+A] private[collections] (
         slots(0) = elem1.asInstanceOf[AnyRef]
         slots(1) = elem0.asInstanceOf[AnyRef]
       }
-      new HashSet(0, slotMap, slots)
+      new HashTrieSet(0, slotMap, slots)
     }
   }
 
@@ -211,26 +211,26 @@ final class HashSet[+A] private[collections] (
     }
   }
 
-  override def iterator: Iterator[A] = new HashSetIterator(this)
+  override def iterator: Iterator[A] = new HashTrieSetIterator(this)
 
-  protected override def stringPrefix: String = "HashSet"
+  protected override def stringPrefix: String = "HashTrieSet"
 }
 
-/** A factory for [[HashSet hash sets]].
+/** A factory for [[HashTrieSet hash sets]].
   * @group Containers */
-object HashSet extends SetFactory[HashSet] {
-  private[this] val Empty = new HashSet[Nothing](0, 0, new Array[AnyRef](0))
-  override def empty[A]: HashSet[A] = Empty
+object HashTrieSet extends SetFactory[HashTrieSet] {
+  private[this] val Empty = new HashTrieSet[Nothing](0, 0, new Array[AnyRef](0))
+  override def empty[A]: HashTrieSet[A] = Empty
 
-  override def from[A](elems: Traverser[A]): HashSet[A] = {
-    if (elems.isInstanceOf[HashSet[_]]) elems.asInstanceOf[HashSet[A]]
+  override def from[A](elems: Traverser[A]): HashTrieSet[A] = {
+    if (elems.isInstanceOf[HashTrieSet[_]]) elems.asInstanceOf[HashTrieSet[A]]
     else super.from(elems)
   }
 
-  implicit override def Builder[A]: Builder[A] with State[HashSet[A]] =
-    new HashSetBuilder[A]
+  implicit override def Builder[A]: Builder[A] with State[HashTrieSet[A]] =
+    new HashTrieSetBuilder[A]
 
-  override def toString: String = "HashSet"
+  override def toString: String = "HashTrieSet"
 
   private[collections] final val VOID = 0
   private[collections] final val LEAF = 1
@@ -238,14 +238,14 @@ object HashSet extends SetFactory[HashSet] {
   private[collections] final val KNOT = 3
 }
 
-private[collections] final class HashSetIterator[+A](
+private[collections] final class HashTrieSetIterator[+A](
     nodes: Array[AnyRef], private[this] var depth: Int,
     stack: Array[Int], private[this] var stackPointer: Int)
   extends Iterator[A] {
 
-  import HashSet.{ VOID, LEAF, TREE, KNOT }
+  import HashTrieSet.{ VOID, LEAF, TREE, KNOT }
 
-  def this(tree: HashSet[A]) = {
+  def this(tree: HashTrieSet[A]) = {
     this(new Array[AnyRef](7), 0, new Array[Int](21), 0)
     node = tree
     i = 0
@@ -267,7 +267,7 @@ private[collections] final class HashSetIterator[+A](
 
   private[this] def follow: Int = leafMap & 1 | (treeMap & 1) << 1
 
-  private[this] def push(tree: HashSet[A]): Unit = {
+  private[this] def push(tree: HashTrieSet[A]): Unit = {
     depth += 1
     node = tree
 
@@ -300,7 +300,7 @@ private[collections] final class HashSetIterator[+A](
   }
 
   @tailrec override def isEmpty: Boolean = node match {
-    case node: HashSet[A] =>
+    case node: HashTrieSet[A] =>
       if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
@@ -322,7 +322,7 @@ private[collections] final class HashSetIterator[+A](
   }
 
   @tailrec override def head: A = node match {
-    case node: HashSet[A] =>
+    case node: HashTrieSet[A] =>
       if ((treeMap | leafMap) != 0) (follow: @switch) match {
         case VOID =>
           treeMap >>>= 1
@@ -344,7 +344,7 @@ private[collections] final class HashSetIterator[+A](
   }
 
   @tailrec override def step(): Unit = node match {
-    case node: HashSet[A] =>
+    case node: HashTrieSet[A] =>
       val slotMap = treeMap | leafMap
       if (slotMap != 0) {
         if ((slotMap & 1) == 1) i += 1
@@ -359,25 +359,25 @@ private[collections] final class HashSetIterator[+A](
   }
 
   override def dup: Iterator[A] =
-    new HashSetIterator(nodes.clone, depth, stack.clone, stackPointer)
+    new HashTrieSetIterator(nodes.clone, depth, stack.clone, stackPointer)
 }
 
-private[collections] final class HashSetBuilder[A] extends Builder[A] with State[HashSet[A]] {
-  private[this] var these: HashSet[A] = HashSet.empty[A]
+private[collections] final class HashTrieSetBuilder[A] extends Builder[A] with State[HashTrieSet[A]] {
+  private[this] var these: HashTrieSet[A] = HashTrieSet.empty[A]
 
   override def append(elem: A): Unit = these += elem
 
   override def appendAll(elems: Traverser[A]): Unit = {
-    if (these.isEmpty && elems.isInstanceOf[HashSet[_]])
-      these = elems.asInstanceOf[HashSet[A]]
+    if (these.isEmpty && elems.isInstanceOf[HashTrieSet[_]])
+      these = elems.asInstanceOf[HashTrieSet[A]]
     else super.appendAll(elems)
   }
 
   override def expect(count: Int): this.type = this
 
-  override def state: HashSet[A] = these
+  override def state: HashTrieSet[A] = these
 
-  override def clear(): Unit = these = HashSet.empty[A]
+  override def clear(): Unit = these = HashTrieSet.empty[A]
 
-  override def toString: String = "HashSet"+"."+"Builder"
+  override def toString: String = "HashTrieSet"+"."+"Builder"
 }

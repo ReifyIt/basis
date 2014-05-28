@@ -9,11 +9,11 @@ package immutable
 
 import org.scalatest._
 
-class VectorSpec extends FlatSpec with Matchers with SeqBehaviors {
-  override def suiteName = "Vector specification"
+class FingerTrieSeqSpec extends FlatSpec with Matchers with SeqBehaviors {
+  override def suiteName = "FingerTrieSeq specification"
 
-  override type Coll[X] = Vector[X]
-  override val Coll = Vector
+  override type Coll[X] = FingerTrieSeq[X]
+  override val Coll = FingerTrieSeq
 
   it should behave like GenericCollection()
   it should behave like GenericContainer()
@@ -32,7 +32,7 @@ class VectorSpec extends FlatSpec with Matchers with SeqBehaviors {
   private def boxSeries: Int => Box = i => new Box(i)
 
   private def dropSeq[T](length: Int)(series: Int => T): Unit = {
-    val xs = Vector.tabulate(length)(series)
+    val xs = FingerTrieSeq.tabulate(length)(series)
     var l = 0
     while (l < length) {
       val ys = xs.drop(l)
@@ -52,7 +52,7 @@ class VectorSpec extends FlatSpec with Matchers with SeqBehaviors {
   }
 
   private def takeSeq[T](length: Int)(series: Int => T): Unit = {
-    val xs = Vector.tabulate(length)(series)
+    val xs = FingerTrieSeq.tabulate(length)(series)
     var u = 1
     while (u <= length) try {
       val ys = xs.take(u)

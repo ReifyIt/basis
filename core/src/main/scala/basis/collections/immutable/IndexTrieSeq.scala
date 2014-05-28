@@ -10,61 +10,61 @@ package immutable
 import basis._
 import basis.collections.generic._
 
-sealed abstract class TrieSeq[+A]
+sealed abstract class IndexTrieSeq[+A]
   extends Equals
   with Immutable
-  with Family[TrieSeq[_]]
-  with Compound[TrieSeq[A]]
+  with Family[IndexTrieSeq[_]]
+  with Compound[IndexTrieSeq[A]]
   with IndexedSeq[A] {
 
-  def update[B >: A](index: Int, elem: B): TrieSeq[B]
+  def update[B >: A](index: Int, elem: B): IndexTrieSeq[B]
 
-  def :+ [B >: A](elem: B): TrieSeq[B]
+  def :+ [B >: A](elem: B): IndexTrieSeq[B]
 
-  protected override def stringPrefix: String = "TrieSeq"
+  protected override def stringPrefix: String = "IndexTrieSeq"
 }
 
-private[collections] final class TrieSeq0 extends TrieSeq[Nothing] {
+private[collections] final class IndexTrieSeq0 extends IndexTrieSeq[Nothing] {
   override def length: Int = 0
 
   override def apply(index: Int): Nothing =
     throw new IndexOutOfBoundsException(index.toString)
 
-  override def update[B](index: Int, elem: B): TrieSeq[B] =
+  override def update[B](index: Int, elem: B): IndexTrieSeq[B] =
     throw new IndexOutOfBoundsException(index.toString)
 
-  override def :+ [B](elem: B): TrieSeq[B] = {
+  override def :+ [B](elem: B): IndexTrieSeq[B] = {
     val newNode1 = new Array[AnyRef](1)
     newNode1(0) = elem.asInstanceOf[AnyRef]
-    new TrieSeq1(newNode1, 1)
+    new IndexTrieSeq1(newNode1, 1)
   }
 
   override def traverse(f: Nothing => Unit): Unit = ()
 
-  override def iterator: Iterator[Nothing] = new TrieSeqIterator(null, 0)
+  override def iterator: Iterator[Nothing] = new IndexTrieSeqIterator(null, 0)
 
-  override def segments: Iterator[TrieSeq[Nothing]] = new TrieSeqSplitter(null, 0)
+  override def segments: Iterator[IndexTrieSeq[Nothing]] = new IndexTrieSeqSplitter(null, 0)
 }
 
-private[collections] final class TrieSeq1[+A](
+private[collections] final class IndexTrieSeq1[+A](
     private[collections] val node1: Array[AnyRef],
     override val length: Int)
-  extends TrieSeq[A] {
+  extends IndexTrieSeq[A] {
 
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     node1(index).asInstanceOf[A]
   }
 
-  override def update[B >: A](index: Int, elem: B): TrieSeq[B] = {
+  override def update[B >: A](index: Int, elem: B): IndexTrieSeq[B] = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     val newNode1 = new Array[AnyRef](node1.length)
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
     newNode1(index) = elem.asInstanceOf[AnyRef]
-    new TrieSeq1(newNode1, length)
+    new IndexTrieSeq1(newNode1, length)
   }
 
-  override def :+ [B >: A](elem: B): TrieSeq[B] = {
+  override def :+ [B >: A](elem: B): IndexTrieSeq[B] = {
     val length  = this.length
     val length1 = length & 0x1F
 
@@ -73,27 +73,27 @@ private[collections] final class TrieSeq1[+A](
 
     if (length1 != 0) {
       java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
-      new TrieSeq1(newNode1, length + 1)
+      new IndexTrieSeq1(newNode1, length + 1)
     }
     else {
       val newNode2 = new Array[Array[AnyRef]](2)
       newNode2(0) = node1
       newNode2(1) = newNode1
-      new TrieSeq2(newNode2, length + 1)
+      new IndexTrieSeq2(newNode2, length + 1)
     }
   }
 
-  override def traverse(f: A => Unit): Unit = TrieSeq.traverse1(node1)(f)
+  override def traverse(f: A => Unit): Unit = IndexTrieSeq.traverse1(node1)(f)
 
-  override def iterator: Iterator[A] = new TrieSeqIterator(node1, length)
+  override def iterator: Iterator[A] = new IndexTrieSeqIterator(node1, length)
 
-  override def segments: Iterator[TrieSeq[A]] = new TrieSeqSplitter(node1, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node1, length)
 }
 
-private[collections] final class TrieSeq2[+A](
+private[collections] final class IndexTrieSeq2[+A](
     private[collections] val node2: Array[Array[AnyRef]],
     override val length: Int)
-  extends TrieSeq[A] {
+  extends IndexTrieSeq[A] {
 
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -101,7 +101,7 @@ private[collections] final class TrieSeq2[+A](
           (index       & 0x1F).asInstanceOf[A])
   }
 
-  override def update[B >: A](index: Int, elem: B): TrieSeq[B] = {
+  override def update[B >: A](index: Int, elem: B): IndexTrieSeq[B] = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     val newNode2 = new Array[Array[AnyRef]](node2.length)
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
@@ -112,10 +112,10 @@ private[collections] final class TrieSeq2[+A](
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
 
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
-    new TrieSeq2(newNode2, length)
+    new IndexTrieSeq2(newNode2, length)
   }
 
-  override def :+ [B >: A](elem: B): TrieSeq[B] = {
+  override def :+ [B >: A](elem: B): IndexTrieSeq[B] = {
     val length  = this.length
     val length1 = length       & 0x1F
     val length2 = length >>> 5 & 0x1F
@@ -131,27 +131,27 @@ private[collections] final class TrieSeq2[+A](
         val node1 = node2(length2)
         java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
       }
-      new TrieSeq2(newNode2, length + 1)
+      new IndexTrieSeq2(newNode2, length + 1)
     }
     else {
       val newNode3 = new Array[Array[Array[AnyRef]]](2)
       newNode3(0) = node2
       newNode3(1) = newNode2
-      new TrieSeq3(newNode3, length + 1)
+      new IndexTrieSeq3(newNode3, length + 1)
     }
   }
 
-  override def traverse(f: A => Unit): Unit = TrieSeq.traverse2(node2)(f)
+  override def traverse(f: A => Unit): Unit = IndexTrieSeq.traverse2(node2)(f)
 
-  override def iterator: Iterator[A] = new TrieSeqIterator(node2, length)
+  override def iterator: Iterator[A] = new IndexTrieSeqIterator(node2, length)
 
-  override def segments: Iterator[TrieSeq[A]] = new TrieSeqSplitter(node2, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node2, length)
 }
 
-private[collections] final class TrieSeq3[+A](
+private[collections] final class IndexTrieSeq3[+A](
     private[collections] val node3: Array[Array[Array[AnyRef]]],
     override val length: Int)
-  extends TrieSeq[A] {
+  extends IndexTrieSeq[A] {
 
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -160,7 +160,7 @@ private[collections] final class TrieSeq3[+A](
           (index        & 0x1F).asInstanceOf[A])
   }
 
-  override def update[B >: A](index: Int, elem: B): TrieSeq[B] = {
+  override def update[B >: A](index: Int, elem: B): IndexTrieSeq[B] = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     val newNode3 = new Array[Array[Array[AnyRef]]](node3.length)
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
@@ -176,10 +176,10 @@ private[collections] final class TrieSeq3[+A](
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
 
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
-    new TrieSeq3(newNode3, length)
+    new IndexTrieSeq3(newNode3, length)
   }
 
-  override def :+ [B >: A](elem: B): TrieSeq[B] = {
+  override def :+ [B >: A](elem: B): IndexTrieSeq[B] = {
     val length  = this.length
     val length1 = length        & 0x1F
     val length2 = length >>>  5 & 0x1F
@@ -202,27 +202,27 @@ private[collections] final class TrieSeq3[+A](
           java.lang.System.arraycopy(node1, 0, newNode1, 0, length1)
         }
       }
-      new TrieSeq3(newNode3, length + 1)
+      new IndexTrieSeq3(newNode3, length + 1)
     }
     else {
       val newNode4 = new Array[Array[Array[Array[AnyRef]]]](2)
       newNode4(0) = node3
       newNode4(1) = newNode3
-      new TrieSeq4(newNode4, length + 1)
+      new IndexTrieSeq4(newNode4, length + 1)
     }
   }
 
-  override def traverse(f: A => Unit): Unit = TrieSeq.traverse3(node3)(f)
+  override def traverse(f: A => Unit): Unit = IndexTrieSeq.traverse3(node3)(f)
 
-  override def iterator: Iterator[A] = new TrieSeqIterator(node3, length)
+  override def iterator: Iterator[A] = new IndexTrieSeqIterator(node3, length)
 
-  override def segments: Iterator[TrieSeq[A]] = new TrieSeqSplitter(node3, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node3, length)
 }
 
-private[collections] final class TrieSeq4[+A](
+private[collections] final class IndexTrieSeq4[+A](
     private[collections] val node4: Array[Array[Array[Array[AnyRef]]]],
     override val length: Int)
-  extends TrieSeq[A] {
+  extends IndexTrieSeq[A] {
 
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -232,7 +232,7 @@ private[collections] final class TrieSeq4[+A](
           (index        & 0x1F).asInstanceOf[A])
   }
 
-  override def update[B >: A](index: Int, elem: B): TrieSeq[B] = {
+  override def update[B >: A](index: Int, elem: B): IndexTrieSeq[B] = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     val newNode4 = new Array[Array[Array[Array[AnyRef]]]](node4.length)
     java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
@@ -253,10 +253,10 @@ private[collections] final class TrieSeq4[+A](
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
 
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
-    new TrieSeq4(newNode4, length)
+    new IndexTrieSeq4(newNode4, length)
   }
 
-  override def :+ [B >: A](elem: B): TrieSeq[B] = {
+  override def :+ [B >: A](elem: B): IndexTrieSeq[B] = {
     val length  = this.length
     val length1 = length        & 0x1F
     val length2 = length >>>  5 & 0x1F
@@ -286,27 +286,27 @@ private[collections] final class TrieSeq4[+A](
           }
         }
       }
-      new TrieSeq4(newNode4, length + 1)
+      new IndexTrieSeq4(newNode4, length + 1)
     }
     else {
       val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](2)
       newNode5(0) = node4
       newNode5(1) = newNode4
-      new TrieSeq5(newNode5, length + 1)
+      new IndexTrieSeq5(newNode5, length + 1)
     }
   }
 
-  override def traverse(f: A => Unit): Unit = TrieSeq.traverse4(node4)(f)
+  override def traverse(f: A => Unit): Unit = IndexTrieSeq.traverse4(node4)(f)
 
-  override def iterator: Iterator[A] = new TrieSeqIterator(node4, length)
+  override def iterator: Iterator[A] = new IndexTrieSeqIterator(node4, length)
 
-  override def segments: Iterator[TrieSeq[A]] = new TrieSeqSplitter(node4, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node4, length)
 }
 
-private[collections] final class TrieSeq5[+A](
+private[collections] final class IndexTrieSeq5[+A](
     private[collections] val node5: Array[Array[Array[Array[Array[AnyRef]]]]],
     override val length: Int)
-  extends TrieSeq[A] {
+  extends IndexTrieSeq[A] {
 
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -317,7 +317,7 @@ private[collections] final class TrieSeq5[+A](
           (index        & 0x1F).asInstanceOf[A])
   }
 
-  override def update[B >: A](index: Int, elem: B): TrieSeq[B] = {
+  override def update[B >: A](index: Int, elem: B): IndexTrieSeq[B] = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     val newNode5 = new Array[Array[Array[Array[Array[AnyRef]]]]](node5.length)
     java.lang.System.arraycopy(node5, 0, newNode5, 0, node5.length)
@@ -343,10 +343,10 @@ private[collections] final class TrieSeq5[+A](
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
 
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
-    new TrieSeq5(newNode5, length)
+    new IndexTrieSeq5(newNode5, length)
   }
 
-  override def :+ [B >: A](elem: B): TrieSeq[B] = {
+  override def :+ [B >: A](elem: B): IndexTrieSeq[B] = {
     val length  = this.length
     val length1 = length        & 0x1F
     val length2 = length >>>  5 & 0x1F
@@ -383,27 +383,27 @@ private[collections] final class TrieSeq5[+A](
           }
         }
       }
-      new TrieSeq5(newNode5, length + 1)
+      new IndexTrieSeq5(newNode5, length + 1)
     }
     else {
       val newNode6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](2)
       newNode6(0) = node5
       newNode6(1) = newNode5
-      new TrieSeq6(newNode6, length + 1)
+      new IndexTrieSeq6(newNode6, length + 1)
     }
   }
 
-  override def traverse(f: A => Unit): Unit = TrieSeq.traverse5(node5)(f)
+  override def traverse(f: A => Unit): Unit = IndexTrieSeq.traverse5(node5)(f)
 
-  override def iterator: Iterator[A] = new TrieSeqIterator(node5, length)
+  override def iterator: Iterator[A] = new IndexTrieSeqIterator(node5, length)
 
-  override def segments: Iterator[TrieSeq[A]] = new TrieSeqSplitter(node5, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node5, length)
 }
 
-private[collections] final class TrieSeq6[+A](
+private[collections] final class IndexTrieSeq6[+A](
     private[collections] val node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]],
     override val length: Int)
-  extends TrieSeq[A] {
+  extends IndexTrieSeq[A] {
 
   override def apply(index: Int): A = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
@@ -415,7 +415,7 @@ private[collections] final class TrieSeq6[+A](
           (index        & 0x1F).asInstanceOf[A])
   }
 
-  override def update[B >: A](index: Int, elem: B): TrieSeq[B] = {
+  override def update[B >: A](index: Int, elem: B): IndexTrieSeq[B] = {
     if (index < 0 || index >= length) throw new IndexOutOfBoundsException(index.toString)
     val newNode6 = new Array[Array[Array[Array[Array[Array[AnyRef]]]]]](node6.length)
     java.lang.System.arraycopy(node6, 0, newNode6, 0, node6.length)
@@ -446,10 +446,10 @@ private[collections] final class TrieSeq6[+A](
     java.lang.System.arraycopy(node1, 0, newNode1, 0, node1.length)
 
     newNode1(index & 0x1F) = elem.asInstanceOf[AnyRef]
-    new TrieSeq4(newNode4, length)
+    new IndexTrieSeq4(newNode4, length)
   }
 
-  override def :+ [B >: A](elem: B): TrieSeq[B] = {
+  override def :+ [B >: A](elem: B): IndexTrieSeq[B] = {
     val length  = this.length
     val length1 = length        & 0x1F
     val length2 = length >>>  5 & 0x1F
@@ -493,29 +493,29 @@ private[collections] final class TrieSeq6[+A](
           }
         }
       }
-      new TrieSeq6(newNode6, length + 1)
+      new IndexTrieSeq6(newNode6, length + 1)
     }
     else throw new UnsupportedOperationException("maximum length exceeded")
   }
 
-  override def traverse(f: A => Unit): Unit = TrieSeq.traverse6(node6)(f)
+  override def traverse(f: A => Unit): Unit = IndexTrieSeq.traverse6(node6)(f)
 
-  override def iterator: Iterator[A] = new TrieSeqIterator(node6, length)
+  override def iterator: Iterator[A] = new IndexTrieSeqIterator(node6, length)
 
-  override def segments: Iterator[TrieSeq[A]] = new TrieSeqSplitter(node6, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node6, length)
 }
 
-object TrieSeq extends SeqFactory[TrieSeq] {
-  private[collections] val Empty = new TrieSeq0
-  override def empty[A]: TrieSeq[A] = Empty
+object IndexTrieSeq extends SeqFactory[IndexTrieSeq] {
+  private[collections] val Empty = new IndexTrieSeq0
+  override def empty[A]: IndexTrieSeq[A] = Empty
 
-  override def from[A](elems: Traverser[A]): TrieSeq[A] = {
-    if (elems.isInstanceOf[TrieSeq[_]]) elems.asInstanceOf[TrieSeq[A]]
+  override def from[A](elems: Traverser[A]): IndexTrieSeq[A] = {
+    if (elems.isInstanceOf[IndexTrieSeq[_]]) elems.asInstanceOf[IndexTrieSeq[A]]
     else super.from(elems)
   }
 
-  implicit override def Builder[A]: Builder[A] with State[TrieSeq[A]] =
-    new TrieSeqBuilder[A]
+  implicit override def Builder[A]: Builder[A] with State[IndexTrieSeq[A]] =
+    new IndexTrieSeqBuilder[A]
 
   private[collections] def traverse1[A](node1: Array[AnyRef])(f: A => Unit): Unit = {
     var i = 0
@@ -571,10 +571,10 @@ object TrieSeq extends SeqFactory[TrieSeq] {
     }
   }
 
-  override def toString: String = "TrieSeq"
+  override def toString: String = "IndexTrieSeq"
 }
 
-private[collections] final class TrieSeqIterator[+A](
+private[collections] final class IndexTrieSeqIterator[+A](
     private[this] val length: Int,
     private[this] var index: Int,
     private[this] var node1: Array[AnyRef],
@@ -625,12 +625,12 @@ private[collections] final class TrieSeqIterator[+A](
   override def isEmpty: Boolean = index >= length
 
   override def head: A = {
-    if (index >= length) throw new NoSuchElementException("Head of empty iterator.")
+    if (index >= length) Iterator.empty.head
     node1(index & 0x1F).asInstanceOf[A]
   }
 
   override def step(): Unit = {
-    if (index >= length) throw new UnsupportedOperationException("Empty iterator step.")
+    if (index >= length) Iterator.empty.step()
     val diff = index ^ (index + 1)
     index += 1
     if (index < length && diff >= (1 << 5)) {
@@ -651,10 +651,10 @@ private[collections] final class TrieSeqIterator[+A](
   }
 
   override def dup: Iterator[A] =
-    new TrieSeqIterator(length, index, node1, node2, node3, node4, node5, node6)
+    new IndexTrieSeqIterator(length, index, node1, node2, node3, node4, node5, node6)
 }
 
-private[collections] final class TrieSeqSplitter[+A](
+private[collections] final class IndexTrieSeqSplitter[+A](
     private[this] val length: Int,
     private[this] var index: Int,
     private[this] var node1: Array[AnyRef],
@@ -663,7 +663,7 @@ private[collections] final class TrieSeqSplitter[+A](
     private[this] var node4: Array[Array[Array[Array[AnyRef]]]],
     private[this] var node5: Array[Array[Array[Array[Array[AnyRef]]]]],
     private[this] var node6: Array[Array[Array[Array[Array[Array[AnyRef]]]]]])
-  extends Iterator[TrieSeq[A]] {
+  extends Iterator[IndexTrieSeq[A]] {
 
   def this(trie: AnyRef, length: Int) = {
     this(length, 0, null, null, null, null, null, null)
@@ -704,9 +704,9 @@ private[collections] final class TrieSeqSplitter[+A](
 
   override def isEmpty: Boolean = index >= length
 
-  override def head: TrieSeq[A] = {
+  override def head: IndexTrieSeq[A] = {
     if (index >= length) Iterator.empty.head
-    new TrieSeq1(node1, node1.length)
+    new IndexTrieSeq1(node1, node1.length)
   }
 
   override def step(): Unit = {
@@ -730,11 +730,11 @@ private[collections] final class TrieSeqSplitter[+A](
     }
   }
 
-  override def dup: Iterator[TrieSeq[A]] =
-    new TrieSeqSplitter(length, index, node1, node2, node3, node4, node5, node6)
+  override def dup: Iterator[IndexTrieSeq[A]] =
+    new IndexTrieSeqSplitter(length, index, node1, node2, node3, node4, node5, node6)
 }
 
-private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State[TrieSeq[A]] {
+private[collections] final class IndexTrieSeqBuilder[A] extends Builder[A] with State[IndexTrieSeq[A]] {
   private[this] var node1: Array[AnyRef] = _
   private[this] var node2: Array[Array[AnyRef]] = _
   private[this] var node3: Array[Array[Array[AnyRef]]] = _
@@ -835,15 +835,15 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
   }
 
   override def appendAll(elems: Traverser[A]): Unit = elems match {
-    case elems: TrieSeq0 if length == 0 => ()
-    case elems: TrieSeq1[A] if (length & 0x1F) == 0 =>
+    case elems: IndexTrieSeq0 if length == 0 => ()
+    case elems: IndexTrieSeq1[A] if (length & 0x1F) == 0 =>
       gotoNode2()
       if (length == (1 << 5)) node2(0) = node1
       node1 = elems.node1
       node2(length >>> 5 & 0x1F) = node1
       length += elems.length
       if (elems.length < (1 << 5)) aliased = 1
-    case elems: TrieSeq2[A] if (length & 0x3FF) == 0 =>
+    case elems: IndexTrieSeq2[A] if (length & 0x3FF) == 0 =>
       gotoNode3()
       if (length == (1 << 10)) node3(0) = node2
       node2 = elems.node2
@@ -851,7 +851,7 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node3(length >>> 10 & 0x1F) = node2
       length += elems.length
       if (elems.length < (1 << 10)) aliased = 2
-    case elems: TrieSeq3[A] if (length & 0x7FFF) == 0 =>
+    case elems: IndexTrieSeq3[A] if (length & 0x7FFF) == 0 =>
       gotoNode4()
       if (length == (1 << 15)) node4(0) = node3
       node3 = elems.node3
@@ -860,7 +860,7 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node4(length >>> 15 & 0x1F) = node3
       length += elems.length
       if (elems.length < (1 << 15)) aliased = 3
-    case elems: TrieSeq4[A] if (length & 0xFFFFF) == 0 =>
+    case elems: IndexTrieSeq4[A] if (length & 0xFFFFF) == 0 =>
       gotoNode5()
       if (length == (1 << 20)) node5(0) = node4
       node4 = elems.node4
@@ -870,7 +870,7 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node5(length >>> 20 & 0x1F) = node4
       length += elems.length
       if (elems.length < (1 << 20)) aliased = 4
-    case elems: TrieSeq5[A] if (length & 0x1FFFFFF) == 0 =>
+    case elems: IndexTrieSeq5[A] if (length & 0x1FFFFFF) == 0 =>
       gotoNode6()
       if (length == (1 << 25)) node6(0) = node5
       node5 = elems.node5
@@ -881,7 +881,7 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node6(length >>> 25 & 0x1F) = node5
       length += elems.length
       if (elems.length < (1 << 25)) aliased = 5
-    case elems: TrieSeq6[A] if length == 0 =>
+    case elems: IndexTrieSeq6[A] if length == 0 =>
       node6 = elems.node6
       node5 = node6(node6.length - 1)
       node4 = node5(node5.length - 1)
@@ -893,9 +893,9 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
     case _ => super.appendAll(elems)
   }
 
-  private[this] def alias: TrieSeq[A] = if (length == 0) TrieSeq.empty else alias1
+  private[this] def alias: IndexTrieSeq[A] = if (length == 0) IndexTrieSeq.empty else alias1
 
-  private[this] def alias1: TrieSeq[A] = {
+  private[this] def alias1: IndexTrieSeq[A] = {
     if ((length & 0x1F) != 0) {
       val last1 = (length - 1) & 0x1F
       val oldNode1 = node1
@@ -903,10 +903,10 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       java.lang.System.arraycopy(oldNode1, 0, node1, 0, last1 + 1)
       aliased = 1
     }
-    if (length <= (1 << 5)) new TrieSeq1(node1, length) else alias2
+    if (length <= (1 << 5)) new IndexTrieSeq1(node1, length) else alias2
   }
 
-  private[this] def alias2: TrieSeq[A] = {
+  private[this] def alias2: IndexTrieSeq[A] = {
     if (aliased == 1 || (length >>> 5 & 0x1F) != 0) {
       val last2 = (length - 1) >>> 5 & 0x1F
       val oldNode2 = node2
@@ -915,10 +915,10 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node2(last2) = node1
       aliased = 2
     }
-    if (length <= (1 << 10)) new TrieSeq2(node2, length) else alias3
+    if (length <= (1 << 10)) new IndexTrieSeq2(node2, length) else alias3
   }
 
-  private[this] def alias3: TrieSeq[A] = {
+  private[this] def alias3: IndexTrieSeq[A] = {
     if (aliased == 2 || (length >>> 10 & 0x1F) != 0) {
       val last3 = (length - 1) >>> 10 & 0x1F
       val oldNode3 = node3
@@ -927,10 +927,10 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node3(last3) = node2
       aliased = 3
     }
-    if (length <= (1 << 15)) new TrieSeq3(node3, length) else alias4
+    if (length <= (1 << 15)) new IndexTrieSeq3(node3, length) else alias4
   }
 
-  private[this] def alias4: TrieSeq[A] = {
+  private[this] def alias4: IndexTrieSeq[A] = {
     if (aliased == 3 || (length >>> 15 & 0x1F) != 0) {
       val last4 = (length - 1) >>> 15 & 0x1F
       val oldNode4 = node4
@@ -939,10 +939,10 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node4(last4) = node3
       aliased = 4
     }
-    if (length <= (1 << 20)) new TrieSeq4(node4, length) else alias5
+    if (length <= (1 << 20)) new IndexTrieSeq4(node4, length) else alias5
   }
 
-  private[this] def alias5: TrieSeq[A] = {
+  private[this] def alias5: IndexTrieSeq[A] = {
     if (aliased == 4 || (length >>> 20 & 0x1F) != 0) {
       val last5 = (length - 1) >>> 20 & 0x1F
       val oldNode5 = node5
@@ -951,10 +951,10 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node5(last5) = node4
       aliased = 5
     }
-    if (length <= (1 << 25)) new TrieSeq5(node5, length) else alias6
+    if (length <= (1 << 25)) new IndexTrieSeq5(node5, length) else alias6
   }
 
-  private[this] def alias6: TrieSeq[A] = {
+  private[this] def alias6: IndexTrieSeq[A] = {
     if (aliased == 5 || (length >>> 25 & 0x1F) != 0) {
       val last6 = (length - 1) >>> 25 & 0x1F
       val oldNode6 = node6
@@ -963,10 +963,10 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
       node6(last6) = node5
       aliased = 6
     }
-    new TrieSeq6(node6, length)
+    new IndexTrieSeq6(node6, length)
   }
 
-  override def state: TrieSeq[A] = alias
+  override def state: IndexTrieSeq[A] = alias
 
   override def clear(): Unit = {
     node1 = null
@@ -981,5 +981,5 @@ private[collections] final class TrieSeqBuilder[A] extends Builder[A] with State
 
   override def expect(count: Int): this.type = this
 
-  override def toString: String = "TrieSeq"+"."+"Builder"
+  override def toString: String = "IndexTrieSeq"+"."+"Builder"
 }

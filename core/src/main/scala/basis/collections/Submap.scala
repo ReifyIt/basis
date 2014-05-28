@@ -20,7 +20,7 @@ trait Submap[+A, +T] extends Any with Equals with Family[Submap[_, _]] with Map[
 }
 
 object Submap extends generic.MapFactory[Submap] {
-  override def empty[A, T]: Submap[A, T] = immutable.HashMap.empty[A, T]
+  override def empty[A, T]: Submap[A, T] = immutable.HashTrieMap.empty[A, T]
 
   override def from[A, T](elems: Traverser[(A, T)]): Submap[A, T] = {
     if (elems.isInstanceOf[Submap[_, _]]) elems.asInstanceOf[Submap[A, T]]
@@ -28,7 +28,7 @@ object Submap extends generic.MapFactory[Submap] {
   }
 
   implicit override def Builder[A, T]: Builder[(A, T)] with State[Submap[A, T]] =
-    immutable.HashMap.Builder[A, T]
+    immutable.HashTrieMap.Builder[A, T]
 
   override def toString: String = "Submap"
 }

@@ -179,7 +179,7 @@ private[collections] final class ArrayMapIterator[+A, +T]
 }
 
 private[collections] final class ArrayMapBuilder[A, T] extends Builder[(A, T)] with State[ArrayMap[A, T]] {
-  private[this] var seen: HashMap[A, Int] = HashMap.empty[A, Int]
+  private[this] var seen: HashTrieMap[A, Int] = HashTrieMap.empty[A, Int]
 
   private[this] var slots: Array[AnyRef] = _
 
@@ -241,7 +241,7 @@ private[collections] final class ArrayMapBuilder[A, T] extends Builder[(A, T)] w
   }
 
   override def clear(): Unit = {
-    seen = HashMap.empty[A, Int]
+    seen = HashTrieMap.empty[A, Int]
     slots = null
     aliased = true
     size = 0

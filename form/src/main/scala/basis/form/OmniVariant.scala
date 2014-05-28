@@ -66,8 +66,8 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
   protected class OmniObjectFactory extends BaseObjectFactory with JsonObjectFactory with BsonObjectFactory {
-    override val empty: ObjectForm                                                     = new OmniObject(immutable.Vector.empty)
-    implicit override def Builder(): Builder[(String, AnyForm)] with State[ObjectForm] = new OmniObjectBuilder(immutable.Vector.Builder[(String, AnyForm)])
+    override val empty: ObjectForm                                                     = new OmniObject(immutable.FingerTrieSeq.empty)
+    implicit override def Builder(): Builder[(String, AnyForm)] with State[ObjectForm] = new OmniObjectBuilder(immutable.FingerTrieSeq.Builder[(String, AnyForm)])
   }
 
   protected final class OmniObjectBuilder(underlying: Builder[(String, AnyForm)] with State[Seq[(String, AnyForm)]]) extends Builder[(String, AnyForm)] with State[ObjectForm] {
@@ -86,8 +86,8 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
   protected class OmniSeqFactory extends BaseSeqFactory with JsonSeqFactory with BsonSeqFactory {
-    override val empty: SeqForm                                         = new OmniSeq(immutable.Vector.empty)
-    implicit override def Builder: Builder[AnyForm] with State[SeqForm] = new OmniSeqBuilder(immutable.Vector.Builder[AnyForm])
+    override val empty: SeqForm                                         = new OmniSeq(immutable.FingerTrieSeq.empty)
+    implicit override def Builder: Builder[AnyForm] with State[SeqForm] = new OmniSeqBuilder(immutable.FingerTrieSeq.Builder[AnyForm])
   }
 
   protected final class OmniSeqBuilder(underlying: Builder[AnyForm] with State[IndexedSeq[AnyForm]]) extends Builder[AnyForm] with State[SeqForm] {
@@ -105,8 +105,8 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
   protected class OmniSetFactory extends BaseSetFactory with JsonSetFactory with BsonSetFactory {
-    override val empty: SetForm                                         = new OmniSet(immutable.Vector.empty)
-    implicit override def Builder: Builder[AnyForm] with State[SetForm] = new OmniSetBuilder(immutable.Vector.Builder[AnyForm])
+    override val empty: SetForm                                         = new OmniSet(immutable.FingerTrieSeq.empty)
+    implicit override def Builder: Builder[AnyForm] with State[SetForm] = new OmniSetBuilder(immutable.FingerTrieSeq.Builder[AnyForm])
   }
 
   protected final class OmniSetBuilder(underlying: Builder[AnyForm] with State[Seq[AnyForm]]) extends Builder[AnyForm] with State[SetForm] {
