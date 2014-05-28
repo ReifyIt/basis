@@ -17,7 +17,7 @@ trait Queue[+A] extends Any with Equals with Family[Queue[_]] with LinearSeq[A] 
 }
 
 object Queue extends generic.SeqFactory[Queue] {
-  override def empty[A]: Queue[A] = immutable.Stitch.empty[A]
+  override def empty[A]: Queue[A] = immutable.Vector.empty[A]
 
   override def from[A](elems: Traverser[A]): Queue[A] = {
     if (elems.isInstanceOf[Queue[_]]) elems.asInstanceOf[Queue[A]]
@@ -25,7 +25,7 @@ object Queue extends generic.SeqFactory[Queue] {
   }
 
   implicit override def Builder[A]: Builder[A] with State[Queue[A]] =
-    immutable.Stitch.Builder[A]
+    immutable.Vector.Builder[A]
 
   override def toString: String = "Queue"
 }

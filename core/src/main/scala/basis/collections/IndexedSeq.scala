@@ -71,7 +71,7 @@ trait IndexedSeq[@specialized(Byte, Short, Int, Long, Float, Double, Boolean) +A
 }
 
 object IndexedSeq extends generic.SeqFactory[IndexedSeq] {
-  override def empty[A]: IndexedSeq[A] = immutable.Vector.empty[A]
+  override def empty[A]: IndexedSeq[A] = immutable.TrieSeq.empty[A]
 
   override def from[A](elems: Traverser[A]): IndexedSeq[A] = {
     if (elems.isInstanceOf[IndexedSeq[_]]) elems.asInstanceOf[IndexedSeq[A]]
@@ -79,7 +79,7 @@ object IndexedSeq extends generic.SeqFactory[IndexedSeq] {
   }
 
   implicit override def Builder[A]: Builder[A] with State[IndexedSeq[A]] =
-    immutable.Vector.Builder[A]
+    immutable.TrieSeq.Builder[A]
 
   override def toString: String = "IndexedSeq"
 }
