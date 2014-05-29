@@ -8,11 +8,10 @@ package basis.collections
 package immutable
 
 import basis._
-import scala.annotation.unchecked._
 
 final class FingerTrieSeq[+A] private[collections] (
     private[collections] val prefix: Array[AnyRef],
-    private[collections] var branch: FingerTrieSeq[FingerTrieSeq[A @uncheckedVariance]],
+    private[collections] var branch: FingerTrieSeq[Array[AnyRef]],
     private[collections] val suffix: Array[AnyRef],
     override val length: Int)
   extends Equals
@@ -22,7 +21,7 @@ final class FingerTrieSeq[+A] private[collections] (
   with IndexedSeq[A] {
 
   private[collections] def this(infix: Array[AnyRef]) =
-    this(infix, FingerTrieSeq.empty[FingerTrieSeq[A]], FingerTrieSeq.EmptyRefArray, infix.length)
+    this(infix, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, infix.length)
 
   override def isEmpty: Boolean = length == 0
 
@@ -31,7 +30,7 @@ final class FingerTrieSeq[+A] private[collections] (
     if (n < 0) prefix(index).asInstanceOf[A]
     else {
       val j = n - (branch.length << 5)
-      if (j < 0) branch(n >> 5)(n & 0x1F)
+      if (j < 0) branch(n >> 5)(n & 0x1F).asInstanceOf[A]
       else suffix(j).asInstanceOf[A]
     }
   }
@@ -47,7 +46,13 @@ final class FingerTrieSeq[+A] private[collections] (
     }
     else {
       val j = n - (branch.length << 5)
-      if (j < 0) new FingerTrieSeq[B](prefix, branch.update(n >> 5, branch(n >> 5).update(n & 0x1F, elem)), suffix, length)
+      if (j < 0) {
+        val oldInfix = branch(n >> 5)
+        val newInfix = new Array[AnyRef](32)
+        System.arraycopy(oldInfix, 0, newInfix, 0, 32)
+        newInfix(n & 0x1F) = elem.asInstanceOf[AnyRef]
+        new FingerTrieSeq[B](prefix, branch.update(n >> 5, newInfix), suffix, length)
+      }
       else {
         val b = suffix.length
         val newSuffix = new Array[AnyRef](b)
@@ -59,7 +64,7 @@ final class FingerTrieSeq[+A] private[collections] (
   }
 
   override def head: A = {
-    if (length == 0) throw new NoSuchElementException
+    if (length == 0) throw new NoSuchElementException("head of empty finger trie")
     prefix(0).asInstanceOf[A]
   }
 
@@ -74,7 +79,7 @@ final class FingerTrieSeq[+A] private[collections] (
   }
 
   override def foot: A = {
-    if (length == 0) throw new NoSuchElementException
+    if (length == 0) throw new NoSuchElementException("foot of empty finger trie")
     if (length <= 32) prefix(prefix.length - 1).asInstanceOf[A]
     else suffix(suffix.length - 1).asInstanceOf[A]
   }
@@ -83,10 +88,10 @@ final class FingerTrieSeq[+A] private[collections] (
     val n = lower - prefix.length
     val k = length - lower
     if (lower <= 0) this
-    else if (lower >= length) FingerTrieSeq.empty[A]
+    else if (lower >= length) FingerTrieSeq.empty
     else if (n == 0) {
-      if (branch.length > 0) new FingerTrieSeq[A](branch.head.prefix, branch.tail, suffix, k)
-      else new FingerTrieSeq[A](suffix, FingerTrieSeq.empty[FingerTrieSeq[A]], FingerTrieSeq.EmptyRefArray, k)
+      if (branch.length > 0) new FingerTrieSeq[A](branch.head, branch.tail, suffix, k)
+      else new FingerTrieSeq[A](suffix, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, k)
     }
     else if (n < 0) {
       val newPrefix = new Array[AnyRef](-n)
@@ -97,7 +102,7 @@ final class FingerTrieSeq[+A] private[collections] (
       val j = n - (branch.length << 5)
       if (j < 0) {
         val split = branch.drop(n >> 5)
-        val splitPrefix = split.head.prefix
+        val splitPrefix = split.head
         val newPrefix = new Array[AnyRef](splitPrefix.length - (n & 0x1F))
         System.arraycopy(splitPrefix, n & 0x1F, newPrefix, 0, newPrefix.length)
         new FingerTrieSeq[A](newPrefix, split.tail, suffix, k)
@@ -105,7 +110,7 @@ final class FingerTrieSeq[+A] private[collections] (
       else {
         val newPrefix = new Array[AnyRef](k)
         System.arraycopy(suffix, j, newPrefix, 0, k)
-        new FingerTrieSeq[A](newPrefix, FingerTrieSeq.empty[FingerTrieSeq[A]], FingerTrieSeq.EmptyRefArray, k)
+        new FingerTrieSeq[A](newPrefix, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, k)
       }
     }
   }
@@ -114,21 +119,21 @@ final class FingerTrieSeq[+A] private[collections] (
     val n = upper - prefix.length
     if (upper <= 0) FingerTrieSeq.empty[A]
     else if (upper >= length) this
-    else if (n == 0) new FingerTrieSeq[A](prefix, FingerTrieSeq.empty[FingerTrieSeq[A]], FingerTrieSeq.EmptyRefArray, upper)
+    else if (n == 0) new FingerTrieSeq[A](prefix, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, upper)
     else if (n < 0) {
       val newPrefix = new Array[AnyRef](upper)
       System.arraycopy(prefix, 0, newPrefix, 0, upper)
-      new FingerTrieSeq[A](newPrefix, FingerTrieSeq.empty[FingerTrieSeq[A]], FingerTrieSeq.EmptyRefArray, upper)
+      new FingerTrieSeq[A](newPrefix, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, upper)
     }
     else {
       val j = n - (branch.length << 5)
       if (j == 0) {
-        if (branch.length > 0) new FingerTrieSeq[A](prefix, branch.body, branch.foot.prefix, upper)
-        else new FingerTrieSeq[A](suffix, FingerTrieSeq.empty[FingerTrieSeq[A]], FingerTrieSeq.EmptyRefArray, upper)
+        if (branch.length > 0) new FingerTrieSeq[A](prefix, branch.body, branch.foot, upper)
+        else new FingerTrieSeq[A](suffix, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, upper)
       }
       else if (j < 0) {
         val split = branch.take(((n + 0x1F) & 0xFFFFFFE0) >> 5)
-        val splitSuffix = split.foot.prefix
+        val splitSuffix = split.foot
         val newSuffix = new Array[AnyRef](((((n & 0x1F) ^ 0x1F) + 1) & 0x20) | (n & 0x1F))
         System.arraycopy(splitSuffix, 0, newSuffix, 0, newSuffix.length)
         new FingerTrieSeq[A](prefix, split.body, newSuffix, upper)
@@ -140,6 +145,8 @@ final class FingerTrieSeq[+A] private[collections] (
       }
     }
   }
+
+  def slice(lower: Int, upper: Int): FingerTrieSeq[A] = drop(lower).take(upper)
 
   override def :+ [B >: A](elem: B): FingerTrieSeq[B] = {
     val i = prefix.length
@@ -170,7 +177,7 @@ final class FingerTrieSeq[+A] private[collections] (
     else {
       val newSuffix = new Array[AnyRef](1)
       newSuffix(0) = elem.asInstanceOf[AnyRef]
-      new FingerTrieSeq[B](prefix, branch :+ new FingerTrieSeq[B](suffix), newSuffix, length + 1)
+      new FingerTrieSeq[B](prefix, branch :+ suffix, newSuffix, length + 1)
     }
   }
 
@@ -203,13 +210,94 @@ final class FingerTrieSeq[+A] private[collections] (
     else {
       val newPrefix = new Array[AnyRef](1)
       newPrefix(0) = elem.asInstanceOf[AnyRef]
-      new FingerTrieSeq[B](newPrefix, new FingerTrieSeq[B](prefix) +: branch, suffix, 1 + length)
+      new FingerTrieSeq[B](newPrefix, prefix +: branch, suffix, 1 + length)
     }
   }
 
   override def :: [B >: A](elem: B): FingerTrieSeq[B] = elem +: this
 
-  override def traverse(f: A => Unit): Unit = FingerTrieSeq.traverse1(this)(f)
+  override def traverse(f: A => Unit): Unit = traverse1(this)(f)
+
+  private[this] def traverse1(xs: FingerTrieSeq[A])(f: A => Unit): Unit = {
+    traverse1(xs.prefix)(f)
+    traverse2(xs.branch)(f)
+    traverse1(xs.suffix)(f)
+  }
+
+  private[this] def traverse2(xs: FingerTrieSeq[Array[AnyRef]])(f: A => Unit): Unit = {
+    traverse2(xs.prefix)(f)
+    traverse3(xs.branch.asInstanceOf[FingerTrieSeq[FingerTrieSeq[Array[AnyRef]]]])(f)
+    traverse2(xs.suffix)(f)
+  }
+
+  private[this] def traverse3(xs: FingerTrieSeq[FingerTrieSeq[Array[AnyRef]]])(f: A => Unit): Unit = {
+    traverse3(xs.prefix)(f)
+    traverse4(xs.branch.asInstanceOf[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[Array[AnyRef]]]]])(f)
+    traverse3(xs.suffix)(f)
+  }
+
+  private[this] def traverse4(xs: FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[Array[AnyRef]]]])(f: A => Unit): Unit = {
+    traverse4(xs.prefix)(f)
+    traverse5(xs.branch.asInstanceOf[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[Array[AnyRef]]]]]])(f)
+    traverse4(xs.suffix)(f)
+  }
+
+  private[this] def traverse5(xs: FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[Array[AnyRef]]]]])(f: A => Unit): Unit = {
+    traverse5(xs.prefix)(f)
+    val branch = xs.branch
+    var i = 0
+    val n = branch.length
+    while (i < n) {
+      traverse5(branch(i))(f)
+      i += 1
+    }
+    traverse5(xs.suffix)(f)
+  }
+
+  private[this] def traverse1(array: Array[AnyRef])(f: A => Unit): Unit = {
+    var i = 0
+    val n = array.length
+    while (i < n) {
+      f(array(i).asInstanceOf[A])
+      i += 1
+    }
+  }
+
+  private[this] def traverse2(array: Array[AnyRef])(f: A => Unit): Unit = {
+    var i = 0
+    val n = array.length
+    while (i < n) {
+      traverse1(array(i).asInstanceOf[Array[AnyRef]])(f)
+      i += 1
+    }
+  }
+
+  private[this] def traverse3(array: Array[AnyRef])(f: A => Unit): Unit = {
+    var i = 0
+    val n = array.length
+    while (i < n) {
+      traverse2(array(i).asInstanceOf[Array[AnyRef]])(f)
+      i += 1
+    }
+  }
+
+  private[this] def traverse4(array: Array[AnyRef])(f: A => Unit): Unit = {
+    var i = 0
+    val n = array.length
+    while (i < n) {
+      traverse3(array(i).asInstanceOf[Array[AnyRef]])(f)
+      i += 1
+    }
+  }
+
+  private[this] def traverse5(array: Array[AnyRef])(f: A => Unit): Unit = {
+    var i = 0
+    val n = array.length
+    while (i < n) {
+      traverse4(array(i).asInstanceOf[Array[AnyRef]])(f)
+      i += 1
+    }
+  }
 
   protected override def stringPrefix: String = "FingerTrieSeq"
 }
@@ -233,87 +321,6 @@ object FingerTrieSeq extends generic.SeqFactory[FingerTrieSeq] {
   implicit override def Builder[A]: Builder[A] with State[FingerTrieSeq[A]] = new FingerTrieSeqBuilder[A]
 
   override def toString: String = "FingerTrieSeq"
-
-  private[collections] def traverse1[A](xs: FingerTrieSeq[A])(f: A => Unit): Unit = {
-    traverse1(xs.prefix)(f)
-    traverse2(xs.branch)(f)
-    traverse1(xs.suffix)(f)
-  }
-
-  private[collections] def traverse2[A](xs: FingerTrieSeq[FingerTrieSeq[A]])(f: A => Unit): Unit = {
-    traverse2(xs.prefix)(f)
-    traverse3(xs.branch)(f)
-    traverse2(xs.suffix)(f)
-  }
-
-  private[collections] def traverse3[A](xs: FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[A]]])(f: A => Unit): Unit = {
-    traverse3(xs.prefix)(f)
-    traverse4(xs.branch)(f)
-    traverse3(xs.suffix)(f)
-  }
-
-  private[collections] def traverse4[A](xs: FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[A]]]])(f: A => Unit): Unit = {
-    traverse4(xs.prefix)(f)
-    traverse5(xs.branch)(f)
-    traverse4(xs.suffix)(f)
-  }
-
-  private[collections] def traverse5[A](xs: FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[A]]]]])(f: A => Unit): Unit = {
-    traverse5(xs.prefix)(f)
-    val branch = xs.branch
-    var i = 0
-    val n = branch.length
-    while (i < n) {
-      traverse5(branch(i))(f)
-      i += 1
-    }
-    traverse5(xs.suffix)(f)
-  }
-
-  private[collections] def traverse1[A](array: Array[AnyRef])(f: A => Unit): Unit = {
-    var i = 0
-    val n = array.length
-    while (i < n) {
-      f(array(i).asInstanceOf[A])
-      i += 1
-    }
-  }
-
-  private[collections] def traverse2[A](array: Array[AnyRef])(f: A => Unit): Unit = {
-    var i = 0
-    val n = array.length
-    while (i < n) {
-      traverse1(array(i).asInstanceOf[FingerTrieSeq[A]])(f)
-      i += 1
-    }
-  }
-
-  private[collections] def traverse3[A](array: Array[AnyRef])(f: A => Unit): Unit = {
-    var i = 0
-    val n = array.length
-    while (i < n) {
-      traverse2(array(i).asInstanceOf[FingerTrieSeq[FingerTrieSeq[A]]])(f)
-      i += 1
-    }
-  }
-
-  private[collections] def traverse4[A](array: Array[AnyRef])(f: A => Unit): Unit = {
-    var i = 0
-    val n = array.length
-    while (i < n) {
-      traverse3(array(i).asInstanceOf[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[A]]]])(f)
-      i += 1
-    }
-  }
-
-  private[collections] def traverse5[A](array: Array[AnyRef])(f: A => Unit): Unit = {
-    var i = 0
-    val n = array.length
-    while (i < n) {
-      traverse4(array(i).asInstanceOf[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[FingerTrieSeq[A]]]]])(f)
-      i += 1
-    }
-  }
 }
 
 private[collections] final class FingerTrieSeqBuilder[A] extends Builder[A] with State[FingerTrieSeq[A]] {
