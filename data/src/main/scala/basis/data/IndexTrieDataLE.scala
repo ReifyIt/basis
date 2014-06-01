@@ -9,7 +9,7 @@ package basis.data
 import basis._
 import basis.util._
 
-sealed abstract class ByteVectorLE extends ByteVector with ByteOrder[LittleEndian] {
+sealed abstract class IndexTrieDataLE extends IndexTrieData with ByteOrder[LittleEndian] {
   override def endian: LittleEndian = LittleEndian
 
   override def loadByte(address: Long): Byte
@@ -103,14 +103,14 @@ sealed abstract class ByteVectorLE extends ByteVector with ByteOrder[LittleEndia
 
   override def loadAlignedDouble(address: Long): Double = loadAlignedLong(address).toDoubleBits
 
-  override def mutateByte(address: Long, value: Byte): ByteVectorLE = {
+  override def mutateByte(address: Long, value: Byte): IndexTrieDataLE = {
     val offset = address.toInt & 0xFF
     val node1 = copyNode1(address)
     node1(offset) = value
     mutateNode1(address, node1)
   }
 
-  override def mutateShort(address: Long, value: Short): ByteVectorLE = {
+  override def mutateShort(address: Long, value: Short): IndexTrieDataLE = {
     val offset = address.toInt & 0xFF
     if (offset <= 254) {
       val node1 = copyNode1(address)
@@ -123,7 +123,7 @@ sealed abstract class ByteVectorLE extends ByteVector with ByteOrder[LittleEndia
       mutateByte(address + 1L, (value >> 8).toByte)
   }
 
-  override def mutateInt(address: Long, value: Int): ByteVectorLE = {
+  override def mutateInt(address: Long, value: Int): IndexTrieDataLE = {
     val offset = address.toInt & 0xFF
     if (offset <= 252) {
       val node1 = copyNode1(address)
@@ -140,7 +140,7 @@ sealed abstract class ByteVectorLE extends ByteVector with ByteOrder[LittleEndia
       mutateByte(address + 3L, (value >> 24).toByte)
   }
 
-  override def mutateLong(address: Long, value: Long): ByteVectorLE = {
+  override def mutateLong(address: Long, value: Long): IndexTrieDataLE = {
     val offset = address.toInt & 0xFF
     if (offset <= 248) {
       val node1 = copyNode1(address)
@@ -165,12 +165,12 @@ sealed abstract class ByteVectorLE extends ByteVector with ByteOrder[LittleEndia
       mutateByte(address + 7L, (value >> 56).toByte)
   }
 
-  override def mutateFloat(address: Long, value: Float): ByteVectorLE = mutateInt(address, value.toRawIntBits)
+  override def mutateFloat(address: Long, value: Float): IndexTrieDataLE = mutateInt(address, value.toRawIntBits)
 
-  override def mutateDouble(address: Long, value: Double): ByteVectorLE = mutateLong(address, value.toRawLongBits)
+  override def mutateDouble(address: Long, value: Double): IndexTrieDataLE = mutateLong(address, value.toRawLongBits)
 
-  override def ++ (that: Loader): ByteVectorLE = {
-    val framer = ByteVectorLE.Framer
+  override def ++ (that: Loader): IndexTrieDataLE = {
+    val framer = IndexTrieDataLE.Framer
     framer.writeData(this)
     framer.writeData(that)
     framer.state
@@ -185,53 +185,53 @@ sealed abstract class ByteVectorLE extends ByteVector with ByteOrder[LittleEndia
     newNode1
   }
 
-  protected[data] def mutateNode1(address: Long, newNode1: Array[Byte]): ByteVectorLE
+  protected[data] def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE
 
-  protected override def stringPrefix: String = "ByteVectorLE"
+  protected override def stringPrefix: String = "IndexTrieDataLE"
 }
 
-object ByteVectorLE extends ByteOrder[LittleEndian] with ByteFactory[ByteVectorLE] {
+object IndexTrieDataLE extends ByteOrder[LittleEndian] with DataFactory[IndexTrieDataLE] {
   override def endian: LittleEndian = LittleEndian
 
-  override val empty: ByteVectorLE = new ByteVectorLE0
+  override val empty: IndexTrieDataLE = new IndexTrieDataLE0
 
-  implicit override def Framer: Framer with ByteOrder[LittleEndian] with State[ByteVectorLE] = new ByteVectorLEFramer
+  implicit override def Framer: Framer with ByteOrder[LittleEndian] with State[IndexTrieDataLE] = new IndexTrieDataLEFramer
 
-  override def toString: String = "ByteVectorLE"
+  override def toString: String = "IndexTrieDataLE"
 }
 
-private[data] final class ByteVectorLE0 extends ByteVectorLE {
+private[data] final class IndexTrieDataLE0 extends IndexTrieDataLE {
   override def size: Long = 0L
 
-  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ByteVectorLEReader()
+  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader()
 
   override def loadByte(address: Long): Byte = throw new IndexOutOfBoundsException(address.toString)
 
   protected[data] override def getNode1(address: Long): Array[Byte] = throw new IndexOutOfBoundsException(address.toString)
 
-  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): ByteVectorLE = throw new IndexOutOfBoundsException(address.toString)
+  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = throw new IndexOutOfBoundsException(address.toString)
 }
 
-private[data] final class ByteVectorLE1(
+private[data] final class IndexTrieDataLE1(
     private[data] val node1: Array[Byte],
     override val size: Long)
-  extends ByteVectorLE {
+  extends IndexTrieDataLE {
 
-  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ByteVectorLEReader(node1, size)
+  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node1, size)
 
   override def loadByte(address: Long): Byte = node1(address.toInt)
 
   protected[data] override def getNode1(address: Long): Array[Byte] = node1
 
-  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): ByteVectorLE = new ByteVectorLE1(newNode1, size)
+  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = new IndexTrieDataLE1(newNode1, size)
 }
 
-private[data] final class ByteVectorLE2(
+private[data] final class IndexTrieDataLE2(
     private[data] val node2: Array[Array[Byte]],
     override val size: Long)
-  extends ByteVectorLE {
+  extends IndexTrieDataLE {
 
-  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ByteVectorLEReader(node2, size)
+  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node2, size)
 
   override def loadByte(address: Long): Byte = {
     val lo = address.toInt
@@ -244,22 +244,22 @@ private[data] final class ByteVectorLE2(
     node2(lo >>> 8 & 0xFF)
   }
 
-  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): ByteVectorLE = {
+  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = {
     val lo = address.toInt
     val newNode2 = new Array[Array[Byte]](node2.length)
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
     newNode2(lo >>> 8 & 0xFF) = newNode1
-    new ByteVectorLE2(newNode2, size)
+    new IndexTrieDataLE2(newNode2, size)
   }
 }
 
-private[data] final class ByteVectorLE3(
+private[data] final class IndexTrieDataLE3(
     private[data] val node3: Array[Array[Array[Byte]]],
     override val size: Long)
-  extends ByteVectorLE {
+  extends IndexTrieDataLE {
 
-  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ByteVectorLEReader(node3, size)
+  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node3, size)
 
   override def loadByte(address: Long): Byte = {
     val lo = address.toInt
@@ -274,7 +274,7 @@ private[data] final class ByteVectorLE3(
           (lo >>>  8 & 0xFF))
   }
 
-  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): ByteVectorLE = {
+  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = {
     val lo = address.toInt
     val newNode3 = new Array[Array[Array[Byte]]](node3.length)
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
@@ -285,16 +285,16 @@ private[data] final class ByteVectorLE3(
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
     newNode2(lo >>>  8 & 0xFF) = newNode1
-    new ByteVectorLE3(newNode3, size)
+    new IndexTrieDataLE3(newNode3, size)
   }
 }
 
-private[data] final class ByteVectorLE4(
+private[data] final class IndexTrieDataLE4(
     private[data] val node4: Array[Array[Array[Array[Byte]]]],
     override val size: Long)
-  extends ByteVectorLE {
+  extends IndexTrieDataLE {
 
-  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ByteVectorLEReader(node4, size)
+  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node4, size)
 
   override def loadByte(address: Long): Byte = {
     val lo = address.toInt
@@ -311,7 +311,7 @@ private[data] final class ByteVectorLE4(
           (lo >>>  8 & 0xFF))
   }
 
-  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): ByteVectorLE = {
+  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = {
     val lo = address.toInt
     val newNode4 = new Array[Array[Array[Array[Byte]]]](node4.length)
     java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
@@ -327,16 +327,16 @@ private[data] final class ByteVectorLE4(
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
     newNode2(lo >>>  8 & 0xFF) = newNode1
-    new ByteVectorLE4(newNode4, size)
+    new IndexTrieDataLE4(newNode4, size)
   }
 }
 
-private[data] final class ByteVectorLE5(
+private[data] final class IndexTrieDataLE5(
     private[data] val node5: Array[Array[Array[Array[Array[Byte]]]]],
     override val size: Long)
-  extends ByteVectorLE {
+  extends IndexTrieDataLE {
 
-  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ByteVectorLEReader(node5, size)
+  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node5, size)
 
   override def loadByte(address: Long): Byte = {
     val hi = (address >>> 32).toInt
@@ -357,7 +357,7 @@ private[data] final class ByteVectorLE5(
           (lo >>>  8 & 0xFF))
   }
 
-  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): ByteVectorLE = {
+  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = {
     val hi = (address >>> 32).toInt
     val lo = address.toInt
     val newNode5 = new Array[Array[Array[Array[Array[Byte]]]]](node5.length)
@@ -379,16 +379,16 @@ private[data] final class ByteVectorLE5(
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
     newNode2(lo >>>  8 & 0xFF) = newNode1
-    new ByteVectorLE5(newNode5, size)
+    new IndexTrieDataLE5(newNode5, size)
   }
 }
 
-private[data] final class ByteVectorLE6(
+private[data] final class IndexTrieDataLE6(
     private[data] val node6: Array[Array[Array[Array[Array[Array[Byte]]]]]],
     override val size: Long)
-  extends ByteVectorLE {
+  extends IndexTrieDataLE {
 
-  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ByteVectorLEReader(node6, size)
+  override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node6, size)
 
   override def loadByte(address: Long): Byte = {
     val hi = (address >>> 32).toInt
@@ -411,7 +411,7 @@ private[data] final class ByteVectorLE6(
           (lo >>>  8 & 0xFF))
   }
 
-  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): ByteVectorLE = {
+  protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = {
     val hi = (address >>> 32).toInt
     val lo = address.toInt
     val newNode6 = new Array[Array[Array[Array[Array[Array[Byte]]]]]](node6.length)
@@ -438,11 +438,11 @@ private[data] final class ByteVectorLE6(
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
     newNode2(lo >>>  8 & 0xFF) = newNode1
-    new ByteVectorLE6(newNode6, size)
+    new IndexTrieDataLE6(newNode6, size)
   }
 }
 
-private[data] final class ByteVectorLEReader(
+private[data] final class IndexTrieDataLEReader(
     private[this] val size: Long,
     private[this] var index: Long,
     private[this] var node1: Array[Byte],
@@ -585,7 +585,7 @@ private[data] final class ByteVectorLEReader(
   }
 }
 
-private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with ByteOrder[LittleEndian] with Framer {
+private[data] final class IndexTrieDataLEFramer extends State[IndexTrieDataLE] with ByteOrder[LittleEndian] with Framer {
   private[this] var node1: Array[Byte] = _
   private[this] var node2: Array[Array[Byte]] = _
   private[this] var node3: Array[Array[Array[Byte]]] = _
@@ -679,9 +679,9 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
     }
   }
 
-  private[this] def alias: ByteVectorLE = if (length == 0L) ByteVectorLE.empty else alias1
+  private[this] def alias: IndexTrieDataLE = if (length == 0L) IndexTrieDataLE.empty else alias1
 
-  private[this] def alias1: ByteVectorLE = {
+  private[this] def alias1: IndexTrieDataLE = {
     if ((length.toInt & 0xFF) != 0) {
       val last1 = (length - 1L).toInt & 0xFF
       val oldNode1 = node1
@@ -689,10 +689,10 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       java.lang.System.arraycopy(oldNode1, 0, node1, 0, last1 + 1)
       aliased = 1
     }
-    if (length <= (1L << 8)) new ByteVectorLE1(node1, length) else alias2
+    if (length <= (1L << 8)) new IndexTrieDataLE1(node1, length) else alias2
   }
 
-  private[this] def alias2: ByteVectorLE = {
+  private[this] def alias2: IndexTrieDataLE = {
     if (aliased == 1 || ((length >>> 8).toInt & 0xFF) != 0) {
       val last2 = ((length - 1L) >>> 8).toInt & 0xFF
       val oldNode2 = node2
@@ -701,10 +701,10 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node2(last2) = node1
       aliased = 2
     }
-    if (length <= (1L << 16)) new ByteVectorLE2(node2, length) else alias3
+    if (length <= (1L << 16)) new IndexTrieDataLE2(node2, length) else alias3
   }
 
-  private[this] def alias3: ByteVectorLE = {
+  private[this] def alias3: IndexTrieDataLE = {
     if (aliased == 2 || ((length >>> 16).toInt & 0xFF) != 0) {
       val last3 = ((length - 1L) >>> 16).toInt & 0xFF
       val oldNode3 = node3
@@ -713,10 +713,10 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node3(last3) = node2
       aliased = 3
     }
-    if (length <= (1L << 24)) new ByteVectorLE3(node3, length) else alias4
+    if (length <= (1L << 24)) new IndexTrieDataLE3(node3, length) else alias4
   }
 
-  private[this] def alias4: ByteVectorLE = {
+  private[this] def alias4: IndexTrieDataLE = {
     if (aliased == 3 || ((length >>> 24).toInt & 0xFF) != 0) {
       val last4 = ((length - 1L) >>> 24).toInt & 0xFF
       val oldNode4 = node4
@@ -725,10 +725,10 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node4(last4) = node3
       aliased = 4
     }
-    if (length <= (1L << 32)) new ByteVectorLE4(node4, length) else alias5
+    if (length <= (1L << 32)) new IndexTrieDataLE4(node4, length) else alias5
   }
 
-  private[this] def alias5: ByteVectorLE = {
+  private[this] def alias5: IndexTrieDataLE = {
     if (aliased == 4 || ((length >>> 32).toInt & 0xFF) != 0) {
       val last5 = ((length - 1L) >>> 32).toInt & 0xFF
       val oldNode5 = node5
@@ -737,10 +737,10 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node5(last5) = node4
       aliased = 5
     }
-    if (length <= (1L << 40)) new ByteVectorLE5(node5, length) else alias6
+    if (length <= (1L << 40)) new IndexTrieDataLE5(node5, length) else alias6
   }
 
-  private[this] def alias6: ByteVectorLE = {
+  private[this] def alias6: IndexTrieDataLE = {
     if (aliased == 5 || ((length >>> 40).toInt & 0xFF) != 0) {
       val last6 = ((length - 1L) >>> 40).toInt & 0xFF
       val oldNode6 = node6
@@ -749,7 +749,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node6(last6) = node5
       aliased = 6
     }
-    new ByteVectorLE6(node6, length)
+    new IndexTrieDataLE6(node6, length)
   }
 
   override def endian: LittleEndian = LittleEndian
@@ -824,15 +824,15 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
   override def writeDouble(value: Double): Unit = writeLong(value.toRawLongBits)
 
   override def writeData(data: Loader): Unit = data match {
-    case data: ByteVectorLE0 if length == 0L => ()
-    case data: ByteVectorLE1 if (length & 0x00000000000000FFL) == 0L =>
+    case data: IndexTrieDataLE0 if length == 0L => ()
+    case data: IndexTrieDataLE1 if (length & 0x00000000000000FFL) == 0L =>
       gotoNode2()
       if (length == (1L << 8)) node2(0) = node1
       node1 = data.node1
       node2((length >>> 8).toInt & 0xFF) = node1
       length += data.size
       if (data.size < (1L << 8)) aliased = 1
-    case data: ByteVectorLE2 if (length & 0x000000000000FFFFL) == 0L =>
+    case data: IndexTrieDataLE2 if (length & 0x000000000000FFFFL) == 0L =>
       gotoNode3()
       if (length == (1L << 16)) node3(0) = node2
       node2 = data.node2
@@ -840,7 +840,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node3((length >>> 16).toInt & 0xFF) = node2
       length += data.size
       if (data.size < (1L << 16)) aliased = 2
-    case data: ByteVectorLE3 if (length & 0x0000000000FFFFFFL) == 0L =>
+    case data: IndexTrieDataLE3 if (length & 0x0000000000FFFFFFL) == 0L =>
       gotoNode4()
       if (length == (1L << 24)) node4(0) = node3
       node3 = data.node3
@@ -849,7 +849,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node4((length >>> 24).toInt & 0xFF) = node3
       length += data.size
       if (data.size < (1L << 24)) aliased = 3
-    case data: ByteVectorLE4 if (length & 0x00000000FFFFFFFFL) == 0L =>
+    case data: IndexTrieDataLE4 if (length & 0x00000000FFFFFFFFL) == 0L =>
       gotoNode5()
       if (length == (1L << 32)) node5(0) = node4
       node4 = data.node4
@@ -859,7 +859,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node5((length >>> 32).toInt & 0xFF) = node4
       length += data.size
       if (data.size < (1L << 32)) aliased = 4
-    case data: ByteVectorLE5 if (length & 0x000000FFFFFFFFFFL) == 0L =>
+    case data: IndexTrieDataLE5 if (length & 0x000000FFFFFFFFFFL) == 0L =>
       gotoNode6()
       if (length == (1L << 40)) node6(0) = node5
       node5 = data.node5
@@ -870,7 +870,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
       node6((length >>> 40).toInt & 0xFF) = node5
       length += data.size
       if (data.size < (1L << 40)) aliased = 5
-    case data: ByteVectorLE6 if length == 0L =>
+    case data: IndexTrieDataLE6 if length == 0L =>
       node6 = data.node6
       node5 = node6(node6.length - 1)
       node4 = node5(node5.length - 1)
@@ -882,7 +882,7 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
     case _ => super.writeData(data)
   }
 
-  override def state: ByteVectorLE = alias
+  override def state: IndexTrieDataLE = alias
 
   override def clear(): Unit = {
     node1 = null
@@ -895,5 +895,5 @@ private[data] final class ByteVectorLEFramer extends State[ByteVectorLE] with By
     aliased = 0
   }
 
-  override def toString: String = "ByteVectorLE"+"."+"Framer"+"()"
+  override def toString: String = "IndexTrieDataLE"+"."+"Framer"+"()"
 }

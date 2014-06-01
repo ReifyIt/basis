@@ -13,7 +13,7 @@ trait LoaderBehaviors { this: FlatSpec =>
   import Matchers._
   import HexMatchers._
 
-  def BigEndianLoader[Data <: Loader with ByteOrder[BigEndian]](Data: ByteFactory[Data]): Unit = {
+  def BigEndianLoader[Data <: Loader with ByteOrder[BigEndian]](Data: DataFactory[Data]): Unit = {
     def Base16(base16: String): Data = Data.fromBase16(base16)
 
     it should "load Byte values" in {
@@ -138,7 +138,7 @@ trait LoaderBehaviors { this: FlatSpec =>
   }
 
 
-  def LittleEndianLoader[Data <: Loader with ByteOrder[LittleEndian]](Data: ByteFactory[Data]): Unit = {
+  def LittleEndianLoader[Data <: Loader with ByteOrder[LittleEndian]](Data: DataFactory[Data]): Unit = {
     def Base16(base16: String): Data = Data.fromBase16(base16)
 
     it should "load Byte values" in {

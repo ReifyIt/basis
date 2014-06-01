@@ -6,7 +6,7 @@
 
 package basis.data
 
-final class ByteFactoryOps[+Data](val __ : ByteFactory[Data]) extends AnyVal {
+final class DataFactoryOps[+Data](val __ : DataFactory[Data]) extends AnyVal {
   def fromBase16(base16: CharSequence): Data = {
     var i = 0
     val n = base16.length

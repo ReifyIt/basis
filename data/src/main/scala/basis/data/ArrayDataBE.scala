@@ -9,7 +9,7 @@ package basis.data
 import basis._
 import basis.util._
 
-final class ByteArrayBE(val __ : Array[Byte]) extends AnyVal with ByteArray with ByteOrder[BigEndian] {
+final class ArrayDataBE(val __ : Array[Byte]) extends AnyVal with ArrayData with ByteOrder[BigEndian] {
   override def endian: BigEndian = BigEndian
 
   override def size: Long = __.length.toLong
@@ -94,42 +94,42 @@ final class ByteArrayBE(val __ : Array[Byte]) extends AnyVal with ByteArray with
   override def storeAlignedFloat(address: Long, value: Float): Unit   = storeFloat(address & -4L, value)
   override def storeAlignedDouble(address: Long, value: Double): Unit = storeDouble(address & -8L, value)
 
-  override def ++ (that: Loader): ByteArrayBE = that match {
-    case that: ByteArray =>
+  override def ++ (that: Loader): ArrayDataBE = that match {
+    case that: ArrayData =>
       val data = that.toArray
       val buffer = new Array[Byte](__.length + data.length)
       java.lang.System.arraycopy(__, 0, buffer, 0, __.length)
       java.lang.System.arraycopy(data, 0, buffer, __.length, data.length)
-      new ByteArrayBE(buffer)
+      new ArrayDataBE(buffer)
     case _ =>
-      val framer = ByteArrayBE.Framer.expect(size + that.size)
+      val framer = ArrayDataBE.Framer.expect(size + that.size)
       framer.writeData(this)
       framer.writeData(that)
       framer.state
   }
 
-  override def reader(address: Long): Reader with ByteOrder[BigEndian] = new ByteArrayBEReader(__, address.toInt)
+  override def reader(address: Long): Reader with ByteOrder[BigEndian] = new ArrayDataBEReader(__, address.toInt)
 
   override def toArray: Array[Byte] = __
 
-  protected override def stringPrefix: String = "ByteArrayBE"
+  protected override def stringPrefix: String = "ArrayDataBE"
 }
 
-object ByteArrayBE extends ByteOrder[BigEndian] with Allocator[ByteArrayBE] {
+object ArrayDataBE extends ByteOrder[BigEndian] with Allocator[ArrayDataBE] {
   override def endian: BigEndian = BigEndian
 
-  override val empty: ByteArrayBE = new ByteArrayBE(new Array[Byte](0))
+  override val empty: ArrayDataBE = new ArrayDataBE(new Array[Byte](0))
 
-  override def apply(data: Array[Byte]): ByteArrayBE = new ByteArrayBE(data)
+  override def apply(data: Array[Byte]): ArrayDataBE = new ArrayDataBE(data)
 
-  override def apply(size: Long): ByteArrayBE = new ByteArrayBE(new Array[Byte](size.toInt))
+  override def apply(size: Long): ArrayDataBE = new ArrayDataBE(new Array[Byte](size.toInt))
 
-  implicit override def Framer: Framer with ByteOrder[BigEndian] with State[ByteArrayBE] = new ByteArrayBEFramer
+  implicit override def Framer: Framer with ByteOrder[BigEndian] with State[ArrayDataBE] = new ArrayDataBEFramer
 
-  override def toString: String = "ByteArrayBE"
+  override def toString: String = "ArrayDataBE"
 }
 
-private[data] final class ByteArrayBEReader(buffer: Array[Byte], private[this] var offset: Int) extends ByteOrder[BigEndian] with Reader {
+private[data] final class ArrayDataBEReader(buffer: Array[Byte], private[this] var offset: Int) extends ByteOrder[BigEndian] with Reader {
   override def endian: BigEndian = BigEndian
 
   override def readByte(): Byte = {
@@ -175,7 +175,7 @@ private[data] final class ByteArrayBEReader(buffer: Array[Byte], private[this] v
   override def readDouble(): Double = readLong().toDoubleBits
 }
 
-private[data] final class ByteArrayBEFramer extends State[ByteArrayBE] with ByteOrder[BigEndian] with Framer {
+private[data] final class ArrayDataBEFramer extends State[ArrayDataBE] with ByteOrder[BigEndian] with Framer {
   private[this] var buffer: Array[Byte] = _
 
   private[this] var offset: Int = 0
@@ -239,11 +239,11 @@ private[data] final class ByteArrayBEFramer extends State[ByteArrayBE] with Byte
   override def writeDouble(value: Double): Unit = writeLong(value.toRawLongBits)
 
   override def writeData(data: Loader): Unit = data match {
-    case data: ByteArray if offset == 0 =>
+    case data: ArrayData if offset == 0 =>
       buffer = data.toArray
       offset = buffer.length
       aliased = true
-    case data: ByteArray =>
+    case data: ArrayData =>
       val array = data.toArray
       prepare(offset + array.length)
       java.lang.System.arraycopy(array, 0, buffer, offset, array.length)
@@ -265,15 +265,15 @@ private[data] final class ByteArrayBEFramer extends State[ByteArrayBE] with Byte
     this
   }
 
-  override def state: ByteArrayBE = {
-    if (buffer == null) buffer = ByteArrayBE.empty.__
+  override def state: ArrayDataBE = {
+    if (buffer == null) buffer = ArrayDataBE.empty.__
     else if (buffer.length != offset) {
       val array = new Array[Byte](offset)
       java.lang.System.arraycopy(buffer, 0, array, 0, offset)
       buffer = array
     }
     aliased = true
-    new ByteArrayBE(buffer)
+    new ArrayDataBE(buffer)
   }
 
   override def clear(): Unit = {
@@ -282,5 +282,5 @@ private[data] final class ByteArrayBEFramer extends State[ByteArrayBE] with Byte
     aliased = true
   }
 
-  override def toString: String = "ByteArrayBE"+"."+"Framer"+"()"
+  override def toString: String = "ArrayDataBE"+"."+"Framer"+"()"
 }

@@ -12,9 +12,9 @@ private[data] class DataMacros(val c: blackbox.Context) {
   import c.{ Expr, mirror, WeakTypeTag }
   import c.universe._
 
-  def ByteFactoryToOps[Data](factory: Expr[ByteFactory[Data]])(implicit Data: WeakTypeTag[Data]): Expr[ByteFactoryOps[Data]] = {
-    implicit val ByteFactoryOpsTag = WeakTypeTag[ByteFactory[Data]](appliedType(mirror.staticClass("basis.data.ByteFactoryOps").toTypeConstructor, Data.tpe :: Nil))
-    Expr[ByteFactoryOps[Data]](q"new $ByteFactoryOpsTag($factory)")
+  def DataFactoryToOps[Data](factory: Expr[DataFactory[Data]])(implicit Data: WeakTypeTag[Data]): Expr[DataFactoryOps[Data]] = {
+    implicit val DataFactoryOpsTag = WeakTypeTag[DataFactory[Data]](appliedType(mirror.staticClass("basis.data.DataFactoryOps").toTypeConstructor, Data.tpe :: Nil))
+    Expr[DataFactoryOps[Data]](q"new $DataFactoryOpsTag($factory)")
   }
 
   def LoaderToOps(data: Expr[Loader]): Expr[LoaderOps] = Expr[LoaderOps](q"new _root_.basis.data.LoaderOps($data)")

@@ -181,7 +181,7 @@ trait Variant { variant =>
     protected override def stringPrefix: String = "BinaryForm"
   }
 
-  trait BaseBinaryFactory extends ByteFactory[BinaryForm] {
+  trait BaseBinaryFactory extends DataFactory[BinaryForm] {
     override def toString: String = "BinaryForm"
   }
 

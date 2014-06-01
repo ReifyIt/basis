@@ -8,11 +8,11 @@ package basis.data
 
 import org.scalatest._
 
-trait ByteFactoryBehaviors { this: FlatSpec =>
+trait DataFactoryBehaviors { this: FlatSpec =>
   import Matchers._
   import HexMatchers._
 
-  def DataSerializer(Data: ByteFactory[Loader]): Unit = {
+  def DataSerializer(Data: DataFactory[Loader]): Unit = {
     def serialize[T](count: Int, offset: Int)(series: Int => T)(implicit T: Frame[T]): Unit = {
       val framer = Data.Framer
       var i = 0

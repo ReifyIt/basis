@@ -74,7 +74,7 @@ trait BsonVariant extends Variant { variant =>
 
     /** Returns the serialized BSON representation of this form. */
     def toBson: Loader = {
-      val output = ByteVectorLE.Framer.expect(bsonSize.toLong)
+      val output = ArrayDataLE.Framer.expect(bsonSize.toLong)
       writeBson(output)
       output.state
     }

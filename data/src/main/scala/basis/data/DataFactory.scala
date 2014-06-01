@@ -8,7 +8,7 @@ package basis.data
 
 import basis._
 
-trait ByteFactory[+Data] extends ByteOrder[Endianness] {
+trait DataFactory[+Data] extends ByteOrder[Endianness] {
   def empty: Data = Framer.state
 
   def apply(data: Array[Byte]): Data = {

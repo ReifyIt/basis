@@ -6,6 +6,6 @@
 
 package basis.data
 
-trait Allocator[+Data] extends ByteFactory[Data] {
+trait Allocator[+Data] extends DataFactory[Data] {
   def apply(size: Long): Data
 }

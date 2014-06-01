@@ -13,7 +13,7 @@ trait ReaderBehaviors { this: FlatSpec =>
   import Matchers._
   import HexMatchers._
 
-  def BigEndianReader(Data: ByteFactory[Loader with ByteOrder[BigEndian]]): Unit = {
+  def BigEndianReader(Data: DataFactory[Loader with ByteOrder[BigEndian]]): Unit = {
     def Base16(base16: String): Reader with ByteOrder[BigEndian] = Data.fromBase16(base16).reader(0L)
 
     it should "read Byte values" in {
@@ -73,7 +73,7 @@ trait ReaderBehaviors { this: FlatSpec =>
   }
 
 
-  def LittleEndianReader(Data: ByteFactory[Loader with ByteOrder[LittleEndian]]): Unit = {
+  def LittleEndianReader(Data: DataFactory[Loader with ByteOrder[LittleEndian]]): Unit = {
     def Base16(base16: String): Reader with ByteOrder[LittleEndian] = Data.fromBase16(base16).reader(0L)
 
     it should "read Byte values" in {

@@ -13,7 +13,7 @@ trait WriterBehaviors { this: FlatSpec =>
   import Matchers._
   import HexMatchers._
 
-  def BigEndianWriter(Data: ByteFactory[Loader with ByteOrder[BigEndian]]): Unit = {
+  def BigEndianWriter(Data: DataFactory[Loader with ByteOrder[BigEndian]]): Unit = {
     it should "write Byte values" in {
       val framer = Data.Framer
       framer.writeByte(0x69.toByte)
@@ -135,7 +135,7 @@ trait WriterBehaviors { this: FlatSpec =>
   }
 
 
-  def LittleEndianWriter(Data: ByteFactory[Loader with ByteOrder[LittleEndian]]): Unit = {
+  def LittleEndianWriter(Data: DataFactory[Loader with ByteOrder[LittleEndian]]): Unit = {
     it should "write Byte values" in {
       val framer = Data.Framer
       framer.writeByte(0x69.toByte)
