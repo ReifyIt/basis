@@ -20,9 +20,6 @@ final class FingerTrieSeq[+A] private[collections] (
   with Deque[A]
   with IndexedSeq[A] {
 
-  // if (length <= 32) assume(prefix.length == length)
-  // if (length >  32) assume(prefix.length == 32)
-
   private[collections] def this(infix: Array[AnyRef]) =
     this(infix, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, infix.length)
 
@@ -219,6 +216,8 @@ final class FingerTrieSeq[+A] private[collections] (
 
   override def :: [B >: A](elem: B): FingerTrieSeq[B] = elem +: this
 
+  override def iterator: Iterator[A] = new FingerTrieSeqIterator(this)
+
   override def traverse(f: A => Unit): Unit = traverse1(this)(f)
 
   private[this] def traverse1(xs: FingerTrieSeq[A])(f: A => Unit): Unit = {
@@ -324,6 +323,51 @@ object FingerTrieSeq extends generic.SeqFactory[FingerTrieSeq] {
   implicit override def Builder[A]: Builder[A] with State[FingerTrieSeq[A]] = new FingerTrieSeqBuilder[A]
 
   override def toString: String = "FingerTrieSeq"
+}
+
+private[collections] final class FingerTrieSeqIterator[+A](
+    private[this] val trie: FingerTrieSeq[A],
+    private[this] var inner: Iterator[Array[AnyRef]],
+    private[this] var buffer: Array[AnyRef],
+    private[this] var index: Int)
+  extends Iterator[A] {
+
+  def this(trie: FingerTrieSeq[A]) = this(trie, null, trie.prefix, 0)
+
+  override def isEmpty: Boolean = index >= trie.length
+
+  override def head: A = {
+    val n = index - trie.prefix.length
+    if (n < 0) buffer(index).asInstanceOf[A]
+    else {
+      val j = n - (trie.branch.length << 5)
+      if (j < 0) buffer(n & 0x1F).asInstanceOf[A]
+      else if (j < trie.suffix.length) buffer(j).asInstanceOf[A]
+      else Iterator.empty.head
+    }
+  }
+
+  override def step(): Unit = {
+    if (index >= trie.length) Iterator.empty.step()
+    index += 1
+
+    val n = index - trie.prefix.length
+    if ((n & 0x1F) == 0 && index < trie.length) {
+      val j = n - (trie.branch.length << 5)
+      buffer =
+        if (j == 0) trie.suffix
+        else if (n == 0) {
+          inner = trie.branch.iterator
+          inner.head
+        }
+        else {
+          inner.step()
+          inner.head
+        }
+    }
+  }
+
+  override def dup: Iterator[A] = new FingerTrieSeqIterator(trie, inner.dup, buffer, index)
 }
 
 private[collections] final class FingerTrieSeqBuilder[A](
