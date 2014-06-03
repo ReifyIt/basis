@@ -235,13 +235,13 @@ private[data] final class IndexTrieDataBE2(
 
   override def loadByte(address: Long): Byte = {
     val lo = address.toInt
-    (node2(lo >>> 8 & 0xFF)
+    (node2(lo >>> 8 & 0x1F)
           (lo       & 0xFF))
   }
 
   protected[data] override def getNode1(address: Long): Array[Byte] = {
     val lo = address.toInt
-    node2(lo >>> 8 & 0xFF)
+    node2(lo >>> 8 & 0x1F)
   }
 
   protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataBE = {
@@ -249,7 +249,7 @@ private[data] final class IndexTrieDataBE2(
     val newNode2 = new Array[Array[Byte]](node2.length)
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
-    newNode2(lo >>> 8 & 0xFF) = newNode1
+    newNode2(lo >>> 8 & 0x1F) = newNode1
     new IndexTrieDataBE2(newNode2, size)
   }
 }
@@ -263,15 +263,15 @@ private[data] final class IndexTrieDataBE3(
 
   override def loadByte(address: Long): Byte = {
     val lo = address.toInt
-    (node3(lo >>> 16 & 0xFF)
-          (lo >>>  8 & 0xFF)
+    (node3(lo >>> 13 & 0x1F)
+          (lo >>>  8 & 0x1F)
           (lo        & 0xFF))
   }
 
   protected[data] override def getNode1(address: Long): Array[Byte] = {
     val lo = address.toInt
-    (node3(lo >>> 16 & 0xFF)
-          (lo >>>  8 & 0xFF))
+    (node3(lo >>> 13 & 0x1F)
+          (lo >>>  8 & 0x1F))
   }
 
   protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataBE = {
@@ -279,12 +279,12 @@ private[data] final class IndexTrieDataBE3(
     val newNode3 = new Array[Array[Array[Byte]]](node3.length)
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
 
-    val node2 = newNode3(lo >>> 16 & 0xFF)
+    val node2 = newNode3(lo >>> 13 & 0x1F)
     val newNode2 = new Array[Array[Byte]](node2.length)
-    newNode3(lo >>> 16 & 0xFF) = newNode2
+    newNode3(lo >>> 13 & 0x1F) = newNode2
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
-    newNode2(lo >>>  8 & 0xFF) = newNode1
+    newNode2(lo >>>  8 & 0x1F) = newNode1
     new IndexTrieDataBE3(newNode3, size)
   }
 }
@@ -298,17 +298,17 @@ private[data] final class IndexTrieDataBE4(
 
   override def loadByte(address: Long): Byte = {
     val lo = address.toInt
-    (node4(lo >>> 24 & 0xFF)
-          (lo >>> 16 & 0xFF)
-          (lo >>>  8 & 0xFF)
+    (node4(lo >>> 18 & 0x1F)
+          (lo >>> 13 & 0x1F)
+          (lo >>>  8 & 0x1F)
           (lo        & 0xFF))
   }
 
   protected[data] override def getNode1(address: Long): Array[Byte] = {
     val lo = address.toInt
-    (node4(lo >>> 24 & 0xFF)
-          (lo >>> 16 & 0xFF)
-          (lo >>>  8 & 0xFF))
+    (node4(lo >>> 18 & 0x1F)
+          (lo >>> 13 & 0x1F)
+          (lo >>>  8 & 0x1F))
   }
 
   protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataBE = {
@@ -316,17 +316,17 @@ private[data] final class IndexTrieDataBE4(
     val newNode4 = new Array[Array[Array[Array[Byte]]]](node4.length)
     java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
 
-    val node3 = newNode4(lo >>> 24 & 0xFF)
+    val node3 = newNode4(lo >>> 18 & 0x1F)
     val newNode3 = new Array[Array[Array[Byte]]](node3.length)
-    newNode4(lo >>> 24 & 0xFF) = newNode3
+    newNode4(lo >>> 18 & 0x1F) = newNode3
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
 
-    val node2 = newNode3(lo >>> 16 & 0xFF)
+    val node2 = newNode3(lo >>> 13 & 0x1F)
     val newNode2 = new Array[Array[Byte]](node2.length)
-    newNode3(lo >>> 16 & 0xFF) = newNode2
+    newNode3(lo >>> 13 & 0x1F) = newNode2
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
-    newNode2(lo >>>  8 & 0xFF) = newNode1
+    newNode2(lo >>>  8 & 0x1F) = newNode1
     new IndexTrieDataBE4(newNode4, size)
   }
 }
@@ -339,46 +339,43 @@ private[data] final class IndexTrieDataBE5(
   override def reader(address: Long): Reader with ByteOrder[BigEndian] = new IndexTrieDataBEReader(node5, size)
 
   override def loadByte(address: Long): Byte = {
-    val hi = (address >>> 32).toInt
     val lo = address.toInt
-    (node5(hi        & 0xFF)
-          (lo >>> 24 & 0xFF)
-          (lo >>> 16 & 0xFF)
-          (lo >>>  8 & 0xFF)
+    (node5(lo >>> 23 & 0x1F)
+          (lo >>> 18 & 0x1F)
+          (lo >>> 13 & 0x1F)
+          (lo >>>  8 & 0x1F)
           (lo        & 0xFF))
   }
 
   protected[data] override def getNode1(address: Long): Array[Byte] = {
-    val hi = (address >>> 32).toInt
     val lo = address.toInt
-    (node5(hi        & 0xFF)
-          (lo >>> 24 & 0xFF)
-          (lo >>> 16 & 0xFF)
-          (lo >>>  8 & 0xFF))
+    (node5(lo >>> 23 & 0x1F)
+          (lo >>> 18 & 0x1F)
+          (lo >>> 13 & 0x1F)
+          (lo >>>  8 & 0x1F))
   }
 
   protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataBE = {
-    val hi = (address >>> 32).toInt
     val lo = address.toInt
     val newNode5 = new Array[Array[Array[Array[Array[Byte]]]]](node5.length)
     java.lang.System.arraycopy(node5, 0, newNode5, 0, node5.length)
 
-    val node4 = newNode5(hi        & 0xFF)
+    val node4 = newNode5(lo >>> 23 & 0x1F)
     val newNode4 = new Array[Array[Array[Array[Byte]]]](node4.length)
-    newNode5(hi        & 0xFF) = newNode4
+    newNode5(lo >>> 23 & 0x1F) = newNode4
     java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
 
-    val node3 = newNode4(lo >>> 24 & 0xFF)
+    val node3 = newNode4(lo >>> 18 & 0x1F)
     val newNode3 = new Array[Array[Array[Byte]]](node3.length)
-    newNode4(lo >>> 24 & 0xFF) = newNode3
+    newNode4(lo >>> 18 & 0x1F) = newNode3
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
 
-    val node2 = newNode3(lo >>> 16 & 0xFF)
+    val node2 = newNode3(lo >>> 13 & 0x1F)
     val newNode2 = new Array[Array[Byte]](node2.length)
-    newNode3(lo >>> 16 & 0xFF) = newNode2
+    newNode3(lo >>> 13 & 0x1F) = newNode2
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
-    newNode2(lo >>>  8 & 0xFF) = newNode1
+    newNode2(lo >>>  8 & 0x1F) = newNode1
     new IndexTrieDataBE5(newNode5, size)
   }
 }
@@ -391,53 +388,50 @@ private[data] final class IndexTrieDataBE6(
   override def reader(address: Long): Reader with ByteOrder[BigEndian] = new IndexTrieDataBEReader(node6, size)
 
   override def loadByte(address: Long): Byte = {
-    val hi = (address >>> 32).toInt
     val lo = address.toInt
-    (node6(hi >>>  8 & 0xFF)
-          (hi        & 0xFF)
-          (lo >>> 24 & 0xFF)
-          (lo >>> 16 & 0xFF)
-          (lo >>>  8 & 0xFF)
+    (node6((address >>> 28).toInt & 0x1F)
+          (lo >>> 23 & 0x1F)
+          (lo >>> 18 & 0x1F)
+          (lo >>> 13 & 0x1F)
+          (lo >>>  8 & 0x1F)
           (lo        & 0xFF))
   }
 
   protected[data] override def getNode1(address: Long): Array[Byte] = {
-    val hi = (address >>> 32).toInt
     val lo = address.toInt
-    (node6(hi >>>  8 & 0xFF)
-          (hi        & 0xFF)
-          (lo >>> 24 & 0xFF)
-          (lo >>> 16 & 0xFF)
-          (lo >>>  8 & 0xFF))
+    (node6((address >>> 28).toInt & 0x1F)
+          (lo >>> 23 & 0x1F)
+          (lo >>> 18 & 0x1F)
+          (lo >>> 13 & 0x1F)
+          (lo >>>  8 & 0x1F))
   }
 
   protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataBE = {
-    val hi = (address >>> 32).toInt
     val lo = address.toInt
     val newNode6 = new Array[Array[Array[Array[Array[Array[Byte]]]]]](node6.length)
     java.lang.System.arraycopy(node6, 0, newNode6, 0, node6.length)
 
-    val node5 = newNode6(hi >>>  8 & 0xFF)
+    val node5 = newNode6((address >>> 28).toInt & 0x1F)
     val newNode5 = new Array[Array[Array[Array[Array[Byte]]]]](node5.length)
-    newNode6(hi >>>  8 & 0xFF) = newNode5
+    newNode6((address >>> 28).toInt & 0x1F) = newNode5
     java.lang.System.arraycopy(node5, 0, newNode5, 0, node5.length)
 
-    val node4 = newNode5(hi        & 0xFF)
+    val node4 = newNode5(lo >>> 23 & 0x1F)
     val newNode4 = new Array[Array[Array[Array[Byte]]]](node4.length)
-    newNode5(hi        & 0xFF) = newNode4
+    newNode5(lo >>> 23 & 0x1F) = newNode4
     java.lang.System.arraycopy(node4, 0, newNode4, 0, node4.length)
 
-    val node3 = newNode4(lo >>> 24 & 0xFF)
+    val node3 = newNode4(lo >>> 18 & 0x1F)
     val newNode3 = new Array[Array[Array[Byte]]](node3.length)
-    newNode4(lo >>> 24 & 0xFF) = newNode3
+    newNode4(lo >>> 18 & 0x1F) = newNode3
     java.lang.System.arraycopy(node3, 0, newNode3, 0, node3.length)
 
-    val node2 = newNode3(lo >>> 16 & 0xFF)
+    val node2 = newNode3(lo >>> 13 & 0x1F)
     val newNode2 = new Array[Array[Byte]](node2.length)
-    newNode3(lo >>> 16 & 0xFF) = newNode2
+    newNode3(lo >>> 13 & 0x1F) = newNode2
     java.lang.System.arraycopy(node2, 0, newNode2, 0, node2.length)
 
-    newNode2(lo >>>  8 & 0xFF) = newNode1
+    newNode2(lo >>>  8 & 0x1F) = newNode1
     new IndexTrieDataBE6(newNode6, size)
   }
 }
@@ -568,19 +562,19 @@ private[data] final class IndexTrieDataBEReader(
     val diff = index ^ (index + count)
     index += count
     if (index < size && diff >= (1L << 8)) {
-      if (diff >= (1L << 16)) {
-        if (diff >= (1L << 24)) {
-          if (diff >= (1L << 32)) {
-            if (diff >= (1L << 40)) {
-              node5 = node6((index >>> 40).toInt & 0xFF)
+      if (diff >= (1L << 13)) {
+        if (diff >= (1L << 18)) {
+          if (diff >= (1L << 23)) {
+            if (diff >= (1L << 28)) {
+              node5 = node6((index >>> 28).toInt & 0x1F)
             }
-            node4 = node5((index >>> 32).toInt & 0xFF)
+            node4 = node5((index >>> 23).toInt & 0x1F)
           }
-          node3 = node4((index >>> 24).toInt & 0xFF)
+          node3 = node4((index >>> 18).toInt & 0x1F)
         }
-        node2 = node3((index >>> 16).toInt & 0xFF)
+        node2 = node3((index >>> 13).toInt & 0x1F)
       }
-      node1 = node2((index >>> 8).toInt & 0xFF)
+      node1 = node2((index >>> 8).toInt & 0x1F)
     }
   }
 }
@@ -607,71 +601,71 @@ private[data] final class IndexTrieDataBEFramer extends State[IndexTrieDataBE] w
         aliased = 0
       }
       if (length == (1L << 8)) node2(0) = oldNode1
-      if (length >= (1L << 8)) node2((length >>> 8).toInt & 0xFF) = node1
+      if (length >= (1L << 8)) node2((length >>> 8).toInt & 0x1F) = node1
     }
   }
 
   private[this] def gotoNode2(): Unit = {
-    if (length >= (1L << 16)) gotoNode3()
-    if (aliased == 2 || (length & 0x000000000000FFFFL) == 0L || length == (1L << 8)) {
+    if (length >= (1L << 13)) gotoNode3()
+    if (aliased == 2 || (length & 0x0000000000001FFFL) == 0L || length == (1L << 8)) {
       val oldNode2 = node2
-      node2 = new Array[Array[Byte]](256)
+      node2 = new Array[Array[Byte]](32)
       if (aliased == 2) {
         java.lang.System.arraycopy(oldNode2, 0, node2, 0, oldNode2.length)
         aliased = 1
       }
-      if (length == (1L << 16)) node3(0) = oldNode2
-      if (length >= (1L << 16)) node3((length >>> 16).toInt & 0xFF) = node2
+      if (length == (1L << 13)) node3(0) = oldNode2
+      if (length >= (1L << 13)) node3((length >>> 13).toInt & 0x1F) = node2
     }
   }
 
   private[this] def gotoNode3(): Unit = {
-    if (length >= (1L << 24)) gotoNode4()
-    if (aliased == 3 || (length & 0x0000000000FFFFFFL) == 0L || length == (1L << 16)) {
+    if (length >= (1L << 18)) gotoNode4()
+    if (aliased == 3 || (length & 0x000000000003FFFFL) == 0L || length == (1L << 13)) {
       val oldNode3 = node3
-      node3 = new Array[Array[Array[Byte]]](256)
+      node3 = new Array[Array[Array[Byte]]](32)
       if (aliased == 3) {
         java.lang.System.arraycopy(oldNode3, 0, node3, 0, oldNode3.length)
         aliased = 2
       }
-      if (length == (1L << 24)) node4(0) = oldNode3
-      if (length >= (1L << 24)) node4((length >>> 24).toInt & 0xFF) = node3
+      if (length == (1L << 18)) node4(0) = oldNode3
+      if (length >= (1L << 18)) node4((length >>> 18).toInt & 0x1F) = node3
     }
   }
 
   private[this] def gotoNode4(): Unit = {
-    if (length >= (1L << 32)) gotoNode5()
-    if (aliased == 4 || (length & 0x00000000FFFFFFFFL) == 0L || length == (1L << 24)) {
+    if (length >= (1L << 23)) gotoNode5()
+    if (aliased == 4 || (length & 0x00000000007FFFFFL) == 0L || length == (1L << 18)) {
       val oldNode4 = node4
-      node4 = new Array[Array[Array[Array[Byte]]]](256)
+      node4 = new Array[Array[Array[Array[Byte]]]](32)
       if (aliased == 4) {
         java.lang.System.arraycopy(oldNode4, 0, node4, 0, oldNode4.length)
         aliased = 3
       }
-      if (length == (1L << 32)) node5(0) = oldNode4
-      if (length >= (1L << 32)) node5((length >>> 32).toInt & 0xFF) = node4
+      if (length == (1L << 23)) node5(0) = oldNode4
+      if (length >= (1L << 23)) node5((length >>> 23).toInt & 0x1F) = node4
     }
   }
 
   private[this] def gotoNode5(): Unit = {
-    if (length >= (1L << 40)) gotoNode6()
-    if (aliased == 5 || (length & 0x000000FFFFFFFFFFL) == 0L || length == (1L << 32)) {
+    if (length >= (1L << 28)) gotoNode6()
+    if (aliased == 5 || (length & 0x000000000FFFFFFFL) == 0L || length == (1L << 23)) {
       val oldNode5 = node5
-      node5 = new Array[Array[Array[Array[Array[Byte]]]]](256)
+      node5 = new Array[Array[Array[Array[Array[Byte]]]]](32)
       if (aliased == 5) {
         java.lang.System.arraycopy(oldNode5, 0, node5, 0, oldNode5.length)
         aliased = 4
       }
-      if (length == (1L << 40)) node6(0) = oldNode5
-      if (length >= (1L << 40)) node6((length >>> 40).toInt & 0xFF) = node5
+      if (length == (1L << 28)) node6(0) = oldNode5
+      if (length >= (1L << 28)) node6((length >>> 28).toInt & 0x1F) = node5
     }
   }
 
   private[this] def gotoNode6(): Unit = {
-    if (length >= (1L << 48)) throw new UnsupportedOperationException("maximum length exceeded")
-    if (aliased == 6 || length == (1L << 48)) {
+    if (length >= (1L << 33)) throw new UnsupportedOperationException("maximum length exceeded")
+    if (aliased == 6 || (length & 0x00000001FFFFFFFFL) == 0L || length == (1L << 28)) {
       val oldNode6 = node6
-      node6 = new Array[Array[Array[Array[Array[Array[Byte]]]]]](256)
+      node6 = new Array[Array[Array[Array[Array[Array[Byte]]]]]](32)
       if (aliased == 6) {
         java.lang.System.arraycopy(oldNode6, 0, node6, 0, oldNode6.length)
         aliased = 5
@@ -693,56 +687,56 @@ private[data] final class IndexTrieDataBEFramer extends State[IndexTrieDataBE] w
   }
 
   private[this] def alias2: IndexTrieDataBE = {
-    if (aliased == 1 || ((length >>> 8).toInt & 0xFF) != 0) {
-      val last2 = ((length - 1L) >>> 8).toInt & 0xFF
+    if (aliased == 1 || ((length >>> 8).toInt & 0x1F) != 0) {
+      val last2 = ((length - 1L) >>> 8).toInt & 0x1F
       val oldNode2 = node2
       node2 = new Array[Array[Byte]](last2 + 1)
       java.lang.System.arraycopy(oldNode2, 0, node2, 0, last2)
       node2(last2) = node1
       aliased = 2
     }
-    if (length <= (1L << 16)) new IndexTrieDataBE2(node2, length) else alias3
+    if (length <= (1L << 13)) new IndexTrieDataBE2(node2, length) else alias3
   }
 
   private[this] def alias3: IndexTrieDataBE = {
-    if (aliased == 2 || ((length >>> 16).toInt & 0xFF) != 0) {
-      val last3 = ((length - 1L) >>> 16).toInt & 0xFF
+    if (aliased == 2 || ((length >>> 13).toInt & 0x1F) != 0) {
+      val last3 = ((length - 1L) >>> 13).toInt & 0x1F
       val oldNode3 = node3
       node3 = new Array[Array[Array[Byte]]](last3 + 1)
       java.lang.System.arraycopy(oldNode3, 0, node3, 0, last3)
       node3(last3) = node2
       aliased = 3
     }
-    if (length <= (1L << 24)) new IndexTrieDataBE3(node3, length) else alias4
+    if (length <= (1L << 18)) new IndexTrieDataBE3(node3, length) else alias4
   }
 
   private[this] def alias4: IndexTrieDataBE = {
-    if (aliased == 3 || ((length >>> 24).toInt & 0xFF) != 0) {
-      val last4 = ((length - 1L) >>> 24).toInt & 0xFF
+    if (aliased == 3 || ((length >>> 18).toInt & 0x1F) != 0) {
+      val last4 = ((length - 1L) >>> 18).toInt & 0x1F
       val oldNode4 = node4
       node4 = new Array[Array[Array[Array[Byte]]]](last4 + 1)
       java.lang.System.arraycopy(oldNode4, 0, node4, 0, last4)
       node4(last4) = node3
       aliased = 4
     }
-    if (length <= (1L << 32)) new IndexTrieDataBE4(node4, length) else alias5
+    if (length <= (1L << 23)) new IndexTrieDataBE4(node4, length) else alias5
   }
 
   private[this] def alias5: IndexTrieDataBE = {
-    if (aliased == 4 || ((length >>> 32).toInt & 0xFF) != 0) {
-      val last5 = ((length - 1L) >>> 32).toInt & 0xFF
+    if (aliased == 4 || ((length >>> 23).toInt & 0x1F) != 0) {
+      val last5 = ((length - 1L) >>> 23).toInt & 0x1F
       val oldNode5 = node5
       node5 = new Array[Array[Array[Array[Array[Byte]]]]](last5 + 1)
       java.lang.System.arraycopy(oldNode5, 0, node5, 0, last5)
       node5(last5) = node4
       aliased = 5
     }
-    if (length <= (1L << 40)) new IndexTrieDataBE5(node5, length) else alias6
+    if (length <= (1L << 28)) new IndexTrieDataBE5(node5, length) else alias6
   }
 
   private[this] def alias6: IndexTrieDataBE = {
-    if (aliased == 5 || ((length >>> 40).toInt & 0xFF) != 0) {
-      val last6 = ((length - 1L) >>> 40).toInt & 0xFF
+    if (aliased == 5 || ((length >>> 28).toInt & 0x1F) != 0) {
+      val last6 = ((length - 1L) >>> 28).toInt & 0x1F
       val oldNode6 = node6
       node6 = new Array[Array[Array[Array[Array[Array[Byte]]]]]](last6 + 1)
       java.lang.System.arraycopy(oldNode6, 0, node6, 0, last6)
@@ -829,47 +823,47 @@ private[data] final class IndexTrieDataBEFramer extends State[IndexTrieDataBE] w
       gotoNode2()
       if (length == (1L << 8)) node2(0) = node1
       node1 = data.node1
-      node2((length >>> 8).toInt & 0xFF) = node1
+      node2((length >>> 8).toInt & 0x1F) = node1
       length += data.size
       if (data.size < (1L << 8)) aliased = 1
-    case data: IndexTrieDataBE2 if (length & 0x000000000000FFFFL) == 0L =>
+    case data: IndexTrieDataBE2 if (length & 0x0000000000001FFFL) == 0L =>
       gotoNode3()
-      if (length == (1L << 16)) node3(0) = node2
+      if (length == (1L << 13)) node3(0) = node2
       node2 = data.node2
       node1 = node2(node2.length - 1)
-      node3((length >>> 16).toInt & 0xFF) = node2
+      node3((length >>> 13).toInt & 0x1F) = node2
       length += data.size
-      if (data.size < (1L << 16)) aliased = 2
-    case data: IndexTrieDataBE3 if (length & 0x0000000000FFFFFFL) == 0L =>
+      if (data.size < (1L << 13)) aliased = 2
+    case data: IndexTrieDataBE3 if (length & 0x000000000003FFFFL) == 0L =>
       gotoNode4()
-      if (length == (1L << 24)) node4(0) = node3
+      if (length == (1L << 18)) node4(0) = node3
       node3 = data.node3
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
-      node4((length >>> 24).toInt & 0xFF) = node3
+      node4((length >>> 18).toInt & 0x1F) = node3
       length += data.size
-      if (data.size < (1L << 24)) aliased = 3
-    case data: IndexTrieDataBE4 if (length & 0x00000000FFFFFFFFL) == 0L =>
+      if (data.size < (1L << 18)) aliased = 3
+    case data: IndexTrieDataBE4 if (length & 0x00000000007FFFFFL) == 0L =>
       gotoNode5()
-      if (length == (1L << 32)) node5(0) = node4
+      if (length == (1L << 23)) node5(0) = node4
       node4 = data.node4
       node3 = node4(node4.length - 1)
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
-      node5((length >>> 32).toInt & 0xFF) = node4
+      node5((length >>> 23).toInt & 0x1F) = node4
       length += data.size
-      if (data.size < (1L << 32)) aliased = 4
-    case data: IndexTrieDataBE5 if (length & 0x000000FFFFFFFFFFL) == 0L =>
+      if (data.size < (1L << 23)) aliased = 4
+    case data: IndexTrieDataBE5 if (length & 0x000000000FFFFFFFL) == 0L =>
       gotoNode6()
-      if (length == (1L << 40)) node6(0) = node5
+      if (length == (1L << 28)) node6(0) = node5
       node5 = data.node5
       node4 = node5(node5.length - 1)
       node3 = node4(node4.length - 1)
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
-      node6((length >>> 40).toInt & 0xFF) = node5
+      node6((length >>> 28).toInt & 0x1F) = node5
       length += data.size
-      if (data.size < (1L << 40)) aliased = 5
+      if (data.size < (1L << 28)) aliased = 5
     case data: IndexTrieDataBE6 if length == 0L =>
       node6 = data.node6
       node5 = node6(node6.length - 1)
@@ -878,7 +872,7 @@ private[data] final class IndexTrieDataBEFramer extends State[IndexTrieDataBE] w
       node2 = node3(node3.length - 1)
       node1 = node2(node2.length - 1)
       length = data.size
-      if (data.size < (1L << 48)) aliased = 6
+      if (data.size < (1L << 33)) aliased = 6
     case _ => super.writeData(data)
   }
 
@@ -895,5 +889,5 @@ private[data] final class IndexTrieDataBEFramer extends State[IndexTrieDataBE] w
     aliased = 0
   }
 
-  override def toString: String = "IndexTrieDataBE"+"."+"Framer"+"()"
+  override def toString: String = "IndexTrieDataBE"+"."+"Framer"
 }

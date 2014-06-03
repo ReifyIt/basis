@@ -53,13 +53,13 @@ trait DataFactoryBehaviors { this: FlatSpec =>
     lazy val longSeries: Int => Long = i => (~i).toLong
 
     def serializeBlocks[T : Frame](offset: Int)(series: Int => T): Unit = {
-      var k = 4
-      while (k <= 24) {
+      var k = 3
+      while (k <= 23) {
         val count = 1 << k
         serialize(count - 1, offset)(series)
         serialize(count,     offset)(series)
         serialize(count + 1, offset)(series)
-        k += 4
+        k += 5
       }
     }
 
@@ -118,13 +118,13 @@ trait DataFactoryBehaviors { this: FlatSpec =>
     }
 
     def concatBlocks(alias: Boolean): Unit = {
-      var k = 4
-      while (k <= 24) {
+      var k = 3
+      while (k <= 23) {
         val n = 1 << k
         concat(1, n, alias)
         concat(n, 1, alias)
         concat(n, n, alias)
-        k += 4
+        k += 5
       }
     }
 

@@ -282,5 +282,5 @@ private[data] final class ArrayDataLEFramer extends State[ArrayDataLE] with Byte
     aliased = true
   }
 
-  override def toString: String = "ArrayDataLE"+"."+"Framer"+"()"
+  override def toString: String = "ArrayDataLE"+"."+"Framer"
 }
