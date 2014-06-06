@@ -8,6 +8,7 @@ package basis.collections
 package immutable
 
 import basis._
+import basis.util._
 
 final class FingerTrieSeq[+A] private[collections] (
     private[collections] val prefix: Array[AnyRef],
@@ -146,7 +147,10 @@ final class FingerTrieSeq[+A] private[collections] (
     }
   }
 
-  def slice(lower: Int, upper: Int): FingerTrieSeq[A] = drop(lower).take(upper)
+  def slice(lower: Int, upper: Int): FingerTrieSeq[A] = {
+    if (lower >= upper) FingerTrieSeq.empty
+    else drop(lower).take(upper - (0 max lower))
+  }
 
   override def :+ [B >: A](elem: B): FingerTrieSeq[B] = {
     val i = prefix.length
@@ -353,6 +357,7 @@ private[collections] final class FingerTrieSeqArraySegmenter(
       if (branch.length > 0) {
         inner = new FingerTrieSeqArraySegmenter(branch)
         infix = inner.head
+        branch = null
         phase = 1
       }
       else if (suffix.length > 0) {
@@ -441,9 +446,11 @@ private[collections] final class FingerTrieSeqBuilder[A](
 
   def this() = this(null, null, null, 0)
 
+  private[this] def skew: Int = (if (prefix != null) length - prefix.length else length) & 0x1F
+
   override def append(elem: A): Unit = {
-    val i = length & 0x1F
-    if (i == 0) {
+    val offset = skew
+    if (offset == 0) {
       if (buffer != null) {
         if (prefix == null) prefix = buffer
         else {
@@ -455,37 +462,34 @@ private[collections] final class FingerTrieSeqBuilder[A](
     }
     else if (buffer.length < 32) {
       val newBuffer = new Array[AnyRef](32)
-      System.arraycopy(buffer, 0, newBuffer, 0, i)
+      System.arraycopy(buffer, 0, newBuffer, 0, offset)
       buffer = newBuffer
     }
-    buffer(i) = elem.asInstanceOf[AnyRef]
+    buffer(offset) = elem.asInstanceOf[AnyRef]
     length += 1
   }
 
   override def appendAll(elems: Traverser[A]): Unit = {
     if (elems.isInstanceOf[FingerTrieSeq[_]]) {
       val that = elems.asInstanceOf[FingerTrieSeq[A]]
-      val i = length & 0x1F
+      val offset = skew
       if (that.length == 0) ()
       else if (length == 0) {
         if (that.length > 32) {
           prefix = that.prefix
           if (that.length > 64) branch = new FingerTrieSeqBuilder(that.branch)
           buffer = that.suffix
-          length = that.length
         }
-        else if (that.length > 0) {
-          buffer = that.prefix
-          length = that.length
-        }
+        else buffer = that.prefix
+        length = that.length
       }
-      else if (((i + that.prefix.length) & 0x1F) == 0) {
+      else if (((offset + that.prefix.length) & 0x1F) == 0) {
         if (buffer.length < 32) {
           val newBuffer = new Array[AnyRef](32)
-          System.arraycopy(buffer, 0, newBuffer, 0, i)
+          System.arraycopy(buffer, 0, newBuffer, 0, offset)
           buffer = newBuffer
         }
-        if (i > 0) System.arraycopy(that.prefix, 0, buffer, i, 32 - i)
+        if (offset > 0) System.arraycopy(that.prefix, 0, buffer, offset, 32 - offset)
         else {
           if (prefix == null) prefix = buffer
           else {
@@ -512,17 +516,15 @@ private[collections] final class FingerTrieSeqBuilder[A](
   override def state: FingerTrieSeq[A] = {
     if (length == 0) FingerTrieSeq.empty
     else {
-      val i = length & 0x1F
-      val suffix =
-        if (i == 0 || i == buffer.length) buffer
-        else {
-          val suffix = new Array[AnyRef](i)
-          System.arraycopy(buffer, 0, suffix, 0, i)
-          suffix
-        }
-      if (prefix == null) new FingerTrieSeq[A](suffix, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, length)
-      else if (branch == null) new FingerTrieSeq[A](prefix, FingerTrieSeq.empty, suffix, length)
-      else new FingerTrieSeq[A](prefix, branch.state, suffix, length)
+      val offset = skew
+      if (offset != 0 && offset != buffer.length) {
+        val suffix = new Array[AnyRef](offset)
+        System.arraycopy(buffer, 0, suffix, 0, offset)
+        buffer = suffix
+      }
+      if (prefix == null) new FingerTrieSeq[A](buffer, FingerTrieSeq.empty, FingerTrieSeq.EmptyRefArray, length)
+      else if (branch == null) new FingerTrieSeq[A](prefix, FingerTrieSeq.empty, buffer, length)
+      else new FingerTrieSeq[A](prefix, branch.state, buffer, length)
     }
   }
 
