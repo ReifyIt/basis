@@ -325,49 +325,105 @@ object FingerTrieSeq extends generic.SeqFactory[FingerTrieSeq] {
   override def toString: String = "FingerTrieSeq"
 }
 
+private[collections] final class FingerTrieSeqArraySegmenter(
+    private[this] var prefix: Array[AnyRef],
+    private[this] var branch: FingerTrieSeq[Array[AnyRef]],
+    private[this] var suffix: Array[AnyRef],
+    private[this] var inner: FingerTrieSeqArraySegmenter,
+    private[this] var infix: Array[AnyRef],
+    private[this] var phase: Int,
+    private[this] var index: Int)
+  extends Iterator[Array[AnyRef]] {
+
+  def this(trie: FingerTrieSeq[_]) =
+    this(trie.prefix, trie.branch, trie.suffix, null, null, if (!trie.isEmpty) 0 else 3, 0)
+
+  override def isEmpty: Boolean = phase >= 3
+
+  override def head: Array[AnyRef] = phase match {
+    case 0 => prefix
+    case 1 => infix(index).asInstanceOf[Array[AnyRef]]
+    case 2 => suffix
+    case _ => Iterator.empty.head
+  }
+
+  override def step(): Unit = phase match {
+    case 0 =>
+      prefix = null
+      if (branch.length > 0) {
+        inner = new FingerTrieSeqArraySegmenter(branch)
+        infix = inner.head
+        phase = 1
+      }
+      else if (suffix.length > 0) {
+        branch = null
+        phase = 2
+      }
+      else {
+        branch = null
+        suffix = null
+        phase = 3
+      }
+    case 1 =>
+      index += 1
+      if (index >= infix.length) {
+        inner.step()
+        if (!inner.isEmpty) {
+          infix = inner.head
+          index = 0
+        }
+        else {
+          inner = null
+          phase = 2
+        }
+      }
+    case 2 =>
+      suffix = null
+      phase = 3
+    case _ =>
+      Iterator.empty.step()
+  }
+
+  override def dup: FingerTrieSeqArraySegmenter =
+    new FingerTrieSeqArraySegmenter(prefix, branch, suffix, if (inner != null) inner.dup else null, infix, phase, index)
+}
+
 private[collections] final class FingerTrieSeqIterator[+A](
-    private[this] val trie: FingerTrieSeq[A],
-    private[this] var inner: Iterator[Array[AnyRef]],
+    private[this] val segmenter: FingerTrieSeqArraySegmenter,
     private[this] var buffer: Array[AnyRef],
     private[this] var index: Int)
   extends Iterator[A] {
 
-  def this(trie: FingerTrieSeq[A]) = this(trie, null, trie.prefix, 0)
+  def this(trie: FingerTrieSeq[A]) = {
+    this(new FingerTrieSeqArraySegmenter(trie), null, 0)
+    if (!segmenter.isEmpty) {
+      buffer = segmenter.head
+      segmenter.step()
+    }
+    else buffer = FingerTrieSeq.EmptyRefArray
+  }
 
-  override def isEmpty: Boolean = index >= trie.length
+  override def isEmpty: Boolean = index >= buffer.length
 
   override def head: A = {
-    val n = index - trie.prefix.length
-    if (n < 0) buffer(index).asInstanceOf[A]
-    else {
-      val j = n - (trie.branch.length << 5)
-      if (j < 0) buffer(n & 0x1F).asInstanceOf[A]
-      else if (j < trie.suffix.length) buffer(j).asInstanceOf[A]
-      else Iterator.empty.head
-    }
+    if (index >= buffer.length) Iterator.empty.head
+    buffer(index).asInstanceOf[A]
   }
 
   override def step(): Unit = {
-    if (index >= trie.length) Iterator.empty.step()
+    if (index >= buffer.length) Iterator.empty.step()
     index += 1
-
-    val n = index - trie.prefix.length
-    if ((n & 0x1F) == 0 && index < trie.length) {
-      val j = n - (trie.branch.length << 5)
-      buffer =
-        if (j == 0) trie.suffix
-        else if (n == 0) {
-          inner = trie.branch.iterator
-          inner.head
-        }
-        else {
-          inner.step()
-          inner.head
-        }
+    if (index >= buffer.length) {
+      if (!segmenter.isEmpty) {
+        buffer = segmenter.head
+        segmenter.step()
+      }
+      else buffer = FingerTrieSeq.EmptyRefArray
+      index = 0
     }
   }
 
-  override def dup: Iterator[A] = new FingerTrieSeqIterator(trie, inner.dup, buffer, index)
+  override def dup: Iterator[A] = new FingerTrieSeqIterator(segmenter.dup, buffer, index)
 }
 
 private[collections] final class FingerTrieSeqBuilder[A](

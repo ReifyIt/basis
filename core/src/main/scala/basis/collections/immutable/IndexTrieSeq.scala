@@ -43,7 +43,7 @@ private[collections] final class IndexTrieSeq0 extends IndexTrieSeq[Nothing] {
 
   override def iterator: Iterator[Nothing] = new IndexTrieSeqIterator(null, 0)
 
-  override def segments: Iterator[IndexTrieSeq[Nothing]] = new IndexTrieSeqSplitter(null, 0)
+  override def segments: Iterator[IndexTrieSeq[Nothing]] = new IndexTrieSeqSegmenter(null, 0)
 }
 
 private[collections] final class IndexTrieSeq1[+A](
@@ -87,7 +87,7 @@ private[collections] final class IndexTrieSeq1[+A](
 
   override def iterator: Iterator[A] = new IndexTrieSeqIterator(node1, length)
 
-  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node1, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSegmenter(node1, length)
 }
 
 private[collections] final class IndexTrieSeq2[+A](
@@ -145,7 +145,7 @@ private[collections] final class IndexTrieSeq2[+A](
 
   override def iterator: Iterator[A] = new IndexTrieSeqIterator(node2, length)
 
-  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node2, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSegmenter(node2, length)
 }
 
 private[collections] final class IndexTrieSeq3[+A](
@@ -216,7 +216,7 @@ private[collections] final class IndexTrieSeq3[+A](
 
   override def iterator: Iterator[A] = new IndexTrieSeqIterator(node3, length)
 
-  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node3, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSegmenter(node3, length)
 }
 
 private[collections] final class IndexTrieSeq4[+A](
@@ -300,7 +300,7 @@ private[collections] final class IndexTrieSeq4[+A](
 
   override def iterator: Iterator[A] = new IndexTrieSeqIterator(node4, length)
 
-  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node4, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSegmenter(node4, length)
 }
 
 private[collections] final class IndexTrieSeq5[+A](
@@ -397,7 +397,7 @@ private[collections] final class IndexTrieSeq5[+A](
 
   override def iterator: Iterator[A] = new IndexTrieSeqIterator(node5, length)
 
-  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node5, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSegmenter(node5, length)
 }
 
 private[collections] final class IndexTrieSeq6[+A](
@@ -502,7 +502,7 @@ private[collections] final class IndexTrieSeq6[+A](
 
   override def iterator: Iterator[A] = new IndexTrieSeqIterator(node6, length)
 
-  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSplitter(node6, length)
+  override def segments: Iterator[IndexTrieSeq[A]] = new IndexTrieSeqSegmenter(node6, length)
 }
 
 object IndexTrieSeq extends SeqFactory[IndexTrieSeq] {
@@ -654,7 +654,7 @@ private[collections] final class IndexTrieSeqIterator[+A](
     new IndexTrieSeqIterator(length, index, node1, node2, node3, node4, node5, node6)
 }
 
-private[collections] final class IndexTrieSeqSplitter[+A](
+private[collections] final class IndexTrieSeqSegmenter[+A](
     private[this] val length: Int,
     private[this] var index: Int,
     private[this] var node1: Array[AnyRef],
@@ -731,7 +731,7 @@ private[collections] final class IndexTrieSeqSplitter[+A](
   }
 
   override def dup: Iterator[IndexTrieSeq[A]] =
-    new IndexTrieSeqSplitter(length, index, node1, node2, node3, node4, node5, node6)
+    new IndexTrieSeqSegmenter(length, index, node1, node2, node3, node4, node5, node6)
 }
 
 private[collections] final class IndexTrieSeqBuilder[A] extends Builder[A] with State[IndexTrieSeq[A]] {
