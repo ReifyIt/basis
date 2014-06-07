@@ -21,36 +21,36 @@ private[form] final class JsonExprFactory[C <: blackbox.Context, V <: JsonVarian
   override type JsonValue     = Expr[V#AnyForm]
   override type JsonObject    = Expr[V#ObjectForm]
   override type JsonArray     = Expr[V#SeqForm]
-  override type JsonString    = Expr[V#StringForm]
+  override type JsonString    = Expr[V#TextForm]
   override type JsonNumber    = Expr[V#NumberForm]
-  override type JsonBoolean   = Expr[V#BooleanForm]
+  override type JsonBoolean   = Expr[V#BoolForm]
   override type JsonNull      = Expr[V#NullForm]
-  override type JsonUndefined = Expr[V#UndefinedForm]
+  override type JsonUndefined = Expr[V#NoForm]
 
-  implicit protected def AnyFormTag       = WeakTypeTag[V#AnyForm](VariantType("AnyForm"))
-  implicit protected def ObjectFormTag    = WeakTypeTag[V#ObjectForm](VariantType("ObjectForm"))
-  implicit protected def SeqFormTag       = WeakTypeTag[V#SeqForm](VariantType("SeqForm"))
-  implicit protected def StringFormTag    = WeakTypeTag[V#StringForm](VariantType("StringForm"))
-  implicit protected def NumberFormTag    = WeakTypeTag[V#NumberForm](VariantType("NumberForm"))
-  implicit protected def BooleanFormTag   = WeakTypeTag[V#BooleanForm](VariantType("BooleanForm"))
-  implicit protected def NullFormTag      = WeakTypeTag[V#NullForm](VariantType("NullForm"))
-  implicit protected def UndefinedFormTag = WeakTypeTag[V#UndefinedForm](VariantType("UndefinedForm"))
+  implicit protected def AnyFormTag    = WeakTypeTag[V#AnyForm](VariantType("AnyForm"))
+  implicit protected def ObjectFormTag = WeakTypeTag[V#ObjectForm](VariantType("ObjectForm"))
+  implicit protected def SeqFormTag    = WeakTypeTag[V#SeqForm](VariantType("SeqForm"))
+  implicit protected def TextFormTag   = WeakTypeTag[V#TextForm](VariantType("TextForm"))
+  implicit protected def NumberFormTag = WeakTypeTag[V#NumberForm](VariantType("NumberForm"))
+  implicit protected def BoolFormTag   = WeakTypeTag[V#BoolForm](VariantType("BoolForm"))
+  implicit protected def NullFormTag   = WeakTypeTag[V#NullForm](VariantType("NullForm"))
+  implicit protected def NoFormTag     = WeakTypeTag[V#NoForm](VariantType("NoForm"))
 
   override def JsonObjectValue(expr: Expr[V#ObjectForm]) = Expr[V#AnyForm](q"$variant.JsonObjectValue($expr)")
   override def JsonArrayValue(expr: Expr[V#SeqForm])     = Expr[V#AnyForm](q"$variant.JsonArrayValue($expr)")
-  override def JsonStringValue(expr: Expr[V#StringForm]) = Expr[V#AnyForm](q"$variant.JsonStringValue($expr)")
+  override def JsonStringValue(expr: Expr[V#TextForm])   = Expr[V#AnyForm](q"$variant.JsonStringValue($expr)")
 
   override def JsonObjectBuilder: Builder[(String, Expr[V#AnyForm])] with State[Expr[V#ObjectForm]] = new JsonObjectBuilder
   override def JsonArrayBuilder: Builder[Expr[V#AnyForm]] with State[Expr[V#SeqForm]]               = new JsonArrayBuilder
-  override def JsonStringBuilder: StringBuilder with State[Expr[V#StringForm]]                      = new JsonStringBuilder
+  override def JsonStringBuilder: StringBuilder with State[Expr[V#TextForm]]                        = new JsonStringBuilder
 
-  override def JsonString(value: String)  = Expr[V#StringForm](if (value.length == 0) q"$variant.StringForm.empty" else q"$variant.JsonString($value)")
+  override def JsonString(value: String)  = Expr[V#TextForm](if (value.length == 0) q"$variant.TextForm.empty" else q"$variant.JsonString($value)")
   override def JsonNumber(value: String)  = Expr[V#NumberForm](q"$variant.JsonNumber(${JsonNumberLiteral(value)})")
   override def JsonInteger(value: String) = Expr[V#NumberForm](q"$variant.JsonNumber(${JsonIntegerLiteral(value)})")
-  override def JsonTrue                   = Expr[V#BooleanForm](q"$variant.JsonTrue")
-  override def JsonFalse                  = Expr[V#BooleanForm](q"$variant.JsonFalse")
+  override def JsonTrue                   = Expr[V#BoolForm](q"$variant.JsonTrue")
+  override def JsonFalse                  = Expr[V#BoolForm](q"$variant.JsonFalse")
   override def JsonNull                   = Expr[V#NullForm](q"$variant.JsonNull")
-  override def JsonUndefined              = Expr[V#UndefinedForm](q"$variant.JsonUndefined")
+  override def JsonUndefined              = Expr[V#NoForm](q"$variant.JsonUndefined")
 
   override def JsonNew(identifier: String, arguments: Expr[V#SeqForm]) = Expr[V#AnyForm](q"$variant.JsonNew($identifier, $arguments)")
 
@@ -104,13 +104,13 @@ private[form] final class JsonExprFactory[C <: blackbox.Context, V <: JsonVarian
     }
   }
 
-  private final class JsonStringBuilder extends StringBuilder with State[Expr[V#StringForm]] {
+  private final class JsonStringBuilder extends StringBuilder with State[Expr[V#TextForm]] {
     private[this] val underlying                = UString.Builder
     override def clear(): Unit                  = underlying.clear()
     override def expect(count: Int): this.type  = { underlying.expect(count); this }
     override def append(c: Int): Unit           = underlying.append(c)
     override def append(cs: CharSequence): Unit = underlying.append(cs)
-    override def state: Expr[V#StringForm]      = JsonString(underlying.state.toString)
+    override def state: Expr[V#TextForm]        = JsonString(underlying.state.toString)
   }
 
   protected def VariantType(name: String): Type =

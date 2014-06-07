@@ -16,11 +16,11 @@ private[form] final class JsonVariantFactory[V <: JsonVariant](val variant: V) e
   override type JsonValue     = AnyForm
   override type JsonObject    = ObjectForm
   override type JsonArray     = SeqForm
-  override type JsonString    = StringForm
+  override type JsonString    = TextForm
   override type JsonNumber    = NumberForm
-  override type JsonBoolean   = BooleanForm
+  override type JsonBoolean   = BoolForm
   override type JsonNull      = NullForm
-  override type JsonUndefined = UndefinedForm
+  override type JsonUndefined = NoForm
 
   override def JsonObjectValue(json: JsonObject): JsonValue = variant.JsonObjectValue(json)
   override def JsonArrayValue(json: JsonArray): JsonValue   = variant.JsonArrayValue(json)

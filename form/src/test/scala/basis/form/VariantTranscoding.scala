@@ -27,12 +27,12 @@ trait VariantTranscoding { this: FlatSpec =>
       SeqForm.empty should transcode
     }
 
-    it should "transcode empty binary data" in {
-      BinaryForm.empty should transcode
+    it should "transcode empty text" in {
+      TextForm.empty should transcode
     }
 
-    it should "transcode empty strings" in {
-      StringForm.empty should transcode
+    it should "transcode empty data" in {
+      DataForm.empty should transcode
     }
 
     it should "transcode positive integers" in {
@@ -119,7 +119,7 @@ trait VariantTranscoding { this: FlatSpec =>
     }
 
     it should "transcode undefined values" in {
-      UndefinedForm should transcode
+      NoForm should transcode
     }
 
     it should "transcode empty objects in objects" in {
@@ -142,8 +142,8 @@ trait VariantTranscoding { this: FlatSpec =>
       ObjectForm(
         "object" -> ObjectForm.empty,
         "array" -> SeqForm.empty,
-        "binary" -> BinaryForm.empty,
-        "string" -> StringForm.empty,
+        "text" -> TextForm.empty,
+        "data" -> DataForm.empty,
         "int32" -> NumberForm(0xF7F6F5F4),
         "int64" -> NumberForm(0xF7F6F5F4F3F2F1F0L),
         "double" -> NumberForm(0.5),
@@ -158,8 +158,8 @@ trait VariantTranscoding { this: FlatSpec =>
       SeqForm(
         ObjectForm.empty,
         SeqForm.empty,
-        BinaryForm.empty,
-        StringForm.empty,
+        TextForm.empty,
+        DataForm.empty,
         NumberForm(0xF7F6F5F4),
         NumberForm(0xF7F6F5F4F3F2F1F0L),
         NumberForm(0.5),
@@ -178,43 +178,43 @@ trait VariantTranscoding { this: FlatSpec =>
       ObjectForm("a" -> SeqForm(TrueForm), "b" -> SeqForm(FalseForm)) should transcode
     }
 
-    it should "transcode non-empty strings" in {
-      StringForm("test") should transcode
+    it should "transcode non-empty text" in {
+      TextForm("test") should transcode
     }
 
-    it should "transcode non-empty binary data" in {
-      BinaryForm.fromBase64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/-_") should transcode
+    it should "transcode non-empty data" in {
+      DataForm.fromBase64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/-_") should transcode
     }
 
     it should "transcode escaped characters" in {
-      StringForm("\"") should transcode
-      StringForm("\\") should transcode
-      StringForm("\b") should transcode
-      StringForm("\f") should transcode
-      StringForm("\n") should transcode
-      StringForm("\r") should transcode
-      StringForm("\t") should transcode
+      TextForm("\"") should transcode
+      TextForm("\\") should transcode
+      TextForm("\b") should transcode
+      TextForm("\f") should transcode
+      TextForm("\n") should transcode
+      TextForm("\r") should transcode
+      TextForm("\t") should transcode
     }
 
     it should "transcode Unicode strings" in {
-      withClue("U+0000:")   (StringForm("\u0000") should transcode)
-      withClue("U+007F:")   (StringForm("\u007F") should transcode)
-      withClue("U+0080:")   (StringForm("\u0080") should transcode)
-      withClue("U+07FF:")   (StringForm("\u07FF") should transcode)
-      withClue("U+0800:")   (StringForm("\u0800") should transcode)
-      withClue("U+0FFF:")   (StringForm("\u0FFF") should transcode)
-      withClue("U+1000:")   (StringForm("\u1000") should transcode)
-      withClue("U+CFFF:")   (StringForm("\uCFFF") should transcode)
-      withClue("U+D000:")   (StringForm("\uD000") should transcode)
-      withClue("U+D7FF:")   (StringForm("\uD7FF") should transcode)
-      withClue("U+E000:")   (StringForm("\uE000") should transcode)
-      withClue("U+FFFF:")   (StringForm("\uFFFF") should transcode)
-      withClue("U+10000:")  (StringForm("\uD800\uDC00") should transcode)
-      withClue("U+3FFFF:")  (StringForm("\uD8BF\uDFFF") should transcode)
-      withClue("U+40000:")  (StringForm("\uD8C0\uDC00") should transcode)
-      withClue("U+FFFFF:")  (StringForm("\uDBBF\uDFFF") should transcode)
-      withClue("U+100000:") (StringForm("\uDBC0\uDC00") should transcode)
-      withClue("U+10FFFF:") (StringForm("\uDBFF\uDFFF") should transcode)
+      withClue("U+0000:")   (TextForm("\u0000") should transcode)
+      withClue("U+007F:")   (TextForm("\u007F") should transcode)
+      withClue("U+0080:")   (TextForm("\u0080") should transcode)
+      withClue("U+07FF:")   (TextForm("\u07FF") should transcode)
+      withClue("U+0800:")   (TextForm("\u0800") should transcode)
+      withClue("U+0FFF:")   (TextForm("\u0FFF") should transcode)
+      withClue("U+1000:")   (TextForm("\u1000") should transcode)
+      withClue("U+CFFF:")   (TextForm("\uCFFF") should transcode)
+      withClue("U+D000:")   (TextForm("\uD000") should transcode)
+      withClue("U+D7FF:")   (TextForm("\uD7FF") should transcode)
+      withClue("U+E000:")   (TextForm("\uE000") should transcode)
+      withClue("U+FFFF:")   (TextForm("\uFFFF") should transcode)
+      withClue("U+10000:")  (TextForm("\uD800\uDC00") should transcode)
+      withClue("U+3FFFF:")  (TextForm("\uD8BF\uDFFF") should transcode)
+      withClue("U+40000:")  (TextForm("\uD8C0\uDC00") should transcode)
+      withClue("U+FFFFF:")  (TextForm("\uDBBF\uDFFF") should transcode)
+      withClue("U+100000:") (TextForm("\uDBC0\uDC00") should transcode)
+      withClue("U+10FFFF:") (TextForm("\uDBFF\uDFFF") should transcode)
     }
   }
 }

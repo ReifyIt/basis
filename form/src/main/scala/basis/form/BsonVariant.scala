@@ -14,17 +14,17 @@ import basis.util._
 import scala.annotation._
 
 trait BsonVariant extends Variant { variant =>
-  override type AnyForm       <: BsonValue
-  override type ObjectForm    <: BsonObject with AnyForm
-  override type SeqForm       <: BsonSeq with AnyForm
-  override type SetForm       <: BsonSet with AnyForm
-  override type BinaryForm    <: BsonBinary with AnyForm
-  override type StringForm    <: BsonString with AnyForm
-  override type NumberForm    <: BsonNumber with AnyForm
-  override type DateForm      <: BsonDate with AnyForm
-  override type BooleanForm   <: BsonBoolean with AnyForm
-  override type NullForm      <: BsonNull with AnyForm
-  override type UndefinedForm <: BsonUndefined with AnyForm
+  override type AnyForm    <: BsonValue
+  override type ObjectForm <: BsonObject with AnyForm
+  override type SeqForm    <: BsonSeq with AnyForm
+  override type SetForm    <: BsonSet with AnyForm
+  override type TextForm   <: BsonText with AnyForm
+  override type DataForm   <: BsonData with AnyForm
+  override type NumberForm <: BsonNumber with AnyForm
+  override type DateForm   <: BsonDate with AnyForm
+  override type BoolForm   <: BsonBool with AnyForm
+  override type NullForm   <: BsonNull with AnyForm
+  override type NoForm     <: BsonNo with AnyForm
 
   override val AnyForm: BsonValueFactory
   override val ObjectForm: BsonObjectFactory
@@ -33,30 +33,30 @@ trait BsonVariant extends Variant { variant =>
 
   def BsonObjectValue(form: ObjectForm): AnyForm = form
   def BsonArrayValue(form: SeqForm): AnyForm     = form
-  def BsonStringValue(form: StringForm): AnyForm = form
+  def BsonStringValue(form: TextForm): AnyForm   = form
 
   def BsonObjectBuilder: Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder
-  def BsonStringBuilder: StringBuilder with State[StringForm]              = StringForm.Builder
+  def BsonStringBuilder: StringBuilder with State[TextForm]                = TextForm.Builder
   def BsonArrayBuilder: Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder
 
-  def BsonBinary(subtype: Byte, data: Array[Byte]): AnyForm = BinaryForm(data)
-  def BsonBoolean(value: Boolean): AnyForm                  = BooleanForm(value)
+  def BsonBinary(subtype: Byte, data: Array[Byte]): AnyForm = DataForm(data)
+  def BsonBoolean(value: Boolean): AnyForm                  = BoolForm(value)
   def BsonDateTime(millis: Long): AnyForm                   = DateForm(millis)
-  def BsonDBPointer(name: String, id: Array[Byte]): AnyForm = UndefinedForm
+  def BsonDBPointer(name: String, id: Array[Byte]): AnyForm = NoForm
   def BsonDouble(value: Double): AnyForm                    = NumberForm(value)
   def BsonInt32(value: Int): AnyForm                        = NumberForm(value)
   def BsonInt64(value: Long): AnyForm                       = NumberForm(value)
-  def BsonJSCode(js: String): AnyForm                       = UndefinedForm
-  def BsonJSScope(js: String, scope: ObjectForm): AnyForm   = UndefinedForm
-  def BsonMaxKey: AnyForm                                   = UndefinedForm
-  def BsonMinKey: AnyForm                                   = UndefinedForm
+  def BsonJSCode(js: String): AnyForm                       = NoForm
+  def BsonJSScope(js: String, scope: ObjectForm): AnyForm   = NoForm
+  def BsonMaxKey: AnyForm                                   = NoForm
+  def BsonMinKey: AnyForm                                   = NoForm
   def BsonNull: AnyForm                                     = NullForm
-  def BsonObjectId(id: Array[Byte]): AnyForm                = UndefinedForm
-  def BsonRegex(pattern: String, options: String): AnyForm  = UndefinedForm
-  def BsonString(value: String): AnyForm                    = StringForm(value)
-  def BsonSymbol(symbol: String): AnyForm                   = UndefinedForm
-  def BsonTimeStamp(value: Long): AnyForm                   = UndefinedForm
-  def BsonUndefined: AnyForm                                = UndefinedForm
+  def BsonObjectId(id: Array[Byte]): AnyForm                = NoForm
+  def BsonRegex(pattern: String, options: String): AnyForm  = NoForm
+  def BsonString(value: String): AnyForm                    = TextForm(value)
+  def BsonSymbol(symbol: String): AnyForm                   = NoForm
+  def BsonTimeStamp(value: Long): AnyForm                   = NoForm
+  def BsonUndefined: AnyForm                                = NoForm
 
   protected[form] implicit def BsonReader(reader: Reader): BsonReader = new BsonReader(reader)
   protected[form] implicit def BsonWriter(writer: Writer): BsonWriter = new BsonWriter(writer)
@@ -226,20 +226,7 @@ trait BsonVariant extends Variant { variant =>
   }
 
 
-  trait BsonBinary extends BsonValue with BaseBinary { this: BinaryForm =>
-    override def bsonType: Byte = 0x05
-
-    override def bsonSize: Int = 4 + 1 + size.toInt
-
-    override def writeBson(output: Writer): Unit = {
-      output.writeInt(size.toInt)
-      output.writeByte(0x00) // generic subtype
-      output.writeData(this)
-    }
-  }
-
-
-  trait BsonString extends BsonValue with BaseString { this: StringForm =>
+  trait BsonText extends BsonValue with BaseText { this: TextForm =>
     override def bsonType: Byte = 0x02
 
     private[this] var bsonLength: Int = -1
@@ -256,6 +243,19 @@ trait BsonVariant extends Variant { variant =>
         cs.step()
       }
       output.writeByte(0)
+    }
+  }
+
+
+  trait BsonData extends BsonValue with BaseData { this: DataForm =>
+    override def bsonType: Byte = 0x05
+
+    override def bsonSize: Int = 4 + 1 + size.toInt
+
+    override def writeBson(output: Writer): Unit = {
+      output.writeInt(size.toInt)
+      output.writeByte(0x00) // generic subtype
+      output.writeData(this)
     }
   }
 
@@ -288,7 +288,7 @@ trait BsonVariant extends Variant { variant =>
   }
 
 
-  trait BsonBoolean extends BsonValue with BaseBoolean { this: BooleanForm =>
+  trait BsonBool extends BsonValue with BaseBool { this: BoolForm =>
     override def bsonType: Byte         = 0x08
     override def bsonSize: Int          = 1
     def writeBson(output: Writer): Unit = output.writeByte(if (toBoolean) 1 else 0)
@@ -302,7 +302,7 @@ trait BsonVariant extends Variant { variant =>
   }
 
 
-  trait BsonUndefined extends BsonValue with BaseUndefined { this: UndefinedForm =>
+  trait BsonNo extends BsonValue with BaseNo { this: NoForm =>
     override def bsonType: Byte         = 0x06
     override def bsonSize: Int          = 0
     def writeBson(output: Writer): Unit = ()

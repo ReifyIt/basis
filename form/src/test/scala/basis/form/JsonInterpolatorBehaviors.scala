@@ -83,7 +83,7 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
     }
 
     it should "interpolate empty strings" in {
-      json""" "" """ should equal (StringForm.empty)
+      json""" "" """ should equal (TextForm.empty)
     }
 
     it should "interpolate positive integers" in {
@@ -165,7 +165,7 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
     }
 
     it should "interpolate \"undefined\"" in {
-      json"undefined" should equal (UndefinedForm)
+      json"undefined" should equal (NoForm)
     }
 
     it should "interpolate non-empty objects in order" in {
@@ -183,13 +183,13 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
         ObjectForm(
           ("object",    ObjectForm.empty),
           ("array",     SeqForm.empty),
-          ("string",    StringForm.empty),
+          ("string",    TextForm.empty),
           ("integer",   NumberForm(0)),
           ("decimal",   NumberForm(0.0)),
           ("true",      TrueForm),
           ("false",     FalseForm),
           ("null",      NullForm),
-          ("undefined", UndefinedForm)
+          ("undefined", NoForm)
         )
       )
     }
@@ -199,13 +199,13 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
         SeqForm(
           ObjectForm.empty,
           SeqForm.empty,
-          StringForm.empty,
+          TextForm.empty,
           NumberForm(0),
           NumberForm(0.0),
           TrueForm,
           FalseForm,
           NullForm,
-          UndefinedForm
+          NoForm
         )
       )
     }
@@ -223,19 +223,19 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
     }
 
     it should "interpolate non-empty strings" in {
-      json""" "test" """ should equal (StringForm("test"))
+      json""" "test" """ should equal (TextForm("test"))
     }
 
     it should "unescape interpolated strings" in {
-      json""" " \" " """ should equal (StringForm(""" " """))
-      json""" " \' " """ should equal (StringForm(""" ' """))
-      json""" " \\ " """ should equal (StringForm(""" \ """))
-      json""" " \/ " """ should equal (StringForm(""" / """))
-      json""" " \b " """ should equal (StringForm(" \b "))
-      json""" " \f " """ should equal (StringForm(" \f "))
-      json""" " \n " """ should equal (StringForm(" \n "))
-      json""" " \r " """ should equal (StringForm(" \r "))
-      json""" " \t " """ should equal (StringForm(" \t "))
+      json""" " \" " """ should equal (TextForm(""" " """))
+      json""" " \' " """ should equal (TextForm(""" ' """))
+      json""" " \\ " """ should equal (TextForm(""" \ """))
+      json""" " \/ " """ should equal (TextForm(""" / """))
+      json""" " \b " """ should equal (TextForm(" \b "))
+      json""" " \f " """ should equal (TextForm(" \f "))
+      json""" " \n " """ should equal (TextForm(" \n "))
+      json""" " \r " """ should equal (TextForm(" \r "))
+      json""" " \t " """ should equal (TextForm(" \t "))
     }
   }
 
@@ -250,8 +250,8 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
       json"$x" should equal (x)
     }
 
-    it should "interpolate StringForm variables" in {
-      val x = StringForm.empty
+    it should "interpolate TextForm variables" in {
+      val x = TextForm.empty
       json"$x" should equal (x)
     }
 
@@ -260,7 +260,7 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
       json"$x" should equal (x)
     }
 
-    it should "interpolate BooleanForm variables" in {
+    it should "interpolate BoolForm variables" in {
       val x = TrueForm
       json"$x" should equal (x)
     }
@@ -270,14 +270,14 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
       json"$x" should equal (x)
     }
 
-    it should "interpolate UndefinedForm variables" in {
-      val x = UndefinedForm
+    it should "interpolate NoForm variables" in {
+      val x = NoForm
       json"$x" should equal (x)
     }
 
-    it should "interpolate String variables as StringForm values" in {
+    it should "interpolate String variables as TextForm values" in {
       val x = ""
-      (json"$x": AnyForm) should equal (StringForm.empty)
+      (json"$x": AnyForm) should equal (TextForm.empty)
     }
 
     it should "interpolate Int variables as NumberForm values" in {
@@ -300,7 +300,7 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
       (json"$x": AnyForm) should equal (NumberForm(x))
     }
 
-    it should "interpolate Boolean variables as BooleanForm values" in {
+    it should "interpolate Boolean variables as BoolForm values" in {
       val x = true
       (json"$x": AnyForm) should equal (TrueForm)
     }
@@ -309,24 +309,24 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
       json""" {
         "object"    : ${ObjectForm.empty},
         "array"     : ${SeqForm.empty},
-        "string"    : ${StringForm.empty},
+        "string"    : ${TextForm.empty},
         "integer"   : ${NumberForm(0)},
         "decimal"   : ${NumberForm(0.0)},
         "true"      : $TrueForm,
         "false"     : $FalseForm,
         "null"      : $NullForm,
-        "undefined" : $UndefinedForm
+        "undefined" : $NoForm
       } """ should equal (
         ObjectForm(
           ("object",    ObjectForm.empty),
           ("array",     SeqForm.empty),
-          ("string",    StringForm.empty),
+          ("string",    TextForm.empty),
           ("integer",   NumberForm(0)),
           ("decimal",   NumberForm(0.0)),
           ("true",      TrueForm),
           ("false",     FalseForm),
           ("null",      NullForm),
-          ("undefined", UndefinedForm)
+          ("undefined", NoForm)
         )
       )
     }
@@ -335,24 +335,24 @@ trait JsonInterpolatorBehaviors { this: FlatSpec =>
       json""" [
         ${ObjectForm.empty},
         ${SeqForm.empty},
-        ${StringForm.empty},
+        ${TextForm.empty},
         ${NumberForm(0)},
         ${NumberForm(0.0)},
         $TrueForm,
         $FalseForm,
         $NullForm,
-        $UndefinedForm
+        $NoForm
       ] """ should equal (
         SeqForm(
           ObjectForm.empty,
           SeqForm.empty,
-          StringForm.empty,
+          TextForm.empty,
           NumberForm(0),
           NumberForm(0.0),
           TrueForm,
           FalseForm,
           NullForm,
-          UndefinedForm
+          NoForm
         )
       )
     }

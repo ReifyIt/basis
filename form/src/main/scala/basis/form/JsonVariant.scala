@@ -11,17 +11,17 @@ import basis.collections._
 import basis.text._
 
 trait JsonVariant extends Variant { variant =>
-  override type AnyForm       <: JsonValue
-  override type ObjectForm    <: JsonObject with AnyForm
-  override type SeqForm       <: JsonSeq with AnyForm
-  override type SetForm       <: JsonSet with AnyForm
-  override type BinaryForm    <: JsonBinary with AnyForm
-  override type StringForm    <: JsonString with AnyForm
-  override type NumberForm    <: JsonNumber with AnyForm
-  override type DateForm      <: JsonDate with AnyForm
-  override type BooleanForm   <: JsonBoolean with AnyForm
-  override type NullForm      <: JsonNull with AnyForm
-  override type UndefinedForm <: JsonUndefined with AnyForm
+  override type AnyForm    <: JsonValue
+  override type ObjectForm <: JsonObject with AnyForm
+  override type SeqForm    <: JsonSeq with AnyForm
+  override type SetForm    <: JsonSet with AnyForm
+  override type TextForm   <: JsonText with AnyForm
+  override type DataForm   <: JsonData with AnyForm
+  override type NumberForm <: JsonNumber with AnyForm
+  override type DateForm   <: JsonDate with AnyForm
+  override type BoolForm   <: JsonBool with AnyForm
+  override type NullForm   <: JsonNull with AnyForm
+  override type NoForm     <: JsonNo with AnyForm
 
   override val AnyForm: JsonValueFactory
   override val ObjectForm: JsonObjectFactory
@@ -30,24 +30,24 @@ trait JsonVariant extends Variant { variant =>
 
   def JsonObjectValue(form: ObjectForm): AnyForm = decodeJsonObject(form)
   def JsonArrayValue(form: SeqForm): AnyForm     = form
-  def JsonStringValue(form: StringForm): AnyForm = form
+  def JsonStringValue(form: TextForm): AnyForm   = form
 
   def JsonObjectBuilder: Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder
   def JsonArrayBuilder: Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder
-  def JsonStringBuilder: StringBuilder with State[StringForm]              = StringForm.Builder
+  def JsonStringBuilder: StringBuilder with State[TextForm]                = TextForm.Builder
 
-  def JsonString(value: String): StringForm = StringForm(value)
+  def JsonString(value: String): TextForm   = TextForm(value)
   def JsonNumber(value: Int): NumberForm    = NumberForm(value)
   def JsonNumber(value: Long): NumberForm   = NumberForm(value)
   def JsonNumber(value: Float): NumberForm  = NumberForm(value)
   def JsonNumber(value: Double): NumberForm = NumberForm(value)
   def JsonNumber(value: String): NumberForm = NumberForm(value)
-  def JsonTrue: BooleanForm                 = TrueForm
-  def JsonFalse: BooleanForm                = FalseForm
+  def JsonTrue: BoolForm                    = TrueForm
+  def JsonFalse: BoolForm                   = FalseForm
   def JsonNull: NullForm                    = NullForm
-  def JsonUndefined: UndefinedForm          = UndefinedForm
+  def JsonUndefined: NoForm                 = NoForm
 
-  def JsonNew(identifier: String, arguments: SeqForm): AnyForm = UndefinedForm
+  def JsonNew(identifier: String, arguments: SeqForm): AnyForm = NoForm
 
   implicit def JsonStringContext(stringContext: StringContext): JsonStringContext[variant.type] =
     macro JsonVariantMacros.JsonStringContext[variant.type]
@@ -57,8 +57,8 @@ trait JsonVariant extends Variant { variant =>
       val field = form.iterator.head
       val value = field._2
       field._1 match {
-        case "$base64" if value.isStringForm =>
-          try BinaryForm.fromBase64(value.asStringForm.toUString.toString)
+        case "$base64" if value.isTextForm =>
+          try DataForm.fromBase64(value.asTextForm.toUString.toString)
           catch { case _: IllegalArgumentException => form }
         case "$date" if value.isNumberForm =>
           DateForm(value.asNumberForm.toLong)
@@ -99,7 +99,7 @@ trait JsonVariant extends Variant { variant =>
       while (!fields.isEmpty && { field = fields.head; !field._2.isDefined })
         fields.step() // filter leading undefined fields
       if (!fields.isEmpty) {
-        StringForm(field._1).writeJson(builder)
+        TextForm(field._1).writeJson(builder)
         builder.append(':')
         field._2.writeJson(builder)
         fields.step()
@@ -107,7 +107,7 @@ trait JsonVariant extends Variant { variant =>
           field = fields.head
           if (field._2.isDefined) { // filter undefined fields
             builder.append(',')
-            StringForm(field._1).writeJson(builder)
+            TextForm(field._1).writeJson(builder)
             builder.append(':')
             field._2.writeJson(builder)
           }
@@ -203,20 +203,7 @@ trait JsonVariant extends Variant { variant =>
   }
 
 
-  trait JsonBinary extends JsonValue with BaseBinary { this: BinaryForm =>
-    override def writeJson(builder: StringBuilder): Unit = {
-      builder.append('{')
-      builder.append("\"$base64\"")
-      builder.append(':')
-      builder.append('"')
-      this.writeBase64(builder)
-      builder.append('"')
-      builder.append('}')
-    }
-  }
-
-
-  trait JsonString extends JsonValue with BaseString { this: StringForm =>
+  trait JsonText extends JsonValue with BaseText { this: TextForm =>
     override def writeJson(builder: StringBuilder): Unit = {
       def hexToChar(h: Int): Int = if (h < 10) '0' + h else 'A' + (h - 10)
       builder.append('"')
@@ -250,6 +237,19 @@ trait JsonVariant extends Variant { variant =>
   }
 
 
+  trait JsonData extends JsonValue with BaseData { this: DataForm =>
+    override def writeJson(builder: StringBuilder): Unit = {
+      builder.append('{')
+      builder.append("\"$base64\"")
+      builder.append(':')
+      builder.append('"')
+      this.writeBase64(builder)
+      builder.append('"')
+      builder.append('}')
+    }
+  }
+
+
   trait JsonNumber extends JsonValue with BaseNumber { this: NumberForm =>
     override def writeJson(builder: StringBuilder): Unit = builder.append(toJson)
     override def toJson: String                          = if (!isNaN && !isInfinite) toDecimalString else "null"
@@ -267,7 +267,7 @@ trait JsonVariant extends Variant { variant =>
   }
 
 
-  trait JsonBoolean extends JsonValue with BaseBoolean { this: BooleanForm =>
+  trait JsonBool extends JsonValue with BaseBool { this: BoolForm =>
     override def writeJson(builder: StringBuilder): Unit = builder.append(toJson)
     override def toJson: String                          = if (toBoolean) "true" else "false"
   }
@@ -279,7 +279,7 @@ trait JsonVariant extends Variant { variant =>
   }
 
 
-  trait JsonUndefined extends JsonValue with BaseUndefined { this: UndefinedForm =>
+  trait JsonNo extends JsonValue with BaseNo { this: NoForm =>
     override def writeJson(builder: StringBuilder): Unit = builder.append(toJson)
     override def toJson: String                          = "undefined"
   }

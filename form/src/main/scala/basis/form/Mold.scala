@@ -67,16 +67,16 @@ object Mold extends CollectionMolds {
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Byte] = {
       if (form.isNumberForm) Bind(form.asNumberForm.toByte)
-      else if (form.isStringForm)
-        try Bind(java.lang.Byte.parseByte(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try Bind(java.lang.Byte.parseByte(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => Trap }
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
       if (form.isNumberForm) form
-      else if (form.isStringForm)
-        try variant.NumberForm(java.lang.Byte.parseByte(form.asStringForm.toUString.toString).toInt)
+      else if (form.isTextForm)
+        try variant.NumberForm(java.lang.Byte.parseByte(form.asTextForm.toUString.toString).toInt)
         catch { case _: NumberFormatException => form }
       else form
     }
@@ -89,16 +89,16 @@ object Mold extends CollectionMolds {
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Short] = {
       if (form.isNumberForm) Bind(form.asNumberForm.toShort)
-      else if (form.isStringForm)
-        try Bind(java.lang.Short.parseShort(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try Bind(java.lang.Short.parseShort(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => Trap }
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
       if (form.isNumberForm) form
-      else if (form.isStringForm)
-        try variant.NumberForm(java.lang.Short.parseShort(form.asStringForm.toUString.toString).toInt)
+      else if (form.isTextForm)
+        try variant.NumberForm(java.lang.Short.parseShort(form.asTextForm.toUString.toString).toInt)
         catch { case _: NumberFormatException => form }
       else form
     }
@@ -111,16 +111,16 @@ object Mold extends CollectionMolds {
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Int] = {
       if (form.isNumberForm) Bind(form.asNumberForm.toInt)
-      else if (form.isStringForm)
-        try Bind(java.lang.Integer.parseInt(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try Bind(java.lang.Integer.parseInt(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => Trap }
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
       if (form.isNumberForm) form
-      else if (form.isStringForm)
-        try variant.NumberForm(java.lang.Integer.parseInt(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try variant.NumberForm(java.lang.Integer.parseInt(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => form }
       else form
     }
@@ -133,16 +133,16 @@ object Mold extends CollectionMolds {
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Long] = {
       if (form.isNumberForm) Bind(form.asNumberForm.toLong)
-      else if (form.isStringForm)
-        try Bind(java.lang.Long.parseLong(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try Bind(java.lang.Long.parseLong(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => Trap }
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
       if (form.isNumberForm) form
-      else if (form.isStringForm)
-        try variant.NumberForm(java.lang.Long.parseLong(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try variant.NumberForm(java.lang.Long.parseLong(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => form }
       else form
     }
@@ -155,16 +155,16 @@ object Mold extends CollectionMolds {
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Float] = {
       if (form.isNumberForm) Bind(form.asNumberForm.toFloat)
-      else if (form.isStringForm)
-        try Bind(java.lang.Float.parseFloat(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try Bind(java.lang.Float.parseFloat(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => Trap }
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
       if (form.isNumberForm) form
-      else if (form.isStringForm)
-        try variant.NumberForm(java.lang.Float.parseFloat(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try variant.NumberForm(java.lang.Float.parseFloat(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => form }
       else form
     }
@@ -177,16 +177,16 @@ object Mold extends CollectionMolds {
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Double] = {
       if (form.isNumberForm) Bind(form.asNumberForm.toDouble)
-      else if (form.isStringForm)
-        try Bind(java.lang.Double.parseDouble(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try Bind(java.lang.Double.parseDouble(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => Trap }
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
       if (form.isNumberForm) form
-      else if (form.isStringForm)
-        try variant.NumberForm(java.lang.Double.parseDouble(form.asStringForm.toUString.toString))
+      else if (form.isTextForm)
+        try variant.NumberForm(java.lang.Double.parseDouble(form.asTextForm.toUString.toString))
         catch { case _: NumberFormatException => form }
       else form
     }
@@ -195,11 +195,11 @@ object Mold extends CollectionMolds {
   }
 
   private final class BooleanMold(override val identity: Boolean) extends Mold[Boolean] {
-    override def form(variant: Variant)(value: Boolean): variant.AnyForm = variant.BooleanForm(value)
+    override def form(variant: Variant)(value: Boolean): variant.AnyForm = variant.BoolForm(value)
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Boolean] = {
-      if (form.isBooleanForm) Bind(form.asBooleanForm.toBoolean)
-      else if (form.isStringForm) form.asStringForm.toUString.toString match {
+      if (form.isBoolForm) Bind(form.asBoolForm.toBoolean)
+      else if (form.isTextForm) form.asTextForm.toUString.toString match {
         case "true" => True
         case "false" => False
         case _ => Trap
@@ -208,8 +208,8 @@ object Mold extends CollectionMolds {
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
-      if (form.isBooleanForm) form
-      else if (form.isStringForm) form.asStringForm.toUString.toString match {
+      if (form.isBoolForm) form
+      else if (form.isTextForm) form.asTextForm.toUString.toString match {
         case "true" => variant.TrueForm
         case "false" => variant.FalseForm
         case _ => form
@@ -221,19 +221,19 @@ object Mold extends CollectionMolds {
   }
 
   private final class StringMold(override val identity: String) extends Mold[String] {
-    override def form(variant: Variant)(value: String): variant.AnyForm = variant.StringForm(value)
+    override def form(variant: Variant)(value: String): variant.AnyForm = variant.TextForm(value)
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[String] = {
-      if (form.isStringForm) Bind(form.asStringForm.toUString.toString)
+      if (form.isTextForm) Bind(form.asTextForm.toUString.toString)
       else if (form.isNumberForm) Bind(form.asNumberForm.toDecimalString)
-      else if (form.isBooleanForm) Bind(if (form.asBooleanForm.toBoolean) "true" else "false")
+      else if (form.isBoolForm) Bind(if (form.asBoolForm.toBoolean) "true" else "false")
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
-      if (form.isStringForm) form
-      else if (form.isNumberForm) variant.StringForm(form.asNumberForm.toDecimalString)
-      else if (form.isBooleanForm) variant.StringForm(if (form.asBooleanForm.toBoolean) "true" else "false")
+      if (form.isTextForm) form
+      else if (form.isNumberForm) variant.TextForm(form.asNumberForm.toDecimalString)
+      else if (form.isBoolForm) variant.TextForm(if (form.asBoolForm.toBoolean) "true" else "false")
       else form
     }
 

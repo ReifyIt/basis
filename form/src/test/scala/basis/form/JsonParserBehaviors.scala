@@ -99,7 +99,7 @@ trait JsonParserBehaviors { this: FlatSpec =>
     }
 
     it should "parse empty strings" in {
-      Json("\"\"") should equal (StringForm.empty)
+      Json("\"\"") should equal (TextForm.empty)
     }
 
     it should "parse positive integers" in {
@@ -184,7 +184,7 @@ trait JsonParserBehaviors { this: FlatSpec =>
     }
 
     it should "parse \"undefined\"" in {
-      Json("undefined") should equal (UndefinedForm)
+      Json("undefined") should equal (NoForm)
     }
 
     it should "parse non-empty objects" in {
@@ -202,13 +202,13 @@ trait JsonParserBehaviors { this: FlatSpec =>
         ObjectForm(
           ("object",    ObjectForm.empty),
           ("array",     SeqForm.empty),
-          ("string",    StringForm.empty),
+          ("string",    TextForm.empty),
           ("integer",   NumberForm(0)),
           ("decimal",   NumberForm(0.0)),
           ("true",      TrueForm),
           ("false",     FalseForm),
           ("null",      NullForm),
-          ("undefined", UndefinedForm)
+          ("undefined", NoForm)
         )
       )
     }
@@ -218,13 +218,13 @@ trait JsonParserBehaviors { this: FlatSpec =>
         SeqForm(
           ObjectForm.empty,
           SeqForm.empty,
-          StringForm.empty,
+          TextForm.empty,
           NumberForm(0),
           NumberForm(0.0),
           TrueForm,
           FalseForm,
           NullForm,
-          UndefinedForm
+          NoForm
         )
       )
     }
@@ -242,19 +242,19 @@ trait JsonParserBehaviors { this: FlatSpec =>
     }
 
     it should "parse non-empty strings" in {
-      Json("\"test\"") should equal (StringForm("test"))
+      Json("\"test\"") should equal (TextForm("test"))
     }
 
     it should "unescape parsed strings" in {
-      Json("\"\\\"\"") should equal (StringForm("\""))
-      Json("\"\\\'\"") should equal (StringForm("\'"))
-      Json("\"\\\\\"") should equal (StringForm("\\"))
-      Json("\"\\/\"")  should equal (StringForm("/"))
-      Json("\"\\b\"")  should equal (StringForm("\b"))
-      Json("\"\\f\"")  should equal (StringForm("\f"))
-      Json("\"\\n\"")  should equal (StringForm("\n"))
-      Json("\"\\r\"")  should equal (StringForm("\r"))
-      Json("\"\\t\"")  should equal (StringForm("\t"))
+      Json("\"\\\"\"") should equal (TextForm("\""))
+      Json("\"\\\'\"") should equal (TextForm("\'"))
+      Json("\"\\\\\"") should equal (TextForm("\\"))
+      Json("\"\\/\"")  should equal (TextForm("/"))
+      Json("\"\\b\"")  should equal (TextForm("\b"))
+      Json("\"\\f\"")  should equal (TextForm("\f"))
+      Json("\"\\n\"")  should equal (TextForm("\n"))
+      Json("\"\\r\"")  should equal (TextForm("\r"))
+      Json("\"\\t\"")  should equal (TextForm("\t"))
     }
   }
 

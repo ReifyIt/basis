@@ -12,48 +12,48 @@ import basis.data._
 import basis.text._
 import scala.reflect._
 
-class OmniVariant extends Variant with JsonVariant with BsonVariant {
+object OmniVariant extends Variant with JsonVariant with BsonVariant {
   import Predef.classOf
 
-  override type AnyForm       = OmniValue
-  override type ObjectForm    = OmniObject
-  override type SeqForm       = OmniSeq
-  override type SetForm       = OmniSet
-  override type BinaryForm    = OmniBinary
-  override type StringForm    = OmniString
-  override type NumberForm    = OmniNumber
-  override type DateForm      = OmniDate
-  override type BooleanForm   = OmniBoolean
-  override type NullForm      = OmniNull
-  override type UndefinedForm = OmniUndefined
+  override type AnyForm    = OmniValue
+  override type ObjectForm = OmniObject
+  override type SeqForm    = OmniSeq
+  override type SetForm    = OmniSet
+  override type TextForm   = OmniText
+  override type DataForm   = OmniData
+  override type NumberForm = OmniNumber
+  override type DateForm   = OmniDate
+  override type BoolForm   = OmniBool
+  override type NullForm   = OmniNull
+  override type NoForm     = OmniNo
 
   override lazy val AnyForm: BaseValueFactory with JsonValueFactory with BsonValueFactory       = new OmniValueFactory
   override lazy val ObjectForm: BaseObjectFactory with JsonObjectFactory with BsonObjectFactory = new OmniObjectFactory
   override lazy val SeqForm: BaseSeqFactory with JsonSeqFactory with BsonSeqFactory             = new OmniSeqFactory
   override lazy val SetForm: BaseSetFactory with JsonSetFactory with BsonSetFactory             = new OmniSetFactory
 
-  override lazy val BinaryForm: BaseBinaryFactory   = new OmniBinaryFactory
-  override lazy val StringForm: BaseStringFactory   = new OmniStringFactory
-  override lazy val NumberForm: BaseNumberFactory   = new OmniNumberFactory
-  override lazy val DateForm: BaseDateFactory       = new OmniDateFactory
-  override lazy val BooleanForm: BaseBooleanFactory = new OmniBooleanFactory
+  override lazy val TextForm: BaseTextFactory     = new OmniTextFactory
+  override lazy val DataForm: BaseDataFactory     = new OmniDataFactory
+  override lazy val NumberForm: BaseNumberFactory = new OmniNumberFactory
+  override lazy val DateForm: BaseDateFactory     = new OmniDateFactory
+  override lazy val BoolForm: BaseBoolFactory     = new OmniBoolFactory
 
-  override lazy val TrueForm: BooleanForm           = new OmniBoolean(true)
-  override lazy val FalseForm: BooleanForm          = new OmniBoolean(false)
-  override lazy val NullForm: NullForm              = new OmniNull
-  override lazy val UndefinedForm: UndefinedForm    = new OmniUndefined
+  override lazy val TrueForm: BoolForm  = new OmniBool(true)
+  override lazy val FalseForm: BoolForm = new OmniBool(false)
+  override lazy val NullForm: NullForm  = new OmniNull
+  override lazy val NoForm: NoForm      = new OmniNo
 
-  implicit override lazy val AnyFormTag: ClassTag[AnyForm]             = ClassTag(classOf[OmniValue])
-  implicit override lazy val ObjectFormTag: ClassTag[ObjectForm]       = ClassTag(classOf[OmniObject])
-  implicit override lazy val SeqFormTag: ClassTag[SeqForm]             = ClassTag(classOf[OmniSeq])
-  implicit override lazy val SetFormTag: ClassTag[SetForm]             = ClassTag(classOf[OmniSet])
-  implicit override lazy val BinaryFormTag: ClassTag[BinaryForm]       = ClassTag(classOf[OmniBinary])
-  implicit override lazy val StringFormTag: ClassTag[StringForm]       = ClassTag(classOf[OmniString])
-  implicit override lazy val NumberFormTag: ClassTag[NumberForm]       = ClassTag(classOf[OmniNumber])
-  implicit override lazy val DateFormTag: ClassTag[DateForm]           = ClassTag(classOf[OmniDate])
-  implicit override lazy val BooleanFormTag: ClassTag[BooleanForm]     = ClassTag(classOf[OmniBoolean])
-  implicit override lazy val NullFormTag: ClassTag[NullForm]           = ClassTag(classOf[OmniNull])
-  implicit override lazy val UndefinedFormTag: ClassTag[UndefinedForm] = ClassTag(classOf[OmniUndefined])
+  implicit override lazy val AnyFormTag: ClassTag[AnyForm]       = ClassTag(classOf[OmniValue])
+  implicit override lazy val ObjectFormTag: ClassTag[ObjectForm] = ClassTag(classOf[OmniObject])
+  implicit override lazy val SeqFormTag: ClassTag[SeqForm]       = ClassTag(classOf[OmniSeq])
+  implicit override lazy val SetFormTag: ClassTag[SetForm]       = ClassTag(classOf[OmniSet])
+  implicit override lazy val TextFormTag: ClassTag[TextForm]     = ClassTag(classOf[OmniText])
+  implicit override lazy val DataFormTag: ClassTag[DataForm]     = ClassTag(classOf[OmniData])
+  implicit override lazy val NumberFormTag: ClassTag[NumberForm] = ClassTag(classOf[OmniNumber])
+  implicit override lazy val DateFormTag: ClassTag[DateForm]     = ClassTag(classOf[OmniDate])
+  implicit override lazy val BoolFormTag: ClassTag[BoolForm]     = ClassTag(classOf[OmniBool])
+  implicit override lazy val NullFormTag: ClassTag[NullForm]     = ClassTag(classOf[OmniNull])
+  implicit override lazy val NoFormTag: ClassTag[NoForm]         = ClassTag(classOf[OmniNo])
 
 
   abstract class OmniValue extends BaseValue with JsonValue with BsonValue
@@ -118,7 +118,27 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  class OmniBinary(underlying: Loader) extends OmniValue with BaseBinary with JsonBinary with BsonBinary {
+  class OmniText(protected val underlying: UString) extends OmniValue with BaseText with JsonText with BsonText {
+    override def iterator: Iterator[Int] = underlying.iterator
+    override def toUString: UString      = underlying
+  }
+
+  protected class OmniTextFactory extends BaseTextFactory {
+    override val empty: TextForm                                      = new OmniText(new UString(""))
+    implicit override def Builder: StringBuilder with State[TextForm] = new OmniTextBuilder(UString.Builder)
+  }
+
+  protected final class OmniTextBuilder(underlying: StringBuilder with State[UString]) extends StringBuilder with State[TextForm] {
+    override def append(c: Int): Unit           = underlying.append(c)
+    override def append(cs: CharSequence): Unit = underlying.append(cs)
+    override def clear(): Unit                  = underlying.clear()
+    override def expect(count: Int): this.type  = { underlying.expect(count); this }
+    override def state: TextForm                = new OmniText(underlying.state)
+    override def toString: String               = "TextForm"+"."+"Builder"
+  }
+
+
+  class OmniData(underlying: Loader) extends OmniValue with BaseData with JsonData with BsonData {
     override def endian: Endianness                = underlying.endian
     override def size: Long                        = underlying.size
     override def loadByte(address: Long): Byte     = underlying.loadByte(address)
@@ -130,13 +150,13 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
     override def reader(address: Long): Reader     = underlying.reader(address)
   }
 
-  protected class OmniBinaryFactory extends BaseBinaryFactory {
-    override def endian: Endianness = NativeEndian
-    override val empty: BinaryForm                     = new BinaryForm(ArrayData.empty)
-    override def Framer: Framer with State[BinaryForm] = new OmniBinaryFramer(ArrayData.Framer)
+  protected class OmniDataFactory extends BaseDataFactory {
+    override def endian: Endianness                  = NativeEndian
+    override val empty: DataForm                     = new OmniData(ArrayData.empty)
+    override def Framer: Framer with State[DataForm] = new OmniDataFramer(ArrayData.Framer)
   }
 
-  protected final class OmniBinaryFramer(underlying: Framer with State[Loader]) extends Framer with State[BinaryForm] {
+  protected final class OmniDataFramer(underlying: Framer with State[Loader]) extends Framer with State[DataForm] {
     override def endian: Endianness               = underlying.endian
     override def writeByte(value: Byte): Unit     = underlying.writeByte(value)
     override def writeShort(value: Short): Unit   = underlying.writeShort(value)
@@ -146,28 +166,8 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
     override def writeDouble(value: Double): Unit = underlying.writeDouble(value)
     override def writeData(data: Loader): Unit    = underlying.writeData(data)
     override def expect(count: Long): this.type   = { underlying.expect(count); this }
-    override def state: BinaryForm                = new OmniBinary(underlying.state)
+    override def state: DataForm                  = new OmniData(underlying.state)
     override def clear(): Unit                    = underlying.clear()
-  }
-
-
-  class OmniString(protected val underlying: UString) extends OmniValue with BaseString with JsonString with BsonString {
-    override def iterator: Iterator[Int] = underlying.iterator
-    override def toUString: UString      = underlying
-  }
-
-  protected class OmniStringFactory extends BaseStringFactory {
-    override val empty: StringForm                                      = new OmniString(new UString(""))
-    implicit override def Builder: StringBuilder with State[StringForm] = new OmniStringBuilder(UString.Builder)
-  }
-
-  protected final class OmniStringBuilder(underlying: StringBuilder with State[UString]) extends StringBuilder with State[StringForm] {
-    override def append(c: Int): Unit           = underlying.append(c)
-    override def append(cs: CharSequence): Unit = underlying.append(cs)
-    override def clear(): Unit                  = underlying.clear()
-    override def expect(count: Int): this.type  = { underlying.expect(count); this }
-    override def state: StringForm              = new OmniString(underlying.state)
-    override def toString: String               = "StringForm"+"."+"Builder"
   }
 
 
@@ -196,15 +196,13 @@ class OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  class OmniBoolean(override val toBoolean: Boolean) extends OmniValue with BaseBoolean with JsonBoolean with BsonBoolean
+  class OmniBool(override val toBoolean: Boolean) extends OmniValue with BaseBool with JsonBool with BsonBool
 
-  protected class OmniBooleanFactory extends BaseBooleanFactory
+  protected class OmniBoolFactory extends BaseBoolFactory
 
 
   class OmniNull extends OmniValue with BaseNull with JsonNull with BsonNull
 
 
-  class OmniUndefined extends OmniValue with BaseUndefined with JsonUndefined with BsonUndefined
+  class OmniNo extends OmniValue with BaseNo with JsonNo with BsonNo
 }
-
-object OmniVariant extends OmniVariant
