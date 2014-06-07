@@ -15,7 +15,7 @@ final class FingerTrieDataLE private[data] (
     private[data] override val branch: immutable.FingerTrieSeq[Array[Byte]],
     private[data] override val suffix: Array[Byte],
     override val size: Long)
-  extends FingerTrieData with ByteOrder[LittleEndian] {
+  extends FingerTrieData with Family[FingerTrieDataLE] with ByteOrder[LittleEndian] {
 
   override def endian: LittleEndian = LittleEndian
 
@@ -186,7 +186,7 @@ final class FingerTrieDataLE private[data] (
     }
   }
 
-  def slice(lower: Long, upper: Long): FingerTrieDataLE = {
+  override def slice(lower: Long, upper: Long): FingerTrieDataLE = {
     if (lower >= upper) FingerTrieDataLE.empty
     else drop(lower).take(upper - (0L max lower))
   }

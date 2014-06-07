@@ -8,7 +8,7 @@ package basis.data
 
 import basis._
 
-abstract class IndexTrieData extends Loader {
+abstract class IndexTrieData extends Family[IndexTrieData] with Loader {
   def mutateByte(address: Long, value: Byte): IndexTrieData with ByteOrder[Endian]
 
   def mutateShort(address: Long, value: Short): IndexTrieData with ByteOrder[Endian]
@@ -20,8 +20,6 @@ abstract class IndexTrieData extends Loader {
   def mutateFloat(address: Long, value: Float): IndexTrieData with ByteOrder[Endian]
 
   def mutateDouble(address: Long, value: Double): IndexTrieData with ByteOrder[Endian]
-
-  def ++ (that: Loader): IndexTrieData with ByteOrder[Endian]
 }
 
 object IndexTrieData extends ByteOrder[NativeEndian] with DataFactory[IndexTrieData with ByteOrder[NativeEndian]] {

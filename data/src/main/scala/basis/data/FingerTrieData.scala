@@ -9,7 +9,7 @@ package basis.data
 import basis._
 import basis.collections._
 
-abstract class FingerTrieData extends Loader {
+abstract class FingerTrieData extends Family[FingerTrieData] with Loader {
   private[data] def prefix: Array[Byte]
 
   private[data] def branch: immutable.FingerTrieSeq[Array[Byte]]

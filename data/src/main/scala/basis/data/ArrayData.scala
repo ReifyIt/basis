@@ -8,8 +8,12 @@ package basis.data
 
 import basis._
 
-trait ArrayData extends Any with Loader with Storer {
-  def ++ (that: Loader): ArrayData with ByteOrder[Endian]
+trait ArrayData extends Any with Family[ArrayData] with Loader with Storer {
+  def drop(lower: Long): ArrayData with ByteOrder[Endian]
+
+  def take(upper: Long): ArrayData with ByteOrder[Endian]
+
+  def slice(lower: Long, upper: Long): ArrayData with ByteOrder[Endian]
 
   def toArray: Array[Byte]
 }

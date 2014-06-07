@@ -8,7 +8,7 @@ package basis.data
 
 import basis._
 
-trait Framer extends State[Any] with Writer {
+trait Framer extends From[Nothing] with State[Any] with Writer {
   def expect(count: Long): this.type = this
 
   def state: State

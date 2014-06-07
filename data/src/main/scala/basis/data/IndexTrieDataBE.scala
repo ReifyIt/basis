@@ -9,7 +9,7 @@ package basis.data
 import basis._
 import basis.util._
 
-sealed abstract class IndexTrieDataBE extends IndexTrieData with ByteOrder[BigEndian] {
+sealed abstract class IndexTrieDataBE extends IndexTrieData with Family[IndexTrieDataBE] with ByteOrder[BigEndian] {
   override def endian: BigEndian = BigEndian
 
   override def loadByte(address: Long): Byte
@@ -168,13 +168,6 @@ sealed abstract class IndexTrieDataBE extends IndexTrieData with ByteOrder[BigEn
   override def mutateFloat(address: Long, value: Float): IndexTrieDataBE = mutateInt(address, value.toRawIntBits)
 
   override def mutateDouble(address: Long, value: Double): IndexTrieDataBE = mutateLong(address, value.toRawLongBits)
-
-  override def ++ (that: Loader): IndexTrieDataBE = {
-    val framer = IndexTrieDataBE.Framer
-    framer.writeData(this)
-    framer.writeData(that)
-    framer.state
-  }
 
   protected[data] def getNode1(address: Long): Array[Byte]
 

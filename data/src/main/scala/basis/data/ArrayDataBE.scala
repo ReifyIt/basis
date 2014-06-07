@@ -9,7 +9,7 @@ package basis.data
 import basis._
 import basis.util._
 
-final class ArrayDataBE(val __ : Array[Byte]) extends AnyVal with ArrayData with ByteOrder[BigEndian] {
+final class ArrayDataBE(val __ : Array[Byte]) extends AnyVal with Family[ArrayDataBE] with ByteOrder[BigEndian] with ArrayData {
   override def endian: BigEndian = BigEndian
 
   override def size: Long = __.length.toLong
@@ -94,18 +94,27 @@ final class ArrayDataBE(val __ : Array[Byte]) extends AnyVal with ArrayData with
   override def storeAlignedFloat(address: Long, value: Float): Unit   = storeFloat(address & -4L, value)
   override def storeAlignedDouble(address: Long, value: Double): Unit = storeDouble(address & -8L, value)
 
-  override def ++ (that: Loader): ArrayDataBE = that match {
-    case that: ArrayData =>
-      val data = that.toArray
-      val buffer = new Array[Byte](__.length + data.length)
-      java.lang.System.arraycopy(__, 0, buffer, 0, __.length)
-      java.lang.System.arraycopy(data, 0, buffer, __.length, data.length)
-      new ArrayDataBE(buffer)
-    case _ =>
-      val framer = ArrayDataBE.Framer.expect(size + that.size)
-      framer.writeData(this)
-      framer.writeData(that)
-      framer.state
+  override def drop(lower: Long): ArrayDataBE = {
+    val n = __.length
+    val i = (0L max lower).toInt min n
+    val buffer = new Array[Byte](n - i)
+    java.lang.System.arraycopy(__, i, buffer, 0, n - i)
+    new ArrayDataBE(buffer)
+  }
+
+  override def take(upper: Long): ArrayDataBE = {
+    val n = (0L max upper).toInt min __.length
+    val buffer = new Array[Byte](n)
+    java.lang.System.arraycopy(__, 0, buffer, 0, n)
+    new ArrayDataBE(buffer)
+  }
+
+  override def slice(lower: Long, upper: Long): ArrayDataBE = {
+    val n = (0L max upper).toInt min __.length
+    val i = (0L max lower).toInt min n
+    val buffer = new Array[Byte](n - i)
+    java.lang.System.arraycopy(__, i, buffer, 0, n - i)
+    new ArrayDataBE(buffer)
   }
 
   override def reader(address: Long): Reader with ByteOrder[BigEndian] = new ArrayDataBEReader(__, address.toInt)

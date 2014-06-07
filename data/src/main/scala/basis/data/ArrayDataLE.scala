@@ -9,7 +9,7 @@ package basis.data
 import basis._
 import basis.util._
 
-final class ArrayDataLE(val __ : Array[Byte]) extends AnyVal with ArrayData with ByteOrder[LittleEndian] {
+final class ArrayDataLE(val __ : Array[Byte]) extends AnyVal with Family[ArrayDataLE] with ByteOrder[LittleEndian] with ArrayData {
   override def endian: LittleEndian = LittleEndian
 
   override def size: Long = __.length.toLong
@@ -94,18 +94,27 @@ final class ArrayDataLE(val __ : Array[Byte]) extends AnyVal with ArrayData with
   override def storeAlignedFloat(address: Long, value: Float): Unit   = storeFloat(address & -4L, value)
   override def storeAlignedDouble(address: Long, value: Double): Unit = storeDouble(address & -8L, value)
 
-  override def ++ (that: Loader): ArrayDataLE = that match {
-    case that: ArrayData =>
-      val data = that.toArray
-      val buffer = new Array[Byte](__.length + data.length)
-      java.lang.System.arraycopy(__, 0, buffer, 0, __.length)
-      java.lang.System.arraycopy(data, 0, buffer, __.length, data.length)
-      new ArrayDataLE(buffer)
-    case _ =>
-      val framer = ArrayDataLE.Framer.expect(size + that.size)
-      framer.writeData(this)
-      framer.writeData(that)
-      framer.state
+  override def drop(lower: Long): ArrayDataLE = {
+    val n = __.length
+    val i = (0L max lower).toInt min n
+    val buffer = new Array[Byte](n - i)
+    java.lang.System.arraycopy(__, i, buffer, 0, n - i)
+    new ArrayDataLE(buffer)
+  }
+
+  override def take(upper: Long): ArrayDataLE = {
+    val n = (0L max upper).toInt min __.length
+    val buffer = new Array[Byte](n)
+    java.lang.System.arraycopy(__, 0, buffer, 0, n)
+    new ArrayDataLE(buffer)
+  }
+
+  override def slice(lower: Long, upper: Long): ArrayDataLE = {
+    val n = (0L max upper).toInt min __.length
+    val i = (0L max lower).toInt min n
+    val buffer = new Array[Byte](n - i)
+    java.lang.System.arraycopy(__, i, buffer, 0, n - i)
+    new ArrayDataLE(buffer)
   }
 
   override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new ArrayDataLEReader(__, address.toInt)

@@ -1,6 +1,6 @@
 lazy val modules = Seq(`basis-core`, `basis-data`, `basis-form`, `basis-math`, `basis-stat`, `basis-util`)
 
-lazy val basis = project in file(".") settings (Unidoc.settings ++ moduleSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*) aggregate (modules map (x => x: ProjectReference): _*)
+lazy val basis = project in file(".") settings (Unidoc.settings ++ rootSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*) aggregate (modules map (x => x: ProjectReference): _*)
 
 lazy val `basis-core` = project in file("core") settings (moduleSettings: _*) dependsOn (`basis-util`)
 
@@ -14,17 +14,19 @@ lazy val `basis-stat` = project in file("stat") settings (moduleSettings: _*) de
 
 lazy val `basis-util` = project in file("util") settings (moduleSettings: _*)
 
-lazy val moduleSettings = projectSettings ++ compileSettings ++ docSettings ++ publishSettings
+lazy val rootSettings = projectSettings ++ docSettings ++ publishSettings
+
+lazy val moduleSettings = rootSettings ++ compileSettings
 
 lazy val projectSettings = Seq(
   version := "0.2.0-SNAPSHOT",
   organization := "it.reify",
   description := "A foundation library for Scala focussed on efficiency and clean design",
   licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
-  homepage := Some(url("http://basis.reify.it")))
+  homepage := Some(url("http://basis.reify.it")),
+  scalaVersion := "2.11.1")
 
 lazy val compileSettings = Seq(
-  scalaVersion := "2.11.1",
   scalacOptions ++= Seq("-optimise", "-language:_", "-deprecation", "-Yno-predef", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,

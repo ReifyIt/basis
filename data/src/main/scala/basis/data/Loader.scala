@@ -6,10 +6,11 @@
 
 package basis.data
 
+import basis._
 import basis.text._
 import basis.util._
 
-trait Loader extends Any with Equals with ByteOrder[Endianness] {
+trait Loader extends Any with Equals with Family[Loader] with ByteOrder[Endianness] {
   /** Returns the size in bytes of the address space.
     * @group General */
   def size: Long
@@ -240,4 +241,14 @@ trait Loader extends Any with Equals with ByteOrder[Endianness] {
   }
 
   protected def stringPrefix: String = getClass.getSimpleName
+}
+
+object Loader extends ByteOrder[NativeEndian] with DataFactory[Loader with ByteOrder[NativeEndian]] {
+  override def endian: NativeEndian = NativeEndian
+
+  override val empty: Loader with ByteOrder[NativeEndian] = FingerTrieData.empty
+
+  implicit override def Framer: Framer with ByteOrder[NativeEndian] with State[Loader with ByteOrder[NativeEndian]] = FingerTrieData.Framer
+
+  override def toString: String = "Loader"
 }

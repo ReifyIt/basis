@@ -6,13 +6,20 @@
 
 package basis.data
 
+import basis._
 import basis.text._
 import scala.reflect.macros._
 
-final class LoaderOps(val __ : Loader) extends AnyVal {
+final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
   def load[T](address: Long)(implicit T: Struct[T]): T                                                    = macro LoaderMacros.load[T]
   def loadArray[T](address: Long, count: Int)(implicit T: Struct[T]): Array[T]                            = macro LoaderMacros.loadArray[T]
   def loadToArray[T](address: Long, array: Array[T], start: Int, count: Int)(implicit T: Struct[T]): Unit = macro LoaderMacros.loadToArray[T]
+
+  def ++ (that: Loader)(implicit framer: Framer with From[Family]): framer.State = {
+    framer.writeData(__)
+    framer.writeData(that)
+    framer.state
+  }
 
   def writeBase16(builder: StringBuilder): Unit = {
     def encodeDigit(digit: Int): Int = {
@@ -83,7 +90,7 @@ final class LoaderOps(val __ : Loader) extends AnyVal {
   }
 }
 
-private[data] class LoaderMacros(val c: blackbox.Context { type PrefixType <: LoaderOps }) {
+private[data] class LoaderMacros(val c: blackbox.Context { type PrefixType <: LoaderOps[_] }) {
   import c.{ Expr, prefix, WeakTypeTag }
   import c.universe._
 
