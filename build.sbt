@@ -24,10 +24,11 @@ lazy val projectSettings = Seq(
   description := "A foundation library for Scala focussed on efficiency and clean design",
   licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   homepage := Some(url("http://basis.reify.it")),
-  scalaVersion := "2.11.1")
+  scalaVersion := "2.11.1",
+  scalacOptions ++= Seq("-language:_", "-Yno-predef"))
 
 lazy val compileSettings = Seq(
-  scalacOptions ++= Seq("-optimise", "-language:_", "-deprecation", "-Yno-predef", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard"),
+  scalacOptions ++= Seq("-optimise", "-deprecation", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
     "org.scalatest" %% "scalatest" % "2.1.6" % "test"))
