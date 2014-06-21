@@ -141,6 +141,8 @@ object ArrayDataBE extends ByteOrder[BigEndian] with Allocator[ArrayDataBE] {
 private[data] final class ArrayDataBEReader(buffer: Array[Byte], private[this] var offset: Int) extends ByteOrder[BigEndian] with Reader {
   override def endian: BigEndian = BigEndian
 
+  override def isEOF: Boolean = offset >= buffer.length
+
   override def readByte(): Byte = {
     val value = buffer(offset)
     offset += 1
@@ -182,6 +184,11 @@ private[data] final class ArrayDataBEReader(buffer: Array[Byte], private[this] v
   override def readFloat(): Float = readInt().toFloatBits
 
   override def readDouble(): Double = readLong().toDoubleBits
+
+  override def drop(lower: Long): Reader with ByteOrder[BigEndian] = {
+    offset = ((offset.toLong + lower) min buffer.length.toLong).toInt
+    this
+  }
 }
 
 private[data] final class ArrayDataBEFramer extends State[ArrayDataBE] with ByteOrder[BigEndian] with Framer {
@@ -207,6 +214,8 @@ private[data] final class ArrayDataBEFramer extends State[ArrayDataBE] with Byte
   }
 
   override def endian: BigEndian = BigEndian
+
+  override def isEOF: Boolean = offset >= Int.MaxValue
 
   override def writeByte(value: Byte): Unit = {
     prepare(offset + 1)

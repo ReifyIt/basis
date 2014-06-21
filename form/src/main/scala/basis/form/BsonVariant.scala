@@ -312,12 +312,17 @@ trait BsonVariant extends Variant { variant =>
   protected[form] class BsonReader(underlying: Reader) extends Reader {
     override def endian: Endianness = underlying.endian
 
+    override def isEOF: Boolean = underlying.isEOF
+
     override def readByte(): Byte     = underlying.readByte()
     override def readShort(): Short   = underlying.readShort()
     override def readInt(): Int       = underlying.readInt()
     override def readLong(): Long     = underlying.readLong()
     override def readFloat(): Float   = underlying.readFloat()
     override def readDouble(): Double = underlying.readDouble()
+
+    override def drop(lower: Long): BsonReader = new BsonReader(underlying.drop(lower))
+    override def take(upper: Long): BsonReader = new BsonReader(underlying.take(upper))
 
     def readBsonDouble(): AnyForm = BsonDouble(readDouble())
 

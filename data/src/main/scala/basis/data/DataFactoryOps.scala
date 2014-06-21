@@ -70,4 +70,10 @@ final class DataFactoryOps[+Data](val __ : DataFactory[Data]) extends AnyVal {
     }
     framer.state
   }
+
+  def write[T](value: T)(implicit T: Frame[T]): Data = {
+    val framer = __.Framer
+    T.write(framer, value)
+    framer.state
+  }
 }

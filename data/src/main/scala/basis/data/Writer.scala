@@ -9,6 +9,8 @@ package basis.data
 import basis.util._
 
 trait Writer extends ByteOrder[Endianness] {
+  def isEOF: Boolean
+
   def writeByte(value: Byte): Unit
 
   def writeShort(value: Short): Unit = {

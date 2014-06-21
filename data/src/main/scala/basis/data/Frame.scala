@@ -7,6 +7,7 @@
 package basis.data
 
 import basis.text._
+import basis.util._
 
 trait Frame[@specialized(Byte, Short, Int, Long, Float, Double) T] {
   def read(data: Reader): T
@@ -26,6 +27,10 @@ object Frame {
   implicit lazy val Bool: Frame[Boolean]   = new Bool
 
   implicit lazy val CString: Frame[String] = new CString
+
+  implicit def Tuple2[T1: Frame, T2: Frame]: Frame[(T1, T2)]                               = new Tuple2[T1, T2]
+  implicit def Tuple3[T1: Frame, T2: Frame, T3: Frame]: Frame[(T1, T2, T3)]                = new Tuple3[T1, T2, T3]
+  implicit def Tuple4[T1: Frame, T2: Frame, T3: Frame, T4: Frame]: Frame[(T1, T2, T3, T4)] = new Tuple4[T1, T2, T3, T4]
 
   private final class Int8 extends Frame[Byte] {
     override def read(data: Reader): Byte               = data.readByte()
@@ -90,5 +95,97 @@ object Frame {
     }
 
     override def toString: String = "CString"
+  }
+
+  private final class Tuple2[T1, T2]
+      (implicit protected val T1: Frame[T1], protected val T2: Frame[T2])
+    extends Frame[(T1, T2)] {
+
+    override def read(data: Reader): (T1, T2) = {
+      val _1 = T1.read(data)
+      val _2 = T2.read(data)
+      (_1, _2)
+    }
+
+    override def write(data: Writer, tuple: (T1, T2)): Unit = {
+      T1.write(data, tuple._1)
+      T2.write(data, tuple._2)
+    }
+
+    override def equals(other: Any): Boolean = other match {
+      case that: Tuple2[_, _] => T1.equals(that.T1) && T2.equals(that.T2)
+      case _ => false
+    }
+
+    override def hashCode: Int = {
+      import MurmurHash3._
+      mash(mix(mix(seed[Tuple2[_, _]], T1.hashCode), T2.hashCode))
+    }
+
+    override def toString: String = "Tuple2"+"("+ T1 +", "+ T2 +")"
+  }
+
+  private final class Tuple3[T1, T2, T3]
+      (implicit protected val T1: Frame[T1], protected val T2: Frame[T2],
+                protected val T3: Frame[T3])
+    extends Frame[(T1, T2, T3)] {
+
+    override def read(data: Reader): (T1, T2, T3) = {
+      val _1 = T1.read(data)
+      val _2 = T2.read(data)
+      val _3 = T3.read(data)
+      (_1, _2, _3)
+    }
+
+    override def write(data: Writer, tuple: (T1, T2, T3)): Unit = {
+      T1.write(data, tuple._1)
+      T2.write(data, tuple._2)
+      T3.write(data, tuple._3)
+    }
+
+    override def equals(other: Any): Boolean = other match {
+      case that: Tuple3[_, _, _] => T1.equals(that.T1) && T2.equals(that.T2) && T3.equals(that.T3)
+      case _ => false
+    }
+
+    override def hashCode: Int = {
+      import MurmurHash3._
+      mash(mix(mix(mix(seed[Tuple3[_, _, _]], T1.hashCode), T2.hashCode), T3.hashCode))
+    }
+
+    override def toString: String = "Tuple3"+"("+ T1 +", "+ T2 +", "+ T3 +")"
+  }
+
+  private final class Tuple4[T1, T2, T3, T4]
+      (implicit protected val T1: Frame[T1], protected val T2: Frame[T2],
+                protected val T3: Frame[T3], protected val T4: Frame[T4])
+    extends Frame[(T1, T2, T3, T4)] {
+
+    override def read(data: Reader): (T1, T2, T3, T4) = {
+      val _1 = T1.read(data)
+      val _2 = T2.read(data)
+      val _3 = T3.read(data)
+      val _4 = T4.read(data)
+      (_1, _2, _3, _4)
+    }
+
+    override def write(data: Writer, tuple: (T1, T2, T3, T4)): Unit = {
+      T1.write(data, tuple._1)
+      T2.write(data, tuple._2)
+      T3.write(data, tuple._3)
+      T4.write(data, tuple._4)
+    }
+
+    override def equals(other: Any): Boolean = other match {
+      case that: Tuple4[_, _, _, _] => T1.equals(that.T1) && T2.equals(that.T2) && T3.equals(that.T3) && T4.equals(that.T4)
+      case _ => false
+    }
+
+    override def hashCode: Int = {
+      import MurmurHash3._
+      mash(mix(mix(mix(mix(seed[Tuple4[_, _, _, _]], T1.hashCode), T2.hashCode), T3.hashCode), T4.hashCode))
+    }
+
+    override def toString: String = "Tuple4"+"("+ T1 +", "+ T2 +", "+ T3 +", "+ T4 +")"
   }
 }

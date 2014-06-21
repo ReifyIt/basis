@@ -9,6 +9,7 @@ package basis.data
 import basis._
 import basis.collections._
 import basis.util._
+import scala.annotation._
 
 final class FingerTrieDataBE private[data] (
     private[data] override val prefix: Array[Byte],
@@ -222,6 +223,8 @@ private[data] final class FingerTrieDataBEReader(
 
   override def endian: BigEndian = BigEndian
 
+  override def isEOF: Boolean = index >= buffer.length && segmenter.isEmpty
+
   override def readByte(): Byte = {
     val value = buffer(index)
     step(1)
@@ -287,6 +290,25 @@ private[data] final class FingerTrieDataBEReader(
 
   override def readDouble(): Double = readLong().toDoubleBits
 
+  @tailrec override def drop(lower: Long): Reader with ByteOrder[BigEndian] = {
+    val more = lower - (buffer.length.toLong - index.toLong)
+    if (more < 0L) {
+      index += lower.toInt
+      this
+    }
+    else if (!segmenter.isEmpty) {
+      buffer = segmenter.head
+      segmenter.step()
+      index = 0
+      drop(more)
+    }
+    else {
+      buffer = FingerTrieData.EmptyByteArray
+      index = 0
+      this
+    }
+  }
+
   private[this] def step(count: Int): Unit = {
     index += count
     if (index >= buffer.length) {
@@ -336,6 +358,8 @@ private[data] final class FingerTrieDataBEFramer(
   }
 
   override def endian: BigEndian = BigEndian
+
+  override def isEOF: Boolean = length >= Long.MaxValue
 
   override def writeByte(value: Byte): Unit = {
     val offset = skew

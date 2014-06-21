@@ -482,6 +482,8 @@ private[data] final class IndexTrieDataLEReader(
 
   override def endian: LittleEndian = LittleEndian
 
+  override def isEOF: Boolean = index >= size
+
   override def readByte(): Byte = {
     val offset = index.toInt & 0xFF
     val value = node1(offset)
@@ -550,6 +552,11 @@ private[data] final class IndexTrieDataLEReader(
   override def readFloat(): Float = readInt().toFloatBits
 
   override def readDouble(): Double = readLong().toDoubleBits
+
+  override def drop(lower: Long): Reader with ByteOrder[LittleEndian] = {
+    step(lower)
+    this
+  }
 
   private[this] def step(count: Long): Unit = {
     val diff = index ^ (index + count)
@@ -740,6 +747,8 @@ private[data] final class IndexTrieDataLEFramer extends State[IndexTrieDataLE] w
   }
 
   override def endian: LittleEndian = LittleEndian
+
+  override def isEOF: Boolean = length >= (1L << 33)
 
   override def writeByte(value: Byte): Unit = {
     val offset = length.toInt & 0xFF

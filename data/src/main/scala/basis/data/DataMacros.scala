@@ -19,6 +19,11 @@ private[data] class DataMacros(val c: blackbox.Context) {
     Expr[DataFactoryOps[Data]](q"new $DataFactoryOpsTag($factory)")
   }
 
+  def AllocatorToOps[Data](allocator: Expr[Allocator[Data]])(implicit Data: WeakTypeTag[Data]): Expr[AllocatorOps[Data]] = {
+    implicit val AllocatorOpsTag = WeakTypeTag[Allocator[Data]](appliedType(mirror.staticClass("basis.data.AllocatorOps").toTypeConstructor, Data.tpe :: Nil))
+    Expr[AllocatorOps[Data]](q"new $AllocatorOpsTag($allocator)")
+  }
+
   def LoaderToOps(data: Expr[Loader]): Expr[LoaderOps[data.value.Family]] = {
     implicit val Family: WeakTypeTag[data.value.Family] = FamilyTag(data)
     implicit val LoaderOpsTag = WeakTypeTag[LoaderOps[data.value.Family]](appliedType(mirror.staticClass("basis.data.LoaderOps").toTypeConstructor, Family.tpe :: Nil))

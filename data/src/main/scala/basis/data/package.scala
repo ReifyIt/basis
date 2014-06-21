@@ -24,6 +24,7 @@ package object data {
   }
 
   implicit def DataFactoryToOps[Data](factory: DataFactory[Data]): DataFactoryOps[Data] = macro DataMacros.DataFactoryToOps[Data]
+  implicit def AllocatorToOps[Data](allocator: Allocator[Data]): AllocatorOps[Data] = macro DataMacros.AllocatorToOps[Data]
 
   implicit def LoaderToOps(data: Loader): LoaderOps[data.Family] = macro DataMacros.LoaderToOps
   implicit def ReaderToOps(data: Reader): ReaderOps = macro DataMacros.ReaderToOps

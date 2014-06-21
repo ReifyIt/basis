@@ -158,6 +158,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
 
   protected final class OmniDataFramer(underlying: Framer with State[Loader]) extends Framer with State[DataForm] {
     override def endian: Endianness               = underlying.endian
+    override def isEOF: Boolean                   = underlying.isEOF
     override def writeByte(value: Byte): Unit     = underlying.writeByte(value)
     override def writeShort(value: Short): Unit   = underlying.writeShort(value)
     override def writeInt(value: Int): Unit       = underlying.writeInt(value)
