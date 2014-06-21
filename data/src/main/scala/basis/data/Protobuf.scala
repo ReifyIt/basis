@@ -25,6 +25,8 @@ object Protobuf {
   lazy val Double: Frame[Double] = new Float64
   lazy val Bool: Frame[Boolean]  = new Bool
 
+  def sizeOf(value: Long): Int = (63 - value.countLeadingZeros) / 7 + 1
+
   private final class Variant extends Frame[Long] {
     override def read(data: Reader): Long = readVariant(data)
     override def write(data: Writer, value: Long): Unit = writeVariant(data, value)
