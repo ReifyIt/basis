@@ -4,9 +4,10 @@
 //   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2014 Reify It
 //  |_____/\_____\____/__/\____/      http://basis.reify.it
 
-package basis.data
+package basis.proto
 
 import basis.collections._
+import basis.data._
 import org.scalatest._
 import org.scalatest.matchers._
 

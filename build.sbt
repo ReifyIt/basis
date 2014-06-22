@@ -1,4 +1,4 @@
-lazy val modules = Seq(`basis-core`, `basis-data`, `basis-form`, `basis-math`, `basis-stat`, `basis-util`)
+lazy val modules = Seq(`basis-core`, `basis-data`, `basis-form`, `basis-math`, `basis-proto`, `basis-stat`, `basis-util`)
 
 lazy val basis = project in file(".") settings (Unidoc.settings ++ rootSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*) aggregate (modules map (x => x: ProjectReference): _*)
 
@@ -9,6 +9,8 @@ lazy val `basis-data` = project in file("data") settings (moduleSettings: _*) de
 lazy val `basis-form` = project in file("form") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-data`, `basis-util`)
 
 lazy val `basis-math` = project in file("math") settings (moduleSettings: _*)
+
+lazy val `basis-proto` = project in file("proto") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-data`, `basis-util`)
 
 lazy val `basis-stat` = project in file("stat") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-util`)
 

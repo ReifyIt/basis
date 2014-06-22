@@ -13,13 +13,11 @@ class IndexTrieDataSpec
   with DataFactoryBehaviors
   with LoaderBehaviors
   with ReaderBehaviors
-  with WriterBehaviors
-  with ProtobufBehaviors {
+  with WriterBehaviors {
 
   override def suiteName = "IndexTrieData specification"
 
   "Big-endian index trie data" should behave like BigEndianLoader(IndexTrieDataBE)
-  it should behave like ProtobufTranscoder(IndexTrieDataBE)
 
   "Big-endian index trie data readers" should behave like BigEndianReader(IndexTrieDataBE)
 
@@ -27,7 +25,6 @@ class IndexTrieDataSpec
 
 
   "Little-endian index trie data" should behave like LittleEndianLoader(IndexTrieDataLE)
-  it should behave like ProtobufTranscoder(IndexTrieDataLE)
 
   "Little-endian index trie data readers" should behave like LittleEndianReader(IndexTrieDataLE)
 
