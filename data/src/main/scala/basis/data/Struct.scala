@@ -43,6 +43,17 @@ object Struct {
   lazy val VolatileDouble: Struct[Double]          = new VolatileDouble
   lazy val VolatileBoolean: Struct[Boolean]        = new VolatileBoolean
 
+  lazy val PackedShortBE: Struct[Short]            = new PackedShortBE
+  lazy val PackedShortLE: Struct[Short]            = new PackedShortLE
+  lazy val PackedIntBE: Struct[Int]                = new PackedIntBE
+  lazy val PackedIntLE: Struct[Int]                = new PackedIntLE
+  lazy val PackedLongBE: Struct[Long]              = new PackedLongBE
+  lazy val PackedLongLE: Struct[Long]              = new PackedLongLE
+  lazy val PackedFloatBE: Struct[Float]            = new PackedFloatBE
+  lazy val PackedFloatLE: Struct[Float]            = new PackedFloatLE
+  lazy val PackedDoubleBE: Struct[Double]          = new PackedDoubleBE
+  lazy val PackedDoubleLE: Struct[Double]          = new PackedDoubleLE
+
   implicit def Tuple2[T1: Struct, T2: Struct]: Struct[(T1, T2)]                                 = new Tuple2[T1, T2]
   implicit def Tuple3[T1: Struct, T2: Struct, T3: Struct]: Struct[(T1, T2, T3)]                 = new Tuple3[T1, T2, T3]
   implicit def Tuple4[T1: Struct, T2: Struct, T3: Struct, T4: Struct]: Struct[(T1, T2, T3, T4)] = new Tuple4[T1, T2, T3, T4]
@@ -197,6 +208,86 @@ object Struct {
     override def load(data: Loader, offset: Long): Boolean               = data.loadVolatileByte(offset) == 0
     override def store(data: Storer, offset: Long, value: Boolean): Unit = data.storeVolatileByte(offset, if (value) 0 else -1)
     override def toString: String                                        = "VolatileBoolean"
+  }
+
+  private final class PackedShortBE extends Struct[Short] {
+    override def alignment: Long                                       = 1L
+    override def size: Long                                            = 2L
+    override def load(data: Loader, offset: Long): Short               = new LoaderOps(data).loadShortBE(offset)
+    override def store(data: Storer, offset: Long, value: Short): Unit = new StorerOps(data).storeShortBE(offset, value)
+    override def toString: String                                      = "PackedShortBE"
+  }
+
+  private final class PackedShortLE extends Struct[Short] {
+    override def alignment: Long                                       = 1L
+    override def size: Long                                            = 2L
+    override def load(data: Loader, offset: Long): Short               = new LoaderOps(data).loadShortLE(offset)
+    override def store(data: Storer, offset: Long, value: Short): Unit = new StorerOps(data).storeShortLE(offset, value)
+    override def toString: String                                      = "PackedShortLE"
+  }
+
+  private final class PackedIntBE extends Struct[Int] {
+    override def alignment: Long                                     = 1L
+    override def size: Long                                          = 4L
+    override def load(data: Loader, offset: Long): Int               = new LoaderOps(data).loadIntBE(offset)
+    override def store(data: Storer, offset: Long, value: Int): Unit = new StorerOps(data).storeIntBE(offset, value)
+    override def toString: String                                    = "PackedIntBE"
+  }
+
+  private final class PackedIntLE extends Struct[Int] {
+    override def alignment: Long                                     = 1L
+    override def size: Long                                          = 4L
+    override def load(data: Loader, offset: Long): Int               = new LoaderOps(data).loadIntLE(offset)
+    override def store(data: Storer, offset: Long, value: Int): Unit = new StorerOps(data).storeIntLE(offset, value)
+    override def toString: String                                    = "PackedIntLE"
+  }
+
+  private final class PackedLongBE extends Struct[Long] {
+    override def alignment: Long                                      = 1L
+    override def size: Long                                           = 8L
+    override def load(data: Loader, offset: Long): Long               = new LoaderOps(data).loadLongBE(offset)
+    override def store(data: Storer, offset: Long, value: Long): Unit = new StorerOps(data).storeLongBE(offset, value)
+    override def toString: String                                     = "PackedLongBE"
+  }
+
+  private final class PackedLongLE extends Struct[Long] {
+    override def alignment: Long                                      = 1L
+    override def size: Long                                           = 8L
+    override def load(data: Loader, offset: Long): Long               = new LoaderOps(data).loadLongLE(offset)
+    override def store(data: Storer, offset: Long, value: Long): Unit = new StorerOps(data).storeLongLE(offset, value)
+    override def toString: String                                     = "PackedLongLE"
+  }
+
+  private final class PackedFloatBE extends Struct[Float] {
+    override def alignment: Long                                       = 1L
+    override def size: Long                                            = 4L
+    override def load(data: Loader, offset: Long): Float               = new LoaderOps(data).loadFloatBE(offset)
+    override def store(data: Storer, offset: Long, value: Float): Unit = new StorerOps(data).storeFloatBE(offset, value)
+    override def toString: String                                      = "PackedFloatBE"
+  }
+
+  private final class PackedFloatLE extends Struct[Float] {
+    override def alignment: Long                                       = 1L
+    override def size: Long                                            = 4L
+    override def load(data: Loader, offset: Long): Float               = new LoaderOps(data).loadFloatLE(offset)
+    override def store(data: Storer, offset: Long, value: Float): Unit = new StorerOps(data).storeFloatLE(offset, value)
+    override def toString: String                                      = "PackedFloatLE"
+  }
+
+  private final class PackedDoubleBE extends Struct[Double] {
+    override def alignment: Long                                        = 1L
+    override def size: Long                                             = 8L
+    override def load(data: Loader, offset: Long): Double               = new LoaderOps(data).loadDoubleBE(offset)
+    override def store(data: Storer, offset: Long, value: Double): Unit = new StorerOps(data).storeDoubleBE(offset, value)
+    override def toString: String                                       = "PackedDoubleBE"
+  }
+
+  private final class PackedDoubleLE extends Struct[Double] {
+    override def alignment: Long                                        = 1L
+    override def size: Long                                             = 8L
+    override def load(data: Loader, offset: Long): Double               = new LoaderOps(data).loadDoubleLE(offset)
+    override def store(data: Storer, offset: Long, value: Double): Unit = new StorerOps(data).storeDoubleLE(offset, value)
+    override def toString: String                                       = "PackedDoubleLE"
   }
 
   private final class Tuple2[T1, T2]

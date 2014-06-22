@@ -63,7 +63,7 @@ trait Reader extends ByteOrder[Endianness] {
 
   def readDouble(): Double = readLong().toDoubleBits
 
-  def drop(lower: Long): Reader with ByteOrder[Endian] = {
+  def drop(lower: Long): this.type = {
     var i = 0L
     while (i < lower && !isEOF) {
       readByte()
@@ -129,7 +129,7 @@ private[data] object Reader {
       value
     }
 
-    override def drop(lower: Long): Reader with ByteOrder[Endian] = {
+    override def drop(lower: Long): this.type = {
       index = (index + lower) min limit
       this
     }

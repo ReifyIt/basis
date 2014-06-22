@@ -8,12 +8,103 @@ package basis.data
 
 import basis._
 import basis.text._
+import basis.util._
 import scala.reflect.macros._
 
 final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
+  import __.{ Family => _, _ }
+
   def load[T](address: Long)(implicit T: Struct[T]): T                                                    = macro LoaderMacros.load[T]
   def loadArray[T](address: Long, count: Int)(implicit T: Struct[T]): Array[T]                            = macro LoaderMacros.loadArray[T]
   def loadToArray[T](address: Long, array: Array[T], start: Int, count: Int)(implicit T: Struct[T]): Unit = macro LoaderMacros.loadToArray[T]
+
+  def loadShortBE(address: Long): Short = {
+    if (endian.isBig) loadShort(address)
+    else if (endian.isLittle)
+      ((loadByte(address     ) & 0xFF)     ) |
+      ((loadByte(address + 1L)       ) << 8)
+    else throw new MatchError(endian)
+  }.toShort
+
+  def loadShortLE(address: Long): Short = {
+    if (endian.isLittle) loadShort(address)
+    else if (endian.isBig)
+      ((loadByte(address     )       ) << 8) |
+      ((loadByte(address + 1L) & 0xFF)     )
+    else throw new MatchError(endian)
+  }.toShort
+
+  def loadIntBE(address: Long): Int = {
+    if (endian.isBig) loadInt(address)
+    else if (endian.isLittle)
+      ((loadByte(address     ) & 0xFF)      ) |
+      ((loadByte(address + 1L) & 0xFF) <<  8) |
+      ((loadByte(address + 2L) & 0xFF) << 16) |
+      ((loadByte(address + 3L)       ) << 24)
+    else throw new MatchError(endian)
+  }
+
+  def loadIntLE(address: Long): Int = {
+    if (endian.isLittle) loadInt(address)
+    else if (endian.isBig)
+      ((loadByte(address     )       ) << 24) |
+      ((loadByte(address + 1L) & 0xFF) << 16) |
+      ((loadByte(address + 2L) & 0xFF) <<  8) |
+      ((loadByte(address + 3L) & 0xFF)      )
+    else throw new MatchError(endian)
+  }
+
+  def loadLongBE(address: Long): Long = {
+    if (endian.isBig) loadLong(address)
+    else if (endian.isLittle)
+      ((loadByte(address     ) & 0xFF).toLong      ) |
+      ((loadByte(address + 1L) & 0xFF).toLong <<  8) |
+      ((loadByte(address + 2L) & 0xFF).toLong << 16) |
+      ((loadByte(address + 3L) & 0xFF).toLong << 24) |
+      ((loadByte(address + 4L) & 0xFF).toLong << 32) |
+      ((loadByte(address + 5L) & 0xFF).toLong << 40) |
+      ((loadByte(address + 6L) & 0xFF).toLong << 48) |
+      ((loadByte(address + 7L)       ).toLong << 56)
+    else throw new MatchError(endian)
+  }
+
+  def loadLongLE(address: Long): Long = {
+    if (endian.isLittle) loadLong(address)
+    else if (endian.isBig)
+      ((loadByte(address     )       ).toLong << 56) |
+      ((loadByte(address + 1L) & 0xFF).toLong << 48) |
+      ((loadByte(address + 2L) & 0xFF).toLong << 40) |
+      ((loadByte(address + 3L) & 0xFF).toLong << 32) |
+      ((loadByte(address + 4L) & 0xFF).toLong << 24) |
+      ((loadByte(address + 5L) & 0xFF).toLong << 16) |
+      ((loadByte(address + 6L) & 0xFF).toLong <<  8) |
+      ((loadByte(address + 7L) & 0xFF).toLong      )
+    else throw new MatchError(endian)
+  }
+
+  def loadFloatBE(address: Long): Float = {
+    if (endian.isBig) loadFloat(address)
+    else if (endian.isLittle) loadIntBE(address).toFloatBits
+    else throw new MatchError(endian)
+  }
+
+  def loadFloatLE(address: Long): Float = {
+    if (endian.isLittle) loadFloat(address)
+    else if (endian.isBig) loadIntLE(address).toFloatBits
+    else throw new MatchError(endian)
+  }
+
+  def loadDoubleBE(address: Long): Double = {
+    if (endian.isBig) loadDouble(address)
+    else if (endian.isLittle) loadLongBE(address).toDoubleBits
+    else throw new MatchError(endian)
+  }
+
+  def loadDoubleLE(address: Long): Double = {
+    if (endian.isLittle) loadDouble(address)
+    else if (endian.isBig) loadLongLE(address).toDoubleBits
+    else throw new MatchError(endian)
+  }
 
   def ++ (that: Loader)(implicit framer: Framer with From[Family]): framer.State = {
     framer.writeData(__)
@@ -28,9 +119,9 @@ final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
       else throw new MatchError(digit.toString)
     }
     var i = 0L
-    val n = __.size
+    val n = size
     while (i < n) {
-      val x = __.loadByte(i) & 0xFF
+      val x = loadByte(i) & 0xFF
       builder.append(encodeDigit(x >>> 4))
       builder.append(encodeDigit(x & 0xF))
       i += 1L
@@ -47,11 +138,11 @@ final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
       else throw new MatchError(digit.toString)
     }
     var i = 0L
-    val n = __.size
+    val n = size
     while (i + 2L < n) {
-      val x = __.loadByte(i     ) & 0xFF
-      val y = __.loadByte(i + 1L) & 0xFF
-      val z = __.loadByte(i + 2L) & 0xFF
+      val x = loadByte(i     ) & 0xFF
+      val y = loadByte(i + 1L) & 0xFF
+      val z = loadByte(i + 2L) & 0xFF
       builder.append(encodeDigit(x >>> 2))
       builder.append(encodeDigit(((x << 4) | (y >>> 4)) & 0x3F))
       builder.append(encodeDigit(((y << 2) | (z >>> 6)) & 0x3F))
@@ -59,8 +150,8 @@ final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
       i += 3L
     }
     if (i + 1L < n) {
-      val x = __.loadByte(i     ) & 0xFF
-      val y = __.loadByte(i + 1L) & 0xFF
+      val x = loadByte(i     ) & 0xFF
+      val y = loadByte(i + 1L) & 0xFF
       builder.append(encodeDigit(x >>> 2))
       builder.append(encodeDigit(((x << 4) | (y >>> 4)) & 0x3F))
       builder.append(encodeDigit((y << 2) & 0x3F))
@@ -68,7 +159,7 @@ final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
       i += 2L
     }
     else if (i < n) {
-      val x = __.loadByte(i) & 0xFF
+      val x = loadByte(i) & 0xFF
       builder.append(encodeDigit(x >>> 2))
       builder.append(encodeDigit((x << 4) & 0x3F))
       builder.append('=')

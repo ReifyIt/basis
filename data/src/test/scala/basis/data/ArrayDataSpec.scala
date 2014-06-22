@@ -8,12 +8,21 @@ package basis.data
 
 import org.scalatest._
 
-class ArrayDataSpec extends FlatSpec with DataFactoryBehaviors with LoaderBehaviors with StorerBehaviors with ReaderBehaviors with WriterBehaviors {
+class ArrayDataSpec
+  extends FlatSpec
+  with DataFactoryBehaviors
+  with LoaderBehaviors
+  with StorerBehaviors
+  with ReaderBehaviors
+  with WriterBehaviors
+  with ProtobufBehaviors {
+
   override def suiteName = "ArrayData specification"
 
   "Big-endian array data" should behave like PrimitiveSerializer(ArrayDataBE)
   it should behave like BigEndianLoader(ArrayDataBE)
   it should behave like BigEndianStorer(ArrayDataBE)
+  it should behave like ProtobufTranscoder(ArrayDataBE)
 
   "Big-endian array data readers" should behave like BigEndianReader(ArrayDataBE)
 
@@ -23,6 +32,7 @@ class ArrayDataSpec extends FlatSpec with DataFactoryBehaviors with LoaderBehavi
   "Little-endian array data" should behave like PrimitiveSerializer(ArrayDataLE)
   it should behave like LittleEndianLoader(ArrayDataLE)
   it should behave like LittleEndianStorer(ArrayDataLE)
+  it should behave like ProtobufTranscoder(ArrayDataLE)
 
   "Little-endian array data readers" should behave like LittleEndianReader(ArrayDataLE)
 

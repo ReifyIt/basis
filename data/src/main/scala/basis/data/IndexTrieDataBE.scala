@@ -553,7 +553,7 @@ private[data] final class IndexTrieDataBEReader(
 
   override def readDouble(): Double = readLong().toDoubleBits
 
-  override def drop(lower: Long): Reader with ByteOrder[BigEndian] = {
+  override def drop(lower: Long): this.type = {
     step(lower)
     this
   }

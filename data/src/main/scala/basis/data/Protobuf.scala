@@ -12,13 +12,47 @@ import basis.util._
 import scala.annotation._
 import scala.runtime._
 
-trait Protobuf[@specialized(Int, Long, Float, Double) T] extends Frame[T] {
+trait Protobuf[@specialized(Protobuf.Specialized) T] extends Frame[T] {
   def sizeOf(value: T): Int
 
   def wireType: Int
 }
 
 object Protobuf {
+  trait Field[@specialized(Protobuf.Specialized) T] extends Protobuf[T] {
+    def tag: Int
+
+    def tpe: Protobuf[T]
+
+    def matches(key: Long): Boolean = (key >>> 3).toInt == tag
+
+    def readValue(data: Reader): T = {
+      if (tpe.wireType == 2) tpe.read(data.take(readVarint(data)))
+      else tpe.read(data)
+    }
+
+    def writeValue(data: Writer, value: T): Unit = {
+      if (tpe.wireType == 2) writeVarint(data, tpe.sizeOf(value))
+      tpe.write(data, value)
+    }
+
+    override def read(data: Reader): T = {
+      val key = readVarint(data)
+      if (key >>> 3 != tag) throw new ProtobufException(s"expected tag $tag, but found tag ${key >>> 3}")
+      if ((key & 0x7) != tpe.wireType) throw new ProtobufException(s"expected wire type $wireType, but found wire type ${key & 0x7}")
+      readValue(data)
+    }
+
+    override def write(data: Writer, value: T): Unit = {
+      writeVarint(data, (tag << 3) | tpe.wireType & 0x7)
+      writeValue(data, value)
+    }
+
+    override def sizeOf(value: T): Int = sizeOfVarint((tag << 3) | tpe.wireType) + tpe.sizeOf(value)
+
+    override def wireType: Int = 2
+  }
+
   def apply[T](implicit T: Protobuf[T]): T.type = T
 
   lazy val Varint: Protobuf[Long]            = new Varint
@@ -37,7 +71,10 @@ object Protobuf {
   implicit lazy val Bool: Protobuf[Boolean]  = new Bool
   implicit lazy val String: Protobuf[String] = new Text
 
-  def Field[@specialized(scala.Int, scala.Long, scala.Float, scala.Double) T](tag: Int)(implicit T: Protobuf[T]): Field[T] = new Field(tag)(T)
+  def Repeated[CC[X] <: Container[X], T](implicit CC: generic.CollectionFactory[CC], T: Protobuf[T]): Protobuf[CC[T]] = new Repeated()(CC, T)
+
+  def Required[@specialized(Protobuf.Specialized) T](tag: Int)(implicit T: Protobuf[T]): Field[T]             = new Required(tag)(T)
+  def Optional[@specialized(Protobuf.Specialized) T](tag: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Optional(tag, default)(T)
 
   def Union[T](fields: Field[S] forSome { type S <: T }*): Reader => Option[T] = {
     val builder = immutable.HashTrieMap.Builder[Int, Field[S] forSome { type S <: T }]
@@ -60,115 +97,115 @@ object Protobuf {
   }
 
   private final class Varint extends Protobuf[Long] {
-    override def read(data: Reader): Long = readVarint(data)
+    override def read(data: Reader): Long               = readVarint(data)
     override def write(data: Writer, value: Long): Unit = writeVarint(data, value)
-    override def sizeOf(value: Long): Int = sizeOfVarint(value)
-    override def wireType: Int = 0
-    override def toString: String = "Protobuf"+"."+"Varint"
+    override def sizeOf(value: Long): Int               = sizeOfVarint(value)
+    override def wireType: Int                          = 0
+    override def toString: String                       = "Protobuf"+"."+"Varint"
   }
 
   private final class Int32 extends Protobuf[Int] {
-    override def read(data: Reader): Int = readVarint(data).toInt
+    override def read(data: Reader): Int               = readVarint(data).toInt
     override def write(data: Writer, value: Int): Unit = writeVarint(data, value.toLong)
-    override def sizeOf(value: Int): Int = sizeOfVarint(value.toLong)
-    override def wireType: Int = 0
-    override def toString: String = "Protobuf"+"."+"Int32"
+    override def sizeOf(value: Int): Int               = sizeOfVarint(value.toLong)
+    override def wireType: Int                         = 0
+    override def toString: String                      = "Protobuf"+"."+"Int32"
   }
 
   private final class Int64 extends Protobuf[Long] {
-    override def read(data: Reader): Long = readVarint(data)
+    override def read(data: Reader): Long               = readVarint(data)
     override def write(data: Writer, value: Long): Unit = writeVarint(data, value)
-    override def sizeOf(value: Long): Int = sizeOfVarint(value)
-    override def wireType: Int = 0
-    override def toString: String = "Protobuf"+"."+"Int64"
+    override def sizeOf(value: Long): Int               = sizeOfVarint(value)
+    override def wireType: Int                          = 0
+    override def toString: String                       = "Protobuf"+"."+"Int64"
   }
 
   private final class UInt32 extends Protobuf[Int] {
-    override def read(data: Reader): Int = readVarint(data).toInt
+    override def read(data: Reader): Int               = readVarint(data).toInt
     override def write(data: Writer, value: Int): Unit = writeVarint(data, value.toLong)
-    override def sizeOf(value: Int): Int = sizeOfVarint(value.toLong)
-    override def wireType: Int = 0
-    override def toString: String = "Protobuf"+"."+"UInt32"
+    override def sizeOf(value: Int): Int               = sizeOfVarint(value.toLong)
+    override def wireType: Int                         = 0
+    override def toString: String                      = "Protobuf"+"."+"UInt32"
   }
 
   private final class UInt64 extends Protobuf[Long] {
-    override def read(data: Reader): Long = readVarint(data)
+    override def read(data: Reader): Long               = readVarint(data)
     override def write(data: Writer, value: Long): Unit = writeVarint(data, value.toLong)
-    override def sizeOf(value: Long): Int = sizeOfVarint(value)
-    override def wireType: Int = 0
-    override def toString: String = "Protobuf"+"."+"UInt64"
+    override def sizeOf(value: Long): Int               = sizeOfVarint(value)
+    override def wireType: Int                          = 0
+    override def toString: String                       = "Protobuf"+"."+"UInt64"
   }
 
   private final class SInt32 extends Protobuf[Int] {
-    override def read(data: Reader): Int = { val n = readVarint(data); ((n >> 1) ^ (n << 31)).toInt }
+    override def read(data: Reader): Int               = { val n = readVarint(data); ((n >>> 1) ^ (n << 63 >> 63)).toInt }
     override def write(data: Writer, value: Int): Unit = writeVarint(data, (value.toLong << 1) ^ (value.toLong >> 31))
-    override def sizeOf(value: Int): Int = sizeOfVarint((value.toLong << 1) ^ (value.toLong >> 31))
-    override def wireType: Int = 0
-    override def toString: String = "Protobuf"+"."+"SInt32"
+    override def sizeOf(value: Int): Int               = sizeOfVarint((value.toLong << 1) ^ (value.toLong >> 31))
+    override def wireType: Int                         = 0
+    override def toString: String                      = "Protobuf"+"."+"SInt32"
   }
 
   private final class SInt64 extends Protobuf[Long] {
-    override def read(data: Reader): Long = { val n = readVarint(data); (n >> 1) ^ (n << 63) }
+    override def read(data: Reader): Long               = { val n = readVarint(data); (n >>> 1) ^ (n << 63 >> 63) }
     override def write(data: Writer, value: Long): Unit = writeVarint(data, (value << 1) ^ (value >> 63))
-    override def sizeOf(value: Long): Int = sizeOfVarint((value << 1) ^ (value >> 63))
-    override def wireType: Int = 0
-    override def toString: String = "Protobuf"+"."+"SInt64"
+    override def sizeOf(value: Long): Int               = sizeOfVarint((value << 1) ^ (value >> 63))
+    override def wireType: Int                          = 0
+    override def toString: String                       = "Protobuf"+"."+"SInt64"
   }
 
   private final class Fixed32 extends Protobuf[Int] {
-    override def read(data: Reader): Int = read32(data)
-    override def write(data: Writer, value: Int): Unit = write32(data, value)
-    override def sizeOf(value: Int): Int = 4
-    override def wireType: Int = 5
-    override def toString: String = "Protobuf"+"."+"Fixed32"
+    override def read(data: Reader): Int               = new ReaderOps(data).readIntLE()
+    override def write(data: Writer, value: Int): Unit = new WriterOps(data).writeIntLE(value)
+    override def sizeOf(value: Int): Int               = 4
+    override def wireType: Int                         = 5
+    override def toString: String                      = "Protobuf"+"."+"Fixed32"
   }
 
   private final class Fixed64 extends Protobuf[Long] {
-    override def read(data: Reader): Long = read64(data)
-    override def write(data: Writer, value: Long): Unit = write64(data, value)
-    override def sizeOf(value: Long): Int = 8
-    override def wireType: Int = 1
-    override def toString: String = "Protobuf"+"."+"Fixed64"
+    override def read(data: Reader): Long               = new ReaderOps(data).readLongLE()
+    override def write(data: Writer, value: Long): Unit = new WriterOps(data).writeLongLE(value)
+    override def sizeOf(value: Long): Int               = 8
+    override def wireType: Int                          = 1
+    override def toString: String                       = "Protobuf"+"."+"Fixed64"
   }
 
   private final class SFixed32 extends Protobuf[Int] {
-    override def read(data: Reader): Int = read32(data)
-    override def write(data: Writer, value: Int): Unit = write32(data, value)
-    override def sizeOf(value: Int): Int = 4
-    override def wireType: Int = 5
-    override def toString: String = "Protobuf"+"."+"SFixed32"
+    override def read(data: Reader): Int               = new ReaderOps(data).readIntLE()
+    override def write(data: Writer, value: Int): Unit = new WriterOps(data).writeIntLE(value)
+    override def sizeOf(value: Int): Int               = 4
+    override def wireType: Int                         = 5
+    override def toString: String                      = "Protobuf"+"."+"SFixed32"
   }
 
   private final class SFixed64 extends Protobuf[Long] {
-    override def read(data: Reader): Long = read64(data)
-    override def write(data: Writer, value: Long): Unit = write64(data, value)
-    override def sizeOf(value: Long): Int = 8
-    override def wireType: Int = 1
-    override def toString: String = "Protobuf"+"."+"SFixed64"
+    override def read(data: Reader): Long               = new ReaderOps(data).readLongLE()
+    override def write(data: Writer, value: Long): Unit = new WriterOps(data).writeLongLE(value)
+    override def sizeOf(value: Long): Int               = 8
+    override def wireType: Int                          = 1
+    override def toString: String                       = "Protobuf"+"."+"SFixed64"
   }
 
   private final class Float32 extends Protobuf[Float] {
-    override def read(data: Reader): Float = read32(data).toFloatBits
-    override def write(data: Writer, value: Float): Unit = write32(data, value.toRawIntBits)
-    override def sizeOf(value: Float): Int = 4
-    override def wireType: Int = 5
-    override def toString: String = "Protobuf"+"."+"Float"
+    override def read(data: Reader): Float               = new ReaderOps(data).readFloatLE()
+    override def write(data: Writer, value: Float): Unit = new WriterOps(data).writeFloatLE(value)
+    override def sizeOf(value: Float): Int               = 4
+    override def wireType: Int                           = 5
+    override def toString: String                        = "Protobuf"+"."+"Float"
   }
 
   private final class Float64 extends Protobuf[Double] {
-    override def read(data: Reader): Double = read64(data).toDoubleBits
-    override def write(data: Writer, value: Double): Unit = write64(data, value.toRawLongBits)
-    override def sizeOf(value: Double): Int = 8
-    override def wireType: Int = 1
-    override def toString: String = "Protobuf"+"."+"Double"
+    override def read(data: Reader): Double               = new ReaderOps(data).readDoubleLE()
+    override def write(data: Writer, value: Double): Unit = new WriterOps(data).writeDoubleLE(value)
+    override def sizeOf(value: Double): Int               = 8
+    override def wireType: Int                            = 1
+    override def toString: String                         = "Protobuf"+"."+"Double"
   }
 
   private final class Bool extends Protobuf[Boolean] {
-    override def read(data: Reader): Boolean = readVarint(data) != 0L
+    override def read(data: Reader): Boolean               = readVarint(data) != 0L
     override def write(data: Writer, value: Boolean): Unit = data.writeByte(if (value) 1.toByte else 0.toByte)
-    override def sizeOf(value: Boolean): Int = 1
-    override def wireType: Int = 0
-    override def toString: String = "Protobuf"+"."+"Bool"
+    override def sizeOf(value: Boolean): Int               = 1
+    override def wireType: Int                             = 0
+    override def toString: String                          = "Protobuf"+"."+"Bool"
   }
 
   private final class Text extends Protobuf[String] {
@@ -193,26 +230,54 @@ object Protobuf {
     override def toString: String = "Protobuf"+"."+"String"
   }
 
-  final class Field[@specialized(scala.Int, scala.Long, scala.Float, scala.Double) T](val tag: Int)(implicit val T: Protobuf[T]) extends Protobuf[T] {
-    override def read(data: Reader): T = {
-      val key = readVarint(data)
-      if (key >>> 3 != tag) throw new RuntimeException(s"expected tag $tag, but found tag ${key >>> 3}")
-      if ((key & 0x7) != T.wireType) throw new RuntimeException(s"expected wire type $wireType, but found wire type ${key & 0x7}")
-      if (T.wireType == 2) T.read(data.take(readVarint(data)))
-      else T.read(data)
+  private final class Repeated[T, CC[X] <: Container[X]](implicit CC: generic.CollectionFactory[CC], T: Protobuf[T]) extends Protobuf[CC[T]] {
+    if (T.wireType == 2) throw new ProtobufException("unsupported repeated length delimited values")
+
+    override def read(data: Reader): CC[T] = {
+      val builder = CC.Builder[T]
+      while (!data.isEOF) builder.append(T.read(data))
+      builder.state
     }
 
-    override def write(data: Writer, value: T): Unit = {
-      writeVarint(data, (tag << 3) | T.wireType & 0x7)
-      if (T.wireType == 2) writeVarint(data, T.sizeOf(value))
-      T.write(data, value)
+    override def write(data: Writer, value: CC[T]): Unit = {
+      val xs = value.iterator
+      while (!xs.isEmpty) {
+        T.write(data, xs.head)
+        xs.step()
+      }
     }
 
-    override def sizeOf(value: T): Int = sizeOfVarint((tag << 3) | T.wireType) + T.sizeOf(value)
+    override def sizeOf(value: CC[T]): Int = {
+      var size = 0
+      val xs = value.iterator
+      while (!xs.isEmpty) {
+        size += T.sizeOf(xs.head)
+        xs.step()
+      }
+      size
+    }
 
     override def wireType: Int = 2
 
-    override def toString: String = "Protobuf"+"."+"Field"+"("+ tag +")"+"("+ T +")"
+    override def toString: String = "Protobuf"+"."+"Repeated"+"("+ CC +", "+ T +")"
+  }
+
+  private final class Required[@specialized(Protobuf.Specialized) T](override val tag: Int)(implicit override val tpe: Protobuf[T]) extends Field[T] {
+    override def toString: String = "Protobuf"+"."+"Required"+"("+ tag +")"+"("+ tpe +")"
+  }
+
+  private final class Optional[@specialized(Protobuf.Specialized) T](override val tag: Int, default: T)(implicit override val tpe: Protobuf[T]) extends Field[T] {
+    override def write(data: Writer, value: T): Unit = {
+      if (value != default) {
+        writeVarint(data, (tag << 3) | tpe.wireType & 0x7)
+        if (tpe.wireType == 2) writeVarint(data, tpe.sizeOf(value))
+        tpe.write(data, value)
+      }
+    }
+
+    override def sizeOf(value: T): Int = if (value != default) sizeOfVarint((tag << 3) | tpe.wireType) + tpe.sizeOf(value) else 0
+
+    override def toString: String = "Protobuf"+"."+"Optional"+"("+ tag +","+ default +")"+"("+ tpe +")"
   }
 
   private final class Union[T](fields: immutable.HashTrieMap[Int, Field[S] forSome { type S <: T }]) extends AbstractFunction1[Reader, Option[T]] {
@@ -222,18 +287,17 @@ object Protobuf {
       val wireType = key.toInt & 0x7
       if (fields.contains(tag)) Some {
         val field = fields(tag)
-        if (tag != field.tag) throw new RuntimeException(s"expected tag ${field.tag}, but found tag $tag")
-        if (wireType != field.T.wireType) throw new RuntimeException(s"expected wire type ${field.wireType}, but found wire type $wireType")
-        if (wireType == 2) field.T.read(data.take(readVarint(data)))
-        else field.T.read(data)
+        if (tag != field.tag) throw new ProtobufException(s"expected tag ${field.tag}, but found tag $tag")
+        if (wireType != field.tpe.wireType) throw new ProtobufException(s"expected wire type ${field.tpe.wireType}, but found wire type $wireType")
+        field.readValue(data)
       }
       else {
         wireType match {
           case 0 => readVarint(data)
-          case 1 => read64(data)
+          case 1 => new ReaderOps(data).readLongLE()
           case 2 => data.drop(readVarint(data))
-          case 5 => read32(data)
-          case _ => throw new RuntimeException("unknown wire type: " + wireType)
+          case 5 => new ReaderOps(data).readIntLE()
+          case _ => throw new ProtobufException("unknown wire type: " + wireType)
         }
         None
       }
@@ -261,18 +325,17 @@ object Protobuf {
         val wireType = key.toInt & 0x7
         if (fields.contains(tag)) {
           val (field, action) = fields(tag)
-          if (tag != field.tag) throw new RuntimeException(s"expected tag ${field.tag}, but found tag $tag")
-          if (wireType != field.T.wireType) throw new RuntimeException(s"expected wire type ${field.wireType}, but found wire type $wireType")
-          if (wireType == 2) action.asInstanceOf[Any => Unit](field.T.asInstanceOf[Protobuf[Any]].read(data.take(readVarint(data))))
-          else action.asInstanceOf[Any => Unit](field.T.asInstanceOf[Protobuf[Any]].read(data))
+          if (tag != field.tag) throw new ProtobufException(s"expected tag ${field.tag}, but found tag $tag")
+          if (wireType != field.tpe.wireType) throw new ProtobufException(s"expected wire type ${field.tpe.wireType}, but found wire type $wireType")
+          action.asInstanceOf[Any => Unit](field.asInstanceOf[Field[Any]].readValue(data))
         }
         else {
           wireType match {
             case 0 => readVarint(data)
-            case 1 => read64(data)
+            case 1 => new ReaderOps(data).readLongLE()
             case 2 => data.drop(readVarint(data))
-            case 5 => read32(data)
-            case _ => throw new RuntimeException("unknown wire type: " + wireType)
+            case 5 => new ReaderOps(data).readIntLE()
+            case _ => throw new ProtobufException("unknown wire type: " + wireType)
           }
           ()
         }
@@ -284,16 +347,12 @@ object Protobuf {
 
   private final def sizeOfVarint(value: Long): Int = (63 - value.countLeadingZeros) / 7 + 1
 
-  private final def readVarint(data: Reader): Long = {
-    var value = 0L
-    var b = 0
-    var k = 0
-    do {
-      b = data.readByte().toInt
-      value |= (b & 0x7F).toLong << k
-      k += 7
-    } while ((b & 0x80) != 0)
-    value
+  private final def readVarint(data: Reader): Long = readVariant(data, 0L, 0)
+  @tailrec private final def readVariant(data: Reader, word: Long, shift: Int): Long = {
+    val b = data.readByte().toInt
+    val value = if (shift < 64) word | ((b & 0x7F).toLong << shift) else word
+    if ((b & 0x80) == 0) value
+    else readVariant(data, value, shift + 7)
   }
 
   @tailrec private final def writeVarint(data: Writer, value: Long): Unit = {
@@ -305,39 +364,5 @@ object Protobuf {
     }
   }
 
-  private final def read32(data: Reader): Int = {
-    ((data.readByte() & 0xFF)      ) |
-    ((data.readByte() & 0xFF) <<  8) |
-    ((data.readByte() & 0xFF) << 16) |
-    ((data.readByte()       ) << 24)
-  }
-
-  private final def write32(data: Writer, value: Int): Unit = {
-    data.writeByte((value      ).toByte)
-    data.writeByte((value >>  8).toByte)
-    data.writeByte((value >> 16).toByte)
-    data.writeByte((value >> 24).toByte)
-  }
-
-  private final def read64(data: Reader): Long = {
-    ((data.readByte() & 0xFF).toLong      ) |
-    ((data.readByte() & 0xFF).toLong <<  8) |
-    ((data.readByte() & 0xFF).toLong << 16) |
-    ((data.readByte() & 0xFF).toLong << 24) |
-    ((data.readByte() & 0xFF).toLong << 32) |
-    ((data.readByte() & 0xFF).toLong << 40) |
-    ((data.readByte() & 0xFF).toLong << 48) |
-    ((data.readByte()       ).toLong << 56)
-  }
-
-  private final def write64(data: Writer, value: Long): Unit = {
-    data.writeByte((value      ).toByte)
-    data.writeByte((value >>  8).toByte)
-    data.writeByte((value >> 16).toByte)
-    data.writeByte((value >> 24).toByte)
-    data.writeByte((value >> 32).toByte)
-    data.writeByte((value >> 40).toByte)
-    data.writeByte((value >> 48).toByte)
-    data.writeByte((value >> 56).toByte)
-  }
+  protected[data] final val Specialized = new Specializable.Group((scala.Int, scala.Long, scala.Float, scala.Double))
 }

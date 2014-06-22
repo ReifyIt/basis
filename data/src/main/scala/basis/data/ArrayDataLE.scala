@@ -185,7 +185,7 @@ private[data] final class ArrayDataLEReader(buffer: Array[Byte], private[this] v
 
   override def readDouble(): Double = readLong().toDoubleBits
 
-  override def drop(lower: Long): Reader with ByteOrder[LittleEndian] = {
+  override def drop(lower: Long): this.type = {
     offset = ((offset.toLong + lower) min buffer.length.toLong).toInt
     this
   }

@@ -290,7 +290,7 @@ private[data] final class FingerTrieDataBEReader(
 
   override def readDouble(): Double = readLong().toDoubleBits
 
-  @tailrec override def drop(lower: Long): Reader with ByteOrder[BigEndian] = {
+  @tailrec override def drop(lower: Long): this.type = {
     val more = lower - (buffer.length.toLong - index.toLong)
     if (more < 0L) {
       index += lower.toInt

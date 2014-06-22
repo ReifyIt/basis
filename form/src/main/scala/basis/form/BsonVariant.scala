@@ -321,7 +321,7 @@ trait BsonVariant extends Variant { variant =>
     override def readFloat(): Float   = underlying.readFloat()
     override def readDouble(): Double = underlying.readDouble()
 
-    override def drop(lower: Long): BsonReader = new BsonReader(underlying.drop(lower))
+    override def drop(lower: Long): this.type  = { underlying.drop(lower); this }
     override def take(upper: Long): BsonReader = new BsonReader(underlying.take(upper))
 
     def readBsonDouble(): AnyForm = BsonDouble(readDouble())
