@@ -176,20 +176,58 @@ trait ProtobufBehaviors { this: FlatSpec =>
     it should "transcode packed repeated protobuf fields" in {
       testRepeated(transcoder(Required(1)(Repeated(Seq, Varint))))
     }
+
+    it should "transcode Unit protobuf values" in {
+      () should (transcoder(Unit))
+    }
+
+    it should "transcode Unit protobuf fields" in {
+      () should (transcoder(Required(1)(Unit)))
+    }
+
+    it should "skip unknown varint protobuf fields" in {
+      val data = ArrayData.write((-1L, 128L))(Frame.Tuple2(Protobuf.Required(1)(Protobuf.Varint), Protobuf.Varint)).reader(0L)
+      Protobuf.Unknown(1, 0).read(data)
+      Protobuf.Varint.read(data) should equal (128L)
+    }
+
+    it should "skip unknown 64-bit protobuf fields" in {
+      val data = ArrayData.write((-1L, 128L))(Frame.Tuple2(Protobuf.Required(1)(Protobuf.SFixed64), Protobuf.Varint)).reader(0L)
+      Protobuf.Unknown(1, 1).read(data)
+      Protobuf.Varint.read(data) should equal (128L)
+    }
+
+    it should "skip unknwon 32-bit protobuf fields" in {
+      val data = ArrayData.write((-1, 128L))(Frame.Tuple2(Protobuf.Required(1)(Protobuf.SFixed32), Protobuf.Varint)).reader(0L)
+      Protobuf.Unknown(1, 5).read(data)
+      Protobuf.Varint.read(data) should equal (128L)
+    }
+
+    it should "skip unknown empty length delimited fields" in {
+      val data = ArrayData.write(("", 128L))(Frame.Tuple2(Protobuf.Required(1)(Protobuf.String), Protobuf.Varint)).reader(0L)
+      Protobuf.Unknown(1, 2).read(data)
+      Protobuf.Varint.read(data) should equal (128L)
+    }
+
+    it should "skip unknown non-empty length delimited fields" in {
+      val data = ArrayData.write(("Hello, world!", 128L))(Frame.Tuple2(Protobuf.Required(1)(Protobuf.String), Protobuf.Varint)).reader(0L)
+      Protobuf.Unknown(1, 2).read(data)
+      Protobuf.Varint.read(data) should equal (128L)
+    }
   }
 
   protected final class Transcoder[T, Data <: Loader](implicit T: Protobuf[T], Data: DataFactory[Data]) extends Matcher[T] {
-    private def transcoded(value: T): T = {
-      val framer = Data.Framer
-      T.write(framer, value)
-      T.read(framer.state.reader(0L))
-    }
-
     def apply(x: T): MatchResult = {
-      val y = transcoded(x)
+      val framer = Data.Framer
+      T.write(framer, x)
+      val data = framer.state
+      val y = T.read(data.reader(0L))
+      val same = x == y
+      val xSize = T.sizeOf(x)
+      val ySize = data.size
       MatchResult(
-        x == y,
-        s"$x improperly transcoded to $y",
+        same && xSize == ySize,
+        if (!same) s"$x improperly transcoded to $y" else s"wrote $ySize bytes, but $T.sizeOf($x) = $xSize bytes",
         s"$x properly transcoded")
     }
   }
