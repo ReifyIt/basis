@@ -88,13 +88,15 @@ object Protobuf {
   implicit lazy val Unit: Protobuf[Unit]     = new Blank
   implicit lazy val String: Protobuf[String] = new Text
 
+  implicit def Bytes[Data <: Loader](implicit Data: DataFactory[Data]): Protobuf[Data] = new Bytes()(Data)
+
   def Repeated[CC[X] <: Container[X], T](implicit CC: generic.CollectionFactory[CC], T: Protobuf[T]): Protobuf[CC[T]] = new Repeated()(CC, T)
 
   def Required[@specialized(Protobuf.Specialized) T](tag: Int)(implicit T: Protobuf[T]): Field[T]             = new Required(tag)(T)
   def Optional[@specialized(Protobuf.Specialized) T](tag: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Optional(tag, default)(T)
 
-  def Unknown[T](key: Long, default: T)(implicit T: Protobuf[T]): Field[T] = new Unknown[T](key, default)
-  def Unknown[T](tag: Int, wireType: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Unknown[T](tag, wireType, default)
+  def Unknown[T](key: Long, default: T)(implicit T: Protobuf[T]): Field[T] = new Unknown(key, default)(T)
+  def Unknown[T](tag: Int, wireType: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Unknown(tag, wireType, default)(T)
   def Unknown(key: Long): Field[Unit] = Unknown(key, ())(Unit)
   def Unknown(tag: Int, wireType: Int): Field[Unit] = Unknown(tag, wireType, ())(Unit)
 
@@ -258,6 +260,32 @@ object Protobuf {
     override def wireType: Int = WireType.Message
 
     override def toString: String = "Protobuf"+"."+"String"
+  }
+
+  private final class Bytes[Data <: Loader](implicit val Data: DataFactory[Data]) extends Protobuf[Data] {
+    override def read(data: Reader): Data = {
+      val framer = Data.Framer
+      while (!data.isEOF) framer.writeByte(data.readByte)
+      framer.state
+    }
+
+    override def write(data: Writer, value: Data): Unit = data.writeData(value)
+
+    override def sizeOf(value: Data): Int = value.size.toInt
+
+    override def wireType: Int = WireType.Message
+
+    override def equals(other: Any): Boolean = other match {
+      case that: Bytes[_] => Data.equals(that.Data)
+      case _ => false
+    }
+
+    override def hashCode: Int = {
+      import MurmurHash3._
+      mash(mix(seed[Bytes[_]], Data.hashCode))
+    }
+
+    override def toString: String = "Protobuf"+"."+"Bytes"+"("+ Data +")"
   }
 
   private final class Repeated[T, CC[X] <: Container[X]](implicit private val CC: generic.CollectionFactory[CC], private val T: Protobuf[T]) extends Protobuf[CC[T]] {

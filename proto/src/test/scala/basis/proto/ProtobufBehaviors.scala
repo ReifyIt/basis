@@ -163,6 +163,22 @@ trait ProtobufBehaviors { this: FlatSpec =>
       testString(transcoder(Required(1)(String)))
     }
 
+    def testBytes[Data <: Loader](transcode: Matcher[Data])(implicit Data: DataFactory[Data]): Unit = {
+      Data.empty should (transcode)
+      Data.write(-1.toByte) should (transcode)
+      Data.write("Hello, world!") should (transcode)
+    }
+
+    it should "transcode Bytes protobuf values" in {
+      implicit val Data = FingerTrieData
+      testBytes(transcoder(Bytes))
+    }
+
+    it should "transcode Bytes protobuf fields" in {
+      implicit val Data = FingerTrieData
+      testBytes(transcoder(Required(1)(Bytes)))
+    }
+
     def testRepeated(transcode: Matcher[Seq[Long]]): Unit = {
       Seq.empty should (transcode)
       Seq(0L) should (transcode)
