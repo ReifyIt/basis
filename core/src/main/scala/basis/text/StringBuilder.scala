@@ -45,6 +45,33 @@ abstract class StringBuilder extends Builder[Int] {
       append(x.toString)
   }
 
+  def showHex(x: Any): Unit = {
+    def hexToChar(x: Int): Int = if (x < 10) '0' + x else 'A' + (x - 10)
+    x match {
+      case x: Int =>
+        append('0'); append('x')
+        append(hexToChar(x >>> 28      )); append(hexToChar(x >>> 24 & 0xF))
+        append(hexToChar(x >>> 20 & 0xF)); append(hexToChar(x >>> 16 & 0xF))
+        append(hexToChar(x >>> 12 & 0xF)); append(hexToChar(x >>>  8 & 0xF))
+        append(hexToChar(x >>>  4 & 0xF)); append(hexToChar(x        & 0xF))
+      case x: Long =>
+        val hi = (x >>> 32).toInt
+        val lo = x.toInt
+        append('0'); append('x')
+        append(hexToChar(hi >>> 28      )); append(hexToChar(hi >>> 24 & 0xF))
+        append(hexToChar(hi >>> 20 & 0xF)); append(hexToChar(hi >>> 16 & 0xF))
+        append(hexToChar(hi >>> 12 & 0xF)); append(hexToChar(hi >>>  8 & 0xF))
+        append(hexToChar(hi >>>  4 & 0xF)); append(hexToChar(hi        & 0xF))
+        append(hexToChar(lo >>> 28      )); append(hexToChar(lo >>> 24 & 0xF))
+        append(hexToChar(lo >>> 20 & 0xF)); append(hexToChar(lo >>> 16 & 0xF))
+        append(hexToChar(lo >>> 12 & 0xF)); append(hexToChar(lo >>>  8 & 0xF))
+        append(hexToChar(lo >>>  4 & 0xF)); append(hexToChar(lo        & 0xF))
+        append('L')
+      case _ =>
+        append(x.toString)
+    }
+  }
+
   override def += (c: Int): this.type = {
     append(c)
     this

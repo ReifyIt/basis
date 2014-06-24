@@ -231,6 +231,13 @@ trait ProtobufBehaviors { this: FlatSpec =>
       Protobuf.Unknown(1, 2).read(data)
       Protobuf.Varint.read(data) should equal (128L)
     }
+
+    it should "not sign extend UInt32 protobuf values" in {
+      withClue("UInt32.sizeOf(-1):") (UInt32.sizeOf(-1) should be (5))
+      val data = Data.write(-1)(Protobuf.UInt32)
+      withClue("Data.write(-1)(UInt32).size") (data.size should be (5))
+      UInt32.read(data.reader(0L)) should equal (-1)
+    }
   }
 
   protected final class Transcoder[T, Data <: Loader](implicit T: Protobuf[T], Data: DataFactory[Data]) extends Matcher[T] {

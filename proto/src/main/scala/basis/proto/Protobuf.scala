@@ -146,8 +146,8 @@ object Protobuf {
 
   private final class UInt32 extends Protobuf[Int] {
     override def read(data: Reader): Int               = readVarint(data).toInt
-    override def write(data: Writer, value: Int): Unit = writeVarint(data, value.toLong)
-    override def sizeOf(value: Int): Int               = sizeOfVarint(value.toLong)
+    override def write(data: Writer, value: Int): Unit = writeVarint(data, value.toLong & 0xFFFFFFFFL)
+    override def sizeOf(value: Int): Int               = sizeOfVarint(value.toLong & 0xFFFFFFFFL)
     override def wireType: Int                         = WireType.Varint
     override def toString: String                      = "Protobuf"+"."+"UInt32"
   }
