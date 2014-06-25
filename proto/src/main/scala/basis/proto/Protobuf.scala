@@ -61,7 +61,7 @@ object Protobuf {
     }
 
     override def sizeOf(value: T): Int = {
-      sizeOfVarint((tag << 3) | tpe.wireType)                         +
+      sizeOfVarint((tag << 3) | tpe.wireType)                                        +
       (if (tpe.wireType == WireType.Message) sizeOfVarint(tpe.sizeOf(value)) else 0) +
       tpe.sizeOf(value)
     }

@@ -133,8 +133,5 @@ private[data] object Reader {
       index = (index + lower) min limit
       this
     }
-
-    override def take(upper: Long): Reader with ByteOrder[Endian] =
-      new Limited(self, index, (index + upper) min limit)
   }
 }
