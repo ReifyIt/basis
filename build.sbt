@@ -26,7 +26,7 @@ lazy val projectSettings = Seq(
   description := "A foundation library for Scala focussed on efficiency and clean design",
   licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   homepage := Some(url("http://basis.reify.it")),
-  scalaVersion := "2.11.1",
+  scalaVersion := "2.11.2",
   scalacOptions ++= Seq("-language:_", "-Yno-predef"))
 
 lazy val compileSettings = Seq(

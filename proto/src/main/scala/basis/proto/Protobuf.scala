@@ -242,7 +242,7 @@ object Protobuf {
 
   private final class Text extends Protobuf[String] {
     override def read(data: Reader): String = {
-      val s = UTF8.Builder(UString.Builder)
+      val s = UTF8.Decoder(UString.Builder)
       while (!data.isEOF) s.append(data.readByte & 0xFF)
       s.state.toString
     }

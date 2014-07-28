@@ -113,12 +113,12 @@ trait UTF16 extends Any with Equals with Family[UTF16] with UTF {
 
 object UTF16 {
   /** Returns a new builder that composes UTF-16 code units into valid Unicode code points. */
-  def Builder(self: StringBuilder): Builder[Int] with State[self.State] = new UTF16Builder[self.State](self)
+  def Decoder(self: StringBuilder): Builder[Int] with State[self.State] = new UTF16Decoder[self.State](self)
 
   override def toString: String = "UTF16"
 }
 
-private[text] final class UTF16Builder[+Result](self: StringBuilder with State[Result]) extends Builder[Int] with State[Result] {
+private[text] final class UTF16Decoder[+Result](self: StringBuilder with State[Result]) extends Builder[Int] with State[Result] {
   private[this] var c1: Int = 0
   private[this] var c2: Int = 0
   private[this] var n: Int = 0
@@ -159,7 +159,7 @@ private[text] final class UTF16Builder[+Result](self: StringBuilder with State[R
     n = 0
   }
 
-  override def toString: String = "UTF16"+"."+"Builder"+"("+ self +")"
+  override def toString: String = "UTF16"+"."+"Decoder"+"("+ self +")"
 }
 
 private[text] final class UTF16Iterator(text: UTF16, private[this] var index: Int) extends Iterator[Int] {

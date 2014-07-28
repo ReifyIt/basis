@@ -10,8 +10,6 @@ import basis.util._
 import org.scalatest.matchers._
 
 trait HexMatchers {
-  import Predef._
-
   def equalByte(right: Byte) = new Matcher[Byte] {
     override def apply(left: Byte) = MatchResult(
       left == right,

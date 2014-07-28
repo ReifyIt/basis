@@ -65,12 +65,12 @@ trait UTF32 extends Any with Equals with Family[UTF32] with IndexedSeq[Int] with
 
 object UTF32 {
   /** Returns a new builder that composes UTF-32 code units into valid Unicode code points. */
-  def Builder(self: StringBuilder): Builder[Int] with State[self.State] = new UTF32Builder[self.State](self)
+  def Decoder(self: StringBuilder): Builder[Int] with State[self.State] = new UTF32Decoder[self.State](self)
 
   override def toString: String = "UTF32"
 }
 
-private[text] final class UTF32Builder[+Result](self: StringBuilder with State[Result]) extends Builder[Int] with State[Result] {
+private[text] final class UTF32Decoder[+Result](self: StringBuilder with State[Result]) extends Builder[Int] with State[Result] {
   protected def appendCodePoint(c: Int): Unit = self.append(c)
 
   override def append(c: Int): Unit = {
@@ -85,7 +85,7 @@ private[text] final class UTF32Builder[+Result](self: StringBuilder with State[R
 
   override def clear(): Unit = self.clear()
 
-  override def toString: String = "UTF32"+"."+"Builder"+"("+ self +")"
+  override def toString: String = "UTF32"+"."+"Decoder"+"("+ self +")"
 }
 
 private[text] final class UTF32Iterator(text: UTF32, private[this] var index: Int) extends Iterator[Int] {
