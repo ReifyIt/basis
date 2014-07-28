@@ -8,6 +8,7 @@ package basis.data
 
 import basis.util._
 import org.scalatest.matchers._
+import scala.Predef.augmentString
 
 trait HexMatchers {
   def equalByte(right: Byte) = new Matcher[Byte] {
