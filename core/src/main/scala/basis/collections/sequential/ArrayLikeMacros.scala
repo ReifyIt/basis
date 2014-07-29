@@ -56,7 +56,7 @@ private[sequential] abstract class ArrayLikeMacros(override val c: blackbox.Cont
   def mayReduceLeft[A, B >: A](op: Expr[(B, A) => B])(implicit B: WeakTypeTag[B]): Expr[Maybe[B]] = Expr[Maybe[B]](q"""{
     val xs = $these
     val n = xs.length
-    if (n <= 0) _root_.basis.util.Trap
+    if (n <= 0) _root_.basis.Trap
     else {
       var r = xs(0): $B
       var i = 1
@@ -64,7 +64,7 @@ private[sequential] abstract class ArrayLikeMacros(override val c: blackbox.Cont
         r = $op(r, xs(i))
         i += 1
       }
-      _root_.basis.util.Bind(r)
+      _root_.basis.Bind(r)
     }
   }""")
 
@@ -97,7 +97,7 @@ private[sequential] abstract class ArrayLikeMacros(override val c: blackbox.Cont
   def mayReduceRight[A, B >: A](op: Expr[(A, B) => B])(implicit B: WeakTypeTag[B]): Expr[Maybe[B]] = Expr[Maybe[B]](q"""{
     val xs = $these
     var i = xs.length - 1
-    if (i < 0) _root_.basis.util.Trap
+    if (i < 0) _root_.basis.Trap
     else {
       var r = xs(i): $B
       i -= 1
@@ -105,7 +105,7 @@ private[sequential] abstract class ArrayLikeMacros(override val c: blackbox.Cont
         r = $op(xs(i), r)
         i -= 1
       }
-      _root_.basis.util.Bind(r)
+      _root_.basis.Bind(r)
     }
   }""")
 
@@ -113,12 +113,12 @@ private[sequential] abstract class ArrayLikeMacros(override val c: blackbox.Cont
     implicit val MaybeA = MaybeTag[A]
     Expr[Maybe[A]](q"""{
       val xs = $these
-      var r = _root_.basis.util.Trap: $MaybeA
+      var r = _root_.basis.Trap: $MaybeA
       var i = 0
       val n = xs.length
       while (i < n && {
         val x = xs(i)
-        !$p(x) && { i += 1; true } || { r = _root_.basis.util.Bind(x); false }
+        !$p(x) && { i += 1; true } || { r = _root_.basis.Bind(x); false }
       }) ()
       r
     }""")
@@ -158,13 +158,13 @@ private[sequential] abstract class ArrayLikeMacros(override val c: blackbox.Cont
     implicit val MaybeB = MaybeTag[B]
     Expr[Maybe[B]](q"""{
       val xs = $these
-      var r = _root_.basis.util.Trap: $MaybeB
+      var r = _root_.basis.Trap: $MaybeB
       var i = 0
       val n = xs.length
       val f = $q
       while (i < n && {
         val x = xs(i)
-        f.isDefinedAt(x) && { r = _root_.basis.util.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { i += 1; true }
+        f.isDefinedAt(x) && { r = _root_.basis.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { i += 1; true }
       }) ()
       r
     }""")

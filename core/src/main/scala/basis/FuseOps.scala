@@ -56,7 +56,7 @@ private[basis] class FuseMacros(val c: blackbox.Context { type PrefixType <: Fus
     val (self, trip) = unApply[A, B]
     Expr[X Else B](q"""{
       val r = $self
-      try if (r.canBind) _root_.basis.Bind($f(r.bind)) else r.asInstanceOf[Nothing Else $B]
+      try if (r.canBind) _root_.basis.Bind($f(r.bind)) else r.asInstanceOf[_root_.basis.Else[Nothing, $B]]
       catch { case e: Throwable => $trip(e) }
     }""")
   }
@@ -65,7 +65,7 @@ private[basis] class FuseMacros(val c: blackbox.Context { type PrefixType <: Fus
     val (self, trip) = unApply[A, Y]
     Expr[X Else Y](q"""{
       val r = $self
-      try if (r.canBind) $f(r.bind) else r.asInstanceOf[Nothing Else $Y]
+      try if (r.canBind) $f(r.bind) else r.asInstanceOf[_root_.basis.Else[Nothing, $Y]]
       catch { case e: Throwable => $trip(e) }
     }""")
   }

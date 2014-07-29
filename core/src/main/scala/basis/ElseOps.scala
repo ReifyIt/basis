@@ -88,7 +88,7 @@ private[basis] class ElseMacros(val c: blackbox.Context { type PrefixType <: Els
 
   def orElse[X, Y](other: Expr[X Else Y])(implicit X: WeakTypeTag[X], Y: WeakTypeTag[Y]): Expr[X Else Y] = Expr[X Else Y](q"""{
     val r = $prefix.__
-    if (r.canBind) r.asInstanceOf[$X Else Nothing] else $other
+    if (r.canBind) r.asInstanceOf[_root_.basis.Else[$X, Nothing]] else $other
   }""")
 
   def orNull[X : WeakTypeTag](isNullable: Expr[Null <:< X]): Expr[X] = Expr[X](q"""{
@@ -113,12 +113,12 @@ private[basis] class ElseMacros(val c: blackbox.Context { type PrefixType <: Els
 
   def map[A, X, B](f: Expr[A => X])(implicit X: WeakTypeTag[X], B: WeakTypeTag[B]): Expr[X Else B] = Expr[X Else B](q"""{
     val r = $prefix.__
-    if (r.canBind) _root_.basis.Bind($f(r.bind)) else r.asInstanceOf[Nothing Else $B]
+    if (r.canBind) _root_.basis.Bind($f(r.bind)) else r.asInstanceOf[_root_.basis.Else[Nothing, $B]]
   }""")
 
   def flatMap[A, X, Y](f: Expr[A => (X Else Y)])(implicit X: WeakTypeTag[X], Y: WeakTypeTag[Y]): Expr[X Else Y] = Expr[X Else Y](q"""{
     val r = $prefix.__
-    if (r.canBind) $f(r.bind) else r.asInstanceOf[Nothing Else $Y]
+    if (r.canBind) $f(r.bind) else r.asInstanceOf[_root_.basis.Else[Nothing, $Y]]
   }""")
 
   def recover[X : WeakTypeTag, B : WeakTypeTag](q: Expr[PartialFunction[B, X]]): Expr[X Else B] = Expr[X Else B](q"""{

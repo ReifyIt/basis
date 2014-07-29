@@ -50,7 +50,7 @@ private[sequential] abstract class LinearSeqMacros(override val c: blackbox.Cont
 
   def mayReduceLeft[A, B >: A](op: Expr[(B, A) => B])(implicit B: WeakTypeTag[B]): Expr[Maybe[B]] = Expr[Maybe[B]](q"""{
     var xs = $these
-    if (xs.isEmpty) _root_.basis.util.Trap
+    if (xs.isEmpty) _root_.basis.Trap
     else {
       var r = xs.head: $B
       xs = xs.tail
@@ -58,7 +58,7 @@ private[sequential] abstract class LinearSeqMacros(override val c: blackbox.Cont
         r = $op(r, xs.head)
         xs = xs.tail
       }
-      _root_.basis.util.Bind(r)
+      _root_.basis.Bind(r)
     }
   }""")
 
@@ -66,10 +66,10 @@ private[sequential] abstract class LinearSeqMacros(override val c: blackbox.Cont
     implicit val MaybeA = MaybeTag[A]
     Expr[Maybe[A]](q"""{
       var xs = $these
-      var r = _root_.basis.util.Trap: $MaybeA
+      var r = _root_.basis.Trap: $MaybeA
       while (!xs.isEmpty && {
         val x = xs.head
-        !$p(x) && { xs = xs.tail; true } || { r = _root_.basis.util.Bind(x); false }
+        !$p(x) && { xs = xs.tail; true } || { r = _root_.basis.Bind(x); false }
       }) ()
       r
     }""")
@@ -103,11 +103,11 @@ private[sequential] abstract class LinearSeqMacros(override val c: blackbox.Cont
     implicit val MaybeB = MaybeTag[B]
     Expr[Maybe[B]](q"""{
       var xs = $these
-      var r = _root_.basis.util.Trap: $MaybeB
+      var r = _root_.basis.Trap: $MaybeB
       val f = $q
       while (!xs.isEmpty && {
         val x = xs.head
-        f.isDefinedAt(x) && { r = _root_.basis.util.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { xs = xs.tail; true }
+        f.isDefinedAt(x) && { r = _root_.basis.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { xs = xs.tail; true }
       }) ()
       r
     }""")

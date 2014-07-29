@@ -50,7 +50,7 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
 
   def mayReduceLeft[A, B >: A](op: Expr[(B, A) => B])(implicit B: WeakTypeTag[B]): Expr[Maybe[B]] = Expr[Maybe[B]](q"""{
     val xs = $these
-    if (xs.isEmpty) _root_.basis.util.Trap
+    if (xs.isEmpty) _root_.basis.Trap
     else {
       var r = xs.head: $B
       xs.step()
@@ -58,7 +58,7 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
         r = $op(r, xs.head)
         xs.step()
       }
-      _root_.basis.util.Bind(r)
+      _root_.basis.Bind(r)
     }
   }""")
 
@@ -66,10 +66,10 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val MaybeA = MaybeTag[A]
     Expr[Maybe[A]](q"""{
       val xs = $these
-      var r = _root_.basis.util.Trap: $MaybeA
+      var r = _root_.basis.Trap: $MaybeA
       while (!xs.isEmpty && {
         val x = xs.head
-        !$p(x) && { xs.step(); true } || { r = _root_.basis.util.Bind(x); false }
+        !$p(x) && { xs.step(); true } || { r = _root_.basis.Bind(x); false }
       }) ()
       r
     }""")
@@ -103,11 +103,11 @@ private[sequential] abstract class IteratorMacros(override val c: blackbox.Conte
     implicit val MaybeB = MaybeTag[B]
     Expr[Maybe[B]](q"""{
       val xs = $these
-      var r = _root_.basis.util.Trap: $MaybeB
+      var r = _root_.basis.Trap: $MaybeB
       val f = $q
       while (!xs.isEmpty && {
         val x = xs.head
-        f.isDefinedAt(x) && { r = _root_.basis.util.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { xs.step(); true }
+        f.isDefinedAt(x) && { r = _root_.basis.Bind(f.applyOrElse(x, _root_.scala.PartialFunction.empty)); false } || { xs.step(); true }
       }) ()
       r
     }""")
