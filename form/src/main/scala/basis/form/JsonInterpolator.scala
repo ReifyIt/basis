@@ -21,7 +21,7 @@ private[form] final class JsonInterpolator(parts: scala.Seq[String], args: scala
     }
     else -1
 
-  protected override def isEOF: Boolean = lookahead < 0
+  override def isEOF: Boolean = lookahead < 0
 
   protected override def head: Int = lookahead
 

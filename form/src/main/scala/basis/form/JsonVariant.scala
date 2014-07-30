@@ -83,10 +83,13 @@ trait JsonVariant extends Variant { variant =>
       val factory = new JsonVariantFactory[variant.type](variant)
       val parser = new JsonStringParser(json)
       parser.skipWhitespace()
-      val value = parser.parseValue(factory)
-      parser.skipWhitespace()
-      parser.parseEOF()
-      value
+      if (parser.isEOF) NoForm
+      else {
+        val value = parser.parseValue(factory)
+        parser.skipWhitespace()
+        parser.parseEOF()
+        value
+      }
     }
   }
 

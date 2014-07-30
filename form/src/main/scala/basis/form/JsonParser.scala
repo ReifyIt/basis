@@ -12,7 +12,7 @@ import scala.annotation._
 
 private[form] abstract class JsonParser {
   /** Returns `true` if the parser has reached the end of input. */
-  protected def isEOF: Boolean
+  def isEOF: Boolean
 
   /** Returns–but does not consume–the next input code point. */
   protected def head: Int

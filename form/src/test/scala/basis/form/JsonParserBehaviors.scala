@@ -90,6 +90,10 @@ trait JsonParserBehaviors { this: FlatSpec =>
   }
 
   def ParsesJsonLiterals(): Unit = {
+    it should "parse empty input" in {
+      Json("") should equal (NoForm)
+    }
+
     it should "parse empty objects" in {
       Json("{ }") should equal (ObjectForm.empty)
     }
@@ -261,11 +265,6 @@ trait JsonParserBehaviors { this: FlatSpec =>
   def RejectsInvalidJson(): Unit = {
     it should "not parse sequential values" in {
       a [JsonException] should be thrownBy (Json("true false"))
-      ()
-    }
-
-    it should "not parse empty input" in {
-      a [JsonException] should be thrownBy (Json(""))
       ()
     }
 
