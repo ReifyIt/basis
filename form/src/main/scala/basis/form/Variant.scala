@@ -144,6 +144,12 @@ trait Variant { variant =>
     override def isObjectForm: Boolean          = true
     override def asObjectForm: ObjectForm       = this
     override def / (key: String): AnyForm       = get(key).bindOrElse(NoForm)
+    def :+ (key: String, value: AnyForm): ObjectForm
+    def +: (key: String, value: AnyForm): ObjectForm
+    def + (key: String, value: AnyForm): ObjectForm
+    def - (key: String): ObjectForm
+    def ++ (that: ObjectForm): ObjectForm
+    def -- (that: ObjectForm): ObjectForm
     protected override def stringPrefix: String = "ObjectForm"
   }
 
@@ -156,6 +162,9 @@ trait Variant { variant =>
     override def isSeqForm: Boolean             = true
     override def asSeqForm: SeqForm             = this
     override def / (index: Int): AnyForm        = if (0 <= index && index < length) this(index) else NoForm
+    def :+ (value: AnyForm): SeqForm
+    def +: (value: AnyForm): SeqForm
+    def ++ (that: SeqForm): SeqForm
     protected override def stringPrefix: String = "SeqForm"
   }
 
@@ -167,6 +176,10 @@ trait Variant { variant =>
   trait BaseSet extends Equals with Immutable with Family[SetForm] with Set[AnyForm] with BaseValue { this: SetForm =>
     override def isSetForm: Boolean             = true
     override def asSetForm: SetForm             = this
+    def + (value: AnyForm): SetForm
+    def - (value: AnyForm): SetForm
+    def ++ (that: SetForm): SetForm
+    def -- (that: SetForm): SetForm
     protected override def stringPrefix: String = "SetForm"
   }
 

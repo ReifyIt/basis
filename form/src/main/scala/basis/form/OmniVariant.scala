@@ -10,6 +10,7 @@ import basis._
 import basis.collections._
 import basis.data._
 import basis.text._
+import basis.util._
 import scala.reflect._
 
 object OmniVariant extends Variant with JsonVariant with BsonVariant {
@@ -62,7 +63,13 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
 
 
   class OmniObject(protected val underlying: Seq[(String, AnyForm)]) extends OmniValue with BaseObject with JsonObject with BsonObject {
-    override def iterator: Iterator[(String, AnyForm)] = underlying.iterator
+    override def :+ (key: String, value: AnyForm): ObjectForm = underlying :+ (key -> value)
+    override def +: (key: String, value: AnyForm): ObjectForm = (key -> value) +: underlying
+    override def + (key: String, value: AnyForm): ObjectForm  = underlying :+ (key -> value)
+    override def - (key: String): ObjectForm                  = underlying.filter(!_._1.equals(key))
+    override def ++ (that: ObjectForm): ObjectForm            = underlying ++ that.underlying
+    override def -- (that: ObjectForm): ObjectForm            = underlying.filter(field => !that.contains(field._1))
+    override def iterator: Iterator[(String, AnyForm)]        = underlying.iterator
   }
 
   protected class OmniObjectFactory extends BaseObjectFactory with JsonObjectFactory with BsonObjectFactory {
@@ -80,9 +87,12 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
 
 
   class OmniSeq(protected val underlying: IndexedSeq[AnyForm]) extends OmniValue with BaseSeq with JsonSeq with BsonSeq {
-    override def length: Int                 = underlying.length
-    override def apply(index: Int): AnyForm  = underlying(index)
-    override def iterator: Iterator[AnyForm] = underlying.iterator
+    override def length: Int                  = underlying.length
+    override def apply(index: Int): AnyForm   = underlying(index)
+    override def :+ (value: AnyForm): SeqForm = underlying.:+(value)(SeqFormBuilder)
+    override def +: (value: AnyForm): SeqForm = underlying.+:(value)(SeqFormBuilder)
+    override def ++ (that: SeqForm): SeqForm  = underlying.++(that.underlying)(SeqFormBuilder)
+    override def iterator: Iterator[AnyForm]  = underlying.iterator
   }
 
   protected class OmniSeqFactory extends BaseSeqFactory with JsonSeqFactory with BsonSeqFactory {
@@ -101,6 +111,10 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
 
   class OmniSet(protected val underlying: Seq[AnyForm]) extends OmniValue with BaseSet with JsonSet with BsonSet {
     override def size: Int                   = underlying.length
+    override def + (value: AnyForm): SetForm = underlying.:+(value)(SetFormBuilder)
+    override def - (value: AnyForm): SetForm = underlying.filter(!_.equals(value))(SetFormBuilder)
+    override def ++ (that: SetForm): SetForm = underlying.++(that.underlying)(SetFormBuilder)
+    override def -- (that: SetForm): SetForm = underlying.filter(value => !that.contains(value))(SetFormBuilder)
     override def iterator: Iterator[AnyForm] = underlying.iterator
   }
 
