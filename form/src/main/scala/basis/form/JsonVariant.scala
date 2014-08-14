@@ -30,7 +30,7 @@ trait JsonVariant extends Variant { variant =>
 
   def JsonObjectValue(form: ObjectForm): AnyForm = decodeJsonObject(form)
   def JsonArrayValue(form: SeqForm): AnyForm     = form
-  def JsonStringValue(form: TextForm): AnyForm   = form
+  def JsonStringValue(form: TextForm): AnyForm   = DateForm.parse(form.toUString.toString).bindOrElse(form)
 
   def JsonObjectBuilder: Builder[(String, AnyForm)] with State[ObjectForm] = ObjectForm.Builder
   def JsonArrayBuilder: Builder[AnyForm] with State[SeqForm]               = SeqForm.Builder
@@ -261,11 +261,9 @@ trait JsonVariant extends Variant { variant =>
 
   trait JsonDate extends JsonValue with BaseDate { this: DateForm =>
     override def writeJson(builder: StringBuilder): Unit = {
-      builder.append('{')
-      builder.append("\"$date\"")
-      builder.append(':')
-      builder.append(java.lang.Long.toString(millis))
-      builder.append('}')
+      builder.append('"')
+      writeISO8601(builder)
+      builder.append('"')
     }
   }
 

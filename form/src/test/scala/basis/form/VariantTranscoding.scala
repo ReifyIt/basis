@@ -107,6 +107,18 @@ trait VariantTranscoding { this: FlatSpec =>
 
     it should "transcode dates" in {
       DateForm.now should transcode
+      DateForm("2000-01-01T00:00:00.000Z") should transcode
+      DateForm("2000-01-01T00:00:00.000+00:00") should transcode
+      DateForm("2000-01-01T00:00:00.000-00:00") should transcode
+      DateForm("2000-01-01T00:00:00Z") should transcode
+      DateForm("2000-01-01T00:00:00+00:00") should transcode
+      DateForm("2000-01-01T00:00:00-00:00") should transcode
+      DateForm("1999-12-31T23:59:59.999Z") should transcode
+      DateForm("1999-12-31T23:59:59.999+23:59") should transcode
+      DateForm("1999-12-31T23:59:59.999-23:59") should transcode
+      DateForm("1999-12-31T23:59:59Z") should transcode
+      DateForm("1999-12-31T23:59:59+23:59") should transcode
+      DateForm("1999-12-31T23:59:59-23:59") should transcode
     }
 
     it should "transcode boolean values" in {

@@ -73,8 +73,8 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
   protected class OmniObjectFactory extends BaseObjectFactory with JsonObjectFactory with BsonObjectFactory {
-    override val empty: ObjectForm                                                     = new OmniObject(immutable.FingerTrieSeq.empty)
-    implicit override def Builder(): Builder[(String, AnyForm)] with State[ObjectForm] = new OmniObjectBuilder(immutable.FingerTrieSeq.Builder[(String, AnyForm)])
+    override val empty: ObjectForm                                                   = new OmniObject(immutable.FingerTrieSeq.empty)
+    implicit override def Builder: Builder[(String, AnyForm)] with State[ObjectForm] = new OmniObjectBuilder(immutable.FingerTrieSeq.Builder[(String, AnyForm)])
   }
 
   protected final class OmniObjectBuilder(underlying: Builder[(String, AnyForm)] with State[Seq[(String, AnyForm)]]) extends Builder[(String, AnyForm)] with State[ObjectForm] {

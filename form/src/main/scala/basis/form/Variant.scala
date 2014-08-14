@@ -10,6 +10,8 @@ import basis._
 import basis.collections._
 import basis.data._
 import basis.text._
+import basis.util._
+import scala.annotation._
 import scala.reflect._
 import scala.runtime._
 
@@ -364,6 +366,52 @@ trait Variant { variant =>
 
     def millis: Long
 
+    def writeISO8601(builder: StringBuilder, timeZone: String): Unit = {
+      def appendInt(value: Int, digits: Int): Unit = {
+        if (digits > 1) appendInt(value / 10, digits - 1)
+        builder.append('0' + value % 10)
+      }
+      import java.util.{ Calendar, Locale, TimeZone }
+      val zone = TimeZone.getTimeZone(timeZone)
+      val calendar = Calendar.getInstance(zone, Locale.ROOT)
+      calendar.setTimeInMillis(millis)
+      appendInt(calendar.get(Calendar.YEAR), 4)
+      builder.append('-')
+      appendInt(calendar.get(Calendar.MONTH) + 1, 2)
+      builder.append('-')
+      appendInt(calendar.get(Calendar.DAY_OF_MONTH), 2)
+      builder.append('T')
+      appendInt(calendar.get(Calendar.HOUR_OF_DAY), 2)
+      builder.append(':')
+      appendInt(calendar.get(Calendar.MINUTE), 2)
+      builder.append(':')
+      appendInt(calendar.get(Calendar.SECOND), 2)
+      builder.append('.')
+      appendInt(calendar.get(Calendar.MILLISECOND), 3)
+      val offset = zone.getOffset(millis)
+      if (offset == 0) builder.append('Z')
+      else {
+        builder.append(if (offset >= 0) '+' else '-')
+        appendInt(offset.abs / 3600000, 2)
+        builder.append(':')
+        appendInt(offset.abs % 3600000 / 60000, 2)
+      }
+    }
+
+    def writeISO8601(builder: StringBuilder): Unit = writeISO8601(builder, "UTC")
+
+    def toISO8601(timeZone: String): String = {
+      val builder = UString.Builder
+      writeISO8601(builder, timeZone)
+      builder.state.toString
+    }
+
+    def toISO8601: String = {
+      val builder = UString.Builder
+      writeISO8601(builder)
+      builder.state.toString
+    }
+
     override def canEqual(other: Any): Boolean = other.isInstanceOf[BaseDate]
 
     override def equals(other: Any): Boolean = eq(other.asInstanceOf[AnyRef]) || (other match {
@@ -380,16 +428,107 @@ trait Variant { variant =>
       val s = UString.Builder
       s.append("DateForm")
       s.append('(')
-      s.append(java.lang.Long.toString(millis))
-      s.append('L')
+      s.append('"')
+      writeISO8601(s)
+      s.append('"')
       s.append(')')
-      s.state.toString()
+      s.state.toString
     }
   }
 
   trait BaseDateFactory {
     def apply(millis: Long): DateForm
-    def now: DateForm             = apply(System.currentTimeMillis)
+
+    def apply(s: String): DateForm = parse(s).bind
+
+    def now: DateForm = apply(System.currentTimeMillis)
+
+    def parse(s: String): Maybe[DateForm] = {
+      val n = s.length
+      var i = 0
+
+      @tailrec def accumulateInt(offset: Int, count: Int, value: Int): Int =
+        if (count <= 0) value
+        else {
+          val c = s.charAt(offset)
+          if (c < '0' || c > '9') Int.MinValue
+          else accumulateInt(offset + 1, count - 1, 10 * value + (c - '0').toInt)
+        }
+      def parseInt(offset: Int, count: Int): Int =
+        if (offset + count > n) Int.MinValue
+        else accumulateInt(offset, count, 0)
+      def peek(offset: Int, c: Char): Boolean = offset < n && s.charAt(offset) == c
+
+      import java.util.{ Calendar, Locale, TimeZone }
+      val calendar = Calendar.getInstance(Locale.ROOT)
+      calendar.clear()
+
+      val year = parseInt(i, 4)
+      if (year != Int.MinValue && peek(i + 4, '-')) {
+        i += 5
+        calendar.set(Calendar.YEAR, year)
+        val month = parseInt(i, 2)
+        if (month >= 1 && month <= 12 && peek(i + 2, '-')) {
+          i += 3
+          calendar.set(Calendar.MONTH, month - 1)
+          val day = parseInt(i, 2)
+          if (day >= 1 && day <= 31 && (peek(i + 2, 'T') || peek(i + 2, ' '))) {
+            i += 3
+            calendar.set(Calendar.DAY_OF_MONTH, day)
+            val hour = parseInt(i, 2)
+            if (hour >= 0 && hour <= 23 && peek(i + 2, ':')) {
+              i += 3
+              calendar.set(Calendar.HOUR_OF_DAY, hour)
+              val minute = parseInt(i, 2)
+              if (minute >= 0 && minute <= 59 && peek(i + 2, ':')) {
+                i += 3
+                calendar.set(Calendar.MINUTE, minute)
+                val second = parseInt(i, 2)
+                if (second >= 0 && second <= 59) {
+                  i += 2
+                  calendar.set(Calendar.SECOND, second)
+                  if (peek(i, '.')) {
+                    val millisecond = parseInt(i + 1, 3)
+                    if (millisecond != Int.MinValue) {
+                      i += 4
+                      calendar.set(Calendar.MILLISECOND, millisecond)
+                    }
+                    else return Trap
+                  }
+                  if (peek(i, 'Z')) {
+                    calendar.setTimeZone(TimeZone.getTimeZone("UTC"))
+                    Bind(apply(calendar.getTimeInMillis))
+                  }
+                  else if (peek(i, '+') || peek(i, '-')) {
+                    val offsetStart = i
+                    i += 1
+                    val offsetHours = parseInt(i, 2)
+                    if (offsetHours >= 0 && offsetHours <= 23 && peek(i + 2, ':')) {
+                      i += 3
+                      val offsetMinutes = parseInt(i, 2)
+                      if (offsetMinutes >= 0 && offsetMinutes <= 59 && i + 2 == n) {
+                        calendar.setTimeZone(TimeZone.getTimeZone("GMT" + s.substring(offsetStart, i + 2)))
+                        Bind(apply(calendar.getTimeInMillis))
+                      }
+                      else Trap
+                    }
+                    else Trap
+                  }
+                  else Trap
+                }
+                else Trap
+              }
+              else Trap
+            }
+            else Trap
+          }
+          else Trap
+        }
+        else Trap
+      }
+      else Trap
+    }
+
     override def toString: String = "DateForm"
   }
 

@@ -33,7 +33,7 @@ lazy val compileSettings = Seq(
   scalacOptions ++= Seq("-optimise", "-deprecation", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    "org.scalatest" %% "scalatest" % "2.2.0" % "test"))
+    "org.scalatest" %% "scalatest" % "2.2.1" % "test"))
 
 lazy val docSettings = Seq(
   apiURL := Some(url("http://basis.reify.it/api/")),
