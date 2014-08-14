@@ -245,15 +245,15 @@ object Mold extends CollectionMolds {
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Date] = {
       if (form.isDateForm) Bind(new Date(form.asDateForm.millis))
+      else if (form.isTextForm) variant.DateForm.parse(form.asTextForm.toUString.toString).map(form => new Date(form.millis))
       else if (form.isNumberForm) Bind(new Date(form.asNumberForm.toLong))
-      // TODO: accept ISO 8601 dates
       else Trap
     }
 
     override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
       if (form.isDateForm) form
+      else if (form.isTextForm) variant.DateForm.parse(form.asTextForm.toUString.toString).bindOrElse(form)
       else if (form.isNumberForm) variant.DateForm(form.asNumberForm.toLong)
-      // TODO: normalize ISO 8601 dates
       else form
     }
 
