@@ -11,6 +11,7 @@ import basis.data._
 import basis.text._
 import basis.util._
 import scala.annotation._
+import scala.reflect._
 import scala.runtime._
 
 trait Protobuf[@specialized(Protobuf.Specialized) T] extends Frame[T] {
@@ -90,7 +91,8 @@ object Protobuf {
 
   implicit def Bytes[Data <: Loader](implicit Data: DataFactory[Data]): Protobuf[Data] = new Bytes()(Data)
 
-  def Repeated[CC[X] <: Container[X], T](implicit CC: generic.CollectionFactory[CC], T: Protobuf[T]): Protobuf[CC[T]] = new Repeated()(CC, T)
+  def Repeated[CC[X] <: Container[X], T](implicit CC: generic.CollectionFactory[CC], T: Protobuf[T]): Protobuf[CC[T]] = new RepeatedCollection()(CC, T)
+  def Repeated[CC[X] <: Container[X], T](implicit CC: generic.ArrayFactory[CC], T: Protobuf[T], TTag: ClassTag[T]): Protobuf[CC[T]] = new RepeatedArray()(CC, T, TTag)
 
   def Required[@specialized(Protobuf.Specialized) T](tag: Int)(implicit T: Protobuf[T]): Field[T]             = new Required(tag)(T)
   def Optional[@specialized(Protobuf.Specialized) T](tag: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Optional(tag, default)(T)
@@ -288,7 +290,7 @@ object Protobuf {
     override def toString: String = "Protobuf"+"."+"Bytes"+"("+ Data +")"
   }
 
-  private final class Repeated[T, CC[X] <: Container[X]](implicit private val CC: generic.CollectionFactory[CC], private val T: Protobuf[T]) extends Protobuf[CC[T]] {
+  private final class RepeatedCollection[T, CC[X] <: Container[X]](implicit private val CC: generic.CollectionFactory[CC], private val T: Protobuf[T]) extends Protobuf[CC[T]] {
     if (T.wireType == WireType.Message) throw new ProtobufException("unsupported repeated length delimited values")
 
     override def read(data: Reader): CC[T] = {
@@ -318,16 +320,58 @@ object Protobuf {
     override def wireType: Int = WireType.Message
 
     override def equals(other: Any): Boolean = other match {
-      case that: Repeated[_, CC forSome { type CC[_] }] @unchecked => CC.equals(that.CC) && T.equals(that.T)
+      case that: RepeatedCollection[_, CC forSome { type CC[_] }] @unchecked => CC.equals(that.CC) && T.equals(that.T)
       case _ => false
     }
 
     override def hashCode: Int = {
       import MurmurHash3._
-      mash(mix(mix(seed[Repeated[_, CC forSome { type CC[_] }]], CC.hashCode), T.hashCode))
+      mash(mix(mix(seed[RepeatedCollection[_, CC forSome { type CC[_] }]], CC.hashCode), T.hashCode))
     }
 
     override def toString: String = "Protobuf"+"."+"Repeated"+"("+ CC +", "+ T +")"
+  }
+
+  private final class RepeatedArray[T, CC[X] <: Container[X]](implicit private val CC: generic.ArrayFactory[CC], private val T: Protobuf[T], private val TTag: ClassTag[T]) extends Protobuf[CC[T]] {
+    if (T.wireType == WireType.Message) throw new ProtobufException("unsupported repeated length delimited values")
+
+    override def read(data: Reader): CC[T] = {
+      val builder = CC.Builder[T]
+      while (!data.isEOF) builder.append(T.read(data))
+      builder.state
+    }
+
+    override def write(data: Writer, value: CC[T]): Unit = {
+      val xs = value.iterator
+      while (!xs.isEmpty) {
+        T.write(data, xs.head)
+        xs.step()
+      }
+    }
+
+    override def sizeOf(value: CC[T]): Int = {
+      var size = 0
+      val xs = value.iterator
+      while (!xs.isEmpty) {
+        size += T.sizeOf(xs.head)
+        xs.step()
+      }
+      size
+    }
+
+    override def wireType: Int = WireType.Message
+
+    override def equals(other: Any): Boolean = other match {
+      case that: RepeatedArray[_, CC forSome { type CC[_] }] @unchecked => CC.equals(that.CC) && T.equals(that.T) && TTag.equals(that.TTag)
+      case _ => false
+    }
+
+    override def hashCode: Int = {
+      import MurmurHash3._
+      mash(mix(mix(mix(seed[RepeatedArray[_, CC forSome { type CC[_] }]], CC.hashCode), T.hashCode), TTag.hashCode))
+    }
+
+    override def toString: String = "Protobuf"+"."+"Repeated"+"("+ CC +", "+ T +", "+ TTag +")"
   }
 
   private final class Required[@specialized(Protobuf.Specialized) T](override val tag: Int)(implicit override val tpe: Protobuf[T]) extends Field[T] {

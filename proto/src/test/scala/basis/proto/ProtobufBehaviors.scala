@@ -10,6 +10,7 @@ import basis.collections._
 import basis.data._
 import org.scalatest._
 import org.scalatest.matchers._
+import scala.reflect._
 
 trait ProtobufBehaviors { this: FlatSpec =>
   import Matchers._
@@ -192,6 +193,21 @@ trait ProtobufBehaviors { this: FlatSpec =>
 
     it should "transcode packed repeated protobuf fields" in {
       testRepeated(transcoder(Required(1)(Repeated(Seq, Varint))))
+    }
+
+    def testRepeatedArray(transcode: Matcher[immutable.ArraySeq[Long]]): Unit = {
+      immutable.ArraySeq.empty should (transcode)
+      immutable.ArraySeq(0L) should (transcode)
+      immutable.ArraySeq(1L, -1L) should (transcode)
+      immutable.ArraySeq(Int.MaxValue, Int.MinValue, Long.MaxValue, Long.MinValue) should (transcode)
+    }
+
+    it should "transcode array packed repeated protobuf values" in {
+      testRepeatedArray(transcoder(Repeated(immutable.ArraySeq, Varint, ClassTag.Long)))
+    }
+
+    it should "transcode array packed repeated protobuf fields" in {
+      testRepeatedArray(transcoder(Required(1)(Repeated(immutable.ArraySeq, Varint, ClassTag.Long))))
     }
 
     it should "transcode Unit protobuf values" in {
