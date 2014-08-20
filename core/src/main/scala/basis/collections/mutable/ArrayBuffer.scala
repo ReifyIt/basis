@@ -21,6 +21,8 @@ abstract class ArrayBuffer[A]
   with Buffer[A]
   with IndexedSeq[A] {
 
+  override def isEmpty: Boolean = length == 0
+
   /** Prepends an array of elements to this $collection.
     * @group Inserting */
   def prependArray(elems: Array[A]): Unit = {

@@ -19,6 +19,8 @@ abstract class ArraySeq[+A]
   with ArrayLike[A]
   with IndexedSeq[A] {
 
+  override def isEmpty: Boolean = length == 0
+
   /** Returns a copy of this $collection with the given element at the given index.
     * @group Indexing */
   def update[B >: A](index: Int, elem: B): ArraySeq[B] = {
@@ -156,6 +158,26 @@ abstract class ArraySeq[+A]
 }
 
 object ArraySeq extends ArrayFactory[ArraySeq] {
+  private[this] val emptyByteArraySeq: ArraySeq[Byte]     = new ByteArraySeq(new Array[Byte](0))
+  private[this] val emptyShortArraySeq: ArraySeq[Short]   = new ShortArraySeq(new Array[Short](0))
+  private[this] val emptyIntArraySeq: ArraySeq[Int]       = new IntArraySeq(new Array[Int](0))
+  private[this] val emptyLongArraySeq: ArraySeq[Long]     = new LongArraySeq(new Array[Long](0))
+  private[this] val emptyFloatArraySeq: ArraySeq[Float]   = new FloatArraySeq(new Array[Float](0))
+  private[this] val emptyDoubleArraySeq: ArraySeq[Double] = new DoubleArraySeq(new Array[Double](0))
+  private[this] val emptyBitArraySeq: ArraySeq[Boolean]   = new BitArraySeq(new Array[Int](0), 0)
+  private[this] val emptyRefArraySeq: ArraySeq[Any]       = new RefArraySeq[Any](new Array[AnyRef](0))
+
+  override def empty[A](implicit A: ClassTag[A]): ArraySeq[A] = (A match {
+    case ClassTag.Byte    => emptyByteArraySeq
+    case ClassTag.Short   => emptyShortArraySeq
+    case ClassTag.Int     => emptyIntArraySeq
+    case ClassTag.Long    => emptyLongArraySeq
+    case ClassTag.Float   => emptyFloatArraySeq
+    case ClassTag.Double  => emptyDoubleArraySeq
+    case ClassTag.Boolean => emptyBitArraySeq
+    case _                => emptyRefArraySeq
+  }).asInstanceOf[ArraySeq[A]]
+
   implicit override def Builder[A](implicit A: ClassTag[A])
     : ArrayBuilder[A] with State[ArraySeq[A]] = (A match {
     case ClassTag.Byte    => new ByteArraySeqBuilder
