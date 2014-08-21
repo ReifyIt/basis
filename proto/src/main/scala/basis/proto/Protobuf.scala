@@ -6,6 +6,7 @@
 
 package basis.proto
 
+import basis._
 import basis.collections._
 import basis.data._
 import basis.text._
@@ -91,11 +92,14 @@ object Protobuf {
 
   implicit def Bytes[Data <: Loader](implicit Data: DataFactory[Data]): Protobuf[Data] = new Bytes()(Data)
 
+  implicit def Perhaps[T](implicit T: Protobuf[T]): Protobuf[Maybe[T]] = new Perhaps()(T)
+
   def Repeated[CC[X] <: Container[X], T](implicit CC: generic.CollectionFactory[CC], T: Protobuf[T]): Protobuf[CC[T]] = new RepeatedCollection()(CC, T)
   def Repeated[CC[X] <: Container[X], T](implicit CC: generic.ArrayFactory[CC], T: Protobuf[T], TTag: ClassTag[T]): Protobuf[CC[T]] = new RepeatedArray()(CC, T, TTag)
 
   def Required[@specialized(Protobuf.Specialized) T](tag: Int)(implicit T: Protobuf[T]): Field[T]             = new Required(tag)(T)
-  def Optional[@specialized(Protobuf.Specialized) T](tag: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Optional(tag, default)(T)
+  def Optional[@specialized(Protobuf.Specialized) T](tag: Int)(implicit T: Protobuf[T]): Field[Maybe[T]]      = new Optional(tag)(T)
+  def Optional[@specialized(Protobuf.Specialized) T](tag: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Default(tag, default)(T)
 
   def Unknown[T](key: Long, default: T)(implicit T: Protobuf[T]): Field[T] = new Unknown(key, default)(T)
   def Unknown[T](tag: Int, wireType: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Unknown(tag, wireType, default)(T)
@@ -290,6 +294,28 @@ object Protobuf {
     override def toString: String = "Protobuf"+"."+"Bytes"+"("+ Data +")"
   }
 
+  private final class Perhaps[@specialized(Protobuf.Specialized) T](implicit private val T: Protobuf[T]) extends Protobuf[Maybe[T]] {
+    override def read(data: Reader): Maybe[T] = if (!data.isEOF) Bind(T.read(data)) else Trap
+
+    override def write(data: Writer, maybe: Maybe[T]): Unit = if (maybe.canBind) T.write(data, maybe.bind)
+
+    override def sizeOf(maybe: Maybe[T]): Int = if (maybe.canBind) T.sizeOf(maybe.bind) else 0
+
+    override def wireType: Int = T.wireType
+
+    override def equals(other: Any): Boolean = other match {
+      case that: Perhaps[_] => T.equals(that.T)
+      case _ => false
+    }
+
+    override def hashCode: Int = {
+      import MurmurHash3._
+      mash(mix(seed[Perhaps[_]], T.hashCode))
+    }
+
+    override def toString: String = "Protobuf"+"."+"Perhaps"+"("+ T +")"
+  }
+
   private final class RepeatedCollection[T, CC[X] <: Container[X]](implicit private val CC: generic.CollectionFactory[CC], private val T: Protobuf[T]) extends Protobuf[CC[T]] {
     if (T.wireType == WireType.Message) throw new ProtobufException("unsupported repeated length delimited values")
 
@@ -388,7 +414,44 @@ object Protobuf {
     override def toString: String = "Protobuf"+"."+"Required"+"("+ tag +")"+"("+ tpe +")"
   }
 
-  private final class Optional[@specialized(Protobuf.Specialized) T](override val tag: Int, private val default: T)(implicit override val tpe: Protobuf[T]) extends Field[T] {
+  private final class Optional[@specialized(Protobuf.Specialized) T](override val tag: Int)(implicit private val T: Protobuf[T]) extends Field[Maybe[T]] {
+    override val tpe: Protobuf[Maybe[T]] = new Perhaps()(T)
+
+    override def read(data: Reader): Maybe[T] = if (!data.isEOF) super.read(data) else Trap
+
+    override def write(data: Writer, maybe: Maybe[T]): Unit = {
+      if (maybe.canBind) {
+        val value = maybe.bind
+        writeVarint(data, (tag << 3) | T.wireType & 0x7)
+        if (T.wireType == WireType.Message) writeVarint(data, T.sizeOf(value))
+        T.write(data, value)
+      }
+    }
+
+    override def sizeOf(maybe: Maybe[T]): Int = {
+      if (maybe.canBind) {
+        val value = maybe.bind
+        sizeOfVarint((tag << 3) | T.wireType)                                      +
+        (if (T.wireType == WireType.Message) sizeOfVarint(T.sizeOf(value)) else 0) +
+        T.sizeOf(value)
+      }
+      else 0
+    }
+
+    override def equals(other: Any): Boolean = other match {
+      case that: Optional[_] => tag == that.tag && T.equals(that.T)
+      case _ => false
+    }
+
+    override def hashCode: Int = {
+      import MurmurHash3._
+      mash(mix(mix(seed[Optional[_]], tag.##), T.hashCode))
+    }
+
+    override def toString: String = "Protobuf"+"."+"Optional"+"("+ tag +")"+"("+ T +")"
+  }
+
+  private final class Default[@specialized(Protobuf.Specialized) T](override val tag: Int, private val default: T)(implicit override val tpe: Protobuf[T]) extends Field[T] {
     override def write(data: Writer, value: T): Unit = {
       if (value != default) {
         writeVarint(data, (tag << 3) | tpe.wireType & 0x7)
@@ -406,13 +469,13 @@ object Protobuf {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case that: Optional[_] => tag == that.tag && default.equals(that.default) && tpe.equals(that.tpe)
+      case that: Default[_] => tag == that.tag && default.equals(that.default) && tpe.equals(that.tpe)
       case _ => false
     }
 
     override def hashCode: Int = {
       import MurmurHash3._
-      mash(mix(mix(mix(seed[Optional[_]], tag.##), default.hashCode), tpe.hashCode))
+      mash(mix(mix(mix(seed[Default[_]], tag.##), default.hashCode), tpe.hashCode))
     }
 
     override def toString: String = "Protobuf"+"."+"Optional"+"("+ tag +","+ default +")"+"("+ tpe +")"

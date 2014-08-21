@@ -6,6 +6,7 @@
 
 package basis.proto
 
+import basis._
 import basis.collections._
 import basis.data._
 import org.scalatest._
@@ -178,6 +179,25 @@ trait ProtobufBehaviors { this: FlatSpec =>
     it should "transcode Bytes protobuf fields" in {
       implicit val Data = FingerTrieData
       testBytes(transcoder(Required(1)(Bytes)))
+    }
+
+    def testOptional(transcode: Matcher[Maybe[Long]]): Unit = {
+      Trap should (transcode)
+      Bind(0L) should (transcode)
+      Bind(1L) should (transcode)
+      Bind(-1L) should (transcode)
+      Bind(Int.MaxValue.toLong) should (transcode)
+      Bind(Int.MinValue.toLong) should (transcode)
+      Bind(Long.MaxValue) should (transcode)
+      Bind(Long.MinValue) should (transcode)
+    }
+
+    it should "transcode optional protobuf values" in {
+      testOptional(transcoder(Perhaps(Varint)))
+    }
+
+    it should "transcode optional protobuf fields" in {
+      testOptional(transcoder(Optional(1)(Varint)))
     }
 
     def testRepeated(transcode: Matcher[Seq[Long]]): Unit = {
