@@ -18,6 +18,8 @@ main() {
   # sbt output filter
   local excludeRegex=$(mkRegex \
     '\[info\] (Resolving|Loading|Updating|Packaging|Done updating)' \
+    '^\[SUCCESSFUL' \
+    '^downloading ' \
     're[-]run with [-]unchecked for details' \
     'ignoring option MaxPermSize' \
     'one warning found'
