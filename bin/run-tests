@@ -17,7 +17,7 @@ filterOutput() {
 main() {
   # sbt output filter
   local excludeRegex=$(mkRegex \
-    '^\[info\] (Resolving|Loading|Updating|Packaging|Done updating|downloading)' \
+    '\[info\] (Resolving|Loading|Updating|Packaging|Done updating|downloading)' \
     '\[SUCCESSFUL' \
     '^(downloading|Getting|[:][:] retrieving|confs[:]) ' \
     're[-]run with [-]unchecked for details' \
