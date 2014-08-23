@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#
+
+stripTerminalEscapeCodes () {
+  sed -r 's/\x1B\[[0-9;]*[JKmsu]//g'
+}
+
+mkRegex () { ( IFS="|" && echo "$*" ); }
+
+filterOutput() {
+  while read line; do
+    if ! [[ $(echo $line | stripTerminalEscapeCodes) =~ $excludeRegex ]] ; then
+      echo "$line"
+    fi
+  done
+}
+main() {
+  # sbt output filter
+  local excludeRegex=$(mkRegex \
+    '\[info\] (Resolving|Loading|Updating|Packaging|Done updating)' \
+    're[-]run with [-]unchecked for details' \
+    'ignoring option MaxPermSize' \
+    'one warning found'
+  )
+  set -o pipefail && { sbt test || exit 1; } |& filterOutput
+}
+
+main "$@"
