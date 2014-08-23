@@ -22,7 +22,8 @@ main() {
     'ignoring option MaxPermSize' \
     'one warning found'
   )
-  set -o pipefail && { sbt test || exit 1; } |& filterOutput
+  set -o pipefail
+  sbt test |& filterOutput
 }
 
 main "$@"
