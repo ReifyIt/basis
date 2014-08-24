@@ -32,7 +32,7 @@ lazy val projectSettings = Seq(
 lazy val compileSettings = Seq(
   scalacOptions ++= Seq("-optimise", "-deprecation", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard"),
   libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+    "org.scala-lang" % "scala-reflect" % scalaVersion.value % "provided",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test"))
 
 lazy val docSettings = Seq(

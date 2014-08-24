@@ -13,8 +13,7 @@ import org.scalatest._
 import org.scalatest.matchers._
 import scala.reflect._
 
-trait ProtobufBehaviors { this: FlatSpec =>
-  import Matchers._
+trait ProtobufBehaviors extends Matchers { this: FlatSpec =>
   import Protobuf._
 
   def ProtobufTranscoder[Data <: Loader](Data: DataFactory[Data]): Unit = {

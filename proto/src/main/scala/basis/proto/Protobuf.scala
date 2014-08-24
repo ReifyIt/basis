@@ -36,6 +36,8 @@ object Protobuf {
 
     def key: Long = (tag.toLong << 3) | (tpe.wireType & 0x7).toLong
 
+    def unapply(key: Long): Boolean = this.key == key
+
     def readValue(data: Reader): T = {
       if (tpe.wireType == WireType.Message) tpe.read(data.take(readVarint(data)))
       else tpe.read(data)
@@ -71,6 +73,12 @@ object Protobuf {
     override def wireType: Int = WireType.Message
   }
 
+  trait Message[T] extends Protobuf[T] {
+    protected def aggregateFields: immutable.HashTrieMap[Long, Field[_]] = macro ProtobufMacros.aggregateFields
+
+    override def wireType: Int = WireType.Message
+  }
+
   def apply[T](implicit T: Protobuf[T]): T.type = T
 
   lazy val Varint: Protobuf[Long]            = new Varint
@@ -99,31 +107,21 @@ object Protobuf {
 
   def Required[@specialized(Protobuf.Specialized) T](tag: Int)(implicit T: Protobuf[T]): Field[T]             = new Required(tag)(T)
   def Optional[@specialized(Protobuf.Specialized) T](tag: Int)(implicit T: Protobuf[T]): Field[Maybe[T]]      = new Optional(tag)(T)
-  def Optional[@specialized(Protobuf.Specialized) T](tag: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Default(tag, default)(T)
+  def Default[@specialized(Protobuf.Specialized) T](tag: Int, default: T)(implicit T: Protobuf[T]): Field[T]  = new Default(tag, default)(T)
 
   def Unknown[T](key: Long, default: T)(implicit T: Protobuf[T]): Field[T] = new Unknown(key, default)(T)
   def Unknown[T](tag: Int, wireType: Int, default: T)(implicit T: Protobuf[T]): Field[T] = new Unknown(tag, wireType, default)(T)
   def Unknown(key: Long): Field[Unit] = Unknown(key, ())(Unit)
   def Unknown(tag: Int, wireType: Int): Field[Unit] = Unknown(tag, wireType, ())(Unit)
 
-  def Union[T](fields: Field[S] forSome { type S <: T }*): Reader => Option[T] = {
-    val builder = immutable.HashTrieMap.Builder[Int, Field[S] forSome { type S <: T }]
+  def Union[T](fields: Field[S] forSome { type S <: T }*): Reader => Maybe[T] = {
+    val builder = immutable.HashTrieMap.Builder[Long, Field[S] forSome { type S <: T }]
     val iter = fields.iterator
     while (iter.hasNext) {
       val field = iter.next()
-      builder.append(field.tag -> field)
+      builder.append(field.key -> field)
     }
     new Union[T](builder.state)
-  }
-
-  def Message(fields: (Field[S], S => Unit) forSome { type S }*): Reader => Unit = {
-    val builder = immutable.HashTrieMap.Builder[Int, (Field[S], S => Unit) forSome { type S }]
-    val iter = fields.iterator
-    while (iter.hasNext) {
-      val entry = iter.next()
-      builder.append(entry._1.tag -> entry)
-    }
-    new Message(builder.state)
   }
 
   private final class Varint extends Protobuf[Long] {
@@ -478,7 +476,7 @@ object Protobuf {
       mash(mix(mix(mix(seed[Default[_]], tag.##), default.hashCode), tpe.hashCode))
     }
 
-    override def toString: String = "Protobuf"+"."+"Optional"+"("+ tag +","+ default +")"+"("+ tpe +")"
+    override def toString: String = "Protobuf"+"."+"Default"+"("+ tag +","+ default +")"+"("+ tpe +")"
   }
 
   private final class Unknown[T](override val key: Long, val default: T)(implicit override val tpe: Protobuf[T]) extends Field[T] {
@@ -552,18 +550,13 @@ object Protobuf {
     }
   }
 
-  private final class Union[T](fields: immutable.HashTrieMap[Int, Field[S] forSome { type S <: T }]) extends AbstractFunction1[Reader, Option[T]] {
-    override def apply(data: Reader): Option[T] = {
+  private final class Union[T](fields: immutable.HashTrieMap[Long, Field[S] forSome { type S <: T }]) extends AbstractFunction1[Reader, Maybe[T]] {
+    override def apply(data: Reader): Maybe[T] = {
       val key = readVarint(data)
-      val tag = (key >>> 3).toInt
-      val wireType = key.toInt & 0x7
-      if (fields.contains(tag)) Some {
-        val field = fields(tag)
-        if (tag != field.tag) throw new ProtobufException(s"expected tag ${field.tag}, but found tag $tag")
-        if (wireType != field.tpe.wireType) throw new ProtobufException(s"expected wire type ${field.tpe.wireType}, but found wire type $wireType")
-        field.readValue(data)
-      }
+      val maybeField = fields.get(key)
+      if (maybeField.canBind) Bind(maybeField.bind.readValue(data))
       else {
+        val wireType = key.toInt & 0x7
         wireType match {
           case 0 => readVarint(data)
           case 1 => data.readLong()
@@ -571,7 +564,7 @@ object Protobuf {
           case 5 => data.readInt()
           case _ => throw new ProtobufException("unknown wire type: " + wireType)
         }
-        None
+        Trap
       }
     }
 
@@ -579,7 +572,7 @@ object Protobuf {
       val s = UString.Builder
       s.append("Protobuf"); s.append('.'); s.append("Union"); s.append('(')
       var i = 0
-      for ((_, field) <- fields) {
+      for (field <- fields.values) {
         if (i > 0) s.append(", ")
         s.append(field.toString)
         i += 1
@@ -587,34 +580,6 @@ object Protobuf {
       s.append(')')
       s.state.toString
     }
-  }
-
-  private final class Message(fields: immutable.HashTrieMap[Int, (Field[S], S => Unit) forSome { type S }]) extends AbstractFunction1[Reader, Unit] {
-    override def apply(data: Reader): Unit = {
-      while (!data.isEOF) {
-        val key = readVarint(data)
-        val tag = (key >>> 3).toInt
-        val wireType = key.toInt & 0x7
-        if (fields.contains(tag)) {
-          val (field, action) = fields(tag)
-          if (tag != field.tag) throw new ProtobufException(s"expected tag ${field.tag}, but found tag $tag")
-          if (wireType != field.tpe.wireType) throw new ProtobufException(s"expected wire type ${field.tpe.wireType}, but found wire type $wireType")
-          action.asInstanceOf[Any => Unit](field.asInstanceOf[Field[Any]].readValue(data))
-        }
-        else {
-          wireType match {
-            case 0 => readVarint(data)
-            case 1 => data.readLong()
-            case 2 => data.drop(readVarint(data))
-            case 5 => data.readInt()
-            case _ => throw new ProtobufException("unknown wire type: " + wireType)
-          }
-          ()
-        }
-      }
-    }
-
-    override def toString: String = "Protobuf"+"."+"Message"
   }
 
   private final def sizeOfVarint(value: Long): Int = (63 - value.countLeadingZeros) / 7 + 1
