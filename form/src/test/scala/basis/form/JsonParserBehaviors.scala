@@ -9,14 +9,11 @@ package basis.form
 import basis.util._
 import org.scalatest._
 
-trait JsonParserBehaviors { this: FlatSpec =>
-  import Matchers._
+trait JsonParserBehaviors extends Matchers { this: FlatSpec =>
+  def ParsesJsonComments(variant: JsonVariant): Unit = {
+    import variant._
+    import AnyForm.{ parseJson => Json }
 
-  val variant: JsonVariant
-  import variant._
-  import AnyForm.{ parseJson => Json }
-
-  def ParsesJsonComments(): Unit = {
     it should "parse empty line comments" in {
       Json("true //")
       ()
@@ -89,7 +86,10 @@ trait JsonParserBehaviors { this: FlatSpec =>
     }
   }
 
-  def ParsesJsonLiterals(): Unit = {
+  def ParsesJsonLiterals(variant: JsonVariant): Unit = {
+    import variant._
+    import AnyForm.{ parseJson => Json }
+
     it should "parse empty input" in {
       Json("") should equal (NoForm)
     }
@@ -262,7 +262,10 @@ trait JsonParserBehaviors { this: FlatSpec =>
     }
   }
 
-  def RejectsInvalidJson(): Unit = {
+  def RejectsInvalidJson(variant: JsonVariant): Unit = {
+    import variant._
+    import AnyForm.{ parseJson => Json }
+
     it should "not parse sequential values" in {
       a [JsonException] should be thrownBy (Json("true false"))
       ()

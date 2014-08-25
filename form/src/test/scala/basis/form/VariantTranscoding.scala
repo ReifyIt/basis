@@ -10,15 +10,10 @@ import basis.util._
 import org.scalatest._
 import org.scalatest.matchers._
 
-trait VariantTranscoding { this: FlatSpec =>
-  import Matchers._
+trait VariantTranscoding extends Matchers { this: FlatSpec =>
+  def Transcodes(variant: Variant)(transcode: Matcher[variant.AnyForm]): Unit = {
+    import variant._
 
-  val variant: Variant
-  import variant._
-
-  protected def transcode: Matcher[AnyForm]
-
-  def Transcodes(): Unit = {
     it should "transcode empty objects" in {
       ObjectForm.empty should transcode
     }

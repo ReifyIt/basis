@@ -267,13 +267,13 @@ trait BsonVariant extends Variant { variant =>
       else 0x01 // double
     }
 
-    def bsonSize: Int = bsonType match {
+    override def bsonSize: Int = bsonType match {
       case 0x01 => 8 // double
       case 0x12 => 8 // int64
       case 0x10 => 4 // int32
     }
 
-    def writeBson(output: Writer): Unit = bsonType match {
+    override def writeBson(output: Writer): Unit = bsonType match {
       case 0x01 => output.writeDouble(toDouble) // double
       case 0x12 => output.writeLong(toLong) // int64
       case 0x10 => output.writeInt(toInt) // int32
@@ -282,30 +282,30 @@ trait BsonVariant extends Variant { variant =>
 
 
   trait BsonDate extends BsonValue with BaseDate { this: DateForm =>
-    override def bsonType: Byte         = 0x09
-    override def bsonSize: Int          = 8
-    def writeBson(output: Writer): Unit = output.writeLong(millis)
+    override def bsonType: Byte                  = 0x09
+    override def bsonSize: Int                   = 8
+    override def writeBson(output: Writer): Unit = output.writeLong(millis)
   }
 
 
   trait BsonBool extends BsonValue with BaseBool { this: BoolForm =>
-    override def bsonType: Byte         = 0x08
-    override def bsonSize: Int          = 1
-    def writeBson(output: Writer): Unit = output.writeByte(if (toBoolean) 1 else 0)
+    override def bsonType: Byte                  = 0x08
+    override def bsonSize: Int                   = 1
+    override def writeBson(output: Writer): Unit = output.writeByte(if (toBoolean) 1 else 0)
   }
 
 
   trait BsonNull extends BsonValue with BaseNull { this: NullForm =>
-    override def bsonType: Byte         = 0x0A
-    override def bsonSize: Int          = 0
-    def writeBson(output: Writer): Unit = ()
+    override def bsonType: Byte                  = 0x0A
+    override def bsonSize: Int                   = 0
+    override def writeBson(output: Writer): Unit = ()
   }
 
 
   trait BsonNo extends BsonValue with BaseNo { this: NoForm =>
-    override def bsonType: Byte         = 0x06
-    override def bsonSize: Int          = 0
-    def writeBson(output: Writer): Unit = ()
+    override def bsonType: Byte                  = 0x06
+    override def bsonSize: Int                   = 0
+    override def writeBson(output: Writer): Unit = ()
   }
 
 

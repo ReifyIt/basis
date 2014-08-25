@@ -6,7 +6,7 @@ lazy val `basis-core` = project in file("core") settings (moduleSettings: _*) de
 
 lazy val `basis-data` = project in file("data") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-util`)
 
-lazy val `basis-form` = project in file("form") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-data`, `basis-util`)
+lazy val `basis-form` = project in file("form") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-data`, `basis-proto`, `basis-util`)
 
 lazy val `basis-math` = project in file("math") settings (moduleSettings: _*)
 

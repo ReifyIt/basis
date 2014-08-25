@@ -13,7 +13,7 @@ import basis.text._
 import basis.util._
 import scala.reflect._
 
-object OmniVariant extends Variant with JsonVariant with BsonVariant {
+object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoVariant {
   import Predef.classOf
 
   override type AnyForm    = OmniValue
@@ -28,16 +28,16 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   override type NullForm   = OmniNull
   override type NoForm     = OmniNo
 
-  override lazy val AnyForm: BaseValueFactory with JsonValueFactory with BsonValueFactory       = new OmniValueFactory
-  override lazy val ObjectForm: BaseObjectFactory with JsonObjectFactory with BsonObjectFactory = new OmniObjectFactory
-  override lazy val SeqForm: BaseSeqFactory with JsonSeqFactory with BsonSeqFactory             = new OmniSeqFactory
-  override lazy val SetForm: BaseSetFactory with JsonSetFactory with BsonSetFactory             = new OmniSetFactory
+  override lazy val AnyForm    = new OmniValueFactory
+  override lazy val ObjectForm = new OmniObjectFactory
+  override lazy val SeqForm    = new OmniSeqFactory
+  override lazy val SetForm    = new OmniSetFactory
 
-  override lazy val TextForm: BaseTextFactory     = new OmniTextFactory
-  override lazy val DataForm: BaseDataFactory     = new OmniDataFactory
-  override lazy val NumberForm: BaseNumberFactory = new OmniNumberFactory
-  override lazy val DateForm: BaseDateFactory     = new OmniDateFactory
-  override lazy val BoolForm: BaseBoolFactory     = new OmniBoolFactory
+  override lazy val TextForm   = new OmniTextFactory
+  override lazy val DataForm   = new OmniDataFactory
+  override lazy val NumberForm = new OmniNumberFactory
+  override lazy val DateForm   = new OmniDateFactory
+  override lazy val BoolForm   = new OmniBoolFactory
 
   override lazy val TrueForm: BoolForm  = new OmniBool(true)
   override lazy val FalseForm: BoolForm = new OmniBool(false)
@@ -57,12 +57,12 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   implicit override lazy val NoFormTag: ClassTag[NoForm]         = ClassTag(classOf[OmniNo])
 
 
-  abstract class OmniValue extends BaseValue with JsonValue with BsonValue
+  abstract class OmniValue extends BaseValue with JsonValue with BsonValue with ProtoValue
 
-  protected class OmniValueFactory extends BaseValueFactory with JsonValueFactory with BsonValueFactory
+  protected class OmniValueFactory extends BaseValueFactory with JsonValueFactory with BsonValueFactory with ProtoValueFactory
 
 
-  class OmniObject(protected val underlying: Seq[(String, AnyForm)]) extends OmniValue with BaseObject with JsonObject with BsonObject {
+  class OmniObject(protected val underlying: Seq[(String, AnyForm)]) extends OmniValue with BaseObject with JsonObject with BsonObject with ProtoObject {
     override def :+ (key: String, value: AnyForm): ObjectForm = underlying :+ (key -> value)
     override def +: (key: String, value: AnyForm): ObjectForm = (key -> value) +: underlying
     override def + (key: String, value: AnyForm): ObjectForm  = underlying :+ (key -> value)
@@ -86,7 +86,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  class OmniSeq(protected val underlying: IndexedSeq[AnyForm]) extends OmniValue with BaseSeq with JsonSeq with BsonSeq {
+  class OmniSeq(protected val underlying: IndexedSeq[AnyForm]) extends OmniValue with BaseSeq with JsonSeq with BsonSeq with ProtoSeq {
     override def length: Int                  = underlying.length
     override def apply(index: Int): AnyForm   = underlying(index)
     override def :+ (value: AnyForm): SeqForm = underlying.:+(value)(SeqFormBuilder)
@@ -109,7 +109,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  class OmniSet(protected val underlying: Seq[AnyForm]) extends OmniValue with BaseSet with JsonSet with BsonSet {
+  class OmniSet(protected val underlying: Seq[AnyForm]) extends OmniValue with BaseSet with JsonSet with BsonSet with ProtoSet {
     override def size: Int                   = underlying.length
     override def + (value: AnyForm): SetForm = underlying.:+(value)(SetFormBuilder)
     override def - (value: AnyForm): SetForm = underlying.filter(!_.equals(value))(SetFormBuilder)
@@ -132,7 +132,12 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  class OmniText(protected val underlying: UString) extends OmniValue with BaseText with JsonText with BsonText {
+  class OmniText(protected val underlying: UString) extends OmniValue with BaseText with JsonText with BsonText with ProtoText {
+    private[this] var utf8Size: Int = -1
+    override def utf8Length: Int = {
+      if (utf8Size == -1) utf8Size = super.utf8Length
+      utf8Size
+    }
     override def iterator: Iterator[Int] = underlying.iterator
     override def toUString: UString      = underlying
   }
@@ -152,7 +157,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  class OmniData(underlying: Loader) extends OmniValue with BaseData with JsonData with BsonData {
+  class OmniData(underlying: Loader) extends OmniValue with BaseData with JsonData with BsonData with ProtoData {
     override def endian: Endianness                = underlying.endian
     override def size: Long                        = underlying.size
     override def loadByte(address: Long): Byte     = underlying.loadByte(address)
@@ -186,7 +191,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  abstract class OmniNumber extends OmniValue with BaseNumber with JsonNumber with BsonNumber
+  abstract class OmniNumber extends OmniValue with BaseNumber with JsonNumber with BsonNumber with ProtoNumber
 
   protected class OmniInt(override val toInt: Int) extends OmniNumber with BaseInt
 
@@ -204,20 +209,20 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant {
   }
 
 
-  class OmniDate(override val millis: Long) extends OmniValue with BaseDate with JsonDate with BsonDate
+  class OmniDate(override val millis: Long) extends OmniValue with BaseDate with JsonDate with BsonDate with ProtoDate
 
   protected class OmniDateFactory extends BaseDateFactory {
     override def apply(millis: Long): DateForm = new OmniDate(millis)
   }
 
 
-  class OmniBool(override val toBoolean: Boolean) extends OmniValue with BaseBool with JsonBool with BsonBool
+  class OmniBool(override val toBoolean: Boolean) extends OmniValue with BaseBool with JsonBool with BsonBool with ProtoBool
 
   protected class OmniBoolFactory extends BaseBoolFactory
 
 
-  class OmniNull extends OmniValue with BaseNull with JsonNull with BsonNull
+  class OmniNull extends OmniValue with BaseNull with JsonNull with BsonNull with ProtoNull
 
 
-  class OmniNo extends OmniValue with BaseNo with JsonNo with BsonNo
+  class OmniNo extends OmniValue with BaseNo with JsonNo with BsonNo with ProtoNo
 }
