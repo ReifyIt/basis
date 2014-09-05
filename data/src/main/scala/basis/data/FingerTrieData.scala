@@ -24,8 +24,6 @@ abstract class FingerTrieData extends Family[FingerTrieData] with Loader {
 }
 
 object FingerTrieData extends ByteOrder[NativeEndian] with DataFactory[FingerTrieData with ByteOrder[NativeEndian]] {
-  private[data] val EmptyByteArray = new Array[Byte](0)
-
   override def endian: NativeEndian = NativeEndian
 
   override val empty: FingerTrieData with ByteOrder[NativeEndian] = {

@@ -132,7 +132,7 @@ final class FingerTrieDataBE private[data] (
     else if (lower >= size) FingerTrieDataBE.empty
     else if (n == 0L) {
       if (branch.length > 0) new FingerTrieDataBE(branch.head, branch.tail, suffix, k)
-      else new FingerTrieDataBE(suffix, immutable.FingerTrieSeq.empty, FingerTrieData.EmptyByteArray, k)
+      else new FingerTrieDataBE(suffix, immutable.FingerTrieSeq.empty, FingerTrieDataBE.EmptyByteArray, k)
     }
     else if (n < 0L) {
       val newPrefix = new Array[Byte](-n.toInt)
@@ -151,7 +151,7 @@ final class FingerTrieDataBE private[data] (
       else {
         val newPrefix = new Array[Byte](k.toInt)
         System.arraycopy(suffix, j.toInt, newPrefix, 0, k.toInt)
-        new FingerTrieDataBE(newPrefix, immutable.FingerTrieSeq.empty, FingerTrieData.EmptyByteArray, k)
+        new FingerTrieDataBE(newPrefix, immutable.FingerTrieSeq.empty, FingerTrieDataBE.EmptyByteArray, k)
       }
     }
   }
@@ -160,17 +160,17 @@ final class FingerTrieDataBE private[data] (
     val n = upper - prefix.length.toLong
     if (upper <= 0L) FingerTrieDataBE.empty
     else if (upper >= size) this
-    else if (n == 0L) new FingerTrieDataBE(prefix, immutable.FingerTrieSeq.empty, FingerTrieData.EmptyByteArray, upper)
+    else if (n == 0L) new FingerTrieDataBE(prefix, immutable.FingerTrieSeq.empty, FingerTrieDataBE.EmptyByteArray, upper)
     else if (n < 0L) {
       val newPrefix = new Array[Byte](upper.toInt)
       System.arraycopy(prefix, 0, newPrefix, 0, upper.toInt)
-      new FingerTrieDataBE(newPrefix, immutable.FingerTrieSeq.empty, FingerTrieData.EmptyByteArray, upper)
+      new FingerTrieDataBE(newPrefix, immutable.FingerTrieSeq.empty, FingerTrieDataBE.EmptyByteArray, upper)
     }
     else {
       val j = n - (branch.length.toLong << 8)
       if (j == 0L) {
         if (branch.length > 0) new FingerTrieDataBE(prefix, branch.body, branch.foot, upper)
-        else new FingerTrieDataBE(suffix, immutable.FingerTrieSeq.empty, FingerTrieData.EmptyByteArray, upper)
+        else new FingerTrieDataBE(suffix, immutable.FingerTrieSeq.empty, FingerTrieDataBE.EmptyByteArray, upper)
       }
       else if (j < 0L) {
         val split = branch.take((((n + 0xFFL) & ~0xFFL) >> 8).toInt)
@@ -196,10 +196,12 @@ final class FingerTrieDataBE private[data] (
 }
 
 object FingerTrieDataBE extends ByteOrder[BigEndian] with DataFactory[FingerTrieDataBE] {
+  private[data] val EmptyByteArray = new Array[Byte](0)
+
   override def endian: BigEndian = BigEndian
 
   override val empty: FingerTrieDataBE =
-    new FingerTrieDataBE(FingerTrieData.EmptyByteArray, immutable.FingerTrieSeq.empty, FingerTrieData.EmptyByteArray, 0L)
+    new FingerTrieDataBE(EmptyByteArray, immutable.FingerTrieSeq.empty, EmptyByteArray, 0L)
 
   implicit override def Framer: Framer with ByteOrder[BigEndian] with State[FingerTrieDataBE] = new FingerTrieDataBEFramer
 
@@ -218,7 +220,7 @@ private[data] final class FingerTrieDataBEReader(
       buffer = segmenter.head
       segmenter.step()
     }
-    else buffer = FingerTrieData.EmptyByteArray
+    else buffer = FingerTrieDataBE.EmptyByteArray
   }
 
   override def endian: BigEndian = BigEndian
@@ -303,7 +305,7 @@ private[data] final class FingerTrieDataBEReader(
       drop(more)
     }
     else {
-      buffer = FingerTrieData.EmptyByteArray
+      buffer = FingerTrieDataBE.EmptyByteArray
       index = 0
       this
     }
@@ -316,7 +318,7 @@ private[data] final class FingerTrieDataBEReader(
         buffer = segmenter.head
         segmenter.step()
       }
-      else buffer = FingerTrieData.EmptyByteArray
+      else buffer = FingerTrieDataBE.EmptyByteArray
       index = 0
     }
   }
@@ -479,7 +481,7 @@ private[data] final class FingerTrieDataBEFramer(
         System.arraycopy(buffer, 0, suffix, 0, offset)
         buffer = suffix
       }
-      if (prefix == null) new FingerTrieDataBE(buffer, immutable.FingerTrieSeq.empty, FingerTrieData.EmptyByteArray, length)
+      if (prefix == null) new FingerTrieDataBE(buffer, immutable.FingerTrieSeq.empty, FingerTrieDataBE.EmptyByteArray, length)
       else if (branch == null) new FingerTrieDataBE(prefix, immutable.FingerTrieSeq.empty, buffer, length)
       else new FingerTrieDataBE(prefix, branch.state, buffer, length)
     }
