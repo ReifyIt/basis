@@ -47,7 +47,7 @@ sealed abstract class Bind[+A] private[basis] extends (A Else Nothing) {
   protected final override def stringPrefix: String = "Bind"
 
   override def toString: String =
-    (UString.Builder ++= "Bind" += '(' +~= bind += ')').state.toString
+    (StringBuilder ~ "Bind" ~ '(' ~> bind ~ ')').state
 }
 
 private[basis] final class BindInt(value: Int) extends Bind[Int] {
@@ -210,7 +210,7 @@ private[basis] final class TrapRef[+B](value: B) extends Trap[B] {
   }
 
   override def toString: String =
-    (UString.Builder ++= "Trap" += '(' +~= trap += ')').state.toString
+    (StringBuilder ~ "Trap" ~ '(' ~> trap ~ ')').state
 }
 
 object Trap extends Trap[Nothing] {

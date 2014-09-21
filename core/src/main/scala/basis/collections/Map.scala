@@ -96,7 +96,7 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[_, _]] with Container[
   }
 
   override def toString: String = {
-    val s = UString.Builder
+    val s = StringBuilder
     s.append(stringPrefix)
     s.append('(')
     val these = iterator
@@ -116,7 +116,7 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[_, _]] with Container[
       }
     }
     s.append(')')
-    s.state.toString
+    s.state
   }
 }
 

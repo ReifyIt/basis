@@ -11,6 +11,8 @@ package basis
   * @contentDiagram hideNodes "basis.text.StringFactory"
   */
 package object text {
+  implicit def StringBuilder: StringBuilder with State[String] = new JStringBuilder
+
   implicit final class UStringContext(val __ : StringContext) extends AnyVal {
     def u(args: Any*): UString = new UString(__.s(args: _*))
   }

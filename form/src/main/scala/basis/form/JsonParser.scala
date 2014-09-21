@@ -295,8 +295,8 @@ private[form] abstract class JsonParser {
   /** Parses an object field name. */
   protected def parseName(): String = {
     (head: @switch) match {
-      case '\"' => parseDoubleQuotedString(UString.Builder).toString
-      case '\'' => parseSingleQuotedString(UString.Builder).toString
+      case '\"' => parseDoubleQuotedString(StringBuilder)
+      case '\'' => parseSingleQuotedString(StringBuilder)
       case _ => parseIdentifier()
     }
   }

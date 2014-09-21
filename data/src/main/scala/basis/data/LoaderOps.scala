@@ -169,15 +169,15 @@ final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
   }
 
   def toBase16: String = {
-    val s = UString.Builder
+    val s = StringBuilder
     writeBase16(s)
-    s.state.toString
+    s.state
   }
 
   def toBase64: String = {
-    val s = UString.Builder
+    val s = StringBuilder
     writeBase64(s)
-    s.state.toString
+    s.state
   }
 }
 

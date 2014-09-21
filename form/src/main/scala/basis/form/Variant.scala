@@ -264,12 +264,12 @@ trait Variant { variant =>
     }
 
     override def toString: String = {
-      val s = UString.Builder
+      val s = StringBuilder
       s.append("NumberForm")
       s.append('(')
       s.append(toDecimalString)
       s.append(')')
-      s.state.toString
+      s.state
     }
   }
 
@@ -401,15 +401,15 @@ trait Variant { variant =>
     def writeISO8601(builder: StringBuilder): Unit = writeISO8601(builder, "UTC")
 
     def toISO8601(timeZone: String): String = {
-      val builder = UString.Builder
+      val builder = StringBuilder
       writeISO8601(builder, timeZone)
-      builder.state.toString
+      builder.state
     }
 
     def toISO8601: String = {
-      val builder = UString.Builder
+      val builder = StringBuilder
       writeISO8601(builder)
-      builder.state.toString
+      builder.state
     }
 
     override def canEqual(other: Any): Boolean = other.isInstanceOf[BaseDate]
@@ -425,14 +425,14 @@ trait Variant { variant =>
     }
 
     override def toString: String = {
-      val s = UString.Builder
+      val s = StringBuilder
       s.append("DateForm")
       s.append('(')
       s.append('"')
       writeISO8601(s)
       s.append('"')
       s.append(')')
-      s.state.toString
+      s.state
     }
   }
 

@@ -461,23 +461,23 @@ trait BsonVariant extends Variant { variant =>
     def readUTF8String(): String = {
       var i = 0
       val n = readInt() - 1
-      val builder = UTF8.Decoder(UString.Builder)
+      val builder = UTF8.Decoder(StringBuilder)
       while (i < n) {
         builder.append(readByte() & 0xFF)
         i += 1
       }
       if (readByte() != 0) throw new BsonException("unterminated string")
-      builder.state.toString
+      builder.state
     }
 
     def readCString(): String = {
-      val builder = UTF8.Decoder(UString.Builder)
+      val builder = UTF8.Decoder(StringBuilder)
       var b = readByte()
       while (b != 0) {
         builder.append(b & 0xFF)
         b = readByte()
       }
-      builder.state.toString
+      builder.state
     }
 
     def skipCString(): Unit = while (readByte() != 0) ()

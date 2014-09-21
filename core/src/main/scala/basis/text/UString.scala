@@ -55,7 +55,7 @@ object UString extends StringFactory[UString] {
   override def toString: String = "UString"
 }
 
-private[text] final class UStringBuilder extends StringBuilder with State[UString] {
+private[text] abstract class CharStringBuilder extends StringBuilder {
   private[this] var codeUnits: Array[Char] = null
 
   private[this] var size: Int = 0
@@ -104,9 +104,9 @@ private[text] final class UStringBuilder extends StringBuilder with State[UStrin
     this
   }
 
-  override def state: UString = {
-    if (codeUnits == null || codeUnits.length == 0) UString.empty
-    else new UString(new String(codeUnits, 0, size))
+  protected def asString: String = {
+    if (codeUnits == null || codeUnits.length == 0) ""
+    else new String(codeUnits, 0, size)
   }
 
   override def clear(): Unit = {
@@ -115,6 +115,14 @@ private[text] final class UStringBuilder extends StringBuilder with State[UStrin
   }
 
   override def toString: String = "UString"+"."+"Builder"
+}
+
+private[text] final class JStringBuilder extends CharStringBuilder with State[String] {
+  override def state: String = asString
+}
+
+private[text] final class UStringBuilder extends CharStringBuilder with State[UString] {
+  override def state: UString = new UString(asString)
 }
 
 private[text] final class UStringIterator(string: String, private[this] var index: Int) extends Iterator[Int] {

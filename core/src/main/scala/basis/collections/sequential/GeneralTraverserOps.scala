@@ -8,6 +8,7 @@ package basis.collections
 package sequential
 
 import basis._
+import basis.text._
 import basis.util._
 
 final class GeneralTraverserOps[+A](val __ : Traverser[A]) extends AnyVal {
@@ -80,6 +81,20 @@ final class GeneralTraverserOps[+A](val __ : Traverser[A]) extends AnyVal {
     f.state
   }
 
+  def joinString(open: String, separator: String, close: String)(implicit builder: StringBuilder): builder.State = {
+    val f = new GeneralTraverserOps.JoinString(separator)(builder)
+    builder.append(open)
+    __.traverse(f)
+    builder.append(close)
+    builder.state
+  }
+
+  def joinString(separator: String)(implicit builder: StringBuilder): builder.State = {
+    val f = new GeneralTraverserOps.JoinString(separator)(builder)
+    __.traverse(f)
+    builder.state
+  }
+
   def eagerly: StrictTraverserOps[A, Traverser[_]] =
     new StrictTraverserOps[A, Traverser[_]](__)
 
@@ -139,5 +154,10 @@ private[sequential] object GeneralTraverserOps {
     private[this] var r: Maybe[B] = Trap
     override def apply(x: A): Unit = if (q.isDefinedAt(x)) { r = Bind(q(x)); begin.break() }
     def state: Maybe[B] = r
+  }
+
+  final class JoinString[-A](s: String)(implicit b: StringBuilder) extends AbstractFunction1[A, Unit] {
+    private[this] var r: Boolean = false
+    override def apply(x: A): Unit = { if (r) b.append(s) else r = true; b.show(x) }
   }
 }

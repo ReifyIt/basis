@@ -246,9 +246,9 @@ object Protobuf {
 
   private final class Text extends Protobuf[String] {
     override def read(data: Reader): String = {
-      val s = UTF8.Decoder(UString.Builder)
+      val s = UTF8.Decoder(StringBuilder)
       while (!data.isEOF) s.append(data.readByte & 0xFF)
-      s.state.toString
+      s.state
     }
 
     override def write(data: Writer, value: String): Unit = {
@@ -539,15 +539,11 @@ object Protobuf {
       mash(mix(mix(mix(seed[Unknown[_]], key.##), default.hashCode), tpe.hashCode))
     }
 
-    override def toString: String = {
-      val s = UString.Builder
-      s.append("Protobuf"); s.append('.'); s.append("Unknown"); s.append('(')
-      s.append("tag");      s.append(" = "); s.show((key >>> 3).toInt); s.append(", ")
-      s.append("wireType"); s.append(" = "); s.show(key.toInt & 0x7);   s.append(", ")
-      s.append("default");  s.append(" = "); s.show(default);
-      s.append(')')
-      s.state.toString
-    }
+    override def toString: String =
+      (StringBuilder ~ "Protobuf" ~ '.' ~ "Unknown" ~ '(' ~
+        "tag"      ~ " = " ~> (key >>> 3).toInt ~ ", " ~
+        "wireType" ~ " = " ~> (key.toInt & 0x7) ~ ", " ~
+        "default"  ~ " = " ~> default           ~ ')').state
   }
 
   private final class Union[T](fields: immutable.HashTrieMap[Long, Field[S] forSome { type S <: T }]) extends AbstractFunction1[Reader, Maybe[T]] {
@@ -569,8 +565,7 @@ object Protobuf {
     }
 
     override def toString: String = {
-      val s = UString.Builder
-      s.append("Protobuf"); s.append('.'); s.append("Union"); s.append('(')
+      val s = StringBuilder ~ "Protobuf" ~ '.' ~ "Union" ~ '('
       var i = 0
       for (field <- fields.values) {
         if (i > 0) s.append(", ")
@@ -578,7 +573,7 @@ object Protobuf {
         i += 1
       }
       s.append(')')
-      s.state.toString
+      s.state
     }
   }
 

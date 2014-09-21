@@ -82,7 +82,17 @@ abstract class StringBuilder extends Builder[Int] {
     this
   }
 
-  def +~= (x: Any): this.type = {
+  def ~ (cs: CharSequence): this.type = {
+    append(cs)
+    this
+  }
+
+  def ~ (c: Int): this.type = {
+    append(c)
+    this
+  }
+
+  def ~> (x: Any): this.type = {
     show(x)
     this
   }

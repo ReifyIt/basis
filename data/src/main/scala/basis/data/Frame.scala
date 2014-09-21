@@ -146,13 +146,13 @@ object Frame {
 
   private final class CString extends Frame[String] {
     override def read(data: Reader): String = {
-      val builder = UTF8.Decoder(UString.Builder)
+      val builder = UTF8.Decoder(StringBuilder)
       var b = data.readByte() & 0xFF
       while (b != 0) {
         builder.append(b)
         b = data.readByte() & 0xFF
       }
-      builder.state.toString
+      builder.state
     }
 
     override def write(data: Writer, value: String): Unit = {

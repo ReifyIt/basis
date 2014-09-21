@@ -230,14 +230,14 @@ trait Loader extends Any with Equals with Family[Loader] with ByteOrder[Endianne
   }
 
   override def toString: String = {
-    val s = UString.Builder
+    val s = StringBuilder
     s.append(stringPrefix)
     s.append('(')
     s.append('\"')
     new LoaderOps(this).writeBase64(s)
     s.append('\"')
     s.append(')')
-    s.state.toString
+    s.state
   }
 
   protected def stringPrefix: String = getClass.getSimpleName
