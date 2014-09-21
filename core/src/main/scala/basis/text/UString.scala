@@ -117,11 +117,11 @@ private[text] abstract class CharStringBuilder extends StringBuilder {
   override def toString: String = "UString"+"."+"Builder"
 }
 
-private[text] final class JStringBuilder extends CharStringBuilder with State[String] {
+private[text] final class JStringBuilder extends CharStringBuilder with Family[String] with State[String] {
   override def state: String = asString
 }
 
-private[text] final class UStringBuilder extends CharStringBuilder with State[UString] {
+private[text] final class UStringBuilder extends CharStringBuilder with Family[UString] with State[UString] {
   override def state: UString = new UString(asString)
 }
 
