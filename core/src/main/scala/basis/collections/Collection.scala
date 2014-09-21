@@ -21,7 +21,7 @@ trait Collection[+A] extends Any with Family[Collection[_]] with Traverser[A] {
   }
 
   override def toString: String = {
-    val s = StringBuilder
+    val s = String.Builder
     s.append(stringPrefix)
     s.append('(')
     traverse(new Collection.AddString(s))

@@ -230,7 +230,7 @@ trait Loader extends Any with Equals with Family[Loader] with ByteOrder[Endianne
   }
 
   override def toString: String = {
-    val s = StringBuilder
+    val s = String.Builder
     s.append(stringPrefix)
     s.append('(')
     s.append('\"')

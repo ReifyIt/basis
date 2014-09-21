@@ -6,6 +6,7 @@
 
 package basis.text
 
+import basis._
 import basis.collections._
 
 abstract class StringBuilder extends Builder[Int] {
@@ -96,4 +97,14 @@ abstract class StringBuilder extends Builder[Int] {
     show(x)
     this
   }
+}
+
+object StringBuilder extends StringFactory[String] {
+  override def empty: String = ""
+
+  override def apply(chars: CharSequence): String = chars.toString
+
+  implicit override def Builder: StringBuilder with State[String] = new JStringBuilder
+
+  override def toString: String = "String"
 }

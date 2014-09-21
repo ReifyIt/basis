@@ -246,7 +246,7 @@ object Protobuf {
 
   private final class Text extends Protobuf[String] {
     override def read(data: Reader): String = {
-      val s = UTF8.Decoder(StringBuilder)
+      val s = UTF8.Decoder(basis.text.String.Builder)
       while (!data.isEOF) s.append(data.readByte & 0xFF)
       s.state
     }
@@ -540,7 +540,7 @@ object Protobuf {
     }
 
     override def toString: String =
-      (StringBuilder ~ "Protobuf" ~ '.' ~ "Unknown" ~ '(' ~
+      (basis.text.String.Builder ~ "Protobuf" ~ '.' ~ "Unknown" ~ '(' ~
         "tag"      ~ " = " ~> (key >>> 3).toInt ~ ", " ~
         "wireType" ~ " = " ~> (key.toInt & 0x7) ~ ", " ~
         "default"  ~ " = " ~> default           ~ ')').state
@@ -565,7 +565,7 @@ object Protobuf {
     }
 
     override def toString: String = {
-      val s = StringBuilder ~ "Protobuf" ~ '.' ~ "Union" ~ '('
+      val s = basis.text.String.Builder ~ "Protobuf" ~ '.' ~ "Union" ~ '('
       var i = 0
       for (field <- fields.values) {
         if (i > 0) s.append(", ")

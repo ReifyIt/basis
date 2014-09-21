@@ -264,7 +264,7 @@ trait Variant { variant =>
     }
 
     override def toString: String = {
-      val s = StringBuilder
+      val s = String.Builder
       s.append("NumberForm")
       s.append('(')
       s.append(toDecimalString)
@@ -401,13 +401,13 @@ trait Variant { variant =>
     def writeISO8601(builder: StringBuilder): Unit = writeISO8601(builder, "UTC")
 
     def toISO8601(timeZone: String): String = {
-      val builder = StringBuilder
+      val builder = String.Builder
       writeISO8601(builder, timeZone)
       builder.state
     }
 
     def toISO8601: String = {
-      val builder = StringBuilder
+      val builder = String.Builder
       writeISO8601(builder)
       builder.state
     }
@@ -425,7 +425,7 @@ trait Variant { variant =>
     }
 
     override def toString: String = {
-      val s = StringBuilder
+      val s = String.Builder
       s.append("DateForm")
       s.append('(')
       s.append('"')

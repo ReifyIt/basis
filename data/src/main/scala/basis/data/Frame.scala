@@ -146,7 +146,7 @@ object Frame {
 
   private final class CString extends Frame[String] {
     override def read(data: Reader): String = {
-      val builder = UTF8.Decoder(StringBuilder)
+      val builder = UTF8.Decoder(String.Builder)
       var b = data.readByte() & 0xFF
       while (b != 0) {
         builder.append(b)

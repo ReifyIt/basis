@@ -461,7 +461,7 @@ trait BsonVariant extends Variant { variant =>
     def readUTF8String(): String = {
       var i = 0
       val n = readInt() - 1
-      val builder = UTF8.Decoder(StringBuilder)
+      val builder = UTF8.Decoder(String.Builder)
       while (i < n) {
         builder.append(readByte() & 0xFF)
         i += 1
@@ -471,7 +471,7 @@ trait BsonVariant extends Variant { variant =>
     }
 
     def readCString(): String = {
-      val builder = UTF8.Decoder(StringBuilder)
+      val builder = UTF8.Decoder(String.Builder)
       var b = readByte()
       while (b != 0) {
         builder.append(b & 0xFF)

@@ -21,7 +21,7 @@ trait Container[+A] extends Any with Family[Container[_]] with Collection[A] {
   override def traverse(f: A => Unit): Unit = iterator.traverse(f)
 
   override def toString: String = {
-    val s = StringBuilder
+    val s = String.Builder
     s.append(stringPrefix)
     s.append('(')
     val these = iterator

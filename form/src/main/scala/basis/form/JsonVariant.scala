@@ -72,7 +72,7 @@ trait JsonVariant extends Variant { variant =>
   trait JsonValue extends BaseValue { this: AnyForm =>
     def writeJson(builder: StringBuilder): Unit
     def toJson: String = {
-      val builder = StringBuilder
+      val builder = String.Builder
       writeJson(builder)
       builder.state
     }
