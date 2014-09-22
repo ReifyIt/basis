@@ -27,7 +27,7 @@ trait MapSource[+CC, -A, -T] {
     builder.state
   }
 
-  implicit def Builder(): Builder[(A, T)] with State[CC]
+  implicit def Builder: Builder[(A, T)] with State[CC]
 }
 
 private[special] class MapSourceMacros(val c: blackbox.Context { type PrefixType <: MapSource[_, _, _] }) {

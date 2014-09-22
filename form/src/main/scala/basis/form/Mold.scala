@@ -59,6 +59,7 @@ object Mold extends CollectionMolds {
   implicit lazy val Boolean: Mold[Boolean] = new BooleanMold(false)
   implicit lazy val String: Mold[String]   = new StringMold("")
   implicit lazy val Date: Mold[Date]       = new DateMold(new Date(0L))
+  implicit lazy val Unit: Mold[Unit]       = new UnitMold
 
   implicit def Set[CC[X] <: Set[X], A](implicit CC: generic.SetFactory[CC], A: Mold[A]): Mold[CC[A]] = new SetMold[CC, A]
 
@@ -258,6 +259,16 @@ object Mold extends CollectionMolds {
     }
 
     override def toString: String = "Mold"+"."+"Date"+"("+ identity +")"
+  }
+
+  private[form] final class UnitMold extends Mold[Unit] {
+    override def identity: Unit = ()
+
+    override def form(variant: Variant)(unit: Unit): variant.AnyForm = variant.NoForm
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Unit] = Trap
+
+    override def toString: String = "Mold"+"."+"Unit"
   }
 
   private[form] final class ContainerMold[CC[X] <: Container[X], A](implicit CC: generic.CollectionFactory[CC], A: Mold[A]) extends Mold[CC[A]] {

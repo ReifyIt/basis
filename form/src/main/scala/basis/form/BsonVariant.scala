@@ -126,7 +126,7 @@ trait BsonVariant extends Variant { variant =>
   }
 
   trait BsonObjectFactory extends BaseObjectFactory {
-    def readBson(input: Reader): ObjectForm = input.readBsonObject(Builder())
+    def readBson(input: Reader): ObjectForm = input.readBsonObject(Builder)
   }
 
 
@@ -444,7 +444,7 @@ trait BsonVariant extends Variant { variant =>
     def readBsonJSScope(): AnyForm = {
       readInt() // length
       val js = readUTF8String()
-      val scope = readBsonObject(ObjectForm.Builder())
+      val scope = readBsonObject(ObjectForm.Builder)
       BsonJSScope(js, scope)
     }
 

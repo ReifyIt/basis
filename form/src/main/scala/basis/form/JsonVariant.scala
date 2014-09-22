@@ -91,6 +91,17 @@ trait JsonVariant extends Variant { variant =>
         value
       }
     }
+
+    def parseJsonPrefix(json: String): (AnyForm, String) = {
+      val factory = new JsonVariantFactory[variant.type](variant)
+      val parser = new JsonStringParser(json)
+      parser.skipWhitespace()
+      val value =
+        try parser.parseValue(factory)
+        catch { case _: JsonException => NoForm }
+      parser.skipWhitespace()
+      (value, parser.remaining)
+    }
   }
 
 
@@ -126,7 +137,7 @@ trait JsonVariant extends Variant { variant =>
       val factory = new JsonVariantFactory[variant.type](variant)
       val parser = new JsonStringParser(json)
       parser.skipWhitespace()
-      val value = parser.parseObject(factory)(Builder())
+      val value = parser.parseObject(factory)(Builder)
       parser.skipWhitespace()
       parser.parseEOF()
       value

@@ -13,6 +13,8 @@ private[form] final class JsonStringParser(input: String) extends JsonParser {
   private[this] var index: Int = 0
   private[this] var lookahead: Int = if (input.length > 0) input.codePointAt(0) else -1
 
+  def remaining: String = input.substring(index)
+
   override def isEOF: Boolean = lookahead < 0
 
   protected override def head: Int = lookahead
