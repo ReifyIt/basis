@@ -28,6 +28,28 @@ final class StrictSeqOps[+A, -Family](val __ : Seq[A]) extends AnyVal {
   def ++ [B >: A](those: Seq[B])(implicit builder: Builder[B] with From[Family]): builder.State = macro StrictSeqMacros.++[B]
   def +: [B >: A](elem: B)(implicit builder: Builder[B] with From[Family]): builder.State       = macro StrictSeqMacros.+:[B]
   def :+ [B >: A](elem: B)(implicit builder: Builder[B] with From[Family]): builder.State       = macro StrictSeqMacros.:+[B]
+
+  def sorted[B >: A](implicit order: Order[B], builder: Builder[B] with From[Family]): builder.State = {
+    var i = 0
+    val n = __.length
+    val array = new Array[Object](n)
+    val these = __.iterator
+    while (!these.isEmpty) {
+      array(i) = these.head.asInstanceOf[Object]
+      these.step()
+      i += 1
+    }
+    java.util.Arrays.sort(array, Order.comparator(order.asInstanceOf[Order[Object]]))
+    builder.expect(n)
+    i = 0
+    while (i < n) {
+      builder.append(array(i).asInstanceOf[B])
+      i += 1
+    }
+    builder.state
+  }
+
+  def sortBy[B](f: A => B)(implicit order: Order[B], builder: Builder[A] with From[Family]): builder.State = sorted(Order.by(f)(order), builder)
 }
 
 private[sequential] class StrictSeqMacros(override val c: blackbox.Context { type PrefixType <: StrictSeqOps[_, _] }) extends IteratorMacros(c) {

@@ -193,7 +193,7 @@ private[data] class LoaderMacros(val c: blackbox.Context { type PrefixType <: Lo
     val xs = new Array[$TTag]($count)
     var p = $address
     var i = 0
-    while (i < count) {
+    while (i < $count) {
       xs(i) = T.load(data, p)
       p += T.size
       i += 1

@@ -485,7 +485,8 @@ object Protobuf {
     override def tag: Int = (key >>> 3).toInt
 
     override def readValue(data: Reader): T = {
-      (key.toInt & 0x7) match {
+      val wireType = key.toInt & 0x7
+      wireType match {
         case 0 => readVarint(data)
         case 1 => data.readLong()
         case 2 => data.drop(readVarint(data))
@@ -500,7 +501,8 @@ object Protobuf {
     }
 
     override def writeValue(data: Writer, value: T): Unit = {
-      (key.toInt & 0x7) match {
+      val wireType = key.toInt & 0x7
+      wireType match {
         case 0 => writeVarint(data, 0L)
         case 1 => data.writeLong(0L)
         case 2 => writeVarint(data, 0L)
