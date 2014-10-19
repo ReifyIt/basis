@@ -20,6 +20,12 @@ final class FingerTrieDataBE private[data] (
 
   override def endian: BigEndian = BigEndian
 
+  override def as[E <: Endianness](endian: E): FingerTrieData with ByteOrder[E] = {
+    if (endian.isBig) this
+    else if (endian.isLittle) new FingerTrieDataLE(prefix, branch, suffix, size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[FingerTrieData with ByteOrder[E]]
+
   override def loadByte(address: Long): Byte = {
     val n = address - prefix.length.toLong
     if (n < 0L) prefix(address.toInt)
@@ -202,6 +208,12 @@ object FingerTrieDataBE extends ByteOrder[BigEndian] with DataFactory[FingerTrie
 
   override val empty: FingerTrieDataBE =
     new FingerTrieDataBE(EmptyByteArray, immutable.FingerTrieSeq.empty, EmptyByteArray, 0L)
+
+  override def from(data: Loader): FingerTrieDataBE = {
+    if (data.isInstanceOf[FingerTrieDataBE]) data.asInstanceOf[FingerTrieDataBE]
+    else if (data.isInstanceOf[FingerTrieDataLE]) data.asInstanceOf[FingerTrieDataLE].as(BigEndian).asInstanceOf[FingerTrieDataBE]
+    else super.from(data)
+  }
 
   implicit override def Framer: Framer with ByteOrder[BigEndian] with State[FingerTrieDataBE] = new FingerTrieDataBEFramer
 

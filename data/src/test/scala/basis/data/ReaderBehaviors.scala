@@ -16,6 +16,10 @@ trait ReaderBehaviors { this: FlatSpec =>
   def BigEndianReader(Data: DataFactory[Loader with ByteOrder[BigEndian]]): Unit = {
     def Base16(base16: String): Reader with ByteOrder[BigEndian] = Data.fromBase16(base16).reader(0L)
 
+    it should "declare itself big-endian" in {
+      Data.empty.reader(0L).endian should equal (BigEndian)
+    }
+
     it should "read Byte values" in {
       val data = Base16("69")
       data.readByte() should equalByte (0x69.toByte)
@@ -75,6 +79,10 @@ trait ReaderBehaviors { this: FlatSpec =>
 
   def LittleEndianReader(Data: DataFactory[Loader with ByteOrder[LittleEndian]]): Unit = {
     def Base16(base16: String): Reader with ByteOrder[LittleEndian] = Data.fromBase16(base16).reader(0L)
+
+    it should "declare itself little-endian" in {
+      Data.empty.reader(0L).endian should equal (LittleEndian)
+    }
 
     it should "read Byte values" in {
       val data = Base16("69")

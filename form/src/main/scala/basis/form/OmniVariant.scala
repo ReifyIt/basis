@@ -160,6 +160,10 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
   class OmniData(underlying: Loader) extends OmniValue with BaseData with JsonData with BsonData with ProtoData {
     override def endian: Endianness                = underlying.endian
     override def size: Long                        = underlying.size
+    override def as[E <: Endianness](endian: E): DataForm with basis.data.ByteOrder[E] = {
+      if (underlying.endian.eq(endian)) this
+      else new OmniData(underlying.as(endian))
+    }.asInstanceOf[DataForm with basis.data.ByteOrder[E]]
     override def loadByte(address: Long): Byte     = underlying.loadByte(address)
     override def loadShort(address: Long): Short   = underlying.loadShort(address)
     override def loadInt(address: Long): Int       = underlying.loadInt(address)
@@ -167,11 +171,16 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
     override def loadFloat(address: Long): Float   = underlying.loadFloat(address)
     override def loadDouble(address: Long): Double = underlying.loadDouble(address)
     override def reader(address: Long): Reader     = underlying.reader(address)
+    override def toArray: Array[Byte]              = underlying.toArray
   }
 
   protected class OmniDataFactory extends BaseDataFactory {
     override def endian: Endianness                  = NativeEndian
     override val empty: DataForm                     = new OmniData(ArrayData.empty)
+    override def from(data: Loader): DataForm        = {
+      if (data.isInstanceOf[OmniData]) data.asInstanceOf[OmniData]
+      else new OmniData(data)
+    }
     override def Framer: Framer with State[DataForm] = new OmniDataFramer(ArrayData.Framer)
   }
 

@@ -9,6 +9,8 @@ package basis.data
 import basis._
 
 abstract class IndexTrieData extends Family[IndexTrieData] with Loader {
+  override def as[E <: Endianness](endian: E): IndexTrieData with ByteOrder[E]
+
   def mutateByte(address: Long, value: Byte): IndexTrieData with ByteOrder[Endian]
 
   def mutateShort(address: Long, value: Short): IndexTrieData with ByteOrder[Endian]
@@ -30,6 +32,11 @@ object IndexTrieData extends ByteOrder[NativeEndian] with DataFactory[IndexTrieD
     else if (endian.isLittle) IndexTrieDataLE.empty
     else throw new MatchError(endian)
   }.asInstanceOf[IndexTrieData with ByteOrder[NativeEndian]]
+
+  override def from(data: Loader): IndexTrieData with ByteOrder[NativeEndian] = {
+    if (data.isInstanceOf[IndexTrieData]) data.asInstanceOf[IndexTrieData].as(NativeEndian)
+    else super.from(data)
+  }
 
   implicit override def Framer: Framer with ByteOrder[NativeEndian] with State[IndexTrieData with ByteOrder[NativeEndian]] = {
     if (endian.isBig) IndexTrieDataBE.Framer

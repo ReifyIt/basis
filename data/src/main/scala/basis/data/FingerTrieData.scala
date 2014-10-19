@@ -16,11 +16,30 @@ abstract class FingerTrieData extends Family[FingerTrieData] with Loader {
 
   private[data] def suffix: Array[Byte]
 
+  override def as[E <: Endianness](endian: E): FingerTrieData with ByteOrder[E]
+
   def drop(lower: Long): FingerTrieData with ByteOrder[Endian]
 
   def take(upper: Long): FingerTrieData with ByteOrder[Endian]
 
   def slice(lower: Long, upper: Long): FingerTrieData with ByteOrder[Endian]
+
+  override def toArray: Array[Byte] = {
+    if (size > Int.MaxValue.toLong)
+      throw new UnsupportedOperationException("size exceeds maximum array capacity")
+    var i = prefix.length
+    val array = new Array[Byte](size.toInt)
+    val segmenter = new FingerTrieDataArraySegmenter(this)
+    System.arraycopy(prefix, 0, array, 0, i)
+    while (!segmenter.isEmpty) {
+      val segment = segmenter.head
+      System.arraycopy(segment, 0, array, i, segment.length)
+      i += segment.length
+      segmenter.step()
+    }
+    System.arraycopy(suffix, 0, array, i, suffix.length)
+    array
+  }
 }
 
 object FingerTrieData extends ByteOrder[NativeEndian] with DataFactory[FingerTrieData with ByteOrder[NativeEndian]] {
@@ -31,6 +50,11 @@ object FingerTrieData extends ByteOrder[NativeEndian] with DataFactory[FingerTri
     else if (endian.isLittle) FingerTrieDataLE.empty
     else throw new MatchError(endian)
   }.asInstanceOf[FingerTrieData with ByteOrder[NativeEndian]]
+
+  override def from(data: Loader): FingerTrieData with ByteOrder[NativeEndian] = {
+    if (data.isInstanceOf[FingerTrieData]) data.asInstanceOf[FingerTrieData].as(NativeEndian)
+    else super.from(data)
+  }
 
   implicit override def Framer: Framer with ByteOrder[NativeEndian] with State[FingerTrieData with ByteOrder[NativeEndian]] = {
     if (endian.isBig) FingerTrieDataBE.Framer

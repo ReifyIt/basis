@@ -11,17 +11,24 @@ package basis
   * @contentDiagram hideNodes "basis.data.ByteOrder" "basis.data.DataFactory"
   */
 package object data {
-  val BigEndian: BigEndian = new BigEndian
-  val LittleEndian: LittleEndian = new LittleEndian
+  /** Big-endian byte order of the host machine. */
+  val BigEndian: BigEndian = {
+    if (java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.BIG_ENDIAN) new BigEndianNative
+    else new BigEndianSwapped
+  }
 
-  type NativeEndian = NativeEndian.type
+  /** Little-endian byte order of the host machine. */
+  val LittleEndian: LittleEndian = {
+    if (java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.LITTLE_ENDIAN) new LittleEndianNative
+    else new LittleEndianSwapped
+  }
 
-  /** The native byte order of the virtual machine. */
-  implicit val NativeEndian: Endianness = {
+  /** Native byte order of the host machine. */
+  implicit val NativeEndian: NativeEndian = {
     if (BigEndian.isNative) BigEndian
     else if (LittleEndian.isNative) LittleEndian
     else throw new AssertionError
-  }
+  }.asInstanceOf[NativeEndian]
 
   implicit def DataFactoryToOps[Data](factory: DataFactory[Data]): DataFactoryOps[Data] = macro DataMacros.DataFactoryToOps[Data]
   implicit def AllocatorToOps[Data](allocator: Allocator[Data]): AllocatorOps[Data] = macro DataMacros.AllocatorToOps[Data]

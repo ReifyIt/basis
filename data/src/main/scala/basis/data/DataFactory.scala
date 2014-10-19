@@ -22,5 +22,16 @@ trait DataFactory[+Data] extends ByteOrder[Endianness] {
     framer.state
   }
 
+  def from(data: Loader): Data = {
+    val size = data.size
+    val framer = Framer.expect(size)
+    var i = 0L
+    while (i < size) {
+      framer.writeByte(data.loadByte(i))
+      i += 1L
+    }
+    framer.state
+  }
+
   implicit def Framer: Framer with ByteOrder[Endian] with State[Data]
 }

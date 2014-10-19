@@ -6,7 +6,7 @@
 
 package basis.data
 
-/** A significance ordering. */
+/** Significance ordering. */
 sealed abstract class Endianness {
   /** Returns `true` if more significant elements precede less significant ones. */
   def isBig: Boolean
@@ -18,18 +18,39 @@ sealed abstract class Endianness {
   def isNative: Boolean
 }
 
-/** An ordering where more significant elements precede less significant ones. */
-final class BigEndian private[data] extends Endianness {
+/** Ordering where more significant elements precede less significant ones. */
+sealed trait BigEndian extends Endianness
+
+/** Ordering where less significant elememts precede more significant ones. */
+sealed trait LittleEndian extends Endianness
+
+/** Significance ordering of the host machine. */
+sealed trait NativeEndian extends Endianness
+
+private[data] final class BigEndianNative extends BigEndian with NativeEndian {
   final override def isBig: Boolean    = true
   final override def isLittle: Boolean = false
-  final override val isNative: Boolean = java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.BIG_ENDIAN
-  override def toString: String = "BigEndian"
+  final override def isNative: Boolean = true
+  final override def toString: String  = "BigEndian"
 }
 
-/** An ordering where less significant elememts precede more significant ones. */
-final class LittleEndian private[data] extends Endianness {
+private[data] final class BigEndianSwapped extends BigEndian {
+  final override def isBig: Boolean    = true
+  final override def isLittle: Boolean = false
+  final override def isNative: Boolean = false
+  final override def toString: String  = "BigEndian"
+}
+
+private[data] final class LittleEndianNative extends LittleEndian with NativeEndian {
   final override def isBig: Boolean    = false
   final override def isLittle: Boolean = true
-  final override val isNative: Boolean = java.nio.ByteOrder.nativeOrder eq java.nio.ByteOrder.LITTLE_ENDIAN
-  override def toString: String = "LittleEndian"
+  final override def isNative: Boolean = true
+  final override def toString: String  = "LittleEndian"
+}
+
+private[data] final class LittleEndianSwapped extends LittleEndian with NativeEndian {
+  final override def isBig: Boolean    = false
+  final override def isLittle: Boolean = true
+  final override def isNative: Boolean = false
+  final override def toString: String  = "LittleEndian"
 }

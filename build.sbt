@@ -30,7 +30,7 @@ lazy val projectSettings = Seq(
   scalacOptions ++= Seq("-language:_", "-Yno-predef"))
 
 lazy val compileSettings = Seq(
-  scalacOptions ++= Seq("-optimise", "-deprecation", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import", "-Ywarn-value-discard"),
+  scalacOptions ++= Seq("-optimise", "-deprecation", "-Xfuture", "-Xlint", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % "provided",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test"))

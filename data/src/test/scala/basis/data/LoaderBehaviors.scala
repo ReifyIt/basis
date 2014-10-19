@@ -16,6 +16,16 @@ trait LoaderBehaviors { this: FlatSpec =>
   def BigEndianLoader[Data <: Loader with ByteOrder[BigEndian]](Data: DataFactory[Data]): Unit = {
     def Base16(base16: String): Data = Data.fromBase16(base16)
 
+    it should "declare itself big-endian" in {
+      Data.empty.endian should equal (BigEndian)
+    }
+
+    it should "project itself as other endiannesses" in {
+      Data.empty.as(BigEndian).endian    should equal (BigEndian)
+      Data.empty.as(LittleEndian).endian should equal (LittleEndian)
+      Data.empty.as(NativeEndian).endian should equal (NativeEndian)
+    }
+
     it should "load Byte values" in {
       val data = Base16("69")
       data.loadByte(0L) should equalByte (0x69.toByte)
@@ -141,6 +151,16 @@ trait LoaderBehaviors { this: FlatSpec =>
   def LittleEndianLoader[Data <: Loader with ByteOrder[LittleEndian]](Data: DataFactory[Data]): Unit = {
     def Base16(base16: String): Data = Data.fromBase16(base16)
 
+    it should "declare itself little-endian" in {
+      Data.empty.endian should equal (LittleEndian)
+    }
+
+    it should "project itself as other endiannesses" in {
+      Data.empty.as(BigEndian).endian    should equal (BigEndian)
+      Data.empty.as(LittleEndian).endian should equal (LittleEndian)
+      Data.empty.as(NativeEndian).endian should equal (NativeEndian)
+    }
+
     it should "load Byte values" in {
       val data = Base16("69")
       data.loadByte(0L) should equalByte (0x69.toByte)
@@ -258,6 +278,38 @@ trait LoaderBehaviors { this: FlatSpec =>
       while (i < 8L) withClue(s"offset $i:") {
         data.loadAlignedDouble(i).toRawLongBits should equalLong (0xF00FC33CA55A9669L)
         i += 1L
+      }
+    }
+  }
+
+
+  def ArrayLoader[Data <: Loader](Data: DataFactory[Data]): Unit = {
+    it should "convert data to byte arrays" in {
+      def series(i: Long): Byte = (i ^ (i >>> 8) ^ (i >>> 16) ^ (i >>> 24)).toByte
+      def dataToArray(n: Long): Unit = {
+        var i = 0L
+        val framer = Data.Framer
+        while (i < n) {
+          framer.writeByte(series(i))
+          i += 1L
+        }
+        val data = framer.state
+
+        i = 0L
+        while (i < n) {
+          val x = data.loadByte(i)
+          if (x != series(i)) withClue(s"address $i of $n:") (x should equal (series(i)))
+          i += 1L
+        }
+      }
+
+      var k = 3
+      while (k <= 18) {
+        val n = 1 << k
+        dataToArray(n - 1)
+        dataToArray(n)
+        dataToArray(n + 1)
+        k += 5
       }
     }
   }

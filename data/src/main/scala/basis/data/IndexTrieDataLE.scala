@@ -188,6 +188,12 @@ object IndexTrieDataLE extends ByteOrder[LittleEndian] with DataFactory[IndexTri
 
   override val empty: IndexTrieDataLE = new IndexTrieDataLE0
 
+  override def from(data: Loader): IndexTrieDataLE = {
+    if (data.isInstanceOf[IndexTrieDataLE]) data.asInstanceOf[IndexTrieDataLE]
+    else if (data.isInstanceOf[IndexTrieDataBE]) data.asInstanceOf[IndexTrieDataBE].as(LittleEndian).asInstanceOf[IndexTrieDataLE]
+    else super.from(data)
+  }
+
   implicit override def Framer: Framer with ByteOrder[LittleEndian] with State[IndexTrieDataLE] = new IndexTrieDataLEFramer
 
   override def toString: String = "IndexTrieDataLE"
@@ -196,6 +202,12 @@ object IndexTrieDataLE extends ByteOrder[LittleEndian] with DataFactory[IndexTri
 private[data] final class IndexTrieDataLE0 extends IndexTrieDataLE {
   override def size: Long = 0L
 
+  override def as[E <: Endianness](endian: E): IndexTrieData with ByteOrder[E] = {
+    if (endian.isLittle) this
+    else if (endian.isBig) IndexTrieDataBE.empty
+    else throw new MatchError(endian)
+  }.asInstanceOf[IndexTrieData with ByteOrder[E]]
+
   override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader()
 
   override def loadByte(address: Long): Byte = throw new IndexOutOfBoundsException(address.toString)
@@ -203,12 +215,20 @@ private[data] final class IndexTrieDataLE0 extends IndexTrieDataLE {
   protected[data] override def getNode1(address: Long): Array[Byte] = throw new IndexOutOfBoundsException(address.toString)
 
   protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = throw new IndexOutOfBoundsException(address.toString)
+
+  override def toArray: Array[Byte] = new Array[Byte](0)
 }
 
 private[data] final class IndexTrieDataLE1(
     private[data] val node1: Array[Byte],
     override val size: Long)
   extends IndexTrieDataLE {
+
+  override def as[E <: Endianness](endian: E): IndexTrieData with ByteOrder[E] = {
+    if (endian.isLittle) this
+    else if (endian.isBig) new IndexTrieDataBE1(node1, size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[IndexTrieData with ByteOrder[E]]
 
   override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node1, size)
 
@@ -217,12 +237,24 @@ private[data] final class IndexTrieDataLE1(
   protected[data] override def getNode1(address: Long): Array[Byte] = node1
 
   protected[data] override def mutateNode1(address: Long, newNode1: Array[Byte]): IndexTrieDataLE = new IndexTrieDataLE1(newNode1, size)
+
+  override def toArray: Array[Byte] = {
+    val array = new Array[Byte](size.toInt)
+    System.arraycopy(node1, 0, array, 0, node1.length)
+    array
+  }
 }
 
 private[data] final class IndexTrieDataLE2(
     private[data] val node2: Array[Array[Byte]],
     override val size: Long)
   extends IndexTrieDataLE {
+
+  override def as[E <: Endianness](endian: E): IndexTrieData with ByteOrder[E] = {
+    if (endian.isLittle) this
+    else if (endian.isBig) new IndexTrieDataBE2(node2, size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[IndexTrieData with ByteOrder[E]]
 
   override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node2, size)
 
@@ -245,12 +277,31 @@ private[data] final class IndexTrieDataLE2(
     newNode2(lo >>> 8 & 0x1F) = newNode1
     new IndexTrieDataLE2(newNode2, size)
   }
+
+  override def toArray: Array[Byte] = {
+    var i = 0
+    val n = size.toInt
+    val array = new Array[Byte](n)
+    var node1 = null: Array[Byte]
+    while (i < n) {
+      node1 = node2(i >>> 8 & 0x1F)
+      java.lang.System.arraycopy(node1, 0, array, i, node1.length)
+      i += node1.length
+    }
+    array
+  }
 }
 
 private[data] final class IndexTrieDataLE3(
     private[data] val node3: Array[Array[Array[Byte]]],
     override val size: Long)
   extends IndexTrieDataLE {
+
+  override def as[E <: Endianness](endian: E): IndexTrieData with ByteOrder[E] = {
+    if (endian.isLittle) this
+    else if (endian.isBig) new IndexTrieDataBE3(node3, size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[IndexTrieData with ByteOrder[E]]
 
   override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node3, size)
 
@@ -280,12 +331,35 @@ private[data] final class IndexTrieDataLE3(
     newNode2(lo >>>  8 & 0x1F) = newNode1
     new IndexTrieDataLE3(newNode3, size)
   }
+
+  override def toArray: Array[Byte] = {
+    var i = 0
+    val n = size.toInt
+    val array = new Array[Byte](n)
+    var node1 = null: Array[Byte]
+    var node2 = null: Array[Array[Byte]]
+    while (i < n) {
+      if ((i & 0x00001FFF) == 0) {
+        node2 = node3(i >>> 13 & 0x1F)
+      }
+      node1 = node2(i >>> 8 & 0x1F)
+      java.lang.System.arraycopy(node1, 0, array, i, node1.length)
+      i += 256
+    }
+    array
+  }
 }
 
 private[data] final class IndexTrieDataLE4(
     private[data] val node4: Array[Array[Array[Array[Byte]]]],
     override val size: Long)
   extends IndexTrieDataLE {
+
+  override def as[E <: Endianness](endian: E): IndexTrieData with ByteOrder[E] = {
+    if (endian.isLittle) this
+    else if (endian.isBig) new IndexTrieDataBE4(node4, size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[IndexTrieData with ByteOrder[E]]
 
   override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node4, size)
 
@@ -322,12 +396,39 @@ private[data] final class IndexTrieDataLE4(
     newNode2(lo >>>  8 & 0x1F) = newNode1
     new IndexTrieDataLE4(newNode4, size)
   }
+
+  override def toArray: Array[Byte] = {
+    var i = 0
+    val n = size.toInt
+    val array = new Array[Byte](n)
+    var node1 = null: Array[Byte]
+    var node2 = null: Array[Array[Byte]]
+    var node3 = null: Array[Array[Array[Byte]]]
+    while (i < n) {
+      if ((i & 0x00001FFF) == 0) {
+        if ((i & 0x0003FFFF) == 0) {
+          node3 = node4(i >>> 18 & 0x1F)
+        }
+        node2 = node3(i >>> 13 & 0x1F)
+      }
+      node1 = node2(i >>> 8 & 0x1F)
+      java.lang.System.arraycopy(node1, 0, array, i, node1.length)
+      i += 256
+    }
+    array
+  }
 }
 
 private[data] final class IndexTrieDataLE5(
     private[data] val node5: Array[Array[Array[Array[Array[Byte]]]]],
     override val size: Long)
   extends IndexTrieDataLE {
+
+  override def as[E <: Endianness](endian: E): IndexTrieData with ByteOrder[E] = {
+    if (endian.isLittle) this
+    else if (endian.isBig) new IndexTrieDataBE5(node5, size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[IndexTrieData with ByteOrder[E]]
 
   override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node5, size)
 
@@ -371,12 +472,43 @@ private[data] final class IndexTrieDataLE5(
     newNode2(lo >>>  8 & 0x1F) = newNode1
     new IndexTrieDataLE5(newNode5, size)
   }
+
+  override def toArray: Array[Byte] = {
+    var i = 0
+    val n = size.toInt
+    val array = new Array[Byte](n)
+    var node1 = null: Array[Byte]
+    var node2 = null: Array[Array[Byte]]
+    var node3 = null: Array[Array[Array[Byte]]]
+    var node4 = null: Array[Array[Array[Array[Byte]]]]
+    while (i < n) {
+      if ((i & 0x00001FFF) == 0) {
+        if ((i & 0x0003FFFF) == 0) {
+          if ((i & 0x007FFFFF) == 0) {
+            node4 = node5(i >>> 23 & 0x1F)
+          }
+          node3 = node4(i >>> 18 & 0x1F)
+        }
+        node2 = node3(i >>> 13 & 0x1F)
+      }
+      node1 = node2(i >>> 8 & 0x1F)
+      java.lang.System.arraycopy(node1, 0, array, i, node1.length)
+      i += 256
+    }
+    array
+  }
 }
 
 private[data] final class IndexTrieDataLE6(
     private[data] val node6: Array[Array[Array[Array[Array[Array[Byte]]]]]],
     override val size: Long)
   extends IndexTrieDataLE {
+
+  override def as[E <: Endianness](endian: E): IndexTrieData with ByteOrder[E] = {
+    if (endian.isLittle) this
+    else if (endian.isBig) new IndexTrieDataBE6(node6, size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[IndexTrieData with ByteOrder[E]]
 
   override def reader(address: Long): Reader with ByteOrder[LittleEndian] = new IndexTrieDataLEReader(node6, size)
 
@@ -426,6 +558,37 @@ private[data] final class IndexTrieDataLE6(
 
     newNode2(lo >>>  8 & 0x1F) = newNode1
     new IndexTrieDataLE6(newNode6, size)
+  }
+
+  override def toArray: Array[Byte] = {
+    if (size > Int.MaxValue.toLong)
+      throw new UnsupportedOperationException("size exceeds maximum array capacity")
+    var i = 0
+    val n = size.toInt
+    val array = new Array[Byte](n)
+    var node1 = null: Array[Byte]
+    var node2 = null: Array[Array[Byte]]
+    var node3 = null: Array[Array[Array[Byte]]]
+    var node4 = null: Array[Array[Array[Array[Byte]]]]
+    var node5 = null: Array[Array[Array[Array[Array[Byte]]]]]
+    while (i < n) {
+      if ((i & 0x00001FFF) == 0) {
+        if ((i & 0x0003FFFF) == 0) {
+          if ((i & 0x007FFFFF) == 0) {
+            if ((i & 0x0FFFFFFF) == 0) {
+              node5 = node6(i >>> 28 & 0x1F)
+            }
+            node4 = node5(i >>> 23 & 0x1F)
+          }
+          node3 = node4(i >>> 18 & 0x1F)
+        }
+        node2 = node3(i >>> 13 & 0x1F)
+      }
+      node1 = node2(i >>> 8 & 0x1F)
+      java.lang.System.arraycopy(node1, 0, array, i, node1.length)
+      i += 256
+    }
+    array
   }
 }
 

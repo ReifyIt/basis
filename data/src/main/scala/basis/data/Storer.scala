@@ -13,6 +13,10 @@ trait Storer extends Any with ByteOrder[Endianness] {
     * @group General */
   def size: Long
 
+  /** Returns an `endian` ordered view of the address space.
+    * @group General */
+  def as[E <: Endianness](endian: E): Storer with ByteOrder[E]
+
   /** Stores a single byte.
     *
     * @param  address   the storage address.

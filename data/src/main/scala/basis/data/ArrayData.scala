@@ -9,13 +9,13 @@ package basis.data
 import basis._
 
 trait ArrayData extends Any with Family[ArrayData] with Loader with Storer {
+  override def as[E <: Endianness](endian: E): ArrayData with ByteOrder[E]
+
   def drop(lower: Long): ArrayData with ByteOrder[Endian]
 
   def take(upper: Long): ArrayData with ByteOrder[Endian]
 
   def slice(lower: Long, upper: Long): ArrayData with ByteOrder[Endian]
-
-  def toArray: Array[Byte]
 }
 
 object ArrayData extends ByteOrder[NativeEndian] with Allocator[ArrayData with ByteOrder[NativeEndian]] {
@@ -27,17 +27,22 @@ object ArrayData extends ByteOrder[NativeEndian] with Allocator[ArrayData with B
     else throw new MatchError(endian)
   }.asInstanceOf[ArrayData with ByteOrder[NativeEndian]]
 
+  override def apply(size: Long): ArrayData with ByteOrder[NativeEndian] = {
+    if (endian.isBig) ArrayDataBE(size)
+    else if (endian.isLittle) ArrayDataLE(size)
+    else throw new MatchError(endian)
+  }.asInstanceOf[ArrayData with ByteOrder[NativeEndian]]
+
   override def apply(data: Array[Byte]): ArrayData with ByteOrder[NativeEndian] = {
     if (endian.isBig) ArrayDataBE(data)
     else if (endian.isLittle) ArrayDataLE(data)
     else throw new MatchError(endian)
   }.asInstanceOf[ArrayData with ByteOrder[NativeEndian]]
 
-  override def apply(size: Long): ArrayData with ByteOrder[NativeEndian] = {
-    if (endian.isBig) ArrayDataBE(size)
-    else if (endian.isLittle) ArrayDataLE(size)
-    else throw new MatchError(endian)
-  }.asInstanceOf[ArrayData with ByteOrder[NativeEndian]]
+  override def from(data: Loader): ArrayData with ByteOrder[NativeEndian] = {
+    if (data.isInstanceOf[ArrayData]) data.asInstanceOf[ArrayData].as(NativeEndian)
+    else super.from(data)
+  }
 
   implicit override def Framer: Framer with ByteOrder[NativeEndian] with State[ArrayData with ByteOrder[NativeEndian]] = {
     if (endian.isBig) ArrayDataBE.Framer

@@ -204,6 +204,7 @@ trait Variant { variant =>
   trait BaseData extends Equals with Family[DataForm] with Loader with BaseValue { this: DataForm =>
     override def isDataForm: Boolean            = true
     override def asDataForm: DataForm           = this
+    override def as[E <: Endianness](endian: E): DataForm with basis.data.ByteOrder[E]
     protected override def stringPrefix: String = "DataForm"
   }
 

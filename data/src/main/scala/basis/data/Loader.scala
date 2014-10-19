@@ -15,6 +15,10 @@ trait Loader extends Any with Equals with Family[Loader] with ByteOrder[Endianne
     * @group General */
   def size: Long
 
+  /** Returns an `endian` ordered view of the address space.
+    * @group General */
+  def as[E <: Endianness](endian: E): Loader with ByteOrder[E]
+
   /** Loads a single byte.
     *
     * @param  address   the address to load.
@@ -204,6 +208,10 @@ trait Loader extends Any with Equals with Family[Loader] with ByteOrder[Endianne
   /** Returns a `Reader` starting at `address`.
     * @group General */
   def reader(address: Long): Reader with ByteOrder[Endian]
+
+  /** Converts this data to a byte array in the most efficient way possible.
+    * Mutable data may return an internal buffer. */
+  def toArray: Array[Byte]
 
   override def canEqual(other: Any): Boolean = other.isInstanceOf[Loader]
 

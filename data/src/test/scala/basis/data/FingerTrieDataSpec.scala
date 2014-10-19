@@ -18,6 +18,7 @@ class FingerTrieDataSpec
   override def suiteName = "FingerTrieData specification"
 
   "Big-endian finger trie data" should behave like BigEndianLoader(FingerTrieDataBE)
+  it should behave like ArrayLoader(FingerTrieDataBE)
 
   "Big-endian finger trie data readers" should behave like BigEndianReader(FingerTrieDataBE)
 
@@ -25,6 +26,7 @@ class FingerTrieDataSpec
 
 
   "Little-endian finger trie data" should behave like LittleEndianLoader(FingerTrieDataLE)
+  it should behave like ArrayLoader(FingerTrieDataLE)
 
   "Little-endian finger trie data readers" should behave like LittleEndianReader(FingerTrieDataLE)
 

@@ -12,6 +12,12 @@ import basis.util._
 final class ArrayDataBE(val __ : Array[Byte]) extends AnyVal with Family[ArrayDataBE] with ByteOrder[BigEndian] with ArrayData {
   override def endian: BigEndian = BigEndian
 
+  override def as[E <: Endianness](endian: E): ArrayData with ByteOrder[E] = {
+    if (endian.isBig) this
+    else if (endian.isLittle) new ArrayDataLE(toArray)
+    else throw new MatchError(endian)
+  }.asInstanceOf[ArrayData with ByteOrder[E]]
+
   override def size: Long = __.length.toLong
 
   override def loadByte(address: Long): Byte = {
@@ -129,9 +135,9 @@ object ArrayDataBE extends ByteOrder[BigEndian] with Allocator[ArrayDataBE] {
 
   override val empty: ArrayDataBE = new ArrayDataBE(new Array[Byte](0))
 
-  override def apply(data: Array[Byte]): ArrayDataBE = new ArrayDataBE(data)
-
   override def apply(size: Long): ArrayDataBE = new ArrayDataBE(new Array[Byte](size.toInt))
+
+  override def apply(data: Array[Byte]): ArrayDataBE = new ArrayDataBE(data)
 
   implicit override def Framer: Framer with ByteOrder[BigEndian] with State[ArrayDataBE] = new ArrayDataBEFramer
 
