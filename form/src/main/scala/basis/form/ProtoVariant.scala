@@ -98,36 +98,38 @@ trait ProtoVariant extends Variant { variant =>
 
 
   trait ProtoNo extends ProtoValue with BaseNo { this: NoForm =>
-    override def protoField: Protobuf.Field[NoForm] =
-      throw new ProtobufException("NoForm has no protobuf representation")
+    override def protoField: Protobuf.Field[NoForm] = Proto.NoFormField
   }
 
 
   class Proto extends Protobuf[AnyForm] {
     implicit lazy val ObjectFieldProto: Protobuf[(String, AnyForm)] = new ObjectFieldProto
-    implicit lazy val ObjectFormProto: Protobuf[ObjectForm]         = new ObjectFormProto
-    implicit lazy val SeqFormProto: Protobuf[SeqForm]               = new SeqFormProto
-    implicit lazy val SetFormProto: Protobuf[SetForm]               = new SetFormProto
-    implicit lazy val TextFormProto: Protobuf[TextForm]             = new TextFormProto
-    implicit lazy val DataFormProto: Protobuf[DataForm]             = new DataFormProto
-    implicit lazy val LongFormProto: Protobuf[NumberForm]           = new LongFormProto
-    implicit lazy val DoubleFormProto: Protobuf[NumberForm]         = new DoubleFormProto
-    implicit lazy val DateFormProto: Protobuf[DateForm]             = new DateFormProto
-    implicit lazy val BoolFormProto: Protobuf[BoolForm]             = new BoolFormProto
-    implicit lazy val NullFormProto: Protobuf[NullForm]             = new NullFormProto
 
-    lazy val ObjectFormField = Protobuf.Required(1)(ObjectFormProto)
-    lazy val SeqFormField    = Protobuf.Required(2)(SeqFormProto)
-    lazy val SetFormField    = Protobuf.Required(3)(SetFormProto)
-    lazy val TextFormField   = Protobuf.Required(4)(TextFormProto)
-    lazy val DataFormField   = Protobuf.Required(5)(DataFormProto)
-    lazy val LongFormField   = Protobuf.Required(6)(LongFormProto)
-    lazy val DoubleFormField = Protobuf.Required(7)(DoubleFormProto)
-    // Field 8 reserved for arbitrary precision integer.
-    // Field 9 reserved for arbitrary precision decimal.
-    lazy val DateFormField   = Protobuf.Required(10)(DateFormProto)
-    lazy val BoolFormField   = Protobuf.Required(11)(BoolFormProto)
-    lazy val NullFormField   = Protobuf.Required(12)(NullFormProto)
+    implicit lazy val ObjectFormProto: Protobuf[ObjectForm] = new ObjectFormProto
+    implicit lazy val SeqFormProto: Protobuf[SeqForm]       = new SeqFormProto
+    implicit lazy val SetFormProto: Protobuf[SetForm]       = new SetFormProto
+    implicit lazy val TextFormProto: Protobuf[TextForm]     = new TextFormProto
+    implicit lazy val DataFormProto: Protobuf[DataForm]     = new DataFormProto
+    implicit lazy val LongFormProto: Protobuf[NumberForm]   = new LongFormProto
+    implicit lazy val DoubleFormProto: Protobuf[NumberForm] = new DoubleFormProto
+    implicit lazy val DateFormProto: Protobuf[DateForm]     = new DateFormProto
+    implicit lazy val BoolFormProto: Protobuf[BoolForm]     = new BoolFormProto
+    implicit lazy val NullFormProto: Protobuf[NullForm]     = new NullFormProto
+    implicit lazy val NoFormProto: Protobuf[NoForm]         = new NoFormProto
+
+    lazy val ObjectFormField  = Protobuf.Required(1)(ObjectFormProto)
+    lazy val SeqFormField     = Protobuf.Required(2)(SeqFormProto)
+    lazy val SetFormField     = Protobuf.Required(3)(SetFormProto)
+    lazy val TextFormField    = Protobuf.Required(5)(TextFormProto)
+    lazy val DataFormField    = Protobuf.Required(6)(DataFormProto)
+    lazy val LongFormField    = Protobuf.Required(7)(LongFormProto)
+    lazy val DoubleFormField  = Protobuf.Required(8)(DoubleFormProto)
+    lazy val IntegerFormField = Protobuf.Unknown[AnyForm](9, Protobuf.WireType.Message, NoForm)(this)
+    lazy val DecimalFormField = Protobuf.Unknown[AnyForm](10, Protobuf.WireType.Message, NoForm)(this)
+    lazy val DateFormField    = Protobuf.Required(11)(DateFormProto)
+    lazy val BoolFormField    = Protobuf.Required(12)(BoolFormProto)
+    lazy val NullFormField    = Protobuf.Required(13)(NullFormProto)
+    lazy val NoFormField      = Protobuf.Default(0, NoForm)(NoFormProto)
 
     def field(key: Long): Protobuf.Field[_ <: AnyForm] = key match {
       case ObjectFormField() => ObjectFormField
@@ -161,6 +163,44 @@ trait ProtoVariant extends Variant { variant =>
     override def wireType: Int = Protobuf.WireType.Message
 
     override def toString: String = variant.toString +"."+"Proto"
+  }
+
+  private[form] final class ObjectFieldProto extends Protobuf[(String, AnyForm)] {
+    private[this] val NameField  = Protobuf.Required(2)(Protobuf.String)
+    private[this] val ValueField = Protobuf.Required(3)(Proto)
+
+    override def read(data: Reader): (String, AnyForm) = {
+      var k = null: String
+      var v = null.asInstanceOf[AnyForm]
+      while (!data.isEOF) {
+        val key = Protobuf.Varint.read(data)
+        key match {
+          case NameField()  => k = NameField.readValue(data)
+          case ValueField() => v = ValueField.readValue(data)
+          case _            => Protobuf.Unknown(key).readValue(data)
+        }
+      }
+      if (k != null && v != null) (k, v)
+      else throw new ProtobufException {
+        if (v != null) "ObjectForm field has no key"
+        else if (k != null) "ObjectForm field has no value"
+        else "ObjectForm field has no key or value"
+      }
+    }
+
+    override def write(data: Writer, field: (String, AnyForm)): Unit = {
+      NameField.write(data, field._1)
+      ValueField.write(data, field._2)
+    }
+
+    override def sizeOf(field: (String, AnyForm)): Int = {
+      NameField.sizeOf(field._1)  +
+      ValueField.sizeOf(field._2)
+    }
+
+    override def wireType: Int = Protobuf.WireType.Message
+
+    override def toString: String = variant.toString +"."+"Proto"+"."+"ObjectFieldProto"
   }
 
   private[form] final class ObjectFormProto extends Protobuf[ObjectForm] {
@@ -204,44 +244,6 @@ trait ProtoVariant extends Variant { variant =>
     override def wireType: Int = Protobuf.WireType.Message
 
     override def toString: String = variant.toString +"."+"Proto"+"."+"ObjectFormProto"
-  }
-
-  private[form] final class ObjectFieldProto extends Protobuf[(String, AnyForm)] {
-    private[this] val KeyField = Protobuf.Required(1)(Protobuf.String)
-    private[this] val ValueField = Protobuf.Required(2)(Proto)
-
-    override def read(data: Reader): (String, AnyForm) = {
-      var k = null: String
-      var v = null.asInstanceOf[AnyForm]
-      while (!data.isEOF) {
-        val key = Protobuf.Varint.read(data)
-        key match {
-          case KeyField()   => k = KeyField.readValue(data)
-          case ValueField() => v = ValueField.readValue(data)
-          case _            => Protobuf.Unknown(key).readValue(data)
-        }
-      }
-      if (k != null && v != null) (k, v)
-      else throw new ProtobufException {
-        if (v != null) "ObjectForm field has no key"
-        else if (k != null) "ObjectForm field has no value"
-        else "ObjectForm field has no key or value"
-      }
-    }
-
-    override def write(data: Writer, field: (String, AnyForm)): Unit = {
-      KeyField.write(data, field._1)
-      ValueField.write(data, field._2)
-    }
-
-    override def sizeOf(field: (String, AnyForm)): Int = {
-      KeyField.sizeOf(field._1)   +
-      ValueField.sizeOf(field._2)
-    }
-
-    override def wireType: Int = Protobuf.WireType.Message
-
-    override def toString: String = variant.toString +"."+"Proto"+"."+"ObjectFieldProto"
   }
 
   private[form] final class SeqFormProto extends Protobuf[SeqForm] {
@@ -404,5 +406,13 @@ trait ProtoVariant extends Variant { variant =>
     override def sizeOf(form: NullForm): Int               = Protobuf.Varint.sizeOf(0L)
     override def wireType: Int                             = Protobuf.Varint.wireType
     override def toString: String                          = variant.toString +"."+"Proto"+"."+"NullFormProto"
+  }
+
+  private[form] final class NoFormProto extends Protobuf[NoForm] {
+    override def read(data: Reader): NoForm              = { Protobuf.Varint.read(data); NoForm }
+    override def write(data: Writer, form: NoForm): Unit = Protobuf.Varint.write(data, 0L)
+    override def sizeOf(form: NoForm): Int               = Protobuf.Varint.sizeOf(0L)
+    override def wireType: Int                           = Protobuf.Varint.wireType
+    override def toString: String                        = variant.toString +"."+"HashProto"+"."+"NoFormProto"
   }
 }
