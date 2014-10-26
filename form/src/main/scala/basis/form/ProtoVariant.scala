@@ -9,6 +9,7 @@ package basis.form
 import basis.data._
 import basis.proto._
 import basis.text._
+import scala.annotation._
 
 trait ProtoVariant extends Variant { variant =>
   override type AnyForm    <: ProtoValue
@@ -131,18 +132,20 @@ trait ProtoVariant extends Variant { variant =>
     lazy val NullFormField    = Protobuf.Required(13)(NullFormProto)
     lazy val NoFormField      = Protobuf.Default(0, NoForm)(NoFormProto)
 
-    def field(key: Long): Protobuf.Field[_ <: AnyForm] = key match {
-      case ObjectFormField() => ObjectFormField
-      case SeqFormField()    => SeqFormField
-      case SetFormField()    => SetFormField
-      case TextFormField()   => TextFormField
-      case DataFormField()   => DataFormField
-      case LongFormField()   => LongFormField
-      case DoubleFormField() => DoubleFormField
-      case DateFormField()   => DateFormField
-      case BoolFormField()   => BoolFormField
-      case NullFormField()   => NullFormField
-      case _                 => Protobuf.Unknown[AnyForm](key, NoForm)(this)
+    def field(key: Long): Protobuf.Field[_ <: AnyForm] = (key.toInt: @switch) match {
+      case 0x0A => ObjectFormField
+      case 0x12 => SeqFormField
+      case 0x1A => SetFormField
+      case 0x2A => TextFormField
+      case 0x32 => DataFormField
+      case 0x38 => LongFormField
+      case 0x41 => DoubleFormField
+      case 0x4A => IntegerFormField
+      case 0x52 => DecimalFormField
+      case 0x58 => DateFormField
+      case 0x60 => BoolFormField
+      case 0x68 => NullFormField
+      case _    => Protobuf.Unknown[AnyForm](key, NoForm)(this)
     }
 
     override def read(data: Reader): AnyForm = {
@@ -174,10 +177,10 @@ trait ProtoVariant extends Variant { variant =>
       var v = null.asInstanceOf[AnyForm]
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
-        key match {
-          case NameField()  => k = NameField.readValue(data)
-          case ValueField() => v = ValueField.readValue(data)
-          case _            => Protobuf.Unknown(key).readValue(data)
+        (key.toInt: @switch) match {
+          case 0x12 => k = NameField.readValue(data)
+          case 0x1A => v = ValueField.readValue(data)
+          case _    => Protobuf.Unknown(key).readValue(data)
         }
       }
       if (k != null && v != null) (k, v)
@@ -210,9 +213,9 @@ trait ProtoVariant extends Variant { variant =>
       val builder = ObjectFormBuilder
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
-        key match {
-          case KeyValueField() => builder.append(KeyValueField.readValue(data))
-          case _               => Protobuf.Unknown(key).readValue(data)
+        (key.toInt: @switch) match {
+          case 0x0A => builder.append(KeyValueField.readValue(data))
+          case _    => Protobuf.Unknown(key).readValue(data)
         }
       }
       builder.state
@@ -253,9 +256,9 @@ trait ProtoVariant extends Variant { variant =>
       val builder = SeqFormBuilder
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
-        key match {
-          case ValueField() => builder.append(ValueField.readValue(data))
-          case _            => Protobuf.Unknown(key).readValue(data)
+        (key.toInt: @switch) match {
+          case 0x0A => builder.append(ValueField.readValue(data))
+          case _    => Protobuf.Unknown(key).readValue(data)
         }
       }
       builder.state
@@ -296,9 +299,9 @@ trait ProtoVariant extends Variant { variant =>
       val builder = SetFormBuilder
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
-        key match {
-          case ValueField() => builder.append(ValueField.readValue(data))
-          case _            => Protobuf.Unknown(key).readValue(data)
+        (key.toInt: @switch) match {
+          case 0x0A => builder.append(ValueField.readValue(data))
+          case _    => Protobuf.Unknown(key).readValue(data)
         }
       }
       builder.state

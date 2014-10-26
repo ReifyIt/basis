@@ -39,7 +39,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
     override def clear(): Unit                          = underlying.clear()
     override def expect(count: Int): this.type          = { underlying.expect(count); this }
     override def state: ObjectForm                      = new ObjectForm(underlying.state)
-    override def toString: String                       = variant.toString +"ObjectForm"+"."+"Builder"
+    override def toString: String                       = (String.Builder~variant.toString~'.'~"ObjectForm"~'.'~"Builder").state
   }
 
 
@@ -62,7 +62,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
     override def clear(): Unit                 = underlying.clear()
     override def expect(count: Int): this.type = { underlying.expect(count); this }
     override def state: SeqForm                = new SeqForm(underlying.state)
-    override def toString: String              = variant.toString +"SeqForm"+"."+"Builder"
+    override def toString: String              = (String.Builder~variant.toString~'.'~"SeqForm"~'.'~"Builder").state
   }
 
 
@@ -85,7 +85,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
     override def clear(): Unit                 = underlying.clear()
     override def expect(count: Int): this.type = { underlying.expect(count); this }
     override def state: SetForm                = new SetForm(underlying.state)
-    override def toString: String              = variant.toString +"SetForm"+"."+"Builder"
+    override def toString: String              = (String.Builder~variant.toString~'.'~"SetForm"~'.'~"Builder").state
   }
 
 
@@ -110,7 +110,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
     override def clear(): Unit                  = underlying.clear()
     override def expect(count: Int): this.type  = { underlying.expect(count); this }
     override def state: TextForm                = new TextForm(underlying.state)
-    override def toString: String               = variant.toString +"TextForm"+"."+"Builder"
+    override def toString: String               = (String.Builder~variant.toString~'.'~"TextForm"~'.'~"Builder").state
   }
 
 
@@ -154,7 +154,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
     override def expect(count: Long): this.type   = { underlying.expect(count); this }
     override def state: DataForm                  = new DataForm(underlying.state)
     override def clear(): Unit                    = underlying.clear()
-    override def toString: String                 = variant.toString +"DataForm"+"."+"Framer"
+    override def toString: String                 = (String.Builder~variant.toString~'.'~"DataForm"~'.'~"Framer").state
   }
 
 

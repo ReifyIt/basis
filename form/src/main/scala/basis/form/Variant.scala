@@ -138,7 +138,7 @@ trait Variant { variant =>
   trait BaseValueFactory {
     /** Encodes a typed value as a variant form using an implicit `Mold`. */
     def apply[@specialized(Mold.Specialized) T](value: T)(implicit T: Mold[T]): AnyForm = T.form(variant)(value)
-    override def toString: String = "AnyForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"AnyForm").state
   }
 
 
@@ -152,11 +152,11 @@ trait Variant { variant =>
     def - (key: String): ObjectForm
     def ++ (that: ObjectForm): ObjectForm
     def -- (that: ObjectForm): ObjectForm
-    protected override def stringPrefix: String = "ObjectForm"
+    protected override def stringPrefix: String = ObjectForm.toString
   }
 
   trait BaseObjectFactory extends special.MapSource[ObjectForm, String, AnyForm] {
-    override def toString: String = "ObjectForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"ObjectForm").state
   }
 
 
@@ -167,11 +167,11 @@ trait Variant { variant =>
     def :+ (value: AnyForm): SeqForm
     def +: (value: AnyForm): SeqForm
     def ++ (that: SeqForm): SeqForm
-    protected override def stringPrefix: String = "SeqForm"
+    protected override def stringPrefix: String = SeqForm.toString
   }
 
   trait BaseSeqFactory extends special.SeqSource[SeqForm, AnyForm] {
-    override def toString: String = "SeqForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"SeqForm").state
   }
 
 
@@ -182,22 +182,22 @@ trait Variant { variant =>
     def - (value: AnyForm): SetForm
     def ++ (that: SetForm): SetForm
     def -- (that: SetForm): SetForm
-    protected override def stringPrefix: String = "SetForm"
+    protected override def stringPrefix: String = SetForm.toString
   }
 
   trait BaseSetFactory extends special.SetSource[SetForm, AnyForm] {
-    override def toString: String = "SetForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"SetForm").state
   }
 
 
   trait BaseText extends Equals with Family[TextForm] with UTF with BaseValue { this: TextForm =>
     override def isTextForm: Boolean            = true
     override def asTextForm: TextForm           = this
-    protected override def stringPrefix: String = "TextForm"
+    protected override def stringPrefix: String = TextForm.toString
   }
 
   trait BaseTextFactory extends StringFactory[TextForm] {
-    override def toString: String = "TextForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"TextForm").state
   }
 
 
@@ -205,11 +205,11 @@ trait Variant { variant =>
     override def isDataForm: Boolean            = true
     override def asDataForm: DataForm           = this
     override def as[E <: Endianness](endian: E): DataForm with basis.data.ByteOrder[E]
-    protected override def stringPrefix: String = "DataForm"
+    protected override def stringPrefix: String = DataForm.toString
   }
 
   trait BaseDataFactory extends DataFactory[DataForm] {
-    override def toString: String = "DataForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"DataForm").state
   }
 
 
@@ -264,14 +264,7 @@ trait Variant { variant =>
       mash(mix(seed[NumberForm], h))
     }
 
-    override def toString: String = {
-      val s = String.Builder
-      s.append("NumberForm")
-      s.append('(')
-      s.append(toDecimalString)
-      s.append(')')
-      s.state
-    }
+    override def toString: String = (String.Builder~variant.toString~'.'~"NumberForm"~'('~toDecimalString~')').state
   }
 
   protected trait BaseInt extends BaseNumber { this: NumberForm =>
@@ -357,7 +350,7 @@ trait Variant { variant =>
               apply(java.lang.Double.parseDouble(value))
           }
       }
-    override def toString: String = "NumberForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"NumberForm").state
   }
 
 
@@ -426,14 +419,9 @@ trait Variant { variant =>
     }
 
     override def toString: String = {
-      val s = String.Builder
-      s.append("DateForm")
-      s.append('(')
-      s.append('"')
+      val s = String.Builder~variant.toString~'.'~"DateForm"~'('~'"'
       writeISO8601(s)
-      s.append('"')
-      s.append(')')
-      s.state
+      (s~'"'~')').state
     }
   }
 
@@ -530,7 +518,7 @@ trait Variant { variant =>
       else Trap
     }
 
-    override def toString: String = "DateForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"DateForm").state
   }
 
 
@@ -552,55 +540,56 @@ trait Variant { variant =>
       mash(mix(seed[BoolForm], hash(toBoolean)))
     }
 
-    override def toString: String = if (toBoolean) "TrueForm" else "FalseForm"
+    override def toString: String =
+      (String.Builder~variant.toString~'.'~(if (toBoolean) "TrueForm" else "FalseForm")).state
   }
 
   trait BaseBoolFactory {
     def apply(value: Boolean): BoolForm = if (value) TrueForm else FalseForm
-    override def toString: String       = "BoolForm"
+    override def toString: String       = (String.Builder~variant.toString~'.'~"BoolForm").state
   }
 
 
   trait BaseNull extends BaseValue { this: NullForm =>
     override def isNullForm: Boolean  = true
     override def asNullForm: NullForm = this
-    override def toString: String     = "NullForm"
+    override def toString: String     = (String.Builder~variant.toString~'.'~"NullForm").state
   }
 
 
   trait BaseNo extends BaseValue { this: NoForm =>
     override def isDefined: Boolean = false
-    override def toString: String   = "NoForm"
+    override def toString: String   = (String.Builder~variant.toString~'.'~"NoForm").state
   }
 
 
   private final class StringToForm extends AbstractFunction1[String, TextForm] {
     override def apply(value: String): TextForm = TextForm(value)
-    override def toString: String = variant.toString +"."+"StringToForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"StringToForm").state
   }
 
   private final class IntToForm extends AbstractFunction1[Int, NumberForm] {
     override def apply(value: Int): NumberForm = NumberForm(value)
-    override def toString: String = variant.toString +"."+"IntToForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"IntToForm").state
   }
 
   private final class LongToForm extends AbstractFunction1[Long, NumberForm] {
     override def apply(value: Long): NumberForm = NumberForm(value)
-    override def toString: String = variant.toString +"."+"LongToForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"LongToForm").state
   }
 
   private final class FloatToForm extends AbstractFunction1[Float, NumberForm] {
     override def apply(value: Float): NumberForm = NumberForm(value)
-    override def toString: String = variant.toString +"."+"FloatToForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"FloatToForm").state
   }
 
   private final class DoubleToForm extends AbstractFunction1[Double, NumberForm] {
     override def apply(value: Double): NumberForm = NumberForm(value)
-    override def toString: String = variant.toString +"."+"DoubleToForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"DoubleToForm").state
   }
 
   private final class BooleanToForm extends AbstractFunction1[Boolean, BoolForm] {
     override def apply(value: Boolean): BoolForm = BoolForm(value)
-    override def toString: String = variant.toString +"."+"BoolToForm"
+    override def toString: String = (String.Builder~variant.toString~'.'~"BooleanToForm").state
   }
 }

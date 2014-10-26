@@ -10,6 +10,7 @@ import basis._
 import basis.collections._
 import basis.text._
 import basis.util._
+import scala.reflect._
 
 trait Mold[@specialized(Mold.Specialized) T] {
   /** Returns a fallback typed value. */
@@ -61,7 +62,11 @@ object Mold extends CollectionMolds {
   implicit lazy val Date: Mold[Date]       = new DateMold(new Date(0L))
   implicit lazy val Unit: Mold[Unit]       = new UnitMold
 
-  implicit def Set[CC[X] <: Set[X], A](implicit CC: generic.SetFactory[CC], A: Mold[A]): Mold[CC[A]] = new SetMold[CC, A]
+  implicit def Tuple2[T1, T2](implicit T1: Mold[T1], T2: Mold[T2]): Mold[(T1, T2)] = new Tuple2Mold[T1, T2]()(T1, T2)
+  implicit def Tuple3[T1, T2, T3](implicit T1: Mold[T1], T2: Mold[T2], T3: Mold[T3]): Mold[(T1, T2, T3)] = new Tuple3Mold[T1, T2, T3]()(T1, T2, T3)
+  implicit def Tuple4[T1, T2, T3, T4](implicit T1: Mold[T1], T2: Mold[T2], T3: Mold[T3], T4: Mold[T4]): Mold[(T1, T2, T3, T4)] = new Tuple4Mold[T1, T2, T3, T4]()(T1, T2, T3, T4)
+
+  implicit def Set[CC[X] <: Set[X], A](implicit CC: generic.SetFactory[CC], A: Mold[A]): Mold[CC[A]] = new SetMold[CC, A]()(CC, A)
 
   private final class ByteMold(override val identity: Byte) extends Mold[Byte] {
     override def form(variant: Variant)(value: Byte): variant.AnyForm = variant.NumberForm(value.toInt)
@@ -82,7 +87,7 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"Byte"+"("+ identity +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Byte"~'('~>identity~')').state
   }
 
   private final class ShortMold(override val identity: Short) extends Mold[Short] {
@@ -104,7 +109,7 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"Short"+"("+ identity +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Short"~'('~>identity~')').state
   }
 
   private final class IntMold(override val identity: Int) extends Mold[Int] {
@@ -126,7 +131,7 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"Int"+"("+ identity +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Int"~'('~>identity~')').state
   }
 
   private final class LongMold(override val identity: Long) extends Mold[Long] {
@@ -148,7 +153,7 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"Long"+"("+ identity +"L"+")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Long"~'('~>identity~')').state
   }
 
   private final class FloatMold(override val identity: Float) extends Mold[Float] {
@@ -170,7 +175,7 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"Float"+"("+ identity +"F"+")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Float"~'('~>identity~')').state
   }
 
   private final class DoubleMold(override val identity: Double) extends Mold[Double] {
@@ -192,7 +197,7 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"Double"+"("+ identity +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Double"~'('~>identity~')').state
   }
 
   private final class BooleanMold(override val identity: Boolean) extends Mold[Boolean] {
@@ -218,7 +223,7 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"Boolean"+"("+ identity +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Boolean"~'('~>identity~')').state
   }
 
   private final class StringMold(override val identity: String) extends Mold[String] {
@@ -238,7 +243,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"String"+"("+ new UString(identity).show +")"
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"String"~'('
+      new UString(identity).show(s)
+      (s~')').state
+    }
   }
 
   private final class DateMold(override val identity: Date) extends Mold[Date] {
@@ -258,17 +267,179 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = "Mold"+"."+"Date"+"("+ identity +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Date"~'('~>identity~')').state
   }
 
-  private[form] final class UnitMold extends Mold[Unit] {
+  private final class UnitMold extends Mold[Unit] {
     override def identity: Unit = ()
 
     override def form(variant: Variant)(unit: Unit): variant.AnyForm = variant.NoForm
 
     override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Unit] = Trap
 
-    override def toString: String = "Mold"+"."+"Unit"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Unit").state
+  }
+
+  private final class Tuple2Mold[T1, T2](implicit T1: Mold[T1], T2: Mold[T2]) extends Mold[(T1, T2)] {
+    override def identity: (T1, T2) = (T1.identity, T2.identity)
+
+    override def form(variant: Variant)(tuple: (T1, T2)): variant.AnyForm = {
+      val _1 = T1.form(variant)(tuple._1)
+      val _2 = T2.form(variant)(tuple._2)
+      variant.SeqForm(_1, _2)
+    }
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[(T1, T2)] = {
+      if (form.isSeqForm && form.asSeqForm.length >= 2) {
+        val xs = form.asSeqForm
+        val _1 = T1.cast(variant)(xs(0))
+        val _2 = T2.cast(variant)(xs(1))
+        if (_1.isDefined && _2.isDefined) Bind((_1.bind, _2.bind))
+        else Trap
+      }
+      else Trap
+    }
+
+    override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
+      if (form.isSeqForm && form.asSeqForm.length == 2) {
+        val xs = form.asSeqForm
+        val _1 = T1.norm(variant)(xs(0))
+        val _2 = T2.norm(variant)(xs(1))
+        variant.SeqForm(_1, _2)
+      }
+      else form
+    }
+
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Tuple2"~'('~>T1~", "~>T2~')').state
+  }
+
+  private final class Tuple3Mold[T1, T2, T3](implicit T1: Mold[T1], T2: Mold[T2], T3: Mold[T3]) extends Mold[(T1, T2, T3)] {
+    override def identity: (T1, T2, T3) = (T1.identity, T2.identity, T3.identity)
+
+    override def form(variant: Variant)(tuple: (T1, T2, T3)): variant.AnyForm = {
+      val _1 = T1.form(variant)(tuple._1)
+      val _2 = T2.form(variant)(tuple._2)
+      val _3 = T3.form(variant)(tuple._3)
+      variant.SeqForm(_1, _2, _3)
+    }
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[(T1, T2, T3)] = {
+      if (form.isSeqForm && form.asSeqForm.length >= 3) {
+        val xs = form.asSeqForm
+        val _1 = T1.cast(variant)(xs(0))
+        val _2 = T2.cast(variant)(xs(1))
+        val _3 = T3.cast(variant)(xs(2))
+        if (_1.isDefined && _2.isDefined && _3.isDefined) Bind((_1.bind, _2.bind, _3.bind))
+        else Trap
+      }
+      else Trap
+    }
+
+    override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
+      if (form.isSeqForm && form.asSeqForm.length == 3) {
+        val xs = form.asSeqForm
+        val _1 = T1.norm(variant)(xs(0))
+        val _2 = T2.norm(variant)(xs(1))
+        val _3 = T3.norm(variant)(xs(2))
+        variant.SeqForm(_1, _2, _3)
+      }
+      else form
+    }
+
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Tuple3"~'('~>T1~", "~>T2~", "~>T3~')').state
+  }
+
+  private final class Tuple4Mold[T1, T2, T3, T4](implicit T1: Mold[T1], T2: Mold[T2], T3: Mold[T3], T4: Mold[T4]) extends Mold[(T1, T2, T3, T4)] {
+    override def identity: (T1, T2, T3, T4) = (T1.identity, T2.identity, T3.identity, T4.identity)
+
+    override def form(variant: Variant)(tuple: (T1, T2, T3, T4)): variant.AnyForm = {
+      val _1 = T1.form(variant)(tuple._1)
+      val _2 = T2.form(variant)(tuple._2)
+      val _3 = T3.form(variant)(tuple._3)
+      val _4 = T4.form(variant)(tuple._4)
+      variant.SeqForm(_1, _2, _3, _4)
+    }
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[(T1, T2, T3, T4)] = {
+      if (form.isSeqForm && form.asSeqForm.length >= 4) {
+        val xs = form.asSeqForm
+        val _1 = T1.cast(variant)(xs(0))
+        val _2 = T2.cast(variant)(xs(1))
+        val _3 = T3.cast(variant)(xs(2))
+        val _4 = T4.cast(variant)(xs(3))
+        if (_1.isDefined && _2.isDefined && _3.isDefined && _4.isDefined) Bind((_1.bind, _2.bind, _3.bind, _4.bind))
+        else Trap
+      }
+      else Trap
+    }
+
+    override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
+      if (form.isSeqForm && form.asSeqForm.length == 4) {
+        val xs = form.asSeqForm
+        val _1 = T1.norm(variant)(xs(0))
+        val _2 = T2.norm(variant)(xs(1))
+        val _3 = T3.norm(variant)(xs(2))
+        val _4 = T4.norm(variant)(xs(3))
+        variant.SeqForm(_1, _2, _3, _4)
+      }
+      else form
+    }
+
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Tuple4"~'('~>T1~", "~>T2~", "~>T3~", "~>T4~')').state
+  }
+
+  private[form] final class ArrayMold[A](implicit A: Mold[A], ATag: ClassTag[A]) extends Mold[Array[A]] {
+    override def identity: Array[A] = ATag.newArray(0)
+
+    override def form(variant: Variant)(array: Array[A]): variant.AnyForm = {
+      var i = 0
+      val n = array.length
+      val b = variant.SeqFormBuilder.expect(n)
+      while (i < n) {
+        b.append(A.form(variant)(array(i)))
+        i += 1
+      }
+      b.state
+    }
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Array[A]] = {
+      var iter = null: Iterator[variant.AnyForm]
+      var n = -1
+      if (form.isSeqForm) {
+        iter = form.asSeqForm.iterator
+        n = form.asSeqForm.length
+      }
+      else if (form.isSetForm) {
+        iter = form.asSetForm.iterator
+        n = form.asSetForm.size
+      }
+      if (n >= 0) {
+        var i = 0
+        val xs = ATag.newArray(n)
+        while (!iter.isEmpty) {
+          A.cast(variant)(iter.head).foreach { value =>
+            xs(i) = value
+            i += 1
+          }
+          iter.step()
+        }
+        if (i == n) Bind(xs)
+        else {
+          val ys = ATag.newArray(i)
+          java.lang.System.arraycopy(xs, 0, ys, 0, i)
+          Bind(ys)
+        }
+      }
+      else Trap
+    }
+
+    override def norm(variant: Variant)(form: variant.AnyForm): variant.AnyForm = {
+      if (form.isSeqForm) form.asSeqForm.map(A.norm(variant)(_))(variant.SeqForm.Builder)
+      else if (form.isSetForm) form.asSetForm.map(A.norm(variant)(_))(variant.SeqForm.Builder)
+      else variant.SeqForm.empty
+    }
+
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Array"~'('~>A~", "~>ATag~')').state
   }
 
   private[form] final class ContainerMold[CC[X] <: Container[X], A](implicit CC: generic.CollectionFactory[CC], A: Mold[A]) extends Mold[CC[A]] {
@@ -289,7 +460,7 @@ object Mold extends CollectionMolds {
       else variant.SeqForm.empty
     }
 
-    override def toString: String = "Mold"+"."+"Container"+"("+ CC +", "+ A +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Container"~'('~>CC~", "~>A~')').state
   }
 
   private[form] final class SetMold[CC[X] <: Set[X], A](implicit CC: generic.SetFactory[CC], A: Mold[A]) extends Mold[CC[A]] {
@@ -310,7 +481,7 @@ object Mold extends CollectionMolds {
       else variant.SetForm.empty
     }
 
-    override def toString: String = "Mold"+"."+"Set"+"("+ CC +", "+ A +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Set"~'('~>CC~", "~>A~')').state
   }
 
   private[form] final class MapMold[CC[X, Y] <: Map[X, Y], T](implicit CC: generic.MapFactory[CC], T: Mold[T]) extends Mold[CC[String, T]] {
@@ -330,14 +501,19 @@ object Mold extends CollectionMolds {
       else variant.ObjectForm.empty
     }
 
-    override def toString: String = "Mold"+"."+"Map"+"("+ CC +", "+ T +")"
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Map"~'('~>CC~", "~>T~')').state
   }
 
   protected[form] final val Specialized = new Specializable.Group((scala.Byte, scala.Short, scala.Int, scala.Long, scala.Float, scala.Double, scala.Boolean))
 }
 
-private[form] class CollectionMolds {
+private[form] class CollectionMolds extends ArrayMolds {
   import Mold._
-  implicit def Container[CC[X] <: Container[X], A](implicit CC: generic.CollectionFactory[CC], A: Mold[A]): Mold[CC[A]] = new ContainerMold[CC, A]
-  implicit def Map[CC[X, Y] <: Map[X, Y], T](implicit CC: generic.MapFactory[CC], T: Mold[T]): Mold[CC[String, T]] = new MapMold[CC, T]
+  implicit def Container[CC[X] <: Container[X], A](implicit CC: generic.CollectionFactory[CC], A: Mold[A]): Mold[CC[A]] = new ContainerMold[CC, A]()(CC, A)
+  implicit def Map[CC[X, Y] <: Map[X, Y], T](implicit CC: generic.MapFactory[CC], T: Mold[T]): Mold[CC[String, T]] = new MapMold[CC, T]()(CC, T)
+}
+
+private[form] class ArrayMolds {
+  import Mold._
+  implicit def Array[A](implicit A: Mold[A], ATag: ClassTag[A]): Mold[Array[A]] = new ArrayMold[A]()(A, ATag)
 }
