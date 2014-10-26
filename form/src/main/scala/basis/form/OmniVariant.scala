@@ -19,6 +19,21 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
   object AnyForm extends BaseValueFactory with JsonValueFactory with BsonValueFactory with ProtoValueFactory
 
 
+  final class SecretForm(override val data: Loader, override val iv: Loader, override val mac: Loader) extends AnyForm with ProtoSecret {
+    override def writeJson(builder: StringBuilder): Unit = toObjectForm.writeJson(builder)
+
+    override def bsonType: Byte = 0x03
+
+    override def bsonSize: Int = toObjectForm.bsonSize
+
+    override def writeBson(output: Writer): Unit = toObjectForm.writeBson(output)
+  }
+
+  object SecretForm extends ProtoSecretFactory {
+    override def apply(data: Loader, iv: Loader, mac: Loader): SecretForm = new SecretForm(data, iv, mac)
+  }
+
+
   final class ObjectForm(protected val underlying: Seq[(String, AnyForm)]) extends AnyForm with BaseObject with JsonObject with BsonObject with ProtoObject {
     override def :+ (key: String, value: AnyForm): ObjectForm = underlying :+ (key -> value)
     override def +: (key: String, value: AnyForm): ObjectForm = (key -> value) +: underlying
@@ -207,6 +222,7 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
 
 
   implicit override lazy val AnyFormTag: ClassTag[AnyForm]       = ClassTag(Predef.classOf[AnyForm])
+  implicit override lazy val SecretFormTag: ClassTag[SecretForm] = ClassTag(Predef.classOf[SecretForm])
   implicit override lazy val ObjectFormTag: ClassTag[ObjectForm] = ClassTag(Predef.classOf[ObjectForm])
   implicit override lazy val SeqFormTag: ClassTag[SeqForm]       = ClassTag(Predef.classOf[SeqForm])
   implicit override lazy val SetFormTag: ClassTag[SetForm]       = ClassTag(Predef.classOf[SetForm])

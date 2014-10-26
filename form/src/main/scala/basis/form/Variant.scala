@@ -15,12 +15,12 @@ import scala.annotation._
 import scala.reflect._
 import scala.runtime._
 
-/** A loosely structured abstract data model.
+/** An abstract structural data model.
   *
   * @contentDiagram hideNodes "basis.form.Variant.BaseValue" "basis.form.Variant.BaseObject" "basis.form.Variant.BaseSeq" "basis.form.Variant.BaseSet" "basis.form.Variant.BaseData" "basis.form.Variant.BaseText" "basis.form.Variant.BaseNumber" "basis.form.Variant.BaseDate" "basis.form.Variant.BaseBool" "basis.form.Variant.BaseNull" "basis.form.Variant.BaseNo"
   */
 trait Variant { variant =>
-  /** The variant top type.
+  /** A polymorphic variant form.
     * @template */
   type AnyForm <: BaseValue
 

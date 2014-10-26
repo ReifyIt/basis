@@ -97,10 +97,11 @@ object Protobuf {
   implicit lazy val Bool: Protobuf[Boolean]  = new Bool
   implicit lazy val Unit: Protobuf[Unit]     = new Blank
   implicit lazy val String: Protobuf[String] = new Text
-
-  implicit def Bytes[Data <: Loader](implicit Data: DataFactory[Data]): Protobuf[Data] = new Bytes()(Data)
+  implicit lazy val Bytes: Protobuf[Loader]  = new Bytes()(Loader)
 
   implicit def Perhaps[T](implicit T: Protobuf[T]): Protobuf[Maybe[T]] = new Perhaps()(T)
+
+  def Bytes[Data <: Loader](implicit Data: DataFactory[Data]): Protobuf[Data] = new Bytes()(Data)
 
   def Repeated[CC[X] <: Container[X], T](implicit CC: generic.CollectionFactory[CC], T: Protobuf[T]): Protobuf[CC[T]] = new RepeatedCollection()(CC, T)
   def Repeated[CC[X] <: Container[X], T](implicit CC: generic.ArrayFactory[CC], T: Protobuf[T], TTag: ClassTag[T]): Protobuf[CC[T]] = new RepeatedArray()(CC, T, TTag)

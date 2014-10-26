@@ -9,7 +9,9 @@ package basis.form
 import basis.data._
 import basis.proto._
 import basis.text._
+import basis.util._
 import scala.annotation._
+import scala.reflect._
 
 trait ProtoVariant extends Variant { variant =>
   override type AnyForm    <: ProtoValue
@@ -26,10 +28,29 @@ trait ProtoVariant extends Variant { variant =>
 
   override val AnyForm: ProtoValueFactory
 
+  /** A symmetrically encrypted variant form.
+    * @template */
+  type SecretForm <: ProtoSecret with AnyForm
+
+  val SecretForm: ProtoSecretFactory
+
+  implicit def SecretFormTag: ClassTag[SecretForm]
+
   implicit lazy val Proto: Proto = new Proto
 
 
   trait ProtoValue extends BaseValue { this: AnyForm =>
+    def isSecretForm: Boolean = false
+    def asSecretForm: SecretForm = throw new MatchError("not a SecretForm")
+
+    def encrypt(secretKey: Loader, iv: Loader): AnyForm = try {
+      val crypto = new ProtoVariantCrypto[variant.type](variant)
+      crypto.encrypt(this, secretKey, iv)
+    }
+    catch { case _: NoClassDefFoundError => this }
+
+    def decrypt(secretKey: Loader): AnyForm = this
+
     def protoField: Protobuf.Field[_ >: this.type]
 
     def writeProto(data: Writer): Unit = Proto.write(data, this)
@@ -43,6 +64,44 @@ trait ProtoVariant extends Variant { variant =>
 
   trait ProtoValueFactory extends BaseValueFactory {
     def readProto(data: Reader): AnyForm = Proto.read(data)
+  }
+
+
+  trait ProtoSecret extends ProtoValue { this: SecretForm =>
+    override def isSecretForm: Boolean = true
+    override def asSecretForm: SecretForm = this
+
+    private[form] var protoSize: Int = -1
+
+    override def protoField: Protobuf.Field[SecretForm] = Proto.SecretFormField
+
+    def data: Loader
+    def iv: Loader
+    def mac: Loader
+
+    override def decrypt(secretKey: Loader): AnyForm = try {
+      val crypto = new ProtoVariantCrypto[variant.type](variant)
+      crypto.decrypt(this, secretKey)
+    }
+    catch { case _: NoClassDefFoundError => this }
+
+    protected def toObjectForm: ObjectForm =
+      ObjectForm(
+        "data" -> DataForm.from(data),
+        "iv"   -> DataForm.from(iv),
+        "mac"  -> DataForm.from(mac))
+
+    override def toString: String =
+      (String.Builder~variant.toString~'.'~"SecretForm"~'('~
+        "data"~" = "~>data~", "~
+        "iv"~" = "~>iv~", "~
+        "mac"~" = "~>mac~')').state
+  }
+
+  trait ProtoSecretFactory {
+    def apply(data: Loader, iv: Loader, mac: Loader): SecretForm
+
+    override def toString: String = (String.Builder~variant.toString~'.'~"SecretForm").state
   }
 
 
@@ -116,6 +175,7 @@ trait ProtoVariant extends Variant { variant =>
     implicit lazy val DateFormProto: Protobuf[DateForm]     = new DateFormProto
     implicit lazy val BoolFormProto: Protobuf[BoolForm]     = new BoolFormProto
     implicit lazy val NullFormProto: Protobuf[NullForm]     = new NullFormProto
+    implicit lazy val SecretFormProto: Protobuf[SecretForm] = new SecretFormProto
     implicit lazy val NoFormProto: Protobuf[NoForm]         = new NoFormProto
 
     lazy val ObjectFormField  = Protobuf.Required(1)(ObjectFormProto)
@@ -130,6 +190,7 @@ trait ProtoVariant extends Variant { variant =>
     lazy val DateFormField    = Protobuf.Required(11)(DateFormProto)
     lazy val BoolFormField    = Protobuf.Required(12)(BoolFormProto)
     lazy val NullFormField    = Protobuf.Required(13)(NullFormProto)
+    lazy val SecretFormField  = Protobuf.Required(15)(SecretFormProto)
     lazy val NoFormField      = Protobuf.Default(0, NoForm)(NoFormProto)
 
     def field(key: Long): Protobuf.Field[_ <: AnyForm] = (key.toInt: @switch) match {
@@ -145,6 +206,7 @@ trait ProtoVariant extends Variant { variant =>
       case 0x58 => DateFormField
       case 0x60 => BoolFormField
       case 0x68 => NullFormField
+      case 0x7A => SecretFormField
       case _    => Protobuf.Unknown[AnyForm](key, NoForm)(this)
     }
 
@@ -166,6 +228,56 @@ trait ProtoVariant extends Variant { variant =>
     override def wireType: Int = Protobuf.WireType.Message
 
     override def toString: String = variant.toString +"."+"Proto"
+  }
+
+  private[form] final class SecretFormProto extends Protobuf[SecretForm] {
+    private[this] val DataField = Protobuf.Required(2)(Protobuf.Bytes)
+    private[this] val IvField   = Protobuf.Required(3)(Protobuf.Bytes)
+    private[this] val MacField  = Protobuf.Required(4)(Protobuf.Bytes)
+
+    override def read(reader: Reader): SecretForm = {
+      var data = null: Loader
+      var iv   = null: Loader
+      var mac  = null: Loader
+      while (!reader.isEOF) {
+        val key = Protobuf.Varint.read(reader)
+        (key.toInt: @switch) match {
+          case 0x12 => data = DataField.readValue(reader)
+          case 0x1A => iv   = IvField.readValue(reader)
+          case 0x22 => mac  = MacField.readValue(reader)
+          case _    => Protobuf.Unknown(key).readValue(reader)
+        }
+      }
+      if (data != null && iv != null && mac != null) SecretForm(data, iv, mac)
+      else throw new ProtobufException {
+        if (data != null && iv != null) "SecretForm has no mac"
+        else if (data != null && mac != null) "SecretForm has no iv"
+        else if (iv != null && mac != null) "SecretForm has no data"
+        else if (data != null) "SecretForm has no iv and no mac"
+        else if (iv != null) "SecretForm has no data and no mac"
+        else if (mac != null) "SecretForm has no data and no iv"
+        else "SecretForm has no data, no iv, and no mac"
+      }
+    }
+
+    override def write(writer: Writer, form: SecretForm): Unit = {
+      DataField.write(writer, form.data)
+      IvField.write(writer, form.iv)
+      MacField.write(writer, form.mac)
+    }
+
+    override def sizeOf(form: SecretForm): Int = {
+      if (form.protoSize == -1)
+        form.protoSize =
+          DataField.sizeOf(form.data) +
+          IvField.sizeOf(form.iv)     +
+          MacField.sizeOf(form.mac)
+      form.protoSize
+    }
+
+    override def wireType: Int = Protobuf.WireType.Message
+
+    override def toString: String = variant.toString +"."+"Proto"+"."+"SecretFormProto"
   }
 
   private[form] final class ObjectFieldProto extends Protobuf[(String, AnyForm)] {
@@ -416,6 +528,6 @@ trait ProtoVariant extends Variant { variant =>
     override def write(data: Writer, form: NoForm): Unit = Protobuf.Varint.write(data, 0L)
     override def sizeOf(form: NoForm): Int               = Protobuf.Varint.sizeOf(0L)
     override def wireType: Int                           = Protobuf.Varint.wireType
-    override def toString: String                        = variant.toString +"."+"HashProto"+"."+"NoFormProto"
+    override def toString: String                        = variant.toString +"."+"Proto"+"."+"NoFormProto"
   }
 }

@@ -251,12 +251,12 @@ trait Loader extends Any with Equals with Family[Loader] with ByteOrder[Endianne
   protected def stringPrefix: String = getClass.getSimpleName
 }
 
-object Loader extends ByteOrder[NativeEndian] with DataFactory[Loader with ByteOrder[NativeEndian]] {
+object Loader extends DataFactory[Loader] {
   override def endian: NativeEndian = NativeEndian
 
-  override val empty: Loader with ByteOrder[NativeEndian] = FingerTrieData.empty
+  override def empty: Loader = ArrayData.empty
 
-  implicit override def Framer: Framer with ByteOrder[NativeEndian] with State[Loader with ByteOrder[NativeEndian]] = FingerTrieData.Framer
+  implicit override def Framer: Framer with State[Loader] = ArrayData.Framer
 
   override def toString: String = "Loader"
 }
