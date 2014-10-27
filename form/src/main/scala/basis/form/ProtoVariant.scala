@@ -49,6 +49,8 @@ trait ProtoVariant extends Variant { variant =>
     }
     catch { case _: NoClassDefFoundError => this }
 
+    def encrypt(secretKey: Loader): AnyForm = encrypt(secretKey, SecretForm.nextIV())
+
     def decrypt(secretKey: Loader): AnyForm = this
 
     def protoField: Protobuf.Field[_ >: this.type]
@@ -87,9 +89,10 @@ trait ProtoVariant extends Variant { variant =>
 
     protected def toObjectForm: ObjectForm =
       ObjectForm(
-        "data" -> DataForm.from(data),
-        "iv"   -> DataForm.from(iv),
-        "mac"  -> DataForm.from(mac))
+        "$cipher" -> TextForm("AES-GCM"),
+        "data"    -> DataForm.from(data),
+        "iv"      -> DataForm.from(iv),
+        "mac"     -> DataForm.from(mac))
 
     override def toString: String =
       (String.Builder~variant.toString~'.'~"SecretForm"~'('~
@@ -99,6 +102,53 @@ trait ProtoVariant extends Variant { variant =>
   }
 
   trait ProtoSecretFactory {
+    private[this] val mac: Int = try {
+      val ip = java.net.InetAddress.getLocalHost
+      val network = java.net.NetworkInterface.getByInetAddress(ip)
+      val mac = network.getHardwareAddress()
+      ((mac(3) & 0xFF) << 16) |
+      ((mac(4) & 0xFF) <<  8) |
+       (mac(5) & 0xFF)
+    }
+    catch { case _: Throwable => new java.security.SecureRandom().nextInt() & 0x00FFFFFF }
+
+    private[this] val pid: Int = try { // not available through standard api
+      val runtime = java.lang.management.ManagementFactory.getRuntimeMXBean()
+      val jvm = runtime.getClass().getDeclaredField("jvm")
+      jvm.setAccessible(true)
+      val management = jvm.get(runtime).asInstanceOf[sun.management.VMManagement]
+      val getProcessId = management.getClass().getDeclaredMethod("getProcessId")
+      getProcessId.setAccessible(true)
+      getProcessId.invoke(management).asInstanceOf[Int] & 0x0000FFFF
+    }
+    catch { case _: Throwable => new java.security.SecureRandom().nextInt() & 0x0000FFFF }
+
+    private[this] val increment: java.util.concurrent.atomic.AtomicInteger =
+      new java.util.concurrent.atomic.AtomicInteger(new java.security.SecureRandom().nextInt())
+
+    private[this] def inc(): Int = increment.getAndIncrement() & 0x00FFFFFF
+
+    protected[ProtoVariant] def nextIV(): Loader = {
+      val iv = new Array[Byte](12)
+      val time = (System.currentTimeMillis / 1000L).toInt
+      val mac = this.mac
+      val pid = this.pid
+      val inc = this.inc()
+      iv( 0) = (time >>> 24).toByte
+      iv( 1) = (time >>> 16).toByte
+      iv( 2) = (time >>>  8).toByte
+      iv( 3) = (time       ).toByte
+      iv( 4) = (mac  >>> 16).toByte
+      iv( 5) = (mac  >>>  8).toByte
+      iv( 6) = (mac        ).toByte
+      iv( 7) = (pid  >>>  8).toByte
+      iv( 8) = (pid        ).toByte
+      iv( 9) = (inc  >>> 16).toByte
+      iv(10) = (inc  >>>  8).toByte
+      iv(11) = (inc        ).toByte
+      ArrayData(iv)
+    }
+
     def apply(data: Loader, iv: Loader, mac: Loader): SecretForm
 
     override def toString: String = (String.Builder~variant.toString~'.'~"SecretForm").state
@@ -109,6 +159,24 @@ trait ProtoVariant extends Variant { variant =>
     private[form] var protoSize: Int = -1
 
     override def protoField: Protobuf.Field[ObjectForm] = Proto.ObjectFormField
+
+    override def decrypt(secretKey: Loader): AnyForm = {
+      var decrypted = false
+      val builder = ObjectFormBuilder
+      val fields = iterator
+      while (!fields.isEmpty) {
+        val field = fields.head
+        val x = field._2
+        val y = x.decrypt(secretKey)
+        if (x eq y) builder.append(field)
+        else {
+          builder.append(field._1 -> y)
+          decrypted = true
+        }
+        fields.step()
+      }
+      if (decrypted) builder.state else this
+    }
   }
 
 
@@ -116,6 +184,20 @@ trait ProtoVariant extends Variant { variant =>
     private[form] var protoSize: Int = -1
 
     override def protoField: Protobuf.Field[SeqForm] = Proto.SeqFormField
+
+    override def decrypt(secretKey: Loader): AnyForm = {
+      var decrypted = false
+      val builder = SeqFormBuilder
+      val elems = iterator
+      while (!elems.isEmpty) {
+        val x = elems.head
+        val y = x.decrypt(secretKey)
+        builder.append(y)
+        decrypted |= x ne y
+        elems.step()
+      }
+      if (decrypted) builder.state else this
+    }
   }
 
 
@@ -123,6 +205,20 @@ trait ProtoVariant extends Variant { variant =>
     private[form] var protoSize: Int = -1
 
     override def protoField: Protobuf.Field[SetForm] = Proto.SetFormField
+
+    override def decrypt(secretKey: Loader): AnyForm = {
+      var decrypted = false
+      val builder = SetFormBuilder
+      val elems = iterator
+      while (!elems.isEmpty) {
+        val x = elems.head
+        val y = x.decrypt(secretKey)
+        builder.append(y)
+        decrypted |= x ne y
+        elems.step()
+      }
+      if (decrypted) builder.state else this
+    }
   }
 
 
@@ -231,26 +327,30 @@ trait ProtoVariant extends Variant { variant =>
   }
 
   private[form] final class SecretFormProto extends Protobuf[SecretForm] {
-    private[this] val DataField = Protobuf.Required(2)(Protobuf.Bytes)
-    private[this] val IvField   = Protobuf.Required(3)(Protobuf.Bytes)
-    private[this] val MacField  = Protobuf.Required(4)(Protobuf.Bytes)
+    private[this] val CipherField = Protobuf.Required(1)(Protobuf.Int32)
+    private[this] val DataField   = Protobuf.Required(2)(Protobuf.Bytes)
+    private[this] val IvField     = Protobuf.Required(3)(Protobuf.Bytes)
+    private[this] val MacField    = Protobuf.Required(4)(Protobuf.Bytes)
 
     override def read(reader: Reader): SecretForm = {
-      var data = null: Loader
-      var iv   = null: Loader
-      var mac  = null: Loader
+      var cipher = 0
+      var data   = null: Loader
+      var iv     = null: Loader
+      var mac    = null: Loader
       while (!reader.isEOF) {
         val key = Protobuf.Varint.read(reader)
         (key.toInt: @switch) match {
-          case 0x12 => data = DataField.readValue(reader)
-          case 0x1A => iv   = IvField.readValue(reader)
-          case 0x22 => mac  = MacField.readValue(reader)
+          case 0x08 => cipher = CipherField.readValue(reader)
+          case 0x12 => data   = DataField.readValue(reader)
+          case 0x1A => iv     = IvField.readValue(reader)
+          case 0x22 => mac    = MacField.readValue(reader)
           case _    => Protobuf.Unknown(key).readValue(reader)
         }
       }
-      if (data != null && iv != null && mac != null) SecretForm(data, iv, mac)
+      if (cipher == 1 && data != null && iv != null && mac != null) SecretForm(data, iv, mac)
       else throw new ProtobufException {
-        if (data != null && iv != null) "SecretForm has no mac"
+        if (cipher != 1) "SecretForm uses unknown cipher"
+        else if (data != null && iv != null) "SecretForm has no mac"
         else if (data != null && mac != null) "SecretForm has no iv"
         else if (iv != null && mac != null) "SecretForm has no data"
         else if (data != null) "SecretForm has no iv and no mac"
@@ -261,6 +361,7 @@ trait ProtoVariant extends Variant { variant =>
     }
 
     override def write(writer: Writer, form: SecretForm): Unit = {
+      CipherField.write(writer, 1)
       DataField.write(writer, form.data)
       IvField.write(writer, form.iv)
       MacField.write(writer, form.mac)
@@ -269,6 +370,7 @@ trait ProtoVariant extends Variant { variant =>
     override def sizeOf(form: SecretForm): Int = {
       if (form.protoSize == -1)
         form.protoSize =
+          CipherField.sizeOf(1)       +
           DataField.sizeOf(form.data) +
           IvField.sizeOf(form.iv)     +
           MacField.sizeOf(form.mac)
@@ -281,8 +383,8 @@ trait ProtoVariant extends Variant { variant =>
   }
 
   private[form] final class ObjectFieldProto extends Protobuf[(String, AnyForm)] {
-    private[this] val NameField  = Protobuf.Required(2)(Protobuf.String)
-    private[this] val ValueField = Protobuf.Required(3)(Proto)
+    private[this] val KeyField   = Protobuf.Required(1)(Protobuf.String)
+    private[this] val ValueField = Protobuf.Required(2)(Proto)
 
     override def read(data: Reader): (String, AnyForm) = {
       var k = null: String
@@ -290,8 +392,8 @@ trait ProtoVariant extends Variant { variant =>
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
         (key.toInt: @switch) match {
-          case 0x12 => k = NameField.readValue(data)
-          case 0x1A => v = ValueField.readValue(data)
+          case 0x0A => k = KeyField.readValue(data)
+          case 0x12 => v = ValueField.readValue(data)
           case _    => Protobuf.Unknown(key).readValue(data)
         }
       }
@@ -304,12 +406,12 @@ trait ProtoVariant extends Variant { variant =>
     }
 
     override def write(data: Writer, field: (String, AnyForm)): Unit = {
-      NameField.write(data, field._1)
+      KeyField.write(data, field._1)
       ValueField.write(data, field._2)
     }
 
     override def sizeOf(field: (String, AnyForm)): Int = {
-      NameField.sizeOf(field._1)  +
+      KeyField.sizeOf(field._1)   +
       ValueField.sizeOf(field._2)
     }
 

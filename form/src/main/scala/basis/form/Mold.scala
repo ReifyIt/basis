@@ -8,6 +8,7 @@ package basis.form
 
 import basis._
 import basis.collections._
+import basis.data._
 import basis.text._
 import basis.util._
 import scala.reflect._
@@ -67,6 +68,8 @@ object Mold extends CollectionMolds {
   implicit def Tuple4[T1, T2, T3, T4](implicit T1: Mold[T1], T2: Mold[T2], T3: Mold[T3], T4: Mold[T4]): Mold[(T1, T2, T3, T4)] = new Tuple4Mold[T1, T2, T3, T4]()(T1, T2, T3, T4)
 
   implicit def Set[CC[X] <: Set[X], A](implicit CC: generic.SetFactory[CC], A: Mold[A]): Mold[CC[A]] = new SetMold[CC, A]()(CC, A)
+
+  def Secret[T](secretKey: Loader)(implicit T: Mold[T]): Mold[T] = new SecretMold[T](secretKey)(T)
 
   private final class ByteMold(override val identity: Byte) extends Mold[Byte] {
     override def form(variant: Variant)(value: Byte): variant.AnyForm = variant.NumberForm(value.toInt)
@@ -502,6 +505,22 @@ object Mold extends CollectionMolds {
     }
 
     override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Map"~'('~>CC~", "~>T~')').state
+  }
+
+  private final class SecretMold[T](secretKey: Loader)(implicit T: Mold[T]) extends Mold[T] {
+    override def identity: T = T.identity
+
+    override def form(variant: Variant)(value: T): variant.AnyForm = variant match {
+      case proto: ProtoVariant => T.form(proto)(value).encrypt(secretKey).asInstanceOf[variant.AnyForm]
+      case _ => T.form(variant)(value)
+    }
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[T] = variant match {
+      case proto: ProtoVariant => T.cast(proto)(form.asInstanceOf[proto.AnyForm].decrypt(secretKey))
+      case _ => T.cast(variant)(form)
+    }
+
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Secret"~'('~"..."~')'~'('~>T~')').state
   }
 
   protected[form] final val Specialized = new Specializable.Group((scala.Byte, scala.Short, scala.Int, scala.Long, scala.Float, scala.Double, scala.Boolean))

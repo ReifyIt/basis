@@ -7,6 +7,7 @@
 package basis.form
 
 import basis.data._
+import org.bouncycastle.crypto._
 import org.bouncycastle.crypto.engines._
 import org.bouncycastle.crypto.modes._
 import org.bouncycastle.crypto.params._
@@ -38,7 +39,7 @@ private[form] final class ProtoVariantCrypto[V <: ProtoVariant](val Variant: V) 
     SecretForm(ArrayDataLE(data), iv, ArrayDataLE(mac))
   }
 
-  def decrypt(secret: SecretForm, secretKey: Loader): AnyForm = {
+  def decrypt(secret: SecretForm, secretKey: Loader): AnyForm = try {
     val key = new KeyParameter(secretKey.toArray)
     val params = new AEADParameters(key, 128, secret.iv.toArray)
 
@@ -58,4 +59,5 @@ private[form] final class ProtoVariantCrypto[V <: ProtoVariant](val Variant: V) 
 
     AnyForm.readProto(ArrayDataLE(plaintext).reader(0L))
   }
+  catch { case _: InvalidCipherTextException => secret }
 }
