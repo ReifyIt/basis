@@ -129,23 +129,29 @@ trait ProtoVariant extends Variant { variant =>
     private[this] def inc(): Int = increment.getAndIncrement() & 0x00FFFFFF
 
     protected[ProtoVariant] def nextIV(): Loader = {
-      val iv = new Array[Byte](12)
-      val time = (System.currentTimeMillis / 1000L).toInt
+      val iv = new Array[Byte](16)
+      val time = System.currentTimeMillis
+      val thi = (time >>> 32).toInt
+      val tlo = time.toInt
       val mac = this.mac
       val pid = this.pid
       val inc = this.inc()
-      iv( 0) = (time >>> 24).toByte
-      iv( 1) = (time >>> 16).toByte
-      iv( 2) = (time >>>  8).toByte
-      iv( 3) = (time       ).toByte
-      iv( 4) = (mac  >>> 16).toByte
-      iv( 5) = (mac  >>>  8).toByte
-      iv( 6) = (mac        ).toByte
-      iv( 7) = (pid  >>>  8).toByte
-      iv( 8) = (pid        ).toByte
-      iv( 9) = (inc  >>> 16).toByte
-      iv(10) = (inc  >>>  8).toByte
-      iv(11) = (inc        ).toByte
+      iv( 0) = (thi >>> 24).toByte
+      iv( 1) = (thi >>> 16).toByte
+      iv( 2) = (thi >>>  8).toByte
+      iv( 3) = (thi       ).toByte
+      iv( 4) = (tlo >>> 24).toByte
+      iv( 5) = (tlo >>> 16).toByte
+      iv( 6) = (tlo >>>  8).toByte
+      iv( 7) = (tlo       ).toByte
+      iv( 8) = (mac >>> 16).toByte
+      iv( 9) = (mac >>>  8).toByte
+      iv(10) = (mac       ).toByte
+      iv(11) = (pid >>>  8).toByte
+      iv(12) = (pid       ).toByte
+      iv(13) = (inc >>> 16).toByte
+      iv(14) = (inc >>>  8).toByte
+      iv(15) = (inc       ).toByte
       ArrayData(iv)
     }
 
