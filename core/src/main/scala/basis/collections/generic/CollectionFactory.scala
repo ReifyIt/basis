@@ -27,6 +27,17 @@ trait CollectionFactory[+CC[_]] {
     builder.state
   }
 
+  def from[A](array: Array[A]): CC[A] = {
+    var i = 0
+    val n = array.length
+    val builder = Builder[A].expect(n)
+    while (i < n) {
+      builder.append(array(i))
+      i += 1
+    }
+    builder.state
+  }
+
   implicit def Builder[A]: Builder[A] with State[CC[A]]
 
   implicit def Factory: CollectionFactory[CC] = this

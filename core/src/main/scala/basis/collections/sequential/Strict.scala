@@ -10,7 +10,7 @@ package sequential
 import scala.reflect.macros._
 
 class Strict extends General {
-  implicit def ArrayToStrictOps[A](xs: Array[A]): StrictArrayOps[A, Array[_]]                 = macro StrictMacros.ArrayToStrictOps[A]
+  implicit def ArrayToStrictOps[A](xs: Array[A]): StrictArrayOps[A, Array[A]]                 = macro StrictMacros.ArrayToStrictOps[A]
   implicit def BilinearSeqToStrictOps[A](xs: BilinearSeq[A]): StrictSeqOps[A, xs.Family]      = macro StrictMacros.SeqToStrictOps[A]
   implicit def CollectionToStrictOps[A](xs: Collection[A]): StrictCollectionOps[A, xs.Family] = macro StrictMacros.CollectionToStrictOps[A]
   implicit def ContainerToStrictOps[A](xs: Container[A]): StrictContainerOps[A, xs.Family]    = macro StrictMacros.ContainerToStrictOps[A]
@@ -27,7 +27,7 @@ private[collections] class StrictMacros(override val c: blackbox.Context) extend
   import c.{ Expr, WeakTypeTag }
   import c.universe.{ Traverser => _, _ }
 
-  def ArrayToStrictOps[A : WeakTypeTag](xs: Expr[Array[A]]): Expr[StrictArrayOps[A, Array[_]]]                         = StrictOpsFamily1[StrictArrayOps, A, Array[_]](xs)
+  def ArrayToStrictOps[A : WeakTypeTag](xs: Expr[Array[A]]): Expr[StrictArrayOps[A, Array[A]]]                         = StrictOpsFamily1[StrictArrayOps, A, Array[A]](xs)
   def CollectionToStrictOps[A : WeakTypeTag](xs: Expr[Collection[A]]): Expr[StrictCollectionOps[A, xs.value.Family]]   = StrictOps1[StrictCollectionOps, A](xs)
   def ContainerToStrictOps[A : WeakTypeTag](xs: Expr[Container[A]]): Expr[StrictContainerOps[A, xs.value.Family]]      = StrictOps1[StrictContainerOps, A](xs)
   def IndexedSeqToStrictOps[A : WeakTypeTag](xs: Expr[IndexedSeq[A]]): Expr[StrictIndexedSeqOps[A, xs.value.Family]]   = StrictOps1[StrictIndexedSeqOps, A](xs)

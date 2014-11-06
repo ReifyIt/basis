@@ -36,6 +36,17 @@ trait ArrayFactory[+CC[_]] {
     builder.state
   }
 
+  def from[A](array: Array[A])(implicit A: ClassTag[A]): CC[A] = {
+    var i = 0
+    val n = array.length
+    val builder = Builder[A].expect(n)
+    while (i < n) {
+      builder.append(array(i))
+      i += 1
+    }
+    builder.state
+  }
+
   implicit def Builder[A](implicit A: ClassTag[A]): Builder[A] with State[CC[A]]
 }
 
