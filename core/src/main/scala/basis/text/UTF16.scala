@@ -123,7 +123,7 @@ private[text] final class UTF16Decoder[+Result](self: StringBuilder with State[R
   private[this] var c2: Int = 0
   private[this] var n: Int = 0
 
-  protected def appendCodeUnit(c: Int): Unit = (n: @switch) match {
+  protected def appendCodeUnit(c: Int): Unit = n match {
     case 0 => c1 = c & 0xFFFF; n = 1
     case 1 => c2 = c & 0xFFFF; n = 2
   }
@@ -232,7 +232,7 @@ private[text] final class UTF16EncodingIterator(
   override def isEmpty: Boolean = i == n && self.isEmpty
 
   @tailrec override def head: Int = {
-    if (i < n) (i: @switch) match {
+    if (i < n) i match {
       case 0 => c1
       case 1 => c2
     }

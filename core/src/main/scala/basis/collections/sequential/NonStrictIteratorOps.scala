@@ -257,22 +257,22 @@ private[sequential] object NonStrictIteratorOps {
 
     def this(these: Iterator[A], those: Iterator[A]) = this(these, those, 0)
 
-    @tailrec override def isEmpty: Boolean = (segment: @switch) match {
+    @tailrec override def isEmpty: Boolean = segment match {
       case 0 => these.isEmpty && { segment = 1; isEmpty }
       case 1 => those.isEmpty
     }
 
-    @tailrec override def head: A = (segment: @switch) match {
+    @tailrec override def head: A = segment match {
       case 0 => if (!these.isEmpty) these.head else { segment = 1; head }
       case 1 => those.head
     }
 
-    @tailrec override def step(): Unit = (segment: @switch) match {
+    @tailrec override def step(): Unit = segment match {
       case 0 => if (!these.isEmpty) these.step() else { segment = 1; step() }
       case 1 => those.step()
     }
 
-    override def dup: Iterator[A] = (segment: @switch) match {
+    override def dup: Iterator[A] = segment match {
       case 0 if !these.isEmpty => new ++(these.dup, those.dup, 0)
       case _ => those.dup
     }

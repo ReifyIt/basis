@@ -345,13 +345,13 @@ object Protobuf {
     override def wireType: Int = WireType.Message
 
     override def equals(other: Any): Boolean = other match {
-      case that: RepeatedCollection[_, CC forSome { type CC[_] }] @unchecked => CC.equals(that.CC) && T.equals(that.T)
+      case that: RepeatedCollection[_, CC] @unchecked => CC.equals(that.CC) && T.equals(that.T)
       case _ => false
     }
 
     override def hashCode: Int = {
       import MurmurHash3._
-      mash(mix(mix(seed[RepeatedCollection[_, CC forSome { type CC[_] }]], CC.hashCode), T.hashCode))
+      mash(mix(mix(seed[RepeatedCollection[_, CC]], CC.hashCode), T.hashCode))
     }
 
     override def toString: String = "Protobuf"+"."+"Repeated"+"("+ CC +", "+ T +")"
@@ -387,13 +387,13 @@ object Protobuf {
     override def wireType: Int = WireType.Message
 
     override def equals(other: Any): Boolean = other match {
-      case that: RepeatedArray[_, CC forSome { type CC[_] }] @unchecked => CC.equals(that.CC) && T.equals(that.T) && TTag.equals(that.TTag)
+      case that: RepeatedArray[_, CC] @unchecked => CC.equals(that.CC) && T.equals(that.T) && TTag.equals(that.TTag)
       case _ => false
     }
 
     override def hashCode: Int = {
       import MurmurHash3._
-      mash(mix(mix(mix(seed[RepeatedArray[_, CC forSome { type CC[_] }]], CC.hashCode), T.hashCode), TTag.hashCode))
+      mash(mix(mix(mix(seed[RepeatedArray[_, CC]], CC.hashCode), T.hashCode), TTag.hashCode))
     }
 
     override def toString: String = "Protobuf"+"."+"Repeated"+"("+ CC +", "+ T +", "+ TTag +")"

@@ -1,7 +1,7 @@
 language: scala
 script: bin/run-tests
 scala:
-  - 2.11.2
+  - 2.11.4
 jdk:
   - openjdk7
   - oraclejdk8

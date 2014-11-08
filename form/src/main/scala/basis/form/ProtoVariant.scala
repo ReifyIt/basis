@@ -433,7 +433,7 @@ trait ProtoVariant extends Variant { variant =>
       val builder = ObjectFormBuilder
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
-        (key.toInt: @switch) match {
+        key.toInt match {
           case 0x0A => builder.append(KeyValueField.readValue(data))
           case _    => Protobuf.Unknown(key).readValue(data)
         }
@@ -476,7 +476,7 @@ trait ProtoVariant extends Variant { variant =>
       val builder = SeqFormBuilder
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
-        (key.toInt: @switch) match {
+        key.toInt match {
           case 0x0A => builder.append(ValueField.readValue(data))
           case _    => Protobuf.Unknown(key).readValue(data)
         }
@@ -519,7 +519,7 @@ trait ProtoVariant extends Variant { variant =>
       val builder = SetFormBuilder
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
-        (key.toInt: @switch) match {
+        key.toInt match {
           case 0x0A => builder.append(ValueField.readValue(data))
           case _    => Protobuf.Unknown(key).readValue(data)
         }
