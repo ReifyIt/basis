@@ -1,0 +1,309 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Family - basis.Family</title>
+          <meta name="description" content="Family - basis.Family" />
+          <meta name="keywords" content="Family basis.Family" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../index.html';
+            var hash = 'basis.Family';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../lib/trait_big.png" />
+        <p id="owner"><a href="package.html" class="extype" name="basis">basis</a></p>
+        <h1>Family</h1> <span class="permalink">
+      <a href="../index.html#basis.Family" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Family</span><span class="tparams">[<span name="Base">+Base</span>]</span><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/core/src/main/scala/basis/Family.scala" target="_blank">Family.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="collections/immutable/$colon$colon.html" class="extype" name="basis.collections.immutable.::">::</a>, <a href="collections/mutable/ArrayBuffer.html" class="extype" name="basis.collections.mutable.ArrayBuffer">ArrayBuffer</a>, <a href="data/ArrayData.html" class="extype" name="basis.data.ArrayData">ArrayData</a>, <a href="data/ArrayDataBE.html" class="extype" name="basis.data.ArrayDataBE">ArrayDataBE</a>, <a href="data/ArrayDataLE.html" class="extype" name="basis.data.ArrayDataLE">ArrayDataLE</a>, <a href="collections/immutable/ArraySeq.html" class="extype" name="basis.collections.immutable.ArraySeq">ArraySeq</a>, <a href="form/Variant$BaseData.html" class="extype" name="basis.form.Variant.BaseData">BaseData</a>, <a href="form/Variant$BaseObject.html" class="extype" name="basis.form.Variant.BaseObject">BaseObject</a>, <a href="form/Variant$BaseSeq.html" class="extype" name="basis.form.Variant.BaseSeq">BaseSeq</a>, <a href="form/Variant$BaseSet.html" class="extype" name="basis.form.Variant.BaseSet">BaseSet</a>, <a href="form/Variant$BaseText.html" class="extype" name="basis.form.Variant.BaseText">BaseText</a>, <a href="collections/BilinearSeq.html" class="extype" name="basis.collections.BilinearSeq">BilinearSeq</a>, <a href="Bind.html" class="extype" name="basis.Bind">Bind</a>, <a href="form/BsonVariant$BsonData.html" class="extype" name="basis.form.BsonVariant.BsonData">BsonData</a>, <a href="form/BsonVariant$BsonObject.html" class="extype" name="basis.form.BsonVariant.BsonObject">BsonObject</a>, <a href="form/BsonVariant$BsonSeq.html" class="extype" name="basis.form.BsonVariant.BsonSeq">BsonSeq</a>, <a href="form/BsonVariant$BsonSet.html" class="extype" name="basis.form.BsonVariant.BsonSet">BsonSet</a>, <a href="form/BsonVariant$BsonText.html" class="extype" name="basis.form.BsonVariant.BsonText">BsonText</a>, <a href="collections/Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>, <a href="collections/Collection.html" class="extype" name="basis.collections.Collection">Collection</a>, <a href="collections/Container.html" class="extype" name="basis.collections.Container">Container</a>, DataForm, <a href="form/OmniVariant$$DataForm.html" class="extype" name="basis.form.OmniVariant.DataForm">DataForm</a>, DataForm, DataForm, DataForm, <a href="collections/Deque.html" class="extype" name="basis.collections.Deque">Deque</a>, <a href="Else.html" class="extype" name="basis.Else">Else</a>, <a href="data/FingerTrieData.html" class="extype" name="basis.data.FingerTrieData">FingerTrieData</a>, <a href="data/FingerTrieDataBE.html" class="extype" name="basis.data.FingerTrieDataBE">FingerTrieDataBE</a>, <a href="data/FingerTrieDataLE.html" class="extype" name="basis.data.FingerTrieDataLE">FingerTrieDataLE</a>, <a href="collections/immutable/FingerTrieSeq.html" class="extype" name="basis.collections.immutable.FingerTrieSeq">FingerTrieSeq</a>, <a href="collections/immutable/HashTrieMap.html" class="extype" name="basis.collections.immutable.HashTrieMap">HashTrieMap</a>, <a href="collections/immutable/HashTrieSet.html" class="extype" name="basis.collections.immutable.HashTrieSet">HashTrieSet</a>, <a href="data/IndexTrieData.html" class="extype" name="basis.data.IndexTrieData">IndexTrieData</a>, <a href="data/IndexTrieDataBE.html" class="extype" name="basis.data.IndexTrieDataBE">IndexTrieDataBE</a>, <a href="data/IndexTrieDataLE.html" class="extype" name="basis.data.IndexTrieDataLE">IndexTrieDataLE</a>, <a href="collections/immutable/IndexTrieSeq.html" class="extype" name="basis.collections.immutable.IndexTrieSeq">IndexTrieSeq</a>, <a href="collections/IndexedSeq.html" class="extype" name="basis.collections.IndexedSeq">IndexedSeq</a>, <a href="collections/Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>, <a href="form/JsonVariant$JsonData.html" class="extype" name="basis.form.JsonVariant.JsonData">JsonData</a>, <a href="form/JsonVariant$JsonObject.html" class="extype" name="basis.form.JsonVariant.JsonObject">JsonObject</a>, <a href="form/JsonVariant$JsonSeq.html" class="extype" name="basis.form.JsonVariant.JsonSeq">JsonSeq</a>, <a href="form/JsonVariant$JsonSet.html" class="extype" name="basis.form.JsonVariant.JsonSet">JsonSet</a>, <a href="form/JsonVariant$JsonText.html" class="extype" name="basis.form.JsonVariant.JsonText">JsonText</a>, <a href="collections/LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>, <a href="collections/immutable/List.html" class="extype" name="basis.collections.immutable.List">List</a>, <a href="collections/mutable/ListBuffer.html" class="extype" name="basis.collections.mutable.ListBuffer">ListBuffer</a>, <a href="data/Loader.html" class="extype" name="basis.data.Loader">Loader</a>, <a href="collections/Map.html" class="extype" name="basis.collections.Map">Map</a>, <a href="collections/immutable/Nil$.html" class="extype" name="basis.collections.immutable.Nil">Nil</a>, ObjectForm, ObjectForm, ObjectForm, <a href="form/OmniVariant$$ObjectForm.html" class="extype" name="basis.form.OmniVariant.ObjectForm">ObjectForm</a>, ObjectForm, <a href="form/ProtoVariant$ProtoData.html" class="extype" name="basis.form.ProtoVariant.ProtoData">ProtoData</a>, <a href="form/ProtoVariant$ProtoObject.html" class="extype" name="basis.form.ProtoVariant.ProtoObject">ProtoObject</a>, <a href="form/ProtoVariant$ProtoSeq.html" class="extype" name="basis.form.ProtoVariant.ProtoSeq">ProtoSeq</a>, <a href="form/ProtoVariant$ProtoSet.html" class="extype" name="basis.form.ProtoVariant.ProtoSet">ProtoSet</a>, <a href="form/ProtoVariant$ProtoText.html" class="extype" name="basis.form.ProtoVariant.ProtoText">ProtoText</a>, <a href="collections/Queue.html" class="extype" name="basis.collections.Queue">Queue</a>, <a href="collections/Seq.html" class="extype" name="basis.collections.Seq">Seq</a>, SeqForm, SeqForm, <a href="form/OmniVariant$$SeqForm.html" class="extype" name="basis.form.OmniVariant.SeqForm">SeqForm</a>, SeqForm, SeqForm, <a href="collections/Set.html" class="extype" name="basis.collections.Set">Set</a>, SetForm, SetForm, <a href="form/OmniVariant$$SetForm.html" class="extype" name="basis.form.OmniVariant.SetForm">SetForm</a>, SetForm, SetForm, <a href="collections/Stack.html" class="extype" name="basis.collections.Stack">Stack</a>, <a href="text/String1.html" class="extype" name="basis.text.String1">String1</a>, <a href="text/String2.html" class="extype" name="basis.text.String2">String2</a>, <a href="text/String4.html" class="extype" name="basis.text.String4">String4</a>, <a href="collections/Submap.html" class="extype" name="basis.collections.Submap">Submap</a>, <a href="collections/Subset.html" class="extype" name="basis.collections.Subset">Subset</a>, TextForm, TextForm, TextForm, TextForm, <a href="form/OmniVariant$$TextForm.html" class="extype" name="basis.form.OmniVariant.TextForm">TextForm</a>, <a href="Trap$.html" class="extype" name="basis.Trap">Trap</a>, <a href="Trap.html" class="extype" name="basis.Trap">Trap</a>, <a href="collections/Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>, <a href="text/UString.html" class="extype" name="basis.text.UString">UString</a>, <a href="text/UTF.html" class="extype" name="basis.text.UTF">UTF</a>, <a href="text/UTF16.html" class="extype" name="basis.text.UTF16">UTF16</a>, <a href="text/UTF32.html" class="extype" name="basis.text.UTF32">UTF32</a>, <a href="text/UTF8.html" class="extype" name="basis.text.UTF8">UTF8</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph321" viewBox="0.00 0.00 158.00 155.00" height="155pt" width="158pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 154,-151 154,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph321_0"><g id="a_this trait|graph321_0"><a xlink:title="basis.Family (this trait)" xlink:href="#inheritance-diagram"><polygon points="125.5,-86 24.5,-86 24.5,-61 125.5,-61 125.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="35" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="55.7144" text-anchor="start">Family[Base]</text></a></g></g><!-- node1 --><g class="node default" id="graph321_1"><g id="a_default|graph321_1"><a xlink:title="ArrayBuffer[A], ArrayData, ArrayDataBE, ArrayDataLE, ArraySeq[A], BaseData, BaseObject, BaseSeq, BaseSet, BaseText, BilinearSeq[A], Collection[A], Container[A], Deque[A], Else[A, B], FingerTrieData, FingerTrieDataBE, FingerTrieDataLE, FingerTrieSeq[A], HashTrieMap[A, T], HashTrieSet[A], IndexTrieData, IndexTrieDataBE, IndexTrieDataLE, IndexTrieSeq[A], IndexedSeq[A], Iterator[A], LinearSeq[A], List[A], ListBuffer[A], Loader, Map[A, T], Queue[A], Seq[A], Set[A], Stack[A], String1, String2, String4, Submap[A, T], Subset[A], Traverser[A], UString, UTF, UTF16, UTF32, UTF8"><polygon points="121.5,-25 28.5,-25 28.5,-0 121.5,-0 121.5,-25" stroke="#ababab" fill="#e1e1e1"></polygon><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-9.5" x="39.6528" text-anchor="start">47 classes/traits</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph321_0_1"><g id="a_inheritance|graph321_0_1"><a xlink:title="47 classes/traits are subtypes of Family[Base]"><path d="M75,-55.6874C75,-45.9173 75,-33.8534 75,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="73.2501,-55.8435 75,-60.8435 76.7501,-55.8435 73.2501,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph321_2"><g id="a_class|graph321_2"><a xlink:title="scala.Any"><polygon points="105.5,-147 44.5,-147 44.5,-122 105.5,-122 105.5,-147" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../lib/class_diagram.png" y="-141.5" x="55" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="75.9951" text-anchor="start">Any</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph321_2_0"><g id="a_inheritance|graph321_2_0"><a xlink:title="Family[Base] is a subtype of Any"><path d="M75,-116.687C75,-106.917 75,-94.8534 75,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="73.2501,-116.843 75,-121.843 76.7501,-116.844 73.2501,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.Family"><span>Family</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.Family.Family" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Family=Base@scala.annotation.unchecked.uncheckedVariance"></a>
+      <a id="Family:Family"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Family</span><span class="result"> = <span class="extype" name="basis.Family.Base">Base</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@Family=Base@scala.annotation.unchecked.uncheckedVariance" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@##():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@hashCode():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.Family@toString():String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>Iterator - basis.collections.Iterator</title>
@@ -29,9 +28,13 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../lib/trait_big.png" />
+        <a href="Iterator$.html" title="Go to companion"><img src="../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.collections">collections</a></p>
-        <h1>Iterator</h1>
+        <h1><a href="Iterator$.html" title="Go to companion">Iterator</a></h1> <span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -40,29 +43,17 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Iterator</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Family.html" class="extype" name="basis.collections.Family">Family</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] with <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
+        <span class="name">Iterator</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] with <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A stateful collection traverser. An iterator steps through each element
-of a collection, one element per <code>step()</code>, until <code>isEmpty</code> returns <code>true</code>.
-Backtracking algorithms can <code>dup</code> an iterator's state and resume it after
-advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()</code> forwards the iterator into one of three states:
-<i>buffered</i>, <i>empty</i>, or <i>done</i>.</p><ul><li>In the <i>buffered</i> state, <code>head</code> returns the current element,
-   and both <code>isEmpty</code> and <code>isDone</code> return <code>false</code>.</li><li>In the <i>empty</i> state, <code>head</code> is undefined, <code>isEmpty</code> returns <code>true</code>,
-   and <code>isDone</code> returns <code>false</code>.</li><li>In the <i>done</i> state, like the <i>empty</i> state, <code>head</code> is undefined,
-   and both <code>isEmpty</code> and <code>isDone</code> return <code>true</code>.</li></ul><p>The distinct <i>empty</i> and <i>done</i> states facilitate low-overhead
-&quot;chunked&quot; iterator applications, such as iteratees.</p><h4>Extensions</h4><p>Add operations to this interface by importing one of these use cases:</p><ul><li><code>import </code><a href="../sequential/General.html" class="extype" name="basis.sequential.General"><code>basis.sequential.general</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/Strict.html" class="extype" name="basis.sequential.Strict"><code>basis.sequential.strict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li><li><code>import </code><a href="../sequential/NonStrict.html" class="extype" name="basis.sequential.NonStrict"><code>basis.sequential.nonstrict</code></a><code>._</code><ul><li>adds reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li>adds lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li></ul></li></ul><p>The following classes implement the extensions to this interface:</p><ul><li><a href="../sequential/GeneralEnumeratorOps.html" class="extype" name="basis.sequential.GeneralEnumeratorOps">GeneralIteratorOps</a>
-   implements reductive operations (<code>foreach</code>, <code>fold</code>, <code>reduce</code>, etc.).</li><li><a href="../sequential/StrictEnumeratorOps.html" class="extype" name="basis.sequential.StrictEnumeratorOps">StrictIteratorOps</a>
-   implements eager transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).</li><li><a href="../sequential/NonStrictEnumeratorOps.html" class="extype" name="basis.sequential.NonStrictEnumeratorOps">NonStrictIteratorOps</a>
-   implements lazy transformations (<code>map</code>, <code>flatMap</code>, <code>filter</code>, etc.).
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-collections/src/main/scala/basis/collections/Iterator.scala" target="_blank">Iterator.scala</a></dd><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A statefully traversable collection of elements.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/core/src/main/scala/basis/collections/Iterator.scala" target="_blank">Iterator.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>], <a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]], <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>], <a href="../Family.html" class="extype" name="basis.Family">basis.Family</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]], <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph179" viewBox="0.00 0.00 257.00 120.00" height="120pt" width="257pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 116)" class="graph" id="graph1"><polygon points="-4,5 -4,-116 254,-116 254,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph179_0"><a xlink:title="basis.collections.Iterator (this trait)" xlink:href="#inheritance-diagram"><polygon points="172,-50 84,-50 84,-24 172,-24 172,-50" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-45" x="94" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33" x="116" text-anchor="start">Iterator[A]</text></a></g><!-- node1 --><g class="node trait" id="graph179_1"><a xlink:title="basis.collections.Family" xlink:href="Family.html#inheritance-diagram"><polygon points="122,-112 7.10543e-15,-112 7.10543e-15,-86 122,-86 122,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="32" text-anchor="start">Family[Iterator[_]]</text></a></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph179_1_0"><a xlink:title="Iterator[A] is a subtype of Family[Iterator[_]]"><path d="M78.5402,-82.2924C89.7669,-72.2386 104.114,-59.3904 114.462,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="77.1158,-81.2188 74.5584,-85.8581 79.4507,-83.8261 77.1158,-81.2188" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node trait" id="graph179_2"><a xlink:title="basis.collections.Enumerator" xlink:href="Enumerator.html#inheritance-diagram"><polygon points="249.25,-112 140.75,-112 140.75,-86 249.25,-86 249.25,-112" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-107" x="151" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-95" x="173" text-anchor="start">Enumerator[A]</text></a></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph179_2_0"><a xlink:title="Iterator[A] is a subtype of Enumerator[A]"><path d="M177.46,-82.2924C166.233,-72.2386 151.886,-59.3904 141.538,-50.1238" stroke="#d4d4d4" fill="none"></path><polygon points="176.549,-83.8261 181.442,-85.8581 178.884,-81.2188 176.549,-83.8261" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph303" viewBox="0.00 0.00 995.50 125.00" height="125pt" width="996pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 121)" class="graph" id="graph0"><polygon points="-4,4 -4,-121 991.5,-121 991.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><g class="cluster" id="clust3"></g><!-- node6 --><g class="node implicit-outgoing class" id="graph303_6"><g id="a_implicit-outgoing class|graph303_6"><a xlink:title="basis.collections.Iterator can be implicitly converted to StrictIteratorOps[A, Iterator[_]] by the implicit method IteratorToStrictOps in class basis.collections.sequential.Strict" xlink:href="sequential/StrictIteratorOps.html#inheritance-diagram"><polygon points="963,-49 786,-49 786,-24 963,-24 963,-49" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="796.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33.7495" x="817.421" text-anchor="start">StrictIteratorOps[A, Iterator[_]]</text></a></g></g><!-- node5 --><g class="node implicit-outgoing class" id="graph303_5"><g id="a_implicit-outgoing class|graph303_5"><a xlink:title="basis.collections.Iterator can be implicitly converted to StrictTraverserOps[A, Traverser[_]] by the implicit method TraverserToStrictOps in class basis.collections.sequential.Strict" xlink:href="sequential/StrictTraverserOps.html#inheritance-diagram"><polygon points="767.5,-49 569.5,-49 569.5,-24 767.5,-24 767.5,-49" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="579.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33.7495" x="600.279" text-anchor="start">StrictTraverserOps[A, Traverser[_]]</text></a></g></g><!-- node5&#45;&gt;node6 --><!-- node4 --><g class="node implicit-outgoing class" id="graph303_4"><g id="a_implicit-outgoing class|graph303_4"><a xlink:title="basis.collections.Iterator can be implicitly converted to GeneralIteratorOps[A] by the implicit method IteratorToGeneralOps in class basis.collections.sequential.General" xlink:href="sequential/GeneralIteratorOps.html#inheritance-diagram"><polygon points="551,-49 410,-49 410,-24 551,-24 551,-49" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="420.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33.7495" x="441.2" text-anchor="start">GeneralIteratorOps[A]</text></a></g></g><!-- node4&#45;&gt;node5 --><!-- node3 --><g class="node implicit-outgoing class" id="graph303_3"><g id="a_implicit-outgoing class|graph303_3"><a xlink:title="basis.collections.Iterator can be implicitly converted to GeneralTraverserOps[A] by the implicit method TraverserToGeneralOps in class basis.collections.sequential.General" xlink:href="sequential/GeneralTraverserOps.html#inheritance-diagram"><polygon points="391.5,-49 239.5,-49 239.5,-24 391.5,-24 391.5,-49" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-43.5" x="249.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-33.7495" x="270.333" text-anchor="start">GeneralTraverserOps[A]</text></a></g></g><!-- node3&#45;&gt;node4 --><!-- node0 --><g class="node this trait" id="graph303_0"><g id="a_this trait|graph303_0"><a xlink:title="basis.collections.Iterator (this trait)" xlink:href="#inheritance-diagram"><polygon points="168,-49 81,-49 81,-24 168,-24 168,-49" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-43.5" x="91.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-33.7495" x="112.158" text-anchor="start">Iterator[A]</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge implicit-outgoing" id="0_3"><g id="a_implicit-outgoing|0_3"><a xlink:title="Iterator[A] can be implicitly converted to GeneralTraverserOps[A], GeneralIteratorOps[A], StrictTraverserOps[A, Traverser[_]], StrictIteratorOps[A, Iterator[_]]"><path d="M176.237,-36.5C191.743,-36.5 209.213,-36.5 226.405,-36.5" stroke="#d4d4d4" fill="none"></path><polygon points="226.527,-38.2501 231.527,-36.5 226.527,-34.7501 226.527,-38.2501" stroke="#d4d4d4" fill="#d4d4d4"></polygon></a></g><text fill="#aaaaaa" font-size="10.00" font-family="Arial" y="-42.999" x="203.75" text-anchor="middle">implicitly</text></g><!-- node1 --><g class="node trait" id="graph303_1"><g id="a_trait|graph303_1"><a xlink:title="basis.Family" xlink:href="../Family.html#inheritance-diagram"><polygon points="121,-117 0,-117 0,-92 121,-92 121,-117" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-111.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-101.75" x="31.2119" text-anchor="start">Family[Iterator[_]]</text></a></g></g><!-- node1&#45;&gt;node0 --><g class="edge inheritance" id="graph303_1_0"><g id="a_inheritance|graph303_1_0"><a xlink:title="Iterator[A] is a subtype of Family[Iterator[_]]"><path d="M75.6731,-87.8527C87.1724,-75.9941 102.723,-59.9572 113.157,-49.1973" stroke="#d4d4d4" fill="none"></path><polygon points="74.1663,-86.8927 71.9419,-91.7005 76.679,-89.3293 74.1663,-86.8927" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph303_2"><g id="a_trait|graph303_2"><a xlink:title="basis.collections.Traverser" xlink:href="Traverser.html#inheritance-diagram"><polygon points="237.5,-117 139.5,-117 139.5,-92 237.5,-92 237.5,-117" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-111.5" x="149.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-101.75" x="170.292" text-anchor="start">Traverser[A]</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph303_2_0"><g id="a_inheritance|graph303_2_0"><a xlink:title="Iterator[A] is a subtype of Traverser[A]"><path d="M173.327,-87.8527C161.828,-75.9941 146.277,-59.9572 135.843,-49.1973" stroke="#d4d4d4" fill="none"></path><polygon points="172.321,-89.3293 177.058,-91.7005 174.834,-86.8927 172.321,-89.3293" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
               </div></div>
         
 
@@ -71,7 +62,7 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
         <div id="order">
               <span class="filtertype">Ordering</span>
               <ol>
-                <li class="group out"><span>Grouped</span></li>
+                
                 <li class="alpha in"><span>Alphabetic</span></li>
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
@@ -80,7 +71,12 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="basis.collections.Iterator"><span>Iterator</span></li><li class="in" name="basis.collections.Enumerator"><span>Enumerator</span></li><li class="in" name="basis.collections.Family"><span>Family</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="basis.collections.Iterator"><span>Iterator</span></li><li class="in" name="basis.collections.Traverser"><span>Traverser</span></li><li class="in" name="basis.Family"><span>Family</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+                <span class="filtertype">Implicitly<br />
+                </span>
+                <ol id="implicits"> <li class="in" name="basis.collections.sequential.General.TraverserToGeneralOps" data-hidden="false"><span>by TraverserToGeneralOps</span></li><li class="in" name="basis.collections.sequential.General.IteratorToGeneralOps" data-hidden="false"><span>by IteratorToGeneralOps</span></li><li class="in" name="basis.collections.sequential.Strict.TraverserToStrictOps" data-hidden="false"><span>by TraverserToStrictOps</span></li><li class="in" name="basis.collections.sequential.Strict.IteratorToStrictOps" data-hidden="false"><span>by IteratorToStrictOps</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -102,8 +98,8 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="basis.collections.Family.Family" visbl="pub" data-isabs="false" fullComment="yes" group="Classifying">
-      <a id="Family=Type"></a>
+              <ol><li name="basis.Family.Family" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Family=Base@scala.annotation.unchecked.uncheckedVariance"></a>
       <a id="Family:Family"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -113,14 +109,18 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">Family</span><span class="result"> = <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]</span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">The base type of this collection's family.</p><div class="fullcomment"><div class="comment cmt"><p>The base type of this collection's family.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Family.html" class="extype" name="basis.collections.Family">Family</a></dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@Family=Base@scala.annotation.unchecked.uncheckedVariance" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Family.html" class="extype" name="basis.Family">Family</a></dd></dl></div>
     </li></ol>
             </div>
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="basis.collections.Iterator#dup" visbl="pub" data-isabs="true" fullComment="no" group="Traversing">
+              <ol><li name="basis.collections.Iterator#dup" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="dup:basis.collections.Iterator[A]"></a>
       <a id="dup:Iterator[A]"></a>
       <h4 class="signature">
@@ -131,8 +131,12 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">dup</span><span class="result">: <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Returns a duplicate iterator with identical but independent state.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@dup:basis.collections.Iterator[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -144,9 +148,13 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Iterator#head" visbl="pub" data-isabs="true" fullComment="no" group="Examining">
+    </li><li name="basis.collections.Iterator#head" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="head:A"></a>
       <a id="head:A"></a>
       <h4 class="signature">
@@ -157,9 +165,13 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">head</span><span class="result">: <span class="extype" name="basis.collections.Iterator.A">A</span></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the currently buffered element.</p>
-    </li><li name="basis.collections.Iterator#isEmpty" visbl="pub" data-isabs="true" fullComment="no" group="Examining">
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@head:A" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.Iterator#isEmpty" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="isEmpty:Boolean"></a>
       <a id="isEmpty:Boolean"></a>
       <h4 class="signature">
@@ -170,9 +182,13 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> when this iterator has no more elements.</p>
-    </li><li name="basis.collections.Iterator#step" visbl="pub" data-isabs="true" fullComment="no" group="Traversing">
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@isEmpty:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.Iterator#step" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="step():Unit"></a>
       <a id="step():Unit"></a>
       <h4 class="signature">
@@ -183,8 +199,12 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">step</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Advances this iterator to its next state.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@step():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
@@ -201,7 +221,11 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
@@ -214,8 +238,54 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#++" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="++[B&gt;:A](those:basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="++[B&gt;:A](Traverser[B])(Builder[B]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus" class="implicit">++</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.StrictTraverserOps.A">A</span></span>]</span><span class="params">(<span name="those">those: <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.++.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.++.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.++.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@++[B&gt;:A](those:basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#++" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="++[B&gt;:A](those:basis.collections.Iterator[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="++[B&gt;:A](Iterator[B])(Builder[B]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus" class="implicit">++</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.StrictIteratorOps.A">A</span></span>]</span><span class="params">(<span name="those">those: <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.sequential.StrictIteratorOps.++.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictIteratorOps.++.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.++.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@++[B&gt;:A](those:basis.collections.Iterator[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
     </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
@@ -227,7 +297,11 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
@@ -240,8 +314,96 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#choose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="choose[B](q:PartialFunction[A,B]):basis.Maybe[B]"></a>
+      <a id="choose[B](PartialFunction[A,B]):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">choose</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.choose.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.choose.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@choose[B](q:PartialFunction[A,B]):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#choose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="choose[B](q:PartialFunction[A,B]):basis.Maybe[B]"></a>
+      <a id="choose[B](PartialFunction[A,B]):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">choose</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.choose.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.choose.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@choose[B](q:PartialFunction[A,B]):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#collect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="collect[B](PartialFunction[A,B])(Builder[B]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <span class="extype" name="basis.collections.sequential.StrictTraverserOps.collect.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.collect.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.collect.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#collect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="collect[B](PartialFunction[A,B])(Builder[B]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <span class="extype" name="basis.collections.sequential.StrictIteratorOps.collect.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictIteratorOps.collect.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.collect.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
     </li><li name="scala.Any#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
@@ -253,8 +415,180 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatMap[B](f:A=&gt;basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="flatMap[B]((A)⇒Traverser[B])(Builder[B]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.flatMap.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.flatMap.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@flatMap[B](f:A=&gt;basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatMap[B](f:A=&gt;basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="flatMap[B]((A)⇒Traverser[B])(Builder[B]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.sequential.StrictIteratorOps.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictIteratorOps.flatMap.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.flatMap.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@flatMap[B](f:A=&gt;basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#fold" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fold[B&gt;:A](z:B)(op:(B,B)=&gt;B):B"></a>
+      <a id="fold[B&gt;:A](B)((B,B)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">fold</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="z">z: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span></span>)</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@fold[B&gt;:A](z:B)(op:(B,B)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#fold" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fold[B&gt;:A](z:B)(op:(B,B)=&gt;B):B"></a>
+      <a id="fold[B&gt;:A](B)((B,B)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">fold</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.A">A</span></span>]</span><span class="params">(<span name="z">z: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.fold.B">B</span></span>)</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.fold.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.fold.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.fold.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.fold.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@fold[B&gt;:A](z:B)(op:(B,B)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#foldLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldLeft[B](z:B)(op:(B,A)=&gt;B):B"></a>
+      <a id="foldLeft[B](B)((B,A)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foldLeft.B">B</span></span>)</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foldLeft.B">B</span>, <span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foldLeft.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@foldLeft[B](z:B)(op:(B,A)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#foldLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldLeft[B](z:B)(op:(B,A)=&gt;B):B"></a>
+      <a id="foldLeft[B](B)((B,A)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.foldLeft.B">B</span></span>)</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.foldLeft.B">B</span>, <span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.foldLeft.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@foldLeft[B](z:B)(op:(B,A)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#foreach" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foreach[U](f:A=&gt;U):Unit"></a>
+      <a id="foreach[U]((A)⇒U):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@foreach[U](f:A=&gt;U):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#foreach" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foreach[U](f:A=&gt;U):Unit"></a>
+      <a id="foreach[U]((A)⇒U):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@foreach[U](f:A=&gt;U):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
     </li><li name="scala.Any#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -266,9 +600,13 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Iterator#isDone" visbl="pub" data-isabs="false" fullComment="no" group="Examining">
+    </li><li name="basis.collections.Iterator#isDone" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="isDone:Boolean"></a>
       <a id="isDone:Boolean"></a>
       <h4 class="signature">
@@ -279,8 +617,12 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">isDone</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Returns <code>true</code> when this iterator has reached a sentinel element.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@isDone:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -292,8 +634,285 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#joinString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="joinString(separator:String)(implicitbuilder:basis.text.StringBuilder):builder.State"></a>
+      <a id="joinString(String)(StringBuilder):text.StringBuilder.State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">joinString</span><span class="params">(<span name="separator">separator: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../text/StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a></span>)</span><span class="result">: <a href="../text/StringBuilder.html#State=Result@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.text.StringBuilder.State">text.StringBuilder.State</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@joinString(separator:String)(implicitbuilder:basis.text.StringBuilder):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#joinString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="joinString(open:String,separator:String,close:String)(implicitbuilder:basis.text.StringBuilder):builder.State"></a>
+      <a id="joinString(String,String,String)(StringBuilder):text.StringBuilder.State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">joinString</span><span class="params">(<span name="open">open: <span class="extype" name="java.lang.String">String</span></span>, <span name="separator">separator: <span class="extype" name="java.lang.String">String</span></span>, <span name="close">close: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../text/StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a></span>)</span><span class="result">: <a href="../text/StringBuilder.html#State=Result@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.text.StringBuilder.State">text.StringBuilder.State</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@joinString(open:String,separator:String,close:String)(implicitbuilder:basis.text.StringBuilder):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#length" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="length:Int"></a>
+      <a id="length:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@length:Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="map[B]((A)⇒B)(Builder[B]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.StrictTraverserOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.map.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.map.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="map[B]((A)⇒B)(Builder[B]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.StrictIteratorOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictIteratorOps.map.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.map.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#mayReduce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mayReduce[B&gt;:A](op:(B,B)=&gt;B):basis.Maybe[B]"></a>
+      <a id="mayReduce[B&gt;:A]((B,B)⇒B):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">mayReduce</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduce.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduce.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduce.B">B</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduce.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@mayReduce[B&gt;:A](op:(B,B)=&gt;B):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#mayReduce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mayReduce[B&gt;:A](op:(B,B)=&gt;B):basis.Maybe[B]"></a>
+      <a id="mayReduce[B&gt;:A]((B,B)⇒B):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">mayReduce</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.mayReduce.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.mayReduce.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.mayReduce.B">B</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.mayReduce.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@mayReduce[B&gt;:A](op:(B,B)=&gt;B):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#mayReduceLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mayReduceLeft[B&gt;:A](op:(B,A)=&gt;B):basis.Maybe[B]"></a>
+      <a id="mayReduceLeft[B&gt;:A]((B,A)⇒B):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">mayReduceLeft</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduceLeft.B">B</span>, <span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduceLeft.B">B</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduceLeft.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@mayReduceLeft[B&gt;:A](op:(B,A)=&gt;B):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#mayReduceLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mayReduceLeft[B&gt;:A](op:(B,A)=&gt;B):basis.Maybe[B]"></a>
+      <a id="mayReduceLeft[B&gt;:A]((B,A)⇒B):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">mayReduceLeft</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.mayReduceLeft.B">B</span>, <span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.mayReduceLeft.B">B</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.mayReduceLeft.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@mayReduceLeft[B&gt;:A](op:(B,A)=&gt;B):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#reduce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduce[B&gt;:A](op:(B,B)=&gt;B):B"></a>
+      <a id="reduce[B&gt;:A]((B,B)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">reduce</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduce.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduce.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduce.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduce.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@reduce[B&gt;:A](op:(B,B)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#reduce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduce[B&gt;:A](op:(B,B)=&gt;B):B"></a>
+      <a id="reduce[B&gt;:A]((B,B)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">reduce</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.reduce.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.reduce.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.reduce.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.reduce.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@reduce[B&gt;:A](op:(B,B)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#reduceLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduceLeft[B&gt;:A](op:(B,A)=&gt;B):B"></a>
+      <a id="reduceLeft[B&gt;:A]((B,A)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">reduceLeft</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduceLeft.B">B</span>, <span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduceLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduceLeft.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@reduceLeft[B&gt;:A](op:(B,A)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#reduceLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduceLeft[B&gt;:A](op:(B,A)=&gt;B):B"></a>
+      <a id="reduceLeft[B&gt;:A]((B,A)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">reduceLeft</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralIteratorOps.reduceLeft.B">B</span>, <span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.reduceLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralIteratorOps.reduceLeft.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@reduceLeft[B&gt;:A](op:(B,A)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
     </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -305,9 +924,13 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="basis.collections.Iterator#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Traversing">
+    </li><li name="basis.collections.Iterator#traverse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traverse(f:A=&gt;Unit):Unit"></a>
       <a id="traverse((A)⇒Unit):Unit"></a>
       <h4 class="signature">
@@ -318,38 +941,661 @@ advancing the original iterator.</p><h4>Iterator states</h4><p>Each <code>step()
       <span class="symbol">
         <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Applies a side-effecting function to each element of this iterator.</p><div class="fullcomment"><div class="comment cmt"><p>Applies a side-effecting function to each element of this iterator.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Iterator">Iterator</a> → <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a></dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@traverse(f:A=&gt;Unit):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="basis.collections.Iterator">Iterator</a> → <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#zip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="zip[B](those:basis.collections.Iterator[B])(implicitbuilder:basis.collections.Builder[(A,B)]withbasis.From[Family]):builder.State"></a>
+      <a id="zip[B](Iterator[B])(Builder[(A,B)]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">zip</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="those">those: <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.sequential.StrictIteratorOps.zip.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[(<span class="extype" name="basis.collections.Iterator.A">A</span>, <span class="extype" name="basis.collections.sequential.StrictIteratorOps.zip.B">B</span>)] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.zip.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@zip[B](those:basis.collections.Iterator[B])(implicitbuilder:basis.collections.Builder[(A,B)]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
     </li></ol>
             </div>
 
-        
+        <div id="values" class="values members">
+              <h3>Shadowed Implicit Value Members</h3>
+              <ol><li name="basis.collections.sequential.General.TraverserToGeneralOps#count" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="count(p:A=&gt;Boolean):Int"></a>
+      <a id="count((A)⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">count</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@count(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralTraverserOps[A]).count(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#count" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="count(p:A=&gt;Boolean):Int"></a>
+      <a id="count((A)⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">count</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@count(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralIteratorOps[A]).count(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="drop(lower:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="drop(Int)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.drop.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@drop(lower:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictTraverserOps[A, Traverser[_]]).drop(lower)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="drop(lower:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="drop(Int)(Builder[A]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.drop.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@drop(lower:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictIteratorOps[A, Iterator[_]]).drop(lower)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#dropWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="dropWhile((A)⇒Boolean)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">dropWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.dropWhile.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictTraverserOps[A, Traverser[_]]).dropWhile(p)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#dropWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="dropWhile((A)⇒Boolean)(Builder[A]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">dropWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.dropWhile.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictIteratorOps[A, Iterator[_]]).dropWhile(p)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#eagerly" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eagerly:basis.collections.sequential.StrictTraverserOps[A,basis.collections.Traverser[_]]"></a>
+      <a id="eagerly:StrictTraverserOps[A,Traverser[_]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">eagerly</span><span class="result">: <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@eagerly:basis.collections.sequential.StrictTraverserOps[A,basis.collections.Traverser[_]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralTraverserOps[A]).eagerly</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#eagerly" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eagerly:basis.collections.sequential.StrictIteratorOps[A,basis.collections.Iterator[_]]"></a>
+      <a id="eagerly:StrictIteratorOps[A,Iterator[_]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">eagerly</span><span class="result">: <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@eagerly:basis.collections.sequential.StrictIteratorOps[A,basis.collections.Iterator[_]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralIteratorOps[A]).eagerly</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exists(p:A=&gt;Boolean):Boolean"></a>
+      <a id="exists((A)⇒Boolean):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">exists</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@exists(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralTraverserOps[A]).exists(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exists(p:A=&gt;Boolean):Boolean"></a>
+      <a id="exists((A)⇒Boolean):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">exists</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@exists(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralIteratorOps[A]).exists(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="filter((A)⇒Boolean)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.filter.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictTraverserOps[A, Traverser[_]]).filter(p)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="filter((A)⇒Boolean)(Builder[A]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.filter.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictIteratorOps[A, Iterator[_]]).filter(p)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#find" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="find(p:A=&gt;Boolean):basis.Maybe[A]"></a>
+      <a id="find((A)⇒Boolean):Maybe[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">find</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@find(p:A=&gt;Boolean):basis.Maybe[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralTraverserOps[A]).find(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#find" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="find(p:A=&gt;Boolean):basis.Maybe[A]"></a>
+      <a id="find((A)⇒Boolean):Maybe[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">find</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@find(p:A=&gt;Boolean):basis.Maybe[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralIteratorOps[A]).find(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#forall" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forall(p:A=&gt;Boolean):Boolean"></a>
+      <a id="forall((A)⇒Boolean):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">forall</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@forall(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralTraverserOps[A]).forall(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#forall" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forall(p:A=&gt;Boolean):Boolean"></a>
+      <a id="forall((A)⇒Boolean):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">forall</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@forall(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralIteratorOps[A]).forall(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#lazily" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lazily:basis.collections.sequential.NonStrictTraverserOps[A]"></a>
+      <a id="lazily:NonStrictTraverserOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">lazily</span><span class="result">: <a href="sequential/NonStrictTraverserOps.html" class="extype" name="basis.collections.sequential.NonStrictTraverserOps">NonStrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@lazily:basis.collections.sequential.NonStrictTraverserOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralTraverserOps[A]).lazily</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.IteratorToGeneralOps#lazily" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lazily:basis.collections.sequential.NonStrictIteratorOps[A]"></a>
+      <a id="lazily:NonStrictIteratorOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">lazily</span><span class="result">: <a href="sequential/NonStrictIteratorOps.html" class="extype" name="basis.collections.sequential.NonStrictIteratorOps">NonStrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@lazily:basis.collections.sequential.NonStrictIteratorOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] performed by method IteratorToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: GeneralIteratorOps[A]).lazily</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="slice(Int,Int)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.slice.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictTraverserOps[A, Traverser[_]]).slice(lower, upper)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="slice(Int,Int)(Builder[A]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.slice.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictIteratorOps[A, Iterator[_]]).slice(lower, upper)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#span" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[A]withbasis.From[Family],implicitbuilder2:basis.collections.Builder[A]withbasis.From[Family]):(builder1.State,builder2.State)"></a>
+      <a id="span((A)⇒Boolean)(Builder[A]withFrom[Traverser[_]],Builder[A]withFrom[Traverser[_]]):((builder1)#State,(builder2)#State)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">span</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder1">builder1: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>, <span name="builder2">builder2: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: ((<span class="extype" name="basis.collections.sequential.StrictTraverserOps.span.builder1">builder1</span>)#<span class="extype" name="basis.State.State">State</span>, (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.span.builder2">builder2</span>)#<span class="extype" name="basis.State.State">State</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[A]withbasis.From[Family],implicitbuilder2:basis.collections.Builder[A]withbasis.From[Family]):(builder1.State,builder2.State)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictTraverserOps[A, Traverser[_]]).span(p)(builder1, builder2)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#span" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[A]withbasis.From[Family],implicitbuilder2:basis.collections.Builder[A]withbasis.From[Family]):(builder1.State,builder2.State)"></a>
+      <a id="span((A)⇒Boolean)(Builder[A]withFrom[Iterator[_]],Builder[A]withFrom[Iterator[_]]):((builder1)#State,(builder2)#State)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">span</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder1">builder1: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>, <span name="builder2">builder2: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: ((<span class="extype" name="basis.collections.sequential.StrictIteratorOps.span.builder1">builder1</span>)#<span class="extype" name="basis.State.State">State</span>, (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.span.builder2">builder2</span>)#<span class="extype" name="basis.State.State">State</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[A]withbasis.From[Family],implicitbuilder2:basis.collections.Builder[A]withbasis.From[Family]):(builder1.State,builder2.State)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictIteratorOps[A, Iterator[_]]).span(p)(builder1, builder2)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#take" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="take(upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="take(Int)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.take.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@take(upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictTraverserOps[A, Traverser[_]]).take(upper)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#take" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="take(upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="take(Int)(Builder[A]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.take.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@take(upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictIteratorOps[A, Iterator[_]]).take(upper)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#takeWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="takeWhile((A)⇒Boolean)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">takeWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.takeWhile.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictTraverserOps[A, Traverser[_]]).takeWhile(p)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#takeWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="takeWhile((A)⇒Boolean)(Builder[A]withFrom[Iterator[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">takeWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictIteratorOps.takeWhile.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictIteratorOps[A, Iterator[_]]).takeWhile(p)(builder)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#withFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withFilter(p:A=&gt;Boolean):basis.collections.Traverser[A]"></a>
+      <a id="withFilter((A)⇒Boolean):Traverser[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@withFilter(p:A=&gt;Boolean):basis.collections.Traverser[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictTraverserOps[A, Traverser[_]]).withFilter(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.IteratorToStrictOps#withFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withFilter(p:A=&gt;Boolean):basis.collections.Iterator[A]"></a>
+      <a id="withFilter((A)⇒Boolean):Iterator[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit shadowed">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Iterator.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Iterator@withFilter(p:A=&gt;Boolean):basis.collections.Iterator[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to
+            <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] performed by method IteratorToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt class="implicit">Shadowing</dt><dd>This implicitly inherited member is ambiguous. One or more implicitly inherited members have similar signatures, so calling this member may produce an ambiguous implicit conversion compiler error.<br />To access this member you can use a <a href="http://stackoverflow.com/questions/2087250/what-is-the-purpose-of-type-ascription-in-scala" target="_blank">type ascription</a>:<br /><div class="cmt"><pre>(iterator: StrictIteratorOps[A, Iterator[_]]).withFilter(p)</pre></div></dd><dt>Definition Classes</dt><dd><a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="basis.collections.Enumerator">
-              <h3>Inherited from <a href="Enumerator.html" class="extype" name="basis.collections.Enumerator">Enumerator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</h3>
-            </div><div class="parent" name="basis.collections.Family">
-              <h3>Inherited from <a href="Family.html" class="extype" name="basis.collections.Family">collections.Family</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</h3>
+        <div class="parent" name="basis.collections.Traverser">
+              <h3>Inherited from <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</h3>
+            </div><div class="parent" name="basis.Family">
+              <h3>Inherited from <a href="../Family.html" class="extype" name="basis.Family">basis.Family</a>[<a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]</h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>
-        
+        <div class="conversion" name="basis.collections.sequential.General.TraverserToGeneralOps">
+              <h3>Inherited by implicit conversion TraverserToGeneralOps from
+                <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]
+              </h3>
+            </div><div class="conversion" name="basis.collections.sequential.General.IteratorToGeneralOps">
+              <h3>Inherited by implicit conversion IteratorToGeneralOps from
+                <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]
+              </h3>
+            </div><div class="conversion" name="basis.collections.sequential.Strict.TraverserToStrictOps">
+              <h3>Inherited by implicit conversion TraverserToStrictOps from
+                <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]
+              </h3>
+            </div><div class="conversion" name="basis.collections.sequential.Strict.IteratorToStrictOps">
+              <h3>Inherited by implicit conversion IteratorToStrictOps from
+                <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>] to <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>, <a href="" class="extype" name="basis.collections.Iterator">Iterator</a>[_]]
+              </h3>
+            </div>
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="Examining">
-              <h3>Examining</h3>
-              
-            </div><div class="group" name="Traversing">
-              <h3>Traversing</h3>
-              
-            </div><div class="group" name="Classifying">
-              <h3>Classifying</h3>
-              
-            </div><div class="group" name="Ungrouped">
+        <div class="group" name="Ungrouped">
               <h3>Ungrouped</h3>
               
             </div>

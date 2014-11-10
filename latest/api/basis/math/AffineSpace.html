@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>AffineSpace - basis.math.AffineSpace</title>
@@ -31,7 +30,11 @@
       <div id="definition">
         <img src="../../lib/trait_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.math">math</a></p>
-        <h1>AffineSpace</h1>
+        <h1>AffineSpace</h1> <span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -47,34 +50,34 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An abstract principal homogeneous space over the additive group of a linear
 space. Vector addition acts freely and transitively over the point set.
 To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>:</p><ul><li>𝓅 + <code>zero</code> == 𝓅 for every point 𝓅 in <code>this</code>.</li><li>(𝓅 + 𝐮) + 𝐯 == 𝓅 + (𝐮 + 𝐯) for every point 𝓅 and all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝐯: Vector) =&gt; 𝓅 + 𝐯 is a bijection for every point 𝓅 in <code>this</code>.
-</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-math/src/main/scala/basis/math/AffineSpace.scala" target="_blank">AffineSpace.scala</a></dd><div class="block">Example:
+</li></ul></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/math/src/main/scala/basis/math/AffineSpace.scala" target="_blank">AffineSpace.scala</a></dd><div class="block">Example:
                <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over affine spaces by parameterizing a class or</span>
 <span class="cmt">// function with a subtype of AffineSpace with Singleton. Type elements</span>
 <span class="cmt">// with the #Point, #Vector and #Scalar type projections of your</span>
 <span class="cmt">// AffineSpace type parameter.</span>
 <span class="kw">def</span> testAffineSpaceOperations[A <span class="kw">&lt;:</span> AffineSpace <span class="kw">with</span> Singleton](
-    p: A#Point, q: A#Point, u: A#Vector, v: A#Vector) {
+    p: A#Point, q: A#Point, u: A#Vector, v: A#Vector): <span class="std">Unit</span> = {
   assert((p + u) + v == p + (u + v), <span class="lit">"associativity of point-vector addition"</span>)
   assert(p + (-v) == p - v, <span class="lit">"existence of point-vector subtraction"</span>)
   assert((p + v) - (q + v) == p - q, <span class="lit">"existence of point-point subtraction"</span>)
 }
 
 <span class="cmt">// Alternatively, functions can use path-dependent types of an AffineSpace parameter.</span>
-<span class="kw">def</span> testAffineSpaceIdentities(A: AffineSpace)(p: A.Point, q: A.Point, v: A.Vector) {
+<span class="kw">def</span> testAffineSpaceIdentities(A: AffineSpace)(p: A.Point, q: A.Point, v: A.Vector): <span class="std">Unit</span> = {
   <span class="kw">import</span> A._
   assert(p + zero == p, <span class="lit">"existence of additive identity vector"</span>)
   <span class="kw">if</span> (p + v == q + v) assert(p == v, <span class="lit">"uniqueness of points"</span>)
 }</pre></li></ol>
-            </div><dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="binary64/Integer$.html" class="extype" name="basis.math.binary64.Integer">Integer</a>, <a href="binary64/R2$.html" class="extype" name="basis.math.binary64.R2">R2</a>, <a href="binary64/R3$.html" class="extype" name="basis.math.binary64.R3">R3</a>, <a href="binary64/R4$.html" class="extype" name="basis.math.binary64.R4">R4</a>, <a href="binary64/Real$.html" class="extype" name="basis.math.binary64.Real">Real</a>, <a href="binary64/Z2$.html" class="extype" name="basis.math.binary64.Z2">Z2</a>, <a href="binary64/Z3$.html" class="extype" name="basis.math.binary64.Z3">Z3</a></div>
-        </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="binary64/Integer$.html" class="extype" name="basis.math.binary64.Integer">Integer</a>, <a href="binary64/R2$.html" class="extype" name="basis.math.binary64.R2">R2</a>, <a href="binary64/R3$.html" class="extype" name="basis.math.binary64.R3">R3</a>, <a href="binary64/R4$.html" class="extype" name="basis.math.binary64.R4">R4</a>, <a href="binary64/RI2$.html" class="extype" name="basis.math.binary64.RI2">RI2</a>, <a href="binary64/RI3$.html" class="extype" name="basis.math.binary64.RI3">RI3</a>, <a href="binary64/Real$.html" class="extype" name="basis.math.binary64.Real">Real</a>, <a href="binary64/Z2$.html" class="extype" name="basis.math.binary64.Z2">Z2</a>, <a href="binary64/Z3$.html" class="extype" name="basis.math.binary64.Z3">Z3</a>, <a href="binary64/ZI2$.html" class="extype" name="basis.math.binary64.ZI2">ZI2</a>, <a href="binary64/ZI3$.html" class="extype" name="basis.math.binary64.ZI3">ZI3</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
                 <span class="toggle diagram-link">Type Hierarchy</span>
                 <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
-                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph83" viewBox="0.00 0.00 539.00 158.00" height="158pt" width="539pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 154)" class="graph" id="graph1"><polygon points="-4,5 -4,-154 536,-154 536,5 -4,5" stroke="white" fill="white"></polygon><g class="cluster" id="graph2"></g><g class="cluster" id="graph3"></g><!-- node0 --><g class="node this trait" id="graph83_0"><a xlink:title="basis.math.AffineSpace (this trait)" xlink:href="#inheritance-diagram"><polygon points="320,-88 222,-88 222,-62 320,-62 320,-88" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-83" x="232" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-71" x="254" text-anchor="start">AffineSpace</text></a></g><!-- node1 --><g class="node object" id="graph83_1"><a xlink:title="basis.math.binary64.Integer" xlink:href="binary64/Integer$.html#inheritance-diagram"><polygon points="74.25,-26 -0.25,-26 -0.25,-0 74.25,-0 74.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="10" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="32" text-anchor="start">Integer</text></a></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph83_0_1"><a xlink:title="Integer is a subtype of AffineSpace"><path d="M218.473,-60.6667C180.761,-51.0749 128.731,-37.8028 83,-26 80.2829,-25.2987 77.4761,-24.5721 74.6514,-23.8391" stroke="#d4d4d4" fill="none"></path><polygon points="218.187,-62.3996 223.464,-61.9359 219.05,-59.0076 218.187,-62.3996" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node2 --><g class="node object" id="graph83_2"><a xlink:title="basis.math.binary64.R2" xlink:href="binary64/R2$.html#inheritance-diagram"><polygon points="149.25,-26 92.75,-26 92.75,-0 149.25,-0 149.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="103" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="125" text-anchor="start">R2</text></a></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph83_0_2"><a xlink:title="R2 is a subtype of AffineSpace"><path d="M235.833,-59.9331C209.457,-49.3829 173.822,-35.1289 149.28,-25.312" stroke="#d4d4d4" fill="none"></path><polygon points="235.353,-61.6259 240.645,-61.8581 236.653,-58.3763 235.353,-61.6259" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node3 --><g class="node object" id="graph83_3"><a xlink:title="basis.math.binary64.R3" xlink:href="binary64/R3$.html#inheritance-diagram"><polygon points="224.25,-26 167.75,-26 167.75,-0 224.25,-0 224.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="178" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="200" text-anchor="start">R3</text></a></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph83_0_3"><a xlink:title="R3 is a subtype of AffineSpace"><path d="M251.695,-58.5563C239.08,-48.4643 222.84,-35.4716 211.155,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="250.825,-60.1011 255.823,-61.8581 253.011,-57.3681 250.825,-60.1011" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node4 --><g class="node object" id="graph83_4"><a xlink:title="basis.math.binary64.R4" xlink:href="binary64/R4$.html#inheritance-diagram"><polygon points="299.25,-26 242.75,-26 242.75,-0 299.25,-0 299.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="253" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="275" text-anchor="start">R4</text></a></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph83_0_4"><a xlink:title="R4 is a subtype of AffineSpace"><path d="M271,-56.6826C271,-46.8961 271,-34.9026 271,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="269.25,-56.8581 271,-61.8581 272.75,-56.8581 269.25,-56.8581" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node5 --><g class="node object" id="graph83_5"><a xlink:title="basis.math.binary64.Real" xlink:href="binary64/Real$.html#inheritance-diagram"><polygon points="382.25,-26 317.75,-26 317.75,-0 382.25,-0 382.25,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="328" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="350" text-anchor="start">Real</text></a></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph83_0_5"><a xlink:title="Real is a subtype of AffineSpace"><path d="M290.988,-58.8189C304.324,-48.6906 321.622,-35.5529 334.037,-26.1238" stroke="#d4d4d4" fill="none"></path><polygon points="289.91,-57.4403 286.987,-61.8581 292.027,-60.2276 289.91,-57.4403" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node6 --><g class="node object" id="graph83_6"><a xlink:title="basis.math.binary64.Z2" xlink:href="binary64/Z2$.html#inheritance-diagram"><polygon points="457,-26 401,-26 401,-0 457,-0 457,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="411" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="433" text-anchor="start">Z2</text></a></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph83_0_6"><a xlink:title="Z2 is a subtype of AffineSpace"><path d="M307.79,-60.029C336.164,-49.2543 374.821,-34.5743 400.781,-24.716" stroke="#d4d4d4" fill="none"></path><polygon points="307.027,-58.447 302.974,-61.8581 308.269,-61.719 307.027,-58.447" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node7 --><g class="node object" id="graph83_7"><a xlink:title="basis.math.binary64.Z3" xlink:href="binary64/Z3$.html#inheritance-diagram"><polygon points="531,-26 475,-26 475,-0 531,-0 531,-26" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-21" x="485" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9" x="507" text-anchor="start">Z3</text></a></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph83_0_7"><a xlink:title="Z3 is a subtype of AffineSpace"><path d="M325.34,-61.7348C364.612,-52.6011 418.827,-39.4365 466,-26 468.858,-25.186 471.826,-24.2974 474.783,-23.3837" stroke="#d4d4d4" fill="none"></path><polygon points="324.618,-60.1057 320.143,-62.9403 325.409,-63.5152 324.618,-60.1057" stroke="#d4d4d4" fill="none"></polygon></a></g><!-- node8 --><g class="node class" id="graph83_8"><a xlink:title="scala.AnyRef"><polygon points="309.25,-150 232.75,-150 232.75,-124 309.25,-124 309.25,-150" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-145" x="243" preserveAspectRatio="xMinYMin meet" height="16px" width="16px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-133" x="265" text-anchor="start">AnyRef</text></a></g><!-- node8&#45;&gt;node0 --><g class="edge inheritance" id="graph83_8_0"><a xlink:title="AffineSpace is a subtype of AnyRef"><path d="M271,-118.683C271,-108.896 271,-96.9026 271,-88.1238" stroke="#d4d4d4" fill="none"></path><polygon points="269.25,-118.858 271,-123.858 272.75,-118.858 269.25,-118.858" stroke="#d4d4d4" fill="none"></polygon></a></g></g></svg></div>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph88" viewBox="0.00 0.00 840.00 155.00" height="155pt" width="840pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 836,-151 836,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph88_0"><g id="a_this trait|graph88_0"><a xlink:title="basis.math.AffineSpace (this trait)" xlink:href="#inheritance-diagram"><polygon points="469.5,-86 372.5,-86 372.5,-61 469.5,-61 469.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="383" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="403.738" text-anchor="start">AffineSpace</text></a></g></g><!-- node1 --><g class="node object" id="graph88_1"><g id="a_object|graph88_1"><a xlink:title="basis.math.binary64.Integer" xlink:href="binary64/Integer$.html#inheritance-diagram"><polygon points="74,-25 0,-25 0,-0 74,-0 74,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="30.5444" text-anchor="start">Integer</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph88_0_1"><g id="a_inheritance|graph88_0_1"><a xlink:title="Integer is a subtype of AffineSpace"><path d="M367.19,-66.7108C300.254,-59.1031 182.629,-44.3983 83,-25 80.0911,-24.4336 77.0907,-23.7991 74.082,-23.1269" stroke="#d4d4d4" fill="none"></path><polygon points="367.152,-68.4676 372.317,-67.2909 367.545,-64.9898 367.152,-68.4676" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node object" id="graph88_2"><g id="a_object|graph88_2"><a xlink:title="basis.math.binary64.R2" xlink:href="binary64/R2$.html#inheritance-diagram"><polygon points="148,-25 92,-25 92,-0 148,-0 148,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="102" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="122.719" text-anchor="start">R2</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph88_0_2"><g id="a_inheritance|graph88_0_2"><a xlink:title="R2 is a subtype of AffineSpace"><path d="M367.359,-64.8353C313.73,-56.7078 229.091,-42.6176 157,-25 154.125,-24.2974 151.145,-23.4965 148.181,-22.652" stroke="#d4d4d4" fill="none"></path><polygon points="367.246,-66.5879 372.451,-65.6031 367.768,-63.127 367.246,-66.5879" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node object" id="graph88_3"><g id="a_object|graph88_3"><a xlink:title="basis.math.binary64.R3" xlink:href="binary64/R3$.html#inheritance-diagram"><polygon points="222,-25 166,-25 166,-0 222,-0 222,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="176" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="196.719" text-anchor="start">R3</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph88_0_3"><g id="a_inheritance|graph88_0_3"><a xlink:title="R3 is a subtype of AffineSpace"><path d="M367.33,-59.9366C329.158,-50.7931 276.747,-37.8168 231,-25 228.15,-24.2015 225.187,-23.3378 222.233,-22.4548" stroke="#d4d4d4" fill="none"></path><polygon points="367.114,-61.6841 372.384,-61.1446 367.928,-58.28 367.114,-61.6841" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node object" id="graph88_4"><g id="a_object|graph88_4"><a xlink:title="basis.math.binary64.R4" xlink:href="binary64/R4$.html#inheritance-diagram"><polygon points="296,-25 240,-25 240,-0 296,-0 296,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="250" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="270.719" text-anchor="start">R4</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph88_0_4"><g id="a_inheritance|graph88_0_4"><a xlink:title="R4 is a subtype of AffineSpace"><path d="M386.178,-59.0719C358.961,-48.5763 321.612,-34.174 296.238,-24.3892" stroke="#d4d4d4" fill="none"></path><polygon points="385.842,-60.8179 391.137,-60.9841 387.101,-57.5523 385.842,-60.8179" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node object" id="graph88_5"><g id="a_object|graph88_5"><a xlink:title="basis.math.binary64.RI2" xlink:href="binary64/RI2$.html#inheritance-diagram"><polygon points="373.5,-25 314.5,-25 314.5,-0 373.5,-0 373.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="325" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="345.83" text-anchor="start">RI2</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph88_0_5"><g id="a_inheritance|graph88_0_5"><a xlink:title="RI2 is a subtype of AffineSpace"><path d="M401.498,-57.5567C388.367,-47.4951 371.301,-34.4187 359.181,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="400.754,-59.1915 405.787,-60.8435 402.883,-56.4133 400.754,-59.1915" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node object" id="graph88_6"><g id="a_object|graph88_6"><a xlink:title="basis.math.binary64.RI3" xlink:href="binary64/RI3$.html#inheritance-diagram"><polygon points="450.5,-25 391.5,-25 391.5,-0 450.5,-0 450.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="402" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="422.83" text-anchor="start">RI3</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph88_0_6"><g id="a_inheritance|graph88_0_6"><a xlink:title="RI3 is a subtype of AffineSpace"><path d="M421,-55.6874C421,-45.9173 421,-33.8534 421,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="419.25,-55.8435 421,-60.8435 422.75,-55.8435 419.25,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node object" id="graph88_7"><g id="a_object|graph88_7"><a xlink:title="basis.math.binary64.Real" xlink:href="binary64/Real$.html#inheritance-diagram"><polygon points="533,-25 469,-25 469,-0 533,-0 533,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="479" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="499.828" text-anchor="start">Real</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph88_0_7"><g id="a_inheritance|graph88_0_7"><a xlink:title="Real is a subtype of AffineSpace"><path d="M440.907,-57.8185C454.596,-47.7228 472.526,-34.4995 485.227,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="439.791,-56.4673 436.805,-60.8435 441.868,-59.2842 439.791,-56.4673" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node object" id="graph88_8"><g id="a_object|graph88_8"><a xlink:title="basis.math.binary64.Z2" xlink:href="binary64/Z2$.html#inheritance-diagram"><polygon points="606.5,-25 551.5,-25 551.5,-0 606.5,-0 606.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="562" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="582.776" text-anchor="start">Z2</text></a></g></g><!-- node0&#45;&gt;node8 --><g class="edge inheritance" id="graph88_0_8"><g id="a_inheritance|graph88_0_8"><a xlink:title="Z2 is a subtype of AffineSpace"><path d="M456.704,-59.1677C485.397,-48.4529 525.117,-33.6207 551.409,-23.8028" stroke="#d4d4d4" fill="none"></path><polygon points="455.911,-57.5955 451.839,-60.9841 457.135,-60.8744 455.911,-57.5955" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node object" id="graph88_9"><g id="a_object|graph88_9"><a xlink:title="basis.math.binary64.Z3" xlink:href="binary64/Z3$.html#inheritance-diagram"><polygon points="679.5,-25 624.5,-25 624.5,-0 679.5,-0 679.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="635" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="655.776" text-anchor="start">Z3</text></a></g></g><!-- node0&#45;&gt;node9 --><g class="edge inheritance" id="graph88_0_9"><g id="a_inheritance|graph88_0_9"><a xlink:title="Z3 is a subtype of AffineSpace"><path d="M474.929,-60.4369C514.227,-51.3862 568.649,-38.3123 616,-25 618.653,-24.2542 621.404,-23.4435 624.15,-22.6094" stroke="#d4d4d4" fill="none"></path><polygon points="474.211,-58.8062 469.729,-61.6313 474.994,-62.2174 474.211,-58.8062" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node object" id="graph88_10"><g id="a_object|graph88_10"><a xlink:title="basis.math.binary64.ZI2" xlink:href="binary64/ZI2$.html#inheritance-diagram"><polygon points="756,-25 698,-25 698,-0 756,-0 756,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="708" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="728.887" text-anchor="start">ZI2</text></a></g></g><!-- node0&#45;&gt;node10 --><g class="edge inheritance" id="graph88_0_10"><g id="a_inheritance|graph88_0_10"><a xlink:title="ZI2 is a subtype of AffineSpace"><path d="M474.935,-64.8624C529.331,-56.7104 615.539,-42.5606 689,-25 691.816,-24.3269 694.73,-23.5652 697.635,-22.762" stroke="#d4d4d4" fill="none"></path><polygon points="474.458,-63.164 469.771,-65.6325 474.975,-66.6257 474.458,-63.164" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node object" id="graph88_11"><g id="a_object|graph88_11"><a xlink:title="basis.math.binary64.ZI3" xlink:href="binary64/ZI3$.html#inheritance-diagram"><polygon points="832,-25 774,-25 774,-0 832,-0 832,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../../lib/object_diagram.png" y="-19.5" x="784" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="804.887" text-anchor="start">ZI3</text></a></g></g><!-- node0&#45;&gt;node11 --><g class="edge inheritance" id="graph88_0_11"><g id="a_inheritance|graph88_0_11"><a xlink:title="ZI3 is a subtype of AffineSpace"><path d="M474.776,-67.7078C542.869,-61.0389 663.548,-47.2121 765,-25 767.828,-24.3808 770.751,-23.6553 773.661,-22.875" stroke="#d4d4d4" fill="none"></path><polygon points="474.369,-65.989 469.562,-68.2145 474.708,-69.4725 474.369,-65.989" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node class" id="graph88_12"><g id="a_class|graph88_12"><a xlink:title="scala.AnyRef"><polygon points="459,-147 383,-147 383,-122 459,-122 459,-147" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-141.5" x="393" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="413.714" text-anchor="start">AnyRef</text></a></g></g><!-- node12&#45;&gt;node0 --><g class="edge inheritance" id="graph88_12_0"><g id="a_inheritance|graph88_12_0"><a xlink:title="AffineSpace is a subtype of AnyRef"><path d="M421,-116.687C421,-106.917 421,-94.8534 421,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="419.25,-116.843 421,-121.843 422.75,-116.844 419.25,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
               </div></div>
         
 
@@ -115,7 +118,7 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="basis.math.AffineSpace.Point" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Point&lt;:AffineSpace.this.Value"></a>
+      <a id="Point&lt;:AffineSpace.this.PointElement"></a>
       <a id="Point:Point"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -123,10 +126,31 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Point</span><span class="result"> &lt;: <a href="AffineSpace$Value.html" class="extype" name="basis.math.AffineSpace.Value">Value</a></span>
+        <span class="name">Point</span><span class="result"> &lt;: <a href="AffineSpace$PointElement.html" class="extype" name="basis.math.AffineSpace.PointElement">PointElement</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@Point&lt;:AffineSpace.this.PointElement" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">The type of points in this affine space.</p>
+    </li><li name="basis.math.AffineSpace.PointElement" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PointElementextendsAny"></a>
+      <a id="PointElement:PointElement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AffineSpace$PointElement.html"><span class="name">PointElement</span></a><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@PointElementextendsAny" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A point in this affine space.</p>
     </li><li name="basis.math.AffineSpace.Scalar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Scalar=AffineSpace.this.Scalar.Element"></a>
       <a id="Scalar:Scalar"></a>
@@ -136,23 +160,14 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Scalar</span><span class="result"> = <a href="Ring.html#Element&lt;:Ring.this.Value" class="extmbr" name="basis.math.Ring.Element">Element</a></span>
+        <span class="name">Scalar</span><span class="result"> = <a href="Ring.html#Element&lt;:Ring.this.RingElement" class="extmbr" name="basis.math.Ring.Element">Element</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@Scalar=AffineSpace.this.Scalar.Element" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">The type of scalars in this affine space.</p>
-    </li><li name="basis.math.AffineSpace.Value" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ValueextendsAny"></a>
-      <a id="Value:Value"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="AffineSpace$Value.html"><span class="name">Value</span></a><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A point in this affine space.</p>
     </li><li name="basis.math.AffineSpace.Vector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Vector=AffineSpace.this.Vector.Vector"></a>
       <a id="Vector:Vector"></a>
@@ -162,9 +177,13 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Vector</span><span class="result"> = <a href="VectorSpace.html#Vector&lt;:VectorSpace.this.Value" class="extmbr" name="basis.math.VectorSpace.Vector">VectorSpace.Vector</a></span>
+        <span class="name">Vector</span><span class="result"> = <a href="VectorSpace.html#Vector&lt;:VectorSpace.this.VectorElement" class="extmbr" name="basis.math.VectorSpace.Vector">VectorSpace.Vector</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@Vector=AffineSpace.this.Vector.Vector" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">The type of vectors in this affine space.</p>
     </li></ol>
             </div>
@@ -182,7 +201,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">Scalar</span><span class="result">: <a href="Ring.html" class="extype" name="basis.math.Ring">Ring</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@Scalar:basis.math.Ring" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the scalar set of this affine space.</p>
     </li><li name="basis.math.AffineSpace#Vector" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Vector:basis.math.VectorSpace"></a>
@@ -195,7 +218,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">Vector</span><span class="result">: <a href="VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@Vector:basis.math.VectorSpace" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the vector space underlying this affine space.</p>
     </li><li name="basis.math.AffineSpace#origin" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="origin:AffineSpace.this.Point"></a>
@@ -206,9 +233,13 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">origin</span><span class="result">: <a href="#Point&lt;:AffineSpace.this.Value" class="extmbr" name="basis.math.AffineSpace.Point">Point</a></span>
+        <span class="name">origin</span><span class="result">: <a href="#Point&lt;:AffineSpace.this.PointElement" class="extmbr" name="basis.math.AffineSpace.Point">Point</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@origin:AffineSpace.this.Point" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the origin of this affine space.</p>
     </li></ol>
             </div>
@@ -216,19 +247,6 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
         <div id="values" class="values members">
               <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -239,8 +257,12 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -252,22 +274,13 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -278,8 +291,12 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -291,7 +308,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -304,9 +325,16 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -320,7 +348,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -333,7 +365,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
@@ -346,9 +382,16 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -362,7 +405,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -375,7 +422,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -388,7 +439,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
@@ -401,7 +456,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -414,7 +473,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -427,7 +490,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -440,7 +507,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
@@ -453,7 +524,11 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -466,9 +541,16 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -482,9 +564,16 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -498,9 +587,16 @@ To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.AffineSpace@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>

@@ -1,71 +1,172 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Basis by ReifyIt</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Basis</h1>
-        <p>An experimental foundation library for Scala focussed on efficiency and clean design</p>
-        <p class="view"><a href="https://github.com/ReifyIt/basis">View the Project on GitHub <small>ReifyIt/basis</small></a></p>
-        <ul>
-          <li><a href="https://github.com/ReifyIt/basis/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/ReifyIt/basis/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/ReifyIt/basis">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h2>Basis</h2>
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Basis Documentation &mdash; Basis Documentation</title>
+  
 
-<p>Basis offers a foundation library for <a href="http://www.scala-lang.org">Scala</a> that applies design thinking to the development of its code. The library strives to make it easy to do the right thing, without preventing you from doing what you want. It accomplishes this by extending simple interfaces outwardly with opt-in use-case driven extensions. This approach keeps the implementation focused, honest, and modular.</p>
+  
+  
 
-<p>At the same time, brass tacks software engineering makes Basis fast and memory efficient. Clear design enables robust optimization without compromising usability. And use-directed development prudently in-sources many performance trade-offs.</p>
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-<h3>Packages</h3>
+  
+  
+    
 
-<ul>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.package">API</a>] <a href="http://basis.reify.it">basis</a> – Umbrella framework<br><code>"it.reify" %% "basis" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.collections.package">API</a>] <a href="http://basis.reify.it/collections.html">basis.collections</a> – General collections interfaces<br><code>"it.reify" %% "basis-collections" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.containers.package">API</a>] <a href="http://basis.reify.it/containers.html">basis.containers</a> – Specialized collection implementations<br><code>"it.reify" %% "basis-containers" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.control.package">API</a>] <a href="http://basis.reify.it/control.html">basis.control</a> – Imperative control-flow and conditional bindings<br><code>"it.reify" %% "basis-control" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.math.package">API</a>] <a href="http://basis.reify.it/math.html">basis.math</a> – Abstract algebraic structures<br><code>"it.reify" %% "basis-math" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.memory.package">API</a>] <a href="http://basis.reify.it/memory.html">basis.memory</a> – Virtual memory model<br><code>"it.reify" %% "basis-memory" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.random.package">API</a>] <a href="http://basis.reify.it/random.html">basis.random</a> – Arbitrary data generation<br><code>"it.reify" %% "basis-random" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.runtime.package">API</a>] <a href="http://basis.reify.it/runtime.html">basis.runtime</a> – Run-time type information<br><code>"it.reify" %% "basis-runtime" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.sequential.package">API</a>] <a href="http://basis.reify.it/sequential.html">basis.sequential</a> – Sequential collections operations<br><code>"it.reify" %% "basis-sequential" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.text.package">API</a>] <a href="http://basis.reify.it/text.html">basis.text</a> – Unicode® string implementations<br><code>"it.reify" %% "basis-text" % "0.1-SNAPSHOT"</code>
-</li>
-<li>[<a href="http://basis.reify.it/latest/api/#basis.util.package">API</a>] <a href="http://basis.reify.it/util.html">basis.util</a> – General utility macros<br><code>"it.reify" %% "basis-util" % "0.1-SNAPSHOT"</code>
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Basis Documentation" href="#"/>
+        <link rel="next" title="Collections" href="collections.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="#" class="fa fa-home"> Basis</a>
+        
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="collections.html">Collections</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="collections/interfaces.html">Collections Interfaces</a></li>
+</ul>
 </li>
 </ul>
-      </section>
+
+        
+        <ul>
+          <li class="toctree-l1"><a class="reference internal" href="latest/api/index.html">API Docs</a><ul>
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Basis</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="#">Docs</a> &raquo;</li>
+      
+    <li>Basis Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="basis-documentation">
+<h1>Basis Documentation<a class="headerlink" href="#basis-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="collections.html">Collections</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="collections.html" class="btn btn-neutral float-right" title="Collections">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/ReifyIt">ReifyIt</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
-  </body>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2012-2014 Reify It.
+      Last updated on Nov 09, 2014.
+    </p>
+  </div>
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.0-SNAPSHOT',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>util - basis.util</title>
@@ -31,7 +30,11 @@
       <div id="definition">
         <img src="../../lib/package_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a></p>
-        <h1>util</h1>
+        <h1>util</h1> <span class="permalink">
+      <a href="../../index.html#basis.util.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -44,7 +47,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>General utility macros.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/basis-util/src/main/scala/basis/util/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>General purpose utilities.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/util/src/main/scala/basis/util/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -87,7 +90,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="basis.util.ArrowOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ArrowOps[+A]extendsAnyRef"></a>
+      <a id="ArrowOps[+A]extendsAnyVal"></a>
       <a id="ArrowOps[+A]:ArrowOps[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -95,12 +98,50 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ArrowOps.html"><span class="name">ArrowOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ArrowOps.html"><span class="name">ArrowOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">Infix arrow (-&gt; and →) associators.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@ArrowOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.util.Begin" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BeginextendsAnyRef"></a>
+      <a id="Begin:Begin"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Begin.html"><span class="name">Begin</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@BeginextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A breakable control flow context.</p>
+    </li><li name="basis.util.Break" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BreakextendsThrowable"></a>
+      <a id="Break:Break"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Break.html"><span class="name">Break</span></a><span class="result"> extends <span class="extype" name="scala.Throwable">Throwable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@BreakextendsThrowable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A control-flow break exception.</p>
     </li><li name="basis.util.DoubleOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="DoubleOpsextendsAnyRef"></a>
+      <a id="DoubleOpsextendsAnyVal"></a>
       <a id="DoubleOps:DoubleOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -108,12 +149,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="DoubleOps.html"><span class="name">DoubleOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="DoubleOps.html"><span class="name">DoubleOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">Extended <code>Double</code> operations.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@DoubleOpsextendsAnyVal" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="basis.util.FloatOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FloatOpsextendsAnyRef"></a>
+      <a id="FloatOpsextendsAnyVal"></a>
       <a id="FloatOps:FloatOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -121,12 +166,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="FloatOps.html"><span class="name">FloatOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="FloatOps.html"><span class="name">FloatOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">Extended <code>Float</code> operations.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@FloatOpsextendsAnyVal" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="basis.util.IntOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="IntOpsextendsAnyRef"></a>
+      <a id="IntOpsextendsAnyVal"></a>
       <a id="IntOps:IntOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -134,12 +183,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="IntOps.html"><span class="name">IntOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="IntOps.html"><span class="name">IntOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">Extended <code>Int</code> operations.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@IntOpsextendsAnyVal" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="basis.util.LongOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LongOpsextendsAnyRef"></a>
+      <a id="LongOpsextendsAnyVal"></a>
       <a id="LongOps:LongOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -147,10 +200,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="LongOps.html"><span class="name">LongOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="LongOps.html"><span class="name">LongOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">Extended <code>Long</code> operations.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@LongOpsextendsAnyVal" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
@@ -158,72 +215,92 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="basis.util.package#ArrowOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ArrowOps[A](left:A):basis.util.ArrowOps[A]"></a>
-      <a id="ArrowOps[A](A):ArrowOps[A]"></a>
+              <ol><li name="basis.util#ArrowToOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ArrowToOps[A](left:A):basis.util.ArrowOps[A]"></a>
+      <a id="ArrowToOps[A](A):ArrowOps[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier">implicit macro </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ArrowOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="left">left: <span class="extype" name="basis.util.ArrowOps.A">A</span></span>)</span><span class="result">: <a href="ArrowOps.html" class="extype" name="basis.util.ArrowOps">ArrowOps</a>[<span class="extype" name="basis.util.ArrowOps.A">A</span>]</span>
+        <span class="name">ArrowToOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="left">left: <span class="extype" name="basis.util.ArrowToOps.A">A</span></span>)</span><span class="result">: <a href="ArrowOps.html" class="extype" name="basis.util.ArrowOps">ArrowOps</a>[<span class="extype" name="basis.util.ArrowToOps.A">A</span>]</span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Implicitly adds infix arrow (-&gt; and →) associators to all values.</p>
-    </li><li name="basis.util.package#DoubleOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="DoubleOps(x:Double):basis.util.DoubleOps"></a>
-      <a id="DoubleOps(Double):DoubleOps"></a>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@ArrowToOps[A](left:A):basis.util.ArrowOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.util#DoubleToOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DoubleToOps(x:Double):basis.util.DoubleOps"></a>
+      <a id="DoubleToOps(Double):DoubleOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier">implicit macro </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">DoubleOps</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="DoubleOps.html" class="extype" name="basis.util.DoubleOps">DoubleOps</a></span>
+        <span class="name">DoubleToOps</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Double">Double</span></span>)</span><span class="result">: <a href="DoubleOps.html" class="extype" name="basis.util.DoubleOps">DoubleOps</a></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Implicitly adds extended operations to <code>Double</code> values.</p>
-    </li><li name="basis.util.package#FloatOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FloatOps(x:Float):basis.util.FloatOps"></a>
-      <a id="FloatOps(Float):FloatOps"></a>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@DoubleToOps(x:Double):basis.util.DoubleOps" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.util#FloatToOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FloatToOps(x:Float):basis.util.FloatOps"></a>
+      <a id="FloatToOps(Float):FloatOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier">implicit macro </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">FloatOps</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="FloatOps.html" class="extype" name="basis.util.FloatOps">FloatOps</a></span>
+        <span class="name">FloatToOps</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="FloatOps.html" class="extype" name="basis.util.FloatOps">FloatOps</a></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Implicitly adds extended operations to <code>Float</code> values.</p>
-    </li><li name="basis.util.package#IntOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="IntOps(a:Int):basis.util.IntOps"></a>
-      <a id="IntOps(Int):IntOps"></a>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@FloatToOps(x:Float):basis.util.FloatOps" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.util#IntToOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntToOps(a:Int):basis.util.IntOps"></a>
+      <a id="IntToOps(Int):IntOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier">implicit macro </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">IntOps</span><span class="params">(<span name="a">a: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="IntOps.html" class="extype" name="basis.util.IntOps">IntOps</a></span>
+        <span class="name">IntToOps</span><span class="params">(<span name="a">a: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="IntOps.html" class="extype" name="basis.util.IntOps">IntOps</a></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Implicitly adds extended operations to <code>Int</code> values.</p>
-    </li><li name="basis.util.package#LongOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LongOps(a:Long):basis.util.LongOps"></a>
-      <a id="LongOps(Long):LongOps"></a>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@IntToOps(a:Int):basis.util.IntOps" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.util#LongToOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongToOps(a:Long):basis.util.LongOps"></a>
+      <a id="LongToOps(Long):LongOps"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier">implicit macro </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">LongOps</span><span class="params">(<span name="a">a: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="LongOps.html" class="extype" name="basis.util.LongOps">LongOps</a></span>
+        <span class="name">LongToOps</span><span class="params">(<span name="a">a: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="LongOps.html" class="extype" name="basis.util.LongOps">LongOps</a></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Implicitly adds extended operations to <code>Long</code> values.</p>
-    </li><li name="basis.util.MurmurHash3" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@LongToOps(a:Long):basis.util.LongOps" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.util.MurmurHash3" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MurmurHash3"></a>
       <a id="MurmurHash3:MurmurHash3"></a>
       <h4 class="signature">
@@ -234,9 +311,37 @@
       <span class="symbol">
         <a href="MurmurHash3$.html"><span class="name">MurmurHash3</span></a>
       </span>
-      </h4>
-      <p class="comment cmt">Implements Austin Appleby's MurmurHash 3 algorithm,
-specifically MurmurHash3_x86_32 revision 136.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@MurmurHash3" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implements Austin Appleby's MurmurHash 3 algorithm, specifically
+MurmurHash3_x86_32 revision 136.</p><div class="fullcomment"><div class="comment cmt"><p>Implements Austin Appleby's MurmurHash 3 algorithm, specifically
+MurmurHash3_x86_32 revision 136.
+</p></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">import</span> MurmurHash3._
+mash(mix(mix(mix(seed[Example], hash(x)), hash(y)), hash(z)))</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0
+</p></dd><dt>See also</dt><dd><span class="cmt"><p><a href="http://code.google.com/p/smhasher/" target="_blank">http://code.google.com/p/smhasher/</a>
+</p></span></dd></dl></div>
+    </li><li name="basis.util#begin" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="begin:basis.util.Begin"></a>
+      <a id="begin:Begin"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">begin</span><span class="result">: <a href="Begin.html" class="extype" name="basis.util.Begin">Begin</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.util.package@begin:basis.util.Begin" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The default breakable control-flow context.</p>
     </li></ol>
             </div>
 
