@@ -1,6 +1,6 @@
 lazy val modules = Seq(`basis-core`, `basis-data`, `basis-form`, `basis-math`, `basis-proto`, `basis-stat`, `basis-util`)
 
-lazy val basis = project in file(".") settings (Unidoc.settings ++ rootSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*) aggregate (modules map (x => x: ProjectReference): _*)
+lazy val basis = project in file(".") settings (commonSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*) aggregate ((modules :+ `basis-docs`) map (x => x: ProjectReference): _*)
 
 lazy val `basis-core` = project in file("core") settings (moduleSettings: _*) dependsOn (`basis-util`)
 
@@ -16,9 +16,11 @@ lazy val `basis-stat` = project in file("stat") settings (moduleSettings: _*) de
 
 lazy val `basis-util` = project in file("util") settings (moduleSettings: _*)
 
-lazy val rootSettings = projectSettings ++ docSettings ++ publishSettings
+lazy val `basis-docs` = project in file("docs") settings (moduleSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*)
 
-lazy val moduleSettings = rootSettings ++ compileSettings
+lazy val commonSettings = projectSettings ++ docSettings ++ publishSettings
+
+lazy val moduleSettings = commonSettings ++ compileSettings
 
 lazy val projectSettings = Seq(
   version := "0.2.0-SNAPSHOT",
@@ -75,3 +77,5 @@ lazy val publishSettings = Seq(
 // Root project settings
 
 libraryDependencies += "org.bouncycastle" % "bcpkix-jdk15on" % "1.51" % "optional"
+
+Unidoc.settings
