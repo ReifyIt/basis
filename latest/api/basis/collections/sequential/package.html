@@ -1,0 +1,750 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>sequential - basis.collections.sequential</title>
+          <meta name="description" content="sequential - basis.collections.sequential" />
+          <meta name="keywords" content="sequential basis.collections.sequential" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'basis.collections.sequential.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="basis">basis</a>.<a href="../package.html" class="extype" name="basis.collections">collections</a></p>
+        <h1>sequential</h1> <span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sequential</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/core/src/main/scala/basis/collections/sequential/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">Content Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph258" viewBox="0.00 0.00 176.00 94.00" height="94pt" width="176pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 90)" class="graph" id="graph0"><polygon points="-4,4 -4,-90 172,-90 172,4 -4,4" stroke="none" fill="white"></polygon><!-- node0 --><g class="node class" id="graph258_0"><g id="a_class|graph258_0"><a xlink:title="basis.collections.sequential.Strict" xlink:href="Strict.html#inheritance-diagram"><polygon points="66,-25 0,-25 0,-0 66,-0 66,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-19.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="30.7217" text-anchor="start">Strict</text></a></g></g><!-- node1 --><g class="node class" id="graph258_1"><g id="a_class|graph258_1"><a xlink:title="basis.collections.sequential.NonStrict" xlink:href="NonStrict.html#inheritance-diagram"><polygon points="168,-25 84,-25 84,-0 168,-0 168,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-19.5" x="94" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="114.549" text-anchor="start">NonStrict</text></a></g></g><!-- node2 --><g class="node class" id="graph258_2"><g id="a_class|graph258_2"><a xlink:title="basis.collections.sequential.General" xlink:href="General.html#inheritance-diagram"><polygon points="118.5,-86 39.5,-86 39.5,-61 118.5,-61 118.5,-86" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../../lib/class_diagram.png" y="-80.5" x="50" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="70.8228" text-anchor="start">General</text></a></g></g><!-- node2&#45;&gt;node0 --><g class="edge inheritance" id="graph258_2_0"><g id="a_inheritance|graph258_2_0"><a xlink:title="Strict is a subtype of General"><path d="M66.7307,-56.7633C58.9748,-46.8155 49.1206,-34.1764 42.0692,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="65.4574,-57.9763 69.9119,-60.8435 68.2176,-55.8243 65.4574,-57.9763" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2&#45;&gt;node1 --><g class="edge inheritance" id="graph258_2_1"><g id="a_inheritance|graph258_2_1"><a xlink:title="NonStrict is a subtype of General"><path d="M91.536,-56.7633C99.4606,-46.8155 109.529,-34.1764 116.734,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="90.0323,-55.8423 88.2857,-60.8435 92.7699,-58.0231 90.0323,-55.8423" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                <li class="group out"><span>Grouped</span></li>
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.collections.sequential"><span>sequential</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.collections.sequential.General" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralextendsAnyRef"></a>
+      <a id="General:General"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="General.html"><span class="name">General</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralArrayOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralArrayOps[A]extendsAnyVal"></a>
+      <a id="GeneralArrayOps[A]:GeneralArrayOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralArrayOps.html"><span class="name">GeneralArrayOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralArrayOps[A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralCollectionOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralCollectionOps[+A]extendsAnyVal"></a>
+      <a id="GeneralCollectionOps[+A]:GeneralCollectionOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralCollectionOps.html"><span class="name">GeneralCollectionOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralCollectionOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralContainerOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralContainerOps[+A]extendsAnyVal"></a>
+      <a id="GeneralContainerOps[+A]:GeneralContainerOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralContainerOps.html"><span class="name">GeneralContainerOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralContainerOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralIndexedSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralIndexedSeqOps[+A]extendsAnyVal"></a>
+      <a id="GeneralIndexedSeqOps[+A]:GeneralIndexedSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralIndexedSeqOps.html"><span class="name">GeneralIndexedSeqOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralIndexedSeqOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralIteratorOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralIteratorOps[+A]extendsAnyVal"></a>
+      <a id="GeneralIteratorOps[+A]:GeneralIteratorOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralIteratorOps.html"><span class="name">GeneralIteratorOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralIteratorOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralLinearSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralLinearSeqOps[+A]extendsAnyVal"></a>
+      <a id="GeneralLinearSeqOps[+A]:GeneralLinearSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralLinearSeqOps.html"><span class="name">GeneralLinearSeqOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralLinearSeqOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralMapOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralMapOps[+A,+T]extendsAnyVal"></a>
+      <a id="GeneralMapOps[+A,+T]:GeneralMapOps[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralMapOps.html"><span class="name">GeneralMapOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralMapOps[+A,+T]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralSeqOps[+A]extendsAnyVal"></a>
+      <a id="GeneralSeqOps[+A]:GeneralSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralSeqOps.html"><span class="name">GeneralSeqOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralSeqOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralSetOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralSetOps[+A]extendsAnyVal"></a>
+      <a id="GeneralSetOps[+A]:GeneralSetOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralSetOps.html"><span class="name">GeneralSetOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralSetOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.GeneralTraverserOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GeneralTraverserOps[+A]extendsAnyVal"></a>
+      <a id="GeneralTraverserOps[+A]:GeneralTraverserOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneralTraverserOps.html"><span class="name">GeneralTraverserOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@GeneralTraverserOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictextendsGeneral"></a>
+      <a id="NonStrict:NonStrict"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrict.html"><span class="name">NonStrict</span></a><span class="result"> extends <a href="General.html" class="extype" name="basis.collections.sequential.General">General</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictextendsGeneral" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictArrayOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictArrayOps[A]extendsAnyVal"></a>
+      <a id="NonStrictArrayOps[A]:NonStrictArrayOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictArrayOps.html"><span class="name">NonStrictArrayOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictArrayOps[A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictCollectionOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictCollectionOps[+A]extendsAnyVal"></a>
+      <a id="NonStrictCollectionOps[+A]:NonStrictCollectionOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictCollectionOps.html"><span class="name">NonStrictCollectionOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictCollectionOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictContainerOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictContainerOps[+A]extendsAnyVal"></a>
+      <a id="NonStrictContainerOps[+A]:NonStrictContainerOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictContainerOps.html"><span class="name">NonStrictContainerOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictContainerOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictIndexedSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictIndexedSeqOps[+A]extendsAnyVal"></a>
+      <a id="NonStrictIndexedSeqOps[+A]:NonStrictIndexedSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictIndexedSeqOps.html"><span class="name">NonStrictIndexedSeqOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictIndexedSeqOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictIteratorOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictIteratorOps[+A]extendsAnyVal"></a>
+      <a id="NonStrictIteratorOps[+A]:NonStrictIteratorOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictIteratorOps.html"><span class="name">NonStrictIteratorOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictIteratorOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictLinearSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictLinearSeqOps[+A]extendsAnyVal"></a>
+      <a id="NonStrictLinearSeqOps[+A]:NonStrictLinearSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictLinearSeqOps.html"><span class="name">NonStrictLinearSeqOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictLinearSeqOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictMapOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictMapOps[+A,+T]extendsAnyVal"></a>
+      <a id="NonStrictMapOps[+A,+T]:NonStrictMapOps[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictMapOps.html"><span class="name">NonStrictMapOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictMapOps[+A,+T]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictSeqOps[+A]extendsAnyVal"></a>
+      <a id="NonStrictSeqOps[+A]:NonStrictSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictSeqOps.html"><span class="name">NonStrictSeqOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictSeqOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictSetOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictSetOps[+A]extendsAnyVal"></a>
+      <a id="NonStrictSetOps[+A]:NonStrictSetOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictSetOps.html"><span class="name">NonStrictSetOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictSetOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.NonStrictTraverserOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NonStrictTraverserOps[+A]extendsAnyVal"></a>
+      <a id="NonStrictTraverserOps[+A]:NonStrictTraverserOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NonStrictTraverserOps.html"><span class="name">NonStrictTraverserOps</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@NonStrictTraverserOps[+A]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.Strict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictextendsGeneral"></a>
+      <a id="Strict:Strict"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Strict.html"><span class="name">Strict</span></a><span class="result"> extends <a href="General.html" class="extype" name="basis.collections.sequential.General">General</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictextendsGeneral" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictArrayOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictArrayOps[A,-Family]extendsAnyVal"></a>
+      <a id="StrictArrayOps[A,-Family]:StrictArrayOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictArrayOps.html"><span class="name">StrictArrayOps</span></a><span class="tparams">[<span name="A">A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictArrayOps[A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictCollectionOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictCollectionOps[+A,-Family]extendsAnyVal"></a>
+      <a id="StrictCollectionOps[+A,-Family]:StrictCollectionOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictCollectionOps.html"><span class="name">StrictCollectionOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictCollectionOps[+A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictContainerOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictContainerOps[+A,-Family]extendsAnyVal"></a>
+      <a id="StrictContainerOps[+A,-Family]:StrictContainerOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictContainerOps.html"><span class="name">StrictContainerOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictContainerOps[+A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictIndexedSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictIndexedSeqOps[+A,-Family]extendsAnyVal"></a>
+      <a id="StrictIndexedSeqOps[+A,-Family]:StrictIndexedSeqOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictIndexedSeqOps.html"><span class="name">StrictIndexedSeqOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictIndexedSeqOps[+A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictIteratorOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictIteratorOps[+A,-Family]extendsAnyVal"></a>
+      <a id="StrictIteratorOps[+A,-Family]:StrictIteratorOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictIteratorOps.html"><span class="name">StrictIteratorOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictIteratorOps[+A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictLinearSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictLinearSeqOps[+A,-Family]extendsAnyVal"></a>
+      <a id="StrictLinearSeqOps[+A,-Family]:StrictLinearSeqOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictLinearSeqOps.html"><span class="name">StrictLinearSeqOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictLinearSeqOps[+A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictMapOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictMapOps[+A,+T,-Family]extendsAnyVal"></a>
+      <a id="StrictMapOps[+A,+T,-Family]:StrictMapOps[A,T,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictMapOps.html"><span class="name">StrictMapOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="T">+T</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictMapOps[+A,+T,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictSeqOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictSeqOps[+A,-Family]extendsAnyVal"></a>
+      <a id="StrictSeqOps[+A,-Family]:StrictSeqOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictSeqOps.html"><span class="name">StrictSeqOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictSeqOps[+A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictSetOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictSetOps[+A,-Family]extendsAnyVal"></a>
+      <a id="StrictSetOps[+A,-Family]:StrictSetOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictSetOps.html"><span class="name">StrictSetOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictSetOps[+A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.StrictTraverserOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StrictTraverserOps[+A,-Family]extendsAnyVal"></a>
+      <a id="StrictTraverserOps[+A,-Family]:StrictTraverserOps[A,Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StrictTraverserOps.html"><span class="name">StrictTraverserOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="Family">-Family</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@StrictTraverserOps[+A,-Family]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="basis.collections.sequential#general" visbl="pub" data-isabs="false" fullComment="no" group="Operations">
+      <a id="general:basis.collections.sequential.General"></a>
+      <a id="general:General"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">general</span><span class="result">: <a href="General.html" class="extype" name="basis.collections.sequential.General">General</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@general:basis.collections.sequential.General" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implicit conversions that add general operations to collections.</p>
+    </li><li name="basis.collections.sequential#nonstrict" visbl="pub" data-isabs="false" fullComment="no" group="Operations">
+      <a id="nonstrict:basis.collections.sequential.NonStrict"></a>
+      <a id="nonstrict:NonStrict"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nonstrict</span><span class="result">: <a href="NonStrict.html" class="extype" name="basis.collections.sequential.NonStrict">NonStrict</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@nonstrict:basis.collections.sequential.NonStrict" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implicit conversions that add general and non-strictly evaluated operations to collections.</p>
+    </li><li name="basis.collections.sequential#strict" visbl="pub" data-isabs="false" fullComment="no" group="Operations">
+      <a id="strict:basis.collections.sequential.Strict"></a>
+      <a id="strict:Strict"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">strict</span><span class="result">: <a href="Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#basis.collections.sequential.package@strict:basis.collections.sequential.Strict" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implicit conversions that add general and strictly evaluated operations to collections.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Operations">
+              <h3>Operations</h3>
+              
+            </div><div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

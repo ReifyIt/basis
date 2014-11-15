@@ -1,0 +1,952 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>BsonValue - basis.form.BsonVariant.BsonValue</title>
+          <meta name="description" content="BsonValue - basis.form.BsonVariant.BsonValue" />
+          <meta name="keywords" content="BsonValue basis.form.BsonVariant.BsonValue" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.form.BsonVariant$BsonValue';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../lib/trait_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.form">form</a>.<a href="BsonVariant.html" class="extype" name="basis.form.BsonVariant">BsonVariant</a></p>
+        <h1>BsonValue</h1> <span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">BsonValue</span><span class="result"> extends <a href="BsonVariant.html#BaseValueextendsAnyRef" class="extmbr" name="basis.form.Variant.BaseValue">BaseValue</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="BsonVariant$AnyForm.html" class="extype" name="basis.form.BsonVariant.AnyForm">AnyForm</a></dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/form/src/main/scala/basis/form/BsonVariant.scala" target="_blank">BsonVariant.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="BsonVariant.html#BaseValueextendsAnyRef" class="extmbr" name="basis.form.Variant.BaseValue">BsonVariant.BaseValue</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="OmniVariant$$AnyForm.html" class="extype" name="basis.form.OmniVariant.AnyForm">AnyForm</a>, BoolForm, <a href="OmniVariant$$BoolForm.html" class="extype" name="basis.form.OmniVariant.BoolForm">BoolForm</a>, <a href="BsonVariant$BsonBool.html" class="extype" name="basis.form.BsonVariant.BsonBool">BsonBool</a>, <a href="BsonVariant$BsonData.html" class="extype" name="basis.form.BsonVariant.BsonData">BsonData</a>, <a href="BsonVariant$BsonDate.html" class="extype" name="basis.form.BsonVariant.BsonDate">BsonDate</a>, <a href="BsonVariant$BsonNo.html" class="extype" name="basis.form.BsonVariant.BsonNo">BsonNo</a>, <a href="BsonVariant$BsonNull.html" class="extype" name="basis.form.BsonVariant.BsonNull">BsonNull</a>, <a href="BsonVariant$BsonNumber.html" class="extype" name="basis.form.BsonVariant.BsonNumber">BsonNumber</a>, <a href="BsonVariant$BsonObject.html" class="extype" name="basis.form.BsonVariant.BsonObject">BsonObject</a>, <a href="BsonVariant$BsonSeq.html" class="extype" name="basis.form.BsonVariant.BsonSeq">BsonSeq</a>, <a href="BsonVariant$BsonSet.html" class="extype" name="basis.form.BsonVariant.BsonSet">BsonSet</a>, <a href="BsonVariant$BsonText.html" class="extype" name="basis.form.BsonVariant.BsonText">BsonText</a>, DataForm, <a href="OmniVariant$$DataForm.html" class="extype" name="basis.form.OmniVariant.DataForm">DataForm</a>, <a href="OmniVariant$$DateForm.html" class="extype" name="basis.form.OmniVariant.DateForm">DateForm</a>, DateForm, <a href="OmniVariant$$FalseForm$.html" class="extype" name="basis.form.OmniVariant.FalseForm">FalseForm</a>, <a href="OmniVariant$$NoForm.html" class="extype" name="basis.form.OmniVariant.NoForm">NoForm</a>, NoForm, <a href="OmniVariant$$NoForm$.html" class="extype" name="basis.form.OmniVariant.NoForm">NoForm</a>, <a href="OmniVariant$$NullForm.html" class="extype" name="basis.form.OmniVariant.NullForm">NullForm</a>, NullForm, <a href="OmniVariant$$NullForm$.html" class="extype" name="basis.form.OmniVariant.NullForm">NullForm</a>, NumberForm, <a href="OmniVariant$$NumberForm.html" class="extype" name="basis.form.OmniVariant.NumberForm">NumberForm</a>, ObjectForm, <a href="OmniVariant$$ObjectForm.html" class="extype" name="basis.form.OmniVariant.ObjectForm">ObjectForm</a>, <a href="OmniVariant$$SecretForm.html" class="extype" name="basis.form.OmniVariant.SecretForm">SecretForm</a>, <a href="OmniVariant$$SeqForm.html" class="extype" name="basis.form.OmniVariant.SeqForm">SeqForm</a>, SeqForm, <a href="OmniVariant$$SetForm.html" class="extype" name="basis.form.OmniVariant.SetForm">SetForm</a>, SetForm, TextForm, <a href="OmniVariant$$TextForm.html" class="extype" name="basis.form.OmniVariant.TextForm">TextForm</a>, <a href="OmniVariant$$TrueForm$.html" class="extype" name="basis.form.OmniVariant.TrueForm">TrueForm</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph161" viewBox="0.00 0.00 1200.50 155.00" height="155pt" width="1201pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 1196.5,-151 1196.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph161_0"><g id="a_this trait|graph161_0"><a xlink:title="basis.form.BsonVariant.BsonValue (this trait)" xlink:href="#inheritance-diagram"><polygon points="658,-86 567,-86 567,-61 658,-61 658,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="577.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="598.297" text-anchor="start">BsonValue</text></a></g></g><!-- node1 --><g class="node class" id="graph161_1"><g id="a_class|graph161_1"><a xlink:title="basis.form.OmniVariant.AnyForm" xlink:href="OmniVariant$$AnyForm.html#inheritance-diagram"><polygon points="141,-25 0,-25 0,-0 141,-0 141,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="31.0239" text-anchor="start">OmniVariant.AnyForm</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph161_0_1"><g id="a_inheritance|graph161_0_1"><a xlink:title="OmniVariant.AnyForm is a subtype of BsonValue"><path d="M561.628,-67.9458C476.449,-60.1689 299.627,-43.3771 150.5,-25 147.436,-24.6224 144.308,-24.2249 141.15,-23.8135" stroke="#d4d4d4" fill="none"></path><polygon points="561.718,-69.7112 566.857,-68.4224 562.036,-66.2257 561.718,-69.7112" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph161_2"><g id="a_trait|graph161_2"><a xlink:title="basis.form.BsonVariant.BsonBool" xlink:href="BsonVariant$BsonBool.html#inheritance-diagram"><polygon points="245.5,-25 159.5,-25 159.5,-0 245.5,-0 245.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="169.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="190.207" text-anchor="start">BsonBool</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph161_0_2"><g id="a_inheritance|graph161_0_2"><a xlink:title="BsonBool is a subtype of BsonValue"><path d="M561.494,-67.1258C491.862,-59.4719 363.266,-44.2061 254.5,-25 251.586,-24.4855 248.589,-23.9199 245.573,-23.3241" stroke="#d4d4d4" fill="none"></path><polygon points="561.654,-68.9037 566.815,-67.7084 562.035,-65.4245 561.654,-68.9037" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph161_3"><g id="a_trait|graph161_3"><a xlink:title="basis.form.BsonVariant.BsonData" xlink:href="BsonVariant$BsonData.html#inheritance-diagram"><polygon points="351,-25 264,-25 264,-0 351,-0 351,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="274.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="295.153" text-anchor="start">BsonData</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph161_0_3"><g id="a_inheritance|graph161_0_3"><a xlink:title="BsonData is a subtype of BsonValue"><path d="M561.545,-63.4288C510.385,-54.2047 429.348,-39.2766 359.5,-25 356.782,-24.4445 353.988,-23.8613 351.171,-23.2645" stroke="#d4d4d4" fill="none"></path><polygon points="561.478,-65.1948 566.709,-64.3588 562.098,-61.7502 561.478,-65.1948" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph161_4"><g id="a_trait|graph161_4"><a xlink:title="basis.form.BsonVariant.BsonDate" xlink:href="BsonVariant$BsonDate.html#inheritance-diagram"><polygon points="456,-25 369,-25 369,-0 456,-0 456,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="379.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="400.153" text-anchor="start">BsonDate</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph161_0_4"><g id="a_inheritance|graph161_0_4"><a xlink:title="BsonDate is a subtype of BsonValue"><path d="M568.42,-59.4964C533.557,-49.2119 485.331,-34.9851 451.78,-25.0875" stroke="#d4d4d4" fill="none"></path><polygon points="568.172,-61.2478 573.463,-60.9841 569.163,-57.8909 568.172,-61.2478" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph161_5"><g id="a_trait|graph161_5"><a xlink:title="basis.form.BsonVariant.BsonNo" xlink:href="BsonVariant$BsonNo.html#inheritance-diagram"><polygon points="553,-25 474,-25 474,-0 553,-0 553,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="484.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="505.323" text-anchor="start">BsonNo</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph161_0_5"><g id="a_inheritance|graph161_0_5"><a xlink:title="BsonNo is a subtype of BsonValue"><path d="M588.302,-58.0789C571.308,-47.9511 548.872,-34.5802 533.019,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="587.75,-59.787 592.941,-60.8435 589.542,-56.7805 587.75,-59.787" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph161_6"><g id="a_trait|graph161_6"><a xlink:title="basis.form.BsonVariant.BsonNull" xlink:href="BsonVariant$BsonNull.html#inheritance-diagram"><polygon points="654,-25 571,-25 571,-0 654,-0 654,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="581.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="602.101" text-anchor="start">BsonNull</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph161_0_6"><g id="a_inheritance|graph161_0_6"><a xlink:title="BsonNull is a subtype of BsonValue"><path d="M612.5,-55.6874C612.5,-45.9173 612.5,-33.8534 612.5,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="610.75,-55.8435 612.5,-60.8435 614.25,-55.8435 610.75,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node trait" id="graph161_7"><g id="a_trait|graph161_7"><a xlink:title="basis.form.BsonVariant.BsonNumber" xlink:href="BsonVariant$BsonNumber.html#inheritance-diagram"><polygon points="774.5,-25 672.5,-25 672.5,-0 774.5,-0 774.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="682.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="703.431" text-anchor="start">BsonNumber</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph161_0_7"><g id="a_inheritance|graph161_0_7"><a xlink:title="BsonNumber is a subtype of BsonValue"><path d="M638.875,-58.4807C657.978,-48.3269 683.505,-34.7588 701.51,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="637.759,-57.0921 634.165,-60.9841 639.402,-60.1826 637.759,-57.0921" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node trait" id="graph161_8"><g id="a_trait|graph161_8"><a xlink:title="basis.form.BsonVariant.BsonObject" xlink:href="BsonVariant$BsonObject.html#inheritance-diagram"><polygon points="888,-25 793,-25 793,-0 888,-0 888,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="803.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="824.264" text-anchor="start">BsonObject</text></a></g></g><!-- node0&#45;&gt;node8 --><g class="edge inheritance" id="graph161_0_8"><g id="a_inheritance|graph161_0_8"><a xlink:title="BsonObject is a subtype of BsonValue"><path d="M662.263,-59.6226C702.044,-49.3286 757.316,-35.0257 795.721,-25.0875" stroke="#d4d4d4" fill="none"></path><polygon points="661.404,-58.0373 657.002,-60.9841 662.281,-61.4257 661.404,-58.0373" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node trait" id="graph161_9"><g id="a_trait|graph161_9"><a xlink:title="basis.form.BsonVariant.BsonSeq" xlink:href="BsonVariant$BsonSeq.html#inheritance-diagram"><polygon points="990.5,-25 906.5,-25 906.5,-0 990.5,-0 990.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="916.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="937.318" text-anchor="start">BsonSeq</text></a></g></g><!-- node0&#45;&gt;node9 --><g class="edge inheritance" id="graph161_0_9"><g id="a_inheritance|graph161_0_9"><a xlink:title="BsonSeq is a subtype of BsonValue"><path d="M663.118,-64.9499C720.221,-56.2271 815.79,-41.0083 897.5,-25 900.35,-24.4416 903.285,-23.8431 906.238,-23.2233" stroke="#d4d4d4" fill="none"></path><polygon points="662.734,-63.2383 658.055,-65.7218 663.261,-66.6983 662.734,-63.2383" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node trait" id="graph161_10"><g id="a_trait|graph161_10"><a xlink:title="basis.form.BsonVariant.BsonSet" xlink:href="BsonVariant$BsonSet.html#inheritance-diagram"><polygon points="1090,-25 1009,-25 1009,-0 1090,-0 1090,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1019.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1040.21" text-anchor="start">BsonSet</text></a></g></g><!-- node0&#45;&gt;node10 --><g class="edge inheritance" id="graph161_0_10"><g id="a_inheritance|graph161_0_10"><a xlink:title="BsonSet is a subtype of BsonValue"><path d="M663.23,-67.9705C737.416,-60.9632 879.705,-46.0694 999.5,-25 1002.57,-24.46 1005.74,-23.8527 1008.91,-23.2066" stroke="#d4d4d4" fill="none"></path><polygon points="662.822,-66.2511 658.007,-68.4614 663.149,-69.7357 662.822,-66.2511" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node trait" id="graph161_11"><g id="a_trait|graph161_11"><a xlink:title="basis.form.BsonVariant.BsonText" xlink:href="BsonVariant$BsonText.html#inheritance-diagram"><polygon points="1192.5,-25 1108.5,-25 1108.5,-0 1192.5,-0 1192.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="1118.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="1139.04" text-anchor="start">BsonText</text></a></g></g><!-- node0&#45;&gt;node11 --><g class="edge inheritance" id="graph161_0_11"><g id="a_inheritance|graph161_0_11"><a xlink:title="BsonText is a subtype of BsonValue"><path d="M663.251,-69.6386C752.097,-64.1649 941.406,-50.4327 1099.5,-25 1102.37,-24.5387 1105.32,-24.013 1108.28,-23.4463" stroke="#d4d4d4" fill="none"></path><polygon points="662.946,-67.9039 658.062,-69.9559 663.16,-71.3974 662.946,-67.9039" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node trait" id="graph161_12"><g id="a_trait|graph161_12"><a xlink:title="basis.form.Variant.BaseValue" xlink:href="Variant$BaseValue.html#inheritance-diagram"><polygon points="658,-147 567,-147 567,-122 658,-122 658,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="577.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="598.297" text-anchor="start">BaseValue</text></a></g></g><!-- node12&#45;&gt;node0 --><g class="edge inheritance" id="graph161_12_0"><g id="a_inheritance|graph161_12_0"><a xlink:title="BsonValue is a subtype of BaseValue"><path d="M612.5,-116.687C612.5,-106.917 612.5,-94.8534 612.5,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="610.75,-116.843 612.5,-121.843 614.25,-116.844 610.75,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.form.BsonVariant.BsonValue"><span>BsonValue</span></li><li class="in" name="basis.form.Variant.BaseValue"><span>BaseValue</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="basis.form.BsonVariant.BsonValue#bsonSize" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="bsonSize:Int"></a>
+      <a id="bsonSize:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bsonSize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@bsonSize:Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the size in bytes of this form's BSON representation.</p>
+    </li><li name="basis.form.BsonVariant.BsonValue#bsonType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="bsonType:Byte"></a>
+      <a id="bsonType:Byte"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bsonType</span><span class="result">: <span class="extype" name="scala.Byte">Byte</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@bsonType:Byte" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the type code of this form's BSON representation.</p>
+    </li><li name="basis.form.BsonVariant.BsonValue#writeBson" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="writeBson(output:basis.data.Writer):Unit"></a>
+      <a id="writeBson(Writer):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeBson</span><span class="params">(<span name="output">output: <a href="../data/Writer.html" class="extype" name="basis.data.Writer">Writer</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@writeBson(output:basis.data.Writer):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Writes the serialized BSON representation of this form to <code>output</code>.</p>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#/" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="/(index:Int):Variant.this.AnyForm"></a>
+      <a id="/(Int):AnyForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="BsonVariant$AnyForm.html" class="extype" name="basis.form.BsonVariant.AnyForm">AnyForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@/(index:Int):Variant.this.AnyForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#/" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="/(key:String):Variant.this.AnyForm"></a>
+      <a id="/(String):AnyForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="key">key: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="BsonVariant$AnyForm.html" class="extype" name="basis.form.BsonVariant.AnyForm">AnyForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@/(key:String):Variant.this.AnyForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asBoolForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asBoolForm:Variant.this.BoolForm"></a>
+      <a id="asBoolForm:BoolForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asBoolForm</span><span class="result">: <a href="BsonVariant$BoolForm.html" class="extype" name="basis.form.BsonVariant.BoolForm">BoolForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asBoolForm:Variant.this.BoolForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asDataForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asDataForm:Variant.this.DataForm"></a>
+      <a id="asDataForm:DataForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asDataForm</span><span class="result">: <a href="BsonVariant$DataForm.html" class="extype" name="basis.form.BsonVariant.DataForm">DataForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asDataForm:Variant.this.DataForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asDateForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asDateForm:Variant.this.DateForm"></a>
+      <a id="asDateForm:DateForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asDateForm</span><span class="result">: <a href="BsonVariant$DateForm.html" class="extype" name="basis.form.BsonVariant.DateForm">DateForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asDateForm:Variant.this.DateForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asNullForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asNullForm:Variant.this.NullForm"></a>
+      <a id="asNullForm:NullForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asNullForm</span><span class="result">: <a href="BsonVariant$NullForm.html" class="extype" name="basis.form.BsonVariant.NullForm">NullForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asNullForm:Variant.this.NullForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asNumberForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asNumberForm:Variant.this.NumberForm"></a>
+      <a id="asNumberForm:NumberForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asNumberForm</span><span class="result">: <a href="BsonVariant$NumberForm.html" class="extype" name="basis.form.BsonVariant.NumberForm">NumberForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asNumberForm:Variant.this.NumberForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asObjectForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asObjectForm:Variant.this.ObjectForm"></a>
+      <a id="asObjectForm:ObjectForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asObjectForm</span><span class="result">: <a href="BsonVariant$ObjectForm.html" class="extype" name="basis.form.BsonVariant.ObjectForm">ObjectForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asObjectForm:Variant.this.ObjectForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asSeqForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asSeqForm:Variant.this.SeqForm"></a>
+      <a id="asSeqForm:SeqForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asSeqForm</span><span class="result">: <a href="BsonVariant$SeqForm.html" class="extype" name="basis.form.BsonVariant.SeqForm">SeqForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asSeqForm:Variant.this.SeqForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asSetForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asSetForm:Variant.this.SetForm"></a>
+      <a id="asSetForm:SetForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asSetForm</span><span class="result">: <a href="BsonVariant$SetForm.html" class="extype" name="basis.form.BsonVariant.SetForm">SetForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asSetForm:Variant.this.SetForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#asTextForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asTextForm:Variant.this.TextForm"></a>
+      <a id="asTextForm:TextForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asTextForm</span><span class="result">: <a href="BsonVariant$TextForm.html" class="extype" name="basis.form.BsonVariant.TextForm">TextForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@asTextForm:Variant.this.TextForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#cast" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cast[T](implicitT:basis.form.Mold[T]):basis.Maybe[T]"></a>
+      <a id="cast[T](Mold[T]):Maybe[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cast</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="T">T: <a href="Mold.html" class="extype" name="basis.form.Mold">Mold</a>[<span class="extype" name="basis.form.Variant.BaseValue.cast.T">T</span>]</span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.form.Variant.BaseValue.cast.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@cast[T](implicitT:basis.form.Mold[T]):basis.Maybe[T]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#coerce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="coerce[T](implicitT:basis.form.Mold[T]):T"></a>
+      <a id="coerce[T](Mold[T]):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">coerce</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="T">T: <a href="Mold.html" class="extype" name="basis.form.Mold">Mold</a>[<span class="extype" name="basis.form.Variant.BaseValue.coerce.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="basis.form.Variant.BaseValue.coerce.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@coerce[T](implicitT:basis.form.Mold[T]):T" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isBoolForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isBoolForm:Boolean"></a>
+      <a id="isBoolForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isBoolForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isBoolForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isDataForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDataForm:Boolean"></a>
+      <a id="isDataForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDataForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isDataForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isDateForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDateForm:Boolean"></a>
+      <a id="isDateForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDateForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isDateForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isDefined" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDefined:Boolean"></a>
+      <a id="isDefined:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDefined</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isDefined:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isNullForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isNullForm:Boolean"></a>
+      <a id="isNullForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isNullForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isNullForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isNumberForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isNumberForm:Boolean"></a>
+      <a id="isNumberForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isNumberForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isNumberForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isObjectForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isObjectForm:Boolean"></a>
+      <a id="isObjectForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isObjectForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isObjectForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isSeqForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSeqForm:Boolean"></a>
+      <a id="isSeqForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSeqForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isSeqForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isSetForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSetForm:Boolean"></a>
+      <a id="isSetForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSetForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isSetForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="basis.form.Variant.BaseValue#isTextForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isTextForm:Boolean"></a>
+      <a id="isTextForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isTextForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@isTextForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Variant$BaseValue.html" class="extype" name="basis.form.Variant.BaseValue">BaseValue</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="basis.form.BsonVariant.BsonValue#toBson" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toBson:basis.data.Loader"></a>
+      <a id="toBson:Loader"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toBson</span><span class="result">: <a href="../data/Loader.html" class="extype" name="basis.data.Loader">Loader</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@toBson:basis.data.Loader" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the serialized BSON representation of this form.</p>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.BsonVariant$BsonValue@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.form.Variant.BaseValue">
+              <h3>Inherited from <a href="BsonVariant.html#BaseValueextendsAnyRef" class="extmbr" name="basis.form.Variant.BaseValue">BsonVariant.BaseValue</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

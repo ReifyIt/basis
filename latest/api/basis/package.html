@@ -1,0 +1,816 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>basis - basis</title>
+          <meta name="description" content="basis - basis" />
+          <meta name="keywords" content="basis basis" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../lib/modernizr.custom.js"></script><script type="text/javascript" src="../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../index.html';
+            var hash = 'basis.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../lib/package_big.png" />
+        
+        <h1>basis</h1> <span class="permalink">
+      <a href="../index.html#basis.package" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">basis</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Core basis types.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/core/src/main/scala/basis/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">Content Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph1" viewBox="0.00 0.00 625.50 155.00" height="155pt" width="626pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 621.5,-151 621.5,4 -4,4" stroke="none" fill="white"></polygon><!-- node0 --><g class="node class" id="graph1_0"><g id="a_class|graph1_0"><a xlink:title="basis.Bind" xlink:href="Bind.html#inheritance-diagram"><polygon points="76,-86 0,-86 0,-61 76,-61 76,-86" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../lib/class_diagram.png" y="-80.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="30.9902" text-anchor="start">Bind[A]</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="basis.Comparison" xlink:href="Comparison.html#inheritance-diagram"><polygon points="381.5,-86 284.5,-86 284.5,-61 381.5,-61 381.5,-86" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../lib/class_diagram.png" y="-80.5" x="295" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="315.655" text-anchor="start">Comparison</text></a></g></g><!-- node2 --><g class="node object" id="graph1_2"><g id="a_object|graph1_2"><a xlink:title="basis.Equivalent" xlink:href="Equivalent$.html#inheritance-diagram"><polygon points="272,-25 182,-25 182,-0 272,-0 272,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../lib/object_diagram.png" y="-19.5" x="192" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="212.761" text-anchor="start">Equivalent</text></a></g></g><!-- node1&#45;&gt;node2 --><g class="edge inheritance" id="graph1_1_2"><g id="a_inheritance|graph1_1_2"><a xlink:title="Equivalent is a subtype of Comparison"><path d="M307.813,-58.4807C289.57,-48.3269 265.194,-34.7588 248,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="307.091,-60.0815 312.31,-60.9841 308.793,-57.0233 307.091,-60.0815" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node object" id="graph1_5"><g id="a_object|graph1_5"><a xlink:title="basis.Precedes" xlink:href="Precedes$.html#inheritance-diagram"><polygon points="376,-25 290,-25 290,-0 376,-0 376,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../lib/object_diagram.png" y="-19.5" x="300" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="320.988" text-anchor="start">Precedes</text></a></g></g><!-- node1&#45;&gt;node5 --><g class="edge inheritance" id="graph1_1_5"><g id="a_inheritance|graph1_1_5"><a xlink:title="Precedes is a subtype of Comparison"><path d="M333,-55.6874C333,-45.9173 333,-33.8534 333,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="331.25,-55.8435 333,-60.8435 334.75,-55.8435 331.25,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node object" id="graph1_6"><g id="a_object|graph1_6"><a xlink:title="basis.Succeeds" xlink:href="Succeeds$.html#inheritance-diagram"><polygon points="481.5,-25 394.5,-25 394.5,-0 481.5,-0 481.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../lib/object_diagram.png" y="-19.5" x="405" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="425.653" text-anchor="start">Succeeds</text></a></g></g><!-- node1&#45;&gt;node6 --><g class="edge inheritance" id="graph1_1_6"><g id="a_inheritance|graph1_1_6"><a xlink:title="Succeeds is a subtype of Comparison"><path d="M357.95,-58.4807C376.02,-48.3269 400.166,-34.7588 417.199,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="356.996,-57.0091 353.494,-60.9841 358.711,-60.0604 356.996,-57.0091" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node object" id="graph1_3"><g id="a_object|graph1_3"><a xlink:title="basis.Incomparable" xlink:href="Incomparable$.html#inheritance-diagram"><polygon points="504,-86 400,-86 400,-61 504,-61 504,-86" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../lib/object_diagram.png" y="-80.5" x="410" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="430.815" text-anchor="start">Incomparable</text></a></g></g><!-- node4 --><g class="node trait" id="graph1_4"><g id="a_trait|graph1_4"><a xlink:title="basis.Order" xlink:href="Order.html#inheritance-diagram"><polygon points="603.5,-86 522.5,-86 522.5,-61 603.5,-61 603.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-80.5" x="533" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="553.998" text-anchor="start">Order[T]</text></a></g></g><!-- node7 --><g class="node class" id="graph1_7"><g id="a_class|graph1_7"><a xlink:title="basis.Trap" xlink:href="Trap.html#inheritance-diagram"><polygon points="170,-86 94,-86 94,-61 170,-61 170,-86" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../lib/class_diagram.png" y="-80.5" x="104" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="124.902" text-anchor="start">Trap[B]</text></a></g></g><!-- node8 --><g class="node object" id="graph1_8"><g id="a_object|graph1_8"><a xlink:title="basis.Trap" xlink:href="Trap$.html#inheritance-diagram"><polygon points="163.5,-25 100.5,-25 100.5,-0 163.5,-0 163.5,-25" stroke="#102966" fill="#3556a7"></polygon><image xlink:href="../lib/object_diagram.png" y="-19.5" x="111" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="131.516" text-anchor="start">Trap</text></a></g></g><!-- node7&#45;&gt;node8 --><g class="edge inheritance" id="graph1_7_8"><g id="a_inheritance|graph1_7_8"><a xlink:title="Trap is a subtype of Trap[B]"><path d="M132,-55.6874C132,-45.9173 132,-33.8534 132,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="130.25,-55.8435 132,-60.8435 133.75,-55.8435 130.25,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node class" id="graph1_9"><g id="a_class|graph1_9"><a xlink:title="basis.Else" xlink:href="Else.html#inheritance-diagram"><polygon points="128.5,-147 41.5,-147 41.5,-122 128.5,-122 128.5,-147" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../lib/class_diagram.png" y="-141.5" x="52" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="72.6577" text-anchor="start">Else[A, B]</text></a></g></g><!-- node9&#45;&gt;node0 --><g class="edge inheritance" id="graph1_9_0"><g id="a_inheritance|graph1_9_0"><a xlink:title="Bind[A] is a subtype of Else[A, B]"><path d="M72.464,-117.763C64.5394,-107.815 54.4711,-95.1764 47.2664,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="71.2301,-119.023 75.7143,-121.843 73.9677,-116.842 71.2301,-119.023" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9&#45;&gt;node7 --><g class="edge inheritance" id="graph1_9_7"><g id="a_inheritance|graph1_9_7"><a xlink:title="Trap[B] is a subtype of Else[A, B]"><path d="M97.536,-117.763C105.461,-107.815 115.529,-95.1764 122.734,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="96.0323,-116.842 94.2857,-121.843 98.7699,-119.023 96.0323,-116.842" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node class" id="graph1_10"><g id="a_class|graph1_10"><a xlink:title="basis.PartialComparison" xlink:href="PartialComparison.html#inheritance-diagram"><polygon points="443,-147 317,-147 317,-122 443,-122 443,-147" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../lib/class_diagram.png" y="-141.5" x="327" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="347.983" text-anchor="start">PartialComparison</text></a></g></g><!-- node10&#45;&gt;node1 --><g class="edge inheritance" id="graph1_10_1"><g id="a_inheritance|graph1_10_1"><a xlink:title="Comparison is a subtype of PartialComparison"><path d="M367.464,-117.763C359.539,-107.815 349.471,-95.1764 342.266,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="366.23,-119.023 370.714,-121.843 368.968,-116.842 366.23,-119.023" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10&#45;&gt;node3 --><g class="edge inheritance" id="graph1_10_3"><g id="a_inheritance|graph1_10_3"><a xlink:title="Incomparable is a subtype of PartialComparison"><path d="M398.236,-118.557C410.514,-108.495 426.472,-95.4187 437.805,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="396.983,-117.321 394.225,-121.843 399.201,-120.028 396.983,-117.321" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node trait" id="graph1_11"><g id="a_trait|graph1_11"><a xlink:title="basis.PartialOrder" xlink:href="PartialOrder.html#inheritance-diagram"><polygon points="617.5,-147 508.5,-147 508.5,-122 617.5,-122 617.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../lib/trait_diagram.png" y="-141.5" x="519" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="539.825" text-anchor="start">PartialOrder[T]</text></a></g></g><!-- node11&#45;&gt;node4 --><g class="edge inheritance" id="graph1_11_4"><g id="a_inheritance|graph1_11_4"><a xlink:title="Order[T] is a subtype of PartialOrder[T]"><path d="M563,-116.687C563,-106.917 563,-94.8534 563,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="561.25,-116.843 563,-121.843 564.75,-116.844 561.25,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis"><span>basis</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.Bind" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Bind[+A]extendsElse[A,Nothing]"></a>
+      <a id="Bind[+A]:Bind[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Bind.html"><span class="name">Bind</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="Else.html" class="extype" name="basis.Else">Else</a>[<span class="extype" name="basis.Bind.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Bind[+A]extendsElse[A,Nothing]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Comparison" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComparisonextendsPartialComparison"></a>
+      <a id="Comparison:Comparison"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Comparison.html"><span class="name">Comparison</span></a><span class="result"> extends <a href="PartialComparison.html" class="extype" name="basis.PartialComparison">PartialComparison</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@ComparisonextendsPartialComparison" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Else" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Else[+A,+B]extendsEqualswithImmutablewithFamily[basis.Else[_,_]]withContainer[A]"></a>
+      <a id="Else[+A,+B]:Else[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Else.html"><span class="name">Else</span></a><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <span class="extype" name="scala.Immutable">Immutable</span> with <a href="Family.html" class="extype" name="basis.Family">Family</a>[<a href="Else.html" class="extype" name="basis.Else">Else</a>[_, _]] with <a href="collections/Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.Else.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Else[+A,+B]extendsEqualswithImmutablewithFamily[basis.Else[_,_]]withContainer[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.ElseOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ElseOps[+A,+B]extendsAnyVal"></a>
+      <a id="ElseOps[+A,+B]:ElseOps[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ElseOps.html"><span class="name">ElseOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@ElseOps[+A,+B]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Family" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Family[+Base]extendsAny"></a>
+      <a id="Family[+Base]:Family[Base]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Family.html"><span class="name">Family</span></a><span class="tparams">[<span name="Base">+Base</span>]</span><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Family[+Base]extendsAny" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.From" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="From[+Family]extendsAny"></a>
+      <a id="From[+Family]:From[Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="From.html"><span class="name">From</span></a><span class="tparams">[<span name="Family">+Family</span>]</span><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@From[+Family]extendsAny" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.FuseOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FuseOps[+A,+B]extendsAnyRef"></a>
+      <a id="FuseOps[+A,+B]:FuseOps[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FuseOps.html"><span class="name">FuseOps</span></a><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@FuseOps[+A,+B]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Maybe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Maybe[+A]=basis.Else[A,Any]"></a>
+      <a id="Maybe[+A]:Maybe[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Maybe</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> = <a href="Else.html" class="extype" name="basis.Else">Else</a>[<span class="extype" name="basis.Maybe.A">A</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Maybe[+A]=basis.Else[A,Any]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Order" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Order[T]extendsPartialOrder[T]"></a>
+      <a id="Order[T]:Order[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Order.html"><span class="name">Order</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="PartialOrder.html" class="extype" name="basis.PartialOrder">PartialOrder</a>[<span class="extype" name="basis.Order.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Order[T]extendsPartialOrder[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.PartialComparison" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PartialComparisonextendsAnyRef"></a>
+      <a id="PartialComparison:PartialComparison"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PartialComparison.html"><span class="name">PartialComparison</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@PartialComparisonextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.PartialOrder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PartialOrder[T]extendsAnyRef"></a>
+      <a id="PartialOrder[T]:PartialOrder[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PartialOrder.html"><span class="name">PartialOrder</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@PartialOrder[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.State" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="State[+Result]extendsAny"></a>
+      <a id="State[+Result]:State[Result]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="State.html"><span class="name">State</span></a><span class="tparams">[<span name="Result">+Result</span>]</span><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@State[+Result]extendsAny" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Trap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Trap[+B]extendsElse[Nothing,B]"></a>
+      <a id="Trap[+B]:Trap[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Trap.html"><span class="name">Trap</span></a><span class="tparams">[<span name="B">+B</span>]</span><span class="result"> extends <a href="Else.html" class="extype" name="basis.Else">Else</a>[<span class="extype" name="scala.Nothing">Nothing</span>, <span class="extype" name="basis.Trap.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Trap[+B]extendsElse[Nothing,B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Truth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Truth=basis.Else[Boolean,Any]"></a>
+      <a id="Truth:Truth"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Truth</span><span class="result"> = <a href="Else.html" class="extype" name="basis.Else">Else</a>[<span class="extype" name="scala.Boolean">Boolean</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Truth=basis.Else[Boolean,Any]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.TruthOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TruthOpsextendsAnyVal"></a>
+      <a id="TruthOps:TruthOps"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TruthOps.html"><span class="name">TruthOps</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@TruthOpsextendsAnyVal" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Try" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Try[+A]=basis.Else[A,Throwable]"></a>
+      <a id="Try[+A]:Try[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Try</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> = <a href="Else.html" class="extype" name="basis.Else">Else</a>[<span class="extype" name="basis.Try.A">A</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Try[+A]=basis.Else[A,Throwable]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="basis.Bind" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Bind"></a>
+      <a id="Bind:Bind"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Bind$.html"><span class="name">Bind</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Bind" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Comparison" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Comparison"></a>
+      <a id="Comparison:Comparison"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Comparison$.html"><span class="name">Comparison</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Comparison" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis#ElseToOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ElseToOps[A,B](self:basis.Else[A,B]):basis.ElseOps[A,B]"></a>
+      <a id="ElseToOps[A,B](Else[A,B]):ElseOps[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ElseToOps</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="self">self: <a href="Else.html" class="extype" name="basis.Else">Else</a>[<span class="extype" name="basis.ElseToOps.A">A</span>, <span class="extype" name="basis.ElseToOps.B">B</span>]</span>)</span><span class="result">: <a href="ElseOps.html" class="extype" name="basis.ElseOps">ElseOps</a>[<span class="extype" name="basis.ElseToOps.A">A</span>, <span class="extype" name="basis.ElseToOps.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@ElseToOps[A,B](self:basis.Else[A,B]):basis.ElseOps[A,B]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Equivalent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Equivalent"></a>
+      <a id="Equivalent:Equivalent"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Equivalent$.html"><span class="name">Equivalent</span></a><span class="result"> extends <a href="Comparison.html" class="extype" name="basis.Comparison">Comparison</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Equivalent" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis#False" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="False:basis.Bind[Boolean]"></a>
+      <a id="False:Bind[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">False</span><span class="result">: <a href="Bind.html" class="extype" name="basis.Bind">Bind</a>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@False:basis.Bind[Boolean]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Incomparable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Incomparable"></a>
+      <a id="Incomparable:Incomparable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Incomparable$.html"><span class="name">Incomparable</span></a><span class="result"> extends <a href="PartialComparison.html" class="extype" name="basis.PartialComparison">PartialComparison</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Incomparable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis#Maybe" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Maybe[A](value:A):basis.Else[A,Nothing]"></a>
+      <a id="Maybe[A](A):Else[A,Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Maybe</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="basis.Maybe.A">A</span></span>)</span><span class="result">: <a href="Else.html" class="extype" name="basis.Else">Else</a>[<span class="extype" name="basis.Maybe.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Maybe[A](value:A):basis.Else[A,Nothing]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis#MaybeToOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MaybeToOps[A](self:basis.Else[A,Nothing]):basis.ElseOps[A,Nothing]"></a>
+      <a id="MaybeToOps[A](Else[A,Nothing]):ElseOps[A,Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MaybeToOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="self">self: <a href="Else.html" class="extype" name="basis.Else">Else</a>[<span class="extype" name="basis.MaybeToOps.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>)</span><span class="result">: <a href="ElseOps.html" class="extype" name="basis.ElseOps">ElseOps</a>[<span class="extype" name="basis.MaybeToOps.A">A</span>, <span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@MaybeToOps[A](self:basis.Else[A,Nothing]):basis.ElseOps[A,Nothing]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Order"></a>
+      <a id="Order:Order"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Order$.html"><span class="name">Order</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Order" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.PartialComparison" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PartialComparison"></a>
+      <a id="PartialComparison:PartialComparison"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PartialComparison$.html"><span class="name">PartialComparison</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@PartialComparison" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Precedes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Precedes"></a>
+      <a id="Precedes:Precedes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Precedes$.html"><span class="name">Precedes</span></a><span class="result"> extends <a href="Comparison.html" class="extype" name="basis.Comparison">Comparison</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Precedes" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Succeeds" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Succeeds"></a>
+      <a id="Succeeds:Succeeds"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Succeeds$.html"><span class="name">Succeeds</span></a><span class="result"> extends <a href="Comparison.html" class="extype" name="basis.Comparison">Comparison</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Succeeds" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.Trap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Trap"></a>
+      <a id="Trap:Trap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Trap$.html"><span class="name">Trap</span></a><span class="result"> extends <a href="Trap.html" class="extype" name="basis.Trap">Trap</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Trap" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis#True" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="True:basis.Bind[Boolean]"></a>
+      <a id="True:Bind[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">True</span><span class="result">: <a href="Bind.html" class="extype" name="basis.Bind">Bind</a>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@True:basis.Bind[Boolean]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis#TruthToOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TruthToOps(self:basis.package.Truth):basis.TruthOps"></a>
+      <a id="TruthToOps(Truth):TruthOps"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TruthToOps</span><span class="params">(<span name="self">self: <a href="#Truth=basis.Else[Boolean,Any]" class="extmbr" name="basis.Truth">Truth</a></span>)</span><span class="result">: <a href="TruthOps.html" class="extype" name="basis.TruthOps">TruthOps</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@TruthToOps(self:basis.package.Truth):basis.TruthOps" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis#Try" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Try[A](expr:=&gt;A):basis.package.Try[A]"></a>
+      <a id="Try[A](⇒A):Try[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Try</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="expr">expr: ⇒ <span class="extype" name="basis.Try.A">A</span></span>)</span><span class="result">: <a href="#Try[+A]=basis.Else[A,Throwable]" class="extmbr" name="basis.Try">Try</a>[<span class="extype" name="basis.Try.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@Try[A](expr:=&gt;A):basis.package.Try[A]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="collections"></a>
+      <a id="collections:collections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="collections/package.html"><span class="name">collections</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@collections" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Collection interfaces, operation extensions, and container implementations.</p>
+    </li><li name="basis.data" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="data"></a>
+      <a id="data:data"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="data/package.html"><span class="name">data</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@data" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Low-level memory model.</p>
+    </li><li name="basis.form" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="form"></a>
+      <a id="form:form"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="form/package.html"><span class="name">form</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@form" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.math" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="math"></a>
+      <a id="math:math"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="math/package.html"><span class="name">math</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@math" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Abstract algebraic structures.</p>
+    </li><li name="basis.proto" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="proto"></a>
+      <a id="proto:proto"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="proto/package.html"><span class="name">proto</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@proto" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.stat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="stat"></a>
+      <a id="stat:stat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="stat/package.html"><span class="name">stat</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@stat" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.text" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="text"></a>
+      <a id="text:text"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="text/package.html"><span class="name">text</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@text" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Unicode® collections.</p>
+    </li><li name="basis.util" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="util"></a>
+      <a id="util:util"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="util/package.html"><span class="name">util</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#basis.package@util" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">General purpose utilities.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

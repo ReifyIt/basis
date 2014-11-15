@@ -1,0 +1,641 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>DeltaValue - basis.form.DeltaVariant.DeltaValue</title>
+          <meta name="description" content="DeltaValue - basis.form.DeltaVariant.DeltaValue" />
+          <meta name="keywords" content="DeltaValue basis.form.DeltaVariant.DeltaValue" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.form.DeltaVariant$DeltaValue';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../lib/trait_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.form">form</a>.<a href="DeltaVariant.html" class="extype" name="basis.form.DeltaVariant">DeltaVariant</a></p>
+        <h1>DeltaValue</h1> <span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DeltaValue</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="DeltaVariant$AnyDelta.html" class="extype" name="basis.form.DeltaVariant.AnyDelta">AnyDelta</a></dd><dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/form/src/main/scala/basis/form/DeltaVariant.scala" target="_blank">DeltaVariant.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent">AnyDelta, <a href="OmniVariant$$AnyDelta.html" class="extype" name="basis.form.OmniVariant.AnyDelta">AnyDelta</a>, <a href="OmniVariant$$AnyForm.html" class="extype" name="basis.form.OmniVariant.AnyForm">AnyForm</a>, AnyForm, AnyForm, BoolForm, <a href="OmniVariant$$BoolForm.html" class="extype" name="basis.form.OmniVariant.BoolForm">BoolForm</a>, DataForm, <a href="OmniVariant$$DataForm.html" class="extype" name="basis.form.OmniVariant.DataForm">DataForm</a>, <a href="OmniVariant$$DateForm.html" class="extype" name="basis.form.OmniVariant.DateForm">DateForm</a>, DateForm, <a href="DeltaVariant$DeltaObject.html" class="extype" name="basis.form.DeltaVariant.DeltaObject">DeltaObject</a>, <a href="DeltaVariant$DeltaSet.html" class="extype" name="basis.form.DeltaVariant.DeltaSet">DeltaSet</a>, <a href="OmniVariant$$FalseForm$.html" class="extype" name="basis.form.OmniVariant.FalseForm">FalseForm</a>, <a href="DeltaVariant$FormObject.html" class="extype" name="basis.form.DeltaVariant.FormObject">FormObject</a>, <a href="DeltaVariant$FormSet.html" class="extype" name="basis.form.DeltaVariant.FormSet">FormSet</a>, <a href="DeltaVariant$FormValue.html" class="extype" name="basis.form.DeltaVariant.FormValue">FormValue</a>, NoForm, <a href="OmniVariant$$NoForm.html" class="extype" name="basis.form.OmniVariant.NoForm">NoForm</a>, <a href="OmniVariant$$NoForm$.html" class="extype" name="basis.form.OmniVariant.NoForm">NoForm</a>, <a href="OmniVariant$$NullForm.html" class="extype" name="basis.form.OmniVariant.NullForm">NullForm</a>, NullForm, <a href="OmniVariant$$NullForm$.html" class="extype" name="basis.form.OmniVariant.NullForm">NullForm</a>, <a href="OmniVariant$$NumberForm.html" class="extype" name="basis.form.OmniVariant.NumberForm">NumberForm</a>, NumberForm, ObjectDelta, <a href="OmniVariant$$ObjectDelta.html" class="extype" name="basis.form.OmniVariant.ObjectDelta">ObjectDelta</a>, ObjectDelta, <a href="OmniVariant$$ObjectForm.html" class="extype" name="basis.form.OmniVariant.ObjectForm">ObjectForm</a>, ObjectForm, ObjectForm, <a href="ProtoVariant$ProtoBool.html" class="extype" name="basis.form.ProtoVariant.ProtoBool">ProtoBool</a>, <a href="ProtoVariant$ProtoData.html" class="extype" name="basis.form.ProtoVariant.ProtoData">ProtoData</a>, <a href="ProtoVariant$ProtoDate.html" class="extype" name="basis.form.ProtoVariant.ProtoDate">ProtoDate</a>, <a href="ProtoVariant$ProtoDelta.html" class="extype" name="basis.form.ProtoVariant.ProtoDelta">ProtoDelta</a>, <a href="ProtoVariant$ProtoNo.html" class="extype" name="basis.form.ProtoVariant.ProtoNo">ProtoNo</a>, <a href="ProtoVariant$ProtoNull.html" class="extype" name="basis.form.ProtoVariant.ProtoNull">ProtoNull</a>, <a href="ProtoVariant$ProtoNumber.html" class="extype" name="basis.form.ProtoVariant.ProtoNumber">ProtoNumber</a>, <a href="ProtoVariant$ProtoObject.html" class="extype" name="basis.form.ProtoVariant.ProtoObject">ProtoObject</a>, <a href="ProtoVariant$ProtoObjectDelta.html" class="extype" name="basis.form.ProtoVariant.ProtoObjectDelta">ProtoObjectDelta</a>, <a href="ProtoVariant$ProtoSecret.html" class="extype" name="basis.form.ProtoVariant.ProtoSecret">ProtoSecret</a>, <a href="ProtoVariant$ProtoSeq.html" class="extype" name="basis.form.ProtoVariant.ProtoSeq">ProtoSeq</a>, <a href="ProtoVariant$ProtoSet.html" class="extype" name="basis.form.ProtoVariant.ProtoSet">ProtoSet</a>, <a href="ProtoVariant$ProtoSetDelta.html" class="extype" name="basis.form.ProtoVariant.ProtoSetDelta">ProtoSetDelta</a>, <a href="ProtoVariant$ProtoText.html" class="extype" name="basis.form.ProtoVariant.ProtoText">ProtoText</a>, <a href="ProtoVariant$ProtoValue.html" class="extype" name="basis.form.ProtoVariant.ProtoValue">ProtoValue</a>, SecretForm, <a href="OmniVariant$$SecretForm.html" class="extype" name="basis.form.OmniVariant.SecretForm">SecretForm</a>, SeqForm, <a href="OmniVariant$$SeqForm.html" class="extype" name="basis.form.OmniVariant.SeqForm">SeqForm</a>, <a href="OmniVariant$$SetDelta.html" class="extype" name="basis.form.OmniVariant.SetDelta">SetDelta</a>, SetDelta, SetDelta, <a href="OmniVariant$$SetForm.html" class="extype" name="basis.form.OmniVariant.SetForm">SetForm</a>, SetForm, SetForm, <a href="OmniVariant$$TextForm.html" class="extype" name="basis.form.OmniVariant.TextForm">TextForm</a>, TextForm, <a href="OmniVariant$$TrueForm$.html" class="extype" name="basis.form.OmniVariant.TrueForm">TrueForm</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph125" viewBox="0.00 0.00 843.00 155.00" height="155pt" width="843pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 839,-151 839,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph125_0"><g id="a_this trait|graph125_0"><a xlink:title="basis.form.DeltaVariant.DeltaValue (this trait)" xlink:href="#inheritance-diagram"><polygon points="514,-86 423,-86 423,-61 514,-61 514,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="433.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="454.021" text-anchor="start">DeltaValue</text></a></g></g><!-- node1 --><g class="node class" id="graph125_1"><g id="a_class|graph125_1"><a xlink:title="basis.form.OmniVariant.AnyDelta" xlink:href="OmniVariant$$AnyDelta.html#inheritance-diagram"><polygon points="141,-25 0,-25 0,-0 141,-0 141,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="31.0166" text-anchor="start">OmniVariant.AnyDelta</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph125_0_1"><g id="a_inheritance|graph125_0_1"><a xlink:title="OmniVariant.AnyDelta is a subtype of DeltaValue"><path d="M417.89,-64.9976C347.696,-54.5919 220.475,-35.7325 141.01,-23.9525" stroke="#d4d4d4" fill="none"></path><polygon points="417.642,-66.7298 422.844,-65.7319 418.155,-63.2676 417.642,-66.7298" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node type" id="graph125_2"><g id="a_type|graph125_2"><a xlink:title="basis.form.ProtoVariant.AnyDelta" xlink:href="ProtoVariant$AnyDelta.html#inheritance-diagram"><polygon points="300,-25 159,-25 159,-0 300,-0 300,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/type_diagram.png" y="-19.5" x="169.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="190.012" text-anchor="start">ProtoVariant.AnyDelta</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph125_0_2"><g id="a_inheritance|graph125_0_2"><a xlink:title="ProtoVariant.AnyDelta is a subtype of DeltaValue"><path d="M417.974,-60.027C376.178,-49.7093 317.267,-35.1663 276.48,-25.0976" stroke="#d4d4d4" fill="none"></path><polygon points="417.71,-61.7643 422.983,-61.2637 418.549,-58.3663 417.71,-61.7643" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node type" id="graph125_3"><g id="a_type|graph125_3"><a xlink:title="basis.form.DeltaVariant.AnyForm" xlink:href="DeltaVariant$AnyForm.html#inheritance-diagram"><polygon points="402.5,-25 318.5,-25 318.5,-0 402.5,-0 402.5,-25" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/type_diagram.png" y="-19.5" x="328.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="349.33" text-anchor="start">AnyForm</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph125_0_3"><g id="a_inheritance|graph125_0_3"><a xlink:title="AnyForm is a subtype of DeltaValue"><path d="M442.838,-58.4807C424.251,-48.3269 399.414,-34.7588 381.896,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="442.193,-60.1228 447.42,-60.9841 443.871,-57.0512 442.193,-60.1228" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph125_4"><g id="a_trait|graph125_4"><a xlink:title="basis.form.DeltaVariant.DeltaObject" xlink:href="DeltaVariant$DeltaObject.html#inheritance-diagram"><polygon points="516.5,-25 420.5,-25 420.5,-0 516.5,-0 516.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="430.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="451.488" text-anchor="start">DeltaObject</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph125_0_4"><g id="a_inheritance|graph125_0_4"><a xlink:title="DeltaObject is a subtype of DeltaValue"><path d="M468.5,-55.6874C468.5,-45.9173 468.5,-33.8534 468.5,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="466.75,-55.8435 468.5,-60.8435 470.25,-55.8435 466.75,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph125_5"><g id="a_trait|graph125_5"><a xlink:title="basis.form.DeltaVariant.DeltaSet" xlink:href="DeltaVariant$DeltaSet.html#inheritance-diagram"><polygon points="616.5,-25 534.5,-25 534.5,-0 616.5,-0 616.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="544.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="565.434" text-anchor="start">DeltaSet</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph125_0_5"><g id="a_inheritance|graph125_0_5"><a xlink:title="DeltaSet is a subtype of DeltaValue"><path d="M493.925,-58.4807C512.339,-48.3269 536.946,-34.7588 554.302,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="492.918,-57.0373 489.385,-60.9841 494.608,-60.1023 492.918,-57.0373" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph125_6"><g id="a_trait|graph125_6"><a xlink:title="basis.form.DeltaVariant.FormValue" xlink:href="DeltaVariant$FormValue.html#inheritance-diagram"><polygon points="726,-25 635,-25 635,-0 726,-0 726,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="645.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="666.029" text-anchor="start">FormValue</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph125_0_6"><g id="a_inheritance|graph125_0_6"><a xlink:title="FormValue is a subtype of DeltaValue"><path d="M514.771,-59.6226C551.76,-49.3286 603.154,-35.0257 638.864,-25.0875" stroke="#d4d4d4" fill="none"></path><polygon points="514.227,-57.9576 509.879,-60.9841 515.165,-61.3294 514.227,-57.9576" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node trait" id="graph125_7"><g id="a_trait|graph125_7"><a xlink:title="basis.form.ProtoVariant.ProtoDelta" xlink:href="ProtoVariant$ProtoDelta.html#inheritance-diagram"><polygon points="835,-25 744,-25 744,-0 835,-0 835,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="754.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="775.488" text-anchor="start">ProtoDelta</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph125_0_7"><g id="a_inheritance|graph125_0_7"><a xlink:title="ProtoDelta is a subtype of DeltaValue"><path d="M519.517,-63.9509C573.32,-54.8115 660.52,-39.6493 735.5,-25 738.228,-24.467 741.031,-23.9072 743.857,-23.3334" stroke="#d4d4d4" fill="none"></path><polygon points="519.053,-62.2546 514.416,-64.8163 519.638,-65.7053 519.053,-62.2546" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node class" id="graph125_8"><g id="a_class|graph125_8"><a xlink:title="scala.AnyRef"><polygon points="506.5,-147 430.5,-147 430.5,-122 506.5,-122 506.5,-147" stroke="#115f3b" fill="#0a955b"></polygon><image xlink:href="../../lib/class_diagram.png" y="-141.5" x="440.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="461.214" text-anchor="start">AnyRef</text></a></g></g><!-- node8&#45;&gt;node0 --><g class="edge inheritance" id="graph125_8_0"><g id="a_inheritance|graph125_8_0"><a xlink:title="DeltaValue is a subtype of AnyRef"><path d="M468.5,-116.687C468.5,-106.917 468.5,-94.8534 468.5,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="466.75,-116.843 468.5,-121.843 470.25,-116.844 466.75,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.form.DeltaVariant.DeltaValue"><span>DeltaValue</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.form.DeltaVariant.DeltaValue#/" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="/(key:String):DeltaVariant.this.AnyDelta"></a>
+      <a id="/(String):AnyDelta"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="key">key: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="DeltaVariant$AnyDelta.html" class="extype" name="basis.form.DeltaVariant.AnyDelta">AnyDelta</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@/(key:String):DeltaVariant.this.AnyDelta" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.form.DeltaVariant.DeltaValue#asForm" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="asForm:DeltaVariant.this.AnyForm"></a>
+      <a id="asForm:AnyForm"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asForm</span><span class="result">: <a href="DeltaVariant$AnyForm.html" class="extype" name="basis.form.DeltaVariant.AnyForm">AnyForm</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@asForm:DeltaVariant.this.AnyForm" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.form.DeltaVariant.DeltaValue#asObjectDelta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="asObjectDelta:DeltaVariant.this.ObjectDelta"></a>
+      <a id="asObjectDelta:ObjectDelta"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asObjectDelta</span><span class="result">: <a href="DeltaVariant$ObjectDelta.html" class="extype" name="basis.form.DeltaVariant.ObjectDelta">ObjectDelta</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@asObjectDelta:DeltaVariant.this.ObjectDelta" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.form.DeltaVariant.DeltaValue#asSetDelta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="asSetDelta:DeltaVariant.this.SetDelta"></a>
+      <a id="asSetDelta:SetDelta"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asSetDelta</span><span class="result">: <a href="DeltaVariant$SetDelta.html" class="extype" name="basis.form.DeltaVariant.SetDelta">SetDelta</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@asSetDelta:DeltaVariant.this.SetDelta" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="basis.form.DeltaVariant.DeltaValue#isDefined" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isDefined:Boolean"></a>
+      <a id="isDefined:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDefined</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@isDefined:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.form.DeltaVariant.DeltaValue#isDelta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isDelta:Boolean"></a>
+      <a id="isDelta:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDelta</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@isDelta:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.form.DeltaVariant.DeltaValue#isForm" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isForm:Boolean"></a>
+      <a id="isForm:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isForm</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@isForm:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.form.DeltaVariant.DeltaValue#isObjectDelta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isObjectDelta:Boolean"></a>
+      <a id="isObjectDelta:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isObjectDelta</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@isObjectDelta:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.form.DeltaVariant.DeltaValue#isSetDelta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isSetDelta:Boolean"></a>
+      <a id="isSetDelta:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSetDelta</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@isSetDelta:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.form.DeltaVariant$DeltaValue@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

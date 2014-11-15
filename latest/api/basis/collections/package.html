@@ -1,0 +1,1193 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>collections - basis.collections</title>
+          <meta name="description" content="collections - basis.collections" />
+          <meta name="keywords" content="collections basis.collections" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.collections.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a></p>
+        <h1>collections</h1> <span class="permalink">
+      <a href="../../index.html#basis.collections.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">collections</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Collection interfaces, operation extensions, and container implementations.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/core/src/main/scala/basis/collections/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a>, <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">Content Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph252" viewBox="0.00 0.00 694.00 399.00" height="399pt" width="694pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 395)" class="graph" id="graph0"><polygon points="-4,4 -4,-395 690,-395 690,4 -4,4" stroke="none" fill="white"></polygon><!-- node0 --><g class="node trait" id="graph252_0"><g id="a_trait|graph252_0"><a xlink:title="basis.collections.Traverser" xlink:href="Traverser.html#inheritance-diagram"><polygon points="521.5,-391 423.5,-391 423.5,-366 521.5,-366 521.5,-391" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-385.5" x="433.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-375.75" x="454.292" text-anchor="start">Traverser[A]</text></a></g></g><!-- node9 --><g class="node trait" id="graph252_9"><g id="a_trait|graph252_9"><a xlink:title="basis.collections.Iterator" xlink:href="Iterator.html#inheritance-diagram"><polygon points="461,-330 374,-330 374,-305 461,-305 461,-330" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-324.5" x="384.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-314.75" x="405.158" text-anchor="start">Iterator[A]</text></a></g></g><!-- node0&#45;&gt;node9 --><g class="edge inheritance" id="graph252_0_9"><g id="a_inheritance|graph252_0_9"><a xlink:title="Iterator[A] is a subtype of Traverser[A]"><path d="M458.078,-362.029C448.767,-352.041 436.85,-339.257 428.344,-330.132" stroke="#d4d4d4" fill="none"></path><polygon points="456.944,-363.379 461.634,-365.843 459.504,-360.993 456.944,-363.379" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node13 --><g class="node trait" id="graph252_13"><g id="a_trait|graph252_13"><a xlink:title="basis.collections.Collection" xlink:href="Collection.html#inheritance-diagram"><polygon points="578,-330 479,-330 479,-305 578,-305 578,-330" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-324.5" x="489.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-314.75" x="510.042" text-anchor="start">Collection[A]</text></a></g></g><!-- node0&#45;&gt;node13 --><g class="edge inheritance" id="graph252_0_13"><g id="a_inheritance|graph252_0_13"><a xlink:title="Collection[A] is a subtype of Traverser[A]"><path d="M487.184,-362.029C496.664,-352.041 508.798,-339.257 517.459,-330.132" stroke="#d4d4d4" fill="none"></path><polygon points="485.737,-361.012 483.564,-365.843 488.275,-363.422 485.737,-361.012" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node1 --><g class="node trait" id="graph252_1"><g id="a_trait|graph252_1"><a xlink:title="basis.collections.Subset" xlink:href="Subset.html#inheritance-diagram"><polygon points="686,-147 599,-147 599,-122 686,-122 686,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="609.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="630.431" text-anchor="start">Subset[A]</text></a></g></g><!-- node2 --><g class="node trait" id="graph252_2"><g id="a_trait|graph252_2"><a xlink:title="basis.collections.Submap" xlink:href="Submap.html#inheritance-diagram"><polygon points="580.5,-147 476.5,-147 476.5,-122 580.5,-122 580.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="486.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="507.132" text-anchor="start">Submap[A, T]</text></a></g></g><!-- node3 --><g class="node trait" id="graph252_3"><g id="a_trait|graph252_3"><a xlink:title="basis.collections.Stack" xlink:href="Stack.html#inheritance-diagram"><polygon points="116,-86 35,-86 35,-61 116,-61 116,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="45.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="66.4927" text-anchor="start">Stack[A]</text></a></g></g><!-- node11 --><g class="node trait" id="graph252_11"><g id="a_trait|graph252_11"><a xlink:title="basis.collections.Deque" xlink:href="Deque.html#inheritance-diagram"><polygon points="220,-25 135,-25 135,-0 220,-0 220,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="145.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="166.264" text-anchor="start">Deque[A]</text></a></g></g><!-- node3&#45;&gt;node11 --><g class="edge inheritance" id="graph252_3_11"><g id="a_inheritance|graph252_3_11"><a xlink:title="Deque[A] is a subtype of Stack[A]"><path d="M99.9837,-58.3379C117.545,-48.18 140.917,-34.661 157.39,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="99.1038,-56.8251 95.6519,-60.8435 100.856,-59.8548 99.1038,-56.8251" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node trait" id="graph252_4"><g id="a_trait|graph252_4"><a xlink:title="basis.collections.Set" xlink:href="Set.html#inheritance-diagram"><polygon points="669,-208 598,-208 598,-183 669,-183 669,-208" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-202.5" x="608.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-192.75" x="629.493" text-anchor="start">Set[A]</text></a></g></g><!-- node4&#45;&gt;node1 --><g class="edge inheritance" id="graph252_4_1"><g id="a_inheritance|graph252_4_1"><a xlink:title="Subset[A] is a subtype of Set[A]"><path d="M636.065,-177.687C637.555,-167.917 639.395,-155.853 640.726,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="634.302,-177.637 635.278,-182.843 637.762,-178.165 634.302,-177.637" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node trait" id="graph252_5"><g id="a_trait|graph252_5"><a xlink:title="basis.collections.Seq" xlink:href="Seq.html#inheritance-diagram"><polygon points="272,-208 199,-208 199,-183 272,-183 272,-208" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-202.5" x="209.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-192.75" x="230.101" text-anchor="start">Seq[A]</text></a></g></g><!-- node8 --><g class="node trait" id="graph252_8"><g id="a_trait|graph252_8"><a xlink:title="basis.collections.LinearSeq" xlink:href="LinearSeq.html#inheritance-diagram"><polygon points="228,-147 127,-147 127,-122 228,-122 228,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="137.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="158.202" text-anchor="start">LinearSeq[A]</text></a></g></g><!-- node5&#45;&gt;node8 --><g class="edge inheritance" id="graph252_5_8"><g id="a_inheritance|graph252_5_8"><a xlink:title="LinearSeq[A] is a subtype of Seq[A]"><path d="M220.291,-179.029C210.473,-169.041 197.905,-156.257 188.935,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="219.288,-180.505 224.041,-182.843 221.784,-178.051 219.288,-180.505" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node trait" id="graph252_10"><g id="a_trait|graph252_10"><a xlink:title="basis.collections.IndexedSeq" xlink:href="IndexedSeq.html#inheritance-diagram"><polygon points="109,-147 0,-147 0,-122 109,-122 109,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="31.3081" text-anchor="start">IndexedSeq[A]</text></a></g></g><!-- node5&#45;&gt;node10 --><g class="edge inheritance" id="graph252_5_10"><g id="a_inheritance|graph252_5_10"><a xlink:title="IndexedSeq[A] is a subtype of Seq[A]"><path d="M195.219,-181.37C163.699,-171.095 120.287,-156.945 90.048,-147.087" stroke="#d4d4d4" fill="none"></path><polygon points="194.875,-183.098 200.172,-182.984 195.96,-179.771 194.875,-183.098" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node15 --><g class="node trait" id="graph252_15"><g id="a_trait|graph252_15"><a xlink:title="basis.collections.Buffer" xlink:href="Buffer.html#inheritance-diagram"><polygon points="328.5,-147 246.5,-147 246.5,-122 328.5,-122 328.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="256.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="277.248" text-anchor="start">Buffer[A]</text></a></g></g><!-- node5&#45;&gt;node15 --><g class="edge inheritance" id="graph252_5_15"><g id="a_inheritance|graph252_5_15"><a xlink:title="Buffer[A] is a subtype of Seq[A]"><path d="M249.135,-179.029C257.938,-169.041 269.206,-156.257 277.248,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="247.767,-177.935 245.774,-182.843 250.392,-180.25 247.767,-177.935" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node trait" id="graph252_6"><g id="a_trait|graph252_6"><a xlink:title="basis.collections.Queue" xlink:href="Queue.html#inheritance-diagram"><polygon points="220.5,-86 134.5,-86 134.5,-61 220.5,-61 220.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="144.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="165.485" text-anchor="start">Queue[A]</text></a></g></g><!-- node6&#45;&gt;node11 --><g class="edge inheritance" id="graph252_6_11"><g id="a_inheritance|graph252_6_11"><a xlink:title="Deque[A] is a subtype of Queue[A]"><path d="M177.5,-55.6874C177.5,-45.9173 177.5,-33.8534 177.5,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="175.75,-55.8435 177.5,-60.8435 179.25,-55.8435 175.75,-55.8435" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node trait" id="graph252_7"><g id="a_trait|graph252_7"><a xlink:title="basis.collections.Map" xlink:href="Map.html#inheritance-diagram"><polygon points="571.5,-208 485.5,-208 485.5,-183 571.5,-183 571.5,-208" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-202.5" x="495.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-192.75" x="516.029" text-anchor="start">Map[A, T]</text></a></g></g><!-- node7&#45;&gt;node2 --><g class="edge inheritance" id="graph252_7_2"><g id="a_inheritance|graph252_7_2"><a xlink:title="Submap[A, T] is a subtype of Map[A, T]"><path d="M528.5,-177.687C528.5,-167.917 528.5,-155.853 528.5,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="526.75,-177.843 528.5,-182.843 530.25,-177.844 526.75,-177.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8&#45;&gt;node3 --><g class="edge inheritance" id="graph252_8_3"><g id="a_inheritance|graph252_8_3"><a xlink:title="Stack[A] is a subtype of LinearSeq[A]"><path d="M153.016,-119.338C135.455,-109.18 112.083,-95.661 95.6101,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="152.144,-120.855 157.348,-121.843 153.896,-117.825 152.144,-120.855" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8&#45;&gt;node6 --><g class="edge inheritance" id="graph252_8_6"><g id="a_inheritance|graph252_8_6"><a xlink:title="Queue[A] is a subtype of LinearSeq[A]"><path d="M177.5,-116.687C177.5,-106.917 177.5,-94.8534 177.5,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="175.75,-116.843 177.5,-121.843 179.25,-116.844 175.75,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node16 --><g class="node trait" id="graph252_16"><g id="a_trait|graph252_16"><a xlink:title="basis.collections.BilinearSeq" xlink:href="BilinearSeq.html#inheritance-diagram"><polygon points="346,-86 239,-86 239,-61 346,-61 346,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="249.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="270.426" text-anchor="start">BilinearSeq[A]</text></a></g></g><!-- node8&#45;&gt;node16 --><g class="edge inheritance" id="graph252_8_16"><g id="a_inheritance|graph252_8_16"><a xlink:title="BilinearSeq[A] is a subtype of LinearSeq[A]"><path d="M204.574,-119.61C224.393,-109.442 250.984,-95.7994 269.717,-86.1884" stroke="#d4d4d4" fill="none"></path><polygon points="203.596,-118.145 199.946,-121.984 205.194,-121.259 203.596,-118.145" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node trait" id="graph252_12"><g id="a_trait|graph252_12"><a xlink:title="basis.collections.Container" xlink:href="Container.html#inheritance-diagram"><polygon points="578,-269 479,-269 479,-244 578,-244 578,-269" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-263.5" x="489.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-253.75" x="510.318" text-anchor="start">Container[A]</text></a></g></g><!-- node12&#45;&gt;node4 --><g class="edge inheritance" id="graph252_12_4"><g id="a_inheritance|graph252_12_4"><a xlink:title="Set[A] is a subtype of Container[A]"><path d="M553.45,-241.481C571.52,-231.327 595.666,-217.759 612.699,-208.188" stroke="#d4d4d4" fill="none"></path><polygon points="552.496,-240.009 548.994,-243.984 554.211,-243.06 552.496,-240.009" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12&#45;&gt;node5 --><g class="edge inheritance" id="graph252_12_5"><g id="a_inheritance|graph252_12_5"><a xlink:title="Seq[A] is a subtype of Container[A]"><path d="M473.634,-245.059C424.739,-235.666 351.263,-221.333 287.5,-208 282.522,-206.959 277.283,-205.835 272.125,-204.711" stroke="#d4d4d4" fill="none"></path><polygon points="473.343,-246.785 478.583,-246.01 474.003,-243.348 473.343,-246.785" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12&#45;&gt;node7 --><g class="edge inheritance" id="graph252_12_7"><g id="a_inheritance|graph252_12_7"><a xlink:title="Map[A, T] is a subtype of Container[A]"><path d="M528.5,-238.687C528.5,-228.917 528.5,-216.853 528.5,-208.132" stroke="#d4d4d4" fill="none"></path><polygon points="526.75,-238.843 528.5,-243.843 530.25,-238.844 526.75,-238.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node13&#45;&gt;node12 --><g class="edge inheritance" id="graph252_13_12"><g id="a_inheritance|graph252_13_12"><a xlink:title="Container[A] is a subtype of Collection[A]"><path d="M528.5,-299.687C528.5,-289.917 528.5,-277.853 528.5,-269.132" stroke="#d4d4d4" fill="none"></path><polygon points="526.75,-299.843 528.5,-304.843 530.25,-299.844 526.75,-299.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node14 --><g class="node trait" id="graph252_14"><g id="a_trait|graph252_14"><a xlink:title="basis.collections.Builder" xlink:href="Builder.html#inheritance-diagram"><polygon points="383,-208 296,-208 296,-183 383,-183 383,-208" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-202.5" x="306.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-192.75" x="327.434" text-anchor="start">Builder[A]</text></a></g></g><!-- node14&#45;&gt;node15 --><g class="edge inheritance" id="graph252_14_15"><g id="a_inheritance|graph252_14_15"><a xlink:title="Buffer[A] is a subtype of Builder[A]"><path d="M325.865,-179.029C317.062,-169.041 305.794,-156.257 297.752,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="324.608,-180.25 329.226,-182.843 327.233,-177.935 324.608,-180.25" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node17 --><g class="node trait" id="graph252_17"><g id="a_trait|graph252_17"><a xlink:title="basis.collections.ArrayBuilder" xlink:href="ArrayBuilder.html#inheritance-diagram"><polygon points="458,-147 347,-147 347,-122 458,-122 458,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="357.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="378.488" text-anchor="start">ArrayBuilder[A]</text></a></g></g><!-- node14&#45;&gt;node17 --><g class="edge inheritance" id="graph252_14_17"><g id="a_inheritance|graph252_14_17"><a xlink:title="ArrayBuilder[A] is a subtype of Builder[A]"><path d="M355.737,-179.294C366.443,-169.268 380.249,-156.338 390.079,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="354.4,-178.148 351.947,-182.843 356.793,-180.703 354.4,-178.148" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node16&#45;&gt;node11 --><g class="edge inheritance" id="graph252_16_11"><g id="a_inheritance|graph252_16_11"><a xlink:title="Deque[A] is a subtype of BilinearSeq[A]"><path d="M265.426,-58.6096C245.607,-48.4419 219.016,-34.7994 200.283,-25.1884" stroke="#d4d4d4" fill="none"></path><polygon points="264.806,-60.2588 270.054,-60.9841 266.404,-57.1447 264.806,-60.2588" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.collections"><span>collections</span></li><li class="in" name="basis.collections.sequential.Strict"><span>Strict</span></li><li class="in" name="basis.collections.sequential.General"><span>General</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.collections.ArrayBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ArrayBuilder[A]extendsBuilder[A]"></a>
+      <a id="ArrayBuilder[A]:ArrayBuilder[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ArrayBuilder.html"><span class="name">ArrayBuilder</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.ArrayBuilder.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@ArrayBuilder[A]extendsBuilder[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An array-like collection builder.</p>
+    </li><li name="basis.collections.BilinearSeq" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="BilinearSeq[+A]extendsAnywithEqualswithFamily[basis.collections.BilinearSeq[_]]withLinearSeq[A]"></a>
+      <a id="BilinearSeq[+A]:BilinearSeq[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BilinearSeq.html"><span class="name">BilinearSeq</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="BilinearSeq.html" class="extype" name="basis.collections.BilinearSeq">BilinearSeq</a>[_]] with <a href="LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>[<span class="extype" name="basis.collections.BilinearSeq.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@BilinearSeq[+A]extendsAnywithEqualswithFamily[basis.collections.BilinearSeq[_]]withLinearSeq[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A bidirectionally decomposable sequence of elements.</p>
+    </li><li name="basis.collections.Buffer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Buffer[A]extendsSeq[A]withBuilder[A]"></a>
+      <a id="Buffer[A]:Buffer[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Buffer.html"><span class="name">Buffer</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.Buffer.A">A</span>] with <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Buffer.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Buffer[A]extendsSeq[A]withBuilder[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A mutable sequence of elements.</p>
+    </li><li name="basis.collections.Builder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Builder[-A]extendsFrom[Nothing]withState[Any]"></a>
+      <a id="Builder[-A]:Builder[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Builder.html"><span class="name">Builder</span></a><span class="tparams">[<span name="A">-A</span>]</span><span class="result"> extends <a href="../From.html" class="extype" name="basis.From">From</a>[<span class="extype" name="scala.Nothing">Nothing</span>] with <a href="../State.html" class="extype" name="basis.State">State</a>[<span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Builder[-A]extendsFrom[Nothing]withState[Any]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A collection builder.</p>
+    </li><li name="basis.collections.Collection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Collection[+A]extendsAnywithFamily[basis.collections.Collection[_]]withTraverser[A]"></a>
+      <a id="Collection[+A]:Collection[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Collection.html"><span class="name">Collection</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[_]] with <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Collection.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Collection[+A]extendsAnywithFamily[basis.collections.Collection[_]]withTraverser[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A repeatedly traversable collection of elements.</p>
+    </li><li name="basis.collections.Compound" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Compound[+Segment]extendsAny"></a>
+      <a id="Compound[+Segment]:Compound[Segment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Compound.html"><span class="name">Compound</span></a><span class="tparams">[<span name="Segment">+Segment</span>]</span><span class="result"> extends <span class="extype" name="scala.Any">Any</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Compound[+Segment]extendsAny" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A segmented collection of elements.</p>
+    </li><li name="basis.collections.Container" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Container[+A]extendsAnywithFamily[basis.collections.Container[_]]withCollection[A]"></a>
+      <a id="Container[+A]:Container[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Container.html"><span class="name">Container</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[_]] with <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.Container.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Container[+A]extendsAnywithFamily[basis.collections.Container[_]]withCollection[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An iterable collection of elements.</p>
+    </li><li name="basis.collections.Deque" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Deque[+A]extendsAnywithEqualswithFamily[basis.collections.Deque[_]]withBilinearSeq[A]withStack[A]withQueue[A]"></a>
+      <a id="Deque[+A]:Deque[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Deque.html"><span class="name">Deque</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Deque.html" class="extype" name="basis.collections.Deque">Deque</a>[_]] with <a href="BilinearSeq.html" class="extype" name="basis.collections.BilinearSeq">BilinearSeq</a>[<span class="extype" name="basis.collections.Deque.A">A</span>] with <a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[<span class="extype" name="basis.collections.Deque.A">A</span>] with <a href="Queue.html" class="extype" name="basis.collections.Queue">Queue</a>[<span class="extype" name="basis.collections.Deque.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Deque[+A]extendsAnywithEqualswithFamily[basis.collections.Deque[_]]withBilinearSeq[A]withStack[A]withQueue[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A double-ended queue.</p>
+    </li><li name="basis.collections.IndexedSeq" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IndexedSeq[+A]extendsAnywithEqualswithFamily[basis.collections.IndexedSeq[_]]withSeq[A]"></a>
+      <a id="IndexedSeq[+A]:IndexedSeq[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IndexedSeq.html"><span class="name">IndexedSeq</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="IndexedSeq.html" class="extype" name="basis.collections.IndexedSeq">IndexedSeq</a>[_]] with <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.IndexedSeq.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@IndexedSeq[+A]extendsAnywithEqualswithFamily[basis.collections.IndexedSeq[_]]withSeq[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A randomly accessible sequence of elements.</p>
+    </li><li name="basis.collections.Iterator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Iterator[+A]extendsAnywithFamily[basis.collections.Iterator[_]]withTraverser[A]"></a>
+      <a id="Iterator[+A]:Iterator[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Iterator.html"><span class="name">Iterator</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>[_]] with <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Iterator.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Iterator[+A]extendsAnywithFamily[basis.collections.Iterator[_]]withTraverser[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A statefully traversable collection of elements.</p>
+    </li><li name="basis.collections.LinearSeq" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LinearSeq[+A]extendsAnywithEqualswithFamily[basis.collections.LinearSeq[_]]withSeq[A]"></a>
+      <a id="LinearSeq[+A]:LinearSeq[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearSeq.html"><span class="name">LinearSeq</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>[_]] with <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.LinearSeq.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@LinearSeq[+A]extendsAnywithEqualswithFamily[basis.collections.LinearSeq[_]]withSeq[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A recursively decomposable sequence of elements.</p>
+    </li><li name="basis.collections.Map" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Map[+A,+T]extendsAnywithEqualswithFamily[basis.collections.Map[_,_]]withContainer[(A,T)]"></a>
+      <a id="Map[+A,+T]:Map[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Map.html"><span class="name">Map</span></a><span class="tparams">[<span name="A">+A</span>, <span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Map.html" class="extype" name="basis.collections.Map">Map</a>[_, _]] with <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[(<span class="extype" name="basis.collections.Map.A">A</span>, <span class="extype" name="basis.collections.Map.T">T</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Map[+A,+T]extendsAnywithEqualswithFamily[basis.collections.Map[_,_]]withContainer[(A,T)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An association of unique keys with values.</p>
+    </li><li name="basis.collections.Queue" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Queue[+A]extendsAnywithEqualswithFamily[basis.collections.Queue[_]]withLinearSeq[A]"></a>
+      <a id="Queue[+A]:Queue[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Queue.html"><span class="name">Queue</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Queue.html" class="extype" name="basis.collections.Queue">Queue</a>[_]] with <a href="LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>[<span class="extype" name="basis.collections.Queue.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Queue[+A]extendsAnywithEqualswithFamily[basis.collections.Queue[_]]withLinearSeq[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An appendanle linear sequence.</p><div class="fullcomment"><div class="comment cmt"><p>An appendanle linear sequence. Forms a first-in first-out (FIFO) queue.</p></div></div>
+    </li><li name="basis.collections.Seq" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Seq[+A]extendsAnywithEqualswithFamily[basis.collections.Seq[_]]withContainer[A]"></a>
+      <a id="Seq[+A]:Seq[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Seq.html"><span class="name">Seq</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[_]] with <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Seq.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Seq[+A]extendsAnywithEqualswithFamily[basis.collections.Seq[_]]withContainer[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An orderly traversable collection of elements.</p>
+    </li><li name="basis.collections.Set" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Set[+A]extendsAnywithEqualswithFamily[basis.collections.Set[_]]withContainer[A]"></a>
+      <a id="Set[+A]:Set[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Set.html"><span class="name">Set</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Set.html" class="extype" name="basis.collections.Set">Set</a>[_]] with <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.Set.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Set[+A]extendsAnywithEqualswithFamily[basis.collections.Set[_]]withContainer[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A collection of unique elements.</p>
+    </li><li name="basis.collections.Stack" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Stack[+A]extendsAnywithEqualswithFamily[basis.collections.Stack[_]]withLinearSeq[A]"></a>
+      <a id="Stack[+A]:Stack[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Stack.html"><span class="name">Stack</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a>[_]] with <a href="LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>[<span class="extype" name="basis.collections.Stack.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Stack[+A]extendsAnywithEqualswithFamily[basis.collections.Stack[_]]withLinearSeq[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A prependable linear sequence.</p><div class="fullcomment"><div class="comment cmt"><p>A prependable linear sequence. Forms a last-in first-out (LIFO) queue.</p></div></div>
+    </li><li name="basis.collections.Submap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Submap[+A,+T]extendsAnywithEqualswithFamily[basis.collections.Submap[_,_]]withMap[A,T]"></a>
+      <a id="Submap[+A,+T]:Submap[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Submap.html"><span class="name">Submap</span></a><span class="tparams">[<span name="A">+A</span>, <span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Submap.html" class="extype" name="basis.collections.Submap">Submap</a>[_, _]] with <a href="Map.html" class="extype" name="basis.collections.Map">Map</a>[<span class="extype" name="basis.collections.Submap.A">A</span>, <span class="extype" name="basis.collections.Submap.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Submap[+A,+T]extendsAnywithEqualswithFamily[basis.collections.Submap[_,_]]withMap[A,T]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A decomposable map.</p>
+    </li><li name="basis.collections.Subset" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Subset[+A]extendsAnywithEqualswithFamily[basis.collections.Subset[_]]withSet[A]"></a>
+      <a id="Subset[+A]:Subset[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Subset.html"><span class="name">Subset</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <span class="extype" name="scala.Equals">Equals</span> with <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Subset.html" class="extype" name="basis.collections.Subset">Subset</a>[_]] with <a href="Set.html" class="extype" name="basis.collections.Set">Set</a>[<span class="extype" name="basis.collections.Subset.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Subset[+A]extendsAnywithEqualswithFamily[basis.collections.Subset[_]]withSet[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A decomposable set.</p>
+    </li><li name="basis.collections.Traverser" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Traverser[+A]extendsAnywithFamily[basis.collections.Traverser[_]]"></a>
+      <a id="Traverser[+A]:Traverser[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Traverser.html"><span class="name">Traverser</span></a><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Traverser[+A]extendsAnywithFamily[basis.collections.Traverser[_]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A once traversable collection of elements.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="basis.collections.sequential.General#ArrayToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ArrayToGeneralOps[A](xs:Array[A]):basis.collections.sequential.GeneralArrayOps[A]"></a>
+      <a id="ArrayToGeneralOps[A](Array[A]):GeneralArrayOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ArrayToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="basis.collections.sequential.General.ArrayToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralArrayOps.html" class="extype" name="basis.collections.sequential.GeneralArrayOps">GeneralArrayOps</a>[<span class="extype" name="basis.collections.sequential.General.ArrayToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@ArrayToGeneralOps[A](xs:Array[A]):basis.collections.sequential.GeneralArrayOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#ArrayToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ArrayToStrictOps[A](xs:Array[A]):basis.collections.sequential.StrictArrayOps[A,Array[A]]"></a>
+      <a id="ArrayToStrictOps[A](Array[A]):StrictArrayOps[A,Array[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ArrayToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="basis.collections.sequential.Strict.ArrayToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictArrayOps.html" class="extype" name="basis.collections.sequential.StrictArrayOps">StrictArrayOps</a>[<span class="extype" name="basis.collections.sequential.Strict.ArrayToStrictOps.A">A</span>, <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="basis.collections.sequential.Strict.ArrayToStrictOps.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@ArrayToStrictOps[A](xs:Array[A]):basis.collections.sequential.StrictArrayOps[A,Array[A]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.BilinearSeq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BilinearSeq"></a>
+      <a id="BilinearSeq:BilinearSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BilinearSeq$.html"><span class="name">BilinearSeq</span></a><span class="result"> extends <a href="generic/SeqFactory.html" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<a href="BilinearSeq.html" class="extype" name="basis.collections.BilinearSeq">BilinearSeq</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@BilinearSeq" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#BilinearSeqToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BilinearSeqToGeneralOps[A](xs:basis.collections.BilinearSeq[A]):basis.collections.sequential.GeneralSeqOps[A]"></a>
+      <a id="BilinearSeqToGeneralOps[A](BilinearSeq[A]):GeneralSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">BilinearSeqToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="BilinearSeq.html" class="extype" name="basis.collections.BilinearSeq">BilinearSeq</a>[<span class="extype" name="basis.collections.sequential.General.BilinearSeqToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralSeqOps.html" class="extype" name="basis.collections.sequential.GeneralSeqOps">GeneralSeqOps</a>[<span class="extype" name="basis.collections.sequential.General.BilinearSeqToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@BilinearSeqToGeneralOps[A](xs:basis.collections.BilinearSeq[A]):basis.collections.sequential.GeneralSeqOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#BilinearSeqToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BilinearSeqToStrictOps[A](xs:basis.collections.BilinearSeq[A]):basis.collections.sequential.StrictSeqOps[A,xs.Family]"></a>
+      <a id="BilinearSeqToStrictOps[A](BilinearSeq[A]):StrictSeqOps[A,collections.BilinearSeq.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">BilinearSeqToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="BilinearSeq.html" class="extype" name="basis.collections.BilinearSeq">BilinearSeq</a>[<span class="extype" name="basis.collections.sequential.Strict.BilinearSeqToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictSeqOps.html" class="extype" name="basis.collections.sequential.StrictSeqOps">StrictSeqOps</a>[<span class="extype" name="basis.collections.sequential.Strict.BilinearSeqToStrictOps.A">A</span>, <a href="BilinearSeq.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.BilinearSeq.Family">collections.BilinearSeq.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@BilinearSeqToStrictOps[A](xs:basis.collections.BilinearSeq[A]):basis.collections.sequential.StrictSeqOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.Buffer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Buffer"></a>
+      <a id="Buffer:Buffer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Buffer$.html"><span class="name">Buffer</span></a><span class="result"> extends <a href="generic/SeqFactory.html" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<a href="Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Buffer" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.Collection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Collection"></a>
+      <a id="Collection:Collection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Collection$.html"><span class="name">Collection</span></a><span class="result"> extends <a href="generic/CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a>[<a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Collection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#CollectionToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CollectionToGeneralOps[A](xs:basis.collections.Collection[A]):basis.collections.sequential.GeneralCollectionOps[A]"></a>
+      <a id="CollectionToGeneralOps[A](Collection[A]):GeneralCollectionOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">CollectionToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.sequential.General.CollectionToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralCollectionOps.html" class="extype" name="basis.collections.sequential.GeneralCollectionOps">GeneralCollectionOps</a>[<span class="extype" name="basis.collections.sequential.General.CollectionToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@CollectionToGeneralOps[A](xs:basis.collections.Collection[A]):basis.collections.sequential.GeneralCollectionOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#CollectionToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CollectionToStrictOps[A](xs:basis.collections.Collection[A]):basis.collections.sequential.StrictCollectionOps[A,xs.Family]"></a>
+      <a id="CollectionToStrictOps[A](Collection[A]):StrictCollectionOps[A,collections.Collection.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">CollectionToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>[<span class="extype" name="basis.collections.sequential.Strict.CollectionToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictCollectionOps.html" class="extype" name="basis.collections.sequential.StrictCollectionOps">StrictCollectionOps</a>[<span class="extype" name="basis.collections.sequential.Strict.CollectionToStrictOps.A">A</span>, <a href="Collection.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.Collection.Family">collections.Collection.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@CollectionToStrictOps[A](xs:basis.collections.Collection[A]):basis.collections.sequential.StrictCollectionOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.Container" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Container"></a>
+      <a id="Container:Container"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Container$.html"><span class="name">Container</span></a><span class="result"> extends <a href="generic/CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a>[<a href="Container.html" class="extype" name="basis.collections.Container">Container</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Container" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#ContainerToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ContainerToGeneralOps[A](xs:basis.collections.Container[A]):basis.collections.sequential.GeneralContainerOps[A]"></a>
+      <a id="ContainerToGeneralOps[A](Container[A]):GeneralContainerOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ContainerToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.sequential.General.ContainerToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralContainerOps.html" class="extype" name="basis.collections.sequential.GeneralContainerOps">GeneralContainerOps</a>[<span class="extype" name="basis.collections.sequential.General.ContainerToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@ContainerToGeneralOps[A](xs:basis.collections.Container[A]):basis.collections.sequential.GeneralContainerOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#ContainerToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ContainerToStrictOps[A](xs:basis.collections.Container[A]):basis.collections.sequential.StrictContainerOps[A,xs.Family]"></a>
+      <a id="ContainerToStrictOps[A](Container[A]):StrictContainerOps[A,collections.Container.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ContainerToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>[<span class="extype" name="basis.collections.sequential.Strict.ContainerToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictContainerOps.html" class="extype" name="basis.collections.sequential.StrictContainerOps">StrictContainerOps</a>[<span class="extype" name="basis.collections.sequential.Strict.ContainerToStrictOps.A">A</span>, <a href="Container.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.Container.Family">collections.Container.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@ContainerToStrictOps[A](xs:basis.collections.Container[A]):basis.collections.sequential.StrictContainerOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.Deque" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Deque"></a>
+      <a id="Deque:Deque"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Deque$.html"><span class="name">Deque</span></a><span class="result"> extends <a href="generic/SeqFactory.html" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<a href="Deque.html" class="extype" name="basis.collections.Deque">Deque</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Deque" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.IndexedSeq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IndexedSeq"></a>
+      <a id="IndexedSeq:IndexedSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IndexedSeq$.html"><span class="name">IndexedSeq</span></a><span class="result"> extends <a href="generic/SeqFactory.html" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<a href="IndexedSeq.html" class="extype" name="basis.collections.IndexedSeq">IndexedSeq</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@IndexedSeq" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#IndexedSeqToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IndexedSeqToGeneralOps[A](xs:basis.collections.IndexedSeq[A]):basis.collections.sequential.GeneralIndexedSeqOps[A]"></a>
+      <a id="IndexedSeqToGeneralOps[A](IndexedSeq[A]):GeneralIndexedSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IndexedSeqToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="IndexedSeq.html" class="extype" name="basis.collections.IndexedSeq">IndexedSeq</a>[<span class="extype" name="basis.collections.sequential.General.IndexedSeqToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralIndexedSeqOps.html" class="extype" name="basis.collections.sequential.GeneralIndexedSeqOps">GeneralIndexedSeqOps</a>[<span class="extype" name="basis.collections.sequential.General.IndexedSeqToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@IndexedSeqToGeneralOps[A](xs:basis.collections.IndexedSeq[A]):basis.collections.sequential.GeneralIndexedSeqOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#IndexedSeqToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IndexedSeqToStrictOps[A](xs:basis.collections.IndexedSeq[A]):basis.collections.sequential.StrictIndexedSeqOps[A,xs.Family]"></a>
+      <a id="IndexedSeqToStrictOps[A](IndexedSeq[A]):StrictIndexedSeqOps[A,collections.IndexedSeq.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IndexedSeqToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="IndexedSeq.html" class="extype" name="basis.collections.IndexedSeq">IndexedSeq</a>[<span class="extype" name="basis.collections.sequential.Strict.IndexedSeqToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictIndexedSeqOps.html" class="extype" name="basis.collections.sequential.StrictIndexedSeqOps">StrictIndexedSeqOps</a>[<span class="extype" name="basis.collections.sequential.Strict.IndexedSeqToStrictOps.A">A</span>, <a href="IndexedSeq.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.IndexedSeq.Family">collections.IndexedSeq.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@IndexedSeqToStrictOps[A](xs:basis.collections.IndexedSeq[A]):basis.collections.sequential.StrictIndexedSeqOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.Iterator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Iterator"></a>
+      <a id="Iterator:Iterator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Iterator$.html"><span class="name">Iterator</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Iterator" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#IteratorToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IteratorToGeneralOps[A](xs:basis.collections.Iterator[A]):basis.collections.sequential.GeneralIteratorOps[A]"></a>
+      <a id="IteratorToGeneralOps[A](Iterator[A]):GeneralIteratorOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IteratorToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.sequential.General.IteratorToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralIteratorOps.html" class="extype" name="basis.collections.sequential.GeneralIteratorOps">GeneralIteratorOps</a>[<span class="extype" name="basis.collections.sequential.General.IteratorToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@IteratorToGeneralOps[A](xs:basis.collections.Iterator[A]):basis.collections.sequential.GeneralIteratorOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#IteratorToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IteratorToStrictOps[A](xs:basis.collections.Iterator[A]):basis.collections.sequential.StrictIteratorOps[A,xs.Family]"></a>
+      <a id="IteratorToStrictOps[A](Iterator[A]):StrictIteratorOps[A,collections.Iterator.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IteratorToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>[<span class="extype" name="basis.collections.sequential.Strict.IteratorToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictIteratorOps.html" class="extype" name="basis.collections.sequential.StrictIteratorOps">StrictIteratorOps</a>[<span class="extype" name="basis.collections.sequential.Strict.IteratorToStrictOps.A">A</span>, <a href="Iterator.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.Iterator.Family">collections.Iterator.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@IteratorToStrictOps[A](xs:basis.collections.Iterator[A]):basis.collections.sequential.StrictIteratorOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.LinearSeq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LinearSeq"></a>
+      <a id="LinearSeq:LinearSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearSeq$.html"><span class="name">LinearSeq</span></a><span class="result"> extends <a href="generic/SeqFactory.html" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<a href="LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@LinearSeq" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#LinearSeqToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LinearSeqToGeneralOps[A](xs:basis.collections.LinearSeq[A]):basis.collections.sequential.GeneralLinearSeqOps[A]"></a>
+      <a id="LinearSeqToGeneralOps[A](LinearSeq[A]):GeneralLinearSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LinearSeqToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>[<span class="extype" name="basis.collections.sequential.General.LinearSeqToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralLinearSeqOps.html" class="extype" name="basis.collections.sequential.GeneralLinearSeqOps">GeneralLinearSeqOps</a>[<span class="extype" name="basis.collections.sequential.General.LinearSeqToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@LinearSeqToGeneralOps[A](xs:basis.collections.LinearSeq[A]):basis.collections.sequential.GeneralLinearSeqOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#LinearSeqToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LinearSeqToStrictOps[A](xs:basis.collections.LinearSeq[A]):basis.collections.sequential.StrictLinearSeqOps[A,xs.Family]"></a>
+      <a id="LinearSeqToStrictOps[A](LinearSeq[A]):StrictLinearSeqOps[A,collections.LinearSeq.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LinearSeqToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>[<span class="extype" name="basis.collections.sequential.Strict.LinearSeqToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictLinearSeqOps.html" class="extype" name="basis.collections.sequential.StrictLinearSeqOps">StrictLinearSeqOps</a>[<span class="extype" name="basis.collections.sequential.Strict.LinearSeqToStrictOps.A">A</span>, <a href="LinearSeq.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.LinearSeq.Family">collections.LinearSeq.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@LinearSeqToStrictOps[A](xs:basis.collections.LinearSeq[A]):basis.collections.sequential.StrictLinearSeqOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.Map" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Map"></a>
+      <a id="Map:Map"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Map$.html"><span class="name">Map</span></a><span class="result"> extends <a href="generic/MapFactory.html" class="extype" name="basis.collections.generic.MapFactory">MapFactory</a>[<a href="Map.html" class="extype" name="basis.collections.Map">Map</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Map" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#MapToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MapToGeneralOps[A,T](xs:basis.collections.Map[A,T]):basis.collections.sequential.GeneralMapOps[A,T]"></a>
+      <a id="MapToGeneralOps[A,T](Map[A,T]):GeneralMapOps[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MapToGeneralOps</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span name="xs">xs: <a href="Map.html" class="extype" name="basis.collections.Map">Map</a>[<span class="extype" name="basis.collections.sequential.General.MapToGeneralOps.A">A</span>, <span class="extype" name="basis.collections.sequential.General.MapToGeneralOps.T">T</span>]</span>)</span><span class="result">: <a href="sequential/GeneralMapOps.html" class="extype" name="basis.collections.sequential.GeneralMapOps">GeneralMapOps</a>[<span class="extype" name="basis.collections.sequential.General.MapToGeneralOps.A">A</span>, <span class="extype" name="basis.collections.sequential.General.MapToGeneralOps.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@MapToGeneralOps[A,T](xs:basis.collections.Map[A,T]):basis.collections.sequential.GeneralMapOps[A,T]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#MapToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MapToStrictOps[A,T](xs:basis.collections.Map[A,T]):basis.collections.sequential.StrictMapOps[A,T,xs.Family]"></a>
+      <a id="MapToStrictOps[A,T](Map[A,T]):StrictMapOps[A,T,collections.Map.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MapToStrictOps</span><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="params">(<span name="xs">xs: <a href="Map.html" class="extype" name="basis.collections.Map">Map</a>[<span class="extype" name="basis.collections.sequential.Strict.MapToStrictOps.A">A</span>, <span class="extype" name="basis.collections.sequential.Strict.MapToStrictOps.T">T</span>]</span>)</span><span class="result">: <a href="sequential/StrictMapOps.html" class="extype" name="basis.collections.sequential.StrictMapOps">StrictMapOps</a>[<span class="extype" name="basis.collections.sequential.Strict.MapToStrictOps.A">A</span>, <span class="extype" name="basis.collections.sequential.Strict.MapToStrictOps.T">T</span>, <a href="Map.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.Map.Family">collections.Map.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@MapToStrictOps[A,T](xs:basis.collections.Map[A,T]):basis.collections.sequential.StrictMapOps[A,T,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.Queue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Queue"></a>
+      <a id="Queue:Queue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Queue$.html"><span class="name">Queue</span></a><span class="result"> extends <a href="generic/SeqFactory.html" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<a href="Queue.html" class="extype" name="basis.collections.Queue">Queue</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Queue" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.Seq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Seq"></a>
+      <a id="Seq:Seq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Seq$.html"><span class="name">Seq</span></a><span class="result"> extends <a href="generic/SeqFactory.html" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Seq" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#SeqToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SeqToGeneralOps[A](xs:basis.collections.Seq[A]):basis.collections.sequential.GeneralSeqOps[A]"></a>
+      <a id="SeqToGeneralOps[A](Seq[A]):GeneralSeqOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SeqToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.sequential.General.SeqToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralSeqOps.html" class="extype" name="basis.collections.sequential.GeneralSeqOps">GeneralSeqOps</a>[<span class="extype" name="basis.collections.sequential.General.SeqToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@SeqToGeneralOps[A](xs:basis.collections.Seq[A]):basis.collections.sequential.GeneralSeqOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#SeqToStringOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SeqToStringOps[A](xs:basis.collections.Seq[A]):basis.collections.sequential.StrictSeqOps[A,xs.Family]"></a>
+      <a id="SeqToStringOps[A](Seq[A]):StrictSeqOps[A,collections.Seq.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SeqToStringOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>[<span class="extype" name="basis.collections.sequential.Strict.SeqToStringOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictSeqOps.html" class="extype" name="basis.collections.sequential.StrictSeqOps">StrictSeqOps</a>[<span class="extype" name="basis.collections.sequential.Strict.SeqToStringOps.A">A</span>, <a href="Seq.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.Seq.Family">collections.Seq.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@SeqToStringOps[A](xs:basis.collections.Seq[A]):basis.collections.sequential.StrictSeqOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.Set" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Set"></a>
+      <a id="Set:Set"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Set$.html"><span class="name">Set</span></a><span class="result"> extends <a href="generic/SetFactory.html" class="extype" name="basis.collections.generic.SetFactory">SetFactory</a>[<a href="Set.html" class="extype" name="basis.collections.Set">Set</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Set" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#SetToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SetToGeneralOps[A](xs:basis.collections.Set[A]):basis.collections.sequential.GeneralSetOps[A]"></a>
+      <a id="SetToGeneralOps[A](Set[A]):GeneralSetOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SetToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Set.html" class="extype" name="basis.collections.Set">Set</a>[<span class="extype" name="basis.collections.sequential.General.SetToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralSetOps.html" class="extype" name="basis.collections.sequential.GeneralSetOps">GeneralSetOps</a>[<span class="extype" name="basis.collections.sequential.General.SetToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@SetToGeneralOps[A](xs:basis.collections.Set[A]):basis.collections.sequential.GeneralSetOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#SetToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SetToStrictOps[A](xs:basis.collections.Set[A]):basis.collections.sequential.StrictSetOps[A,xs.Family]"></a>
+      <a id="SetToStrictOps[A](Set[A]):StrictSetOps[A,collections.Set.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SetToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Set.html" class="extype" name="basis.collections.Set">Set</a>[<span class="extype" name="basis.collections.sequential.Strict.SetToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictSetOps.html" class="extype" name="basis.collections.sequential.StrictSetOps">StrictSetOps</a>[<span class="extype" name="basis.collections.sequential.Strict.SetToStrictOps.A">A</span>, <a href="Set.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.Set.Family">collections.Set.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@SetToStrictOps[A](xs:basis.collections.Set[A]):basis.collections.sequential.StrictSetOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.Stack" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Stack"></a>
+      <a id="Stack:Stack"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Stack$.html"><span class="name">Stack</span></a><span class="result"> extends <a href="generic/SeqFactory.html" class="extype" name="basis.collections.generic.SeqFactory">SeqFactory</a>[<a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Stack" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.Submap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Submap"></a>
+      <a id="Submap:Submap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Submap$.html"><span class="name">Submap</span></a><span class="result"> extends <a href="generic/MapFactory.html" class="extype" name="basis.collections.generic.MapFactory">MapFactory</a>[<a href="Submap.html" class="extype" name="basis.collections.Submap">Submap</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Submap" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.Subset" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Subset"></a>
+      <a id="Subset:Subset"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Subset$.html"><span class="name">Subset</span></a><span class="result"> extends <a href="generic/SetFactory.html" class="extype" name="basis.collections.generic.SetFactory">SetFactory</a>[<a href="Subset.html" class="extype" name="basis.collections.Subset">Subset</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Subset" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.Traverser" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Traverser"></a>
+      <a id="Traverser:Traverser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Traverser$.html"><span class="name">Traverser</span></a><span class="result"> extends <a href="generic/CollectionFactory.html" class="extype" name="basis.collections.generic.CollectionFactory">CollectionFactory</a>[<a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@Traverser" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential.General#TraverserToGeneralOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TraverserToGeneralOps[A](xs:basis.collections.Traverser[A]):basis.collections.sequential.GeneralTraverserOps[A]"></a>
+      <a id="TraverserToGeneralOps[A](Traverser[A]):GeneralTraverserOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TraverserToGeneralOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.sequential.General.TraverserToGeneralOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.sequential.General.TraverserToGeneralOps.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@TraverserToGeneralOps[A](xs:basis.collections.Traverser[A]):basis.collections.sequential.GeneralTraverserOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict#TraverserToStrictOps" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TraverserToStrictOps[A](xs:basis.collections.Traverser[A]):basis.collections.sequential.StrictTraverserOps[A,xs.Family]"></a>
+      <a id="TraverserToStrictOps[A](Traverser[A]):StrictTraverserOps[A,collections.Traverser.Family]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit macro </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TraverserToStrictOps</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="xs">xs: <a href="Traverser.html" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.sequential.Strict.TraverserToStrictOps.A">A</span>]</span>)</span><span class="result">: <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.sequential.Strict.TraverserToStrictOps.A">A</span>, <a href="Traverser.html#Family=Base@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.collections.Traverser.Family">collections.Traverser.Family</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@TraverserToStrictOps[A](xs:basis.collections.Traverser[A]):basis.collections.sequential.StrictTraverserOps[A,xs.Family]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></dd></dl></div>
+    </li><li name="basis.collections.generic" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="generic"></a>
+      <a id="generic:generic"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="generic/package.html"><span class="name">generic</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@generic" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.immutable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="immutable"></a>
+      <a id="immutable:immutable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="immutable/package.html"><span class="name">immutable</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@immutable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.mutable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="mutable"></a>
+      <a id="mutable:mutable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="mutable/package.html"><span class="name">mutable</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@mutable" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.sequential" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sequential"></a>
+      <a id="sequential:sequential"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="sequential/package.html"><span class="name">sequential</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@sequential" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="basis.collections.special" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="special"></a>
+      <a id="special:special"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="special/package.html"><span class="name">special</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.package@special" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.collections.sequential.Strict">
+              <h3>Inherited from <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">Strict</a></h3>
+            </div><div class="parent" name="basis.collections.sequential.General">
+              <h3>Inherited from <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">General</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

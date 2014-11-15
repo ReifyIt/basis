@@ -1,0 +1,929 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Traverser - basis.collections.Traverser</title>
+          <meta name="description" content="Traverser - basis.collections.Traverser" />
+          <meta name="keywords" content="Traverser basis.collections.Traverser" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.collections.Traverser';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="Traverser$.html" title="Go to companion"><img src="../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a>.<a href="package.html" class="extype" name="basis.collections">collections</a></p>
+        <h1><a href="Traverser$.html" title="Go to companion">Traverser</a></h1> <span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Traverser</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> extends <a href="../Family.html" class="extype" name="basis.Family">Family</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A once traversable collection of elements.</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/core/src/main/scala/basis/collections/Traverser.scala" target="_blank">Traverser.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="../Family.html" class="extype" name="basis.Family">basis.Family</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]], <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="immutable/$colon$colon.html" class="extype" name="basis.collections.immutable.::">::</a>, <a href="mutable/ArrayBuffer.html" class="extype" name="basis.collections.mutable.ArrayBuffer">ArrayBuffer</a>, <a href="immutable/ArraySeq.html" class="extype" name="basis.collections.immutable.ArraySeq">ArraySeq</a>, <a href="../form/Variant$BaseObject.html" class="extype" name="basis.form.Variant.BaseObject">BaseObject</a>, <a href="../form/Variant$BaseSeq.html" class="extype" name="basis.form.Variant.BaseSeq">BaseSeq</a>, <a href="../form/Variant$BaseSet.html" class="extype" name="basis.form.Variant.BaseSet">BaseSet</a>, <a href="../form/Variant$BaseText.html" class="extype" name="basis.form.Variant.BaseText">BaseText</a>, <a href="BilinearSeq.html" class="extype" name="basis.collections.BilinearSeq">BilinearSeq</a>, <a href="../Bind.html" class="extype" name="basis.Bind">Bind</a>, <a href="../form/BsonVariant$BsonObject.html" class="extype" name="basis.form.BsonVariant.BsonObject">BsonObject</a>, <a href="../form/BsonVariant$BsonSeq.html" class="extype" name="basis.form.BsonVariant.BsonSeq">BsonSeq</a>, <a href="../form/BsonVariant$BsonSet.html" class="extype" name="basis.form.BsonVariant.BsonSet">BsonSet</a>, <a href="../form/BsonVariant$BsonText.html" class="extype" name="basis.form.BsonVariant.BsonText">BsonText</a>, <a href="Buffer.html" class="extype" name="basis.collections.Buffer">Buffer</a>, <a href="Collection.html" class="extype" name="basis.collections.Collection">Collection</a>, <a href="Container.html" class="extype" name="basis.collections.Container">Container</a>, <a href="../form/DeltaVariant$DeltaObject.html" class="extype" name="basis.form.DeltaVariant.DeltaObject">DeltaObject</a>, <a href="Deque.html" class="extype" name="basis.collections.Deque">Deque</a>, <a href="../Else.html" class="extype" name="basis.Else">Else</a>, <a href="immutable/FingerTrieSeq.html" class="extype" name="basis.collections.immutable.FingerTrieSeq">FingerTrieSeq</a>, <a href="../form/DeltaVariant$FormObject.html" class="extype" name="basis.form.DeltaVariant.FormObject">FormObject</a>, <a href="../form/DeltaVariant$FormSet.html" class="extype" name="basis.form.DeltaVariant.FormSet">FormSet</a>, <a href="immutable/HashTrieMap.html" class="extype" name="basis.collections.immutable.HashTrieMap">HashTrieMap</a>, <a href="immutable/HashTrieSet.html" class="extype" name="basis.collections.immutable.HashTrieSet">HashTrieSet</a>, <a href="immutable/IndexTrieSeq.html" class="extype" name="basis.collections.immutable.IndexTrieSeq">IndexTrieSeq</a>, <a href="IndexedSeq.html" class="extype" name="basis.collections.IndexedSeq">IndexedSeq</a>, <a href="Iterator.html" class="extype" name="basis.collections.Iterator">Iterator</a>, <a href="../form/JsonVariant$JsonObject.html" class="extype" name="basis.form.JsonVariant.JsonObject">JsonObject</a>, <a href="../form/JsonVariant$JsonSeq.html" class="extype" name="basis.form.JsonVariant.JsonSeq">JsonSeq</a>, <a href="../form/JsonVariant$JsonSet.html" class="extype" name="basis.form.JsonVariant.JsonSet">JsonSet</a>, <a href="../form/JsonVariant$JsonText.html" class="extype" name="basis.form.JsonVariant.JsonText">JsonText</a>, <a href="LinearSeq.html" class="extype" name="basis.collections.LinearSeq">LinearSeq</a>, <a href="immutable/List.html" class="extype" name="basis.collections.immutable.List">List</a>, <a href="mutable/ListBuffer.html" class="extype" name="basis.collections.mutable.ListBuffer">ListBuffer</a>, <a href="Map.html" class="extype" name="basis.collections.Map">Map</a>, <a href="immutable/Nil$.html" class="extype" name="basis.collections.immutable.Nil">Nil</a>, ObjectDelta, <a href="../form/OmniVariant$$ObjectDelta.html" class="extype" name="basis.form.OmniVariant.ObjectDelta">ObjectDelta</a>, ObjectDelta, <a href="../form/OmniVariant$$ObjectForm.html" class="extype" name="basis.form.OmniVariant.ObjectForm">ObjectForm</a>, ObjectForm, ObjectForm, ObjectForm, ObjectForm, ObjectForm, <a href="../form/ProtoVariant$ProtoObject.html" class="extype" name="basis.form.ProtoVariant.ProtoObject">ProtoObject</a>, <a href="../form/ProtoVariant$ProtoObjectDelta.html" class="extype" name="basis.form.ProtoVariant.ProtoObjectDelta">ProtoObjectDelta</a>, <a href="../form/ProtoVariant$ProtoSeq.html" class="extype" name="basis.form.ProtoVariant.ProtoSeq">ProtoSeq</a>, <a href="../form/ProtoVariant$ProtoSet.html" class="extype" name="basis.form.ProtoVariant.ProtoSet">ProtoSet</a>, <a href="../form/ProtoVariant$ProtoText.html" class="extype" name="basis.form.ProtoVariant.ProtoText">ProtoText</a>, <a href="Queue.html" class="extype" name="basis.collections.Queue">Queue</a>, <a href="Seq.html" class="extype" name="basis.collections.Seq">Seq</a>, SeqForm, SeqForm, <a href="../form/OmniVariant$$SeqForm.html" class="extype" name="basis.form.OmniVariant.SeqForm">SeqForm</a>, SeqForm, SeqForm, <a href="Set.html" class="extype" name="basis.collections.Set">Set</a>, <a href="../form/OmniVariant$$SetForm.html" class="extype" name="basis.form.OmniVariant.SetForm">SetForm</a>, SetForm, SetForm, SetForm, SetForm, SetForm, <a href="Stack.html" class="extype" name="basis.collections.Stack">Stack</a>, <a href="../text/String1.html" class="extype" name="basis.text.String1">String1</a>, <a href="../text/String2.html" class="extype" name="basis.text.String2">String2</a>, <a href="../text/String4.html" class="extype" name="basis.text.String4">String4</a>, <a href="Submap.html" class="extype" name="basis.collections.Submap">Submap</a>, <a href="Subset.html" class="extype" name="basis.collections.Subset">Subset</a>, TextForm, TextForm, <a href="../form/OmniVariant$$TextForm.html" class="extype" name="basis.form.OmniVariant.TextForm">TextForm</a>, TextForm, TextForm, <a href="../Trap.html" class="extype" name="basis.Trap">Trap</a>, <a href="../Trap$.html" class="extype" name="basis.Trap">Trap</a>, <a href="../text/UString.html" class="extype" name="basis.text.UString">UString</a>, <a href="../text/UTF.html" class="extype" name="basis.text.UTF">UTF</a>, <a href="../text/UTF16.html" class="extype" name="basis.text.UTF16">UTF16</a>, <a href="../text/UTF32.html" class="extype" name="basis.text.UTF32">UTF32</a>, <a href="../text/UTF8.html" class="extype" name="basis.text.UTF8">UTF8</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">Type Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph310" viewBox="0.00 0.00 572.50 179.50" height="179pt" width="573pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 175.499)" class="graph" id="graph0"><polygon points="-4,4 -4,-175.499 568.5,-175.499 568.5,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust3"></g><g class="cluster" id="clust2"></g><!-- node5 --><g class="node implicit-outgoing class" id="graph310_5"><g id="a_implicit-outgoing class|graph310_5"><a xlink:title="basis.collections.Traverser can be implicitly converted to StrictTraverserOps[A, Traverser[_]] by the implicit method TraverserToStrictOps in class basis.collections.sequential.Strict" xlink:href="sequential/StrictTraverserOps.html#inheritance-diagram"><polygon points="392,-93 194,-93 194,-68 392,-68 392,-93" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-87.5" x="204" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-77.7495" x="224.779" text-anchor="start">StrictTraverserOps[A, Traverser[_]]</text></a></g></g><!-- node4 --><g class="node implicit-outgoing class" id="graph310_4"><g id="a_implicit-outgoing class|graph310_4"><a xlink:title="basis.collections.Traverser can be implicitly converted to GeneralTraverserOps[A] by the implicit method TraverserToGeneralOps in class basis.collections.sequential.General" xlink:href="sequential/GeneralTraverserOps.html#inheritance-diagram"><polygon points="176,-93 24,-93 24,-68 176,-68 176,-93" stroke="#ababab" fill="#e1e1e1"></polygon><image xlink:href="../../lib/class_diagram.png" y="-87.5" x="34" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#7d7d7d" font-size="10.00" font-family="Arial" y="-77.7495" x="54.8335" text-anchor="start">GeneralTraverserOps[A]</text></a></g></g><!-- node4&#45;&gt;node5 --><!-- node0 --><g class="node this trait" id="graph310_0"><g id="a_this trait|graph310_0"><a xlink:title="basis.collections.Traverser (this trait)" xlink:href="#inheritance-diagram"><polygon points="514,-93 416,-93 416,-68 514,-68 514,-93" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-87.5" x="426" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-77.7495" x="446.792" text-anchor="start">Traverser[A]</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge implicit-outgoing" id="0_4"><g id="a_implicit-outgoing|0_4"><a xlink:title="Traverser[A] can be implicitly converted to GeneralTraverserOps[A], StrictTraverserOps[A, Traverser[_]]"><path d="M426.234,-100.697C418.99,-103.867 411.376,-106.813 404,-109 310.681,-136.666 279.788,-131.113 185,-109 176.824,-107.093 168.32,-104.724 159.988,-102.172" stroke="#d4d4d4" fill="none"></path><polygon points="160.122,-100.381 154.828,-100.563 159.08,-103.722 160.122,-100.381" stroke="#d4d4d4" fill="#d4d4d4"></polygon></a></g><text fill="#aaaaaa" font-size="10.00" font-family="Arial" y="-120.499" x="296" text-anchor="middle">implicitly</text></g><!-- node1 --><g class="node trait" id="graph310_1"><g id="a_trait|graph310_1"><a xlink:title="basis.collections.Collection" xlink:href="Collection.html#inheritance-diagram"><polygon points="459.5,-25 360.5,-25 360.5,-0 459.5,-0 459.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="371" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="391.542" text-anchor="start">Collection[A]</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph310_0_1"><g id="a_inheritance|graph310_0_1"><a xlink:title="Collection[A] is a subtype of Traverser[A]"><path d="M451.961,-63.8527C442.078,-51.9941 428.714,-35.9572 419.748,-25.1973" stroke="#d4d4d4" fill="none"></path><polygon points="450.622,-64.9797 455.167,-67.7005 453.311,-62.7391 450.622,-64.9797" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node trait" id="graph310_2"><g id="a_trait|graph310_2"><a xlink:title="basis.collections.Iterator" xlink:href="Iterator.html#inheritance-diagram"><polygon points="564.5,-25 477.5,-25 477.5,-0 564.5,-0 564.5,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="488" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="508.658" text-anchor="start">Iterator[A]</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph310_0_2"><g id="a_inheritance|graph310_0_2"><a xlink:title="Iterator[A] is a subtype of Traverser[A]"><path d="M478.276,-63.8527C488.338,-51.9941 501.945,-35.9572 511.075,-25.1973" stroke="#d4d4d4" fill="none"></path><polygon points="476.912,-62.7557 475.012,-67.7005 479.581,-65.0202 476.912,-62.7557" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node trait" id="graph310_3"><g id="a_trait|graph310_3"><a xlink:title="basis.Family" xlink:href="../Family.html#inheritance-diagram"><polygon points="531,-171.499 399,-171.499 399,-146.499 531,-146.499 531,-171.499" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-165.999" x="409" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-156.249" x="429.846" text-anchor="start">Family[Traverser[_]]</text></a></g></g><!-- node3&#45;&gt;node0 --><g class="edge inheritance" id="graph310_3_0"><g id="a_inheritance|graph310_3_0"><a xlink:title="Traverser[A] is a subtype of Family[Traverser[_]]"><path d="M465,-141.331C465,-126.795 465,-106.078 465,-93.2279" stroke="#d4d4d4" fill="none"></path><polygon points="463.25,-141.38 465,-146.38 466.75,-141.381 463.25,-141.38" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.collections.Traverser"><span>Traverser</span></li><li class="in" name="basis.Family"><span>Family</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+                <span class="filtertype">Implicitly<br />
+                </span>
+                <ol id="implicits"> <li class="in" name="basis.collections.sequential.General.TraverserToGeneralOps" data-hidden="false"><span>by TraverserToGeneralOps</span></li><li class="in" name="basis.collections.sequential.Strict.TraverserToStrictOps" data-hidden="false"><span>by TraverserToStrictOps</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.Family.Family" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Family=Base@scala.annotation.unchecked.uncheckedVariance"></a>
+      <a id="Family:Family"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Family</span><span class="result"> = <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@Family=Base@scala.annotation.unchecked.uncheckedVariance" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Family.html" class="extype" name="basis.Family">Family</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="scala.Any#getClass" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.Traverser#traverse" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="traverse(f:A=&gt;Unit):Unit"></a>
+      <a id="traverse((A)⇒Unit):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">traverse</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@traverse(f:A=&gt;Unit):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#++" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="++[B&gt;:A](those:basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="++[B&gt;:A](Traverser[B])(Builder[B]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus$plus" class="implicit">++</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.StrictTraverserOps.A">A</span></span>]</span><span class="params">(<span name="those">those: <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.++.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.++.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.++.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@++[B&gt;:A](those:basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#choose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="choose[B](q:PartialFunction[A,B]):basis.Maybe[B]"></a>
+      <a id="choose[B](PartialFunction[A,B]):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">choose</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.choose.B">B</span>]</span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.choose.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@choose[B](q:PartialFunction[A,B]):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#collect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="collect[B](PartialFunction[A,B])(Builder[B]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">collect</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="q">q: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <span class="extype" name="basis.collections.sequential.StrictTraverserOps.collect.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.collect.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.collect.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@collect[B](q:PartialFunction[A,B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#count" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="count(p:A=&gt;Boolean):Int"></a>
+      <a id="count((A)⇒Boolean):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">count</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@count(p:A=&gt;Boolean):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="drop(lower:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="drop(Int)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">drop</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.drop.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@drop(lower:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#dropWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="dropWhile((A)⇒Boolean)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">dropWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.dropWhile.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@dropWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#eagerly" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eagerly:basis.collections.sequential.StrictTraverserOps[A,basis.collections.Traverser[_]]"></a>
+      <a id="eagerly:StrictTraverserOps[A,Traverser[_]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">eagerly</span><span class="result">: <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@eagerly:basis.collections.sequential.StrictTraverserOps[A,basis.collections.Traverser[_]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="scala.Any#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#exists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exists(p:A=&gt;Boolean):Boolean"></a>
+      <a id="exists((A)⇒Boolean):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">exists</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@exists(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="filter((A)⇒Boolean)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">filter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.filter.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@filter(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#find" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="find(p:A=&gt;Boolean):basis.Maybe[A]"></a>
+      <a id="find((A)⇒Boolean):Maybe[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">find</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@find(p:A=&gt;Boolean):basis.Maybe[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatMap[B](f:A=&gt;basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="flatMap[B]((A)⇒Traverser[B])(Builder[B]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.flatMap.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.flatMap.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@flatMap[B](f:A=&gt;basis.collections.Traverser[B])(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#fold" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fold[B&gt;:A](z:B)(op:(B,B)=&gt;B):B"></a>
+      <a id="fold[B&gt;:A](B)((B,B)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">fold</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="z">z: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span></span>)</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.fold.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@fold[B&gt;:A](z:B)(op:(B,B)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#foldLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foldLeft[B](z:B)(op:(B,A)=&gt;B):B"></a>
+      <a id="foldLeft[B](B)((B,A)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foldLeft.B">B</span></span>)</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foldLeft.B">B</span>, <span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foldLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foldLeft.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@foldLeft[B](z:B)(op:(B,A)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#forall" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forall(p:A=&gt;Boolean):Boolean"></a>
+      <a id="forall((A)⇒Boolean):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">forall</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@forall(p:A=&gt;Boolean):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#foreach" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="foreach[U](f:A=&gt;U):Unit"></a>
+      <a id="foreach[U]((A)⇒U):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.foreach.U">U</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@foreach[U](f:A=&gt;U):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="scala.Any#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#joinString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="joinString(separator:String)(implicitbuilder:basis.text.StringBuilder):builder.State"></a>
+      <a id="joinString(String)(StringBuilder):text.StringBuilder.State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">joinString</span><span class="params">(<span name="separator">separator: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../text/StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a></span>)</span><span class="result">: <a href="../text/StringBuilder.html#State=Result@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.text.StringBuilder.State">text.StringBuilder.State</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@joinString(separator:String)(implicitbuilder:basis.text.StringBuilder):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#joinString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="joinString(open:String,separator:String,close:String)(implicitbuilder:basis.text.StringBuilder):builder.State"></a>
+      <a id="joinString(String,String,String)(StringBuilder):text.StringBuilder.State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">joinString</span><span class="params">(<span name="open">open: <span class="extype" name="java.lang.String">String</span></span>, <span name="separator">separator: <span class="extype" name="java.lang.String">String</span></span>, <span name="close">close: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="../text/StringBuilder.html" class="extype" name="basis.text.StringBuilder">StringBuilder</a></span>)</span><span class="result">: <a href="../text/StringBuilder.html#State=Result@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="basis.text.StringBuilder.State">text.StringBuilder.State</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@joinString(open:String,separator:String,close:String)(implicitbuilder:basis.text.StringBuilder):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#lazily" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lazily:basis.collections.sequential.NonStrictTraverserOps[A]"></a>
+      <a id="lazily:NonStrictTraverserOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">lazily</span><span class="result">: <a href="sequential/NonStrictTraverserOps.html" class="extype" name="basis.collections.sequential.NonStrictTraverserOps">NonStrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@lazily:basis.collections.sequential.NonStrictTraverserOps[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State"></a>
+      <a id="map[B]((A)⇒B)(Builder[B]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.StrictTraverserOps.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.sequential.StrictTraverserOps.map.B">B</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.map.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@map[B](f:A=&gt;B)(implicitbuilder:basis.collections.Builder[B]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#mayReduce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mayReduce[B&gt;:A](op:(B,B)=&gt;B):basis.Maybe[B]"></a>
+      <a id="mayReduce[B&gt;:A]((B,B)⇒B):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">mayReduce</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduce.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduce.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduce.B">B</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduce.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@mayReduce[B&gt;:A](op:(B,B)=&gt;B):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#mayReduceLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mayReduceLeft[B&gt;:A](op:(B,A)=&gt;B):basis.Maybe[B]"></a>
+      <a id="mayReduceLeft[B&gt;:A]((B,A)⇒B):Maybe[B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">mayReduceLeft</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduceLeft.B">B</span>, <span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduceLeft.B">B</span></span>)</span><span class="result">: <a href="../package.html#Maybe[+A]=basis.Else[A,Any]" class="extmbr" name="basis.Maybe">Maybe</a>[<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.mayReduceLeft.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@mayReduceLeft[B&gt;:A](op:(B,A)=&gt;B):basis.Maybe[B]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#reduce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduce[B&gt;:A](op:(B,B)=&gt;B):B"></a>
+      <a id="reduce[B&gt;:A]((B,B)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">reduce</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduce.B">B</span>, <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduce.B">B</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduce.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduce.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@reduce[B&gt;:A](op:(B,B)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.General.TraverserToGeneralOps#reduceLeft" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reduceLeft[B&gt;:A](op:(B,A)=&gt;B):B"></a>
+      <a id="reduceLeft[B&gt;:A]((B,A)⇒B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">reduceLeft</span><span class="tparams">[<span name="B">B &gt;: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.A">A</span></span>]</span><span class="params">(<span name="op">op: (<span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduceLeft.B">B</span>, <span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduceLeft.B">B</span></span>)</span><span class="result">: <span class="extype" name="basis.collections.sequential.GeneralTraverserOps.reduceLeft.B">B</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@reduceLeft[B&gt;:A](op:(B,A)=&gt;B):B" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] performed by method TraverserToGeneralOps in <a href="sequential/General.html" class="extype" name="basis.collections.sequential.General">basis.collections.sequential.General</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#slice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="slice(Int,Int)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">slice</span><span class="params">(<span name="lower">lower: <span class="extype" name="scala.Int">Int</span></span>, <span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.slice.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@slice(lower:Int,upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#span" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[A]withbasis.From[Family],implicitbuilder2:basis.collections.Builder[A]withbasis.From[Family]):(builder1.State,builder2.State)"></a>
+      <a id="span((A)⇒Boolean)(Builder[A]withFrom[Traverser[_]],Builder[A]withFrom[Traverser[_]]):((builder1)#State,(builder2)#State)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">span</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder1">builder1: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>, <span name="builder2">builder2: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: ((<span class="extype" name="basis.collections.sequential.StrictTraverserOps.span.builder1">builder1</span>)#<span class="extype" name="basis.State.State">State</span>, (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.span.builder2">builder2</span>)#<span class="extype" name="basis.State.State">State</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@span(p:A=&gt;Boolean)(implicitbuilder1:basis.collections.Builder[A]withbasis.From[Family],implicitbuilder2:basis.collections.Builder[A]withbasis.From[Family]):(builder1.State,builder2.State)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#take" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="take(upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="take(Int)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">take</span><span class="params">(<span name="upper">upper: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.take.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@take(upper:Int)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#takeWhile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State"></a>
+      <a id="takeWhile((A)⇒Boolean)(Builder[A]withFrom[Traverser[_]]):(builder)#State"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">takeWhile</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="builder">builder: <a href="Builder.html" class="extype" name="basis.collections.Builder">Builder</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] with <a href="../From.html" class="extype" name="basis.From">From</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</span>)</span><span class="result">: (<span class="extype" name="basis.collections.sequential.StrictTraverserOps.takeWhile.builder">builder</span>)#<span class="extype" name="basis.State.State">State</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@takeWhile(p:A=&gt;Boolean)(implicitbuilder:basis.collections.Builder[A]withbasis.From[Family]):builder.State" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li><li name="scala.Any#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="basis.collections.sequential.Strict.TraverserToStrictOps#withFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withFilter(p:A=&gt;Boolean):basis.collections.Traverser[A]"></a>
+      <a id="withFilter((A)⇒Boolean):Traverser[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="implicit">withFilter</span><span class="params">(<span name="p">p: (<span class="extype" name="basis.collections.Traverser.A">A</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.collections.Traverser@withFilter(p:A=&gt;Boolean):basis.collections.Traverser[A]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt class="implicit">Implicit information</dt><dd>
+            This member is added by an implicit conversion from <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to
+            <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]] performed by method TraverserToStrictOps in <a href="sequential/Strict.html" class="extype" name="basis.collections.sequential.Strict">basis.collections.sequential.Strict</a>.
+            
+          </dd><dt>Definition Classes</dt><dd><a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="basis.Family">
+              <h3>Inherited from <a href="../Family.html" class="extype" name="basis.Family">basis.Family</a>[<a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        <div class="conversion" name="basis.collections.sequential.General.TraverserToGeneralOps">
+              <h3>Inherited by implicit conversion TraverserToGeneralOps from
+                <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to <a href="sequential/GeneralTraverserOps.html" class="extype" name="basis.collections.sequential.GeneralTraverserOps">GeneralTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>]
+              </h3>
+            </div><div class="conversion" name="basis.collections.sequential.Strict.TraverserToStrictOps">
+              <h3>Inherited by implicit conversion TraverserToStrictOps from
+                <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>] to <a href="sequential/StrictTraverserOps.html" class="extype" name="basis.collections.sequential.StrictTraverserOps">StrictTraverserOps</a>[<span class="extype" name="basis.collections.Traverser.A">A</span>, <a href="" class="extype" name="basis.collections.Traverser">Traverser</a>[_]]
+              </h3>
+            </div>
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
