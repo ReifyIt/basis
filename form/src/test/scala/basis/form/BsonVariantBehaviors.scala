@@ -47,6 +47,6 @@ trait BsonVariantBehaviors extends Matchers with VariantTranscoding { this: Flat
       }
     }
 
-    "BSON transcoding" should behave like Transcodes(variant)(BsonTranscoder)
+    s"$variant BSON transcoding" should behave like TranscodesForms(variant)(BsonTranscoder)
   }
 }

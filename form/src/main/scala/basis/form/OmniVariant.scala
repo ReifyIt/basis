@@ -8,13 +8,88 @@ package basis.form
 
 import basis._
 import basis.collections._
+import basis.collections.immutable._
 import basis.data._
 import basis.text._
 import basis.util._
 import scala.reflect._
 
-object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoVariant { variant =>
-  sealed abstract class AnyForm extends BaseValue with JsonValue with BsonValue with ProtoValue
+object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonVariant with ProtoVariant { variant =>
+  sealed abstract class AnyDelta extends DeltaValue with ProtoDelta
+
+  object AnyDelta extends DeltaValueFactory with ProtoDeltaFactory
+
+
+  final class ObjectDelta(protected val underlying: FingerTrieSeq[(String, AnyDelta)]) extends AnyDelta with DeltaObject with ProtoObjectDelta {
+    private[this] var _index: HashTrieMap[String, AnyDelta] = null
+    private[this] def index: HashTrieMap[String, AnyDelta] = {
+      if (_index == null) _index = HashTrieMap.from(underlying)
+      _index
+    }
+
+    override def isEmpty: Boolean = underlying.isEmpty
+
+    override def size: Int = underlying.length
+
+    override def contains(key: String): Boolean =
+      if (size > 8) index.contains(key)
+      else (underlying: Container[(String, AnyDelta)]).exists(_._1.equals(key))
+
+    override def get(key: String): Maybe[AnyDelta] =
+      if (size > 8) index.get(key)
+      else (underlying: Container[(String, AnyDelta)]).find(_._1.equals(key)).map(_._2)
+
+    override def apply(key: String): AnyDelta =
+      if (size > 8) index(key)
+      else {
+        val these = underlying.iterator
+        while (!these.isEmpty) {
+          val field = these.head
+          if (field._1.equals(key)) return field._2
+          these.step()
+        }
+        throw new NoSuchElementException(key)
+      }
+
+    override def / (key: String): AnyDelta =
+      if (size > 8) { if (index.contains(key)) index(key) else NoForm }
+      else {
+        val these = underlying.iterator
+        while (!these.isEmpty) {
+          val field = these.head
+          if (field._1.equals(key)) return field._2
+          these.step()
+        }
+        NoForm
+      }
+
+    override def iterator: Iterator[(String, AnyDelta)] = underlying.iterator
+
+    override def traverse(f: ((String, AnyDelta)) => Unit): Unit = underlying.traverse(f)
+  }
+
+  object ObjectDelta extends DeltaObjectFactory {
+    override val empty: ObjectDelta                                                    = new ObjectDelta(FingerTrieSeq.empty)
+    implicit override def Builder: Builder[(String, AnyDelta)] with State[ObjectDelta] = new ObjectDeltaBuilder(FingerTrieSeq.Builder[(String, AnyDelta)])
+  }
+
+  private final class ObjectDeltaBuilder(underlying: Builder[(String, AnyDelta)] with State[FingerTrieSeq[(String, AnyDelta)]]) extends Builder[(String, AnyDelta)] with State[ObjectDelta] {
+    override def append(entry: (String, AnyDelta)): Unit = underlying.append(entry)
+    override def clear(): Unit                           = underlying.clear()
+    override def expect(count: Int): this.type           = { underlying.expect(count); this }
+    override def state: ObjectDelta                      = new ObjectDelta(underlying.state)
+    override def toString: String                        = (String.Builder~variant.toString~'.'~"ObjectDelta"~'.'~"Builder").state
+  }
+
+
+  final class SetDelta(override val deletions: SetForm, override val additions: SetForm) extends AnyDelta with DeltaSet with ProtoSetDelta
+
+  object SetDelta extends DeltaSetFactory {
+    override def apply(deletions: SetForm, additions: SetForm): SetDelta = new SetDelta(deletions, additions)
+  }
+
+
+  sealed abstract class AnyForm extends AnyDelta with FormValue with BaseValue with JsonValue with BsonValue with ProtoValue
 
   object AnyForm extends BaseValueFactory with JsonValueFactory with BsonValueFactory with ProtoValueFactory
 
@@ -34,22 +109,84 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
   }
 
 
-  final class ObjectForm(protected val underlying: Seq[(String, AnyForm)]) extends AnyForm with BaseObject with JsonObject with BsonObject with ProtoObject {
-    override def :+ (key: String, value: AnyForm): ObjectForm = underlying :+ (key -> value)
-    override def +: (key: String, value: AnyForm): ObjectForm = (key -> value) +: underlying
-    override def + (key: String, value: AnyForm): ObjectForm  = underlying :+ (key -> value)
-    override def - (key: String): ObjectForm                  = underlying.filter(!_._1.equals(key))
-    override def ++ (that: ObjectForm): ObjectForm            = underlying ++ that.underlying
-    override def -- (that: ObjectForm): ObjectForm            = underlying.filter(field => !that.contains(field._1))
-    override def iterator: Iterator[(String, AnyForm)]        = underlying.iterator
+  final class ObjectForm(protected val underlying: FingerTrieSeq[(String, AnyForm)]) extends AnyForm with FormObject with BaseObject with JsonObject with BsonObject with ProtoObject {
+    private[this] var _index: HashTrieMap[String, AnyForm] = null
+    private[this] def index: HashTrieMap[String, AnyForm] = {
+      if (_index == null) _index = HashTrieMap.from(underlying)
+      _index
+    }
+
+    override def isEmpty: Boolean = underlying.isEmpty
+
+    override def size: Int = underlying.length
+
+    override def contains(key: String): Boolean =
+      if (size > 8) index.contains(key)
+      else (underlying: Container[(String, AnyForm)]).exists(_._1.equals(key))
+
+    override def get(key: String): Maybe[AnyForm] =
+      if (size > 8) index.get(key)
+      else (underlying: Container[(String, AnyForm)]).find(_._1.equals(key)).map(_._2)
+
+    override def apply(key: String): AnyForm =
+      if (size > 8) index(key)
+      else {
+        val these = underlying.iterator
+        while (!these.isEmpty) {
+          val field = these.head
+          if (field._1.equals(key)) return field._2
+          these.step()
+        }
+        throw new NoSuchElementException(key)
+      }
+
+    override def / (key: String): AnyForm =
+      if (size > 8) { if (index.contains(key)) index(key) else NoForm }
+      else {
+        val these = underlying.iterator
+        while (!these.isEmpty) {
+          val field = these.head
+          if (field._1.equals(key)) return field._2
+          these.step()
+        }
+        NoForm
+      }
+
+    override def :+ (key: String, value: AnyForm): ObjectForm = new ObjectForm(underlying :+ (key -> value))
+
+    override def +: (key: String, value: AnyForm): ObjectForm = new ObjectForm((key -> value) +: underlying)
+
+    override def + (key: String, value: AnyForm): ObjectForm =
+      if (_index != null && !_index.contains(key)) new ObjectForm(underlying :+ (key -> value))
+      else {
+        var i = size - 1
+        while (i >= 0 && underlying(i)._1 != key) i -= 1
+        if (i >= 0) {
+          if (underlying(i)._2.equals(value)) this
+          else new ObjectForm(underlying.update(i, key -> value))
+        }
+        else new ObjectForm(underlying :+ (key -> value))
+      }
+
+    override def - (key: String): ObjectForm =
+      if (_index != null && !_index.contains(key)) this
+      else (underlying: Container[(String, AnyForm)]).filter(!_._1.equals(key))(ObjectFormBuilder)
+
+    override def ++ (that: ObjectForm): ObjectForm = (underlying: Container[(String, AnyForm)]).++(that.underlying)(ObjectFormBuilder)
+
+    override def -- (that: ObjectForm): ObjectForm = (underlying: Container[(String, AnyForm)]).filter(field => !that.contains(field._1))(ObjectFormBuilder)
+
+    override def iterator: Iterator[(String, AnyForm)] = underlying.iterator
+
+    override def traverse(f: ((String, AnyForm)) => Unit): Unit = underlying.traverse(f)
   }
 
   object ObjectForm extends BaseObjectFactory with JsonObjectFactory with BsonObjectFactory {
-    override val empty: ObjectForm                                                   = new ObjectForm(immutable.FingerTrieSeq.empty)
-    implicit override def Builder: Builder[(String, AnyForm)] with State[ObjectForm] = new ObjectFormBuilder(immutable.FingerTrieSeq.Builder[(String, AnyForm)])
+    override val empty: ObjectForm                                                   = new ObjectForm(FingerTrieSeq.empty)
+    implicit override def Builder: Builder[(String, AnyForm)] with State[ObjectForm] = new ObjectFormBuilder(FingerTrieSeq.Builder[(String, AnyForm)])
   }
 
-  private final class ObjectFormBuilder(underlying: Builder[(String, AnyForm)] with State[Seq[(String, AnyForm)]]) extends Builder[(String, AnyForm)] with State[ObjectForm] {
+  private final class ObjectFormBuilder(underlying: Builder[(String, AnyForm)] with State[FingerTrieSeq[(String, AnyForm)]]) extends Builder[(String, AnyForm)] with State[ObjectForm] {
     override def append(entry: (String, AnyForm)): Unit = underlying.append(entry)
     override def clear(): Unit                          = underlying.clear()
     override def expect(count: Int): this.type          = { underlying.expect(count); this }
@@ -58,21 +195,23 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
   }
 
 
-  final class SeqForm(protected val underlying: IndexedSeq[AnyForm]) extends AnyForm with BaseSeq with JsonSeq with BsonSeq with ProtoSeq {
-    override def length: Int                  = underlying.length
-    override def apply(index: Int): AnyForm   = underlying(index)
-    override def :+ (value: AnyForm): SeqForm = underlying.:+(value)(SeqFormBuilder)
-    override def +: (value: AnyForm): SeqForm = underlying.+:(value)(SeqFormBuilder)
-    override def ++ (that: SeqForm): SeqForm  = underlying.++(that.underlying)(SeqFormBuilder)
-    override def iterator: Iterator[AnyForm]  = underlying.iterator
+  final class SeqForm(protected val underlying: FingerTrieSeq[AnyForm]) extends AnyForm with BaseSeq with JsonSeq with BsonSeq with ProtoSeq {
+    override def isEmpty: Boolean                   = underlying.isEmpty
+    override def length: Int                        = underlying.length
+    override def apply(index: Int): AnyForm         = underlying(index)
+    override def :+ (value: AnyForm): SeqForm       = new SeqForm(underlying :+ value)
+    override def +: (value: AnyForm): SeqForm       = new SeqForm(value +: underlying)
+    override def ++ (that: SeqForm): SeqForm        = (underlying: Container[AnyForm]).++(that.underlying)(SeqFormBuilder)
+    override def iterator: Iterator[AnyForm]        = underlying.iterator
+    override def traverse(f: AnyForm => Unit): Unit = underlying.traverse(f)
   }
 
   object SeqForm extends BaseSeqFactory with JsonSeqFactory with BsonSeqFactory {
-    override val empty: SeqForm                                         = new SeqForm(immutable.FingerTrieSeq.empty)
-    implicit override def Builder: Builder[AnyForm] with State[SeqForm] = new SeqFormBuilder(immutable.FingerTrieSeq.Builder[AnyForm])
+    override val empty: SeqForm                                         = new SeqForm(FingerTrieSeq.empty)
+    implicit override def Builder: Builder[AnyForm] with State[SeqForm] = new SeqFormBuilder(FingerTrieSeq.Builder[AnyForm])
   }
 
-  private final class SeqFormBuilder(underlying: Builder[AnyForm] with State[IndexedSeq[AnyForm]]) extends Builder[AnyForm] with State[SeqForm] {
+  private final class SeqFormBuilder(underlying: Builder[AnyForm] with State[FingerTrieSeq[AnyForm]]) extends Builder[AnyForm] with State[SeqForm] {
     override def append(elem: AnyForm): Unit   = underlying.append(elem)
     override def clear(): Unit                 = underlying.clear()
     override def expect(count: Int): this.type = { underlying.expect(count); this }
@@ -81,21 +220,24 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
   }
 
 
-  final class SetForm(protected val underlying: Seq[AnyForm]) extends AnyForm with BaseSet with JsonSet with BsonSet with ProtoSet {
-    override def size: Int                   = underlying.length
-    override def + (value: AnyForm): SetForm = underlying.:+(value)(SetFormBuilder)
-    override def - (value: AnyForm): SetForm = underlying.filter(!_.equals(value))(SetFormBuilder)
-    override def ++ (that: SetForm): SetForm = underlying.++(that.underlying)(SetFormBuilder)
-    override def -- (that: SetForm): SetForm = underlying.filter(value => !that.contains(value))(SetFormBuilder)
-    override def iterator: Iterator[AnyForm] = underlying.iterator
+  final class SetForm(protected val underlying: HashTrieSet[AnyForm]) extends AnyForm with FormSet with BaseSet with JsonSet with BsonSet with ProtoSet {
+    override def isEmpty: Boolean                   = underlying.isEmpty
+    override def size: Int                          = underlying.size
+    override def contains(value: AnyForm): Boolean  = underlying.contains(value)
+    override def + (value: AnyForm): SetForm        = new SetForm(underlying + value)
+    override def - (value: AnyForm): SetForm        = new SetForm(underlying - value)
+    override def ++ (that: SetForm): SetForm        = underlying.++(that.underlying)(SetFormBuilder)
+    override def -- (that: SetForm): SetForm        = underlying.filter(value => !that.contains(value))(SetFormBuilder)
+    override def iterator: Iterator[AnyForm]        = underlying.iterator
+    override def traverse(f: AnyForm => Unit): Unit = underlying.traverse(f)
   }
 
   object SetForm extends BaseSetFactory with JsonSetFactory with BsonSetFactory {
-    override val empty: SetForm                                         = new SetForm(immutable.FingerTrieSeq.empty)
-    implicit override def Builder: Builder[AnyForm] with State[SetForm] = new SetFormBuilder(immutable.FingerTrieSeq.Builder[AnyForm])
+    override val empty: SetForm                                         = new SetForm(HashTrieSet.empty)
+    implicit override def Builder: Builder[AnyForm] with State[SetForm] = new SetFormBuilder(HashTrieSet.Builder[AnyForm])
   }
 
-  private final class SetFormBuilder(underlying: Builder[AnyForm] with State[Seq[AnyForm]]) extends Builder[AnyForm] with State[SetForm] {
+  private final class SetFormBuilder(underlying: Builder[AnyForm] with State[HashTrieSet[AnyForm]]) extends Builder[AnyForm] with State[SetForm] {
     override def append(elem: AnyForm): Unit   = underlying.append(elem)
     override def clear(): Unit                 = underlying.clear()
     override def expect(count: Int): this.type = { underlying.expect(count); this }
@@ -216,23 +358,28 @@ object OmniVariant extends Variant with JsonVariant with BsonVariant with ProtoV
   object NullForm extends NullForm
 
 
-  sealed abstract class NoForm extends AnyForm with BaseNo with JsonNo with BsonNo with ProtoNo
+  sealed abstract class NoForm extends AnyForm with BaseNo with JsonNo with BsonNo with ProtoNo {
+    override def isDefined: Boolean = false
+  }
 
   object NoForm extends NoForm
 
 
-  implicit override lazy val AnyFormTag: ClassTag[AnyForm]       = ClassTag(Predef.classOf[AnyForm])
-  implicit override lazy val SecretFormTag: ClassTag[SecretForm] = ClassTag(Predef.classOf[SecretForm])
-  implicit override lazy val ObjectFormTag: ClassTag[ObjectForm] = ClassTag(Predef.classOf[ObjectForm])
-  implicit override lazy val SeqFormTag: ClassTag[SeqForm]       = ClassTag(Predef.classOf[SeqForm])
-  implicit override lazy val SetFormTag: ClassTag[SetForm]       = ClassTag(Predef.classOf[SetForm])
-  implicit override lazy val TextFormTag: ClassTag[TextForm]     = ClassTag(Predef.classOf[TextForm])
-  implicit override lazy val DataFormTag: ClassTag[DataForm]     = ClassTag(Predef.classOf[DataForm])
-  implicit override lazy val NumberFormTag: ClassTag[NumberForm] = ClassTag(Predef.classOf[NumberForm])
-  implicit override lazy val DateFormTag: ClassTag[DateForm]     = ClassTag(Predef.classOf[DateForm])
-  implicit override lazy val BoolFormTag: ClassTag[BoolForm]     = ClassTag(Predef.classOf[BoolForm])
-  implicit override lazy val NullFormTag: ClassTag[NullForm]     = ClassTag(Predef.classOf[NullForm])
-  implicit override lazy val NoFormTag: ClassTag[NoForm]         = ClassTag(Predef.classOf[NoForm])
+  implicit override lazy val AnyDeltaTag: ClassTag[AnyDelta]       = ClassTag(Predef.classOf[AnyDelta])
+  implicit override lazy val ObjectDeltaTag: ClassTag[ObjectDelta] = ClassTag(Predef.classOf[ObjectDelta])
+  implicit override lazy val SetDeltaTag: ClassTag[SetDelta]       = ClassTag(Predef.classOf[SetDelta])
+  implicit override lazy val AnyFormTag: ClassTag[AnyForm]         = ClassTag(Predef.classOf[AnyForm])
+  implicit override lazy val SecretFormTag: ClassTag[SecretForm]   = ClassTag(Predef.classOf[SecretForm])
+  implicit override lazy val ObjectFormTag: ClassTag[ObjectForm]   = ClassTag(Predef.classOf[ObjectForm])
+  implicit override lazy val SeqFormTag: ClassTag[SeqForm]         = ClassTag(Predef.classOf[SeqForm])
+  implicit override lazy val SetFormTag: ClassTag[SetForm]         = ClassTag(Predef.classOf[SetForm])
+  implicit override lazy val TextFormTag: ClassTag[TextForm]       = ClassTag(Predef.classOf[TextForm])
+  implicit override lazy val DataFormTag: ClassTag[DataForm]       = ClassTag(Predef.classOf[DataForm])
+  implicit override lazy val NumberFormTag: ClassTag[NumberForm]   = ClassTag(Predef.classOf[NumberForm])
+  implicit override lazy val DateFormTag: ClassTag[DateForm]       = ClassTag(Predef.classOf[DateForm])
+  implicit override lazy val BoolFormTag: ClassTag[BoolForm]       = ClassTag(Predef.classOf[BoolForm])
+  implicit override lazy val NullFormTag: ClassTag[NullForm]       = ClassTag(Predef.classOf[NullForm])
+  implicit override lazy val NoFormTag: ClassTag[NoForm]           = ClassTag(Predef.classOf[NoForm])
 
   override def toString: String = "OmniVariant"
 }

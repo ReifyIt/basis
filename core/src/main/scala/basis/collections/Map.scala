@@ -72,7 +72,8 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[_, _]] with Container[
       that.canEqual(this) && this.size == that.size && {
         val those = that.iterator
         while (!those.isEmpty) {
-          if (!contains(those.head._1)) return false
+          val entry = those.head
+          if (!contains(entry._1) || apply(entry._1) != entry._2) return false
           those.step()
         }
         true
@@ -86,7 +87,8 @@ trait Map[+A, +T] extends Any with Equals with Family[Map[_, _]] with Container[
     var c = 1
     val these = iterator
     while (!these.isEmpty) {
-      val h = hash(these.head._1)
+      val entry = these.head
+      val h = mix(hash(entry._1), hash(entry._2))
       a ^= h
       b += h
       if (c != 0) c *= h

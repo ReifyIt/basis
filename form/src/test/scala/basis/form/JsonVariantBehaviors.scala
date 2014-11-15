@@ -41,6 +41,6 @@ trait JsonVariantBehaviors
       }
     }
 
-    "JSON transcoding" should behave like Transcodes(variant)(JsonTranscoder)
+    s"$variant JSON transcoding" should behave like TranscodesForms(variant)(JsonTranscoder)
   }
 }

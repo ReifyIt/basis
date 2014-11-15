@@ -12,11 +12,13 @@ class OmniVariantSpec
   extends FlatSpec
   with JsonVariantBehaviors
   with BsonVariantBehaviors
-  with ProtoVariantBehaviors {
+  with ProtoVariantBehaviors
+  with DeltaVariantBehaviors {
 
   override def suiteName = "OmniVariant specification"
 
-  "OmniVariant" should behave like JsonVariantImplementation(OmniVariant)
+  it should behave like JsonVariantImplementation(OmniVariant)
   it should behave like BsonVariantImplementation(OmniVariant)
   it should behave like ProtoVariantImplementation(OmniVariant)
+  it should behave like DeltaVariantImplementation(OmniVariant)
 }

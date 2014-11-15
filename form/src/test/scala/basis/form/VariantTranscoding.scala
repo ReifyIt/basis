@@ -11,7 +11,7 @@ import org.scalatest._
 import org.scalatest.matchers._
 
 trait VariantTranscoding extends Matchers { this: FlatSpec =>
-  def Transcodes(variant: Variant)(transcode: Matcher[variant.AnyForm]): Unit = {
+  def TranscodesForms(variant: Variant)(transcode: Matcher[variant.AnyForm]): Unit = {
     import variant._
 
     it should "transcode empty objects" in {
@@ -222,6 +222,72 @@ trait VariantTranscoding extends Matchers { this: FlatSpec =>
       withClue("U+FFFFF:")  (TextForm("\uDBBF\uDFFF") should transcode)
       withClue("U+100000:") (TextForm("\uDBC0\uDC00") should transcode)
       withClue("U+10FFFF:") (TextForm("\uDBFF\uDFFF") should transcode)
+    }
+  }
+
+
+  def TranscodesDeltas(variant: DeltaVariant)(transcode: Matcher[variant.AnyDelta]): Unit = {
+    import variant._
+
+    it should "transcode empty object deltas" in {
+      ObjectDelta.empty should transcode
+    }
+
+    it should "transcode empty set deltas" in {
+      SetDelta.empty should transcode
+    }
+
+    it should "transcode non-empty object deltas" in {
+      ObjectDelta(
+        "Δobject" -> ObjectDelta.empty,
+        "Δset" -> SetDelta.empty,
+        "object" -> ObjectForm.empty,
+        "array" -> SeqForm.empty,
+        "text" -> TextForm.empty,
+        "data" -> DataForm.empty,
+        "int32" -> NumberForm(0xF7F6F5F4),
+        "int64" -> NumberForm(0xF7F6F5F4F3F2F1F0L),
+        "double" -> NumberForm(0.5),
+        "date" -> DateForm.now,
+        "true" -> TrueForm,
+        "false" -> FalseForm,
+        "null" -> NullForm
+      ) should transcode
+    }
+
+    it should "transcode non-empty set deltas" in {
+      SetDelta(
+        deletions = SetForm(
+          ObjectForm.empty,
+          SeqForm.empty,
+          TextForm.empty,
+          DataForm.empty),
+        additions = SetForm(
+          NumberForm(0xF7F6F5F4),
+          NumberForm(0xF7F6F5F4F3F2F1F0L),
+          NumberForm(0.5),
+          DateForm.now,
+          TrueForm,
+          FalseForm,
+          NullForm)
+      ) should transcode
+    }
+
+    it should "transcode recursive object deltas" in {
+      ObjectDelta(
+        "a" -> ObjectDelta(
+          "x" -> TrueForm
+        )
+      ) should transcode
+    }
+
+    it should "transcode set deltas within object deltas" in {
+      ObjectDelta(
+        "a" -> SetDelta(
+          deletions = SetForm(FalseForm),
+          additions = SetForm(TrueForm)
+        )
+      ) should transcode
     }
   }
 }

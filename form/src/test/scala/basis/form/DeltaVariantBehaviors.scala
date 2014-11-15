@@ -1,0 +1,182 @@
+//      ____              ___
+//     / __ | ___  ____  /__/___      A library of building blocks
+//    / __  / __ |/ ___|/  / ___|
+//   / /_/ / /_/ /\__ \/  /\__ \      (c) 2012-2014 Reify It
+//  |_____/\_____\____/__/\____/      http://basis.reify.it
+
+package basis.form
+
+import basis.util._
+import org.scalatest._
+
+trait DeltaVariantBehaviors extends Matchers { this: FlatSpec =>
+  def DeltaVariantImplementation(variant: DeltaVariant): Unit = {
+    s"$variant delta transforming" should behave like DeltaTransforms(variant)
+  }
+
+  def DeltaTransforms(variant: DeltaVariant): Unit = {
+    import variant._
+
+    it should "delta primitive forms" in {
+      def delta(a: AnyForm, b: AnyForm): Unit = a delta b should equal (b)
+      def deltaFrom(a: AnyForm): Unit = {
+        delta(a, TextForm.empty)
+        delta(a, DataForm.empty)
+        delta(a, NumberForm(0))
+        delta(a, DateForm.now)
+        delta(a, TrueForm)
+        delta(a, FalseForm)
+        delta(a, NullForm)
+        delta(a, NoForm)
+      }
+      deltaFrom(TextForm.empty)
+      deltaFrom(DataForm.empty)
+      deltaFrom(NumberForm(0))
+      deltaFrom(DateForm.now)
+      deltaFrom(TrueForm)
+      deltaFrom(FalseForm)
+      deltaFrom(NullForm)
+      deltaFrom(NoForm)
+    }
+
+    it should "patch primitive forms" in {
+      def patch(a: AnyForm, b: AnyForm): Unit = a patch b should equal (b)
+      def patchFrom(a: AnyForm): Unit = {
+        patch(a, TextForm.empty)
+        patch(a, DataForm.empty)
+        patch(a, NumberForm(0))
+        patch(a, DateForm.now)
+        patch(a, TrueForm)
+        patch(a, FalseForm)
+        patch(a, NullForm)
+        patch(a, NoForm)
+      }
+      patchFrom(TextForm.empty)
+      patchFrom(DataForm.empty)
+      patchFrom(NumberForm(0))
+      patchFrom(DateForm.now)
+      patchFrom(TrueForm)
+      patchFrom(FalseForm)
+      patchFrom(NullForm)
+      patchFrom(NoForm)
+    }
+
+    it should "delta objects with added fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2))
+      val y = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      x delta y should equal (ObjectDelta("c" -> NumberForm(3)))
+    }
+
+    it should "patch objects with added fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2))
+      val y = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      x patch (x delta y) should equal (y)
+    }
+
+    it should "delta objects with removed fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      val y = ObjectForm("a" -> NumberForm(1), "c" -> NumberForm(3))
+      x delta y should equal (ObjectDelta("b" -> NoForm))
+    }
+
+    it should "patch objects with removed fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      val y = ObjectForm("a" -> NumberForm(1), "c" -> NumberForm(3))
+      x patch (x delta y) should equal (y)
+    }
+
+    it should "delta objects with single differing fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      val y = ObjectForm("a" -> NumberForm(1), "b" -> TextForm("2"), "c" -> NumberForm(3))
+      x delta y should equal (ObjectDelta("b" -> TextForm("2")))
+      y delta x should equal (ObjectDelta("b" -> NumberForm(2)))
+    }
+
+    it should "patch objects with single differing fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      val y = ObjectForm("a" -> NumberForm(1), "b" -> TextForm("2"), "c" -> NumberForm(3))
+      x patch (x delta y) should equal (y)
+      y patch (y delta x) should equal (x)
+    }
+
+    it should "delta objects with multiple differing fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      val y = ObjectForm("a" -> TextForm("1"), "b" -> NumberForm(2), "c" -> TextForm("3"))
+      x delta y should equal (ObjectDelta("a" -> TextForm("1"), "c" -> TextForm("3")))
+      y delta x should equal (ObjectDelta("a" -> NumberForm(1), "c" -> NumberForm(3)))
+    }
+
+    it should "patch objects with multiple differing fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      val y = ObjectForm("a" -> TextForm("1"), "b" -> NumberForm(2), "c" -> TextForm("3"))
+      x patch (x delta y) should equal (y)
+      y patch (y delta x) should equal (x)
+    }
+
+    it should "delta objects with differing, added, and removed fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      val y = ObjectForm("b" -> NumberForm(2), "c" -> TextForm("3"), "d" -> NumberForm(4))
+      x delta y should equal (ObjectDelta("a" -> NoForm, "c" -> TextForm("3"), "d" -> NumberForm(4)))
+      y delta x should equal (ObjectDelta("a" -> NumberForm(1), "c" -> NumberForm(3), "d" -> NoForm))
+    }
+
+    it should "patch objects with differing, added, and removed fields" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      val y = ObjectForm("b" -> NumberForm(2), "c" -> TextForm("3"), "d" -> NumberForm(4))
+      x patch (x delta y) should equal (y)
+      y patch (y delta x) should equal (x)
+    }
+
+    it should "recursively delta nested objects" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> ObjectForm("x" -> TrueForm, "y" -> FalseForm), "c" -> NumberForm(3))
+      val y = ObjectForm("a" -> NumberForm(1), "b" -> ObjectForm("x" -> FalseForm, "y" -> FalseForm), "c" -> NumberForm(3))
+      x delta y should equal (ObjectDelta("b" -> ObjectDelta("x" -> FalseForm)))
+      y delta x should equal (ObjectDelta("b" -> ObjectDelta("x" -> TrueForm)))
+    }
+
+    it should "recursively patch nested objects" in {
+      val x = ObjectForm("a" -> NumberForm(1), "b" -> ObjectForm("x" -> TrueForm, "y" -> FalseForm), "c" -> NumberForm(3))
+      val y = ObjectForm("a" -> NumberForm(1), "b" -> ObjectForm("x" -> FalseForm, "y" -> FalseForm), "c" -> NumberForm(3))
+      x patch (x delta y) should equal (y)
+      y patch (y delta x) should equal (x)
+    }
+
+    it should "delta sets with added elements" in {
+      val x = SetForm(NumberForm(1), NumberForm(2))
+      val y = SetForm(NumberForm(1), NumberForm(2), NumberForm(3))
+      x delta y should equal (SetDelta(additions = SetForm(NumberForm(3))))
+    }
+
+    it should "patch sets with added elements" in {
+      val x = SetForm(NumberForm(1), NumberForm(2))
+      val y = SetForm(NumberForm(1), NumberForm(2), NumberForm(3))
+      x patch (x delta y) should equal (y)
+    }
+
+    it should "delta sets with removed elements" in {
+      val x = SetForm(NumberForm(1), NumberForm(2), NumberForm(3))
+      val y = SetForm(NumberForm(1), NumberForm(3))
+      x delta y should equal (SetDelta(deletions = SetForm(NumberForm(2))))
+    }
+
+    it should "patch sets with removed elements" in {
+      val x = SetForm(NumberForm(1), NumberForm(2), NumberForm(3))
+      val y = SetForm(NumberForm(1), NumberForm(3))
+      x patch (x delta y) should equal (y)
+    }
+
+    it should "delta sets with added and removed elements" in {
+      val x = SetForm(NumberForm(1), NumberForm(2), NumberForm(3))
+      val y = SetForm(NumberForm(2), NumberForm(3), NumberForm(4))
+      x delta y should equal (SetDelta(deletions = SetForm(NumberForm(1)), additions = SetForm(NumberForm(4))))
+      y delta x should equal (SetDelta(deletions = SetForm(NumberForm(4)), additions = SetForm(NumberForm(1))))
+    }
+
+    it should "patch sets with added and removed elements" in {
+      val x = SetForm(NumberForm(1), NumberForm(2), NumberForm(3))
+      val y = SetForm(NumberForm(2), NumberForm(3), NumberForm(4))
+      x patch (x delta y) should equal (y)
+      y patch (y delta x) should equal (x)
+    }
+  }
+}
