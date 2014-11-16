@@ -133,6 +133,8 @@ trait Variant { variant =>
 
     def cast[T](implicit T: Mold[T]): Maybe[T]                           = T.cast(variant)(this)
     def coerce[@specialized(Mold.Specialized) T](implicit T: Mold[T]): T = T.cast(variant)(this).bindOrElse(T.identity)
+
+    def in(domain: Variant): domain.AnyForm
   }
 
   trait BaseValueFactory {
@@ -143,15 +145,18 @@ trait Variant { variant =>
 
 
   trait BaseObject extends Equals with Immutable with Family[ObjectForm] with Map[String, AnyForm] with BaseValue { this: ObjectForm =>
-    override def isObjectForm: Boolean          = true
-    override def asObjectForm: ObjectForm       = this
-    override def / (key: String): AnyForm       = get(key).bindOrElse(NoForm)
+    override def isObjectForm: Boolean    = true
+    override def asObjectForm: ObjectForm = this
+    override def / (key: String): AnyForm = get(key).bindOrElse(NoForm)
     def :+ (key: String, value: AnyForm): ObjectForm
     def +: (key: String, value: AnyForm): ObjectForm
     def + (key: String, value: AnyForm): ObjectForm
     def - (key: String): ObjectForm
     def ++ (that: ObjectForm): ObjectForm
     def -- (that: ObjectForm): ObjectForm
+    override def in(domain: Variant): domain.ObjectForm =
+      if (variant eq domain) asInstanceOf[domain.ObjectForm]
+      else this.map(field => field._1 -> field._2.in(domain))(domain.ObjectFormBuilder)
     protected override def stringPrefix: String = ObjectForm.toString
   }
 
@@ -161,12 +166,15 @@ trait Variant { variant =>
 
 
   trait BaseSeq extends Equals with Immutable with Family[SeqForm] with IndexedSeq[AnyForm] with BaseValue { this: SeqForm =>
-    override def isSeqForm: Boolean             = true
-    override def asSeqForm: SeqForm             = this
-    override def / (index: Int): AnyForm        = if (0 <= index && index < length) this(index) else NoForm
+    override def isSeqForm: Boolean = true
+    override def asSeqForm: SeqForm = this
+    override def / (index: Int): AnyForm = if (0 <= index && index < length) this(index) else NoForm
     def :+ (value: AnyForm): SeqForm
     def +: (value: AnyForm): SeqForm
     def ++ (that: SeqForm): SeqForm
+    override def in(domain: Variant): domain.SeqForm =
+      if (variant eq domain) asInstanceOf[domain.SeqForm]
+      else this.map(_ in domain)(domain.SeqFormBuilder)
     protected override def stringPrefix: String = SeqForm.toString
   }
 
@@ -176,12 +184,15 @@ trait Variant { variant =>
 
 
   trait BaseSet extends Equals with Immutable with Family[SetForm] with Set[AnyForm] with BaseValue { this: SetForm =>
-    override def isSetForm: Boolean             = true
-    override def asSetForm: SetForm             = this
+    override def isSetForm: Boolean = true
+    override def asSetForm: SetForm = this
     def + (value: AnyForm): SetForm
     def - (value: AnyForm): SetForm
     def ++ (that: SetForm): SetForm
     def -- (that: SetForm): SetForm
+    override def in(domain: Variant): domain.SetForm =
+      if (variant eq domain) asInstanceOf[domain.SetForm]
+      else this.map(_ in domain)(domain.SetFormBuilder)
     protected override def stringPrefix: String = SetForm.toString
   }
 
@@ -191,8 +202,11 @@ trait Variant { variant =>
 
 
   trait BaseText extends Equals with Family[TextForm] with UTF with BaseValue { this: TextForm =>
-    override def isTextForm: Boolean            = true
-    override def asTextForm: TextForm           = this
+    override def isTextForm: Boolean  = true
+    override def asTextForm: TextForm = this
+    override def in(domain: Variant): domain.TextForm =
+      if (variant eq domain) asInstanceOf[domain.TextForm]
+      else domain.TextForm(toUString.toString)
     protected override def stringPrefix: String = TextForm.toString
   }
 
@@ -202,9 +216,12 @@ trait Variant { variant =>
 
 
   trait BaseData extends Equals with Family[DataForm] with Loader with BaseValue { this: DataForm =>
-    override def isDataForm: Boolean            = true
-    override def asDataForm: DataForm           = this
+    override def isDataForm: Boolean  = true
+    override def asDataForm: DataForm = this
     override def as[E <: Endianness](endian: E): DataForm with basis.data.ByteOrder[E]
+    override def in(domain: Variant): domain.DataForm =
+      if (variant eq domain) asInstanceOf[domain.DataForm]
+      else domain.DataForm.from(this)
     protected override def stringPrefix: String = DataForm.toString
   }
 
@@ -282,6 +299,9 @@ trait Variant { variant =>
     override def toFloat: Float          = toInt.toFloat
     override def toDouble: Double        = toInt.toDouble
     override def toDecimalString: String = java.lang.Integer.toString(toInt)
+    override def in(domain: Variant): domain.NumberForm =
+      if (variant eq domain) asInstanceOf[domain.NumberForm]
+      else domain.NumberForm(toInt)
   }
 
   protected trait BaseLong extends BaseNumber { this: NumberForm =>
@@ -299,6 +319,9 @@ trait Variant { variant =>
     override def toFloat: Float          = toLong.toFloat
     override def toDouble: Double        = toLong.toDouble
     override def toDecimalString: String = java.lang.Long.toString(toLong)
+    override def in(domain: Variant): domain.NumberForm =
+      if (variant eq domain) asInstanceOf[domain.NumberForm]
+      else domain.NumberForm(toLong)
   }
 
   protected trait BaseFloat extends BaseNumber { this: NumberForm =>
@@ -316,6 +339,9 @@ trait Variant { variant =>
     override def toLong: Long            = toFloat.toLong
     override def toDouble: Double        = toFloat.toDouble
     override def toDecimalString: String = java.lang.Float.toString(toFloat)
+    override def in(domain: Variant): domain.NumberForm =
+      if (variant eq domain) asInstanceOf[domain.NumberForm]
+      else domain.NumberForm(toFloat)
   }
 
   protected trait BaseDouble extends BaseNumber { this: NumberForm =>
@@ -333,6 +359,9 @@ trait Variant { variant =>
     override def toLong: Long            = toDouble.toLong
     override def toFloat: Float          = toDouble.toFloat
     override def toDecimalString: String = java.lang.Double.toString(toDouble)
+    override def in(domain: Variant): domain.NumberForm =
+      if (variant eq domain) asInstanceOf[domain.NumberForm]
+      else domain.NumberForm(toDouble)
   }
 
   trait BaseNumberFactory {
@@ -405,6 +434,10 @@ trait Variant { variant =>
       writeISO8601(builder)
       builder.state
     }
+
+    override def in(domain: Variant): domain.DateForm =
+      if (variant eq domain) asInstanceOf[domain.DateForm]
+      else domain.DateForm(millis)
 
     override def canEqual(other: Any): Boolean = other.isInstanceOf[BaseDate]
 
@@ -528,6 +561,8 @@ trait Variant { variant =>
 
     def toBoolean: Boolean
 
+    override def in(domain: Variant): domain.BoolForm = domain.BoolForm(toBoolean)
+
     override def canEqual(other: Any): Boolean = other.isInstanceOf[BaseBool]
 
     override def equals(other: Any): Boolean = eq(other.asInstanceOf[AnyRef]) || (other match {
@@ -553,13 +588,15 @@ trait Variant { variant =>
   trait BaseNull extends BaseValue { this: NullForm =>
     override def isNullForm: Boolean  = true
     override def asNullForm: NullForm = this
-    override def toString: String     = (String.Builder~variant.toString~'.'~"NullForm").state
+    override def in(domain: Variant): domain.NullForm = domain.NullForm
+    override def toString: String = (String.Builder~variant.toString~'.'~"NullForm").state
   }
 
 
   trait BaseNo extends BaseValue { this: NoForm =>
     override def isDefined: Boolean = false
-    override def toString: String   = (String.Builder~variant.toString~'.'~"NoForm").state
+    override def in(domain: Variant): domain.NoForm = domain.NoForm
+    override def toString: String = (String.Builder~variant.toString~'.'~"NoForm").state
   }
 
 

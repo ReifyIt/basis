@@ -286,6 +286,9 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
     override def loadDouble(address: Long): Double = underlying.loadDouble(address)
     override def reader(address: Long): Reader     = underlying.reader(address)
     override def toArray: Array[Byte]              = underlying.toArray
+    override def in(domain: Variant): domain.DataForm =
+      if (variant eq domain) asInstanceOf[domain.DataForm]
+      else domain.DataForm.from(underlying)
   }
 
   object DataForm extends BaseDataFactory {

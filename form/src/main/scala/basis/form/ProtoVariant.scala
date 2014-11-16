@@ -129,6 +129,12 @@ trait ProtoVariant extends DeltaVariant { variant =>
         "iv"      -> DataForm.from(iv),
         "mac"     -> DataForm.from(mac))
 
+    override def in(domain: Variant): domain.AnyForm =
+      if (variant eq domain) asInstanceOf[domain.AnyForm]
+      else if (domain.isInstanceOf[ProtoVariant])
+        domain.asInstanceOf[ProtoVariant].SecretForm(data, iv, mac).asInstanceOf[domain.AnyForm]
+      else domain.NoForm
+
     override def toString: String =
       (String.Builder~variant.toString~'.'~"SecretForm"~'('~
         "data"~" = "~>data~", "~

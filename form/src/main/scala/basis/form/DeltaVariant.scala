@@ -51,6 +51,8 @@ trait DeltaVariant extends Variant { variant =>
     def asForm: AnyForm            = throw new MatchError("not an AnyForm")
 
     def / (key: String): AnyDelta = NoForm
+
+    def in(domain: DeltaVariant): domain.AnyDelta
   }
 
   trait DeltaValueFactory {
@@ -59,9 +61,12 @@ trait DeltaVariant extends Variant { variant =>
 
 
   trait DeltaObject extends Equals with Immutable with Family[ObjectDelta] with Map[String, AnyDelta] with DeltaValue { this: ObjectDelta =>
-    override def isObjectDelta: Boolean         = true
-    override def asObjectDelta: ObjectDelta     = this
-    override def / (key: String): AnyDelta      = get(key).bindOrElse(NoForm)
+    override def isObjectDelta: Boolean     = true
+    override def asObjectDelta: ObjectDelta = this
+    override def / (key: String): AnyDelta  = get(key).bindOrElse(NoForm)
+    override def in(domain: DeltaVariant): domain.ObjectDelta =
+      if (variant eq domain) asInstanceOf[domain.ObjectDelta]
+      else this.map(field => field._1 -> field._2.in(domain))(domain.ObjectDelta.Builder)
     protected override def stringPrefix: String = ObjectDelta.toString
   }
 
@@ -76,6 +81,10 @@ trait DeltaVariant extends Variant { variant =>
 
     def deletions: SetForm
     def additions: SetForm
+
+    override def in(domain: DeltaVariant): domain.SetDelta =
+      if (variant eq domain) asInstanceOf[domain.SetDelta]
+      else domain.SetDelta(deletions = deletions in domain, additions = additions in domain)
 
     override def canEqual(other: Any): Boolean = other.isInstanceOf[DeltaSet]
 
@@ -110,6 +119,9 @@ trait DeltaVariant extends Variant { variant =>
     override def asForm: AnyForm = this
 
     override def / (key: String): AnyForm = NoForm
+
+    override def in(domain: DeltaVariant): domain.AnyDelta =
+      in(domain: Variant).asInstanceOf[domain.AnyDelta]
 
     def delta(that: AnyForm): AnyDelta = that
     def patch(that: AnyDelta): AnyForm = if (that.isForm) that.asForm else this

@@ -71,6 +71,10 @@ object Mold extends CollectionMolds {
 
   def Secret[T](secretKey: Loader)(implicit T: Mold[T]): Mold[T] = new SecretMold[T](secretKey)(T)
 
+  def AnyForm(domain: Variant): Mold[domain.AnyForm]       = new AnyFormMold[domain.type](domain)
+  def ObjectForm(domain: Variant): Mold[domain.ObjectForm] = new ObjectFormMold[domain.type](domain)
+  def SeqForm(domain: Variant): Mold[domain.SeqForm]       = new SeqFormMold[domain.type](domain)
+
   private final class ByteMold(override val identity: Byte) extends Mold[Byte] {
     override def form(variant: Variant)(value: Byte): variant.AnyForm = variant.NumberForm(value.toInt)
 
@@ -521,6 +525,38 @@ object Mold extends CollectionMolds {
     }
 
     override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Secret"~'('~"..."~')'~'('~>T~')').state
+  }
+
+  private final class AnyFormMold[Domain <: Variant](domain: Domain) extends Mold[Domain#AnyForm] {
+    override def identity: Domain#AnyForm = domain.NoForm
+
+    override def form(variant: Variant)(form: Domain#AnyForm): variant.AnyForm = form in variant
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Domain#AnyForm] = Bind(form in domain)
+
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"AnyForm"~'('~>domain~')').state
+  }
+
+  private final class ObjectFormMold[Domain <: Variant](domain: Domain) extends Mold[Domain#ObjectForm] {
+    override def identity: Domain#ObjectForm = domain.ObjectForm.empty
+
+    override def form(variant: Variant)(form: Domain#ObjectForm): variant.AnyForm = form in variant
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Domain#ObjectForm] =
+      if (form.isObjectForm) Bind(form.asObjectForm in domain) else Trap
+
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"ObjectForm"~'('~>domain~')').state
+  }
+
+  private final class SeqFormMold[Domain <: Variant](domain: Domain) extends Mold[Domain#SeqForm] {
+    override def identity: Domain#SeqForm = domain.SeqForm.empty
+
+    override def form(variant: Variant)(form: Domain#SeqForm): variant.AnyForm = form in variant
+
+    override def cast(variant: Variant)(form: variant.AnyForm): Maybe[Domain#SeqForm] =
+      if (form.isSeqForm) Bind(form.asSeqForm in domain) else Trap
+
+    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"SeqForm"~'('~>domain~')').state
   }
 
   protected[form] final val Specialized = new Specializable.Group((scala.Byte, scala.Short, scala.Int, scala.Long, scala.Float, scala.Double, scala.Boolean))
