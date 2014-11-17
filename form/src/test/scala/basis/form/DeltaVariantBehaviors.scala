@@ -178,5 +178,38 @@ trait DeltaVariantBehaviors extends Matchers { this: FlatSpec =>
       x patch (x delta y) should equal (y)
       y patch (y delta x) should equal (x)
     }
+
+    it should "patch primitives with object deltas" in {
+      val b = ObjectDelta("x" -> NumberForm(1), "y" -> NoForm, "z" -> NullForm)
+      val c = ObjectForm("x" -> NumberForm(1), "z" -> NullForm)
+      TextForm.empty patch b should equal (c)
+      DataForm.empty patch b should equal (c)
+      NumberForm(0) patch b should equal (c)
+      DateForm.now patch b should equal (c)
+      TrueForm patch b should equal (c)
+      FalseForm patch b should equal (c)
+      NullForm patch b should equal (c)
+      NoForm patch b should equal (c)
+    }
+
+    it should "patch primitives with set deltas" in {
+      val c = SetForm(TextForm("x"), TextForm("z"))
+      val d = SetDelta(SetForm(TextForm("y")), c)
+      TextForm.empty patch d should equal (c)
+      DataForm.empty patch d should equal (c)
+      NumberForm(0) patch d should equal (c)
+      DateForm.now patch d should equal (c)
+      TrueForm patch d should equal (c)
+      FalseForm patch d should equal (c)
+      NullForm patch d should equal (c)
+      NoForm patch d should equal (c)
+    }
+
+    it should "recursively create missing nested objects when patching" in {
+      val x = ObjectForm("a" -> NumberForm(1))
+      val d = ObjectDelta("b" -> ObjectDelta("x" -> TrueForm, "y" -> FalseForm))
+      val y = ObjectForm("a" -> NumberForm(1), "b" -> ObjectForm("x" -> TrueForm, "y" -> FalseForm))
+      x patch d should equal (y)
+    }
   }
 }

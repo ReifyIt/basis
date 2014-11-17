@@ -124,7 +124,12 @@ trait DeltaVariant extends Variant { variant =>
       in(domain: Variant).asInstanceOf[domain.AnyDelta]
 
     def delta(that: AnyForm): AnyDelta = that
-    def patch(that: AnyDelta): AnyForm = if (that.isForm) that.asForm else this
+
+    def patch(that: AnyDelta): AnyForm =
+      if (that.isForm) that.asForm
+      else if (that.isObjectDelta) ObjectForm.empty.patch(that.asObjectDelta)
+      else if (that.isSetDelta) that.asSetDelta.additions
+      else this
   }
 
 
