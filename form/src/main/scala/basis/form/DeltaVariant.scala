@@ -123,7 +123,10 @@ trait DeltaVariant extends Variant { variant =>
     override def in(domain: DeltaVariant): domain.AnyDelta =
       in(domain: Variant).asInstanceOf[domain.AnyDelta]
 
-    def delta(that: AnyForm): AnyDelta = that
+    def delta(that: AnyForm): AnyDelta =
+      if (that.isObjectForm) that.asObjectForm.map(field => field._1 -> NoForm.delta(field._2))(ObjectDelta.Builder)
+      else if (that.isSetForm) SetDelta(additions = that.asSetForm)
+      else that
 
     def patch(that: AnyDelta): AnyForm =
       if (that.isForm) that.asForm

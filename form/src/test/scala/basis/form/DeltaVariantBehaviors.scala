@@ -179,6 +179,14 @@ trait DeltaVariantBehaviors extends Matchers { this: FlatSpec =>
       y patch (y delta x) should equal (x)
     }
 
+    it should "delta object from primitives" in {
+      val b = ObjectForm("x" -> NumberForm(1), "y" -> NumberForm(2))
+      val c = NoForm.delta(b)
+      val d = ObjectDelta("x" -> NumberForm(1), "y" -> NumberForm(2))
+      withClue("isObjectDelta:") (c.isObjectDelta should be (true))
+      c should equal (d)
+    }
+
     it should "patch primitives with object deltas" in {
       val b = ObjectDelta("x" -> NumberForm(1), "y" -> NoForm, "z" -> NullForm)
       val c = ObjectForm("x" -> NumberForm(1), "z" -> NullForm)
@@ -190,6 +198,14 @@ trait DeltaVariantBehaviors extends Matchers { this: FlatSpec =>
       FalseForm patch b should equal (c)
       NullForm patch b should equal (c)
       NoForm patch b should equal (c)
+    }
+
+    it should "delta sets from primitives" in {
+      val b = SetForm(TextForm("x"), TextForm("y"))
+      val c = NoForm.delta(b)
+      val d = SetDelta(additions = b)
+      withClue("isSetDelta:") (c.isSetDelta should be (true))
+      c should equal (d)
     }
 
     it should "patch primitives with set deltas" in {
@@ -205,7 +221,7 @@ trait DeltaVariantBehaviors extends Matchers { this: FlatSpec =>
       NoForm patch d should equal (c)
     }
 
-    it should "recursively create missing nested objects when patching" in {
+    it should "recursively create missing nested objects when patching primitives" in {
       val x = ObjectForm("a" -> NumberForm(1))
       val d = ObjectDelta("b" -> ObjectDelta("x" -> TrueForm, "y" -> FalseForm))
       val y = ObjectForm("a" -> NumberForm(1), "b" -> ObjectForm("x" -> TrueForm, "y" -> FalseForm))
