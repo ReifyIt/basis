@@ -65,6 +65,7 @@ trait DeltaVariant extends Variant { variant =>
     def - (key: String): ObjectState                 = update(state - key)
     def ++ (that: ObjectForm): ObjectState           = update(state ++ that)
     def -- (that: ObjectForm): ObjectState           = update(state -- that)
+    def patch(that: ObjectDelta): ObjectState        = update(state.patch(that))
     def merge(that: ObjectState): ObjectState        = update(state.patch(that.delta))
 
     def cast[T](implicit T: Mold[T]): Maybe[T] = T.cast(variant)(state)
