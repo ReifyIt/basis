@@ -11,7 +11,8 @@ import org.scalatest._
 
 trait DeltaVariantBehaviors extends Matchers { this: FlatSpec =>
   def DeltaVariantImplementation(variant: DeltaVariant): Unit = {
-    s"$variant delta transforming" should behave like DeltaTransforms(variant)
+    s"$variant delta transforms" should behave like DeltaTransforms(variant)
+    s"$variant delta object states" should behave like DeltaObjectStates(variant)
   }
 
   def DeltaTransforms(variant: DeltaVariant): Unit = {
@@ -226,6 +227,72 @@ trait DeltaVariantBehaviors extends Matchers { this: FlatSpec =>
       val d = ObjectDelta("b" -> ObjectDelta("x" -> TrueForm, "y" -> FalseForm))
       val y = ObjectForm("a" -> NumberForm(1), "b" -> ObjectForm("x" -> TrueForm, "y" -> FalseForm))
       x patch d should equal (y)
+    }
+  }
+
+  def DeltaObjectStates(variant: DeltaVariant): Unit = {
+    import variant._
+
+    it should "track added fields" in {
+      var form = ObjectState("a" -> NumberForm(1))
+      form += ("b", NumberForm(2))
+      form.delta should equal (ObjectDelta("b" -> NumberForm(2)))
+    }
+
+    it should "track changed fields" in {
+      var form = ObjectState("a" -> NumberForm(1), "b" -> NumberForm(2))
+      form += ("b", TextForm("2"))
+      form.delta should equal (ObjectDelta("b" -> TextForm("2")))
+    }
+
+    it should "track removed fields" in {
+      var form = ObjectState("a" -> NumberForm(1), "b" -> NumberForm(2))
+      form -= "b"
+      form.delta should equal (ObjectDelta("b" -> NoForm))
+    }
+
+    it should "track multi-step changes" in {
+      var form = ObjectState("a" -> NumberForm(1), "b" -> NumberForm(2))
+      form += ("b", TextForm("2"))
+      form += ("c", NumberForm(3))
+      form.delta should equal (ObjectDelta("b" -> TextForm("2"), "c" -> NumberForm(3)))
+    }
+
+    it should "track transformations" in {
+      var form = ObjectState("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      form = form.map {
+        case (key, value: NumberForm) if value.toInt % 2 == 0 => key -> TextForm(value.toInt.toString)
+        case field => field
+      } (form.builder)
+      form.delta should equal (ObjectDelta("b" -> TextForm("2")))
+    }
+
+    it should "merge changes" in {
+      var x = ObjectState("a" -> NumberForm(1), "b" -> NumberForm(2), "c" -> NumberForm(3))
+      var y = x
+      x -= "a"
+      x += ("b", TextForm("2"))
+      x += ("c", NullForm)
+      y += ("a", TextForm("1"))
+      y -= "b"
+      y += ("c", TextForm("3"))
+      y += ("d", TextForm("4"))
+      val z = x merge y
+      z.state should equal (ObjectState("a" -> TextForm("1"), "c" -> TextForm("3"), "d" -> TextForm("4")))
+      z.delta should equal (ObjectDelta("a" -> TextForm("1"), "b" -> NoForm, "c" -> TextForm("3"), "d" -> TextForm("4")))
+    }
+
+    it should "commit changes" in {
+      val x = ObjectState("a" -> NumberForm(1), "b" -> NumberForm(2))
+      val y = (x + ("b", TextForm("2"))).commit
+      y.state should equal (ObjectForm("a" -> NumberForm(1), "b" -> TextForm("2")))
+      y.delta should equal (ObjectDelta.empty)
+    }
+
+    it should "revert changes" in {
+      val x = ObjectState("a" -> NumberForm(1), "b" -> NumberForm(2))
+      val y = (x + ("b", TextForm("2"))).revert
+      x should equal (y)
     }
   }
 }

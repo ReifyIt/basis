@@ -13,6 +13,10 @@ import basis.util._
 import scala.reflect._
 
 trait DeltaVariant extends Variant { variant =>
+  /** A delta-tracking object.
+    * @template */
+  type ObjectState <: StateObject
+
   /** A difference between variant forms.
     * @template */
   type AnyDelta >: AnyForm <: DeltaValue
@@ -29,13 +33,49 @@ trait DeltaVariant extends Variant { variant =>
   override type ObjectForm <: FormObject with AnyForm
   override type SetForm    <: FormSet with AnyForm
 
+  val ObjectState: StateObjectFactory
   val AnyDelta: DeltaValueFactory
   val ObjectDelta: DeltaObjectFactory
   val SetDelta: DeltaSetFactory
 
+  implicit def ObjectStateTag: ClassTag[ObjectState]
   implicit def AnyDeltaTag: ClassTag[AnyDelta]
   implicit def ObjectDeltaTag: ClassTag[ObjectDelta]
   implicit def SetDeltaTag: ClassTag[SetDelta]
+
+
+  trait StateObject extends Equals with Immutable with Family[ObjectState] with Map[String, AnyForm] { this: ObjectState =>
+    def state: ObjectForm
+    def delta: ObjectDelta
+    def commit: ObjectState
+    def revert: ObjectState
+    def update(state: ObjectForm): ObjectState
+    implicit def builder: Builder[(String, AnyForm)] with State[ObjectState]
+
+    override def isEmpty: Boolean                 = state.isEmpty
+    override def size: Int                        = state.size
+    override def contains(key: String): Boolean   = state.contains(key)
+    override def get(key: String): Maybe[AnyForm] = state.get(key)
+    override def apply(key: String): AnyForm      = state(key)
+    def / (key: String): AnyForm                  = state / key
+
+    def :+ (field: (String, AnyForm)): ObjectState   = update(state :+ field)
+    def +: (field: (String, AnyForm)): ObjectState   = update(field +: state)
+    def + (key: String, value: AnyForm): ObjectState = update(state + (key, value))
+    def - (key: String): ObjectState                 = update(state - key)
+    def ++ (that: ObjectForm): ObjectState           = update(state ++ that)
+    def -- (that: ObjectForm): ObjectState           = update(state -- that)
+    def merge(that: ObjectState): ObjectState        = update(state.patch(that.delta))
+
+    override def iterator: Iterator[(String, AnyForm)]          = state.iterator
+    override def traverse(f: ((String, AnyForm)) => Unit): Unit = state.traverse(f)
+    protected override def stringPrefix: String                 = ObjectState.toString
+  }
+
+  trait StateObjectFactory extends special.MapSource[ObjectState, String, AnyForm] {
+    def apply(state: ObjectForm): ObjectState
+    override def toString: String = (String.Builder~variant.toString~'.'~"ObjectState").state
+  }
 
 
   trait DeltaValue { this: AnyDelta =>

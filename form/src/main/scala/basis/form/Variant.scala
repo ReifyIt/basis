@@ -148,8 +148,8 @@ trait Variant { variant =>
     override def isObjectForm: Boolean    = true
     override def asObjectForm: ObjectForm = this
     override def / (key: String): AnyForm = get(key).bindOrElse(NoForm)
-    def :+ (key: String, value: AnyForm): ObjectForm
-    def +: (key: String, value: AnyForm): ObjectForm
+    def :+ (field: (String, AnyForm)): ObjectForm
+    def +: (field: (String, AnyForm)): ObjectForm
     def + (key: String, value: AnyForm): ObjectForm
     def - (key: String): ObjectForm
     def ++ (that: ObjectForm): ObjectForm

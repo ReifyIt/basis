@@ -15,6 +15,32 @@ import basis.util._
 import scala.reflect._
 
 object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonVariant with ProtoVariant { variant =>
+  final class ObjectState(override val state: ObjectForm, private[this] var _revert: ObjectState) extends StateObject {
+    def this(state: ObjectForm) = { this(state, null); _revert = this }
+
+    override def delta: ObjectDelta  = if (this eq revert) ObjectDelta.empty else revert.state.delta(state)
+    override def commit: ObjectState = if (this eq revert) this else new ObjectState(state)
+    override def revert: ObjectState = _revert
+
+    override def update(state: ObjectForm): ObjectState                               = if (this.state eq state) this else new ObjectState(state, revert)
+    implicit override def builder: Builder[(String, AnyForm)] with State[ObjectState] = new ObjectStateBuilder(ObjectFormBuilder, revert)
+  }
+
+  object ObjectState extends StateObjectFactory {
+    override val empty: ObjectState                                                   = new ObjectState(ObjectForm.empty)
+    override def apply(state: ObjectForm): ObjectState                                = new ObjectState(state)
+    implicit override def Builder: Builder[(String, AnyForm)] with State[ObjectState] = new ObjectStateBuilder(ObjectFormBuilder, null)
+  }
+
+  private final class ObjectStateBuilder(underlying: Builder[(String, AnyForm)] with State[ObjectForm], revert: ObjectState) extends Builder[(String, AnyForm)] with State[ObjectState] {
+    override def append(entry: (String, AnyForm)): Unit = underlying.append(entry)
+    override def clear(): Unit                          = underlying.clear()
+    override def expect(count: Int): this.type          = { underlying.expect(count); this }
+    override def state: ObjectState                     = if (revert != null) new ObjectState(underlying.state, revert) else new ObjectState(underlying.state)
+    override def toString: String                       = (String.Builder~variant.toString~'.'~"ObjectState"~'.'~"Builder").state
+  }
+
+
   sealed abstract class AnyDelta extends DeltaValue with ProtoDelta
 
   object AnyDelta extends DeltaValueFactory with ProtoDeltaFactory
@@ -152,9 +178,9 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
         NoForm
       }
 
-    override def :+ (key: String, value: AnyForm): ObjectForm = new ObjectForm(underlying :+ (key -> value))
+    override def :+ (field: (String, AnyForm)): ObjectForm = new ObjectForm(underlying :+ field)
 
-    override def +: (key: String, value: AnyForm): ObjectForm = new ObjectForm((key -> value) +: underlying)
+    override def +: (field: (String, AnyForm)): ObjectForm = new ObjectForm(field +: underlying)
 
     override def + (key: String, value: AnyForm): ObjectForm =
       if (_index != null && !_index.contains(key)) new ObjectForm(underlying :+ (key -> value))
@@ -368,6 +394,7 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
   object NoForm extends NoForm
 
 
+  implicit override lazy val ObjectStateTag: ClassTag[ObjectState] = ClassTag(Predef.classOf[ObjectState])
   implicit override lazy val AnyDeltaTag: ClassTag[AnyDelta]       = ClassTag(Predef.classOf[AnyDelta])
   implicit override lazy val ObjectDeltaTag: ClassTag[ObjectDelta] = ClassTag(Predef.classOf[ObjectDelta])
   implicit override lazy val SetDeltaTag: ClassTag[SetDelta]       = ClassTag(Predef.classOf[SetDelta])
