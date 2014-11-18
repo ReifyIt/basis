@@ -18,7 +18,14 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
   final class ObjectState(override val state: ObjectForm, private[this] var _revert: ObjectState) extends StateObject {
     def this(state: ObjectForm) = { this(state, null); _revert = this }
 
-    override def delta: ObjectDelta  = if (this eq revert) ObjectDelta.empty else revert.state.delta(state)
+    private[this] var _delta: ObjectDelta = _
+    override def delta: ObjectDelta = {
+      if (_delta == null) _delta =
+        if (this eq revert) ObjectDelta.empty
+        else revert.state.delta(state)
+      _delta
+    }
+
     override def commit: ObjectState = if (this eq revert) this else new ObjectState(state)
     override def revert: ObjectState = _revert
 
