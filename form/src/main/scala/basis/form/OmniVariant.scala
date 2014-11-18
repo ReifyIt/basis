@@ -24,6 +24,14 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
 
     override def update(state: ObjectForm): ObjectState                               = if (this.state eq state) this else new ObjectState(state, revert)
     implicit override def builder: Builder[(String, AnyForm)] with State[ObjectState] = new ObjectStateBuilder(ObjectFormBuilder, revert)
+
+    def writeJson(builder: StringBuilder): Unit = state.writeJson(builder)
+    def writeBson(writer: Writer): Unit         = state.writeBson(writer)
+    def writeProto(writer: Writer): Unit        = state.writeProto(writer)
+
+    def toJson: String  = state.toJson
+    def toBson: Loader  = state.toBson
+    def toProto: Loader = state.toProto
   }
 
   object ObjectState extends StateObjectFactory {

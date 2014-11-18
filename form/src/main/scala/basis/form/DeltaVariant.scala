@@ -67,6 +67,14 @@ trait DeltaVariant extends Variant { variant =>
     def -- (that: ObjectForm): ObjectState           = update(state -- that)
     def merge(that: ObjectState): ObjectState        = update(state.patch(that.delta))
 
+    def cast[T](implicit T: Mold[T]): Maybe[T] = T.cast(variant)(state)
+    def coerce[T](implicit T: Mold[T]): T      = T.cast(variant)(state).bindOrElse(T.identity)
+
+    def in(domain: DeltaVariant): domain.ObjectState =
+      if (variant eq domain) this.asInstanceOf[domain.ObjectState]
+      else if (this eq revert) domain.ObjectState(state in domain)
+      else (revert in domain).update(state in domain)
+
     override def iterator: Iterator[(String, AnyForm)]          = state.iterator
     override def traverse(f: ((String, AnyForm)) => Unit): Unit = state.traverse(f)
     protected override def stringPrefix: String                 = ObjectState.toString
@@ -160,8 +168,8 @@ trait DeltaVariant extends Variant { variant =>
 
     override def / (key: String): AnyForm = NoForm
 
-    override def in(domain: DeltaVariant): domain.AnyDelta =
-      in(domain: Variant).asInstanceOf[domain.AnyDelta]
+    override def in(domain: DeltaVariant): domain.AnyForm =
+      in(domain: Variant).asInstanceOf[domain.AnyForm]
 
     def delta(that: AnyForm): AnyDelta =
       if (that.isObjectForm) that.asObjectForm.map(field => field._1 -> NoForm.delta(field._2))(ObjectDelta.Builder)
@@ -178,6 +186,9 @@ trait DeltaVariant extends Variant { variant =>
 
   trait FormObject extends FormValue with BaseObject { this: ObjectForm =>
     override def / (key: String): AnyForm = get(key).bindOrElse(NoForm)
+
+    override def in(domain: DeltaVariant): domain.ObjectForm =
+      in(domain: Variant).asInstanceOf[domain.ObjectForm]
 
     override def delta(that: AnyForm): AnyDelta =
       if (that.isObjectForm) delta(that.asObjectForm) else super.delta(that)
@@ -223,6 +234,9 @@ trait DeltaVariant extends Variant { variant =>
 
 
   trait FormSet extends FormValue with BaseSet { this: SetForm =>
+    override def in(domain: DeltaVariant): domain.SetForm =
+      in(domain: Variant).asInstanceOf[domain.SetForm]
+
     override def delta(that: AnyForm): AnyDelta =
       if (that.isSetForm) delta(that.asSetForm) else super.delta(that)
 
