@@ -1,0 +1,753 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>math - basis.math</title>
+          <meta name="description" content="math - basis.math" />
+          <meta name="keywords" content="math basis.math" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'basis.math.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="basis">basis</a></p>
+        <h1>math</h1> <span class="permalink">
+      <a href="../../index.html#basis.math.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">math</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Abstract algebraic structures.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/reifyit/basis/tree/master/math/src/main/scala/basis/math/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block diagram-container" id="content-diagram-container">
+                <span class="toggle diagram-link">Content Hierarchy</span>
+                <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#diagrams" target="_blank" class="diagram-help">Learn more about scaladoc diagrams</a>
+                <div class="diagram" id="content-diagram"><svg class="package-diagram" id="graph8" viewBox="0.00 0.00 823.50 216.00" height="216pt" width="824pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 212)" class="graph" id="graph0"><polygon points="-4,4 -4,-212 819.5,-212 819.5,4 -4,4" stroke="none" fill="white"></polygon><!-- node0 --><g class="node trait" id="graph8_0"><g id="a_trait|graph8_0"><a xlink:title="basis.math.CompleteField" xlink:href="CompleteField.html#inheritance-diagram"><polygon points="228,-86 120,-86 120,-61 228,-61 228,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="130" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="150.875" text-anchor="start">CompleteField</text></a></g></g><!-- node14 --><g class="node trait" id="graph8_14"><g id="a_trait|graph8_14"><a xlink:title="basis.math.RealField" xlink:href="RealField.html#inheritance-diagram"><polygon points="155,-25 69,-25 69,-0 155,-0 155,-25" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-19.5" x="79" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-9.74951" x="99.9902" text-anchor="start">RealField</text></a></g></g><!-- node0&#45;&gt;node14 --><g class="edge inheritance" id="graph8_0_14"><g id="a_inheritance|graph8_0_14"><a xlink:title="RealField is a subtype of CompleteField"><path d="M158.02,-57.2936C147.485,-47.268 133.898,-34.338 124.224,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="156.922,-58.6644 161.751,-60.8435 159.335,-56.1289 156.922,-58.6644" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node1 --><g class="node trait" id="graph8_1"><g id="a_trait|graph8_1"><a xlink:title="basis.math.F2" xlink:href="F2.html#inheritance-diagram"><polygon points="669.5,-86 614.5,-86 614.5,-61 669.5,-61 669.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="625" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="645.776" text-anchor="start">F2</text></a></g></g><!-- node2 --><g class="node trait" id="graph8_2"><g id="a_trait|graph8_2"><a xlink:title="basis.math.F2x2" xlink:href="F2x2.html#inheritance-diagram"><polygon points="428,-86 362,-86 362,-61 428,-61 428,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="372" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="392.995" text-anchor="start">F2x2</text></a></g></g><!-- node3 --><g class="node trait" id="graph8_3"><g id="a_trait|graph8_3"><a xlink:title="basis.math.F3" xlink:href="F3.html#inheritance-diagram"><polygon points="742.5,-86 687.5,-86 687.5,-61 742.5,-61 742.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="698" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="718.776" text-anchor="start">F3</text></a></g></g><!-- node4 --><g class="node trait" id="graph8_4"><g id="a_trait|graph8_4"><a xlink:title="basis.math.F3x3" xlink:href="F3x3.html#inheritance-diagram"><polygon points="512,-86 446,-86 446,-61 512,-61 512,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="456" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="476.995" text-anchor="start">F3x3</text></a></g></g><!-- node5 --><g class="node trait" id="graph8_5"><g id="a_trait|graph8_5"><a xlink:title="basis.math.F4" xlink:href="F4.html#inheritance-diagram"><polygon points="815.5,-86 760.5,-86 760.5,-61 815.5,-61 815.5,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="771" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="791.776" text-anchor="start">F4</text></a></g></g><!-- node6 --><g class="node trait" id="graph8_6"><g id="a_trait|graph8_6"><a xlink:title="basis.math.F4x4" xlink:href="F4x4.html#inheritance-diagram"><polygon points="596,-86 530,-86 530,-61 596,-61 596,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="540" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="560.995" text-anchor="start">F4x4</text></a></g></g><!-- node7 --><g class="node trait" id="graph8_7"><g id="a_trait|graph8_7"><a xlink:title="basis.math.Field" xlink:href="Field.html#inheritance-diagram"><polygon points="206.5,-147 141.5,-147 141.5,-122 206.5,-122 206.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="152" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="172.773" text-anchor="start">Field</text></a></g></g><!-- node7&#45;&gt;node0 --><g class="edge inheritance" id="graph8_7_0"><g id="a_inheritance|graph8_7_0"><a xlink:title="CompleteField is a subtype of Field"><path d="M174,-116.687C174,-106.917 174,-94.8534 174,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="172.25,-116.843 174,-121.843 175.75,-116.844 172.25,-116.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node trait" id="graph8_10"><g id="a_trait|graph8_10"><a xlink:title="basis.math.IntervalField" xlink:href="IntervalField.html#inheritance-diagram"><polygon points="344,-86 246,-86 246,-61 344,-61 344,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="256" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="276.877" text-anchor="start">IntervalField</text></a></g></g><!-- node7&#45;&gt;node10 --><g class="edge inheritance" id="graph8_7_10"><g id="a_inheritance|graph8_7_10"><a xlink:title="IntervalField is a subtype of Field"><path d="M202.223,-119.738C223.103,-109.557 251.235,-95.8399 271.029,-86.1884" stroke="#d4d4d4" fill="none"></path><polygon points="201.344,-118.22 197.617,-121.984 202.878,-121.366 201.344,-118.22" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12 --><g class="node trait" id="graph8_12"><g id="a_trait|graph8_12"><a xlink:title="basis.math.OrderedField" xlink:href="OrderedField.html#inheritance-diagram"><polygon points="102,-86 0,-86 0,-61 102,-61 102,-86" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="10" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-70.7495" x="30.9312" text-anchor="start">OrderedField</text></a></g></g><!-- node7&#45;&gt;node12 --><g class="edge inheritance" id="graph8_7_12"><g id="a_inheritance|graph8_7_12"><a xlink:title="OrderedField is a subtype of Field"><path d="M145.31,-119.738C124.085,-109.557 95.4883,-95.8399 75.3674,-86.1884" stroke="#d4d4d4" fill="none"></path><polygon points="144.727,-121.399 149.992,-121.984 146.241,-118.244 144.727,-121.399" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node trait" id="graph8_8"><g id="a_trait|graph8_8"><a xlink:title="basis.math.FMxN" xlink:href="FMxN.html#inheritance-diagram"><polygon points="556,-147 486,-147 486,-122 556,-122 556,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="496" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="516.781" text-anchor="start">FMxN</text></a></g></g><!-- node8&#45;&gt;node2 --><g class="edge inheritance" id="graph8_8_2"><g id="a_inheritance|graph8_8_2"><a xlink:title="F2x2 is a subtype of FMxN"><path d="M491.61,-119.738C469.868,-109.557 440.573,-95.8399 419.962,-86.1884" stroke="#d4d4d4" fill="none"></path><polygon points="491.137,-121.449 496.407,-121.984 492.621,-118.279 491.137,-121.449" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8&#45;&gt;node4 --><g class="edge inheritance" id="graph8_8_4"><g id="a_inheritance|graph8_8_4"><a xlink:title="F3x3 is a subtype of FMxN"><path d="M509.798,-117.763C502.716,-107.815 493.719,-95.1764 487.281,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="508.377,-118.785 512.702,-121.843 511.228,-116.755 508.377,-118.785" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8&#45;&gt;node6 --><g class="edge inheritance" id="graph8_8_6"><g id="a_inheritance|graph8_8_6"><a xlink:title="F4x4 is a subtype of FMxN"><path d="M532.202,-117.763C539.284,-107.815 548.281,-95.1764 554.719,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="530.772,-116.755 529.298,-121.843 533.623,-118.785 530.772,-116.755" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node trait" id="graph8_9"><g id="a_trait|graph8_9"><a xlink:title="basis.math.FN" xlink:href="FN.html#inheritance-diagram"><polygon points="706.5,-147 649.5,-147 649.5,-122 706.5,-122 706.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="660" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="680.946" text-anchor="start">FN</text></a></g></g><!-- node9&#45;&gt;node1 --><g class="edge inheritance" id="graph8_9_1"><g id="a_inheritance|graph8_9_1"><a xlink:title="F2 is a subtype of FN"><path d="M668.235,-117.496C662.191,-107.59 654.567,-95.0957 649.098,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="666.789,-118.487 670.888,-121.843 669.777,-116.664 666.789,-118.487" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9&#45;&gt;node3 --><g class="edge inheritance" id="graph8_9_3"><g id="a_inheritance|graph8_9_3"><a xlink:title="F3 is a subtype of FN"><path d="M688.036,-117.496C694.249,-107.59 702.084,-95.0957 707.705,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="686.484,-116.678 685.31,-121.843 689.449,-118.537 686.484,-116.678" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9&#45;&gt;node5 --><g class="edge inheritance" id="graph8_9_5"><g id="a_inheritance|graph8_9_5"><a xlink:title="F4 is a subtype of FN"><path d="M704.138,-119.481C723.069,-109.327 748.365,-95.7588 766.208,-86.1884" stroke="#d4d4d4" fill="none"></path><polygon points="703.049,-118.079 699.47,-121.984 704.704,-121.163 703.049,-118.079" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node trait" id="graph8_11"><g id="a_trait|graph8_11"><a xlink:title="basis.math.IntervalRing" xlink:href="IntervalRing.html#inheritance-diagram"><polygon points="332.5,-147 235.5,-147 235.5,-122 332.5,-122 332.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="246" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="266.931" text-anchor="start">IntervalRing</text></a></g></g><!-- node11&#45;&gt;node10 --><g class="edge inheritance" id="graph8_11_10"><g id="a_inheritance|graph8_11_10"><a xlink:title="IntervalField is a subtype of IntervalRing"><path d="M287.135,-116.687C288.956,-106.917 291.205,-94.8534 292.831,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="285.369,-116.607 286.173,-121.843 288.81,-117.249 285.369,-116.607" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node12&#45;&gt;node14 --><g class="edge inheritance" id="graph8_12_14"><g id="a_inheritance|graph8_12_14"><a xlink:title="RealField is a subtype of OrderedField"><path d="M66.7219,-57.2936C77.0873,-47.268 90.4557,-34.338 99.9734,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="65.429,-56.1094 63.0516,-60.8435 67.8623,-58.6252 65.429,-56.1094" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node13 --><g class="node trait" id="graph8_13"><g id="a_trait|graph8_13"><a xlink:title="basis.math.OrderedRing" xlink:href="OrderedRing.html#inheritance-diagram"><polygon points="112.5,-147 11.5,-147 11.5,-122 112.5,-122 112.5,-147" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-141.5" x="22" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-131.75" x="42.9854" text-anchor="start">OrderedRing</text></a></g></g><!-- node13&#45;&gt;node12 --><g class="edge inheritance" id="graph8_13_12"><g id="a_inheritance|graph8_13_12"><a xlink:title="OrderedField is a subtype of OrderedRing"><path d="M58.8654,-116.687C57.0439,-106.917 54.7947,-94.8534 53.1687,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="57.1899,-117.249 59.8268,-121.843 60.6306,-116.607 57.1899,-117.249" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node15 --><g class="node trait" id="graph8_15"><g id="a_trait|graph8_15"><a xlink:title="basis.math.Ring" xlink:href="Ring.html#inheritance-diagram"><polygon points="206,-208 142,-208 142,-183 206,-183 206,-208" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-202.5" x="152" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-192.75" x="172.828" text-anchor="start">Ring</text></a></g></g><!-- node15&#45;&gt;node7 --><g class="edge inheritance" id="graph8_15_7"><g id="a_inheritance|graph8_15_7"><a xlink:title="Field is a subtype of Ring"><path d="M174,-177.687C174,-167.917 174,-155.853 174,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="172.25,-177.843 174,-182.843 175.75,-177.844 172.25,-177.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node15&#45;&gt;node11 --><g class="edge inheritance" id="graph8_15_11"><g id="a_inheritance|graph8_15_11"><a xlink:title="IntervalRing is a subtype of Ring"><path d="M200.138,-180.481C219.069,-170.327 244.365,-156.759 262.208,-147.188" stroke="#d4d4d4" fill="none"></path><polygon points="199.049,-179.079 195.47,-182.984 200.704,-182.163 199.049,-179.079" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node15&#45;&gt;node13 --><g class="edge inheritance" id="graph8_15_13"><g id="a_inheritance|graph8_15_13"><a xlink:title="OrderedRing is a subtype of Ring"><path d="M147.387,-180.481C128.112,-170.327 102.356,-156.759 84.1882,-147.188" stroke="#d4d4d4" fill="none"></path><polygon points="146.9,-182.202 152.139,-182.984 148.531,-179.105 146.9,-182.202" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node16 --><g class="node trait" id="graph8_16"><g id="a_trait|graph8_16"><a xlink:title="basis.math.VectorSpace" xlink:href="VectorSpace.html#inheritance-diagram"><polygon points="670,-208 570,-208 570,-183 670,-183 670,-208" stroke="#37657d" fill="#498aad"></polygon><image xlink:href="../../lib/trait_diagram.png" y="-202.5" x="580" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="10.00" font-family="Arial" y="-192.75" x="600.759" text-anchor="start">VectorSpace</text></a></g></g><!-- node16&#45;&gt;node8 --><g class="edge inheritance" id="graph8_16_8"><g id="a_inheritance|graph8_16_8"><a xlink:title="FMxN is a subtype of VectorSpace"><path d="M595.802,-180.079C578.808,-169.951 556.372,-156.58 540.519,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="595.25,-181.787 600.441,-182.843 597.042,-178.78 595.25,-181.787" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node16&#45;&gt;node9 --><g class="edge inheritance" id="graph8_16_9"><g id="a_inheritance|graph8_16_9"><a xlink:title="FN is a subtype of VectorSpace"><path d="M635.209,-179.029C645.027,-169.041 657.595,-156.257 666.565,-147.132" stroke="#d4d4d4" fill="none"></path><polygon points="633.716,-178.051 631.459,-182.843 636.212,-180.505 633.716,-178.051" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                <li class="group out"><span>Grouped</span></li>
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="basis.math"><span>math</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="basis.math.AffineSpace" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="AffineSpaceextendsAnyRef"></a>
+      <a id="AffineSpace:AffineSpace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AffineSpace.html"><span class="name">AffineSpace</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@AffineSpaceextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract principal homogeneous space over the additive group of a linear
+space.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract principal homogeneous space over the additive group of a linear
+space. Vector addition acts freely and transitively over the point set.
+To the extent practicable, the following axioms should hold.</p><p><b>Axioms</b>:</p><ul><li>𝓅 + <code>zero</code> == 𝓅 for every point 𝓅 in <code>this</code>.</li><li>(𝓅 + 𝐮) + 𝐯 == 𝓅 + (𝐮 + 𝐯) for every point 𝓅 and all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝐯: Vector) =&gt; 𝓅 + 𝐯 is a bijection for every point 𝓅 in <code>this</code>.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over affine spaces by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of AffineSpace with Singleton. Type elements</span>
+<span class="cmt">// with the #Point, #Vector and #Scalar type projections of your</span>
+<span class="cmt">// AffineSpace type parameter.</span>
+<span class="kw">def</span> testAffineSpaceOperations[A <span class="kw">&lt;:</span> AffineSpace <span class="kw">with</span> Singleton](
+    p: A#Point, q: A#Point, u: A#Vector, v: A#Vector): <span class="std">Unit</span> = {
+  assert((p + u) + v == p + (u + v), <span class="lit">"associativity of point-vector addition"</span>)
+  assert(p + (-v) == p - v, <span class="lit">"existence of point-vector subtraction"</span>)
+  assert((p + v) - (q + v) == p - q, <span class="lit">"existence of point-point subtraction"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of an AffineSpace parameter.</span>
+<span class="kw">def</span> testAffineSpaceIdentities(A: AffineSpace)(p: A.Point, q: A.Point, v: A.Vector): <span class="std">Unit</span> = {
+  <span class="kw">import</span> A._
+  assert(p + zero == p, <span class="lit">"existence of additive identity vector"</span>)
+  <span class="kw">if</span> (p + v == q + v) assert(p == v, <span class="lit">"uniqueness of points"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.CompleteField" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="CompleteFieldextendsField"></a>
+      <a id="CompleteField:CompleteField"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CompleteField.html"><span class="name">CompleteField</span></a><span class="result"> extends <a href="Field.html" class="extype" name="basis.math.Field">Field</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@CompleteFieldextendsField" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A complete abstract field structure.</p><div class="fullcomment"><div class="comment cmt"><p>A complete abstract field structure. Addition associates and commutes,
+and multiplication associates, commutes, and distributes over addition.
+Addition and multiplication both have an identity element, every element
+has an additive inverse, and every element except zero has a multiplicative
+inverse. <i>Completeness</i> implies that every Cauchy sequence of elements
+converges. To the extent practicable, the following axioms should hold.</p><p><b>Axioms for addition</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their sum 𝑎 + 𝑏 is also an element in <code>this</code>.</li><li>𝑎 + 𝑏 == 𝑏 + 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>(𝑎 + 𝑏) + 𝑐 == 𝑎 + (𝑏 + 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>zero</code> such that <code>zero</code> + 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>to every element 𝑎 in <code>this</code> corresponds an element -𝑎 in <code>this</code> such that 𝑎 + (-𝑎) == <code>zero</code>.</li></ul><p><b>Axioms for multiplication</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their product 𝑎 * 𝑏 is also an element in <code>this</code>.</li><li>𝑎 * 𝑏 == 𝑏 * 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>(𝑎 * 𝑏) * 𝑐 == 𝑎 * (𝑏 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>unit</code> != <code>zero</code> such that <code>unit</code> * 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>if 𝑎 is in <code>this</code> and 𝑎 != <code>zero</code> then there exists an element 𝑎.<code>inverse</code> such that 𝑎 * 𝑎.<code>inverse</code> == <code>unit</code>.</li></ul><p><b>The distributive law</b>:</p><ul><li>𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li></ul><p><b>Completeness axiom</b>:</p><ul><li>every non-empty subset of <code>this</code> with an upper bound has a least upper bound.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over complete fields by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of CompleteField with Singleton. Type elements</span>
+<span class="cmt">// with the #Element type projection of your CompleteField type parameter.</span>
+<span class="kw">def</span> testCompleteFieldOperations[F <span class="kw">&lt;:</span> CompleteField <span class="kw">with</span> Singleton](a: F#Element, b: F#Element, c: F#Element): <span class="std">Unit</span> = {
+  assert(a + b == b + a, <span class="lit">"commutativity of addition"</span>)
+  assert((a + b) + c == a + (b + c), <span class="lit">"associativity of addition"</span>)
+  assert(a * b == b * a, <span class="lit">"commutativity of multiplication"</span>)
+  assert((a * b) * c == a * (b * c), <span class="lit">"associativity of multiplication"</span>)
+  assert(a * (b + c) == (a * b) + (a * c), <span class="lit">"distributivity of multiplication over addition"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of a CompleteField parameter.</span>
+<span class="kw">def</span> testCompleteFieldIdentities(F: CompleteField)(a: F.Element): <span class="std">Unit</span> = {
+  <span class="kw">import</span> F._
+  assert(zero + a == a, <span class="lit">"existence of additive identity"</span>)
+  assert(a + (-a) == zero, <span class="lit">"existence of additive inverse"</span>)
+  assert(unit != zero &amp;&amp; unit * a == a, <span class="lit">"existence of multiplicative identity"</span>)
+  assert(a * a.inverse == unit, <span class="lit">"existence of multiplicative inverse"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.DimensionException" visbl="pub" data-isabs="false" fullComment="yes" group="Exceptions">
+      <a id="DimensionExceptionextendsRuntimeException"></a>
+      <a id="DimensionException:DimensionException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DimensionException.html"><span class="name">DimensionException</span></a><span class="result"> extends <span class="extype" name="scala.RuntimeException">RuntimeException</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@DimensionExceptionextendsRuntimeException" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Indicates a dimensional mismatch.</p><div class="fullcomment"><div class="comment cmt"><p>Indicates a dimensional mismatch.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.0</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.F2" visbl="pub" data-isabs="true" fullComment="yes" group="VectorSpaces">
+      <a id="F2extendsFN"></a>
+      <a id="F2:F2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="F2.html"><span class="name">F2</span></a><span class="result"> extends <a href="FN.html" class="extype" name="basis.math.FN">FN</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@F2extendsFN" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract 2-dimensional vector space over a ring.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract 2-dimensional vector space over a ring.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.F2x2" visbl="pub" data-isabs="true" fullComment="yes" group="MatrixSpaces">
+      <a id="F2x2extendsRingwithFMxN"></a>
+      <a id="F2x2:F2x2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="F2x2.html"><span class="name">F2x2</span></a><span class="result"> extends <a href="Ring.html" class="extype" name="basis.math.Ring">Ring</a> with <a href="FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@F2x2extendsRingwithFMxN" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An asbtract 2 by 2 matrix space over a field.</p><div class="fullcomment"><div class="comment cmt"><p>An asbtract 2 by 2 matrix space over a field.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.F3" visbl="pub" data-isabs="true" fullComment="yes" group="VectorSpaces">
+      <a id="F3extendsFN"></a>
+      <a id="F3:F3"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="F3.html"><span class="name">F3</span></a><span class="result"> extends <a href="FN.html" class="extype" name="basis.math.FN">FN</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@F3extendsFN" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract 3-dimensional vector space over a ring.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract 3-dimensional vector space over a ring.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.F3x3" visbl="pub" data-isabs="true" fullComment="yes" group="MatrixSpaces">
+      <a id="F3x3extendsRingwithFMxN"></a>
+      <a id="F3x3:F3x3"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="F3x3.html"><span class="name">F3x3</span></a><span class="result"> extends <a href="Ring.html" class="extype" name="basis.math.Ring">Ring</a> with <a href="FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@F3x3extendsRingwithFMxN" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An asbtract 3 by 3 matrix space over a field.</p><div class="fullcomment"><div class="comment cmt"><p>An asbtract 3 by 3 matrix space over a field.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.F4" visbl="pub" data-isabs="true" fullComment="yes" group="VectorSpaces">
+      <a id="F4extendsFN"></a>
+      <a id="F4:F4"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="F4.html"><span class="name">F4</span></a><span class="result"> extends <a href="FN.html" class="extype" name="basis.math.FN">FN</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@F4extendsFN" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract 4-dimensional vector space over a ring.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract 4-dimensional vector space over a ring.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.F4x4" visbl="pub" data-isabs="true" fullComment="yes" group="MatrixSpaces">
+      <a id="F4x4extendsRingwithFMxN"></a>
+      <a id="F4x4:F4x4"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="F4x4.html"><span class="name">F4x4</span></a><span class="result"> extends <a href="Ring.html" class="extype" name="basis.math.Ring">Ring</a> with <a href="FMxN.html" class="extype" name="basis.math.FMxN">FMxN</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@F4x4extendsRingwithFMxN" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An asbtract 4 by 4 matrix space over a field.</p><div class="fullcomment"><div class="comment cmt"><p>An asbtract 4 by 4 matrix space over a field.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.FMxN" visbl="pub" data-isabs="true" fullComment="yes" group="MatrixSpaces">
+      <a id="FMxNextendsVectorSpace"></a>
+      <a id="FMxN:FMxN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FMxN.html"><span class="name">FMxN</span></a><span class="result"> extends <a href="VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@FMxNextendsVectorSpace" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract <i>M</i> by <i>N</i> matrix space over a ring.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract <i>M</i> by <i>N</i> matrix space over a ring. Matrix spaces
+describe linear maps between vector spaces relative to the vector spaces'
+assumed bases. Matrix addition associates and commutes, and scalar
+multiplication associates, commutes, and distributes over matrix addition
+and scalar addition. Matrix and vector multiplication also both associate
+and distribute over matrix addition. Vectors in the row space multiply as
+columns on the right, and vectors in the column space multiply as rows on
+the left. Addition and scalar multiplication both have an identity element,
+and every matrix has an additive inverse. To the extent practicable, the
+following axioms should hold.</p><p><b>Axioms for matrix addition</b>:</p><ul><li>if 𝐀 and 𝐁 are matrices in <code>this</code>, then their sum 𝐀 + 𝐁 is also a matrix in <code>this</code>.</li><li>𝐀 + 𝐁 == 𝐁 + 𝐀 for all matrices 𝐀, 𝐁 in <code>this</code>.</li><li>(𝐀 + 𝐁) + 𝐂 == 𝐀 + (𝐁 + 𝐂) for all matrices 𝐀, 𝐁, 𝐂 in <code>this</code>.</li><li><code>this</code> has a matrix <code>zero</code> such that <code>zero</code> + 𝐀 == 𝐀 for every matrix 𝐀 in <code>this</code>.</li><li>to every matrix 𝐀 in <code>this</code> corresponds a matrix -𝐀 in <code>this</code> such that 𝐀 + (-𝐀) == <code>zero</code>.</li></ul><p><b>Axioms for scalar multiplication</b>:</p><ul><li>if 𝑥 is a scalar in <code>this</code> and 𝐀 is a matrix in <code>this</code>, then their product 𝑥 *: 𝐀 is also a matrix in <code>this</code>.</li><li>(𝑥 * 𝑦) *: 𝐀 == 𝑥 *: (𝑦 *: 𝐀) for all scalars 𝑥, 𝑦 and every matrix 𝐀 in <code>this</code>.</li><li><code>Scalar</code> has an element <code>unit</code> such that <code>unit</code> *: 𝐀 == 𝐀 for every matrix 𝐀 in <code>this</code>.</li></ul><p><b>Axioms for vector multiplication</b>:</p><ul><li>If 𝐀 is a matrix in <code>this</code> and 𝐯 is a vector in the row space of 𝐀, then their product
+    𝐀 :⋅ 𝐯 is a vector in the column space of 𝐀.</li><li>(𝐀 ⋅ 𝐁) :⋅ 𝐯 == 𝐀 :⋅ (𝐁 :⋅ 𝐯) for all matrices 𝐀, 𝐁 and every vector 𝐯 in the row space of 𝐁,
+    where the row space of 𝐀 equals the column space of 𝐁.</li><li>𝐀 :⋅ 𝐯 == 𝐯 ⋅: 𝐀.<code>T</code> for every matrix 𝐀 and every vector 𝐯 in the row space of 𝐀.</li></ul><p><b>Axioms for matrix multiplication</b>:</p><ul><li>if 𝐀 and 𝐁 are matrices and the row space of 𝐀 equals the column space of 𝐁,
+    then the matrix product 𝐀 ⋅ 𝐁 exists.</li><li>(𝐀 ⋅ 𝐁) ⋅ 𝐂 == 𝐀 ⋅ (𝐁 ⋅ 𝐂) for all matrices 𝐀, 𝐁, 𝐂 where the row space of 𝐀 equals
+    the column space of 𝐁, and the row space of 𝐁 equals the column space of 𝐂.</li><li>(𝐀 ⋅ 𝐁).<code>T</code> == 𝐁.<code>T</code> ⋅ 𝐀.<code>T</code> for all matrices 𝐀, 𝐁 where the row space of 𝐀 equals the column space of 𝐁.</li></ul><p><b>Distributive laws</b>:</p><ul><li>𝑥 *: (𝐀 + 𝐁) == (𝑥 *: 𝐀) + (𝑥 *: 𝐁) for every scalar 𝑥 and all matrices 𝐀, 𝐁 in <code>this</code>.</li><li>(𝑥 + 𝑦) *: 𝐀 == (𝑥 *: 𝐀) + (𝑦 *: 𝐀) for all scalars 𝑥, 𝑦 and every matrix 𝐀 in <code>this</code>.</li><li>𝐯 ⋅: (𝐀 + 𝐁) == (𝐯 ⋅: 𝐀) + (𝐯 ⋅: 𝐁) for all matrices 𝐀, 𝐁 in the same matrix space, and every
+    vector 𝐯 in the column space of 𝐀 and 𝐁.</li><li>(𝐀 + 𝐁) :⋅ 𝐯 == (𝐀 :⋅ 𝐯) + (𝐁 :⋅ 𝐯) for all matrices 𝐀, 𝐁 in the same matrix space, and every
+    vector 𝐯 in the row space of 𝐀 and 𝐁.</li><li>𝐀 ⋅ (𝐁 + 𝐂) == (𝐀 ⋅ 𝐁) + (𝐀 ⋅ 𝐂) for all matrices 𝐁, 𝐂 in the same matrix space, and every
+    matrix 𝐀 whose row space equals the colum space of 𝐁 and 𝐂.</li><li>(𝐀 + 𝐁) ⋅ 𝐂 == (𝐀 ⋅ 𝐂) + (𝐁 ⋅ 𝐂) for all matrices 𝐀, 𝐁 in the same matrix space, and every
+    matrix 𝐂 whose column space equals the row space of 𝐀 and 𝐁.
+</li></ul></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.FN" visbl="pub" data-isabs="true" fullComment="yes" group="VectorSpaces">
+      <a id="FNextendsVectorSpace"></a>
+      <a id="FN:FN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FN.html"><span class="name">FN</span></a><span class="result"> extends <a href="VectorSpace.html" class="extype" name="basis.math.VectorSpace">VectorSpace</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@FNextendsVectorSpace" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract <i>N</i>-dimensional vector space over a ring.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract <i>N</i>-dimensional vector space over a ring. Vector addition
+associates and commutes, and scalar multiplication associates, commutes,
+and distributes over vector addition and scalar addition. Vector addition
+and scalar multiplication both have an identity element, and every vector
+has an additive inverse. Every vector space is an affine space over itself.
+To the extent practicable, the following axioms should hold.</p><p><b>Axioms for vector addition</b>:</p><ul><li>if 𝐮 and 𝐯 are vectors in <code>this</code>, then their sum 𝐮 + 𝐯 is also a vector in <code>this</code>.</li><li>𝐮 + 𝐯 == 𝐯 + 𝐮 for all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝐮 + 𝐯) + 𝐰 == 𝐮 + (𝐯 + 𝐰) for all vectors 𝐮, 𝐯, 𝐰 in <code>this</code>.</li><li><code>this</code> has a vector <code>zero</code> such that <code>zero</code> + 𝐯 == 𝐯 for every vector 𝐯 in <code>this</code>.</li><li>to every vector 𝐯 in <code>this</code> corresponds a vector -𝐯 in <code>this</code> such that 𝐯 + (-𝐯) == <code>zero</code>.</li></ul><p><b>Axioms for scalar multiplication</b>:</p><ul><li>if 𝑎 is a scalar in <code>this</code> and 𝐯 is a vector in <code>this</code>, then their product 𝑎 *: 𝐯 is also a vector in <code>this</code>.</li><li>(𝑎 * 𝑏) *: 𝐯 == 𝑎 *: (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in <code>this</code>.</li><li><code>Scalar</code> has an element <code>unit</code> such that <code>unit</code> *: 𝐯 == 𝐯 for every vector 𝐯 in <code>this</code>.</li></ul><p><b>Distributive laws</b>:</p><ul><li>𝑎 *: (𝐮 + 𝐯) == (𝑎 *: 𝐮) + (𝑎 *: 𝐯) for every scalar 𝑎 and all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝑎 + 𝑏) *: 𝐯 == (𝑎 *: 𝐯) + (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in <code>this</code>.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over vector spaces by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of FN with Singleton. Type elements with</span>
+<span class="cmt">// the #Vector and #Scalar type projections of your FN type parameter.</span>
+<span class="kw">def</span> testVectorSpaceOperations[V <span class="kw">&lt;:</span> FN[S] <span class="kw">with</span> Singleton, S <span class="kw">&lt;:</span> Ring <span class="kw">with</span> Singleton]
+    (a: V#Scalar, b: V#Scalar, u: V#Vector, v: V#Vector, w: V#Vector): <span class="std">Unit</span> = {
+  assert(u + v == v + u, <span class="lit">"commutativity of vector addition"</span>)
+  assert((u + v) + w == u + (v + w), <span class="lit">"associativity of vector addition"</span>)
+  assert((a * b) *: v == a *: (b *: v), <span class="lit">"associativity of scalar multiplication with ring multiplication"</span>)
+  assert(a *: (u + v) == (a *: u) + (a *: v), <span class="lit">"distributivity of scalar multiplication over vector addition"</span>)
+  assert((a + b) *: v == (a *: v) + (b *: v), <span class="lit">"distributivity of scalar multiplication over ring addition"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of a FN parameter.</span>
+<span class="kw">def</span> testVectorSpaceIdentities(V: FN[_])(a: V.Scalar, v: V.Vector): <span class="std">Unit</span> = {
+  <span class="kw">import</span> V._
+  assert(zero + v == v, <span class="lit">"existence of additive identity vector"</span>)
+  assert(v + (-v) == zero, <span class="lit">"existence of additive inverse vector"</span>)
+  assert(Scalar.unit *: v == v, <span class="lit">"existence of multiplicative identity scalar"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.Field" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="FieldextendsRing"></a>
+      <a id="Field:Field"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Field.html"><span class="name">Field</span></a><span class="result"> extends <a href="Ring.html" class="extype" name="basis.math.Ring">Ring</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@FieldextendsRing" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract field structure.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract field structure. Addition associates and commutes, and
+multiplication associates, commutes, and distributes over addition.
+Addition and multiplication both have an identity element, every element
+has an additive inverse, and every element except zero has a multiplicative
+inverse. To the extent practicable, the following axioms should hold.</p><p><b>Axioms for addition</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their sum 𝑎 + 𝑏 is also an element in <code>this</code>.</li><li>𝑎 + 𝑏 == 𝑏 + 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>(𝑎 + 𝑏) + 𝑐 == 𝑎 + (𝑏 + 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>zero</code> such that <code>zero</code> + 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>to every element 𝑎 in <code>this</code> corresponds an element -𝑎 in <code>this</code> such that 𝑎 + (-𝑎) == <code>zero</code>.</li></ul><p><b>Axioms for multiplication</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their product 𝑎 * 𝑏 is also an element in <code>this</code>.</li><li>𝑎 * 𝑏 == 𝑏 * 𝑎 for all 𝑎, 𝑏 elements in <code>this</code>.</li><li>(𝑎 * 𝑏) * 𝑐 == 𝑎 * (𝑏 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>unit</code> != <code>zero</code> such that <code>unit</code> * 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>if 𝑎 is in <code>this</code> and 𝑎 != <code>zero</code> then there exists an element 𝑎.<code>inverse</code> such that 𝑎 * 𝑎.<code>inverse</code> == <code>unit</code>.</li></ul><p><b>The distributive law</b>:</p><ul><li>𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over fields by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of Field with Singleton. Type elements</span>
+<span class="cmt">// with the #Element type projection of your Field type parameter.</span>
+<span class="kw">def</span> testFieldOperations[F <span class="kw">&lt;:</span> Field <span class="kw">with</span> Singleton](a: F#Element, b: F#Element, c: F#Element): <span class="std">Unit</span> = {
+  assert(a + b == b + a, <span class="lit">"commutativity of addition"</span>)
+  assert((a + b) + c == a + (b + c), <span class="lit">"associativity of addition"</span>)
+  assert(a * b == b * a, <span class="lit">"commutativity of multiplication"</span>)
+  assert((a * b) * c == a * (b * c), <span class="lit">"associativity of multiplication"</span>)
+  assert(a * (b + c) == (a * b) + (a * c), <span class="lit">"distributivity of multiplication over addition"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of a Field parameter.</span>
+<span class="kw">def</span> testFieldIdentities(F: Field)(a: F.Element): <span class="std">Unit</span> = {
+  <span class="kw">import</span> F._
+  assert(zero + a == a, <span class="lit">"existence of additive identity"</span>)
+  assert(a + (-a) == zero, <span class="lit">"existence of additive inverse"</span>)
+  assert(unit != zero &amp;&amp; unit * a == a, <span class="lit">"existence of multiplicative identity"</span>)
+  assert(a * a.inverse == unit, <span class="lit">"existence of multiplicative inverse"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.IntervalField" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="IntervalFieldextendsIntervalRingwithField"></a>
+      <a id="IntervalField:IntervalField"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntervalField.html"><span class="name">IntervalField</span></a><span class="result"> extends <a href="IntervalRing.html" class="extype" name="basis.math.IntervalRing">IntervalRing</a> with <a href="Field.html" class="extype" name="basis.math.Field">Field</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@IntervalFieldextendsIntervalRingwithField" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A field of closed sets between two elements of an ordered field.</p><div class="fullcomment"><div class="comment cmt"><p>A field of closed sets between two elements of an ordered field.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.1</p></dd></dl></div>
+    </li><li name="basis.math.IntervalRing" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="IntervalRingextendsRing"></a>
+      <a id="IntervalRing:IntervalRing"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IntervalRing.html"><span class="name">IntervalRing</span></a><span class="result"> extends <a href="Ring.html" class="extype" name="basis.math.Ring">Ring</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@IntervalRingextendsRing" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A ring of closed sets between two elenents of an ordered ring.</p><div class="fullcomment"><div class="comment cmt"><p>A ring of closed sets between two elenents of an ordered ring.
+</p></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.1</p></dd></dl></div>
+    </li><li name="basis.math.OrderedField" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="OrderedFieldextendsOrderedRingwithField"></a>
+      <a id="OrderedField:OrderedField"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="OrderedField.html"><span class="name">OrderedField</span></a><span class="result"> extends <a href="OrderedRing.html" class="extype" name="basis.math.OrderedRing">OrderedRing</a> with <a href="Field.html" class="extype" name="basis.math.Field">Field</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@OrderedFieldextendsOrderedRingwithField" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A totally ordered abstract field structure.</p><div class="fullcomment"><div class="comment cmt"><p>A totally ordered abstract field structure. Addition associates and
+commutes, and multiplication associates, commutes, and distributes over
+addition. Addition and multiplication both have an identity element, every
+every element has an additive inverse, and every element except zero has
+a multiplicative inverse. To the extent practicable, the following axioms
+should hold.</p><p><b>Axioms for addition</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their sum 𝑎 + 𝑏 is also an element in <code>this</code>.</li><li>𝑎 + 𝑏 == 𝑏 + 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>(𝑎 + 𝑏) + 𝑐 == 𝑎 + (𝑏 + 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>zero</code> such that <code>zero</code> + 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>to every element 𝑎 in <code>this</code> corresponds an element -𝑎 in <code>this</code> such that 𝑎 + (-𝑎) == <code>zero</code>.</li></ul><p><b>Axioms for multiplication</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their product 𝑎 * 𝑏 is also an element in <code>this</code>.</li><li>𝑎 * 𝑏 == 𝑏 * 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>(𝑎 * 𝑏) * 𝑐 == 𝑎 * (𝑏 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>unit</code> != <code>zero</code> such that <code>unit</code> * 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>if 𝑎 is in <code>this</code> and 𝑎 != <code>zero</code> then there exists an element 𝑎.<code>inverse</code> such that 𝑎 * 𝑎.<code>inverse</code> == <code>unit</code>.</li></ul><p><b>The distributive law</b>:</p><ul><li>𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li></ul><p><b>Order axioms</b>:</p><ul><li>if 𝑎 &lt;= 𝑏 and 𝑏 &lt;= 𝑎 then 𝑎 == 𝑏 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>if 𝑎 &lt;= 𝑏 and 𝑏 &lt;= 𝑐 then 𝑎 &lt;= 𝑐 for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li>𝑎 &lt;= 𝑏 or 𝑏 &lt;= 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over ordered fields by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of OrderedField with Singleton. Type elements</span>
+<span class="cmt">// with the #Element type projection of your OrderedField type parameter.</span>
+<span class="kw">def</span> testOrderedFieldOperations[F <span class="kw">&lt;:</span> OrderedField <span class="kw">with</span> Singleton](a: F#Element, b: F#Element, c: F#Element): <span class="std">Unit</span> = {
+  assert(a + b == b + a, <span class="lit">"commutativity of addition"</span>)
+  assert((a + b) + c == a + (b + c), <span class="lit">"associativity of addition"</span>)
+  assert(a * b == b * a, <span class="lit">"commutativity of multiplication"</span>)
+  assert((a * b) * c == a * (b * c), <span class="lit">"associativity of multiplication"</span>)
+  assert(a * (b + c) == (a * b) + (a * c), <span class="lit">"distributivity of multiplication over addition"</span>)
+  <span class="kw">if</span> (a &lt;= b) assert((a min b) == a, <span class="lit">"existence of minima"</span>)
+  <span class="kw">if</span> (a &lt;= b) assert((a max b) == b, <span class="lit">"existence of maxima"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of an OrderedField parameter.</span>
+<span class="kw">def</span> testOrderedFieldIdentities(F: OrderedField)(a: F.Element, b: F.Element): <span class="std">Unit</span> = {
+  <span class="kw">import</span> F._
+  assert(zero + a == a, <span class="lit">"existence of additive identity"</span>)
+  assert(a + (-a) == zero, <span class="lit">"existence of additive inverse"</span>)
+  assert(unit != zero &amp;&amp; unit * a == a, <span class="lit">"existence of multiplicative identity"</span>)
+  assert(a * a.inverse == unit, <span class="lit">"existence of multiplicative inverse"</span>)
+  <span class="kw">if</span> (a &lt;= b &amp;&amp; b &lt;= a) assert(a == b, <span class="lit">"antisymmetry of ordering"</span>)
+  <span class="kw">if</span> (a &lt;= b &amp;&amp; b &lt;= c) assert(a &lt;= c, <span class="lit">"transitivity of ordering"</span>)
+  assert(a &lt;= b || b &lt;= a, <span class="lit">"totality of ordering"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.OrderedRing" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="OrderedRingextendsRing"></a>
+      <a id="OrderedRing:OrderedRing"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="OrderedRing.html"><span class="name">OrderedRing</span></a><span class="result"> extends <a href="Ring.html" class="extype" name="basis.math.Ring">Ring</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@OrderedRingextendsRing" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A totally ordered abstract ring structure.</p><div class="fullcomment"><div class="comment cmt"><p>A totally ordered abstract ring structure. Addition associates and
+commutes, and multiplication associates and distributes over addition.
+Addition and multiplication both have an identity element, and every
+element has an additive inverse. To the extent practicable, the following
+axioms should hold.</p><p><b>Axioms for addition</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their sum 𝑎 + 𝑏 is also an element in <code>this</code>.</li><li>𝑎 + 𝑏 == 𝑏 + 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>(𝑎 + 𝑏) + 𝑐 == 𝑎 + (𝑏 + 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>zero</code> such that <code>zero</code> + 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>to every element 𝑎 in <code>this</code> corresponds an element -𝑎 in <code>this</code> such that 𝑎 + (-𝑎) == <code>zero</code>.</li></ul><p><b>Axioms for multiplication</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their product 𝑎 * 𝑏 is also an element in <code>this</code>.</li><li>(𝑎 * 𝑏) * 𝑐 == 𝑎 * (𝑏 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>unit</code> != <code>zero</code> such that <code>unit</code> * 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li></ul><p><b>The distributive law</b>:</p><ul><li>𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li></ul><p><b>Order axioms</b>:</p><ul><li>if 𝑎 &lt;= 𝑏 and 𝑏 &lt;= 𝑎 then 𝑎 == 𝑏 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>if 𝑎 &lt;= 𝑏 and 𝑏 &lt;= 𝑐 then 𝑎 &lt;= 𝑐 for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li>𝑎 &lt;= 𝑏 or 𝑏 &lt;= 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over ordered rings by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of OrderedRing with Singleton. Type elements</span>
+<span class="cmt">// with the #Element type projection of your OrderedRing type parameter.</span>
+<span class="kw">def</span> testOrderedRingOperations[R <span class="kw">&lt;:</span> OrderedRing <span class="kw">with</span> Singleton](a: R#Element, b: R#Element, c: R#Element): <span class="std">Unit</span> = {
+  assert(a + b == b + a, <span class="lit">"commutativity of addition"</span>)
+  assert((a + b) + c == a + (b + c), <span class="lit">"associativity of addition"</span>)
+  assert((a * b) * c == a * (b * c), <span class="lit">"associativity of multiplication"</span>)
+  assert(a * (b + c) == (a * b) + (a * c), <span class="lit">"distributivity of multiplication over addition"</span>)
+  <span class="kw">if</span> (a &lt;= b) assert((a min b) == a, <span class="lit">"existence of minima"</span>)
+  <span class="kw">if</span> (a &lt;= b) assert((a max b) == b, <span class="lit">"existence of maxima"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of an OrderedRing parameter.</span>
+<span class="kw">def</span> testOrderedRingIdentities(R: OrderedRing)(a: R.Element, b: R.Element): <span class="std">Unit</span> = {
+  <span class="kw">import</span> R._
+  assert(zero + a == a, <span class="lit">"existence of additive identity"</span>)
+  assert(a + (-a) == zero, <span class="lit">"existence of additive inverse"</span>)
+  assert(unit != zero &amp;&amp; unit * a == a, <span class="lit">"existence of multiplicative identity"</span>)
+  <span class="kw">if</span> (a &lt;= b &amp;&amp; b &lt;= a) assert(a == b, <span class="lit">"antisymmetry of ordering"</span>)
+  <span class="kw">if</span> (a &lt;= b &amp;&amp; b &lt;= c) assert(a &lt;= c, <span class="lit">"transitivity of ordering"</span>)
+  assert(a &lt;= b || b &lt;= a, <span class="lit">"totality of ordering"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.RealField" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="RealFieldextendsOrderedFieldwithCompleteField"></a>
+      <a id="RealField:RealField"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="RealField.html"><span class="name">RealField</span></a><span class="result"> extends <a href="OrderedField.html" class="extype" name="basis.math.OrderedField">OrderedField</a> with <a href="CompleteField.html" class="extype" name="basis.math.CompleteField">CompleteField</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@RealFieldextendsOrderedFieldwithCompleteField" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A complete, totally ordered abstract field structure.</p><div class="fullcomment"><div class="comment cmt"><p>A complete, totally ordered abstract field structure. Addition associates
+and commutes, and multiplication associates, commutes, and distributes over
+addition. Addition and multiplication both have an identity element, every
+element has an additive inverse, and every element except zero has a
+multiplicative inverse. Also, every Cauchy sequence of elements converges.
+To the extent practicable, the following axioms should hold.</p><p><b>Axioms for addition</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their sum 𝑎 + 𝑏 is also an element in <code>this</code>.</li><li>𝑎 + 𝑏 == 𝑏 + 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>(𝑎 + 𝑏) + 𝑐 == 𝑎 + (𝑏 + 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>zero</code> such that <code>zero</code> + 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>to every element 𝑎 in <code>this</code> corresponds an element -𝑎 in <code>this</code> such that 𝑎 + (-𝑎) == <code>zero</code>.</li></ul><p><b>Axioms for multiplication</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their product 𝑎 * 𝑏 is also an element in <code>this</code>.</li><li>𝑎 * 𝑏 == 𝑏 * 𝑎 for all 𝑎, 𝑏 elements in <code>this</code>.</li><li>(𝑎 * 𝑏) * 𝑐 == 𝑎 * (𝑏 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>unit</code> != <code>zero</code> such that <code>unit</code> * 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>if 𝑎 is in <code>this</code> and 𝑎 != <code>zero</code> then there exists an element 𝑎.<code>inverse</code> such that 𝑎 * 𝑎.<code>inverse</code> == <code>unit</code>.</li></ul><p><b>The distributive law</b>:</p><ul><li>𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li></ul><p><b>Order axioms</b>:</p><ul><li>if 𝑎 &lt;= 𝑏 and 𝑏 &lt;= 𝑎 then 𝑎 == 𝑏 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>if 𝑎 &lt;= 𝑏 and 𝑏 &lt;= 𝑐 then 𝑎 &lt;= 𝑐 for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li>𝑎 &lt;= 𝑏 or 𝑏 &lt;= 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li></ul><p><b>Completeness axiom</b>:</p><ul><li>every non-empty subset of <code>this</code> with an upper bound has a least upper bound.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over real fields by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of RealField with Singleton. Type elements</span>
+<span class="cmt">// with the #Element type projection of your RealField type parameter.</span>
+<span class="kw">def</span> testRealFieldOperations[R <span class="kw">&lt;:</span> RealField <span class="kw">with</span> Singleton](a: R#Element, b: R#Element, c: R#Element): <span class="std">Unit</span> = {
+  assert(a + b == b + a, <span class="lit">"commutativity of addition"</span>)
+  assert((a + b) + c == a + (b + c), <span class="lit">"associativity of addition"</span>)
+  assert(a * b == b * a, <span class="lit">"commutativity of multiplication"</span>)
+  assert((a * b) * c == a * (b * c), <span class="lit">"associativity of multiplication"</span>)
+  assert(a * (b + c) == (a * b) + (a * c), <span class="lit">"distributivity of multiplication over addition"</span>)
+  <span class="kw">if</span> (a &lt;= b) assert((a min b) == a, <span class="lit">"existence of minima"</span>)
+  <span class="kw">if</span> (a &lt;= b) assert((a max b) == b, <span class="lit">"existence of maxima"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of a RealField parameter.</span>
+<span class="kw">def</span> testRealFieldIdentities(R: RealField)(a: R.Element, b: R.Element): <span class="std">Unit</span> = {
+  <span class="kw">import</span> R._
+  assert(zero + a == a, <span class="lit">"existence of additive identity"</span>)
+  assert(a + (-a) == zero, <span class="lit">"existence of additive inverse"</span>)
+  assert(unit != zero &amp;&amp; unit * a == a, <span class="lit">"existence of multiplicative identity"</span>)
+  assert(a * a.inverse == unit, <span class="lit">"existence of multiplicative inverse"</span>)
+  <span class="kw">if</span> (a &lt;= b &amp;&amp; b &lt;= a) assert(a == b, <span class="lit">"antisymmetry of ordering"</span>)
+  <span class="kw">if</span> (a &lt;= b &amp;&amp; b &lt;= c) assert(a &lt;= c, <span class="lit">"transitivity of ordering"</span>)
+  assert(a &lt;= b || b &lt;= a, <span class="lit">"totality of ordering"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.Ring" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="RingextendsAnyRef"></a>
+      <a id="Ring:Ring"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Ring.html"><span class="name">Ring</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@RingextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract ring structure.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract ring structure. Addition associates and commutes, and
+multiplication associates and distributes over addition. Addition and
+multiplication both have an identity element, and every element has an
+additive inverse. To the extent practicable, the following axioms
+should hold.</p><p><b>Axioms for addition</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their sum 𝑎 + 𝑏 is also an element in <code>this</code>.</li><li>𝑎 + 𝑏 == 𝑏 + 𝑎 for all elements 𝑎, 𝑏 in <code>this</code>.</li><li>(𝑎 + 𝑏) + 𝑐 == 𝑎 + (𝑏 + 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>zero</code> such that <code>zero</code> + 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li><li>to every element 𝑎 in <code>this</code> corresponds an element -𝑎 in <code>this</code> such that 𝑎 + (-𝑎) == <code>zero</code>.</li></ul><p><b>Axioms for multiplication</b>:</p><ul><li>if 𝑎 and 𝑏 are elements in <code>this</code>, then their product 𝑎 * 𝑏 is also an element in <code>this</code>.</li><li>(𝑎 * 𝑏) * 𝑐 == 𝑎 * (𝑏 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.</li><li><code>this</code> has an element <code>unit</code> != <code>zero</code> such that <code>unit</code> * 𝑎 == 𝑎 for every element 𝑎 in <code>this</code>.</li></ul><p><b>The distributive law</b>:</p><ul><li>𝑎 * (𝑏 + 𝑐) == (𝑎 * 𝑏) + (𝑎 * 𝑐) for all elements 𝑎, 𝑏, 𝑐 in <code>this</code>.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over rings by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of Ring with Singleton. Type elements</span>
+<span class="cmt">// with the #Element type projection of your Ring type parameter.</span>
+<span class="kw">def</span> testRingOperations[R <span class="kw">&lt;:</span> Ring <span class="kw">with</span> Singleton](a: R#Element, b: R#Element, c: R#Element): <span class="std">Unit</span> = {
+  assert(a + b == b + a, <span class="lit">"commutativity of addition"</span>)
+  assert((a + b) + c == a + (b + c), <span class="lit">"associativity of addition"</span>)
+  assert((a * b) * c == a * (b * c), <span class="lit">"associativity of multiplication"</span>)
+  assert(a * (b + c) == (a * b) + (a * c), <span class="lit">"distributivity of multiplication over addition"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of a Ring parameter.</span>
+<span class="kw">def</span> testRingIdentities(R: Ring)(a: R.Element): <span class="std">Unit</span> = {
+  <span class="kw">import</span> R._
+  assert(zero + a == a, <span class="lit">"existence of additive identity"</span>)
+  assert(a + (-a) == zero, <span class="lit">"existence of additive inverse"</span>)
+  assert(unit != zero &amp;&amp; unit * a == a, <span class="lit">"existence of multiplicative identity"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li><li name="basis.math.VectorSpace" visbl="pub" data-isabs="true" fullComment="yes" group="Structures">
+      <a id="VectorSpaceextendsAnyRef"></a>
+      <a id="VectorSpace:VectorSpace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="VectorSpace.html"><span class="name">VectorSpace</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@VectorSpaceextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An abstract vector space over a ring.</p><div class="fullcomment"><div class="comment cmt"><p>An abstract vector space over a ring. Vector addition associates and
+commutes, and scalar multiplication associates and distributes over vector
+addition and scalar addition. Vector addition and scalar multiplication
+both have an identity element, and every vector has an additive inverse.
+To the extent practicable, the following axioms should hold.</p><p><b>Axioms for vector addition</b>:</p><ul><li>if 𝐮 and 𝐯 are vectors in <code>this</code>, then their sum 𝐮 + 𝐯 is also a vector in <code>this</code>.</li><li>𝐮 + 𝐯 == 𝐯 + 𝐮 for all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝐮 + 𝐯) + 𝐰 == 𝐮 + (𝐯 + 𝐰) for all vectors 𝐮, 𝐯, 𝐰 in <code>this</code>.</li><li><code>this</code> has a vector <code>zero</code> such that <code>zero</code> + 𝐯 == 𝐯 for every vector 𝐯 in <code>this</code>.</li><li>to every vector 𝐯 in <code>this</code> corresponds a vector -𝐯 in <code>this</code> such that 𝐯 + (-𝐯) == <code>zero</code>.</li></ul><p><b>Axioms for scalar multiplication</b>:</p><ul><li>if 𝑎 is a scalar in <code>this</code> and 𝐯 is a vector in <code>this</code>, then their product 𝑎 *: 𝐯 is also a vector in <code>this</code>.</li><li>(𝑎 * 𝑏) *: 𝐯 == 𝑎 *: (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in <code>this</code>.</li><li><code>Scalar</code> has an element <code>unit</code> such that <code>unit</code> *: 𝐯 == 𝐯 for every vector 𝐯 in <code>this</code>.</li></ul><p><b>Distributive laws</b>:</p><ul><li>𝑎 *: (𝐮 + 𝐯) == (𝑎 *: 𝐮) + (𝑎 *: 𝐯) for every scalar 𝑎 and all vectors 𝐮, 𝐯 in <code>this</code>.</li><li>(𝑎 + 𝑏) *: 𝐯 == (𝑎 *: 𝐯) + (𝑏 *: 𝐯) for all scalars 𝑎, 𝑏 and every vector 𝐯 in <code>this</code>.
+</li></ul></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="cmt">// You can abstract over vector spaces by parameterizing a class or</span>
+<span class="cmt">// function with a subtype of VectorSpace with Singleton. Type elements</span>
+<span class="cmt">// with the #Vector and #Scalar type projections of your VectorSpace</span>
+<span class="cmt">// type parameter.</span>
+<span class="kw">def</span> testVectorSpaceOperations[V <span class="kw">&lt;:</span> VectorSpace <span class="kw">with</span> Singleton]
+    (a: V#Scalar, b: V#Scalar, u: V#Vector, v: V#Vector, w: V#Vector) {
+  assert(u + v == v + u, <span class="lit">"commutativity of vector addition"</span>)
+  assert((u + v) + w == u + (v + w), <span class="lit">"associativity of vector addition"</span>)
+  assert((a * b) *: v == a *: (b *: v), <span class="lit">"associativity of scalar multiplication with ring multiplication"</span>)
+  assert(a *: (u + v) == (a *: u) + (a *: v), <span class="lit">"distributivity of scalar multiplication over vector addition"</span>)
+  assert((a + b) *: v == (a *: v) + (b *: v), <span class="lit">"distributivity of scalar multiplication over ring addition"</span>)
+}
+
+<span class="cmt">// Alternatively, functions can use path-dependent types of a VectorSpace parameter.</span>
+<span class="kw">def</span> testVectorSpaceIdentities(V: VectorSpace)(a: V.Scalar, v: V.Vector): <span class="std">Unit</span> = {
+  <span class="kw">import</span> V._
+  assert(zero + v == v, <span class="lit">"existence of additive identity vector"</span>)
+  assert(v + (-v) == zero, <span class="lit">"existence of additive inverse vector"</span>)
+  assert(Scalar.unit *: v == v, <span class="lit">"existence of multiplicative identity scalar"</span>)
+}</pre></li></ol>
+            </div><dt>Version</dt><dd><p>0.1</p></dd><dt>Since</dt><dd><p>0.0</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="basis.math.binary64" visbl="pub" data-isabs="false" fullComment="no" group="Categories">
+      <a id="binary64"></a>
+      <a id="binary64:binary64"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="binary64/package.html"><span class="name">binary64</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#basis.math.package@binary64" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">64-bit binary based algebraic structures.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Categories">
+              <h3>Categories</h3>
+              
+            </div><div class="group" name="Structures">
+              <h3>Structures</h3>
+              
+            </div><div class="group" name="VectorSpaces">
+              <h3>Vector spaces</h3>
+              
+            </div><div class="group" name="MatrixSpaces">
+              <h3>Matrix spaces</h3>
+              
+            </div><div class="group" name="Exceptions">
+              <h3>Exceptions</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
