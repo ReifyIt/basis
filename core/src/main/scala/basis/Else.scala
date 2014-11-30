@@ -46,8 +46,7 @@ sealed abstract class Bind[+A] private[basis] extends (A Else Nothing) {
 
   protected final override def stringPrefix: String = "Bind"
 
-  override def toString: String =
-    (String.Builder~"Bind"~'('~>bind~')').state
+  override def toString: String = (String.Builder~"Bind"~'('~>bind~')').state
 }
 
 private[basis] final class BindInt(value: Int) extends Bind[Int] {
@@ -171,6 +170,10 @@ object Bind {
   def apply(value: Double): Bind[Double] = new BindDouble(value)
 
   def apply(value: Boolean): Bind[Boolean] = if (value) True else False
+
+  def unapply[A](maybe: A Else Any): A Else Any = maybe
+
+  override def toString: String = "Bind"
 }
 
 sealed abstract class Trap[+B] private[basis] extends (Nothing Else B) {
@@ -209,8 +212,7 @@ private[basis] final class TrapRef[+B](value: B) extends Trap[B] {
     mash(mix(seed[Trap[_]], hash(trap)))
   }
 
-  override def toString: String =
-    (String.Builder~"Trap"~'('~>trap~')').state
+  override def toString: String = (String.Builder~"Trap"~'('~>trap~')').state
 }
 
 object Trap extends Trap[Nothing] {

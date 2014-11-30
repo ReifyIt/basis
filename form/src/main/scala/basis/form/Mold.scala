@@ -9,7 +9,6 @@ package basis.form
 import basis._
 import basis.collections._
 import basis.data._
-import basis.text._
 import basis.util._
 import scala.reflect._
 
@@ -94,7 +93,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Byte"~'('~>identity~')').state
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"Byte"
+      if (identity != 0) s~'('~>identity~')'
+      s.state
+    }
   }
 
   private final class ShortMold(override val identity: Short) extends Mold[Short] {
@@ -116,7 +119,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Short"~'('~>identity~')').state
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"Short"
+      if (identity != 0) s~'('~>identity~')'
+      s.state
+    }
   }
 
   private final class IntMold(override val identity: Int) extends Mold[Int] {
@@ -138,7 +145,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Int"~'('~>identity~')').state
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"Int"
+      if (identity != 0) s~'('~>identity~')'
+      s.state
+    }
   }
 
   private final class LongMold(override val identity: Long) extends Mold[Long] {
@@ -160,7 +171,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Long"~'('~>identity~')').state
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"Long"
+      if (identity != 0L) s~'('~>identity~')'
+      s.state
+    }
   }
 
   private final class FloatMold(override val identity: Float) extends Mold[Float] {
@@ -182,7 +197,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Float"~'('~>identity~')').state
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"Float"
+      if (identity != 0.0f) s~'('~>identity~')'
+      s.state
+    }
   }
 
   private final class DoubleMold(override val identity: Double) extends Mold[Double] {
@@ -204,7 +223,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Double"~'('~>identity~')').state
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"Double"
+      if (identity != 0.0) s~'('~>identity~')'
+      s.state
+    }
   }
 
   private final class BooleanMold(override val identity: Boolean) extends Mold[Boolean] {
@@ -230,7 +253,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Boolean"~'('~>identity~')').state
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"Boolean"
+      if (identity) s~'('~>identity~')'
+      s.state
+    }
   }
 
   private final class StringMold(override val identity: String) extends Mold[String] {
@@ -251,9 +278,9 @@ object Mold extends CollectionMolds {
     }
 
     override def toString: String = {
-      val s = basis.text.String.Builder~"Mold"~'.'~"String"~'('
-      new UString(identity).show(s)
-      (s~')').state
+      val s = basis.text.String.Builder~"Mold"~'.'~"String"
+      if (identity != "") s~'('~>identity~')'
+      s.state
     }
   }
 
@@ -274,7 +301,11 @@ object Mold extends CollectionMolds {
       else form
     }
 
-    override def toString: String = (basis.text.String.Builder~"Mold"~'.'~"Date"~'('~>identity~')').state
+    override def toString: String = {
+      val s = basis.text.String.Builder~"Mold"~'.'~"Date"
+      if (identity.getTime != 0L) s~'('~>identity~')'
+      s.state
+    }
   }
 
   private final class UnitMold extends Mold[Unit] {

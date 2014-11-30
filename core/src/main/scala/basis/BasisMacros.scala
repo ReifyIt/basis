@@ -15,6 +15,11 @@ private[basis] class BasisMacros(val c: blackbox.Context) {
   def ElseToOps[A : WeakTypeTag, B : WeakTypeTag](self: Expr[A Else B]): Expr[ElseOps[A, B]] = Expr[ElseOps[A, B]](q"new _root_.basis.ElseOps($self)")
   def TruthToOps(self: Expr[Truth]): Expr[TruthOps]                                          = Expr[TruthOps](q"new _root_.basis.TruthOps($self)")
 
+  def Maybe[A : WeakTypeTag](value: Expr[A]): Expr[A Else Nothing] = Expr[A Else Nothing](q"""{
+    val x = $value
+    if (x != null) _root_.basis.Bind(x) else _root_.basis.Trap
+  }""")(ElseTag[A, Nothing])
+
   def Try[A : WeakTypeTag](expr: Expr[A]): Expr[A Else Throwable] = Expr[A Else Throwable](q"""
     try _root_.basis.Bind($expr)
     catch { case e: Throwable => _root_.basis.Trap.NonFatal(e) }
@@ -28,4 +33,5 @@ private[basis] class BasisMacros(val c: blackbox.Context) {
 
   implicit protected def TruthOpsTag: WeakTypeTag[TruthOps]   = WeakTypeTag(mirror.staticClass("basis.TruthOps").toType)
   implicit protected def ThrowableTag: WeakTypeTag[Throwable] = WeakTypeTag(mirror.staticClass("java.lang.Throwable").toType)
+  implicit protected def NothingTag: WeakTypeTag[Nothing]     = WeakTypeTag.Nothing
 }

@@ -9,14 +9,28 @@
   * @contentDiagram hideNodes "basis.Family"
   */
 package object basis {
+  /** A bound value or else a trapped value.
+    * @template */
   type Maybe[+A] = A Else Any
 
-  def Maybe[A](value: A): A Else Nothing = if (value != null) Bind(value) else Trap
+  object Maybe {
+    def empty[A]: Maybe[A] = Trap
+    def apply[A](value: A): A Else Nothing = macro BasisMacros.Maybe[A]
+    override def toString: String = "Maybe"
+  }
 
+  /** A bound value or else a trapped throwable.
+    * @template */
   type Try[+A] = A Else Throwable
 
-  def Try[A](expr: => A): Try[A] = macro BasisMacros.Try[A]
+  object Try {
+    def empty[A]: Try[A] = Trap
+    def apply[A](expr: => A): Try[A] = macro BasisMacros.Try[A]
+    override def toString: String = "Try"
+  }
 
+  /** A bound boolean or else a trapped value.
+    * @template */
   type Truth = Boolean Else Any
 
   val True: Bind[Boolean] = new BindBoolean(true)

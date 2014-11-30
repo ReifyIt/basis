@@ -14,6 +14,10 @@ final class ElseOps[+A, +B](val __ : A Else B) extends AnyVal {
     * @group Evaluating */
   def bindOrElse[X >: A](default: => X): X = macro ElseMacros.bindOrElse[X, B]
 
+  /** Synonym for `bindOrElse`.
+    * @group Evaluating */
+  def getOrElse[X >: A](default: => X): X = macro ElseMacros.bindOrElse[X, B]
+
   /** Returns this `Bind`, or the `other` binding for a `Trap`.
     * @group Composing */
   def orElse[X >: A, Y](other: X Else Y): X Else Y = macro ElseMacros.orElse[X, Y]

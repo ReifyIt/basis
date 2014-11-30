@@ -137,7 +137,7 @@ trait ProtoVariant extends DeltaVariant { variant =>
       else domain.NoForm
 
     override def toString: String =
-      (String.Builder~variant.toString~'.'~"SecretForm"~'('~
+      (String.Builder~"SecretForm"~'('~
         "data"~" = "~>data~", "~
         "iv"~" = "~>iv~", "~
         "mac"~" = "~>mac~')').state
@@ -400,7 +400,7 @@ trait ProtoVariant extends DeltaVariant { variant =>
     }
 
     override def read(data: Reader): AnyForm = {
-      var form = NoForm: AnyForm
+      var form = AnyForm.undefined
       while (!data.isEOF) {
         val key = Protobuf.Varint.read(data)
         form = field(key).readValue(data)

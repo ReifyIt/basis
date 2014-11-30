@@ -78,7 +78,7 @@ trait DeltaVariant extends Variant { variant =>
 
     override def iterator: Iterator[(String, AnyForm)]          = state.iterator
     override def traverse(f: ((String, AnyForm)) => Unit): Unit = state.traverse(f)
-    protected override def stringPrefix: String                 = ObjectState.toString
+    protected override def stringPrefix: String                 = "ObjectState"
   }
 
   trait StateObjectFactory extends special.MapSource[ObjectState, String, AnyForm] {
@@ -116,7 +116,7 @@ trait DeltaVariant extends Variant { variant =>
     override def in(domain: DeltaVariant): domain.ObjectDelta =
       if (variant eq domain) asInstanceOf[domain.ObjectDelta]
       else this.map(field => field._1 -> field._2.in(domain))(domain.ObjectDelta.Builder)
-    protected override def stringPrefix: String = ObjectDelta.toString
+    protected override def stringPrefix: String = "ObjectDelta"
   }
 
   trait DeltaObjectFactory extends special.MapSource[ObjectDelta, String, AnyDelta] {
@@ -148,7 +148,7 @@ trait DeltaVariant extends Variant { variant =>
     }
 
     override def toString: String =
-      (String.Builder~variant.toString~'.'~"SetDelta"~'('~
+      (String.Builder~"SetDelta"~'('~
         "deletions"~" = "~>deletions~", "~
         "additions"~" = "~>additions~')').state
   }

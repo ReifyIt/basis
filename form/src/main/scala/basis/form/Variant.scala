@@ -138,6 +138,7 @@ trait Variant { variant =>
   }
 
   trait BaseValueFactory {
+    def undefined: AnyForm = NoForm
     /** Encodes a typed value as a variant form using an implicit `Mold`. */
     def apply[@specialized(Mold.Specialized) T](value: T)(implicit T: Mold[T]): AnyForm = T.form(variant)(value)
     override def toString: String = (String.Builder~variant.toString~'.'~"AnyForm").state
@@ -157,7 +158,7 @@ trait Variant { variant =>
     override def in(domain: Variant): domain.ObjectForm =
       if (variant eq domain) asInstanceOf[domain.ObjectForm]
       else this.map(field => field._1 -> field._2.in(domain))(domain.ObjectFormBuilder)
-    protected override def stringPrefix: String = ObjectForm.toString
+    protected override def stringPrefix: String = "ObjectForm"
   }
 
   trait BaseObjectFactory extends special.MapSource[ObjectForm, String, AnyForm] {
@@ -175,7 +176,7 @@ trait Variant { variant =>
     override def in(domain: Variant): domain.SeqForm =
       if (variant eq domain) asInstanceOf[domain.SeqForm]
       else this.map(_ in domain)(domain.SeqFormBuilder)
-    protected override def stringPrefix: String = SeqForm.toString
+    protected override def stringPrefix: String = "SeqForm"
   }
 
   trait BaseSeqFactory extends special.SeqSource[SeqForm, AnyForm] {
@@ -193,7 +194,7 @@ trait Variant { variant =>
     override def in(domain: Variant): domain.SetForm =
       if (variant eq domain) asInstanceOf[domain.SetForm]
       else this.map(_ in domain)(domain.SetFormBuilder)
-    protected override def stringPrefix: String = SetForm.toString
+    protected override def stringPrefix: String = "SetForm"
   }
 
   trait BaseSetFactory extends special.SetSource[SetForm, AnyForm] {
@@ -207,7 +208,7 @@ trait Variant { variant =>
     override def in(domain: Variant): domain.TextForm =
       if (variant eq domain) asInstanceOf[domain.TextForm]
       else domain.TextForm(toUString.toString)
-    protected override def stringPrefix: String = TextForm.toString
+    protected override def stringPrefix: String = "TextForm"
   }
 
   trait BaseTextFactory extends StringFactory[TextForm] {
@@ -222,7 +223,7 @@ trait Variant { variant =>
     override def in(domain: Variant): domain.DataForm =
       if (variant eq domain) asInstanceOf[domain.DataForm]
       else domain.DataForm.from(this)
-    protected override def stringPrefix: String = DataForm.toString
+    protected override def stringPrefix: String = "DataForm"
   }
 
   trait BaseDataFactory extends DataFactory[DataForm] {
@@ -281,7 +282,7 @@ trait Variant { variant =>
       mash(mix(seed[NumberForm], h))
     }
 
-    override def toString: String = (String.Builder~variant.toString~'.'~"NumberForm"~'('~toDecimalString~')').state
+    override def toString: String = (String.Builder~"NumberForm"~'('~toDecimalString~')').state
   }
 
   protected trait BaseInt extends BaseNumber { this: NumberForm =>
@@ -452,7 +453,7 @@ trait Variant { variant =>
     }
 
     override def toString: String = {
-      val s = String.Builder~variant.toString~'.'~"DateForm"~'('~'"'
+      val s = String.Builder~"DateForm"~'('~'"'
       writeISO8601(s)
       (s~'"'~')').state
     }
@@ -575,8 +576,7 @@ trait Variant { variant =>
       mash(mix(seed[BoolForm], hash(toBoolean)))
     }
 
-    override def toString: String =
-      (String.Builder~variant.toString~'.'~(if (toBoolean) "TrueForm" else "FalseForm")).state
+    override def toString: String = if (toBoolean) "TrueForm" else "FalseForm"
   }
 
   trait BaseBoolFactory {
@@ -589,14 +589,14 @@ trait Variant { variant =>
     override def isNullForm: Boolean  = true
     override def asNullForm: NullForm = this
     override def in(domain: Variant): domain.NullForm = domain.NullForm
-    override def toString: String = (String.Builder~variant.toString~'.'~"NullForm").state
+    override def toString: String = "NullForm"
   }
 
 
   trait BaseNo extends BaseValue { this: NoForm =>
     override def isDefined: Boolean = false
     override def in(domain: Variant): domain.NoForm = domain.NoForm
-    override def toString: String = (String.Builder~variant.toString~'.'~"NoForm").state
+    override def toString: String = "NoForm"
   }
 
 
