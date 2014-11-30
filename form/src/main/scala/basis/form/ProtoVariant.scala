@@ -40,7 +40,8 @@ trait ProtoVariant extends DeltaVariant { variant =>
 
   implicit def SecretFormTag: ClassTag[SecretForm]
 
-  private lazy val Proto: Proto                    = new Proto
+  lazy val Proto = new Proto
+
   implicit lazy val DeltaProto: Protobuf[AnyDelta] = new DeltaProto
   implicit lazy val FormProto: Protobuf[AnyForm]   = new FormProto
 
@@ -306,7 +307,7 @@ trait ProtoVariant extends DeltaVariant { variant =>
   }
 
 
-  private final class Proto {
+  class Proto {
     val ObjectDeltaProto: Protobuf[ObjectDelta] = new ObjectDeltaProto
     val SetDeltaProto: Protobuf[SetDelta]       = new SetDeltaProto
     val ObjectFormProto: Protobuf[ObjectForm]   = new ObjectFormProto
@@ -803,7 +804,7 @@ trait ProtoVariant extends DeltaVariant { variant =>
   private final class DataFormProto extends Protobuf[DataForm] {
     override def read(data: Reader): DataForm = {
       val framer = DataFormFramer
-      while (!data.isEOF) framer.writeByte(data.readByte)
+      while (!data.isEOF) framer.writeByte(data.readByte())
       framer.state
     }
 
@@ -817,10 +818,10 @@ trait ProtoVariant extends DeltaVariant { variant =>
   }
 
   private final class LongFormProto extends Protobuf[NumberForm] {
-    override def read(data: Reader): NumberForm              = NumberForm(Protobuf.Varint.read(data))
-    override def write(data: Writer, form: NumberForm): Unit = Protobuf.Varint.write(data, form.toLong)
-    override def sizeOf(form: NumberForm): Int               = Protobuf.Varint.sizeOf(form.toLong)
-    override def wireType: Int                               = Protobuf.Varint.wireType
+    override def read(data: Reader): NumberForm              = NumberForm(Protobuf.SInt64.read(data))
+    override def write(data: Writer, form: NumberForm): Unit = Protobuf.SInt64.write(data, form.toLong)
+    override def sizeOf(form: NumberForm): Int               = Protobuf.SInt64.sizeOf(form.toLong)
+    override def wireType: Int                               = Protobuf.SInt64.wireType
     override def toString: String                            = (String.Builder~variant.toString~'.'~"Proto"~'.'~"LongFormProto").state
   }
 
