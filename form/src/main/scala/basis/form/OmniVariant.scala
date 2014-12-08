@@ -201,7 +201,7 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
       if (_index != null && !_index.contains(key)) new ObjectForm(underlying :+ (key -> value))
       else {
         var i = size - 1
-        while (i >= 0 && underlying(i)._1 != key) i -= 1
+        while (i >= 0 && !underlying(i)._1.equals(key)) i -= 1
         if (i >= 0) {
           if (underlying(i)._2.equals(value)) this
           else new ObjectForm(underlying.update(i, key -> value))

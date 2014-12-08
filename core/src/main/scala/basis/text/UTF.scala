@@ -26,7 +26,7 @@ trait UTF extends Any with Equals with Family[UTF] with Seq[Int] {
   def show(builder: StringBuilder): Unit = {
     def hexToChar(x: Int): Int = if (x < 10) '0' + x else 'A' + (x - 10)
     builder.append('\"')
-    val cs = utf16Iterator
+    val cs = iterator
     while (!cs.isEmpty) {
       (cs.head: @switch) match {
         case '\b' => builder.append('\\'); builder.append('b')
@@ -39,10 +39,10 @@ trait UTF extends Any with Equals with Family[UTF] with Seq[Int] {
         case c if (c >= 0x0000 && c <= 0x001F) ||
                   (c >= 0x007F && c <= 0x009F) =>
           builder.append('\\'); builder.append('u')
-          builder.append(hexToChar(c.toInt >>> 12 & 0xF))
-          builder.append(hexToChar(c.toInt >>>  8 & 0xF))
-          builder.append(hexToChar(c.toInt >>>  4 & 0xF))
-          builder.append(hexToChar(c.toInt        & 0xF))
+          builder.append(hexToChar(c >>> 12 & 0xF))
+          builder.append(hexToChar(c >>>  8 & 0xF))
+          builder.append(hexToChar(c >>>  4 & 0xF))
+          builder.append(hexToChar(c        & 0xF))
         case c => builder.append(c)
       }
       cs.step()

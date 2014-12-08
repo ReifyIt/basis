@@ -1,22 +1,61 @@
-lazy val modules = Seq(`basis-core`, `basis-data`, `basis-form`, `basis-math`, `basis-proto`, `basis-stat`, `basis-util`)
+lazy val modules = Seq(
+  `basis-core`,
+  `basis-data`,
+  `basis-form`,
+  `basis-markup`,
+  `basis-math`,
+  `basis-proto`,
+  `basis-stat`,
+  `basis-util`)
 
-lazy val basis = project in file(".") settings (commonSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*) aggregate ((modules :+ `basis-docs`) map (x => x: ProjectReference): _*)
+lazy val basis = project
+  .in(file("."))
+  .settings(commonSettings: _*)
+  .dependsOn(modules.map(module => module: ClasspathDep[ProjectReference]): _*)
+  .aggregate((modules :+ `basis-docs`).map(module => module: ProjectReference): _*)
 
-lazy val `basis-core` = project in file("core") settings (moduleSettings: _*) dependsOn (`basis-util`)
+lazy val `basis-core` = project
+  .in(file("core"))
+  .settings(moduleSettings: _*)
+  .dependsOn(`basis-util`)
 
-lazy val `basis-data` = project in file("data") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-util`)
+lazy val `basis-data` = project
+  .in(file("data"))
+  .settings(moduleSettings: _*)
+  .dependsOn(`basis-core`, `basis-util`)
 
-lazy val `basis-form` = project in file("form") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-data`, `basis-proto`, `basis-util`)
+lazy val `basis-form` = project
+  .in(file("form"))
+  .settings(moduleSettings: _*)
+  .dependsOn(`basis-core`, `basis-data`, `basis-proto`, `basis-util`)
 
-lazy val `basis-math` = project in file("math") settings (moduleSettings: _*)
+lazy val `basis-markup` = project
+  .in(file("markup"))
+  .settings(moduleSettings: _*)
+  .dependsOn(`basis-core`, `basis-util`)
 
-lazy val `basis-proto` = project in file("proto") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-data`, `basis-util`)
+lazy val `basis-math` = project
+  .in(file("math"))
+  .settings(moduleSettings: _*)
 
-lazy val `basis-stat` = project in file("stat") settings (moduleSettings: _*) dependsOn (`basis-core`, `basis-util`)
+lazy val `basis-proto` = project
+  .in(file("proto"))
+  .settings(moduleSettings: _*)
+  .dependsOn(`basis-core`, `basis-data`, `basis-util`)
 
-lazy val `basis-util` = project in file("util") settings (moduleSettings: _*)
+lazy val `basis-stat` = project
+  .in(file("stat"))
+  .settings(moduleSettings: _*)
+  .dependsOn(`basis-core`, `basis-util`)
 
-lazy val `basis-docs` = project in file("docs") settings (moduleSettings: _*) dependsOn (modules map (x => x: ClasspathDep[ProjectReference]): _*)
+lazy val `basis-util` = project
+  .in(file("util"))
+  .settings(moduleSettings: _*)
+
+lazy val `basis-docs` = project
+  .in(file("docs"))
+  .settings(moduleSettings: _*)
+  .dependsOn(modules.map(module => module: ClasspathDep[ProjectReference]): _*)
 
 lazy val commonSettings = projectSettings ++ docSettings ++ publishSettings
 
@@ -32,7 +71,17 @@ lazy val projectSettings = Seq(
   scalacOptions ++= Seq("-language:_", "-Yno-predef"))
 
 lazy val compileSettings = Seq(
-  scalacOptions ++= Seq("-optimise", "-deprecation", "-Xfuture", "-Ywarn-adapted-args", "-Ywarn-inaccessible", "-Ywarn-infer-any", "-Ywarn-nullary-override", "-Ywarn-nullary-unit", "-Ywarn-unused", "-Ywarn-unused-import"),
+  scalacOptions ++= Seq(
+    "-optimise",
+    "-deprecation",
+    "-unchecked",
+    "-Xfuture",
+    "-Ywarn-adapted-args",
+    "-Ywarn-inaccessible",
+    "-Ywarn-nullary-override",
+    "-Ywarn-nullary-unit",
+    "-Ywarn-unused",
+    "-Ywarn-unused-import"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % "provided",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test"))
