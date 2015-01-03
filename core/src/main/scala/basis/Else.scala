@@ -16,6 +16,8 @@ sealed abstract class Else[@specialized(Int, Long, Float, Double, Boolean) +A, +
 
   def isDefined: Boolean
 
+  def isResult: Boolean
+
   def canBind: Boolean
 
   def canTrap: Boolean
@@ -35,6 +37,8 @@ sealed abstract class Bind[+A] private[basis] extends (A Else Nothing) {
   final override def isEmpty: Boolean = false
 
   final override def isDefined: Boolean = true
+
+  final override def isResult: Boolean = true
 
   final override def canBind: Boolean = true
 
@@ -177,9 +181,9 @@ object Bind {
 }
 
 sealed abstract class Trap[+B] private[basis] extends (Nothing Else B) {
-  final override def isEmpty: Boolean = true
-
   final override def isDefined: Boolean = false
+
+  final override def isEmpty: Boolean = true
 
   final override def canBind: Boolean = false
 
@@ -195,6 +199,8 @@ sealed abstract class Trap[+B] private[basis] extends (Nothing Else B) {
 }
 
 private[basis] final class TrapRef[+B](value: B) extends Trap[B] {
+  override def isResult: Boolean = true
+
   override def canSafelyTrap: Boolean = true
 
   override def bind: Nothing = {
@@ -217,6 +223,8 @@ private[basis] final class TrapRef[+B](value: B) extends Trap[B] {
 
 object Trap extends Trap[Nothing] {
   import scala.runtime._
+
+  override def isResult: Boolean = false
 
   override def canSafelyTrap: Boolean = false
 

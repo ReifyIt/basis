@@ -25,7 +25,7 @@ final class NonStrictIteratorOps[+A](val __ : Iterator[A]) extends AnyVal {
   def zip[B](those: Iterator[B]): Iterator[(A, B)]      = new NonStrictIteratorOps.Zip(__.dup, those.dup)
 }
 
-private[sequential] object NonStrictIteratorOps {
+private[basis] object NonStrictIteratorOps {
   import scala.annotation._
 
   final class Collect[-A, +B](these: Iterator[A], q: PartialFunction[A, B]) extends Iterator[B] {

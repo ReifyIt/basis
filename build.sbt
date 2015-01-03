@@ -2,7 +2,6 @@ lazy val modules = Seq(
   `basis-core`,
   `basis-data`,
   `basis-form`,
-  `basis-markup`,
   `basis-math`,
   `basis-proto`,
   `basis-stat`,
@@ -28,11 +27,6 @@ lazy val `basis-form` = project
   .in(file("form"))
   .settings(moduleSettings: _*)
   .dependsOn(`basis-core`, `basis-data`, `basis-proto`, `basis-util`)
-
-lazy val `basis-markup` = project
-  .in(file("markup"))
-  .settings(moduleSettings: _*)
-  .dependsOn(`basis-core`, `basis-util`)
 
 lazy val `basis-math` = project
   .in(file("math"))
