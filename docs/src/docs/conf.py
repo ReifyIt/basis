@@ -6,7 +6,7 @@ extensions = ['includecode']
 # General configuration
 
 project = 'Basis'
-copyright = '2012-2014 Reify It'
+copyright = '2012-2015 Chris Sachs'
 
 master_doc = 'index'
 highlight_language = 'scala'
