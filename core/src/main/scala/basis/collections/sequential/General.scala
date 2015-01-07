@@ -9,14 +9,20 @@ package sequential
 
 import scala.reflect.macros._
 
-class General {
+class General extends GeneralPriority2 {
   implicit def ArrayToGeneralOps[A](xs: Array[A]): GeneralArrayOps[A]                = macro GeneralMacros.ArrayToGeneralOps[A]
   implicit def BilinearSeqToGeneralOps[A](xs: BilinearSeq[A]): GeneralSeqOps[A]      = macro GeneralMacros.SeqToGeneralOps[A]
+}
+
+private[collections] trait GeneralPriority2 extends GeneralPriority3 {
+  implicit def IndexedSeqToGeneralOps[A](xs: IndexedSeq[A]): GeneralIndexedSeqOps[A] = macro GeneralMacros.IndexedSeqToGeneralOps[A]
+  implicit def LinearSeqToGeneralOps[A](xs: LinearSeq[A]): GeneralLinearSeqOps[A]    = macro GeneralMacros.LinearSeqToGeneralOps[A]
+}
+
+private[collections] trait GeneralPriority3 {
   implicit def CollectionToGeneralOps[A](xs: Collection[A]): GeneralCollectionOps[A] = macro GeneralMacros.CollectionToGeneralOps[A]
   implicit def ContainerToGeneralOps[A](xs: Container[A]): GeneralContainerOps[A]    = macro GeneralMacros.ContainerToGeneralOps[A]
-  implicit def IndexedSeqToGeneralOps[A](xs: IndexedSeq[A]): GeneralIndexedSeqOps[A] = macro GeneralMacros.IndexedSeqToGeneralOps[A]
   implicit def IteratorToGeneralOps[A](xs: Iterator[A]): GeneralIteratorOps[A]       = macro GeneralMacros.IteratorToGeneralOps[A]
-  implicit def LinearSeqToGeneralOps[A](xs: LinearSeq[A]): GeneralLinearSeqOps[A]    = macro GeneralMacros.LinearSeqToGeneralOps[A]
   implicit def MapToGeneralOps[A, T](xs: Map[A, T]): GeneralMapOps[A, T]             = macro GeneralMacros.MapToGeneralOps[A, T]
   implicit def SeqToGeneralOps[A](xs: Seq[A]): GeneralSeqOps[A]                      = macro GeneralMacros.SeqToGeneralOps[A]
   implicit def SetToGeneralOps[A](xs: Set[A]): GeneralSetOps[A]                      = macro GeneralMacros.SetToGeneralOps[A]

@@ -9,14 +9,20 @@ package sequential
 
 import scala.reflect.macros._
 
-class Strict extends General {
+class Strict extends General with StrictPriority2 {
   implicit def ArrayToStrictOps[A](xs: Array[A]): StrictArrayOps[A, Array[A]]                 = macro StrictMacros.ArrayToStrictOps[A]
   implicit def BilinearSeqToStrictOps[A](xs: BilinearSeq[A]): StrictSeqOps[A, xs.Family]      = macro StrictMacros.SeqToStrictOps[A]
+}
+
+private[collections] trait StrictPriority2 extends StrictPriority3 {
+  implicit def IndexedSeqToStrictOps[A](xs: IndexedSeq[A]): StrictIndexedSeqOps[A, xs.Family] = macro StrictMacros.IndexedSeqToStrictOps[A]
+  implicit def LinearSeqToStrictOps[A](xs: LinearSeq[A]): StrictLinearSeqOps[A, xs.Family]    = macro StrictMacros.LinearSeqToStrictOps[A]
+}
+
+private[collections] trait StrictPriority3 {
   implicit def CollectionToStrictOps[A](xs: Collection[A]): StrictCollectionOps[A, xs.Family] = macro StrictMacros.CollectionToStrictOps[A]
   implicit def ContainerToStrictOps[A](xs: Container[A]): StrictContainerOps[A, xs.Family]    = macro StrictMacros.ContainerToStrictOps[A]
-  implicit def IndexedSeqToStrictOps[A](xs: IndexedSeq[A]): StrictIndexedSeqOps[A, xs.Family] = macro StrictMacros.IndexedSeqToStrictOps[A]
   implicit def IteratorToStrictOps[A](xs: Iterator[A]): StrictIteratorOps[A, xs.Family]       = macro StrictMacros.IteratorToStrictOps[A]
-  implicit def LinearSeqToStrictOps[A](xs: LinearSeq[A]): StrictLinearSeqOps[A, xs.Family]    = macro StrictMacros.LinearSeqToStrictOps[A]
   implicit def MapToStrictOps[A, T](xs: Map[A, T]): StrictMapOps[A, T, xs.Family]             = macro StrictMacros.MapToStrictOps[A, T]
   implicit def SeqToStringOps[A](xs: Seq[A]): StrictSeqOps[A, xs.Family]                      = macro StrictMacros.SeqToStrictOps[A]
   implicit def SetToStrictOps[A](xs: Set[A]): StrictSetOps[A, xs.Family]                      = macro StrictMacros.SetToStrictOps[A]

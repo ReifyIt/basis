@@ -74,11 +74,11 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
 
     override def contains(key: String): Boolean =
       if (size > 8) index.contains(key)
-      else (underlying: Container[(String, AnyDelta)]).exists(_._1.equals(key))
+      else underlying.exists(_._1.equals(key))
 
     override def get(key: String): Maybe[AnyDelta] =
       if (size > 8) index.get(key)
-      else (underlying: Container[(String, AnyDelta)]).find(_._1.equals(key)).map(_._2)
+      else underlying.find(_._1.equals(key)).map(_._2)
 
     override def apply(key: String): AnyDelta =
       if (size > 8) index(key)
@@ -163,11 +163,11 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
 
     override def contains(key: String): Boolean =
       if (size > 8) index.contains(key)
-      else (underlying: Container[(String, AnyForm)]).exists(_._1.equals(key))
+      else underlying.exists(_._1.equals(key))
 
     override def get(key: String): Maybe[AnyForm] =
       if (size > 8) index.get(key)
-      else (underlying: Container[(String, AnyForm)]).find(_._1.equals(key)).map(_._2)
+      else underlying.find(_._1.equals(key)).map(_._2)
 
     override def apply(key: String): AnyForm =
       if (size > 8) index(key)
@@ -211,11 +211,11 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
 
     override def - (key: String): ObjectForm =
       if (_index != null && !_index.contains(key)) this
-      else (underlying: Container[(String, AnyForm)]).filter(!_._1.equals(key))(ObjectFormBuilder)
+      else underlying.filter(!_._1.equals(key))(ObjectFormBuilder)
 
-    override def ++ (that: ObjectForm): ObjectForm = (underlying: Container[(String, AnyForm)]).++(that.underlying)(ObjectFormBuilder)
+    override def ++ (that: ObjectForm): ObjectForm = underlying.++(that.underlying)(ObjectFormBuilder)
 
-    override def -- (that: ObjectForm): ObjectForm = (underlying: Container[(String, AnyForm)]).filter(field => !that.contains(field._1))(ObjectFormBuilder)
+    override def -- (that: ObjectForm): ObjectForm = underlying.filter(field => !that.contains(field._1))(ObjectFormBuilder)
 
     override def iterator: Iterator[(String, AnyForm)] = underlying.iterator
 
@@ -242,7 +242,7 @@ object OmniVariant extends Variant with DeltaVariant with JsonVariant with BsonV
     override def apply(index: Int): AnyForm         = underlying(index)
     override def :+ (value: AnyForm): SeqForm       = new SeqForm(underlying :+ value)
     override def +: (value: AnyForm): SeqForm       = new SeqForm(value +: underlying)
-    override def ++ (that: SeqForm): SeqForm        = (underlying: Container[AnyForm]).++(that.underlying)(SeqFormBuilder)
+    override def ++ (that: SeqForm): SeqForm        = underlying.++(that.underlying)(SeqFormBuilder)
     override def iterator: Iterator[AnyForm]        = underlying.iterator
     override def traverse(f: AnyForm => Unit): Unit = underlying.traverse(f)
   }

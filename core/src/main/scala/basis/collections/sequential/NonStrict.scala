@@ -9,14 +9,20 @@ package sequential
 
 import scala.reflect.macros._
 
-class NonStrict extends General {
+class NonStrict extends General with NonStrictPriority2 {
   implicit def ArrayToNonStrictOps[A](xs: Array[A]): NonStrictArrayOps[A]                = macro NonStrictMacros.ArrayToNonStrictOps[A]
   implicit def BilinearSeqToNonStrictOps[A](xs: BilinearSeq[A]): NonStrictSeqOps[A]      = macro NonStrictMacros.SeqToNonStrictOps[A]
+}
+
+private[collections] trait NonStrictPriority2 extends NonStrictPriority3 {
+  implicit def IndexedSeqToNonStrictOps[A](xs: IndexedSeq[A]): NonStrictIndexedSeqOps[A] = macro NonStrictMacros.IndexedSeqToNonStrictOps[A]
+  implicit def LinearSeqToNonStrictOps[A](xs: LinearSeq[A]): NonStrictLinearSeqOps[A]    = macro NonStrictMacros.LinearSeqToNonStrictOps[A]
+}
+
+private[collections] trait NonStrictPriority3 {
   implicit def CollectionToNonStrictOps[A](xs: Collection[A]): NonStrictCollectionOps[A] = macro NonStrictMacros.CollectionToNonStrictOps[A]
   implicit def ContainerToNonStrictOps[A](xs: Container[A]): NonStrictContainerOps[A]    = macro NonStrictMacros.ContainerToNonStrictOps[A]
-  implicit def IndexedSeqToNonStrictOps[A](xs: IndexedSeq[A]): NonStrictIndexedSeqOps[A] = macro NonStrictMacros.IndexedSeqToNonStrictOps[A]
   implicit def IteratorToNonStrictOps[A](xs: Iterator[A]): NonStrictIteratorOps[A]       = macro NonStrictMacros.IteratorToNonStrictOps[A]
-  implicit def LinearSeqToNonStrictOps[A](xs: LinearSeq[A]): NonStrictLinearSeqOps[A]    = macro NonStrictMacros.LinearSeqToNonStrictOps[A]
   implicit def MapToNonStrictOps[A, T](xs: Map[A, T]): NonStrictMapOps[A, T]             = macro NonStrictMacros.MapToNonStrictOps[A, T]
   implicit def SeqToNonStrictOps[A](xs: Seq[A]): NonStrictSeqOps[A]                      = macro NonStrictMacros.SeqToNonStrictOps[A]
   implicit def SetToNonStrictOps[A](xs: Set[A]): NonStrictSetOps[A]                      = macro NonStrictMacros.SetToNonStrictOps[A]
