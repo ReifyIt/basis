@@ -114,9 +114,10 @@ private[data] class ReaderMacros(val c: blackbox.Context { type PrefixType <: Re
   def readArray[T](count: Expr[T])(T: Expr[Frame[T]])(implicit TTag: WeakTypeTag[T]): Expr[Array[T]] = Expr[Array[T]](q"""{
     val data = $prefix.__
     val T = $T
-    val xs = new Array[$TTag]($count)
     var i = 0
-    while (i < count) {
+    val n = $count
+    val xs = new Array[$TTag](n)
+    while (i < n) {
       xs(i) = T.read(data)
       i += 1
     }
@@ -126,9 +127,9 @@ private[data] class ReaderMacros(val c: blackbox.Context { type PrefixType <: Re
   def readToArray[T](array: Expr[Array[T]], start: Expr[Int], count: Expr[Int])(T: Expr[Frame[T]]): Expr[Unit] = Expr[Unit](q"""{
     val data = $prefix.__
     val T = $T
-    val xs = $array
     var i = $start
     val n = i + $count
+    val xs = $array
     while (i < n) {
       xs(i) = T.read(data)
       i += 1
