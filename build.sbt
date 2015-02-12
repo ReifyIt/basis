@@ -9,9 +9,9 @@ lazy val modules = Seq(
 
 lazy val basis = project
   .in(file("."))
-  .settings(commonSettings: _*)
+  .settings(moduleSettings: _*)
   .dependsOn(modules.map(module => module: ClasspathDep[ProjectReference]): _*)
-  .aggregate((modules :+ `basis-docs`).map(module => module: ProjectReference): _*)
+  .aggregate(modules.map(module => module: ProjectReference): _*)
 
 lazy val `basis-core` = project
   .in(file("core"))
@@ -46,14 +46,7 @@ lazy val `basis-util` = project
   .in(file("util"))
   .settings(moduleSettings: _*)
 
-lazy val `basis-docs` = project
-  .in(file("docs"))
-  .settings(moduleSettings: _*)
-  .dependsOn(modules.map(module => module: ClasspathDep[ProjectReference]): _*)
-
-lazy val commonSettings = projectSettings ++ docSettings ++ publishSettings
-
-lazy val moduleSettings = commonSettings ++ compileSettings
+lazy val moduleSettings = projectSettings ++ compileSettings ++ docSettings ++ publishSettings
 
 lazy val projectSettings = Seq(
   version := "0.2.0-SNAPSHOT",
@@ -61,11 +54,17 @@ lazy val projectSettings = Seq(
   description := "A foundation library for Scala focussed on efficiency and clean design",
   licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   homepage := Some(url("http://basis.reify.it")),
-  scalaVersion := "2.11.4",
-  scalacOptions ++= Seq("-language:_", "-Yno-predef"))
+  scalaVersion := "2.11.5",
+  scalacOptions in (Compile, console) := Seq(
+    "-language:_",
+    "-Yno-predef",
+    "-optimise",
+    "-deprecation"))
 
 lazy val compileSettings = Seq(
   scalacOptions ++= Seq(
+    "-language:_",
+    "-Yno-predef",
     "-optimise",
     "-deprecation",
     "-unchecked",

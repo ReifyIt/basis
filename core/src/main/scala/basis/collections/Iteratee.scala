@@ -32,7 +32,7 @@ trait Iteratee[-I, +O] {
   def run(input: Iterator[I]): Iteratee[I, O] = {
     var next = this
     while (!input.isEmpty && next.isCont) next = next.feed(input)
-    if (input.isEmpty && !input.isDone) next = next.feed(Iterator.done)
+    if (input.isEmpty && !input.isDone && next.isCont) next = next.feed(Iterator.done)
     next
   }
 

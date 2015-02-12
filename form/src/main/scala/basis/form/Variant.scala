@@ -254,6 +254,8 @@ trait Variant { variant =>
 
     def toDecimalString: String
 
+    override def in(domain: Variant): domain.NumberForm
+
     override def canEqual(other: Any): Boolean = other.isInstanceOf[BaseNumber]
 
     override def equals(other: Any): Boolean = eq(other.asInstanceOf[AnyRef]) || (other match {
