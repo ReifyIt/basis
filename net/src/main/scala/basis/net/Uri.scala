@@ -20,6 +20,61 @@ class Uri private[net] (
     scheme.isDefined || authority.isDefined ||
     path.isDefined || query.isDefined || fragment.isDefined
 
+  def resolve(relative: Uri): Uri = {
+    if (relative.scheme.isDefined)
+      new Uri(
+        relative.scheme,
+        relative.authority,
+        relative.path.removeDotSegments,
+        relative.query,
+        relative.fragment)
+    else if (relative.authority.isDefined)
+      new Uri(
+        scheme,
+        relative.authority,
+        relative.path.removeDotSegments,
+        relative.query,
+        relative.fragment)
+    else if (relative.path.isEmpty)
+      new Uri(
+        scheme,
+        authority,
+        path,
+        if (relative.query.isDefined) relative.query else query,
+        relative.fragment)
+    else if (relative.path.head.equals("/"))
+      new Uri(
+        scheme,
+        authority,
+        relative.path.removeDotSegments,
+        relative.query,
+        relative.fragment)
+    else
+      new Uri(
+        scheme,
+        authority,
+        merge(relative.path).removeDotSegments,
+        relative.query,
+        relative.fragment)
+  }
+
+  private def merge(relative: Path): Path =
+    if (authority.isDefined && path.isEmpty) "/" :: relative
+    else if (path.isEmpty) relative
+    else {
+      val builder = Path.Builder
+      var head = path.head
+      var tail = path.tail
+      while (!tail.isEmpty) {
+        builder.append(head)
+        head = tail.head
+        tail = tail.tail
+      }
+      if (head.equals("/")) builder.append(head)
+      builder.appendPath(relative)
+      builder.state
+    }
+
   def writeUriString(builder: StringBuilder): Unit = {
     if (scheme.isDefined) {
       scheme.writeUriString(builder)
@@ -47,6 +102,15 @@ class Uri private[net] (
     writeUriString(builder)
     builder.state
   }
+
+  def copy(
+      scheme: Scheme = this.scheme,
+      authority: Authority = this.authority,
+      path: Path = this.path,
+      query: Query = this.query,
+      fragment: Fragment = this.fragment)
+    : Uri =
+    new Uri(scheme, authority, path, query, fragment)
 
   override def equals(other: Any): Boolean =
     eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Uri] && {

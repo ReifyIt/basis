@@ -194,18 +194,6 @@ private[net] class UriExprFactory[C <: blackbox.Context](val c: C) extends UriPa
       if (builder eq null) q"_root_.basis.net.Path.empty"
       else q"$builder.state"
     }
-
-    //private[this] val self = mutable.ArrayBuffer.empty[PathSegment]
-    //override def append(segment: PathSegment): Unit = self.append(segment)
-    //override def appendPath(path: Path): Unit = Predef.???
-    //override def clear(): Unit = self.clear()
-    //override def state: Path = Expr[basis.net.Path] {
-    //  if (self.isEmpty) q"_root_.basis.net.Path.Empty"
-    //  else {
-    //    val builder = self.foldLeft(q"_root_.basis.net.Path.Builder": Tree)((b, e) => q"$b += $e")
-    //    q"$builder.state"
-    //  }
-    //}
   }
 
 

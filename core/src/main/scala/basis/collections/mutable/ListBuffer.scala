@@ -30,13 +30,16 @@ class ListBuffer[A] private (
 
   override def apply(index: Int): A = {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index.toString)
-    var i = 0
-    var xs = first
-    while (i < index) {
-      xs = xs.tail
-      i += 1
+    if (index > 0 && index == size - 1) last.head
+    else {
+      var i = 0
+      var xs = first
+      while (i < index) {
+        xs = xs.tail
+        i += 1
+      }
+      xs.head
     }
-    xs.head
   }
 
   override def update(index: Int, elem: A): Unit = {

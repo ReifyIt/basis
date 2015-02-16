@@ -31,6 +31,9 @@ final class Authority private[net] (val host: Host, val port: Port, val userInfo
     builder.state
   }
 
+  def copy(host: Host = this.host, port: Port = this.port, userInfo: UserInfo = this.userInfo): Authority =
+    new Authority(host, port, userInfo)
+
   override def equals(other: Any): Boolean =
     eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Authority] && {
       val that = other.asInstanceOf[Authority]

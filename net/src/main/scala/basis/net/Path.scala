@@ -32,6 +32,47 @@ sealed abstract class Path private[net]
 
   def / : Path = (new PathBuilder() ++= this += "/").state
 
+  def removeDotSegments: Path = {
+    var path = this
+    val buffer = new PathBuilder()
+    while (!path.isEmpty) {
+      if (path.head.equals(".") || path.head.equals("..")) {
+        path = path.tail
+        if (!path.isEmpty) path = path.tail
+      }
+      else if (path.head.equals("/")) {
+        val rest = path.tail
+        if (!rest.isEmpty) {
+          if (rest.head.equals(".")) {
+            path = rest.tail
+            if (path.isEmpty) path = Path.Slash
+          }
+          else if (rest.head.equals("..")) {
+            path = rest.tail
+            if (path.isEmpty) path = Path.Slash
+            if (!buffer.isEmpty && !buffer.dropFoot().equals("/")) {
+              if (!buffer.isEmpty) buffer.dropFoot()
+            }
+          }
+          else {
+            buffer.append(path.head)
+            buffer.append(rest.head)
+            path = rest.tail
+          }
+        }
+        else {
+          buffer.append(path.head)
+          path = path.tail
+        }
+      }
+      else {
+        buffer.append(path.head)
+        path = path.tail
+      }
+    }
+    buffer.state
+  }
+
   def writeUriString(builder: StringBuilder): Unit = writeUriString(this)(builder)
   @tailrec private[this] def writeUriString(path: Path)(builder: StringBuilder): Unit =
     if (!path.isEmpty) {
@@ -118,7 +159,9 @@ object Path extends Uri.PathFactory {
 
     private[net] def tail_=(tail: SlashOrEmpty): Unit = rest = tail
 
-    override def :: (segment: String): Path = new Segment(segment, new Slash(this))
+    override def :: (segment: String): Path =
+      if (segment == "/") new Slash(this)
+      else new Segment(segment, new Slash(this))
   }
 
   sealed abstract class SlashOrEmpty private[net] extends Path {
@@ -162,6 +205,8 @@ private[net] final class PathBuilder(
   extends Uri.PathBuilder {
 
   def this() = this(Path.Empty, null, 0, 0)
+
+  def isEmpty: Boolean = size == 0
 
   override def append(segment: String): Unit = {
     if (segment == "/") {
@@ -209,6 +254,29 @@ private[net] final class PathBuilder(
   }
 
   override def appendPath(path: Path) = appendAll(path)
+
+  def dropFoot(): String = {
+    if (size == 0) throw new UnsupportedOperationException()
+    if (size == 1) {
+      val x0 = first
+      val x = x0.head
+      first = x0.tail
+      if (x0.tail.isEmpty) last = null
+      size -= 1
+      if (aliased > 0) aliased -= 1
+      x
+    }
+    else {
+      val xi = dealias(size - 2)
+      val x = xi.tail.head
+      if (xi.isInstanceOf[Path.Slash]) xi.asInstanceOf[Path.Slash].tail = Path.Empty
+      else xi.asInstanceOf[Path.Segment].tail = Path.Empty
+      last = xi
+      size -= 1
+      aliased -= 1
+      x
+    }
+  }
 
   override def clear(): Unit = {
     first = Path.Empty

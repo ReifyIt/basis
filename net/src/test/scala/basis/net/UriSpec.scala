@@ -265,4 +265,58 @@ class UriSpec extends FlatSpec with Matchers {
     Uri("scheme://user@domain:80/path?query#fragment") should equal (
       Uri(Scheme("scheme"), Authority(Host.Name("domain"), Port(80), UserInfo("user")), Path / "path", Query.Part("query"), Fragment.Part("fragment")))
   }
+
+
+  "Relative URI resolution" should "resolve normal URI references" in {
+    val base = uri"http://a/b/c/d;p?q"
+    base.resolve(uri"g:h") should equal (uri"g:h")
+    base.resolve(uri"g") should equal (uri"http://a/b/c/g")
+    base.resolve(uri"./g") should equal (uri"http://a/b/c/g")
+    base.resolve(uri"g/") should equal (uri"http://a/b/c/g/")
+    base.resolve(uri"/g") should equal (uri"http://a/g")
+    base.resolve(uri"//g") should equal (uri"http://g")
+    base.resolve(uri"?y") should equal (uri"http://a/b/c/d;p?y")
+    base.resolve(uri"g?y") should equal (uri"http://a/b/c/g?y")
+    base.resolve(uri"#s") should equal (uri"http://a/b/c/d;p?q#s")
+    base.resolve(uri"g#s") should equal (uri"http://a/b/c/g#s")
+    base.resolve(uri"g?y#s") should equal (uri"http://a/b/c/g?y#s")
+    base.resolve(uri";x") should equal (uri"http://a/b/c/;x")
+    base.resolve(uri"g;x") should equal (uri"http://a/b/c/g;x")
+    base.resolve(uri"g;x?y#s") should equal (uri"http://a/b/c/g;x?y#s")
+    base.resolve(uri"") should equal (uri"http://a/b/c/d;p?q")
+    base.resolve(uri".") should equal (uri"http://a/b/c/")
+    base.resolve(uri"./") should equal (uri"http://a/b/c/")
+    base.resolve(uri"..") should equal (uri"http://a/b/")
+    base.resolve(uri"../") should equal (uri"http://a/b/")
+    base.resolve(uri"../g") should equal (uri"http://a/b/g")
+    base.resolve(uri"../..") should equal (uri"http://a/")
+    base.resolve(uri"../../") should equal (uri"http://a/")
+    base.resolve(uri"../../g") should equal (uri"http://a/g")
+  }
+
+  it should "resolve abnormal URI references" in {
+    val base = uri"http://a/b/c/d;p?q"
+
+    base.resolve(uri"../../../g") should equal (uri"http://a/g")
+    base.resolve(uri"../../../../g") should equal (uri"http://a/g")
+
+    base.resolve(uri"/./g") should equal (uri"http://a/g")
+    base.resolve(uri"/../g") should equal (uri"http://a/g")
+    base.resolve(uri"g.") should equal (uri"http://a/b/c/g.")
+    base.resolve(uri".g") should equal (uri"http://a/b/c/.g")
+    base.resolve(uri"g..") should equal (uri"http://a/b/c/g..")
+    base.resolve(uri"..g") should equal (uri"http://a/b/c/..g")
+
+    base.resolve(uri"./../g") should equal (uri"http://a/b/g")
+    base.resolve(uri"./g/.") should equal (uri"http://a/b/c/g/")
+    base.resolve(uri"g/./h") should equal (uri"http://a/b/c/g/h")
+    base.resolve(uri"g/../h") should equal (uri"http://a/b/c/h")
+    base.resolve(uri"g;x=1/./y") should equal (uri"http://a/b/c/g;x=1/y")
+    base.resolve(uri"g;x=1/../y") should equal (uri"http://a/b/c/y")
+
+    base.resolve(uri"g?y/./x") should equal (uri"http://a/b/c/g?y/./x")
+    base.resolve(uri"g?y/../x") should equal (uri"http://a/b/c/g?y/../x")
+    base.resolve(uri"g#s/./x") should equal (uri"http://a/b/c/g#s/./x")
+    base.resolve(uri"g#s/../x") should equal (uri"http://a/b/c/g#s/../x")
+  }
 }
