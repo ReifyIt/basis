@@ -72,7 +72,7 @@ sealed abstract class Query private[net]
 }
 
 object Query extends Uri.QueryFactory {
-  override def Undefined: Query = new Undefined()
+  override val Undefined: Query = new Undefined()
 
   override def Part(query: String): Query = new Part(query)
 

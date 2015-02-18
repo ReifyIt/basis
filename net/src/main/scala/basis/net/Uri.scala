@@ -168,11 +168,11 @@ object Uri extends UriParser {
   val empty: Uri = apply()
 
   override def apply(
-      scheme: Scheme = Scheme.Undefined,
-      authority: Authority = Authority.Undefined,
-      path: Path = Path.Empty,
-      query: Query = Query.Undefined,
-      fragment: Fragment = Fragment.Undefined)
+      scheme: Scheme = basis.net.Scheme.Undefined,
+      authority: Authority = basis.net.Authority.Undefined,
+      path: Path = basis.net.Path.Empty,
+      query: Query = basis.net.Query.Undefined,
+      fragment: Fragment = basis.net.Fragment.Undefined)
     : Uri =
     new Uri(scheme, authority, path, query, fragment)
 
