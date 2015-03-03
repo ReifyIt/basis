@@ -122,7 +122,11 @@ final class HashTrieMap[+A, +T] private[collections] (
     else {
       var i = 0
       var j = 0
-      val slots = new Array[AnyRef](newSlotMap.countSetBits + newLeafMap.countSetBits)
+      val size = newSlotMap.countSetBits + newLeafMap.countSetBits
+      if (size == 0) {
+        return HashTrieMap.empty
+      }
+      val slots = new Array[AnyRef](size)
       while (newSlotMap != 0) {
         if ((oldSlotMap & newSlotMap & 1) == 1) slots(j) = this.slots(i)
         if ((oldSlotMap & 1) == 1) i += 1
