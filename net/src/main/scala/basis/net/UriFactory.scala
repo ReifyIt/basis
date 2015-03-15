@@ -105,6 +105,8 @@ trait UriFactory {
 
     def Segment(segment: String): PathSegment
 
+    def Part(segment: PathSegment): Path
+
     def unapply(part: Part): Maybe[Path]
 
     def Builder: PathBuilder

@@ -157,6 +157,9 @@ private[net] class UriExprFactory[C <: blackbox.Context](val c: C) extends UriPa
     override def Segment(segment: String): PathSegment =
       Expr[String](Literal(Constant(segment)))
 
+    override def Part(segment: PathSegment): Path =
+      Expr[basis.net.Path](q"_root_.basis.net.Path.Part($segment)")
+
     override def unapply(part: Part): Maybe[Path] =
       if (part.actualType <:< PathTag.tpe)
         basis.Bind(part.asInstanceOf[Expr[basis.net.Path]])

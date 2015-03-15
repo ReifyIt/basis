@@ -124,6 +124,8 @@ object Path extends Uri.PathFactory {
 
   override def Segment(segment: String): String = segment
 
+  override def Part(segment: String): Path = new Segment(segment, Empty)
+
   implicit def apply(path: String): Path = {
     val input = new UString(path).iterator
     var result = Uri.PathParser.run(input)
