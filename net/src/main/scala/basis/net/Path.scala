@@ -20,6 +20,8 @@ sealed abstract class Path private[net]
 
   def isDefined: Boolean
 
+  def isRelative: Boolean
+
   override def isEmpty: Boolean
 
   override def head: String
@@ -72,6 +74,42 @@ sealed abstract class Path private[net]
     }
     buffer.state
   }
+
+  def merge(that: Path): Path = {
+    val builder = Path.Builder
+    var head = this.head
+    var tail = this.tail
+    while (!tail.isEmpty) {
+      builder.append(head)
+      head = tail.head
+      tail = tail.tail
+    }
+    if (head.equals("/")) builder.append(head)
+    builder.appendPath(that)
+    builder.state
+  }
+
+  def unmerge(that: Path): Path = unmerge(that, that)
+
+  @tailrec private def unmerge(that: Path, root: Path): Path =
+    if (isEmpty) {
+      if (!that.isEmpty && !that.tail.isEmpty) that.tail
+      else that
+    }
+    else if (isRelative) that
+    else if (that.isRelative) new Path.Slash(that)
+    else {
+      var a = tail
+      var b = that.tail
+      if (!a.isEmpty && b.isEmpty) Path.Slash
+      else if (a.isEmpty || b.isEmpty || !a.head.equals(b.head)) b
+      else {
+        a = a.tail
+        b = b.tail
+        if (!a.isEmpty && b.isEmpty) root
+        else a.unmerge(b, root)
+      }
+    }
 
   def writeUriString(builder: StringBuilder): Unit = writeUriString(this)(builder)
   @tailrec private[this] def writeUriString(path: Path)(builder: StringBuilder): Unit =
@@ -155,6 +193,8 @@ object Path extends Uri.PathFactory {
 
     override def isDefined: Boolean = true
 
+    override def isRelative: Boolean = true
+
     override def isEmpty: Boolean = false
 
     override def tail: SlashOrEmpty = rest
@@ -162,7 +202,7 @@ object Path extends Uri.PathFactory {
     private[net] def tail_=(tail: SlashOrEmpty): Unit = rest = tail
 
     override def :: (segment: String): Path =
-      if (segment == "/") new Slash(this)
+      if (segment.equals("/")) new Slash(this)
       else new Segment(segment, new Slash(this))
   }
 
@@ -172,6 +212,8 @@ object Path extends Uri.PathFactory {
 
   sealed class Slash private[net] (private[this] var rest: Path) extends SlashOrEmpty {
     override def isDefined: Boolean = true
+
+    override def isRelative: Boolean = false
 
     override def isEmpty: Boolean = false
 
@@ -188,6 +230,8 @@ object Path extends Uri.PathFactory {
 
   object Empty extends SlashOrEmpty {
     override def isDefined: Boolean = false
+
+    override def isRelative: Boolean = true
 
     override def isEmpty: Boolean = true
 
@@ -211,7 +255,7 @@ private[net] final class PathBuilder(
   def isEmpty: Boolean = size == 0
 
   override def append(segment: String): Unit = {
-    if (segment == "/") {
+    if (segment.equals("/")) {
       val xn = new Path.Slash(Path.Empty)
       if (size == 0) first = xn
       else {

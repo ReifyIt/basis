@@ -319,4 +319,37 @@ class UriSpec extends FlatSpec with Matchers {
     base.resolve(uri"g#s/./x") should equal (uri"http://a/b/c/g#s/./x")
     base.resolve(uri"g#s/../x") should equal (uri"http://a/b/c/g#s/../x")
   }
+
+  it should "unresolve related URIs" in {
+    uri"http://example.com".unresolve(uri"http://example.com") should equal (Uri.empty)
+    uri"http://example.com".unresolve(uri"http://example.com/") should equal (uri"/")
+    uri"http://example.com".unresolve(uri"http://example.com/path") should equal (uri"path")
+    uri"http://example.com".unresolve(uri"http://example.com?query") should equal (uri"?query")
+    uri"http://example.com".unresolve(uri"http://example.com#fragment") should equal (uri"#fragment")
+    uri"http://example.com/".unresolve(uri"http://example.com") should equal (uri"/")
+    uri"http://example.com/".unresolve(uri"http://example.com/") should equal (Uri.empty)
+    uri"http://example.com/".unresolve(uri"http://example.com/path") should equal (uri"path")
+    uri"http://example.com/".unresolve(uri"http://example.com?query") should equal (uri"/?query")
+    uri"http://example.com/".unresolve(uri"http://example.com#fragment") should equal (uri"/#fragment")
+    uri"http://example.com/base".unresolve(uri"http://example.com") should equal (uri"/")
+    uri"http://example.com/base".unresolve(uri"http://example.com/") should equal (uri"/")
+    uri"http://example.com/base".unresolve(uri"http://example.com/path") should equal (uri"path")
+    uri"http://example.com/base".unresolve(uri"http://example.com?query") should equal (uri"/?query")
+    uri"http://example.com/base".unresolve(uri"http://example.com#fragment") should equal (uri"/#fragment")
+    uri"http://example.com/base".unresolve(uri"http://example.com/base") should equal (Uri.empty)
+    uri"http://example.com/base".unresolve(uri"http://example.com/base/") should equal (uri"/")
+    uri"http://example.com/base".unresolve(uri"http://example.com/base/path") should equal (uri"path")
+    uri"http://example.com/base".unresolve(uri"http://example.com/base?query") should equal (uri"?query")
+    uri"http://example.com/base".unresolve(uri"http://example.com/base#fragment") should equal (uri"#fragment")
+    uri"http://example.com/base/".unresolve(uri"http://example.com/base") should equal (uri"/base")
+    uri"http://example.com/base/".unresolve(uri"http://example.com/base/") should equal (Uri.empty)
+    uri"http://example.com/base/".unresolve(uri"http://example.com/base/path") should equal (uri"path")
+    uri"http://example.com/base/".unresolve(uri"http://example.com/base?query") should equal (uri"/base?query")
+    uri"http://example.com/base/".unresolve(uri"http://example.com/base#fragment") should equal (uri"/base#fragment")
+  }
+
+  it should "unresolve unrelated URIs" in {
+    uri"http://example.com".unresolve(uri"https://example.com") should equal (uri"https://example.com")
+    uri"http://example.com".unresolve(uri"http://example.org") should equal (uri"http://example.org")
+  }
 }

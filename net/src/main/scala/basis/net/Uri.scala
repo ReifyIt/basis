@@ -20,7 +20,7 @@ class Uri private[net] (
     scheme.isDefined || authority.isDefined ||
     path.isDefined || query.isDefined || fragment.isDefined
 
-  def resolve(relative: Uri): Uri = {
+  def resolve(relative: Uri): Uri =
     if (relative.scheme.isDefined)
       new Uri(
         relative.scheme,
@@ -56,24 +56,21 @@ class Uri private[net] (
         merge(relative.path).removeDotSegments,
         relative.query,
         relative.fragment)
-  }
 
   private def merge(relative: Path): Path =
     if (authority.isDefined && path.isEmpty) "/" :: relative
     else if (path.isEmpty) relative
-    else {
-      val builder = Path.Builder
-      var head = path.head
-      var tail = path.tail
-      while (!tail.isEmpty) {
-        builder.append(head)
-        head = tail.head
-        tail = tail.tail
-      }
-      if (head.equals("/")) builder.append(head)
-      builder.appendPath(relative)
-      builder.state
-    }
+    else path.merge(relative)
+
+  def unresolve(that: Uri): Uri =
+    if (!scheme.equals(that.scheme) || !authority.equals(that.authority)) that
+    else
+      new Uri(
+        Scheme.Undefined,
+        Authority.Undefined,
+        path.unmerge(that.path),
+        that.query,
+        that.fragment)
 
   def writeUriString(builder: StringBuilder): Unit = {
     if (scheme.isDefined) {

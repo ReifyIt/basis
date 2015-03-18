@@ -40,9 +40,11 @@ final class Authority private[net] (val host: Host, val port: Port, val userInfo
       host.equals(that.host) && port.equals(that.port) && userInfo.equals(that.userInfo)
     }
 
+  private[this] var code: Int = 0
   override def hashCode: Int = {
     import MurmurHash3._
-    mash(mix(mix(mix(seed[Authority], host.hashCode), port.hashCode), userInfo.hashCode))
+    if (code == 0) code = mash(mix(mix(mix(seed[Authority], host.hashCode), port.hashCode), userInfo.hashCode))
+    code
   }
 
   override def toString: String = {
