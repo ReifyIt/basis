@@ -28,6 +28,37 @@ sealed abstract class Path private[net]
 
   override def tail: Path
 
+  def body: Path = {
+    if (isEmpty) throw new UnsupportedOperationException("body of empty path")
+    val builder = Path.Builder
+    var path = this
+    var head = path.head
+    path = path.tail
+    while (!path.isEmpty) {
+      builder.append(head)
+      head = path.head
+      path = path.tail
+    }
+    builder.state
+  }
+
+  def foot: String = {
+    if (isEmpty) throw new UnsupportedOperationException("foot of empty path")
+    var path = this
+    var head = path.head
+    path = path.tail
+    while (!path.isEmpty) {
+      head = path.head
+      path = path.tail
+    }
+    head
+  }
+
+  def reverse: Path = reverse(this, Path.Empty)
+  @tailrec private def reverse(xs: Path, ys: Path): Path =
+    if (xs.isEmpty) ys
+    else reverse(xs.tail, xs.head :: ys)
+
   def :: (segment: String): Path
 
   def / (segment: String): Path = (new PathBuilder() ++= this += segment).state
