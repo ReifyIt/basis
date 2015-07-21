@@ -776,6 +776,7 @@ trait UriParser extends UriFactory { Uri =>
         }
         if (s == 3) {
           if (!input.isEmpty && { c = input.head; isHexChar(c) }) {
+            if (builder eq null) builder = UTF8.Decoder(String.Builder)
             input.step()
             builder.append((decodeHex(c1) << 4) + decodeHex(c))
             c1 = 0

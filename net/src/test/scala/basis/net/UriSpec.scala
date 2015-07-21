@@ -100,6 +100,10 @@ class UriSpec extends FlatSpec with Matchers {
     Uri("/one/!$&()*+,;='/three") should equal (Uri(path = Path / "one" / "!$&()*+,;='" / "three"))
   }
 
+  it should "parse URIs with paths beginning with percent escapes" in {
+    Uri("%20") should equal(Uri(path = Path.Part(" ")))
+  }
+
   it should "parse URIs with empty queries" in {
     Uri("?") should equal (Uri(query = Query.Part("")))
   }
