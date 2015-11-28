@@ -7,6 +7,7 @@
 package basis.data
 
 import basis._
+import basis.collections._
 import basis.text._
 import basis.util._
 import scala.reflect.macros._
@@ -112,7 +113,7 @@ final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
     framer.state
   }
 
-  def writeBase16(builder: StringBuilder): Unit = {
+  def writeBase16(builder: Builder[Int]): Unit = {
     def encodeDigit(digit: Int): Int = {
       if      (digit >=  0 && digit < 10) digit + ('0'     )
       else if (digit >= 10 && digit < 16) digit + ('A' - 10)
@@ -128,7 +129,7 @@ final class LoaderOps[-Family](val __ : Loader) extends AnyVal {
     }
   }
 
-  def writeBase64(builder: StringBuilder): Unit = {
+  def writeBase64(builder: Builder[Int]): Unit = {
     def encodeDigit(digit: Int): Int = {
       if      (digit >=  0 && digit < 26) digit + ('A'     )
       else if (digit >= 26 && digit < 52) digit + ('a' - 26)
