@@ -7,6 +7,7 @@
 package basis.net
 
 import basis._
+import basis.collections._
 import basis.text._
 import basis.util._
 
@@ -19,7 +20,7 @@ sealed abstract class UserInfo private[net] extends UriPart {
 
   def part: String
 
-  def writeUriString(builder: StringBuilder): Unit
+  def writeUriString(builder: Builder[Int]): Unit
 
   def toUriString: String = {
     val builder = String.Builder
@@ -77,17 +78,18 @@ object UserInfo extends Uri.UserInfoFactory {
       builder.state
     }
 
-    override def writeUriString(builder: StringBuilder): Unit = {
+    override def writeUriString(builder: Builder[Int]): Unit = {
       Uri.writeUser(username)(builder)
       builder.append(':')
       Uri.writeUserInfo(password)(builder)
     }
 
-    override def equals(other: Any): Boolean =
+    override def equals(other: Any): Boolean = {
       eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Login] && {
         val that = other.asInstanceOf[Login]
         username.equals(that.username) && password.equals(that.password)
       }
+    }
 
     override def hashCode: Int = {
       import MurmurHash3._
@@ -102,12 +104,14 @@ object UserInfo extends Uri.UserInfoFactory {
 
     override def password: String = ""
 
-    override def writeUriString(builder: StringBuilder): Unit =
+    override def writeUriString(builder: Builder[Int]): Unit = {
       Uri.writeUserInfo(part)(builder)
+    }
 
-    override def equals(other: Any): Boolean =
+    override def equals(other: Any): Boolean = {
       eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Part] &&
       part.equals(other.asInstanceOf[Part].part)
+    }
 
     override def hashCode: Int = {
       import MurmurHash3._
@@ -124,7 +128,7 @@ object UserInfo extends Uri.UserInfoFactory {
 
     override def part: String = ""
 
-    override def writeUriString(builder: StringBuilder): Unit = ()
+    override def writeUriString(builder: Builder[Int]): Unit = ()
 
     override def toUriString: String = ""
 

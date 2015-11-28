@@ -7,6 +7,7 @@
 package basis.net
 
 import basis._
+import basis.collections._
 import basis.text._
 import basis.util._
 
@@ -19,7 +20,7 @@ sealed abstract class Host private[net] extends UriPart {
 
   def address: String
 
-  def writeUriString(builder: StringBuilder): Unit
+  def writeUriString(builder: Builder[Int]): Unit
 
   def toUriString: String = {
     val builder = String.Builder
@@ -62,12 +63,14 @@ object Host extends Uri.HostFactory {
 
     override def isName: Boolean = true
 
-    override def writeUriString(builder: StringBuilder): Unit =
+    override def writeUriString(builder: Builder[Int]): Unit = {
       Uri.writeHost(address)(builder)
+    }
 
-    override def equals(other: Any): Boolean =
+    override def equals(other: Any): Boolean = {
       eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Name] &&
       address.equals(other.asInstanceOf[Name].address)
+    }
 
     override def hashCode: Int = {
       import MurmurHash3._
@@ -82,12 +85,14 @@ object Host extends Uri.HostFactory {
 
     override def isIPv4: Boolean = true
 
-    override def writeUriString(builder: StringBuilder): Unit =
+    override def writeUriString(builder: Builder[Int]): Unit = {
       Uri.writeHost(address)(builder)
+    }
 
-    override def equals(other: Any): Boolean =
+    override def equals(other: Any): Boolean = {
       eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[IPv4] &&
       address.equals(other.asInstanceOf[IPv4].address)
+    }
 
     override def hashCode: Int = {
       import MurmurHash3._
@@ -102,15 +107,16 @@ object Host extends Uri.HostFactory {
 
     override def isIPv6: Boolean = true
 
-    override def writeUriString(builder: StringBuilder): Unit = {
+    override def writeUriString(builder: Builder[Int]): Unit = {
       builder.append('[')
       Uri.writeHost(address)(builder)
       builder.append(']')
     }
 
-    override def equals(other: Any): Boolean =
+    override def equals(other: Any): Boolean = {
       eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[IPv6] &&
       address.equals(other.asInstanceOf[IPv6].address)
+    }
 
     override def hashCode: Int = {
       import MurmurHash3._
@@ -125,7 +131,7 @@ object Host extends Uri.HostFactory {
 
     override def address: String = ""
 
-    override def writeUriString(builder: StringBuilder): Unit = ()
+    override def writeUriString(builder: Builder[Int]): Unit = ()
 
     override def toString: String = (String.Builder~"Host"~'.'~"Undefined").state
   }

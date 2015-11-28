@@ -7,6 +7,7 @@
 package basis.net
 
 import basis._
+import basis.collections._
 import basis.text._
 import basis.util._
 
@@ -15,8 +16,9 @@ final class Fragment private[net] (private val fragment: String) extends UriPart
 
   def part: String = if (fragment ne null) fragment else ""
 
-  def writeUriString(builder: StringBuilder): Unit =
+  def writeUriString(builder: Builder[Int]): Unit = {
     if (fragment ne null) Uri.writeFragment(fragment)(builder)
+  }
 
   def toUriString: String = {
     val builder = String.Builder
@@ -24,9 +26,10 @@ final class Fragment private[net] (private val fragment: String) extends UriPart
     builder.state
   }
 
-  override def equals(other: Any): Boolean =
+  override def equals(other: Any): Boolean = {
     eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Fragment] &&
     fragment == other.asInstanceOf[Fragment].fragment
+  }
 
   override def hashCode: Int = {
     import MurmurHash3._

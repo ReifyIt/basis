@@ -55,9 +55,10 @@ sealed abstract class Path private[net]
   }
 
   def reverse: Path = reverse(this, Path.Empty)
-  @tailrec private def reverse(xs: Path, ys: Path): Path =
+  @tailrec private def reverse(xs: Path, ys: Path): Path = {
     if (xs.isEmpty) ys
     else reverse(xs.tail, xs.head :: ys)
+  }
 
   def :: (segment: String): Path
 
@@ -142,13 +143,14 @@ sealed abstract class Path private[net]
       }
     }
 
-  def writeUriString(builder: StringBuilder): Unit = writeUriString(this)(builder)
-  @tailrec private[this] def writeUriString(path: Path)(builder: StringBuilder): Unit =
+  def writeUriString(builder: Builder[Int]): Unit = writeUriString(this)(builder)
+  @tailrec private[this] def writeUriString(path: Path)(builder: Builder[Int]): Unit = {
     if (!path.isEmpty) {
       if (path.isInstanceOf[Path.Slash]) builder.append('/')
       else Uri.writePathSegment(path.head)(builder)
       writeUriString(path.tail)(builder)
     }
+  }
 
   def toUriString: String = {
     val builder = String.Builder
@@ -158,18 +160,21 @@ sealed abstract class Path private[net]
 
   override def canEqual(other: Any): Boolean = other.isInstanceOf[Path]
 
-  override def equals(other: Any): Boolean =
+  override def equals(other: Any): Boolean = {
     eq(other.asInstanceOf[AnyRef]) ||
     other.isInstanceOf[Path] && equals(this, other.asInstanceOf[Path])
-  @tailrec private[this] def equals(these: Path, those: Path): Boolean =
+  }
+  @tailrec private[this] def equals(these: Path, those: Path): Boolean = {
     if (these.isEmpty) those.isEmpty
     else if (those.isEmpty) these.isEmpty
     else these.head.equals(those.head) && equals(these.tail, those.tail)
+  }
 
   override def hashCode: Int = hash(MurmurHash3.seed[Path], this)
-  @tailrec private[this] def hash(code: Int, path: Path): Int =
+  @tailrec private[this] def hash(code: Int, path: Path): Int = {
     if (path.isEmpty) MurmurHash3.mash(code)
     else hash(MurmurHash3.mix(code, path.head.hashCode), path.tail)
+  }
 
   override def toString: String = {
     val s = String.Builder~"Path"~'('~'"'
@@ -232,9 +237,10 @@ object Path extends Uri.PathFactory {
 
     private[net] def tail_=(tail: SlashOrEmpty): Unit = rest = tail
 
-    override def :: (segment: String): Path =
+    override def :: (segment: String): Path = {
       if (segment.equals("/")) new Slash(this)
       else new Segment(segment, new Slash(this))
+    }
   }
 
   sealed abstract class SlashOrEmpty private[net] extends Path {

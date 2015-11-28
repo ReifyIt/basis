@@ -445,7 +445,7 @@ private[data] final class FingerTrieDataLEFramer(
   override def writeDouble(value: Double): Unit = writeLong(value.toRawLongBits)
 
   override def writeData(data: Loader): Unit = data match {
-    case _ if data.size == 0 => ()
+    case _ if data.size == 0L => ()
     case that: FingerTrieData =>
       val offset = skew
       if (length == 0L) {
@@ -485,7 +485,7 @@ private[data] final class FingerTrieDataLEFramer(
   }
 
   override def state: FingerTrieDataLE = {
-    if (length == 0) FingerTrieDataLE.empty
+    if (length == 0L) FingerTrieDataLE.empty
     else {
       val offset = skew
       if (offset != 0 && offset != buffer.length) {

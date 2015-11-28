@@ -6,6 +6,7 @@
 
 package basis.net
 
+import basis.collections._
 import basis.text._
 import basis.util._
 
@@ -20,7 +21,7 @@ class Uri private[net] (
     scheme.isDefined || authority.isDefined ||
     path.isDefined || query.isDefined || fragment.isDefined
 
-  def resolve(relative: Uri): Uri =
+  def resolve(relative: Uri): Uri = {
     if (relative.scheme.isDefined)
       new Uri(
         relative.scheme,
@@ -56,13 +57,15 @@ class Uri private[net] (
         merge(relative.path).removeDotSegments,
         relative.query,
         relative.fragment)
+  }
 
-  private def merge(relative: Path): Path =
+  private def merge(relative: Path): Path = {
     if (authority.isDefined && path.isEmpty) "/" :: relative
     else if (path.isEmpty) relative
     else path.merge(relative)
+  }
 
-  def unresolve(that: Uri): Uri =
+  def unresolve(that: Uri): Uri = {
     if (!scheme.equals(that.scheme) || !authority.equals(that.authority)) that
     else
       new Uri(
@@ -71,8 +74,9 @@ class Uri private[net] (
         path.unmerge(that.path),
         that.query,
         that.fragment)
+  }
 
-  def writeUriString(builder: StringBuilder): Unit = {
+  def writeUriString(builder: Builder[Int]): Unit = {
     if (scheme.isDefined) {
       scheme.writeUriString(builder)
       builder.append(':')
@@ -109,12 +113,13 @@ class Uri private[net] (
     : Uri =
     new Uri(scheme, authority, path, query, fragment)
 
-  override def equals(other: Any): Boolean =
+  override def equals(other: Any): Boolean = {
     eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Uri] && {
       val that = other.asInstanceOf[Uri]
       scheme.equals(that.scheme) && authority.equals(that.authority) &&
       path.equals(that.path) && query.equals(that.query) && fragment.equals(that.fragment)
     }
+  }
 
   private[this] var code: Int = 0
   override def hashCode: Int = {
@@ -186,12 +191,12 @@ object Uri extends UriParser {
   }
 
   private[this] def encodeHex(x: Int): Int = if (x < 10) '0' + x else 'A' + (x - 10)
-  private[this] def writePctEncoded(c: Int)(builder: StringBuilder): Unit = {
+  private[this] def writePctEncoded(c: Int)(builder: Builder[Int]): Unit = {
     builder.append('%')
     builder.append(encodeHex(c >>> 4 & 0xF))
     builder.append(encodeHex(c       & 0xF))
   }
-  private[this] def writeEncoded(c: Int)(builder: StringBuilder): Unit = {
+  private[this] def writeEncoded(c: Int)(builder: Builder[Int]): Unit = {
     if (c == 0x00) { // modified UTF-8
       writePctEncoded(0xC0)(builder)
       writePctEncoded(0x80)(builder)
@@ -222,7 +227,7 @@ object Uri extends UriParser {
     }
   }
 
-  private[net] def writeScheme(scheme: String)(builder: StringBuilder): Unit = {
+  private[net] def writeScheme(scheme: String)(builder: Builder[Int]): Unit = {
     var i = 0
     val n = scheme.length
     while (i < n) {
@@ -233,7 +238,7 @@ object Uri extends UriParser {
     }
   }
 
-  private[net] def writeUserInfo(userInfo: String)(builder: StringBuilder): Unit = {
+  private[net] def writeUserInfo(userInfo: String)(builder: Builder[Int]): Unit = {
     var i = 0
     val n = userInfo.length
     while (i < n) {
@@ -244,7 +249,7 @@ object Uri extends UriParser {
     }
   }
 
-  private[net] def writeUser(user: String)(builder: StringBuilder): Unit = {
+  private[net] def writeUser(user: String)(builder: Builder[Int]): Unit = {
     var i = 0
     val n = user.length
     while (i < n) {
@@ -255,7 +260,7 @@ object Uri extends UriParser {
     }
   }
 
-  private[net] def writeHost(address: String)(builder: StringBuilder): Unit = {
+  private[net] def writeHost(address: String)(builder: Builder[Int]): Unit = {
     var i = 0
     val n = address.length
     while (i < n) {
@@ -266,7 +271,23 @@ object Uri extends UriParser {
     }
   }
 
-  private[net] def writePathSegment(segment: String)(builder: StringBuilder): Unit = {
+  private[net] def writePort(number: Int)(builder: Builder[Int]): Unit = {
+    var n = number
+    var i = 9
+    val digits = new Array[Int](10)
+    while (n > 0) {
+      digits(i) = n % 10
+      n /= 10
+      i -= 1
+    }
+    i += 1
+    while (i < 10) {
+      builder.append('0' + digits(i))
+      i += 1
+    }
+  }
+
+  private[net] def writePathSegment(segment: String)(builder: Builder[Int]): Unit = {
     var i = 0
     val n = segment.length
     while (i < n) {
@@ -277,7 +298,7 @@ object Uri extends UriParser {
     }
   }
 
-  private[net] def writeQuery(query: String)(builder: StringBuilder): Unit = {
+  private[net] def writeQuery(query: String)(builder: Builder[Int]): Unit = {
     var i = 0
     val n = query.length
     while (i < n) {
@@ -288,7 +309,7 @@ object Uri extends UriParser {
     }
   }
 
-  private[net] def writeParam(param: String)(builder: StringBuilder): Unit = {
+  private[net] def writeParam(param: String)(builder: Builder[Int]): Unit = {
     var i = 0
     val n = param.length
     while (i < n) {
@@ -299,7 +320,7 @@ object Uri extends UriParser {
     }
   }
 
-  private[net] def writeFragment(fragment: String)(builder: StringBuilder): Unit = {
+  private[net] def writeFragment(fragment: String)(builder: Builder[Int]): Unit = {
     var i = 0
     val n = fragment.length
     while (i < n) {

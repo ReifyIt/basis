@@ -240,7 +240,7 @@ trait UriParser extends UriFactory { Uri =>
       new UriParser(scheme, authority, path, query, fragment, s)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, Uri] =
+    override def interpolate(part: Part): Iteratee[Int, Uri] = {
       if (s == 1) part match {
         case Scheme(_) =>
           val scheme = this.scheme.asInstanceOf[Parser[Scheme]].interpolate(part)
@@ -282,6 +282,7 @@ trait UriParser extends UriFactory { Uri =>
         else new UriParser(scheme, authority, path, query, fragment, 8)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[Uri] = Bind(bind)
 
@@ -320,12 +321,13 @@ trait UriParser extends UriFactory { Uri =>
       new SchemeParser(builder, s)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, Scheme] =
+    override def interpolate(part: Part): Iteratee[Int, Scheme] = {
       if (s == 1) part match {
         case Scheme(scheme) => Iteratee.done(scheme)
         case _ => super.interpolate(part)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[Scheme] = Bind(bind)
 
@@ -388,7 +390,7 @@ trait UriParser extends UriFactory { Uri =>
       new AuthorityParser(userInfo, host, port, s)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, Authority] =
+    override def interpolate(part: Part): Iteratee[Int, Authority] = {
       if (s == 1) part match {
         case Authority(authority) => Iteratee.done(authority)
         case UserInfo(userInfo) =>
@@ -412,6 +414,7 @@ trait UriParser extends UriFactory { Uri =>
         new AuthorityParser(userInfo, host, port, 4)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[Authority] = Bind(bind)
 
@@ -508,12 +511,13 @@ trait UriParser extends UriFactory { Uri =>
       new UserInfoParser(username, password, c1, s)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, UserInfo] =
+    override def interpolate(part: Part): Iteratee[Int, UserInfo] = {
       if (s == 1 && (username eq null)) part match {
         case UserInfo(userInfo) => Iteratee.done(userInfo)
         case _ => super.interpolate(part)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[UserInfo] = Bind(bind)
 
@@ -625,12 +629,13 @@ trait UriParser extends UriFactory { Uri =>
       new HostAddressParser(builder, c1, x, s)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, Host] =
+    override def interpolate(part: Part): Iteratee[Int, Host] = {
       if (builder eq null) part match {
         case Host(host) => Iteratee.done(host)
         case _ => super.interpolate(part)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[Host] = Bind(bind)
 
@@ -689,11 +694,11 @@ trait UriParser extends UriFactory { Uri =>
 
 
   final class PortParser(port: Int) extends Parser[Port] {
-    def this() = this(-1)
+    def this() = this(0)
 
     override def feed(input: Iterator[Int]): Iteratee[Int, Port] = {
       var c = 0
-      var port = if (this.port > 0 || input.isEmpty) this.port else 0
+      var port = this.port
       while (!input.isEmpty && { c = input.head; isDigit(c) }) {
         input.step()
         port = 10 * port + decodeDigit(c)
@@ -702,16 +707,17 @@ trait UriParser extends UriFactory { Uri =>
       new PortParser(port)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, Port] =
-      if (port < 0) part match {
+    override def interpolate(part: Part): Iteratee[Int, Port] = {
+      if (port == 0) part match {
         case Port(port) => Iteratee.done(port)
         case _ => super.interpolate(part)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[Port] = Bind(bind)
 
-    override def bind: Port = Port(if (port > 0) port else 0)
+    override def bind: Port = Port(if (port == 0) port else 0)
 
     override def toString: String = (String.Builder~Uri.toString~'.'~"PortParser").state
   }
@@ -789,7 +795,7 @@ trait UriParser extends UriFactory { Uri =>
       new PathParser(builder, path, c1, s)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, Path] =
+    override def interpolate(part: Part): Iteratee[Int, Path] = {
       if (s == 1) part match {
         case Path(subpath) =>
           val path = if (this.path ne null) this.path else Path.Builder
@@ -799,6 +805,7 @@ trait UriParser extends UriFactory { Uri =>
         case _ => super.interpolate(part)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[Path] = Bind(bind)
 
@@ -929,12 +936,13 @@ trait UriParser extends UriFactory { Uri =>
       new QueryParser(key, value, query, c1, s)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, Query] =
+    override def interpolate(part: Part): Iteratee[Int, Query] = {
       if ((key eq null) && (value eq null) && (query eq null)) part match {
         case Query(query) => Iteratee.done(query)
         case _ => super.interpolate(part)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[Query] = Bind(bind)
 
@@ -996,12 +1004,13 @@ trait UriParser extends UriFactory { Uri =>
       new FragmentParser(builder, c1, l, s)
     }
 
-    override def interpolate(part: Part): Iteratee[Int, Fragment] =
+    override def interpolate(part: Part): Iteratee[Int, Fragment] = {
       if (l == 0) part match {
         case Fragment(fragment) => Iteratee.done(fragment)
         case _ => super.interpolate(part)
       }
       else super.interpolate(part)
+    }
 
     override def state: Maybe[Fragment] = Bind(bind)
 

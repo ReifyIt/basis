@@ -7,20 +7,27 @@
 package basis.net
 
 import basis._
+import basis.collections._
 import basis.text._
 import basis.util._
 
 final class Port private[net] (val number: Int) extends UriPart {
   def isDefined: Boolean = number != 0
 
-  def writeUriString(builder: StringBuilder): Unit =
-    builder.append(java.lang.Integer.toString(number))
+  def writeUriString(builder: Builder[Int]): Unit = {
+    Uri.writePort(number)(builder)
+  }
 
-  def toUriString: String = java.lang.Integer.toString(number)
+  def toUriString: String = {
+    val builder = String.Builder
+    writeUriString(builder)
+    builder.state
+  }
 
-  override def equals(other: Any): Boolean =
+  override def equals(other: Any): Boolean = {
     eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Port] &&
     number == other.asInstanceOf[Port].number
+  }
 
   override def hashCode: Int = {
     import MurmurHash3._
@@ -38,9 +45,10 @@ final class Port private[net] (val number: Int) extends UriPart {
 object Port extends Uri.PortFactory {
   override val Undefined: Port = new Port(0)
 
-  implicit override def apply(number: Int): Port =
+  implicit override def apply(number: Int): Port = {
     if (number == 0) Undefined
     else new Port(number)
+  }
 
   implicit def apply(port: String): Port = {
     val input = new UString(port).iterator

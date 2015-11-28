@@ -7,13 +7,14 @@
 package basis.net
 
 import basis._
+import basis.collections._
 import basis.text._
 import basis.util._
 
 final class Authority private[net] (val host: Host, val port: Port, val userInfo: UserInfo) extends UriPart {
   def isDefined: Boolean = host.isDefined || port.isDefined || userInfo.isDefined
 
-  def writeUriString(builder: StringBuilder): Unit = {
+  def writeUriString(builder: Builder[Int]): Unit = {
     if (userInfo.isDefined) {
       userInfo.writeUriString(builder)
       builder.append('@')
@@ -34,11 +35,12 @@ final class Authority private[net] (val host: Host, val port: Port, val userInfo
   def copy(host: Host = this.host, port: Port = this.port, userInfo: UserInfo = this.userInfo): Authority =
     new Authority(host, port, userInfo)
 
-  override def equals(other: Any): Boolean =
+  override def equals(other: Any): Boolean = {
     eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Authority] && {
       val that = other.asInstanceOf[Authority]
       host.equals(that.host) && port.equals(that.port) && userInfo.equals(that.userInfo)
     }
+  }
 
   private[this] var code: Int = 0
   override def hashCode: Int = {
@@ -62,9 +64,10 @@ final class Authority private[net] (val host: Host, val port: Port, val userInfo
 object Authority extends Uri.AuthorityFactory {
   override val Undefined: Authority = new Authority(Host.Undefined, Port.Undefined, UserInfo.Undefined)
 
-  override def apply(host: Host, port: Port = Port.Undefined, userInfo: UserInfo = UserInfo.Undefined): Authority =
+  override def apply(host: Host, port: Port = Port.Undefined, userInfo: UserInfo = UserInfo.Undefined): Authority = {
     if (!host.isDefined && !port.isDefined && !userInfo.isDefined) Undefined
     else new Authority(host, port, userInfo)
+  }
 
   implicit def apply(authority: String): Authority = {
     val input = new UString(authority).iterator

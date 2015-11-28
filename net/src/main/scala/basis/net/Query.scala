@@ -30,6 +30,12 @@ sealed abstract class Query private[net]
 
   override def tail: Query
 
+  def contains(key: String): Boolean
+
+  def get(key: String): Maybe[String]
+
+  def apply(key: String): String
+
   def +: (key: String, value: String): Query =
     new Query.Param(key, value, this)
 
@@ -41,7 +47,7 @@ sealed abstract class Query private[net]
 
   def part: String
 
-  def writeUriString(builder: StringBuilder): Unit
+  def writeUriString(builder: Builder[Int]): Unit
 
   def toUriString: String = {
     val builder = String.Builder
@@ -51,18 +57,21 @@ sealed abstract class Query private[net]
 
   override def canEqual(other: Any): Boolean = other.isInstanceOf[Query]
 
-  override def equals(other: Any): Boolean =
+  override def equals(other: Any): Boolean = {
     eq(other.asInstanceOf[AnyRef]) ||
     other.isInstanceOf[Query] && equals(this, other.asInstanceOf[Query])
-  @tailrec private[this] def equals(these: Query, those: Query): Boolean =
+  }
+  @tailrec private[this] def equals(these: Query, those: Query): Boolean = {
     if (these.isEmpty) those.isEmpty
     else if (those.isEmpty) these.isEmpty
     else these.key.equals(those.key) && these.value.equals(those.value) && equals(these.tail, those.tail)
+  }
 
   override def hashCode: Int = hash(MurmurHash3.seed[Query], this)
-  @tailrec private[this] def hash(code: Int, query: Query): Int =
+  @tailrec private[this] def hash(code: Int, query: Query): Int = {
     if (query.isEmpty) MurmurHash3.mash(code)
     else hash(MurmurHash3.mix(MurmurHash3.mix(code, query.key.hashCode), query.value.hashCode), query.tail)
+  }
 
   override def toString: String = {
     val s = String.Builder~"Query"~'('~'"'
@@ -122,6 +131,23 @@ object Query extends Uri.QueryFactory {
 
     private[net] def tail_=(tail: Query): Unit = rest = tail
 
+    @tailrec override def contains(key: String): Boolean = {
+      this.key.equals(key) ||
+      tail.isInstanceOf[Param] && tail.asInstanceOf[Param].contains(key)
+    }
+
+    @tailrec override def get(key: String): Maybe[String] = {
+      if (this.key.equals(key)) Bind(value)
+      else if (tail.isInstanceOf[Param]) tail.asInstanceOf[Param].get(key)
+      else Trap
+    }
+
+    @tailrec override def apply(key: String): String = {
+      if (this.key.equals(key)) value
+      else if (tail.isInstanceOf[Param]) tail.asInstanceOf[Param](key)
+      else throw new NoSuchElementException(key)
+    }
+
     override def part: String = {
       val builder = String.Builder
       builder.append(key)
@@ -130,7 +156,7 @@ object Query extends Uri.QueryFactory {
       writePart(tail)(builder)
       builder.state
     }
-    @tailrec private[this] def writePart(query: Query)(builder: StringBuilder): Unit =
+    @tailrec private[this] def writePart(query: Query)(builder: StringBuilder): Unit = {
       if (!query.isEmpty) {
         builder.append('&')
         builder.append(key)
@@ -138,14 +164,15 @@ object Query extends Uri.QueryFactory {
         builder.append(value)
         writePart(query.tail)(builder)
       }
+    }
 
-    override def writeUriString(builder: StringBuilder): Unit = {
+    override def writeUriString(builder: Builder[Int]): Unit = {
       Uri.writeParam(key)(builder)
       builder.append('=')
       Uri.writeParam(value)(builder)
       writeUriString(tail)(builder)
     }
-    @tailrec private[this] def writeUriString(query: Query)(builder: StringBuilder): Unit =
+    @tailrec private[this] def writeUriString(query: Query)(builder: Builder[Int]): Unit =
       if (!query.isEmpty) {
         builder.append('&')
         Uri.writeParam(query.key)(builder)
@@ -168,7 +195,13 @@ object Query extends Uri.QueryFactory {
 
     override def tail: Query = Undefined
 
-    override def writeUriString(builder: StringBuilder): Unit =  Uri.writeQuery(part)(builder)
+    override def contains(key: String): Boolean = false
+
+    override def get(key: String): Maybe[String] = Trap
+
+    override def apply(key: String): String = throw new NoSuchElementException(key)
+
+    override def writeUriString(builder: Builder[Int]): Unit =  Uri.writeQuery(part)(builder)
   }
 
   private[net] final class Undefined extends Query {
@@ -184,9 +217,15 @@ object Query extends Uri.QueryFactory {
 
     override def tail: Query = throw new NoSuchElementException("tail of undefined query")
 
+    override def contains(key: String): Boolean = false
+
+    override def get(key: String): Maybe[String] = Trap
+
+    override def apply(key: String): String = throw new NoSuchElementException(key)
+
     override def part: String = ""
 
-    override def writeUriString(builder: StringBuilder): Unit = ()
+    override def writeUriString(builder: Builder[Int]): Unit = ()
 
     override def toUriString: String = ""
 

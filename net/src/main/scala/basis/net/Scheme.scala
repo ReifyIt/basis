@@ -7,14 +7,16 @@
 package basis.net
 
 import basis._
+import basis.collections._
 import basis.text._
 import basis.util._
 
 final class Scheme private[net] (val part: String) extends UriPart {
   def isDefined: Boolean = part.length > 0
 
-  def writeUriString(builder: StringBuilder): Unit =
+  def writeUriString(builder: Builder[Int]): Unit = {
     if (part.length > 0) Uri.writeScheme(part)(builder)
+  }
 
   def toUriString: String = {
     val builder = String.Builder
@@ -22,9 +24,10 @@ final class Scheme private[net] (val part: String) extends UriPart {
     builder.state
   }
 
-  override def equals(other: Any): Boolean =
+  override def equals(other: Any): Boolean = {
     eq(other.asInstanceOf[AnyRef]) || other.isInstanceOf[Scheme] &&
     part.equals(other.asInstanceOf[Scheme].part)
+  }
 
   override def hashCode: Int = {
     import MurmurHash3._
@@ -46,9 +49,10 @@ final class Scheme private[net] (val part: String) extends UriPart {
 object Scheme extends Uri.SchemeFactory {
   override val Undefined: Scheme = new Scheme("")
 
-  override def Part(scheme: String): Scheme =
+  override def Part(scheme: String): Scheme = {
     if (scheme.length == 0) Undefined
     else new Scheme(scheme)
+  }
 
   implicit def apply(scheme: String): Scheme = {
     val input = new UString(scheme).iterator
