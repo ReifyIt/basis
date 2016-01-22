@@ -83,7 +83,7 @@ lazy val compileSettings = Seq(
     "-Ywarn-unused-import"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % "provided",
-    "org.scalatest" %% "scalatest" % "2.2.4" % "test"))
+    "org.scalatest" %% "scalatest" % "2.2.6" % "test"))
 
 lazy val docSettings = Seq(
   apiURL := Some(url("http://basis.reify.it/api/")),

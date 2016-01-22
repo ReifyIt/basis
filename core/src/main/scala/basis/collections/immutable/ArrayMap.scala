@@ -83,9 +83,9 @@ private[collections] final class ArrayMap[+A, +T] private[collections] (slots: A
 
   private[collections] def unaryValue: T = slots(1).asInstanceOf[T]
 
-  private[collections] def keyAt(index: Int): A = slots(index >> 1).asInstanceOf[A]
+  private[collections] def keyAt(index: Int): A = slots(index << 1).asInstanceOf[A]
 
-  private[collections] def valueAt(index: Int): T = slots((index >> 1) + 1).asInstanceOf[T]
+  private[collections] def valueAt(index: Int): T = slots((index << 1) + 1).asInstanceOf[T]
 
   private[collections] def traverseKeys(f: A => Unit): Unit = {
     var i = 0

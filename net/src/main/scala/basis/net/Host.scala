@@ -109,7 +109,7 @@ object Host extends Uri.HostFactory {
 
     override def writeUriString(builder: Builder[Int]): Unit = {
       builder.append('[')
-      Uri.writeHost(address)(builder)
+      Uri.writeHostLiteral(address)(builder)
       builder.append(']')
     }
 

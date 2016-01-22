@@ -221,7 +221,7 @@ trait UriParser extends UriFactory { Uri =>
         query = query.feed(input)
         if (query.isError) return query.asError
         else if (!input.isEmpty) {
-          val c = input.head
+          c = input.head
           if (c == '#') {
             input.step()
             s = 8
@@ -717,7 +717,7 @@ trait UriParser extends UriFactory { Uri =>
 
     override def state: Maybe[Port] = Bind(bind)
 
-    override def bind: Port = Port(if (port == 0) port else 0)
+    override def bind: Port = Port(port)
 
     override def toString: String = (String.Builder~Uri.toString~'.'~"PortParser").state
   }
@@ -848,7 +848,7 @@ trait UriParser extends UriFactory { Uri =>
             if (query eq null) query = Query.Builder
             if (query.isInstanceOf[QueryBuilder])
               query.asInstanceOf[QueryBuilder].append("", key.state)
-            else query.append(Query.Param("", value.state))
+            else query.append(Query.Param("", key.state))
             key = null
             s = 1
           }

@@ -89,7 +89,7 @@ class UriSpec extends FlatSpec with Matchers {
     Uri("/one/two/") should equal (Uri(path = Path / "one" / "two" /))
   }
 
-  it should "parse URIs with rootless paths" in {
+  it should "parse URIs with relative paths" in {
     Uri("one") should equal (Uri(path = Path("one")))
     Uri("one/") should equal (Uri(path = Path("one") /))
     Uri("one/two") should equal (Uri(path = Path("one") / "two"))
@@ -115,6 +115,7 @@ class UriSpec extends FlatSpec with Matchers {
   it should "parse URIs with query params" in {
     Uri("?key=value") should equal (Uri(query = Query :+ ("key", "value")))
     Uri("?k1=v1&k2=v2") should equal (Uri(query = Query :+ ("k1", "v1") :+ ("k2", "v2")))
+    Uri("?k1=v=1") should equal (Uri(query = Query :+ ("k1", "v=1")))
     Uri("?k1=") should equal (Uri(query = Query :+ ("k1", "")))
     Uri("?=v1") should equal (Uri(query = Query :+ ("", "v1")))
     Uri("?=") should equal (Uri(query = Query :+ ("", "")))
@@ -172,7 +173,7 @@ class UriSpec extends FlatSpec with Matchers {
     Uri("scheme:/one/two/") should equal (Uri(Scheme("scheme"), path = Path / "one" / "two" /))
   }
 
-  it should "parse URIs with schemes and rootless paths" in {
+  it should "parse URIs with schemes and relative paths" in {
     Uri("scheme:one") should equal (Uri(Scheme("scheme"), path = Path("one")))
     Uri("scheme:one/") should equal (Uri(Scheme("scheme"), path = Path("one") /))
     Uri("scheme:one/two") should equal (Uri(Scheme("scheme"), path = Path("one") / "two"))

@@ -271,6 +271,17 @@ object Uri extends UriParser {
     }
   }
 
+  private[net] def writeHostLiteral(address: String)(builder: Builder[Int]): Unit = {
+    var i = 0
+    val n = address.length
+    while (i < n) {
+      val c = address.codePointAt(i)
+      if (isHostChar(c) || c == ':') builder.append(c)
+      else writeEncoded(c)(builder)
+      i = address.offsetByCodePoints(i, 1)
+    }
+  }
+
   private[net] def writePort(number: Int)(builder: Builder[Int]): Unit = {
     var n = number
     var i = 9
