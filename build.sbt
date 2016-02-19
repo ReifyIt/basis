@@ -69,7 +69,7 @@ lazy val projectSettings = Seq(
 
 lazy val compileSettings = Seq(
   scalacOptions ++= Seq(
-  "-target:jvm-1.7",
+    "-target:jvm-1.7",
     "-language:_",
     "-Yno-predef",
     "-optimise",

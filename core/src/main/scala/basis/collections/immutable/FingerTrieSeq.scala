@@ -162,8 +162,14 @@ final class FingerTrieSeq[+A] private[collections] (
       newPrefix(i) = elem.asInstanceOf[AnyRef]
       new FingerTrieSeq(newPrefix, branch, suffix, length + 1)
     }
+    else if (n == 0 && i + j < 32) {
+      val newPrefix = new Array[AnyRef](i + j + 1)
+      System.arraycopy(prefix, 0, newPrefix, 0, i)
+      System.arraycopy(suffix, 0, newPrefix, i, j)
+      newPrefix(i + j) = elem.asInstanceOf[AnyRef]
+      new FingerTrieSeq(newPrefix, branch, FingerTrieSeq.EmptyRefArray, length + 1)
+    }
     else if (n == 0 && i + j < 64) {
-      // assume(i + j > 32)
       val newPrefix = new Array[AnyRef](32)
       System.arraycopy(prefix, 0, newPrefix, 0, i)
       System.arraycopy(suffix, 0, newPrefix, i, 32 - i)
@@ -195,8 +201,14 @@ final class FingerTrieSeq[+A] private[collections] (
       System.arraycopy(prefix, 0, newPrefix, 1, i)
       new FingerTrieSeq(newPrefix, branch, suffix, 1 + length)
     }
+    else if (n == 0 && i + j < 32) {
+      val newPrefix = new Array[AnyRef](1 + i + j)
+      newPrefix(0) = elem.asInstanceOf[AnyRef]
+      System.arraycopy(prefix, 0, newPrefix, 1, i)
+      System.arraycopy(suffix, 0, newPrefix, 1 + i, j)
+      new FingerTrieSeq(newPrefix, branch, FingerTrieSeq.EmptyRefArray, 1 + length)
+    }
     else if (n == 0 && i + j < 64) {
-      // assume(i + j > 32)
       val newPrefix = new Array[AnyRef](1 + i + j - 32)
       newPrefix(0) = elem.asInstanceOf[AnyRef]
       System.arraycopy(prefix, 0, newPrefix, 1, i + j - 32)
